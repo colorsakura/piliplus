@@ -302,8 +302,7 @@ class VideoStat extends StatelessWidget {
             maxLines: 1,
             text: TextSpan(
                 style: TextStyle(
-                  fontSize: MediaQuery.textScalerOf(context)
-                      .scale(Theme.of(context).textTheme.labelSmall!.fontSize!),
+                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
                   color: Theme.of(context).colorScheme.outline,
                 ),
                 text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),

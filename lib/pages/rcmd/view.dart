@@ -45,7 +45,7 @@ class _RcmdPageState extends State<RcmdPage>
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent - 200) {
           EasyThrottle.throttle(
-              'my-throttler', const Duration(milliseconds: 500), () {
+              'my-throttler', const Duration(milliseconds: 200), () {
             _rcmdController.isLoadingMore = true;
             _rcmdController.onLoad();
           });
@@ -114,6 +114,7 @@ class _RcmdPageState extends State<RcmdPage>
                         errMsg: data['msg'],
                         fn: () {
                           setState(() {
+                            _rcmdController.isLoadingMore = true;
                             _futureBuilderFuture =
                                 _rcmdController.queryRcmdFeed('init');
                           });
@@ -126,7 +127,6 @@ class _RcmdPageState extends State<RcmdPage>
                 },
               ),
             ),
-            LoadingMore(ctr: _rcmdController),
           ],
         ),
       ),
@@ -173,36 +173,6 @@ class _RcmdPageState extends State<RcmdPage>
               : const VideoCardVSkeleton();
         },
         childCount: videoList!.isNotEmpty ? videoList!.length : 10,
-      ),
-    );
-  }
-}
-
-class LoadingMore extends StatelessWidget {
-  final dynamic ctr;
-  const LoadingMore({super.key, this.ctr});
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        height: MediaQuery.of(context).padding.bottom + 80,
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-        child: GestureDetector(
-          onTap: () {
-            if (ctr != null) {
-              ctr!.isLoadingMore = true;
-              ctr!.onLoad();
-            }
-          },
-          child: Center(
-            child: Text(
-              '点击加载更多 👇',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline, fontSize: 13),
-            ),
-          ),
-        ),
       ),
     );
   }

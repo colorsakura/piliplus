@@ -121,7 +121,12 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                   } else {
                     return HttpError(
                       errMsg: data['msg'],
-                      fn: () => setState(() {}),
+                      fn: () {
+                        setState(() {
+                          _futureBuilderFuture =
+                              _hotController.queryHotFeed('init');
+                        });
+                      },
                     );
                   }
                 } else {
