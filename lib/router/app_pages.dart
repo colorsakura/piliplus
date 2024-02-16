@@ -47,6 +47,7 @@ import '../pages/setting/recommend_setting.dart';
 import '../pages/setting/play_setting.dart';
 import '../pages/setting/privacy_setting.dart';
 import '../pages/setting/style_setting.dart';
+import '../pages/setting/hidden_settings.dart';
 import '../pages/video/detail/index.dart';
 import '../pages/video/detail/reply_reply/index.dart';
 import '../pages/webview/index.dart';
@@ -121,6 +122,8 @@ class Routes {
     //
     CustomGetPage(name: '/blackListPage', page: () => const BlackListPage()),
     CustomGetPage(name: '/colorSetting', page: () => const ColorSelectPage()),
+    // 隐藏设置
+    CustomGetPage(name: '/hiddenSetting', page: () => const HiddenSetting()),
     // 首页tabbar
     CustomGetPage(name: '/tabbarSetting', page: () => const TabbarSetPage()),
     CustomGetPage(
