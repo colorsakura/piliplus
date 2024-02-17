@@ -122,7 +122,7 @@ class Routes {
     //
     CustomGetPage(name: '/blackListPage', page: () => const BlackListPage()),
     CustomGetPage(name: '/colorSetting', page: () => const ColorSelectPage()),
-    // 隐藏设置
+    // 开发人员选项
     CustomGetPage(name: '/hiddenSetting', page: () => const HiddenSetting()),
     // 首页tabbar
     CustomGetPage(name: '/tabbarSetting', page: () => const TabbarSetPage()),

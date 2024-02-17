@@ -33,50 +33,60 @@ class _HiddenSettingState extends State<HiddenSetting> {
         centerTitle: false,
         titleSpacing: 0,
         title: Text(
-          '隐藏设置',
+          '开发人员选项',
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
       body: Column(
         children: [
           ListTile(
-            onTap: () {
-              RxInt zero = 0.obs;
-              1 / zero.value;
-            },
+            title: Text('手动产生异常', style: titleStyle),
             dense: false,
-            title: Text('产生除以0异常', style: titleStyle),
+            subtitle: Column(
+              children: [
+                ListTile(
+                  onTap: () {
+                    test([][0]);
+                  },
+                  dense: true,
+                  title: const Text('数组越界'),
+                ),
+                ListTile(
+                  onTap: () {
+                    test(null!.value);
+                  },
+                  dense: true,
+                  title: const Text('非空断言'),
+                ),
+                ListTile(
+                  onTap: () {
+                    test(int.parse("壹"));
+                  },
+                  dense: true,
+                  title: const Text('非法整数解析'),
+                ),
+                ListTile(
+                  onTap: () {
+                    test(DateTime.parse("2050-01-aa"));
+                  },
+                  dense: true,
+                  title: const Text('非法日期解析'),
+                ),
+                ListTile(
+                  onTap: () {
+                    throw Exception("测试异常");
+                  },
+                  dense: true,
+                  title: const Text('抛出测试异常'),
+                ),
+              ],
+            ),
           ),
           ListTile(
+            title: const Text('查看日志'),
             onTap: () {
-              List list = [];
-              test(list[0]);
+              Get.toNamed('/logs');
             },
-            dense: false,
-            title: Text('产生数组越界异常', style: titleStyle),
-          ),
-          ListTile(
-            onTap: () {
-              RxInt? integer;
-              test(integer!.value);
-            },
-            dense: false,
-            title: Text('产生空异常', style: titleStyle),
-            subtitle: Text('空安全: 喵喵喵?', style: subTitleStyle),
-          ),
-          ListTile(
-            onTap: () {
-              int.parse("壹");
-            },
-            dense: false,
-            title: Text('产生整数解析异常', style: titleStyle),
-          ),
-          ListTile(
-            onTap: () {
-              throw Exception("测试异常");
-            },
-            dense: false,
-            title: Text('产生测试异常', style: titleStyle),
           ),
         ],
       ),

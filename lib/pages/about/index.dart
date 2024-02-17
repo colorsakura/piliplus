@@ -308,13 +308,13 @@ class AboutController extends GetxController {
 
   tapOnVersion() {
     if (settingController.hiddenSettingUnlocked.value) {
-      SmartDialog.showToast('您已解锁隐藏设置, 无需再次操作');
+      SmartDialog.showToast('您已解锁开发人员选项, 无需再次操作');
       return;
     }
     count.value++;
     if (count.value == 5) {
       setting.put(SettingBoxKey.hiddenSettingUnlocked, true);
-      SmartDialog.showToast('恭喜您发现了隐藏设置!');
+      SmartDialog.showToast('恭喜您发现了开发人员选项!');
     }
   }
 }

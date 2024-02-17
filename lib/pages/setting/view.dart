@@ -50,7 +50,7 @@ class SettingPage extends StatelessWidget {
               child: ListTile(
                 onTap: () => Get.toNamed('/hiddenSetting'),
                 dense: false,
-                title: const Text('隐藏设置'),
+                title: const Text('开发人员选项'),
               ),
             ),
           ),
