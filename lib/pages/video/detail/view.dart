@@ -25,7 +25,6 @@ import 'package:pilipala/plugin/pl_player/models/play_repeat.dart';
 import 'package:pilipala/services/service_locator.dart';
 import 'package:pilipala/utils/storage.dart';
 
-import 'package:pilipala/plugin/pl_player/utils/fullscreen.dart';
 import '../../../services/shutdown_timer_service.dart';
 import 'widgets/header_control.dart';
 
@@ -548,7 +547,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                                 .withOpacity(0.06),
                                           ),
                                         ),
-                                        RelatedVideoPanel(),
+                                        const RelatedVideoPanel(),
                                       ],
                                     );
                                   },
@@ -786,7 +785,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       child: TabBarView(
                         controller: videoDetailController.tabCtr,
                         children: <Widget>[
-                          CustomScrollView(
+                          const CustomScrollView(
                             slivers: [
                               RelatedVideoPanel(),
                             ],
