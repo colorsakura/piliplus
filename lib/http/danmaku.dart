@@ -19,6 +19,9 @@ class DanmakaHttp {
       data: params,
       extra: {'resType': ResponseType.bytes},
     );
+    if (response.statusCode != 200 || response.data == null) {
+      return DmSegMobileReply();
+    }
     return DmSegMobileReply.fromBuffer(response.data);
   }
 
