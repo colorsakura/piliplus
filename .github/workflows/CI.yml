@@ -86,10 +86,9 @@ jobs:
         run: |
           # 更新pubspec.yaml文件中的版本号
           sed -i "s/version: .*/version: ${{ needs.update_version.outputs.new_version }}/g" pubspec.yaml
-          yq e .version pubspec.yaml
 
       - name: flutter build apk
-        run: flutter build apk --release --split-per-abi --build-number ${{ github.run_number }}
+        run: flutter build apk --release --split-per-abi
         env:
             KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
             KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -172,10 +171,10 @@ jobs:
       - name: Upload Pre-release
         uses: ncipollo/release-action@v1
         with:
-          name: v${{ needs.update_version.outputs.new_version }}
+          name: ${{ needs.update_version.outputs.new_version }}
           token: ${{ secrets.GIT_TOKEN }}
           commit: main
-          tag: v${{ needs.update_version.outputs.new_version }}
+          tag: ${{ needs.update_version.outputs.new_version }}
           prerelease: true
           allowUpdates: true
           artifacts: Pilipala-CI/*

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -194,7 +196,12 @@ class AboutController extends GetxController {
   // 获取当前版本
   Future getCurrentApp() async {
     var currentInfo = await PackageInfo.fromPlatform();
-    currentVersion.value = "v${currentInfo.version}+${currentInfo.buildNumber}";
+    String buildNumber = currentInfo.buildNumber;
+    //if is android
+    if (Platform.isAndroid) {
+      buildNumber = buildNumber.substring(0,buildNumber.length - 1);
+    }
+    currentVersion.value = "v${currentInfo.version}+$buildNumber";
   }
 
   // 获取远程版本

@@ -225,7 +225,11 @@ class Utils {
     var currentInfo = await PackageInfo.fromPlatform();
     var result = await Request().get(Api.latestApp, extra: {'ua': 'mob'});
     LatestDataModel data = LatestDataModel.fromJson(result.data[0]);
-    bool isUpdate = Utils.needUpdate("v${currentInfo.version}+${currentInfo.buildNumber}", data.tagName!);
+    String buildNumber = currentInfo.buildNumber;
+    if (Platform.isAndroid) {
+      buildNumber = buildNumber.substring(0, buildNumber.length - 1);
+    }
+    bool isUpdate = Utils.needUpdate("v${currentInfo.version}+$buildNumber", data.tagName!);
     if (isUpdate) {
       SmartDialog.show(
         animationType: SmartAnimationType.centerFade_otherSlide,
