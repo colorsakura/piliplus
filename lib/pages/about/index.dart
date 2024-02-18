@@ -120,7 +120,7 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
           ListTile(
-            onTap: () => _aboutController.qqChanel(),
+            onTap: () => _aboutController.qqGroup(),
             title: const Text('QQ群'),
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -201,7 +201,7 @@ class AboutController extends GetxController {
     if (Platform.isAndroid) {
       buildNumber = buildNumber.substring(0,buildNumber.length - 1);
     }
-    currentVersion.value = "v${currentInfo.version}+$buildNumber";
+    currentVersion.value = "${currentInfo.version}+$buildNumber";
   }
 
   // 获取远程版本
@@ -237,10 +237,10 @@ class AboutController extends GetxController {
     );
   }
 
-  // qq频道
-  qqChanel() {
+  // qq群
+  qqGroup() {
     Clipboard.setData(
-      const ClipboardData(text: '489981949'),
+      const ClipboardData(text: '392176105'),
     );
     SmartDialog.showToast('已复制QQ群号');
   }
