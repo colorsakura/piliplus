@@ -175,18 +175,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     // 长按选择文件夹
     if (enableDragQuickFav) {
       if (type == 'tap') {
-        if (!videoIntroController.hasFav.value) {
-          videoIntroController.actionFavVideo(type: 'default');
-        } else {
-          showModalBottomSheet(
-            context: context,
-            useRootNavigator: true,
-            isScrollControlled: true,
-            builder: (BuildContext context) {
-              return FavPanel(ctr: videoIntroController);
-            },
-          );
-        }
+        videoIntroController.actionFavVideo(type: 'default');
       } else {
         showModalBottomSheet(
           context: context,
