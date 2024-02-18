@@ -822,6 +822,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         }
       },
     );
+    if (!horizontalScreen) {
+      if (Platform.isAndroid) {
+        return PiPSwitcher(
+            childWhenEnabled: childWhenEnabled,
+            childWhenDisabled: childWhenDisabled,
+          floating: floating,);
+      }
+      return childWhenDisabled;
+    }
     return OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
       if (orientation == Orientation.landscape) {
@@ -829,22 +838,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       }
       if (Platform.isAndroid) {
         return PiPSwitcher(
-          childWhenDisabled: Container(
-            key: UniqueKey(),
-            child: !horizontalScreen || orientation == Orientation.portrait
+          childWhenDisabled: orientation == Orientation.portrait
                 ? childWhenDisabled
                 : childWhenDisabledLandscape,
-          ),
           childWhenEnabled: childWhenEnabled,
           floating: floating,
         );
       }
-      return Container(
-        key: UniqueKey(),
-        child: !horizontalScreen || orientation == Orientation.portrait
+      return orientation == Orientation.portrait
             ? childWhenDisabled
-            : childWhenDisabledLandscape,
-      );
+            : childWhenDisabledLandscape;
     });
   }
 }
