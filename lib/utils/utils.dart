@@ -97,10 +97,20 @@ class Utils {
       currentYearStr = 'MM-DD hh:mm';
       lastYearStr = 'YY-MM-DD hh:mm';
       return CustomStamp_str(
+          timestamp: timeStamp, date: lastYearStr, toInt: false);
+    } else if (formatType == 'day') {
+      if (distance <= 43200) {
+        return CustomStamp_str(
           timestamp: timeStamp,
-          date: lastYearStr,
-          toInt: false,
-          formatType: formatType);
+          date: 'hh:mm',
+          toInt: true,
+        );
+      }
+      return CustomStamp_str(
+        timestamp: timeStamp,
+        date: 'YY-MM-DD',
+        toInt: true,
+      );
     }
     if (distance <= 60) {
       return '刚刚';
@@ -111,25 +121,19 @@ class Utils {
     } else if (DateTime.fromMillisecondsSinceEpoch(time * 1000).year ==
         DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000).year) {
       return CustomStamp_str(
-          timestamp: timeStamp,
-          date: currentYearStr,
-          toInt: false,
-          formatType: formatType);
+          timestamp: timeStamp, date: currentYearStr, toInt: false);
     } else {
       return CustomStamp_str(
-          timestamp: timeStamp,
-          date: lastYearStr,
-          toInt: false,
-          formatType: formatType);
+          timestamp: timeStamp, date: lastYearStr, toInt: false);
     }
   }
 
   // 时间戳转时间
-  static String CustomStamp_str(
-      {int? timestamp, // 为空则显示当前时间
-      String? date, // 显示格式，比如：'YY年MM月DD日 hh:mm:ss'
-      bool toInt = true, // 去除0开头
-      String? formatType}) {
+  static String CustomStamp_str({
+    int? timestamp, // 为空则显示当前时间
+    String? date, // 显示格式，比如：'YY年MM月DD日 hh:mm:ss'
+    bool toInt = true, // 去除0开头
+  }) {
     timestamp ??= (DateTime.now().millisecondsSinceEpoch / 1000).round();
     String timeStr =
         (DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)).toString();
@@ -158,10 +162,6 @@ class Utils {
     if (date == null) {
       return timeStr;
     }
-
-    // if (formatType == 'list' && int.parse(DD) > DateTime.now().day - 2) {
-    //   return '昨天';
-    // }
 
     date = date
         .replaceAll('YY', YY)
@@ -229,7 +229,8 @@ class Utils {
     if (Platform.isAndroid) {
       buildNumber = buildNumber.substring(0, buildNumber.length - 1);
     }
-    bool isUpdate = Utils.needUpdate("v${currentInfo.version}+$buildNumber", data.tagName!);
+    bool isUpdate =
+        Utils.needUpdate("${currentInfo.version}+$buildNumber", data.tagName!);
     if (isUpdate) {
       SmartDialog.show(
         animationType: SmartAnimationType.centerFade_otherSlide,
@@ -336,11 +337,13 @@ class Utils {
   }
 
   static String generateRandomString(int minLength, int maxLength) {
-    const String printable = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#\$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ ';
+    const String printable =
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#\$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ ';
 
     var random = Random();
     int length = minLength + random.nextInt(maxLength - minLength + 1);
-    return List<String>.generate(length, (index) => printable[random.nextInt(printable.length)]).join();
+    return List<String>.generate(
+        length, (index) => printable[random.nextInt(printable.length)]).join();
   }
 
   static String base64EncodeRandomString(int minLength, int maxLength) {

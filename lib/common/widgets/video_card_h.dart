@@ -159,8 +159,11 @@ class VideoContent extends StatelessWidget {
               Text(
                 videoItem.title as String,
                 textAlign: TextAlign.start,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  height: 1.4,
+                  letterSpacing: 0.3,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -175,6 +178,8 @@ class VideoContent extends StatelessWidget {
                         text: i['text'] as String,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           letterSpacing: 0.3,
                           color: i['type'] == 'em'
                               ? Theme.of(context).colorScheme.primary
@@ -204,24 +209,19 @@ class VideoContent extends StatelessWidget {
             //     ),
             //   ),
             // const SizedBox(height: 4),
-            if (showPubdate)
-              Text(
-                Utils.dateFormat(videoItem.pubdate!),
-                style: TextStyle(
-                    fontSize: 11, color: Theme.of(context).colorScheme.outline),
-              ),
-            if (showOwner)
-              Row(
-                children: [
-                  Text(
-                    videoItem.owner.name as String,
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
+            if (showOwner || showPubdate)
+              Expanded(
+                flex: 0,
+                child: Text(
+                  "${showPubdate ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day') + '  ' : ''}  ${showOwner ? videoItem.owner.name : ''}",
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 11,
+                    height: 1,
+                    color: Theme.of(context).colorScheme.outline,
+                    overflow: TextOverflow.fade,
                   ),
-                ],
+                ),
               ),
             Row(
               children: [
@@ -237,7 +237,6 @@ class VideoContent extends StatelessWidget {
                     theme: 'gray',
                     danmu: videoItem.stat.danmaku as int,
                   ),
-
                 const Spacer(),
                 if (source == 'normal')
                   SizedBox(
