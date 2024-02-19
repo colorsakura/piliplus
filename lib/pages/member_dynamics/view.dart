@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/pages/member_dynamics/index.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
+import '../../common/widgets/http_error.dart';
 import '../dynamics/widgets/dynamic_panel.dart';
 
 class MemberDynamicsPage extends StatefulWidget {
@@ -80,10 +81,16 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
                           : const SliverToBoxAdapter(),
                     );
                   } else {
-                    return const SliverToBoxAdapter();
+                    return HttpError(
+                      errMsg: snapshot.data['msg'],
+                      fn: () {},
+                    );
                   }
                 } else {
-                  return const SliverToBoxAdapter();
+                  return HttpError(
+                    errMsg: snapshot.data['msg'],
+                    fn: () {},
+                  );
                 }
               } else {
                 return const SliverToBoxAdapter();

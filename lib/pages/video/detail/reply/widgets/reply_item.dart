@@ -620,26 +620,34 @@ InlineSpan buildContent(
                   ..onTap = () async {
                     final String title = content.jumpUrl[matchStr]['title'];
                     if (appUrlSchema == '') {
-                      final String redirectUrl =
-                          await UrlUtils.parseRedirectUrl(matchStr);
-                      final String pathSegment = Uri.parse(redirectUrl).path;
-                      final String lastPathSegment =
-                          pathSegment.split('/').last;
-                      if (lastPathSegment.startsWith('BV')) {
+                      if (matchStr.startsWith('BV')) {
                         UrlUtils.matchUrlPush(
-                          lastPathSegment,
+                          matchStr,
                           title,
-                          redirectUrl,
+                          '',
                         );
                       } else {
-                        Get.toNamed(
-                          '/webview',
-                          parameters: {
-                            'url': redirectUrl,
-                            'type': 'url',
-                            'pageTitle': title
-                          },
-                        );
+                        final String redirectUrl =
+                            await UrlUtils.parseRedirectUrl(matchStr);
+                        final String pathSegment = Uri.parse(redirectUrl).path;
+                        final String lastPathSegment =
+                            pathSegment.split('/').last;
+                        if (lastPathSegment.startsWith('BV')) {
+                          UrlUtils.matchUrlPush(
+                            lastPathSegment,
+                            title,
+                            redirectUrl,
+                          );
+                        } else {
+                          Get.toNamed(
+                            '/webview',
+                            parameters: {
+                              'url': redirectUrl,
+                              'type': 'url',
+                              'pageTitle': title
+                            },
+                          );
+                        }
                       }
                     } else {
                       if (appUrlSchema.startsWith('bilibili://search')) {

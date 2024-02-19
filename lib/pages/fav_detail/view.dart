@@ -29,6 +29,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
   @override
   void initState() {
     super.initState();
+    mediaId = Get.parameters['mediaId']!;
     _futureBuilderFuture = _favDetailController.queryUserFavFolderDetail();
     mediaId = Get.parameters['mediaId']!;
     titleStreamC = StreamController<bool>();
