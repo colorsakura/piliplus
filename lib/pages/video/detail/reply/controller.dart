@@ -56,7 +56,6 @@ class VideoReplyController extends GetxController {
     if (isLoadingMore) {
       return;
     }
-    isLoadingMore = true;
     if (type == 'init') {
       currentPage = 0;
       noMore.value = '';
@@ -64,6 +63,7 @@ class VideoReplyController extends GetxController {
     if (noMore.value == '没有更多了') {
       return;
     }
+    isLoadingMore = true;
     final res = await ReplyHttp.replyList(
       oid: aid!,
       pageNum: currentPage + 1,
@@ -71,6 +71,7 @@ class VideoReplyController extends GetxController {
       type: ReplyType.video.index,
       sort: _sortType.index,
     );
+    isLoadingMore = false;
     if (res['status']) {
       final List<ReplyItemModel> replies = res['data'].replies;
       if (replies.isNotEmpty) {
@@ -105,8 +106,6 @@ class VideoReplyController extends GetxController {
         replyList.addAll(replies);
       }
     }
-    isLoadingMore = false;
-    return res;
   }
 
   // 上拉加载

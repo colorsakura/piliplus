@@ -38,7 +38,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   late AnimationController fabAnimationCtr;
   late ScrollController scrollController;
 
-  Future? _futureBuilderFuture;
   bool _isFabVisible = true;
   String replyLevel = '1';
   late String heroTag;
@@ -66,7 +65,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     fabAnimationCtr = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
 
-    _futureBuilderFuture = _videoReplyController.queryReplyList();
+    _videoReplyController.queryReplyList();
 
     fabAnimationCtr.forward();
     scrollListener();
@@ -121,13 +120,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     }
   }
 
-  @override
-  void dispose() {
-    scrollController.removeListener(() {});
-    fabAnimationCtr.dispose();
-    // scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +127,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     return RefreshIndicator(
       onRefresh: () async {
         _videoReplyController.currentPage = 0;
-        return await _videoReplyController.queryReplyList();
+        _videoReplyController.noMore.value = '';
+        await _videoReplyController.queryReplyList();
       },
       child: Stack(
         children: [
@@ -195,90 +188,56 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   ),
                 ),
               ),
-              FutureBuilder(
-                future: _futureBuilderFuture,
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    var data = snapshot.data;
-                    if (data['status']) {
-                      // 请求成功
-                      return Obx(
-                        () => _videoReplyController.isLoadingMore &&
-                                _videoReplyController.replyList.isEmpty
-                            ? SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, index) {
-                                  return const VideoReplySkeleton();
-                                }, childCount: 5),
-                              )
-                            : SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, index) {
-                                    double bottom =
-                                        MediaQuery.of(context).padding.bottom;
-                                    if (index ==
-                                        _videoReplyController
-                                            .replyList.length) {
-                                      return Container(
-                                        padding:
-                                            EdgeInsets.only(bottom: bottom),
-                                        height: bottom + 100,
-                                        child: Center(
-                                          child: Obx(
-                                            () => Text(
-                                              _videoReplyController
-                                                  .noMore.value,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return ReplyItem(
-                                        replyItem: _videoReplyController
-                                            .replyList[index],
-                                        showReplyRow: true,
-                                        replyLevel: replyLevel,
-                                        replyReply: (replyItem) =>
-                                            replyReply(replyItem),
-                                        replyType: ReplyType.video,
-                                      );
-                                    }
-                                  },
-                                  childCount:
-                                      _videoReplyController.replyList.length +
-                                          1,
-                                ),
-                              ),
-                      );
-                    } else {
-                      // 请求错误
-                      return HttpError(
-                        errMsg: data['msg'],
-                        fn: () {
-                          setState(() {
-                            _futureBuilderFuture =
-                                _videoReplyController.queryReplyList();
-                          });
-                        },
-                      );
-                    }
-                  } else {
-                    // 骨架屏
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
+              Obx(
+                () => _videoReplyController.isLoadingMore &&
+                        _videoReplyController.replyList.isEmpty
+                    ? SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, index) {
+                          return const VideoReplySkeleton();
+                        }, childCount: 5),
+                      )
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
                           (BuildContext context, index) {
-                        return const VideoReplySkeleton();
-                      }, childCount: 5),
-                    );
-                  }
-                },
-              )
+                            double bottom =
+                                MediaQuery.of(context).padding.bottom;
+                            if (index ==
+                                _videoReplyController.replyList.length) {
+                              return Container(
+                                padding: EdgeInsets.only(bottom: bottom),
+                                height: bottom + 100,
+                                child: Center(
+                                  child: Obx(
+                                    () => Text(
+                                      _videoReplyController.noMore.value,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return ReplyItem(
+                                replyItem:
+                                    _videoReplyController.replyList[index],
+                                showReplyRow: true,
+                                replyLevel: replyLevel,
+                                replyReply: (replyItem) =>
+                                    replyReply(replyItem),
+                                replyType: ReplyType.video,
+                              );
+                            }
+                          },
+                          childCount:
+                              _videoReplyController.replyList.length + 1,
+                        ),
+                      ),
+              ),
             ],
           ),
           Positioned(
