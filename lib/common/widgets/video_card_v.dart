@@ -159,13 +159,13 @@ class VideoCardV extends StatelessWidget {
                         ),
                       ),
                       if (videoItem.duration > 0)
-                          PBadge(
-                            bottom: 6,
-                            right: 7,
-                            size: 'small',
-                            type: 'gray',
-                            text: Utils.timeFormat(videoItem.duration),
-                          )
+                        PBadge(
+                          bottom: 6,
+                          right: 7,
+                          size: 'small',
+                          type: 'gray',
+                          text: Utils.timeFormat(videoItem.duration),
+                        )
                     ],
                   );
                 }),
@@ -181,9 +181,7 @@ class VideoCardV extends StatelessWidget {
 
 class VideoContent extends StatelessWidget {
   final dynamic videoItem;
-  const VideoContent(
-      {Key? key, required this.videoItem})
-      : super(key: key);
+  const VideoContent({Key? key, required this.videoItem}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -196,18 +194,19 @@ class VideoContent extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    videoItem.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  child: Text(videoItem.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        height: 1.45,
+                      )),
                 ),
               ],
             ),
-              const SizedBox(height: 2),
-              VideoStat(
-                videoItem: videoItem,
-              ),
+            const SizedBox(height: 2),
+            VideoStat(
+              videoItem: videoItem,
+            ),
             Row(
               children: [
                 if (videoItem.goto == 'bangumi') ...[
@@ -250,6 +249,7 @@ class VideoContent extends StatelessWidget {
                   child: Text(
                     videoItem.owner.name,
                     maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.labelMedium!.fontSize,
