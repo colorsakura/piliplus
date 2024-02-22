@@ -134,6 +134,14 @@ class _AboutPageState extends State<AboutPage> {
             trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
           ),
           ListTile(
+            onTap: () => _aboutController.webSiteUrl(),
+            title: const Text('访问官网'),
+            trailing: Text(
+              'https://pilipalanet.mysxl.cn/pilipala-x',
+              style: subTitleStyle,
+            ),
+          ),
+          ListTile(
             onTap: () => _aboutController.aPay(),
             title: const Text('赞助'),
             trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
@@ -228,6 +236,13 @@ class AboutController extends GetxController {
     );
   }
 
+  // 从网盘下载
+  panDownload() {
+    launchUrl(
+      Uri.parse('https://www.123pan.com/s/9sVqVv-flu0A.html'),
+      mode: LaunchMode.externalApplication,
+    );
+  }
   // 问题反馈
   feedback() {
     launchUrl(
@@ -258,6 +273,14 @@ class AboutController extends GetxController {
         Uri.parse('https://t.me/+lm_oOVmF0RJiODk1'),
         mode: LaunchMode.externalApplication,
       ),
+    );
+  }
+
+  // 官网
+  webSiteUrl() {
+    launchUrl(
+      Uri.parse('https://pilipalanet.mysxl.cn/pilipala-x'),
+      mode: LaunchMode.externalApplication,
     );
   }
 
