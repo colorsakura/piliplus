@@ -391,7 +391,7 @@ class PlPlayerController {
           setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
       if (autoEnterFullcreen && _isFirstTime) {
         await Future.delayed(const Duration(milliseconds: 100));
-        triggerFullScreen();
+        triggerFullScreen(status: true);
       }
     } catch (err) {
       dataStatus.status.value = DataStatus.error;
@@ -967,38 +967,10 @@ class PlPlayerController {
         await landScape();
       }
 
-      // bool isValid =
-      //     direction.value == 'vertical' || mode == FullScreenMode.vertical
-      //         ? true
-      //         : false;
-      // var result = await showDialog(
-      //   context: Get.context!,
-      //   useSafeArea: false,
-      //   builder: (context) => Dialog.fullscreen(
-      //     backgroundColor: Colors.black,
-      //     child: SafeArea(
-      //       // 忽略手机安全区域
-      //       top: isValid,
-      //       left: false,
-      //       right: false,
-      //       bottom: isValid,
-      //       child: PLVideoPlayer(
-      //         controller: this,
-      //         headerControl: headerControl,
-      //         bottomControl: bottomControl,
-      //         danmuWidget: danmuWidget,
-      //       ),
-      //     ),
-      //   ),
-      // );
-      // if (result == null) {
-      //   // 退出全屏
-      //   StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
-      //   exitFullScreen();
-      //   await verticalScreen();
-      //   toggleFullScreen(false);
-      // }
-    } else if (isFullScreen.value) {
+      if (triggerFullscreenCallback != null) {
+        triggerFullscreenCallback!(status: status);
+      }
+    } else if (isFullScreen.value && !status) {
       if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
         StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
         // Get.back();
@@ -1006,9 +978,9 @@ class PlPlayerController {
       }
       exitFullScreen();
       toggleFullScreen(false);
-    }
-    if (triggerFullscreenCallback != null) {
-      triggerFullscreenCallback!(status: status);
+      if (triggerFullscreenCallback != null) {
+        triggerFullscreenCallback!(status: status);
+      }
     }
   }
 
