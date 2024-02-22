@@ -23,6 +23,7 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPalaX/services/service_locator.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 
 import '../../../services/shutdown_timer_service.dart';
 import 'widgets/header_control.dart';
@@ -202,6 +203,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoPlayerServiceHandler.onVideoDetailDispose();
     floating.dispose();
     _lifecycleListener.dispose();
+    StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
     exitFullScreen();
     super.dispose();
   }
@@ -838,6 +840,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         builder: (BuildContext context, Orientation orientation) {
       if (orientation == Orientation.landscape) {
         enterFullScreen();
+      } else if (!isFullScreen.value) {
+        StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       }
       if (Platform.isAndroid) {
         return PiPSwitcher(

@@ -5,6 +5,9 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../../../common/widgets/custom_toast.dart';
+import '../../../utils/storage.dart';
+
 //横屏
 Future<void> landScape() async {
   dynamic document;
@@ -74,7 +77,11 @@ Future<void> exitFullScreen() async {
         mode,
         overlays: SystemUiOverlay.values,
       );
-      await SystemChrome.setPreferredOrientations([]);
+      if (setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
+        autoScreen();
+      } else {
+        verticalScreen();
+      }
     } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       await const MethodChannel('com.alexmercerind/media_kit_video')
           .invokeMethod(

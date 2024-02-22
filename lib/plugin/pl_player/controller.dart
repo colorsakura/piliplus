@@ -948,15 +948,15 @@ class PlPlayerController {
 
   // 全屏
   Future<void> triggerFullScreen({bool status = true}) async {
-    FullScreenMode mode = FullScreenModeCode.fromCode(
-        setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
-    await StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
     if (!isFullScreen.value && status) {
+      await StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
       /// 按照视频宽高比决定全屏方向
       toggleFullScreen(true);
 
       /// 进入全屏
       await enterFullScreen();
+      FullScreenMode mode = FullScreenModeCode.fromCode(
+          setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
       if (mode == FullScreenMode.vertical ||
           (mode == FullScreenMode.auto && direction.value == 'vertical') ||
           (mode == FullScreenMode.ratio &&
@@ -999,12 +999,12 @@ class PlPlayerController {
       //   toggleFullScreen(false);
       // }
     } else if (isFullScreen.value) {
-      StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
-      // Get.back();
-      exitFullScreen();
       if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
-        await verticalScreen();
+        StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+        // Get.back();
+        // await verticalScreen();
       }
+      exitFullScreen();
       toggleFullScreen(false);
     }
     if (triggerFullscreenCallback != null) {
