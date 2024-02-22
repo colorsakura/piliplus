@@ -221,7 +221,12 @@ class ProfilePanel extends StatelessWidget {
                     if (ctr.ownerMid == ctr.mid && ctr.ownerMid != -1) ...[
                       TextButton(
                         onPressed: () {
-                          SmartDialog.showToast('功能开发中 💪');
+                          Get.toNamed('/webview', parameters: {
+                            'url':
+                                'https://account.bilibili.com/account/home',
+                            'pageTitle': '编辑资料（建议浏览器打开）',
+                            'type': 'url'
+                          });
                         },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.only(left: 80, right: 80),
