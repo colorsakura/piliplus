@@ -198,7 +198,7 @@ class VideoContent extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        height: 1.45,
+                        height: 1.42,
                       )),
                 ),
               ],
