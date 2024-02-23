@@ -95,7 +95,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
     List<DanmakuElem>? currentDanmakuList =
         _plDanmakuController.getCurrentDanmaku(currentPosition);
 
-    if (currentDanmakuList != null) {
+    if (currentDanmakuList != null && _controller != null) {
       Color? defaultColor = playerController.blockTypes.contains(6)
           ? DmUtils.decimalToColor(16777215)
           : null;
