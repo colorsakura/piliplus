@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:PiliPalaX/models/user/my_emote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -42,13 +43,15 @@ class _EmoteTabState extends State<EmoteTab> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: futureBuild,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              myEmote.packages != null) {
-            return Column(
-              children: [
-                Expanded(child: TabBarView(controller: _myEmoteTabController, children: [
+      future: futureBuild,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            myEmote != null &&
+            myEmote.packages != null) {
+          return Column(
+            children: [
+              Expanded(
+                child: TabBarView(controller: _myEmoteTabController, children: [
                   for (Packages i in myEmote.packages!) ...<Widget>[
                     GridView.builder(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -64,41 +67,46 @@ class _EmoteTabState extends State<EmoteTab> with TickerProviderStateMixin {
                             widget.onEmoteTap(i.emote![index].text!);
                           },
                           child: i.type == 4
-                              ? Text(i.emote![index].text!,overflow: TextOverflow.clip,maxLines: 1,)
+                              ? Text(
+                                  i.emote![index].text!,
+                                  overflow: TextOverflow.clip,
+                                  maxLines: 1,
+                                )
                               : NetworkImgLayer(
-                            width: 36,
-                            height: 36,
-                            type: 'emote',
-                            src: i.emote![index].url,
-                          ),
+                                  width: 36,
+                                  height: 36,
+                                  type: 'emote',
+                                  src: i.emote![index].url?.split("@")[0]
+                                ),
                         );
                       },
                     ),
                   ],
-                ]),),
-                SizedBox(
-                    height: 45,
-                    child: TabBar(
-                      isScrollable: true,
-                      controller: _myEmoteTabController,
-                      tabs: [
-                        for (var i in myEmote.packages!)
-                          NetworkImgLayer(
-                            width: 36,
-                            height: 36,
-                            type: 'emote',
-                            src: i.url,
-                          ),
-                      ],
-                    ))
-              ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      );
+                ]),
+              ),
+              SizedBox(
+                  height: 45,
+                  child: TabBar(
+                    isScrollable: true,
+                    controller: _myEmoteTabController,
+                    tabs: [
+                      for (var i in myEmote.packages!)
+                        NetworkImgLayer(
+                          width: 36,
+                          height: 36,
+                          type: 'emote',
+                          src: i.url,
+                        ),
+                    ],
+                  ))
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }

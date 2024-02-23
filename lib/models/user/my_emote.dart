@@ -6,7 +6,7 @@ class MyEmote {
 
   MyEmote.fromJson(Map<String, dynamic> json) {
     setting =
-    json['setting'] != null ? Setting.fromJson(json['setting']) : null;
+        json['setting'] != null ? Setting.fromJson(json['setting']) : null;
     if (json['packages'] != null) {
       packages = <Packages>[];
       json['packages'].forEach((v) {
@@ -62,23 +62,23 @@ class Packages {
   PackagesMeta? meta;
   List<Emote>? emote;
   PackagesFlags? flags;
-  dynamic label;
+  Label? label;
   String? packageSubTitle;
   int? refMid;
 
   Packages(
       {this.id,
-        this.text,
-        this.url,
-        this.mtime,
-        this.type,
-        this.attr,
-        this.meta,
-        this.emote,
-        this.flags,
-        this.label,
-        this.packageSubTitle,
-        this.refMid});
+      this.text,
+      this.url,
+      this.mtime,
+      this.type,
+      this.attr,
+      this.meta,
+      this.emote,
+      this.flags,
+      this.label,
+      this.packageSubTitle,
+      this.refMid});
 
   Packages.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -94,8 +94,9 @@ class Packages {
         emote!.add(Emote.fromJson(v));
       });
     }
-    flags = json['flags'] != null ? PackagesFlags.fromJson(json['flags']) : null;
-    label = json['label'];
+    flags =
+        json['flags'] != null ? PackagesFlags.fromJson(json['flags']) : null;
+    label = json['label'] != null ? Label.fromJson(json['label']) : null;
     packageSubTitle = json['package_sub_title'];
     refMid = json['ref_mid'];
   }
@@ -117,9 +118,33 @@ class Packages {
     if (flags != null) {
       data['flags'] = flags!.toJson();
     }
-    data['label'] = label;
+    if (label != null) {
+      data['label'] = label!.toJson();
+    }
     data['package_sub_title'] = packageSubTitle;
     data['ref_mid'] = refMid;
+    return data;
+  }
+}
+
+class Label {
+  String? fontColor;
+  String? backgroundColor;
+  String? text;
+
+  Label({this.fontColor, this.backgroundColor, this.text});
+
+  Label.fromJson(Map<String, dynamic> json) {
+    fontColor = json['font_color'];
+    backgroundColor = json['background_color'];
+    text = json['text'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['font_color'] = fontColor;
+    data['background_color'] = backgroundColor;
+    data['text'] = text;
     return data;
   }
 }
@@ -127,18 +152,24 @@ class Packages {
 class PackagesMeta {
   int? size;
   int? itemId;
+  String? itemUrl;
+  int? assetId;
 
-  PackagesMeta({this.size, this.itemId});
+  PackagesMeta({this.size, this.itemId, this.itemUrl, this.assetId});
 
   PackagesMeta.fromJson(Map<String, dynamic> json) {
     size = json['size'];
     itemId = json['item_id'];
+    itemUrl = json['item_url'];
+    assetId = json['asset_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['size'] = size;
     data['item_id'] = itemId;
+    data['item_url'] = itemUrl;
+    data['asset_id'] = assetId;
     return data;
   }
 }
@@ -158,16 +189,16 @@ class Emote {
 
   Emote(
       {this.id,
-        this.packageId,
-        this.text,
-        this.url,
-        this.mtime,
-        this.type,
-        this.attr,
-        this.meta,
-        this.flags,
-        this.activity,
-        this.gifUrl});
+      this.packageId,
+      this.text,
+      this.url,
+      this.mtime,
+      this.type,
+      this.attr,
+      this.meta,
+      this.flags,
+      this.activity,
+      this.gifUrl});
 
   Emote.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -214,7 +245,9 @@ class EmoteMeta {
 
   EmoteMeta.fromJson(Map<String, dynamic> json) {
     size = json['size'];
-    suggest = json['suggest'].cast<String>();
+    suggest = json['suggest'] == null
+        ? null
+        : List<String>.from(json['suggest'].map((x) => x));
     alias = json['alias'];
     gifUrl = json['gif_url'];
   }
@@ -231,16 +264,18 @@ class EmoteMeta {
 
 class EmoteFlags {
   bool? unlocked;
+  bool? recentUseForbid;
 
-  EmoteFlags({this.unlocked});
-
+  EmoteFlags({this.unlocked, this.recentUseForbid});
   EmoteFlags.fromJson(Map<String, dynamic> json) {
     unlocked = json['unlocked'];
+    recentUseForbid = json['recent_use_forbid'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['unlocked'] = unlocked;
+    data['recent_use_forbid'] = recentUseForbid;
     return data;
   }
 }

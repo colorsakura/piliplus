@@ -129,6 +129,7 @@ class ReplyItem extends StatelessWidget {
   }
 
   Widget content(BuildContext context) {
+    if (replyItem?.member == null) return const SizedBox();
     final String heroTag = Utils.makeHeroTag(replyItem!.mid);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
