@@ -92,8 +92,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     autoPlayEnable =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: true);
     autoPiP = setting.get(SettingBoxKey.autoPiP, defaultValue: false);
-    videoDetailController
-        .setTriggerFullScreenCallback(triggerFullScreenCallback);
     videoSourceInit();
     appbarStreamListen();
     lifecycleListener();
@@ -158,8 +156,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   /// 未开启自动播放时触发播放
   Future<void> handlePlay() async {
-    videoDetailController
-        .setTriggerFullScreenCallback(triggerFullScreenCallback);
     await videoDetailController.playerInit();
     plPlayerController = videoDetailController.plPlayerController;
     plPlayerController!.addStatusLister(playerListener);
@@ -193,6 +189,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       if (isFullScreen) {
         videoDetailController.hiddenReplyReplyPanel();
       }
+      setState(() {
+        this.isFullScreen.value = isFullScreen;
+      });
     });
   }
 
@@ -244,8 +243,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
-    videoDetailController
-        .setTriggerFullScreenCallback(triggerFullScreenCallback);
     videoDetailController.playerInit(autoplay: autoplay);
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
@@ -293,12 +290,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
   }
 
-  void triggerFullScreenCallback({bool? status}) {
-    // SmartDialog.showToast('triggerFullScreen $status $isFullScreen.value');
-    setState(() {
-      isFullScreen.value = status ?? !isFullScreen.value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

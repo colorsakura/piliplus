@@ -247,10 +247,6 @@ class VideoDetailController extends GetxController
     plPlayerController.headerControl = headerControl;
   }
 
-  void setTriggerFullScreenCallback(void Function({bool? status}) callback) {
-    plPlayerController.setTriggerFullscreenCallback(callback);
-  }
-
   // 视频链接
   Future queryVideoUrl() async {
     var result = await VideoHttp.videoUrl(cid: cid.value, bvid: bvid);

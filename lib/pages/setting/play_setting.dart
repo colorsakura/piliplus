@@ -26,6 +26,7 @@ class _PlaySettingState extends State<PlaySetting> {
   late dynamic defaultAudioQa;
   late dynamic defaultDecode;
   late int defaultFullScreenMode;
+  late bool lockLandscape;
   late int defaultBtmProgressBehavior;
 
   @override
@@ -39,6 +40,8 @@ class _PlaySettingState extends State<PlaySetting> {
         defaultValue: VideoDecodeFormats.values.last.code);
     defaultFullScreenMode = setting.get(SettingBoxKey.fullScreenMode,
         defaultValue: FullScreenMode.values.first.code);
+    lockLandscape = setting.get(SettingBoxKey.lockLandscape,
+        defaultValue: false);
     defaultBtmProgressBehavior = setting.get(SettingBoxKey.btmProgressBehavior,
         defaultValue: BtmProgresBehavior.values.first.code);
   }
@@ -132,6 +135,12 @@ class _PlaySettingState extends State<PlaySetting> {
                 SmartDialog.showToast('已关闭横屏适配');
               }
             }
+          ),
+          const SetSwitchItem(
+            title: '额外横屏',
+            subTitle: '执行播放器横屏前，额外施加屏幕旋转方向限制',
+            setKey: SettingBoxKey.lockLandscape,
+            defaultVal: false,
           ),
           const SetSwitchItem(
             title: '开启硬解',
