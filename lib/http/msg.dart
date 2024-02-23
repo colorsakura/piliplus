@@ -100,6 +100,26 @@ class MsgHttp {
       };
     }
   }
+
+  static Future msgSysUpdateCursor(int cursor) async {
+    String csrf = await Request.getCsrf();
+    var res = await Request().get(Api.msgSysUpdateCursor, data: {
+      'csrf': csrf,
+      'csrf': csrf,
+      'cursor': cursor,
+    });
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+      };
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   static Future msgFeedUnread() async {
     var res = await Request().get(Api.msgFeedUnread);
     if (res.data['code'] == 0) {

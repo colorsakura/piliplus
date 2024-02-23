@@ -170,13 +170,13 @@ class Utils {
         .replaceAll('hh', hh)
         .replaceAll('mm', mm)
         .replaceAll('ss', ss);
-    if (int.parse(YY) == DateTime.now().year &&
-        int.parse(MM) == DateTime.now().month) {
-      // 当天
-      if (int.parse(DD) == DateTime.now().day) {
-        return '今天';
-      }
-    }
+    // if (int.parse(YY) == DateTime.now().year &&
+    //     int.parse(MM) == DateTime.now().month) {
+    //   // 当天
+    //   if (int.parse(DD) == DateTime.now().day) {
+    //     return '今天';
+    //   }
+    // }
     return date;
   }
 

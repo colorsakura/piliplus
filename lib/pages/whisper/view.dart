@@ -46,6 +46,7 @@ class _WhisperPageState extends State<WhisperPage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
+          await _whisperController.queryMsgFeedUnread();
           await _whisperController.onRefresh();
         },
         child: SingleChildScrollView(
@@ -58,27 +59,32 @@ class _WhisperPageState extends State<WhisperPage> {
                 return Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: SizedBox(
-                    height: constraints.maxWidth / 4,
+                    height: constraints.maxWidth / 4 + 10,
                     child: Obx(
                       () => GridView.count(
                         primary: false,
                         crossAxisCount: 4,
-                        padding: const EdgeInsets.all(0),
-                        childAspectRatio: 1.25,
-                        children: _whisperController.msgFeedTop.map((item) {
+                        padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
+                        childAspectRatio: 1.2,
+                        children: Iterable<int>.generate(
+                                _whisperController.msgFeedTop.length)
+                            .map((idx) {
                           return GestureDetector(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Badge(
-                                  isLabelVisible: item['value'] > 0,
+                                  isLabelVisible: _whisperController
+                                          .msgFeedTop[idx]['value'] >
+                                      0,
                                   backgroundColor:
                                       Theme.of(context).colorScheme.primary,
                                   textColor: Theme.of(context)
                                       .colorScheme
                                       .onInverseSurface,
-                                  label: Text(" ${item['value']} "),
+                                  label: Text(
+                                      " ${_whisperController.msgFeedTop[idx]['value']} "),
                                   alignment: Alignment.topRight,
                                   child: CircleAvatar(
                                     radius: 22,
@@ -86,7 +92,8 @@ class _WhisperPageState extends State<WhisperPage> {
                                         .colorScheme
                                         .onInverseSurface,
                                     child: Icon(
-                                      item['icon'],
+                                      _whisperController.msgFeedTop[idx]
+                                          ['icon'],
                                       size: 20,
                                       color:
                                           Theme.of(context).colorScheme.primary,
@@ -94,11 +101,17 @@ class _WhisperPageState extends State<WhisperPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 6),
-                                Text(item['name'],
+                                Text(_whisperController.msgFeedTop[idx]['name'],
                                     style: const TextStyle(fontSize: 13))
                               ],
                             ),
-                            onTap: () => Get.toNamed(item['route']),
+                            onTap: () {
+                              setState(() {
+                                _whisperController.msgFeedTop[idx]['value'] = 0;
+                              });
+                              Get.toNamed(
+                                  _whisperController.msgFeedTop[idx]['route']);
+                            },
                           );
                         }).toList(),
                       ),
@@ -123,19 +136,27 @@ class _WhisperPageState extends State<WhisperPage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (_, int i) {
                                   return ListTile(
-                                    onTap: () => Get.toNamed(
-                                      '/whisperDetail',
-                                      parameters: {
-                                        'talkerId':
-                                            sessionList[i].talkerId.toString(),
-                                        'name': sessionList[i].accountInfo.name,
-                                        'face': sessionList[i].accountInfo.face,
-                                        'mid': sessionList[i]
-                                            .accountInfo
-                                            .mid
-                                            .toString(),
-                                      },
-                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        sessionList[i].unreadCount = 0;
+                                      });
+                                      Get.toNamed(
+                                        '/whisperDetail',
+                                        parameters: {
+                                          'talkerId': sessionList[i]
+                                              .talkerId
+                                              .toString(),
+                                          'name':
+                                              sessionList[i].accountInfo.name,
+                                          'face':
+                                              sessionList[i].accountInfo.face,
+                                          'mid': sessionList[i]
+                                              .accountInfo
+                                              .mid
+                                              .toString(),
+                                        },
+                                      );
+                                    },
                                     leading: Badge(
                                       isLabelVisible:
                                           sessionList[i].unreadCount > 0,
@@ -181,7 +202,7 @@ class _WhisperPageState extends State<WhisperPage> {
                                                     .outline)),
                                     trailing: Text(
                                       Utils.dateFormat(
-                                          sessionList[i].lastMsg.timestamp),
+                                          sessionList[i].lastMsg.timestamp, formatType: "day"),
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall!

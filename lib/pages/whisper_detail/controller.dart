@@ -25,15 +25,19 @@ class WhisperDetailController extends GetxController {
     var res = await MsgHttp.sessionMsg(talkerId: talkerId);
     if (res['status']) {
       messageList.value = res['data'].messages;
-      if (messageList.isNotEmpty && res['data'].eInfos != null) {
-        eInfos = res['data'].eInfos;
+      if (messageList.isNotEmpty) {
+        ackSessionMsg();
+        if (res['data'].eInfos != null) {
+          eInfos = res['data'].eInfos;
+        }
       }
+    } else {
+      SmartDialog.showToast(res['msg']);
     }
-    return res;
   }
 
   Future ackSessionMsg() async {
-    if (messageList.isEmpty){
+    if (messageList.isEmpty) {
       return;
     }
     var res = await MsgHttp.ackSessionMsg(

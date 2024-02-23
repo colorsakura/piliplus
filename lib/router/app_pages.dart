@@ -34,6 +34,7 @@ import '../pages/member_dynamics/index.dart';
 import '../pages/member_like/index.dart';
 import '../pages/member_search/index.dart';
 import '../pages/member_seasons/index.dart';
+import '../pages/msg_feed_top/sys_msg/view.dart';
 import '../pages/search/index.dart';
 import '../pages/search_result/index.dart';
 import '../pages/setting/extra_setting.dart';
@@ -154,7 +155,7 @@ class Routes {
     // 收到的赞
     CustomGetPage(name: '/likeMe', page: () => const LikeMePage()),
     // 系统消息
-    CustomGetPage(name: '/sysMsg', page: () => const WhisperPage()),
+    CustomGetPage(name: '/sysMsg', page: () => const SysMsgPage()),
     // 登录页面
     CustomGetPage(name: '/loginPage', page: () => const LoginPage()),
     // 用户动态

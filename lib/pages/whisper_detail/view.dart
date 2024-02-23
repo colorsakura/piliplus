@@ -16,12 +16,11 @@ class WhisperDetailPage extends StatefulWidget {
 class _WhisperDetailPageState extends State<WhisperDetailPage> {
   final WhisperDetailController _whisperDetailController =
       Get.put(WhisperDetailController());
-  late Future _futureBuilderFuture;
 
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _whisperDetailController.querySessionMsg();
+    _whisperDetailController.querySessionMsg();
   }
 
   @override
@@ -89,53 +88,23 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
           ),
         ),
       ),
-      body: FutureBuilder(
-        future: _futureBuilderFuture,
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == null) {
-              return const SizedBox();
-            }
-            final Map data = snapshot.data as Map;
-            if (data['status']) {
-              List messageList = _whisperDetailController.messageList;
-              _whisperDetailController.ackSessionMsg();
-              return Obx(
-                () => messageList.isEmpty
-                    ? const SizedBox()
-                    : ListView.builder(
-                        itemCount: messageList.length,
-                        shrinkWrap: true,
-                        reverse: true,
-                        itemBuilder: (_, int i) {
-                          if (i == 0) {
-                            return Column(
-                              children: [
-                                ChatItem(
-                                    item: messageList[i],
-                                    e_infos: _whisperDetailController.eInfos),
-                                const SizedBox(height: 12),
-                              ],
-                            );
-                          } else {
-                            return ChatItem(
-                                item: messageList[i],
-                                e_infos: _whisperDetailController.eInfos);
-                          }
-                        },
-                      ),
-              );
-            } else {
-              // 请求错误
-              return const SizedBox();
-            }
-          } else {
-            // 骨架屏
-            return const SizedBox();
-          }
-        },
-      ),
-      // resizeToAvoidBottomInset: true,
+      body: Obx(() {
+        List messageList = _whisperDetailController.messageList;
+        if (messageList.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return ListView.builder(
+          itemCount: messageList.length,
+          shrinkWrap: true,
+          reverse: true,
+          itemBuilder: (_, int i) {
+            return ChatItem(
+                item: messageList[i], e_infos: _whisperDetailController.eInfos);
+          },
+        );
+      }),
       bottomNavigationBar: Container(
         width: double.infinity,
         height: MediaQuery.of(context).padding.bottom + 70,
