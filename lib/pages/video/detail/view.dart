@@ -275,8 +275,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     final bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    /// TODO 横屏全屏状态下误触pip
-    if (autoPiP && routePath.startsWith('/video') && isPortrait) {
+    if (autoPiP && routePath.startsWith('/video')) {
       floating.enable(
           aspectRatio: Rational(
         videoDetailController.data.dash!.video!.first.width!,
