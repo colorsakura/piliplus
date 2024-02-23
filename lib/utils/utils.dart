@@ -200,18 +200,22 @@ class Utils {
 
   static int findClosestNumber(int target, List<int> numbers) {
     int minDiff = 127;
-    late int closestNumber;
+    int? closestNumber;
     try {
       for (int number in numbers) {
-        int diff = (number - target).abs();
-
+        int diff = target - number;
+        if (diff < 0) {
+          continue;
+        }
         if (diff < minDiff) {
           minDiff = diff;
           closestNumber = number;
         }
       }
-    } catch (_) {}
-    return closestNumber;
+    } catch (_) {} finally {
+      closestNumber ??= numbers.last;
+    }
+    return closestNumber!;
   }
 
   // 版本对比
