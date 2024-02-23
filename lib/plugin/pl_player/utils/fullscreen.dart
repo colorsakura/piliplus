@@ -75,11 +75,6 @@ Future<void> exitFullScreen() async {
         mode,
         overlays: SystemUiOverlay.values,
       );
-      if (setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
-        autoScreen();
-      } else {
-        verticalScreen();
-      }
     } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       await const MethodChannel('com.alexmercerind/media_kit_video')
           .invokeMethod(

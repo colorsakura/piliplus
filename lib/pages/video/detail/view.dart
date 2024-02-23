@@ -96,6 +96,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     appbarStreamListen();
     lifecycleListener();
     fullScreenStatusListener();
+    autoScreen();
   }
 
   // 获取视频资源，初始化播放器
@@ -188,10 +189,19 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     plPlayerController?.isFullScreen.listen((bool isFullScreen) {
       if (isFullScreen) {
         videoDetailController.hiddenReplyReplyPanel();
+        enterFullScreen();
       }
       setState(() {
         this.isFullScreen.value = isFullScreen;
       });
+      if (!isFullScreen) {
+        exitFullScreen();
+        if (setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
+          autoScreen();
+        } else {
+          verticalScreen();
+        }
+      }
     });
   }
 
@@ -290,7 +300,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     Widget childWhenDisabled = SafeArea(
@@ -317,13 +326,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 children: [
                   Obx(
                     () {
-                      if (MediaQuery.of(context).orientation ==
-                              Orientation.landscape ||
-                          isFullScreen.value == true) {
-                        enterFullScreen();
-                      } else {
-                        exitFullScreen();
-                      }
                       final double videoheight = Get.width * 9 / 16;
                       final double videowidth = Get.width;
                       return SizedBox(
@@ -547,7 +549,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                   },
                                 ),
                                 Obx(
-                                      () => VideoReplyPanel(
+                                  () => VideoReplyPanel(
                                     bvid: videoDetailController.bvid,
                                     oid: videoDetailController.oid.value,
                                   ),
@@ -826,34 +828,39 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         }
       },
     );
-    if (!horizontalScreen) {
-      if (Platform.isAndroid) {
-        return PiPSwitcher(
-            childWhenEnabled: childWhenEnabled,
-            childWhenDisabled: childWhenDisabled,
-          floating: floating,);
-      }
-      return childWhenDisabled;
-    }
+    // if (!horizontalScreen) {
+    //   if (Platform.isAndroid) {
+    //     return PiPSwitcher(
+    //         childWhenEnabled: childWhenEnabled,
+    //         childWhenDisabled: childWhenDisabled,
+    //       floating: floating,);
+    //   }
+    //   return childWhenDisabled;
+    // }
     return OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
+          print("orientation $orientation");
       if (orientation == Orientation.landscape) {
         enterFullScreen();
+        if (!horizontalScreen) {
+          videoDetailController.hiddenReplyReplyPanel();
+        }
       } else if (!isFullScreen.value) {
         StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       }
       if (Platform.isAndroid) {
         return PiPSwitcher(
-          childWhenDisabled: orientation == Orientation.portrait
-                ? childWhenDisabled
-                : childWhenDisabledLandscape,
+          childWhenDisabled:
+              !horizontalScreen || orientation == Orientation.portrait
+                  ? childWhenDisabled
+                  : childWhenDisabledLandscape,
           childWhenEnabled: childWhenEnabled,
           floating: floating,
         );
       }
-      return orientation == Orientation.portrait
-            ? childWhenDisabled
-            : childWhenDisabledLandscape;
+      return !horizontalScreen || orientation == Orientation.portrait
+          ? childWhenDisabled
+          : childWhenDisabledLandscape;
     });
   }
 }
