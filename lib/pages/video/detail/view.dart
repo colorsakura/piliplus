@@ -97,6 +97,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoSourceInit();
     appbarStreamListen();
     lifecycleListener();
+    fullScreenStatusListener();
   }
 
   // 获取视频资源，初始化播放器
@@ -185,6 +186,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         return Future.value(AppExitResponse.cancel);
       },
     );
+  }
+
+  void fullScreenStatusListener() {
+    plPlayerController?.isFullScreen.listen((bool isFullScreen) {
+      if (isFullScreen) {
+        videoDetailController.hiddenReplyReplyPanel();
+      }
+    });
   }
 
   @override
