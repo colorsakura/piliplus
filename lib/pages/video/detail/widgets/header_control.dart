@@ -1095,7 +1095,7 @@ class _HeaderControlState extends State<HeaderControl> {
             ),
             fuc: () async {
               // 销毁播放器实例
-              await widget.controller!.dispose(type: 'all');
+              // await widget.controller!.dispose(type: 'all');
               if (mounted) {
                 Navigator.popUntil(
                     context, (Route<dynamic> route) => route.isFirst);
