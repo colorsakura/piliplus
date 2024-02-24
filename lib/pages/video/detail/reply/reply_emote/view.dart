@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:PiliPalaX/models/user/my_emote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

@@ -217,7 +217,7 @@ class Utils {
     } catch (_) {} finally {
       closestNumber ??= numbers.last;
     }
-    return closestNumber!;
+    return closestNumber;
   }
 
   // 版本对比
