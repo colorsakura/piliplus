@@ -1078,9 +1078,7 @@ class _HeaderControlState extends State<HeaderControl> {
                       !setting.get(SettingBoxKey.horizontalScreen,
                           defaultValue: false))
                     {
-                      SystemChrome.setPreferredOrientations([
-                        DeviceOrientation.portraitUp,
-                      ])
+                      verticalScreen(),
                     },
                   Get.back()
                 }

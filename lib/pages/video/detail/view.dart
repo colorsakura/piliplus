@@ -23,7 +23,6 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPalaX/services/service_locator.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 
 import '../../../services/shutdown_timer_service.dart';
 import 'widgets/header_control.dart';
@@ -64,6 +63,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late final AppLifecycleListener _lifecycleListener;
   bool isShowing = true;
   RxBool isFullScreen = false.obs;
+  late StreamSubscription<bool> fullScreenStatusListener;
 
   @override
   void initState() {
@@ -95,7 +95,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoSourceInit();
     appbarStreamListen();
     lifecycleListener();
-    fullScreenStatusListener();
     autoScreen();
   }
 
@@ -105,6 +104,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
+      listenFullScreenStatus();
     }
   }
 
@@ -140,13 +140,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         plPlayerController!.play();
       }
       // 播放完展示控制栏
-      try {
+      if (videoDetailController.floating != null) {
         PiPStatus currentStatus =
             await videoDetailController.floating!.pipStatus;
         if (currentStatus == PiPStatus.disabled) {
           plPlayerController!.onLockControl(false);
         }
-      } catch (_) {}
+      }
     }
   }
 
@@ -160,6 +160,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     await videoDetailController.playerInit();
     plPlayerController = videoDetailController.plPlayerController;
     plPlayerController!.addStatusLister(playerListener);
+    listenFullScreenStatus();
     videoDetailController.autoPlay.value = true;
     videoDetailController.isShowCover.value = false;
   }
@@ -185,17 +186,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  void fullScreenStatusListener() {
-    plPlayerController?.isFullScreen.listen((bool isFullScreen) {
-      if (isFullScreen) {
+  void listenFullScreenStatus() {
+    fullScreenStatusListener =
+        plPlayerController!.isFullScreen.listen((bool status) {
+      if (status) {
         videoDetailController.hiddenReplyReplyPanel();
-        enterFullScreen();
+        hideStatusBar();
       }
       setState(() {
-        this.isFullScreen.value = isFullScreen;
+        isFullScreen.value = status;
       });
-      if (!isFullScreen) {
-        exitFullScreen();
+      if (!status) {
+        showStatusBar();
         if (setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
           autoScreen();
         } else {
@@ -213,6 +215,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     shutdownTimerService.handleWaitingFinished();
     if (plPlayerController != null) {
       plPlayerController!.removeStatusLister(playerListener);
+      fullScreenStatusListener.cancel();
       plPlayerController!.dispose();
     }
     if (videoDetailController.floating != null) {
@@ -221,8 +224,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoPlayerServiceHandler.onVideoDetailDispose();
     floating.dispose();
     _lifecycleListener.dispose();
-    StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
-    exitFullScreen();
+    showStatusBar();
     super.dispose();
   }
 
@@ -238,6 +240,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoDetailController.defaultST = plPlayerController!.position.value;
       videoIntroController.isPaused = true;
       plPlayerController!.removeStatusLister(playerListener);
+      fullScreenStatusListener.cancel();
       plPlayerController!.pause();
     }
     setState(() => isShowing = false);
@@ -247,10 +250,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   // 返回当前页面时
   void didPopNext() async {
-    if (plPlayerController != null &&
-        plPlayerController!.videoPlayerController != null) {
-      setState(() => isShowing = true);
-    }
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
     videoDetailController.playerInit(autoplay: autoplay);
@@ -265,6 +264,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController?.play();
     }
     plPlayerController?.addStatusLister(playerListener);
+    if (plPlayerController != null) {
+      listenFullScreenStatus();
+    }
+    setState(() => isShowing = true);
     super.didPopNext();
   }
 
@@ -288,8 +291,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   void autoEnterPip() {
     final String routePath = Get.currentRoute;
-    final bool isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
 
     if (autoPiP && routePath.startsWith('/video')) {
       floating.enable(
@@ -340,7 +341,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             : videoheight,
                         width: MediaQuery.of(context).size.width,
                         child: PopScope(
-                            canPop: isFullScreen.value != true,
+                            canPop: isFullScreen.value != true &&
+                                (horizontalScreen ||
+                                    MediaQuery.of(context).orientation ==
+                                        Orientation.portrait),
                             onPopInvoked: (bool didPop) {
                               if (isFullScreen.value == true) {
                                 plPlayerController!
@@ -519,34 +523,30 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             child: TabBarView(
                               controller: videoDetailController.tabCtr,
                               children: <Widget>[
-                                Builder(
-                                  builder: (BuildContext context) {
-                                    return CustomScrollView(
-                                      key: const PageStorageKey<String>('简介'),
-                                      slivers: <Widget>[
-                                        if (videoDetailController.videoType ==
-                                            SearchType.video) ...[
-                                          const VideoIntroPanel(),
-                                        ] else if (videoDetailController
-                                                .videoType ==
-                                            SearchType.media_bangumi) ...[
-                                          Obx(() => BangumiIntroPanel(
-                                              cid: videoDetailController
-                                                  .cid.value)),
-                                        ],
-                                        SliverToBoxAdapter(
-                                          child: Divider(
-                                            indent: 12,
-                                            endIndent: 12,
-                                            color: Theme.of(context)
-                                                .dividerColor
-                                                .withOpacity(0.06),
-                                          ),
-                                        ),
-                                        const RelatedVideoPanel(),
-                                      ],
-                                    );
-                                  },
+                                CustomScrollView(
+                                  key: const PageStorageKey<String>('简介'),
+                                  slivers: <Widget>[
+                                    if (videoDetailController.videoType ==
+                                        SearchType.video) ...[
+                                      const VideoIntroPanel(),
+                                    ] else if (videoDetailController
+                                            .videoType ==
+                                        SearchType.media_bangumi) ...[
+                                      Obx(() => BangumiIntroPanel(
+                                          cid:
+                                              videoDetailController.cid.value)),
+                                    ],
+                                    SliverToBoxAdapter(
+                                      child: Divider(
+                                        indent: 12,
+                                        endIndent: 12,
+                                        color: Theme.of(context)
+                                            .dividerColor
+                                            .withOpacity(0.06),
+                                      ),
+                                    ),
+                                    const RelatedVideoPanel(),
+                                  ],
                                 ),
                                 Obx(
                                   () => VideoReplyPanel(
@@ -799,54 +799,31 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 );
               }))
         ]));
-    Widget childWhenEnabled = FutureBuilder(
-      key: Key(heroTag),
-      future: _futureBuilderFuture,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData && snapshot.data['status']) {
-          return Obx(
-            () => !videoDetailController.autoPlay.value
-                ? const SizedBox()
-                : PLVideoPlayer(
-                    controller: plPlayerController!,
-                    headerControl: HeaderControl(
-                      controller: plPlayerController,
-                      videoDetailCtr: videoDetailController,
-                    ),
-                    // danmuWidget: Obx(
-                    //   () => PlDanmaku(
-                    //     key: Key(
-                    //         videoDetailController.danmakuCid.value.toString()),
-                    //     cid: videoDetailController.danmakuCid.value,
-                    //     playerController: plPlayerController!,
-                    //   ),
-                    // ),
-                  ),
-          );
-        } else {
-          return nil;
-        }
-      },
+    Widget childWhenEnabled = Obx(
+      () => !videoDetailController.autoPlay.value
+          ? const SizedBox()
+          : PLVideoPlayer(
+              controller: plPlayerController!,
+              headerControl: HeaderControl(
+                controller: plPlayerController,
+                videoDetailCtr: videoDetailController,
+              ),
+            ),
     );
-    // if (!horizontalScreen) {
-    //   if (Platform.isAndroid) {
-    //     return PiPSwitcher(
-    //         childWhenEnabled: childWhenEnabled,
-    //         childWhenDisabled: childWhenDisabled,
-    //       floating: floating,);
-    //   }
-    //   return childWhenDisabled;
-    // }
     return OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
-          print("orientation $orientation");
+      if (!isShowing) {
+        return const SizedBox();
+      }
       if (orientation == Orientation.landscape) {
-        enterFullScreen();
         if (!horizontalScreen) {
+          hideStatusBar();
           videoDetailController.hiddenReplyReplyPanel();
         }
-      } else if (!isFullScreen.value) {
-        StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+      } else {
+        if (!isFullScreen.value) {
+          showStatusBar();
+        }
       }
       if (Platform.isAndroid) {
         return PiPSwitcher(

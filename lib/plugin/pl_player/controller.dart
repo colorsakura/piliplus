@@ -20,7 +20,6 @@ import 'package:PiliPalaX/services/service_locator.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import 'package:universal_platform/universal_platform.dart';
 // import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -943,12 +942,11 @@ class PlPlayerController {
   // 全屏
   Future<void> triggerFullScreen({bool status = true}) async {
     if (!isFullScreen.value && status) {
-      await StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
+      // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
+      hideStatusBar();
       /// 按照视频宽高比决定全屏方向
       toggleFullScreen(true);
-
       /// 进入全屏
-      await enterFullScreen();
       FullScreenMode mode = FullScreenModeCode.fromCode(
           setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
       if (mode == FullScreenMode.vertical ||
@@ -960,15 +958,13 @@ class PlPlayerController {
       } else {
         await landScape();
       }
-
     } else if (isFullScreen.value && !status) {
-      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
-        StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
-        // Get.back();
-        // await verticalScreen();
-      }
-      exitFullScreen();
+      // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+      showStatusBar();
       toggleFullScreen(false);
+      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)){
+        await verticalScreen();
+      }
     }
   }
 

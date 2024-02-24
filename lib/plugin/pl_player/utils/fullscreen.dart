@@ -53,14 +53,14 @@ Future<void> autoScreen() async {
   ]);
 }
 
-Future<void> enterFullScreen() async {
+Future<void> hideStatusBar() async {
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,
   );
 }
 
 //退出全屏显示
-Future<void> exitFullScreen() async {
+Future<void> showStatusBar() async {
   dynamic document;
   late SystemUiMode mode = SystemUiMode.edgeToEdge;
   try {
