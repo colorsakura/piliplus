@@ -236,11 +236,26 @@ class AboutController extends GetxController {
     );
   }
 
+  githubRelease() {
+    launchUrl(
+      Uri.parse('https://github.com/guozhigq/pilipala/release'),
+      mode: LaunchMode.externalApplication,
+    );
+  }
+
   // 从网盘下载
   panDownload() {
-    launchUrl(
-      Uri.parse('https://www.123pan.com/s/9sVqVv-flu0A.html'),
-      mode: LaunchMode.externalApplication,
+    Clipboard.setData(
+      const ClipboardData(text: 'pili'),
+    );
+    SmartDialog.showToast(
+      '已复制提取码：pili',
+      displayTime: const Duration(milliseconds: 500),
+    ).then(
+      (value) => launchUrl(
+        Uri.parse('https://www.123pan.com/s/9sVqVv-flu0A.html'),
+        mode: LaunchMode.externalApplication,
+      ),
     );
   }
   // 问题反馈

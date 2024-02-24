@@ -17,6 +17,8 @@ import '../http/index.dart';
 import '../models/github/latest.dart';
 
 class Utils {
+  static final Random random = Random();
+
   static Future<String> getCookiePath() async {
     final Directory tempDir = await getApplicationSupportDirectory();
     final String tempPath = "${tempDir.path}/.plpl/";
@@ -181,7 +183,7 @@ class Utils {
   }
 
   static String makeHeroTag(v) {
-    return v.toString() + Random().nextInt(9999).toString();
+    return v.toString() + random.nextInt(9999).toString();
   }
 
   static int duration(String duration) {
@@ -340,18 +342,14 @@ class Utils {
     return md5String;
   }
 
-  static String generateRandomString(int minLength, int maxLength) {
-    const String printable =
-        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#\$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ ';
-
-    var random = Random();
-    int length = minLength + random.nextInt(maxLength - minLength + 1);
-    return List<String>.generate(
-        length, (index) => printable[random.nextInt(printable.length)]).join();
+  static List<int> generateRandomBytes(int minLength, int maxLength) {
+    return List<int>.generate(
+      random.nextInt(maxLength-minLength+1), (_) => random.nextInt(0x60) + 0x20
+    );
   }
 
   static String base64EncodeRandomString(int minLength, int maxLength) {
-    String randomString = generateRandomString(minLength, maxLength);
-    return base64.encode(utf8.encode(randomString));
+    List<int> randomBytes = generateRandomBytes(minLength, maxLength);
+    return base64.encode(randomBytes);
   }
 }
