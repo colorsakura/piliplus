@@ -813,7 +813,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     return OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
       if (!isShowing) {
-        return const SizedBox();
+        return ColoredBox(color: Theme.of(context).colorScheme.background);
       }
       if (orientation == Orientation.landscape) {
         if (!horizontalScreen) {
