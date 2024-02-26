@@ -111,18 +111,20 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
     super.didChangeMetrics();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 键盘高度
-      final viewInsets = EdgeInsets.fromViewPadding(
-          View.of(context).viewInsets, View.of(context).devicePixelRatio);
-      _debouncer.run(() {
-        if (mounted) {
-          if (keyboardHeight == 0 && emoteHeight == 0) {
-            setState(() {
-              emoteHeight = keyboardHeight =
-                  keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
-            });
+      if (mounted) {
+        final viewInsets = EdgeInsets.fromViewPadding(
+            View.of(context).viewInsets, View.of(context).devicePixelRatio);
+        _debouncer.run(() {
+          if (mounted) {
+            if (keyboardHeight == 0 && emoteHeight == 0) {
+              setState(() {
+                emoteHeight = keyboardHeight =
+                    keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
+              });
+            }
           }
-        }
-      });
+        });
+      }
     });
   }
 
@@ -131,6 +133,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
     WidgetsBinding.instance.removeObserver(this);
     _replyContentController.dispose();
     replyContentFocusNode.removeListener(() {});
+    replyContentFocusNode.dispose();
     super.dispose();
   }
 
