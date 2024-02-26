@@ -386,7 +386,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                       // 完成评论，数据添加
                       if (value != null && value['data'] != null)
                         {
-                          _htmlRenderCtr.replyList.add(value['data']),
+                          _htmlRenderCtr.replyList.insert(0, value['data']),
                           _htmlRenderCtr.acount.value++
                         }
                     },
