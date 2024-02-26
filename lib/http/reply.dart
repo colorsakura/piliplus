@@ -1,4 +1,5 @@
 import '../models/video/reply/data.dart';
+import '../models/video/reply/emote.dart';
 import 'api.dart';
 import 'init.dart';
 
@@ -101,16 +102,16 @@ class ReplyHttp {
     }
   }
 
-  static Future getMyEmote({
-    required String business,
-  }) async {
+
+  static Future getEmoteList({String? business}) async {
     var res = await Request().get(Api.myEmote, data: {
-      'business': business,
+      'business': business ?? 'reply',
+      'web_location': '333.1245',
     });
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': res.data['data'],
+        'data': EmoteModelData.fromJson(res.data['data']),
       };
     } else {
       return {

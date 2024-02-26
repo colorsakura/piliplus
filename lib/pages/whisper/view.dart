@@ -178,7 +178,13 @@ class _WhisperPageState extends State<WhisperPage> {
                                     title:
                                         Text(sessionList[i].accountInfo.name),
                                     subtitle: Text(
-                                        sessionList[i]
+                                        sessionList[i].lastMsg.content !=
+                                                    null &&
+                                                sessionList[i]
+                                                        .lastMsg
+                                                        .content !=
+                                                    ''
+                                            ? (sessionList[i]
                                                 .lastMsg
                                                 .content['text'] ??
                                             sessionList[i]
@@ -189,8 +195,8 @@ class _WhisperPageState extends State<WhisperPage> {
                                                 .content['title'] ??
                                             sessionList[i]
                                                 .lastMsg
-                                                .content['reply_content'] ??
-                                            '',
+                                                .content['reply_content'])
+                                        : '不支持的消息类型',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
@@ -226,7 +232,9 @@ class _WhisperPageState extends State<WhisperPage> {
                       );
                     } else {
                       // 请求错误
-                      return const SizedBox();
+                      return Center(
+                        child: Text(data['msg'] ?? '请求异常'),
+                      );
                     }
                   } else {
                     // 骨架屏
