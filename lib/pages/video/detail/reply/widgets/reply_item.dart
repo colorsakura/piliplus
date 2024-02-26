@@ -278,7 +278,9 @@ class ReplyItem extends StatelessWidget {
                 },
               ).then((value) => {
                     // 完成评论，数据添加
-                    if (value != null && value['data'] != null)
+                    if (value != null &&
+                        value['data'] != null &&
+                        addReply != null)
                       {
                         addReply!(value['data'])
                         // replyControl.replies.add(value['data']),
