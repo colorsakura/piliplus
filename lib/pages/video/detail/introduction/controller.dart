@@ -23,7 +23,7 @@ import 'widgets/group_panel.dart';
 
 class VideoIntroController extends GetxController {
   // 视频bvid
-  String bvid = Get.parameters['bvid']!;
+  late String bvid;
 
   // 是否预渲染 骨架屏
   bool preRender = false;
@@ -72,6 +72,7 @@ class VideoIntroController extends GetxController {
     userInfo = userInfoCache.get('userInfoCache');
     try {
       heroTag = Get.arguments['heroTag'];
+      bvid = Get.parameters['bvid']!;
     } catch (_) {}
     if (Get.arguments.isNotEmpty) {
       if (Get.arguments.containsKey('videoItem')) {
