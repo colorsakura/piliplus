@@ -45,11 +45,15 @@ class HtmlRenderController extends GetxController {
     }
     response = res;
     oid.value = res['commentId'];
+    queryReplyList(reqType: 'init');
     return res;
   }
 
   // 请求评论
   Future queryReplyList({reqType = 'init'}) async {
+    if (reqType == 'init') {
+      currentPage = 0;
+    }
     var res = await ReplyHttp.replyList(
       oid: oid.value,
       pageNum: currentPage + 1,
