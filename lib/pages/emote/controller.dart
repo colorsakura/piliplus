@@ -6,7 +6,7 @@ import '../../models/video/reply/emote.dart';
 
 class EmotePanelController extends GetxController
     with GetTickerProviderStateMixin {
-  late List<PackageItem> emotePackage;
+  late List<Packages> emotePackage;
   late TabController tabController;
 
   Future getEmote() async {

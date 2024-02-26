@@ -102,7 +102,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
     _replyContentController.value = TextEditingValue(
       text: newText,
       selection:
-      TextSelection.collapsed(offset: cursorPosition + emote.text!.length),
+          TextSelection.collapsed(offset: cursorPosition + emote.text!.length),
     );
   }
 
@@ -118,7 +118,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
           if (keyboardHeight == 0 && emoteHeight == 0) {
             setState(() {
               emoteHeight = keyboardHeight =
-              keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
+                  keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
             });
           }
         }
@@ -221,15 +221,11 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
               ],
             ),
           ),
-          AnimatedSize(
-            curve: Curves.easeInOut,
-            duration: const Duration(milliseconds: 300),
-            child: SizedBox(
-              width: double.infinity,
-              height: toolbarType == 'input' ? keyboardHeight : emoteHeight,
-              child: EmotePanel(
-                onChoose: (package, emote) => onChooseEmote(package, emote),
-              ),
+          SizedBox(
+            width: double.infinity,
+            height: toolbarType == 'input' ? keyboardHeight : emoteHeight,
+            child: EmotePanel(
+              onChoose: (package, emote) => onChooseEmote(package, emote),
             ),
           ),
         ],

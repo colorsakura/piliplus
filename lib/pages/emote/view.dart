@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../common/widgets/network_img_layer.dart';
 import '../../models/video/reply/emote.dart';
 import 'controller.dart';
 
@@ -35,8 +36,7 @@ class _EmotePanelState extends State<EmotePanel>
           if (snapshot.connectionState == ConnectionState.done) {
             Map data = snapshot.data as Map;
             if (data['status']) {
-              List<PackageItem> emotePackage =
-                  _emotePanelController.emotePackage;
+              List<Packages> emotePackage = _emotePanelController.emotePackage;
 
               return Column(
                 children: [
@@ -52,9 +52,11 @@ class _EmotePanelState extends State<EmotePanel>
                           child: GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: size == 1 ? 40 : 60,
+                              maxCrossAxisExtent:
+                                  type == 4 ? 100 : (size == 1 ? 40 : 60),
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,
+                              mainAxisExtent: size == 1 ? 40 : 60,
                             ),
                             itemCount: e.emote!.length,
                             itemBuilder: (context, index) {
@@ -99,7 +101,14 @@ class _EmotePanelState extends State<EmotePanel>
                     dividerColor: Colors.transparent,
                     isScrollable: true,
                     tabs: _emotePanelController.emotePackage
-                        .map((e) => Tab(text: e.text))
+                        .map(
+                          (e) => NetworkImgLayer(
+                            width: 36,
+                            height: 36,
+                            type: 'emote',
+                            src: e.url,
+                          ),
+                        )
                         .toList(),
                   ),
                   SizedBox(height: MediaQuery.of(context).padding.bottom + 20),

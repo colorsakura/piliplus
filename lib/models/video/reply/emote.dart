@@ -1,120 +1,300 @@
 class EmoteModelData {
-  final List<PackageItem>? packages;
+  Setting? setting;
+  List<Packages>? packages;
 
-  EmoteModelData({
-    required this.packages,
-  });
+  EmoteModelData({this.setting, this.packages});
 
-  factory EmoteModelData.fromJson(Map<String, dynamic> jsonRes) {
-    final List<PackageItem>? packages =
-        jsonRes['packages'] is List ? <PackageItem>[] : null;
+  EmoteModelData.fromJson(Map<String, dynamic> json) {
+    setting =
+    json['setting'] != null ? Setting.fromJson(json['setting']) : null;
+    if (json['packages'] != null) {
+      packages = <Packages>[];
+      json['packages'].forEach((v) {
+        packages!.add(Packages.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (setting != null) {
+      data['setting'] = setting!.toJson();
+    }
     if (packages != null) {
-      for (final dynamic item in jsonRes['packages']!) {
-        if (item != null) {
-          try {
-            packages.add(PackageItem.fromJson(item));
-          } catch (_) {}
-        }
-      }
+      data['packages'] = packages!.map((v) => v.toJson()).toList();
     }
-    return EmoteModelData(
-      packages: packages,
-    );
+    return data;
   }
 }
 
-class PackageItem {
-  final int? id;
-  final String? text;
-  final String? url;
-  final int? mtime;
-  final int? type;
-  final int? attr;
-  final Meta? meta;
-  final List<Emote>? emote;
+class Setting {
+  int? recentLimit;
+  int? attr;
+  int? focusPkgId;
+  String? schema;
 
-  PackageItem({
-    required this.id,
-    required this.text,
-    required this.url,
-    required this.mtime,
-    required this.type,
-    required this.attr,
-    required this.meta,
-    required this.emote,
-  });
+  Setting({this.recentLimit, this.attr, this.focusPkgId, this.schema});
 
-  factory PackageItem.fromJson(Map<String, dynamic> jsonRes) {
-    final List<Emote>? emote = jsonRes['emote'] is List ? <Emote>[] : null;
+  Setting.fromJson(Map<String, dynamic> json) {
+    recentLimit = json['recent_limit'];
+    attr = json['attr'];
+    focusPkgId = json['focus_pkg_id'];
+    schema = json['schema'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['recent_limit'] = recentLimit;
+    data['attr'] = attr;
+    data['focus_pkg_id'] = focusPkgId;
+    data['schema'] = schema;
+    return data;
+  }
+}
+
+class Packages {
+  int? id;
+  String? text;
+  String? url;
+  int? mtime;
+  int? type;
+  int? attr;
+  PackagesMeta? meta;
+  List<Emote>? emote;
+  PackagesFlags? flags;
+  Label? label;
+  String? packageSubTitle;
+  int? refMid;
+
+  Packages(
+      {this.id,
+        this.text,
+        this.url,
+        this.mtime,
+        this.type,
+        this.attr,
+        this.meta,
+        this.emote,
+        this.flags,
+        this.label,
+        this.packageSubTitle,
+        this.refMid});
+
+  Packages.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    text = json['text'];
+    url = json['url'];
+    mtime = json['mtime'];
+    type = json['type'];
+    attr = json['attr'];
+    meta = json['meta'] != null ? PackagesMeta.fromJson(json['meta']) : null;
+    if (json['emote'] != null) {
+      emote = <Emote>[];
+      json['emote'].forEach((v) {
+        emote!.add(Emote.fromJson(v));
+      });
+    }
+    flags =
+    json['flags'] != null ? PackagesFlags.fromJson(json['flags']) : null;
+    label = json['label'] != null ? Label.fromJson(json['label']) : null;
+    packageSubTitle = json['package_sub_title'];
+    refMid = json['ref_mid'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['text'] = text;
+    data['url'] = url;
+    data['mtime'] = mtime;
+    data['type'] = type;
+    data['attr'] = attr;
+    if (meta != null) {
+      data['meta'] = meta!.toJson();
+    }
     if (emote != null) {
-      for (final dynamic item in jsonRes['emote']!) {
-        if (item != null) {
-          try {
-            emote.add(Emote.fromJson(item));
-          } catch (_) {}
-        }
-      }
+      data['emote'] = emote!.map((v) => v.toJson()).toList();
     }
-    return PackageItem(
-      id: jsonRes['id'],
-      text: jsonRes['text'],
-      url: jsonRes['url'],
-      mtime: jsonRes['mtime'],
-      type: jsonRes['type'],
-      attr: jsonRes['attr'],
-      meta: Meta.fromJson(jsonRes['meta']),
-      emote: emote,
-    );
+    if (flags != null) {
+      data['flags'] = flags!.toJson();
+    }
+    if (label != null) {
+      data['label'] = label!.toJson();
+    }
+    data['package_sub_title'] = packageSubTitle;
+    data['ref_mid'] = refMid;
+    return data;
   }
 }
 
-class Meta {
-  final int? size;
-  final List<String>? suggest;
+class Label {
+  String? fontColor;
+  String? backgroundColor;
+  String? text;
 
-  Meta({
-    required this.size,
-    required this.suggest,
-  });
+  Label({this.fontColor, this.backgroundColor, this.text});
 
-  factory Meta.fromJson(Map<String, dynamic> jsonRes) => Meta(
-        size: jsonRes['size'],
-        suggest: jsonRes['suggest'] is List ? <String>[] : null,
-      );
+  Label.fromJson(Map<String, dynamic> json) {
+    fontColor = json['font_color'];
+    backgroundColor = json['background_color'];
+    text = json['text'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['font_color'] = fontColor;
+    data['background_color'] = backgroundColor;
+    data['text'] = text;
+    return data;
+  }
+}
+
+class PackagesMeta {
+  int? size;
+  int? itemId;
+  String? itemUrl;
+  int? assetId;
+
+  PackagesMeta({this.size, this.itemId, this.itemUrl, this.assetId});
+
+  PackagesMeta.fromJson(Map<String, dynamic> json) {
+    size = json['size'];
+    itemId = json['item_id'];
+    itemUrl = json['item_url'];
+    assetId = json['asset_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['size'] = size;
+    data['item_id'] = itemId;
+    data['item_url'] = itemUrl;
+    data['asset_id'] = assetId;
+    return data;
+  }
 }
 
 class Emote {
-  final int? id;
-  final int? packageId;
-  final String? text;
-  final String? url;
-  final int? mtime;
-  final int? type;
-  final int? attr;
-  final Meta? meta;
-  final dynamic activity;
+  int? id;
+  int? packageId;
+  String? text;
+  String? url;
+  int? mtime;
+  int? type;
+  int? attr;
+  EmoteMeta? meta;
+  EmoteFlags? flags;
+  dynamic activity;
+  String? gifUrl;
 
-  Emote({
-    required this.id,
-    required this.packageId,
-    required this.text,
-    required this.url,
-    required this.mtime,
-    required this.type,
-    required this.attr,
-    required this.meta,
-    required this.activity,
-  });
+  Emote(
+      {this.id,
+        this.packageId,
+        this.text,
+        this.url,
+        this.mtime,
+        this.type,
+        this.attr,
+        this.meta,
+        this.flags,
+        this.activity,
+        this.gifUrl});
 
-  factory Emote.fromJson(Map<String, dynamic> jsonRes) => Emote(
-        id: jsonRes['id'],
-        packageId: jsonRes['package_id'],
-        text: jsonRes['text'],
-        url: jsonRes['url'],
-        mtime: jsonRes['mtime'],
-        type: jsonRes['type'],
-        attr: jsonRes['attr'],
-        meta: Meta.fromJson(jsonRes['meta']),
-        activity: jsonRes['activity'],
-      );
+  Emote.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    packageId = json['package_id'];
+    text = json['text'];
+    url = json['url'];
+    mtime = json['mtime'];
+    type = json['type'];
+    attr = json['attr'];
+    meta = json['meta'] != null ? EmoteMeta.fromJson(json['meta']) : null;
+    flags = json['flags'] != null ? EmoteFlags.fromJson(json['flags']) : null;
+    activity = json['activity'];
+    gifUrl = json['gif_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['package_id'] = packageId;
+    data['text'] = text;
+    data['url'] = url;
+    data['mtime'] = mtime;
+    data['type'] = type;
+    data['attr'] = attr;
+    if (meta != null) {
+      data['meta'] = meta!.toJson();
+    }
+    if (flags != null) {
+      data['flags'] = flags!.toJson();
+    }
+    data['activity'] = activity;
+    data['gif_url'] = gifUrl;
+    return data;
+  }
+}
+
+class EmoteMeta {
+  int? size;
+  List<String>? suggest;
+  String? alias;
+  String? gifUrl;
+
+  EmoteMeta({this.size, this.suggest, this.alias, this.gifUrl});
+
+  EmoteMeta.fromJson(Map<String, dynamic> json) {
+    size = json['size'];
+    suggest = json['suggest'] == null
+        ? null
+        : List<String>.from(json['suggest'].map((x) => x));
+    alias = json['alias'];
+    gifUrl = json['gif_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['size'] = size;
+    data['suggest'] = suggest;
+    data['alias'] = alias;
+    data['gif_url'] = gifUrl;
+    return data;
+  }
+}
+
+class EmoteFlags {
+  bool? unlocked;
+  bool? recentUseForbid;
+
+  EmoteFlags({this.unlocked, this.recentUseForbid});
+  EmoteFlags.fromJson(Map<String, dynamic> json) {
+    unlocked = json['unlocked'];
+    recentUseForbid = json['recent_use_forbid'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['unlocked'] = unlocked;
+    data['recent_use_forbid'] = recentUseForbid;
+    return data;
+  }
+}
+
+class PackagesFlags {
+  bool? added;
+  bool? preview;
+
+  PackagesFlags({this.added, this.preview});
+
+  PackagesFlags.fromJson(Map<String, dynamic> json) {
+    added = json['added'];
+    preview = json['preview'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['added'] = added;
+    data['preview'] = preview;
+    return data;
+  }
 }
