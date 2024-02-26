@@ -147,7 +147,11 @@ class UserHttp {
   // 观看历史暂停状态
   static Future historyStatus() async {
     var res = await Request().get(Api.historyStatus);
-    return res;
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'data': [], 'msg': res.data['message']};
+    }
   }
 
   // 清空历史记录

@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -1204,13 +1203,9 @@ class _HeaderControlState extends State<HeaderControl> {
                   padding: MaterialStateProperty.all(EdgeInsets.zero),
                 ),
                 onPressed: () async {
-                  bool canUsePiP = false;
+                  bool canUsePiP = widget.floating != null &&
+                      await widget.floating!.isPipAvailable;
                   widget.controller!.hiddenControls(false);
-                  try {
-                    canUsePiP = await widget.floating!.isPipAvailable;
-                  } on PlatformException catch (_) {
-                    canUsePiP = false;
-                  }
                   if (canUsePiP) {
                     final Rational aspectRatio = Rational(
                       widget.videoDetailCtr!.data.dash!.video!.first.width!,

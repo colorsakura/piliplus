@@ -638,7 +638,7 @@ class PlPlayerController {
           Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
         //_timerForSeek = null;
         if (duration.value.inSeconds != 0) {
-          await _videoPlayerController!.stream.buffer.first;
+          await _videoPlayerController?.stream.buffer.first;
           await _videoPlayerController?.seek(position);
           // if (playerStatus.status.value == PlayerStatus.paused) {
           //   play();

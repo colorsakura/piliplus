@@ -215,6 +215,10 @@ class AboutController extends GetxController {
   // 获取远程版本
   Future getRemoteApp() async {
     var result = await Request().get(Api.latestApp, extra: {'ua': 'pc'});
+    if (result.data.isEmpty) {
+      SmartDialog.showToast('检查更新失败，github接口未返回数据，请检查网络');
+      return false;
+    }
     data = LatestDataModel.fromJson(result.data[0]);
     remoteAppInfo = data;
     remoteVersion.value = data.tagName!;

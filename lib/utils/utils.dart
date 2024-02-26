@@ -230,6 +230,10 @@ class Utils {
     SmartDialog.dismiss();
     var currentInfo = await PackageInfo.fromPlatform();
     var result = await Request().get(Api.latestApp, extra: {'ua': 'mob'});
+    if (result.data.isEmpty) {
+      SmartDialog.showToast('检查更新失败，github接口未返回数据，请检查网络');
+      return false;
+    }
     LatestDataModel data = LatestDataModel.fromJson(result.data[0]);
     String buildNumber = currentInfo.buildNumber;
     if (Platform.isAndroid) {

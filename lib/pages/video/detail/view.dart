@@ -218,9 +218,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       fullScreenStatusListener.cancel();
       plPlayerController!.dispose();
     }
-    if (videoDetailController.floating != null) {
-      videoDetailController.floating!.dispose();
-    }
+    videoDetailController.floating?.dispose();
     videoPlayerServiceHandler.onVideoDetailDispose();
     floating.dispose();
     _lifecycleListener.dispose();
