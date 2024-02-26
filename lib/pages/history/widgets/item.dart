@@ -296,10 +296,10 @@ class VideoContent extends StatelessWidget {
               maxLines: videoItem.videos > 1 ? 1 : 2,
               overflow: TextOverflow.ellipsis,
             ),
-            if (videoItem.showTitle != null) ...[
+            if (videoItem.isFullScreen != null) ...[
               const SizedBox(height: 2),
               Text(
-                videoItem.showTitle,
+                videoItem.isFullScreen,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,

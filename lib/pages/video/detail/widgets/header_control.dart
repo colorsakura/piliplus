@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -20,6 +21,7 @@ import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/services/shutdown_timer_service.dart';
 import '../../../../models/video_detail_res.dart';
 import '../introduction/index.dart';
+import 'package:marquee/marquee.dart';
 
 class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
   const HeaderControl({
@@ -49,29 +51,30 @@ class _HeaderControlState extends State<HeaderControl> {
   final Box<dynamic> videoStorage = GStrorage.video;
   late List<double> speedsList;
   double buttonSpace = 8;
-  bool showTitle = false;
+  bool isFullScreen = false;
   late String heroTag;
   late VideoIntroController videoIntroController;
   late VideoDetailData videoDetail;
+  late StreamSubscription<bool> fullScreenStatusListener;
+  late bool horizontalScreen;
 
   @override
   void initState() {
     super.initState();
     videoInfo = widget.videoDetailCtr!.data;
     speedsList = widget.controller!.speedsList;
-    fullScreenStatusListener();
+    listenFullScreenStatus();
     heroTag = Get.arguments['heroTag'];
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
+    horizontalScreen =
+        setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
   }
 
-  void fullScreenStatusListener() {
-    widget.videoDetailCtr!.plPlayerController.isFullScreen
-        .listen((bool isFullScreen) {
-      if (isFullScreen) {
-        showTitle = true;
-      } else {
-        showTitle = false;
-      }
+  void listenFullScreenStatus() {
+    fullScreenStatusListener = widget
+        .videoDetailCtr!.plPlayerController.isFullScreen
+        .listen((bool status) {
+      isFullScreen = status;
       setState(() {});
     });
   }
@@ -79,8 +82,10 @@ class _HeaderControlState extends State<HeaderControl> {
   @override
   void dispose() {
     widget.floating?.dispose();
+    fullScreenStatusListener.cancel();
     super.dispose();
   }
+
   /// 设置面板
   void showSettingSheet() {
     showModalBottomSheet(
@@ -1085,6 +1090,7 @@ class _HeaderControlState extends State<HeaderControl> {
       titleSpacing: 14,
       title: Row(
         children: [
+          // SizedBox(width: MediaQuery.of(context).padding.left,),
           ComBtn(
             icon: const Icon(
               FontAwesomeIcons.arrowLeft,
@@ -1098,8 +1104,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 <void>{
                   if (MediaQuery.of(context).orientation ==
                           Orientation.landscape &&
-                      !setting.get(SettingBoxKey.horizontalScreen,
-                          defaultValue: false))
+                      !horizontalScreen)
                     {
                       verticalScreen(),
                     },
@@ -1108,18 +1113,34 @@ class _HeaderControlState extends State<HeaderControl> {
             },
           ),
           SizedBox(width: buttonSpace),
-          if (showTitle && isLandscape) ...[
+          if (isFullScreen ||
+              (!isFullScreen && isLandscape && !horizontalScreen)) ...[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 200),
-                  child: Text(
-                    videoIntroController.videoDetail.value.title!,
+                  constraints: BoxConstraints(
+                      maxWidth: isLandscape ? 400 : 100, maxHeight: 20),
+                  child: Marquee(
+                    text: videoIntroController.videoDetail.value.title!,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                     ),
+                    scrollAxis: Axis.horizontal,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    blankSpace: 200,
+                    velocity: 40,
+                    startAfter: const Duration(seconds: 1),
+                    showFadingOnlyWhenScrolling: true,
+                    fadingEdgeStartFraction: 0.1,
+                    fadingEdgeEndFraction: 0.1,
+                    numberOfRounds: 1,
+                    startPadding: 0,
+                    accelerationDuration: const Duration(seconds: 1),
+                    accelerationCurve: Curves.linear,
+                    decelerationDuration: const Duration(milliseconds: 500),
+                    decelerationCurve: Curves.easeOut,
                   ),
                 ),
                 if (videoIntroController.isShowOnlineTotal)
@@ -1159,19 +1180,21 @@ class _HeaderControlState extends State<HeaderControl> {
           //   fuc: () => _.screenshot(),
           // ),
           SizedBox(
-            width: 56,
+            width: 34,
             height: 34,
-            child: TextButton(
+            child: IconButton(
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.zero),
               ),
               onPressed: () => showShootDanmakuSheet(),
-              child: const Text(
-                '发弹幕',
-                style: textStyle,
+              icon: const Icon(
+                Icons.add_card_outlined,
+                size: 19,
+                color: Colors.white,
               ),
             ),
           ),
+          SizedBox(width: buttonSpace),
           SizedBox(
             width: 34,
             height: 34,
@@ -1225,7 +1248,7 @@ class _HeaderControlState extends State<HeaderControl> {
           ],
           Obx(
             () => SizedBox(
-              width: 45,
+              width: 34,
               height: 34,
               child: TextButton(
                 style: ButtonStyle(
