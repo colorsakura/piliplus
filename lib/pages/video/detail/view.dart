@@ -209,6 +209,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
+    videoDetailController.floating?.dispose();
+    floating.dispose();
     if (!horizontalScreen) {
       AutoOrientation.portraitUpMode();
     }
@@ -218,9 +220,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       fullScreenStatusListener.cancel();
       plPlayerController!.dispose();
     }
-    videoDetailController.floating?.dispose();
     videoPlayerServiceHandler.onVideoDetailDispose();
-    floating.dispose();
     _lifecycleListener.dispose();
     showStatusBar();
     super.dispose();

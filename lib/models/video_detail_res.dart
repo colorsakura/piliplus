@@ -184,8 +184,9 @@ class VideoDetailData {
             : List<dynamic>.from(descV2!.map((e) => e.toJson())),
         "state": state,
         "duration": duration,
-        "rights":
-            Map.from(rights!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "rights": rights == null
+            ? {}
+            : Map.from(rights!).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "owner": owner?.toJson(),
         "stat": stat?.toJson(),
         "dynamic": videoDynamic,

@@ -20,7 +20,7 @@ import 'package:PiliPalaX/utils/utils.dart';
 class DynamicsController extends GetxController {
   int page = 1;
   String? offset = '';
-  RxList<DynamicItemModel> dynamicsList = [DynamicItemModel()].obs;
+  RxList<DynamicItemModel> dynamicsList = <DynamicItemModel>[].obs;
   Rx<DynamicsType> dynamicsType = DynamicsType.values[0].obs;
   RxString dynamicsTypeLabel = '全部'.obs;
   final ScrollController scrollController = ScrollController();
