@@ -49,7 +49,6 @@ class _HeaderControlState extends State<HeaderControl> {
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
   final Box<dynamic> localCache = GStrorage.localCache;
   final Box<dynamic> videoStorage = GStrorage.video;
-  late List<double> speedsList;
   double buttonSpace = 8;
   bool isFullScreen = false;
   late String heroTag;
@@ -62,7 +61,6 @@ class _HeaderControlState extends State<HeaderControl> {
   void initState() {
     super.initState();
     videoInfo = widget.videoDetailCtr!.data;
-    speedsList = widget.controller!.speedsList;
     listenFullScreenStatus();
     heroTag = Get.arguments['heroTag'];
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
@@ -424,65 +422,6 @@ class _HeaderControlState extends State<HeaderControl> {
             ),
           );
         });
-      },
-    );
-  }
-
-  /// 选择倍速
-  void showSetSpeedSheet() {
-    final double currentSpeed = widget.controller!.playbackSpeed;
-    showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('播放速度'),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Wrap(
-              spacing: 8,
-              runSpacing: 2,
-              children: [
-                for (final double i in speedsList) ...<Widget>[
-                  if (i == currentSpeed) ...<Widget>[
-                    FilledButton(
-                      onPressed: () async {
-                        // setState(() => currentSpeed = i),
-                        await widget.controller!.setPlaybackSpeed(i);
-                        Get.back();
-                      },
-                      child: Text(i.toString()),
-                    ),
-                  ] else ...[
-                    FilledButton.tonal(
-                      onPressed: () async {
-                        // setState(() => currentSpeed = i),
-                        await widget.controller!.setPlaybackSpeed(i);
-                        Get.back();
-                      },
-                      child: Text(i.toString()),
-                    ),
-                  ]
-                ]
-              ],
-            );
-          }),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                await widget.controller!.setDefaultSpeed();
-                Get.back();
-              },
-              child: const Text('默认速度'),
-            ),
-          ],
-        );
       },
     );
   }
@@ -1073,10 +1012,6 @@ class _HeaderControlState extends State<HeaderControl> {
   @override
   Widget build(BuildContext context) {
     final _ = widget.controller!;
-    const TextStyle textStyle = TextStyle(
-      color: Colors.white,
-      fontSize: 12,
-    );
     final bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return AppBar(
@@ -1113,14 +1048,14 @@ class _HeaderControlState extends State<HeaderControl> {
             },
           ),
           SizedBox(width: buttonSpace),
-          if (isFullScreen ||
-              (!isFullScreen && isLandscape && !horizontalScreen)) ...[
+          if ((videoIntroController.videoDetail.value.title != null) && (isFullScreen ||
+              (!isFullScreen && isLandscape && !horizontalScreen))) ...[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                      maxWidth: isLandscape ? 400 : 100, maxHeight: 20),
+                      maxWidth: isLandscape ? 400 : 150, maxHeight: 20),
                   child: Marquee(
                     text: videoIntroController.videoDetail.value.title!,
                     style: const TextStyle(
@@ -1246,23 +1181,6 @@ class _HeaderControlState extends State<HeaderControl> {
             ),
             SizedBox(width: buttonSpace),
           ],
-          Obx(
-            () => SizedBox(
-              width: 34,
-              height: 34,
-              child: TextButton(
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: () => showSetSpeedSheet(),
-                child: Text(
-                  '${_.playbackSpeed}X',
-                  style: textStyle,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: buttonSpace),
           ComBtn(
             icon: const Icon(
               Icons.more_vert_outlined,
