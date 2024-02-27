@@ -1,6 +1,5 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -103,26 +102,8 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               const Spacer(),
-              // 倍速
-              // Obx(
-              //   () => SizedBox(
-              //     width: 45,
-              //     height: 34,
-              //     child: TextButton(
-              //       style: ButtonStyle(
-              //         padding: MaterialStateProperty.all(EdgeInsets.zero),
-              //       ),
-              //       onPressed: () {
-              //         _.togglePlaybackSpeed();
-              //       },
-              //       child: Text(
-              //         '${_.playbackSpeed.toString()}X',
-              //         style: textStyle,
-              //       ),
-              //     ),
-              //   ),
-              // ),
               SizedBox(
+                width: 45,
                 height: 30,
                 child: TextButton(
                   onPressed: () => _.toggleVideoFit(),
@@ -137,17 +118,55 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              // 全屏
               Obx(
-                () => ComBtn(
-                  icon: Icon(
-                    _.isFullScreen.value
-                        ? FontAwesomeIcons.compress
-                        : FontAwesomeIcons.expand,
-                    size: 15,
-                    color: Colors.white,
+                () => _.vttSubtitles.isEmpty
+                    ? const SizedBox(
+                        width: 0,
+                      )
+                    : SizedBox(
+                        width: 45,
+                        height: 30,
+                        child: IconButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          ),
+                          onPressed: () => _.showSetSubtitleSheet(),
+                          icon: const Icon(
+                            Icons.closed_caption_off_outlined,
+                            size: 19,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+              ),
+              SizedBox(
+                width: 45,
+                height: 30,
+                child: TextButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.zero),
                   ),
+                  onPressed: () => showSetSpeedSheet(),
+                  child: Obx(
+                    () => Text(
+                      '${_.playbackSpeed}X',
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  ),
+                ),
+              ),
+              // 全屏
+              SizedBox(
+                width: 45,
+                height: 30,
+                child: ComBtn(
+                  icon: Obx(() => Icon(
+                        _.isFullScreen.value
+                            ? Icons.fullscreen_exit
+                            : Icons.fullscreen,
+                        size: 19,
+                        color: Colors.white,
+                      )),
                   fuc: () => triggerFullScreen!(status: !_.isFullScreen.value),
                 ),
               ),
@@ -156,6 +175,66 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(height: 12),
         ],
       ),
+    );
+  }
+
+  /// 选择倍速
+  void showSetSpeedSheet() {
+    final double currentSpeed = controller!.playbackSpeed;
+    List<double> speedsList = controller!.speedsList;
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('播放速度'),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Wrap(
+              spacing: 8,
+              runSpacing: 2,
+              children: [
+                for (final double i in speedsList) ...<Widget>[
+                  if (i == currentSpeed) ...<Widget>[
+                    FilledButton(
+                      onPressed: () async {
+                        // setState(() => currentSpeed = i),
+                        await controller!.setPlaybackSpeed(i);
+                        Get.back();
+                      },
+                      child: Text(i.toString()),
+                    ),
+                  ] else ...[
+                    FilledButton.tonal(
+                      onPressed: () async {
+                        // setState(() => currentSpeed = i),
+                        await controller!.setPlaybackSpeed(i);
+                        Get.back();
+                      },
+                      child: Text(i.toString()),
+                    ),
+                  ]
+                ]
+              ],
+            );
+          }),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                await controller!.setDefaultSpeed();
+                Get.back();
+              },
+              child: const Text('默认速度'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

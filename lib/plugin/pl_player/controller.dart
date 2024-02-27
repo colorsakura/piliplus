@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -95,6 +96,7 @@ class PlPlayerController {
   int _heartDuration = 0;
   bool _enableHeart = true;
   bool _isFirstTime = true;
+  final RxList<Map<String,String>> _vttSubtitles = <Map<String,String>>[].obs;
 
   Timer? _timer;
   Timer? _timerForSeek;
@@ -147,7 +149,10 @@ class PlPlayerController {
   Rx<bool> get mute => _mute;
   Stream<bool> get onMuteChanged => _mute.stream;
 
-  /// [videoPlayerController] instace of Player
+  // 视频字幕
+  RxList<dynamic> get vttSubtitles => _vttSubtitles;
+
+  /// [videoPlayerController] instance of Player
   Player? get videoPlayerController => _videoPlayerController;
 
   /// [videoController] instace of Player
@@ -372,6 +377,7 @@ class PlPlayerController {
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
       updateDurationSecond();
+      refreshSubtitles();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
 
@@ -1076,5 +1082,83 @@ class PlPlayerController {
     } catch (err) {
       print(err);
     }
+  }
+
+  void refreshSubtitles() async {
+    _vttSubtitles.clear();
+    Map res = await VideoHttp.subtitlesJson(
+        bvid: _bvid, cid: _cid);
+    if (!res["status"]) {
+      SmartDialog.showToast('查询字幕错误，${res["msg"]}');
+    }
+    if (res["data"].length == 0) {
+      return;
+    }
+    _vttSubtitles.value = await VideoHttp.vttSubtitles(res["data"]);
+    if (_vttSubtitles.isEmpty) {
+      // SmartDialog.showToast('字幕均加载失败');
+      return;
+    }
+  }
+
+  /// 选择字幕
+  void showSetSubtitleSheet() async {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('选择字幕（测试）'),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Wrap(
+                  spacing: 8,
+                  runSpacing: 2,
+                  children: [
+                    FilledButton.tonal(
+                      onPressed: () async {
+                        await removeSubtitle();
+                        Get.back();
+                      },
+                      child: const Text("关闭字幕"),
+                    ),
+                    for (final Map<String, String> i in _vttSubtitles) ...<Widget>[
+                      FilledButton.tonal(
+                        onPressed: () async {
+                          await setSubtitle(i);
+                          Get.back();
+                        },
+                        child: Text(i["title"]!),
+                      ),
+                    ]
+                  ],
+                );
+              }),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  removeSubtitle() {
+    _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
+  }
+
+  // 设定字幕轨道
+  setSubtitle(Map<String,String> s) {
+    _videoPlayerController?.setSubtitleTrack(
+      SubtitleTrack.data(
+        s['text']!,
+        title: s['title']!,
+        language: s['language']!,
+      )
+    );
   }
 }
