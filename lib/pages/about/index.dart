@@ -218,6 +218,9 @@ class AboutController extends GetxController {
     if (result.data.isEmpty) {
       SmartDialog.showToast('检查更新失败，github接口未返回数据，请检查网络');
       return false;
+    } else if (result.data[0] == null) {
+      SmartDialog.showToast('检查更新失败，github接口返回如下内容：\n${result.data}');
+      return false;
     }
     data = LatestDataModel.fromJson(result.data[0]);
     remoteAppInfo = data;
