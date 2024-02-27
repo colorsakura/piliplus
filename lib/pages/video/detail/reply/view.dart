@@ -117,20 +117,18 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
-        _videoReplyController.currentPage = 0;
-        _videoReplyController.noMore.value = '';
-        await _videoReplyController.queryReplyList();
+        await _videoReplyController.queryReplyList(type: 'init');
       },
       child: Stack(
         children: [
           CustomScrollView(
             controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
               SliverPersistentHeader(
@@ -268,7 +266,10 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     (value) => {
                       // 完成评论，数据添加
                       if (value != null && value['data'] != null)
-                        {_videoReplyController.replyList.insert(0, value['data'])}
+                        {
+                          _videoReplyController.replyList
+                              .insert(0, value['data'])
+                        }
                     },
                   );
                 },
