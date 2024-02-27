@@ -5,9 +5,6 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../../../common/widgets/custom_toast.dart';
-import '../../../utils/storage.dart';
-
 //横屏
 Future<void> landScape() async {
   dynamic document;
@@ -15,14 +12,6 @@ Future<void> landScape() async {
     if (kIsWeb) {
       await document.documentElement?.requestFullscreen();
     } else if (Platform.isAndroid || Platform.isIOS) {
-      if (setting.get(SettingBoxKey.lockLandscape, defaultValue: false)) {
-        await SystemChrome.setPreferredOrientations(
-          [
-            DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
-          ],
-        );
-      }
       await AutoOrientation.landscapeAutoMode(forceSensor: true);
     } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       await const MethodChannel('com.alexmercerind/media_kit_video')

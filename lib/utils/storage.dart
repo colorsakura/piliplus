@@ -81,7 +81,6 @@ class SettingBoxKey {
       defaultAudioQa = 'defaultAudioQa',
       autoPlayEnable = 'autoPlayEnable',
       fullScreenMode = 'fullScreenMode',
-      lockLandscape = 'lockLandscape',
       defaultDecode = 'defaultDecode',
       danmakuEnable = 'danmakuEnable',
       defaultToastOp = 'defaultToastOp',
