@@ -50,8 +50,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   final Box<dynamic> localCache = GStrorage.localCache;
   final Box<dynamic> setting = GStrorage.setting;
-  late double statusBarHeight;
-  final double videoHeight = Get.size.width * 9 / 16;
   late Future _futureBuilderFuture;
   // 自动退出全屏
   late bool autoExitFullcreen;
@@ -84,7 +82,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoPlayerServiceHandler.onVideoDetailChange(
           bangumiIntroController.bangumiDetail.value, p0);
     });
-    statusBarHeight = localCache.get('statusBarHeight');
     autoExitFullcreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: false);
     horizontalScreen =
