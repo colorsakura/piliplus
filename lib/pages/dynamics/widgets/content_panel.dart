@@ -191,13 +191,16 @@ class _ContentState extends State<Content> {
                 /// fix 默认20px高度
                 style: const TextStyle(height: 0),
                 richNode(widget.item, context),
-                maxLines: widget.source == 'detail' ? 999 : 3,
+                // maxLines: widget.source == 'detail' ? 999 : 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
           if (hasPics) ...[
-            Text.rich(picsNodes()),
+            Text.rich(
+              picsNodes(),
+              semanticsLabel: '动态图片',
+            ),
           ]
         ],
       ),
