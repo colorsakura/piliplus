@@ -323,6 +323,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   Obx(
                     () {
                       final double videoheight = Get.width * 9 / 16;
+                      // final double videoheight =
+                      //     plPlayerController?.direction.value == 'vertical'
+                      //         ? Get.width
+                      //         : Get.width * 9 / 16;
                       final double videowidth = Get.width;
                       return SizedBox(
                         height: MediaQuery.of(context).orientation ==
@@ -482,15 +486,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       );
                     },
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).orientation ==
-                                Orientation.landscape ||
-                            isFullScreen.value == true
-                        ? 0
-                        : Get.height -
-                            Get.width * 9 / 16 -
-                            MediaQuery.of(context).padding.top,
-                    width: MediaQuery.of(context).size.width,
+                  Expanded(
                     child: ColoredBox(
                       key: Key(heroTag),
                       color: Theme.of(context).colorScheme.background,
