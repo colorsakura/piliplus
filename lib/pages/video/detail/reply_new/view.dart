@@ -109,9 +109,10 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 键盘高度
-      if (mounted) {
+    final String routePath = Get.currentRoute;
+    if (mounted && routePath.startsWith('/video')) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // 键盘高度
         final viewInsets = EdgeInsets.fromViewPadding(
             View.of(context).viewInsets, View.of(context).devicePixelRatio);
         _debouncer.run(() {
@@ -124,8 +125,8 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
             }
           }
         });
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -139,6 +140,9 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
 
   @override
   Widget build(BuildContext context) {
+    double keyboardHeight = EdgeInsets.fromViewPadding(
+            View.of(context).viewInsets, View.of(context).devicePixelRatio)
+        .bottom;
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
