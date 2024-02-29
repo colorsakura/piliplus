@@ -49,6 +49,7 @@ class _FavPageState extends State<FavPage> {
             onPressed: () => Get.toNamed(
                 '/favSearch?searchType=1&mediaId=${_favController.favFolderData.value.list!.first.id}'),
             icon: const Icon(Icons.search_outlined),
+            tooltip: '搜索',
           ),
           const SizedBox(width: 6),
         ],

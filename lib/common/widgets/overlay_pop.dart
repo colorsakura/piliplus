@@ -41,6 +41,7 @@ class OverlayPop extends StatelessWidget {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(20))),
                   child: IconButton(
+                    tooltip: '关闭',
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.zero),
                     ),

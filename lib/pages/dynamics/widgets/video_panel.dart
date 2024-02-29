@@ -87,6 +87,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                 width: width,
                 height: width / StyleString.aspectRatio,
                 src: content.cover,
+                semanticsLabel: content.title,
               ),
             ),
             if (content.badge != null && type == 'pgc')
@@ -133,7 +134,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                             const SizedBox(width: 10),
                           Text(content.stat.play + '次围观'),
                           const SizedBox(width: 10),
-                          Text(content.stat.danmaku + '条弹幕')
+                          Text(content.stat.danmu + '条弹幕')
                         ],
                       ),
                     ),

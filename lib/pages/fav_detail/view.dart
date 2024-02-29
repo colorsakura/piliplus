@@ -96,6 +96,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             ),
             actions: [
               IconButton(
+                tooltip: '搜索',
                 onPressed: () =>
                     Get.toNamed('/favSearch?searchType=0&mediaId=$mediaId'),
                 icon: const Icon(Icons.search_outlined),

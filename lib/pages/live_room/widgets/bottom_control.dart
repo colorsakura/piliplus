@@ -89,6 +89,7 @@ class _BottomControlState extends State<BottomControl> {
               width: 34,
               height: 34,
               child: IconButton(
+                tooltip: '画中画',
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(EdgeInsets.zero),
                 ),
@@ -114,6 +115,7 @@ class _BottomControlState extends State<BottomControl> {
             const SizedBox(width: 4),
           ],
           ComBtn(
+            tooltip: '全屏切换',
             icon: const Icon(
               Icons.fullscreen,
               size: 20,

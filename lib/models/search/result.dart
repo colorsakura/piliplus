@@ -98,7 +98,7 @@ class SearchVideoItemModel {
 class Stat {
   Stat({
     this.view,
-    this.danmaku,
+    this.danmu,
     this.favorite,
     this.reply,
     this.like,
@@ -107,7 +107,7 @@ class Stat {
   // 播放量
   int? view;
   // 弹幕数
-  int? danmaku;
+  int? danmu;
   // 收藏数
   int? favorite;
   // 评论数
@@ -117,7 +117,7 @@ class Stat {
 
   Stat.fromJson(Map<String, dynamic> json) {
     view = json['play'];
-    danmaku = json['danmaku'];
+    danmu = json['danmaku'];
     favorite = json['favorite'];
     reply = json['review'];
     like = json['like'];

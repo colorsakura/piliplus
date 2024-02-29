@@ -1,10 +1,15 @@
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
+
+import '../../../common/widgets/audio_video_progress_bar.dart';
+import '../../../utils/utils.dart';
 
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   final PlPlayerController? controller;
@@ -23,7 +28,9 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
       color: Colors.white,
       fontSize: 12,
     );
-
+    //阅读器限制
+    Timer? _accessibilityDebounce;
+    double _lastAnnouncedValue = -1;
     return Container(
       color: Colors.transparent,
       height: 90,
@@ -41,31 +48,49 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               }
               return Padding(
                 padding: const EdgeInsets.only(left: 7, right: 7, bottom: 6),
-                child: ProgressBar(
-                  progress: Duration(seconds: value),
-                  buffered: Duration(seconds: buffer),
-                  total: Duration(seconds: max),
-                  progressBarColor: colorTheme,
-                  baseBarColor: Colors.white.withOpacity(0.2),
-                  bufferedBarColor: colorTheme.withOpacity(0.4),
-                  timeLabelLocation: TimeLabelLocation.none,
-                  thumbColor: colorTheme,
-                  barHeight: 3.5,
-                  thumbRadius: 7,
-                  onDragStart: (duration) {
-                    feedBack();
-                    _.onChangedSliderStart();
-                  },
-                  onDragUpdate: (duration) {
-                    _.onUpdatedSliderProgress(duration.timeStamp);
-                  },
-                  onSeek: (duration) {
-                    _.onChangedSliderEnd();
-                    _.onChangedSlider(duration.inSeconds.toDouble());
-                    _.seekTo(Duration(seconds: duration.inSeconds),
-                        type: 'slider');
-                  },
-                ),
+                child: Semantics(
+                    // label: '${(value / max * 100).round()}%',
+                    value: '${(value / max * 100).round()}%',
+                    // enabled: false,
+                    child: ProgressBar(
+                      progress: Duration(seconds: value),
+                      buffered: Duration(seconds: buffer),
+                      total: Duration(seconds: max),
+                      progressBarColor: colorTheme,
+                      baseBarColor: Colors.white.withOpacity(0.2),
+                      bufferedBarColor: colorTheme.withOpacity(0.4),
+                      timeLabelLocation: TimeLabelLocation.none,
+                      thumbColor: colorTheme,
+                      barHeight: 3.5,
+                      thumbRadius: 7,
+                      onDragStart: (duration) {
+                        feedBack();
+                        _.onChangedSliderStart();
+                      },
+                      onDragUpdate: (duration) {
+                        double newProgress = duration.timeStamp.inSeconds / max;
+                        if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
+                          _accessibilityDebounce?.cancel();
+                          _accessibilityDebounce =
+                              Timer(const Duration(milliseconds: 200), () {
+                            SemanticsService.announce(
+                                "${(newProgress * 100).round()}%",
+                                TextDirection.ltr);
+                            _lastAnnouncedValue = newProgress;
+                          });
+                        }
+                        _.onUpdatedSliderProgress(duration.timeStamp);
+                      },
+                      onSeek: (duration) {
+                        _.onChangedSliderEnd();
+                        _.onChangedSlider(duration.inSeconds.toDouble());
+                        _.seekTo(Duration(seconds: duration.inSeconds),
+                            type: 'slider');
+                        SemanticsService.announce(
+                            "${(duration.inSeconds / max * 100).round()}%",
+                            TextDirection.ltr);
+                      },
+                    )),
               );
             },
           ),
@@ -80,25 +105,26 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               // 播放时间
               Obx(() {
                 return Text(
-                  _.durationSeconds.value >= 3600
-                      ? printDurationWithHours(
-                          Duration(seconds: _.positionSeconds.value))
-                      : printDuration(
-                          Duration(seconds: _.positionSeconds.value)),
+                  Utils.timeFormat(_.positionSeconds.value),
                   style: textStyle,
+                  semanticsLabel:
+                      '已播放${Utils.durationReadFormat(Utils.timeFormat(_.positionSeconds.value))}',
                 );
               }),
               const SizedBox(width: 2),
-              const Text('/', style: textStyle),
+              const ExcludeSemantics(
+                child: Text(
+                  '/',
+                  style: textStyle,
+                ),
+              ),
               const SizedBox(width: 2),
               Obx(
                 () => Text(
-                  _.durationSeconds.value >= 3600
-                      ? printDurationWithHours(
-                          Duration(seconds: _.durationSeconds.value))
-                      : printDuration(
-                          Duration(seconds: _.durationSeconds.value)),
+                  Utils.timeFormat(_.durationSeconds.value),
                   style: textStyle,
+                  semanticsLabel:
+                      '共${Utils.durationReadFormat(Utils.timeFormat(_.durationSeconds.value))}',
                 ),
               ),
               const Spacer(),
@@ -127,6 +153,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         width: 45,
                         height: 30,
                         child: IconButton(
+                          tooltip: '字幕',
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(EdgeInsets.zero),
                           ),
@@ -151,6 +178,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                     () => Text(
                       '${_.playbackSpeed}X',
                       style: const TextStyle(color: Colors.white, fontSize: 13),
+                      semanticsLabel: '${_.playbackSpeed}倍速',
                     ),
                   ),
                 ),
@@ -159,16 +187,18 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 45,
                 height: 30,
-                child: ComBtn(
-                  icon: Obx(() => Icon(
+                child: Obx(() => ComBtn(
+                      tooltip: _.isFullScreen.value ? '退出全屏' : '全屏',
+                      icon: Icon(
                         _.isFullScreen.value
                             ? Icons.fullscreen_exit
                             : Icons.fullscreen,
                         size: 19,
                         color: Colors.white,
-                      )),
-                  fuc: () => triggerFullScreen!(status: !_.isFullScreen.value),
-                ),
+                      ),
+                      fuc: () =>
+                          triggerFullScreen!(status: !_.isFullScreen.value),
+                    )),
               ),
             ],
           ),

@@ -85,6 +85,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                 children: <Widget>[
                   const Text('评论详情'),
                   IconButton(
+                    tooltip: '关闭',
                     icon: const Icon(Icons.close, size: 20),
                     onPressed: () {
                       _videoReplyReplyController.currentPage = 0;

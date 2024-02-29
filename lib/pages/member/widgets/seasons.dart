@@ -43,6 +43,7 @@ class MemberSeasonsPanel extends StatelessWidget {
                       width: 35,
                       height: 35,
                       child: IconButton(
+                        tooltip: '前往',
                         onPressed: () => Get.toNamed(
                             '/memberSeasons?mid=${item.meta!.mid}&seasonId=${item.meta!.seasonId}'),
                         style: ButtonStyle(

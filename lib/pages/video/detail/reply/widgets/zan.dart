@@ -76,6 +76,7 @@ class _ZanButtonState extends State<ZanButton> {
                   : FontAwesomeIcons.thumbsUp,
               size: 16,
               color: widget.replyItem!.action == 1 ? primary : color,
+              semanticLabel: widget.replyItem!.action == 1 ? '已赞' : '点赞',
             ),
             const SizedBox(width: 4),
             AnimatedSwitcher(

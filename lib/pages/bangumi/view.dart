@@ -98,6 +98,7 @@ class _BangumiPageState extends State<BangumiPage>
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           IconButton(
+                            tooltip: '刷新',
                             onPressed: () {
                               setState(() {
                                 _futureBuilderFutureFollow =

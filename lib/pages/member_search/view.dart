@@ -52,6 +52,7 @@ class _MemberSearchPageState extends State<MemberSearchPage>
         titleSpacing: 0,
         actions: [
           IconButton(
+              tooltip: '搜索',
               onPressed: () => _memberSearchCtr.submit(),
               icon: const Icon(CupertinoIcons.search, size: 22)),
           const SizedBox(width: 10)
@@ -67,6 +68,7 @@ class _MemberSearchPageState extends State<MemberSearchPage>
               hintText: _memberSearchCtr.hintText,
               border: InputBorder.none,
               suffixIcon: IconButton(
+                tooltip: '清空',
                 icon: Icon(
                   Icons.clear,
                   size: 22,

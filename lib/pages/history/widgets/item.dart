@@ -230,6 +230,7 @@ class HistoryItem extends StatelessWidget {
                                             const Duration(milliseconds: 250),
                                         curve: Curves.easeInOut,
                                         child: IconButton(
+                                          tooltip: '取消选择',
                                           style: ButtonStyle(
                                             padding: MaterialStateProperty.all(
                                                 EdgeInsets.zero),

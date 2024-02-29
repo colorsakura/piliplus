@@ -192,6 +192,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ToolbarIconButton(
+                  tooltip: '输入',
                   onPressed: () {
                     if (toolbarType == 'emote') {
                       setState(() {
@@ -206,6 +207,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
                 ),
                 const SizedBox(width: 20),
                 ToolbarIconButton(
+                  tooltip: '表情',
                   onPressed: () {
                     if (toolbarType == 'input') {
                       setState(() {

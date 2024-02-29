@@ -95,6 +95,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         IconButton(
+                          tooltip: '关闭',
                           icon: const Icon(Icons.close),
                           onPressed: () => Navigator.pop(context),
                         ),

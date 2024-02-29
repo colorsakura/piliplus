@@ -87,6 +87,7 @@ class SearchVideoPanel extends StatelessWidget {
                 width: 32,
                 height: 32,
                 child: IconButton(
+                  tooltip: '筛选',
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(EdgeInsets.zero),
                   ),

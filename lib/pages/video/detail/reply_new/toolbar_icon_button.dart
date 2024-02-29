@@ -5,6 +5,7 @@ class ToolbarIconButton extends StatelessWidget {
   final Icon icon;
   final String toolbarType;
   final bool selected;
+  final String tooltip;
 
   const ToolbarIconButton({
     super.key,
@@ -12,6 +13,7 @@ class ToolbarIconButton extends StatelessWidget {
     required this.icon,
     required this.toolbarType,
     required this.selected,
+    required this.tooltip,
   });
 
   @override
@@ -20,6 +22,7 @@ class ToolbarIconButton extends StatelessWidget {
       width: 36,
       height: 36,
       child: IconButton(
+        tooltip: tooltip,
         onPressed: onPressed,
         icon: icon,
         highlightColor: Theme.of(context).colorScheme.secondaryContainer,

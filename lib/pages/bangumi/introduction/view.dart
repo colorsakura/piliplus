@@ -15,6 +15,7 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/action_row_ite
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 
+import '../../../utils/utils.dart';
 import 'controller.dart';
 import 'widgets/intro_detail.dart';
 
@@ -192,6 +193,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                             src: !widget.loadingStatus
                                 ? widget.bangumiDetail!.cover!
                                 : bangumiItem!.cover!,
+                            semanticsLabel: '封面',
                           ),
                           if (bangumiItem != null &&
                               bangumiItem!.rating != null)
@@ -235,6 +237,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                       width: 34,
                                       height: 34,
                                       child: IconButton(
+                                        tooltip: '收藏',
                                         style: ButtonStyle(
                                           padding: MaterialStateProperty.all(
                                               EdgeInsets.zero),
@@ -394,18 +397,19 @@ class _BangumiInfoState extends State<BangumiInfo> {
               crossAxisCount: 5,
               childAspectRatio: 1.25,
               children: <Widget>[
-                Obx(
-                  () => ActionItem(
+                Obx(() => ActionItem(
                       icon: const Icon(FontAwesomeIcons.thumbsUp),
                       selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
                       onTap:
                           handleState(bangumiIntroController.actionLikeVideo),
                       selectStatus: bangumiIntroController.hasLike.value,
                       loadingStatus: false,
+                      semanticsLabel: '点赞',
                       text: !widget.loadingStatus
-                          ? widget.bangumiDetail!.stat!['likes']!.toString()
-                          : bangumiItem!.stat!['likes']!.toString()),
-                ),
+                          ? Utils.numFormat(
+                              widget.bangumiDetail!.stat!['likes']!)
+                          : Utils.numFormat(bangumiItem!.stat!['likes']!),
+                    )),
                 Obx(
                   () => ActionItem(
                       icon: const Icon(FontAwesomeIcons.b),
@@ -414,9 +418,10 @@ class _BangumiInfoState extends State<BangumiInfo> {
                           handleState(bangumiIntroController.actionCoinVideo),
                       selectStatus: bangumiIntroController.hasCoin.value,
                       loadingStatus: false,
+                      semanticsLabel: '投币',
                       text: !widget.loadingStatus
-                          ? widget.bangumiDetail!.stat!['coins']!.toString()
-                          : bangumiItem!.stat!['coins']!.toString()),
+                          ? Utils.numFormat(widget.bangumiDetail!.stat!['coins']!)
+                          : Utils.numFormat(bangumiItem!.stat!['coins']!)),
                 ),
                 Obx(
                   () => ActionItem(
@@ -425,9 +430,10 @@ class _BangumiInfoState extends State<BangumiInfo> {
                       onTap: () => showFavBottomSheet(),
                       selectStatus: bangumiIntroController.hasFav.value,
                       loadingStatus: false,
+                      semanticsLabel: '收藏',
                       text: !widget.loadingStatus
-                          ? widget.bangumiDetail!.stat!['favorite']!.toString()
-                          : bangumiItem!.stat!['favorite']!.toString()),
+                          ? Utils.numFormat(widget.bangumiDetail!.stat!['favorite']!)
+                          : Utils.numFormat(bangumiItem!.stat!['favorite']!)),
                 ),
                 ActionItem(
                   icon: const Icon(FontAwesomeIcons.comment),
@@ -435,18 +441,20 @@ class _BangumiInfoState extends State<BangumiInfo> {
                   onTap: () => videoDetailCtr.tabCtr.animateTo(1),
                   selectStatus: false,
                   loadingStatus: false,
+                  semanticsLabel: '评论',
                   text: !widget.loadingStatus
-                      ? widget.bangumiDetail!.stat!['reply']!.toString()
-                      : bangumiItem!.stat!['reply']!.toString(),
+                      ? Utils.numFormat(widget.bangumiDetail!.stat!['reply']!)
+                      : Utils.numFormat(bangumiItem!.stat!['reply']!),
                 ),
                 ActionItem(
                     icon: const Icon(FontAwesomeIcons.shareFromSquare),
                     onTap: () => bangumiIntroController.actionShareVideo(),
                     selectStatus: false,
                     loadingStatus: false,
+                    semanticsLabel: '转发',
                     text: !widget.loadingStatus
-                        ? widget.bangumiDetail!.stat!['share']!.toString()
-                        : bangumiItem!.stat!['share']!.toString()),
+                        ? Utils.numFormat(widget.bangumiDetail!.stat!['share']!)
+                        : Utils.numFormat(bangumiItem!.stat!['share']!)),
               ],
             ),
           ),

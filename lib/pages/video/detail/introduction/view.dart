@@ -87,7 +87,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               errMsg: snapshot.data['msg'],
               btnText: snapshot.data['code'] == -404 ||
                       snapshot.data['code'] == 62002
-                  ? '返回上一页'
+                  ? '上一页'
                   : null,
               fn: () => Get.back(),
             );
@@ -285,8 +285,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                               StatDanMu(
                                 theme: 'gray',
                                 danmu: !loadingStatus
-                                    ? widget.videoDetail!.stat!.danmaku
-                                    : videoItem['stat'].danmaku,
+                                    ? widget.videoDetail!.stat!.danmu
+                                    : videoItem['stat'].danmu,
                                 size: 'medium',
                               ),
                               const SizedBox(width: 10),
@@ -335,17 +335,19 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         Positioned(
                           right: 10,
                           top: 6,
-                          child: GestureDetector(
-                            onTap: () async {
-                              final res =
-                                  await videoIntroController.aiConclusion();
-                              if (res['status']) {
-                                showAiBottomSheet();
-                              }
-                            },
-                            child:
-                                Image.asset('assets/images/ai.png', height: 22),
-                          ),
+                          child: Semantics(
+                              label: 'AI总结',
+                              child: GestureDetector(
+                                onTap: () async {
+                                  final res =
+                                      await videoIntroController.aiConclusion();
+                                  if (res['status']) {
+                                    showAiBottomSheet();
+                                  }
+                                },
+                                child: Image.asset('assets/images/ai.png',
+                                    height: 22),
+                              )),
                         )
                     ],
                   ),
@@ -406,11 +408,15 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             fadeOutDuration: Duration.zero,
                           ),
                           const SizedBox(width: 10),
-                          Text(owner.name,
-                              style: const TextStyle(fontSize: 13)),
+                          Text(
+                            owner.name,
+                            style: const TextStyle(fontSize: 13),
+                            // semanticsLabel: "Up主：${owner.name}",
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             follower,
+                            semanticsLabel: "粉丝数：$follower",
                             style: TextStyle(
                               fontSize: t.textTheme.labelSmall!.fontSize,
                               color: outline,
@@ -498,8 +504,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   onTap: handleState(videoIntroController.actionLikeVideo),
                   selectStatus: videoIntroController.hasLike.value,
                   loadingStatus: loadingStatus,
+                  semanticsLabel: '点赞',
                   text: !loadingStatus
-                      ? widget.videoDetail!.stat!.like!.toString()
+                      ? Utils.numFormat(widget.videoDetail!.stat!.like!)
                       : '-'),
             ),
             // ActionItem(
@@ -515,8 +522,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   onTap: handleState(videoIntroController.actionCoinVideo),
                   selectStatus: videoIntroController.hasCoin.value,
                   loadingStatus: loadingStatus,
+                  semanticsLabel: '投币',
                   text: !loadingStatus
-                      ? widget.videoDetail!.stat!.coin!.toString()
+                      ? Utils.numFormat(widget.videoDetail!.stat!.coin!)
                       : '-'),
             ),
             Obx(
@@ -527,8 +535,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   onLongPress: () => showFavBottomSheet(type: 'longPress'),
                   selectStatus: videoIntroController.hasFav.value,
                   loadingStatus: loadingStatus,
+                  semanticsLabel: '收藏',
                   text: !loadingStatus
-                      ? widget.videoDetail!.stat!.favorite!.toString()
+                      ? Utils.numFormat(widget.videoDetail!.stat!.favorite!)
                       : '-'),
             ),
             ActionItem(
@@ -536,15 +545,19 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 onTap: () => videoDetailCtr.tabCtr.animateTo(1),
                 selectStatus: false,
                 loadingStatus: loadingStatus,
+                semanticsLabel: '评论',
                 text: !loadingStatus
-                    ? widget.videoDetail!.stat!.reply!.toString()
+                    ? Utils.numFormat(widget.videoDetail!.stat!.reply!)
                     : '评论'),
             ActionItem(
                 icon: const Icon(FontAwesomeIcons.shareFromSquare),
                 onTap: () => videoIntroController.actionShareVideo(),
                 selectStatus: false,
                 loadingStatus: loadingStatus,
-                text: '分享'),
+                semanticsLabel: '分享',
+                text: !loadingStatus
+                    ? Utils.numFormat(widget.videoDetail!.stat!.share!)
+                    : '分享'),
           ],
         ),
       );

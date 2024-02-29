@@ -10,6 +10,7 @@ class ActionItem extends StatelessWidget {
   final bool? loadingStatus;
   final String? text;
   final bool selectStatus;
+  final String semanticsLabel;
 
   const ActionItem({
     Key? key,
@@ -20,11 +21,15 @@ class ActionItem extends StatelessWidget {
     this.loadingStatus,
     this.text,
     this.selectStatus = false,
+    required this.semanticsLabel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return Semantics(
+      label: (text ?? "") + (selectStatus ? "已" :"") + semanticsLabel,
+      child:
+      InkWell(
       onTap: () => {
         feedBack(),
         onTap!(),
@@ -37,11 +42,15 @@ class ActionItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 4),
-          selectStatus
-              ? Icon(selectIcon!.icon!,
-                  size: 18, color: Theme.of(context).colorScheme.primary)
-              : Icon(icon!.icon!,
-                  size: 18, color: Theme.of(context).colorScheme.outline),
+          Icon(
+            selectStatus
+                ? selectIcon!.icon!
+                : icon!.icon!,
+            size: 18,
+            color: selectStatus
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline,
+          ),
           const SizedBox(height: 6),
           AnimatedOpacity(
             opacity: loadingStatus! ? 0 : 1,
@@ -59,11 +68,12 @@ class ActionItem extends StatelessWidget {
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.outline,
                     fontSize: Theme.of(context).textTheme.labelSmall!.fontSize),
+                semanticsLabel: "",
               ),
             ),
           ),
         ],
       ),
-    );
+    ));
   }
 }

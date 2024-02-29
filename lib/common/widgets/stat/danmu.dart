@@ -31,6 +31,7 @@ class StatDanMu extends StatelessWidget {
             fontSize: size == 'medium' ? 12 : 11,
             color: color,
           ),
+          semanticsLabel: '${Utils.numFormat(danmu!)}条弹幕',
         )
       ],
     );

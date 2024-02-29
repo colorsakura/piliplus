@@ -44,46 +44,54 @@ class _MinePageState extends State<MinePage> {
         toolbarHeight: kTextTabBarHeight + 20,
         backgroundColor: Colors.transparent,
         centerTitle: false,
-        title: //logo
-            Row(
-          children: [
-            Image.asset(
-              'assets/images/logo/logo_android_2.png',
-              width: 40,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              'PiliPalaX',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ],
+        title: ExcludeSemantics(
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/logo/logo_android_2.png',
+                width: 40,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                'PiliPalaX',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ],
+          ),
         ),
         actions: [
           IconButton(
+            tooltip: "${MineController.anonymity ? '退出' : '进入'}无痕模式",
             onPressed: () {
               MineController.onChangeAnonymity(context);
               setState(() {});
             },
             icon: Icon(
               MineController.anonymity
-                  ? Icons.visibility_off
-                  : Icons.visibility,
+                  ? CupertinoIcons.checkmark_shield
+                  : CupertinoIcons.shield_slash,
               size: 22,
             ),
           ),
           IconButton(
-            onPressed: () => mineController.onChangeTheme(),
+            tooltip:
+                '切换至${mineController.themeType.value == ThemeType.dark ? '浅色' : '深色'}主题',
+            onPressed: () {
+              mineController.onChangeTheme();
+              setState(() {});
+            },
             icon: Icon(
               mineController.themeType.value == ThemeType.dark
-                  ? Icons.light_mode
-                  : Icons.mode_night,
+                  ? CupertinoIcons.moon
+                  : CupertinoIcons.sun_min,
               size: 22,
             ),
           ),
           IconButton(
+            tooltip: '设置',
             onPressed: () => Get.toNamed('/setting', preventDuplicates: false),
             icon: const Icon(
-              Icons.settings,
+              CupertinoIcons.gear,
             ),
           ),
           const SizedBox(width: 10),
@@ -140,6 +148,7 @@ class _MinePageState extends State<MinePage> {
                 child: _mineController.userInfo.value.face != null
                     ? NetworkImgLayer(
                         src: _mineController.userInfo.value.face,
+                        semanticsLabel: '头像',
                         width: 85,
                         height: 85)
                     : Image.asset('assets/images/noface.jpeg'),
@@ -159,6 +168,8 @@ class _MinePageState extends State<MinePage> {
             Image.asset(
               'assets/images/lv/lv${_mineController.userInfo.value.levelInfo != null ? _mineController.userInfo.value.levelInfo!.currentLevel : '0'}.png',
               height: 10,
+              semanticLabel:
+                  '等级：${_mineController.userInfo.value.levelInfo != null ? _mineController.userInfo.value.levelInfo!.currentLevel : '0'}',
             ),
           ],
         ),
@@ -207,6 +218,8 @@ class _MinePageState extends State<MinePage> {
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontSize: 12,
                             ),
+                            semanticsLabel:
+                                '当前经验${levelInfo.currentExp!}，升级需要${levelInfo.nextExp!}',
                           ),
                         ),
                       ),

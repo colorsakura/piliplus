@@ -220,41 +220,46 @@ class UserInfoWidget extends StatelessWidget {
           const SizedBox(width: 4),
           ClipRect(
             child: IconButton(
+              tooltip: '消息',
               onPressed: () => Get.toNamed('/whisper'),
-              icon: const Icon(Icons.notifications_none),
+              icon: const Icon(
+                Icons.notifications_none,
+              ),
             ),
           )
         ],
         const SizedBox(width: 8),
-        Obx(
-          () => userLogin.value
-              ? Stack(
-                  children: [
-                    NetworkImgLayer(
-                      type: 'avatar',
-                      width: 34,
-                      height: 34,
-                      src: userFace,
-                    ),
-                    Positioned.fill(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => callback?.call(),
-                          splashColor: Theme.of(context)
-                              .colorScheme
-                              .primaryContainer
-                              .withOpacity(0.3),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(50),
-                          ),
+        Semantics(
+            label: "我的",
+            child: Obx(
+              () => userLogin.value
+                  ? Stack(
+                      children: [
+                        NetworkImgLayer(
+                          type: 'avatar',
+                          width: 34,
+                          height: 34,
+                          src: userFace,
                         ),
-                      ),
+                        Positioned.fill(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => callback?.call(),
+                              splashColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer
+                                  .withOpacity(0.3),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(50),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     )
-                  ],
-                )
-              : DefaultUser(callback: () => callback!()),
-        ),
+                  : DefaultUser(callback: () => callback!()),
+            )),
       ],
     );
   }
@@ -270,6 +275,7 @@ class DefaultUser extends StatelessWidget {
       width: 38,
       height: 38,
       child: IconButton(
+        tooltip: '默认用户头像',
         style: ButtonStyle(
           padding: MaterialStateProperty.all(EdgeInsets.zero),
           backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -409,6 +415,7 @@ class SearchBar extends StatelessWidget {
                 Icon(
                   Icons.search_outlined,
                   color: colorScheme.onSecondaryContainer,
+                  semanticLabel: '搜索',
                 ),
                 const SizedBox(width: 10),
                 Expanded(

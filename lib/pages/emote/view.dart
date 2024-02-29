@@ -78,10 +78,11 @@ class _EmotePanelState extends State<EmotePanel>
                                             overflow: TextOverflow.clip,
                                             maxLines: 1,
                                           )
-                                        : Image.network(
-                                            e.emote![index].url!,
+                                        : NetworkImgLayer(
+                                            src: e.emote![index].url!,
                                             width: size * 38,
                                             height: size * 38,
+                                            semanticsLabel: e.emote![index].text!,
                                           ),
                                   ),
                                 ),

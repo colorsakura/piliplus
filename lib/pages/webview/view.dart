@@ -27,6 +27,7 @@ class _WebviewPageState extends State<WebviewPage> {
           actions: [
             const SizedBox(width: 4),
             IconButton(
+              tooltip: '刷新',
               onPressed: () {
                 _webviewController.controller.reload();
               },
@@ -34,6 +35,7 @@ class _WebviewPageState extends State<WebviewPage> {
                   color: Theme.of(context).colorScheme.primary),
             ),
             IconButton(
+              tooltip: '用外部浏览器打开',
               onPressed: () {
                 launchUrl(Uri.parse(_webviewController.url));
               },

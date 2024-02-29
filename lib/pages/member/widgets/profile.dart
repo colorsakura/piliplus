@@ -147,28 +147,30 @@ class ProfilePanel extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                  !loadingStatus
-                                      ? ctr.userStat!['likes'] != null
-                                          ? Utils.numFormat(
-                                              ctr.userStat!['likes'],
-                                            )
-                                          : '-'
-                                      : '-',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              Text(
-                                '获赞',
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium!
-                                        .fontSize),
-                              )
-                            ],
-                          ),
+                          InkWell(
+                              onTap: null,
+                              child: Column(
+                                children: [
+                                  Text(
+                                      !loadingStatus
+                                          ? ctr.userStat!['likes'] != null
+                                              ? Utils.numFormat(
+                                                  ctr.userStat!['likes'],
+                                                )
+                                              : '-'
+                                          : '-',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                    '获赞',
+                                    style: TextStyle(
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium!
+                                            .fontSize),
+                                  )
+                                ],
+                              )),
                         ],
                       ),
                     ),
@@ -221,8 +223,7 @@ class ProfilePanel extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Get.toNamed('/webview', parameters: {
-                            'url':
-                                'https://account.bilibili.com/account/home',
+                            'url': 'https://account.bilibili.com/account/home',
                             'pageTitle': '编辑资料（建议浏览器打开）',
                             'type': 'url'
                           });

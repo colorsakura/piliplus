@@ -50,9 +50,10 @@ class _AboutPageState extends State<AboutPage> {
         children: [
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 150),
-            child: Image.asset(
+            child: ExcludeSemantics(
+                child: Image.asset(
               'assets/images/logo/logo_android_2.png',
-            ),
+            )),
           ),
           ListTile(
             title: Text('PiliPalaX',
@@ -65,6 +66,7 @@ class _AboutPageState extends State<AboutPage> {
               '使用Flutter开发的哔哩哔哩第三方客户端',
               textAlign: TextAlign.center,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              semanticsLabel: '与你一起，发现不一样的世界',
             ),
           ),
           Obx(
@@ -156,7 +158,7 @@ class _AboutPageState extends State<AboutPage> {
               var cleanStatus = await CacheManage().clearCacheAll();
               if (cleanStatus) {
                 getCacheSize();
-                  SmartDialog.showToast('清除成功');
+                SmartDialog.showToast('清除成功');
               }
             },
             title: const Text('清除缓存'),
@@ -207,7 +209,7 @@ class AboutController extends GetxController {
     String buildNumber = currentInfo.buildNumber;
     //if is android
     if (Platform.isAndroid) {
-      buildNumber = buildNumber.substring(0,buildNumber.length - 1);
+      buildNumber = buildNumber.substring(0, buildNumber.length - 1);
     }
     currentVersion.value = "${currentInfo.version}+$buildNumber";
   }
@@ -265,6 +267,7 @@ class AboutController extends GetxController {
       ),
     );
   }
+
   // 问题反馈
   feedback() {
     launchUrl(

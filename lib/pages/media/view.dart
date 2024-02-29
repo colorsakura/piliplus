@@ -149,6 +149,7 @@ class _MediaPageState extends State<MediaPage>
             ),
           ),
           trailing: IconButton(
+            tooltip: '刷新',
             onPressed: () {
               setState(() {
                 _futureBuilderFuture = mediaController.queryFavFolder();
@@ -189,6 +190,7 @@ class _MediaPageState extends State<MediaPage>
                                       right: 14, bottom: 35),
                                   child: Center(
                                     child: IconButton(
+                                      tooltip: '查看更多',
                                       style: ButtonStyle(
                                         padding: MaterialStateProperty.all(
                                             EdgeInsets.zero),

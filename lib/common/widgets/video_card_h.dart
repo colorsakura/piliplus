@@ -38,93 +38,96 @@ class VideoCardH extends StatelessWidget {
     final int aid = videoItem.aid;
     final String bvid = videoItem.bvid;
     final String heroTag = Utils.makeHeroTag(aid);
-    return GestureDetector(
-      onLongPress: () {
-        if (longPress != null) {
-          longPress!();
-        }
-      },
-      // onLongPressEnd: (details) {
-      //   if (longPressEnd != null) {
-      //     longPressEnd!();
-      //   }
-      // },
-      child: InkWell(
-        onTap: () async {
-          try {
-            final int cid =
-                videoItem.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
-            Get.toNamed('/video?bvid=$bvid&cid=$cid',
-                arguments: {'videoItem': videoItem, 'heroTag': heroTag});
-          } catch (err) {
-            SmartDialog.showToast(err.toString());
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-              StyleString.safeSpace, 5, StyleString.safeSpace, 5),
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints boxConstraints) {
-              final double width = (boxConstraints.maxWidth -
-                      StyleString.cardSpace *
-                          6 /
-                          MediaQuery.textScalerOf(context).scale(1.0)) /
-                  2;
-              return Container(
-                constraints: const BoxConstraints(minHeight: 88),
-                height: width / StyleString.aspectRatio,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: StyleString.aspectRatio,
-                      child: LayoutBuilder(
-                        builder: (BuildContext context,
-                            BoxConstraints boxConstraints) {
-                          final double maxWidth = boxConstraints.maxWidth;
-                          final double maxHeight = boxConstraints.maxHeight;
-                          return Stack(
-                            children: [
-                              Hero(
-                                tag: heroTag,
-                                child: NetworkImgLayer(
-                                  src: videoItem.pic as String,
-                                  width: maxWidth,
-                                  height: maxHeight,
-                                ),
-                              ),
-                              PBadge(
-                                text: Utils.timeFormat(videoItem.duration!),
-                                right: 6.0,
-                                bottom: 6.0,
-                                type: 'gray',
-                              ),
-                              // if (videoItem.rcmdReason != null &&
-                              //     videoItem.rcmdReason.content != '')
-                              //   pBadge(videoItem.rcmdReason.content, context,
-                              //       6.0, 6.0, null, null),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    VideoContent(
-                      videoItem: videoItem,
-                      source: source,
-                      showOwner: showOwner,
-                      showView: showView,
-                      showDanmaku: showDanmaku,
-                      showPubdate: showPubdate,
-                    )
-                  ],
-                ),
-              );
+    return Semantics(
+        label: Utils.videoItemSemantics(videoItem),
+        excludeSemantics: true,
+        child: GestureDetector(
+          onLongPress: () {
+            if (longPress != null) {
+              longPress!();
+            }
+          },
+          // onLongPressEnd: (details) {
+          //   if (longPressEnd != null) {
+          //     longPressEnd!();
+          //   }
+          // },
+          child: InkWell(
+            onTap: () async {
+              try {
+                final int cid = videoItem.cid ??
+                    await SearchHttp.ab2c(aid: aid, bvid: bvid);
+                Get.toNamed('/video?bvid=$bvid&cid=$cid',
+                    arguments: {'videoItem': videoItem, 'heroTag': heroTag});
+              } catch (err) {
+                SmartDialog.showToast(err.toString());
+              }
             },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  StyleString.safeSpace, 5, StyleString.safeSpace, 5),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints boxConstraints) {
+                  final double width = (boxConstraints.maxWidth -
+                          StyleString.cardSpace *
+                              6 /
+                              MediaQuery.textScalerOf(context).scale(1.0)) /
+                      2;
+                  return Container(
+                    constraints: const BoxConstraints(minHeight: 88),
+                    height: width / StyleString.aspectRatio,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        AspectRatio(
+                          aspectRatio: StyleString.aspectRatio,
+                          child: LayoutBuilder(
+                            builder: (BuildContext context,
+                                BoxConstraints boxConstraints) {
+                              final double maxWidth = boxConstraints.maxWidth;
+                              final double maxHeight = boxConstraints.maxHeight;
+                              return Stack(
+                                children: [
+                                  Hero(
+                                    tag: heroTag,
+                                    child: NetworkImgLayer(
+                                      src: videoItem.pic as String,
+                                      width: maxWidth,
+                                      height: maxHeight,
+                                    ),
+                                  ),
+                                  PBadge(
+                                    text: Utils.timeFormat(videoItem.duration!),
+                                    right: 6.0,
+                                    bottom: 6.0,
+                                    type: 'gray',
+                                  ),
+                                  // if (videoItem.rcmdReason != null &&
+                                  //     videoItem.rcmdReason.content != '')
+                                  //   pBadge(videoItem.rcmdReason.content, context,
+                                  //       6.0, 6.0, null, null),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        VideoContent(
+                          videoItem: videoItem,
+                          source: source,
+                          showOwner: showOwner,
+                          showView: showView,
+                          showDanmaku: showDanmaku,
+                          showPubdate: showPubdate,
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -185,6 +188,7 @@ class VideoContent extends StatelessWidget {
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.onSurface,
                         ),
+                        semanticsLabel: i['text'] as String,
                       ),
                     ]
                   ],
@@ -235,7 +239,7 @@ class VideoContent extends StatelessWidget {
                 if (showDanmaku)
                   StatDanMu(
                     theme: 'gray',
-                    danmu: videoItem.stat.danmaku as int,
+                    danmu: videoItem.stat.danmu as int,
                   ),
                 const Spacer(),
                 if (source == 'normal')

@@ -45,6 +45,76 @@ class Utils {
     }
   }
 
+  static String durationReadFormat(String duration) {
+    List<String> durationParts = duration.split(':');
+
+    if (durationParts.length == 3) {
+      if (durationParts[0] != '00') {
+        return '${int.parse(durationParts[0])}小时${durationParts[1]}分钟${durationParts[2]}秒';
+      }
+      durationParts.removeAt(0);
+    }
+    if (durationParts.length == 2) {
+      if (durationParts[0] != '00') {
+        return '${int.parse(durationParts[0])}分钟${durationParts[1]}秒';
+      }
+      durationParts.removeAt(0);
+    }
+    return '${int.parse(durationParts[0])}秒';
+  }
+
+  static String videoItemSemantics(dynamic videoItem) {
+    String semanticsLabel = "";
+    bool emptyStatCheck(dynamic stat) {
+      return stat == null ||
+          stat == '' ||
+          stat == 0 ||
+          stat == '0' ||
+          stat == '-';
+    }
+
+    if (videoItem.runtimeType.toString() == "RecVideoItemAppModel") {
+      if (videoItem.goto == 'picture') {
+        semanticsLabel += '动态,';
+      } else if (videoItem.goto == 'bangumi') {
+        semanticsLabel += '番剧,';
+      }
+    }
+    semanticsLabel += '${videoItem.title}';
+    if (!emptyStatCheck(videoItem.stat.view)) {
+      semanticsLabel += ',${Utils.numFormat(videoItem.stat.view)}';
+      semanticsLabel +=
+          (videoItem.runtimeType.toString() == "RecVideoItemAppModel" &&
+                  videoItem.goto == 'picture')
+              ? '浏览'
+              : '播放';
+    }
+    if (!emptyStatCheck(videoItem.stat.danmu)) {
+      semanticsLabel += ',${Utils.numFormat(videoItem.stat.danmu)}弹幕';
+    }
+    if (videoItem.rcmdReason != null && videoItem.rcmdReason.content != '') {
+      semanticsLabel += ',${videoItem.rcmdReason.content}';
+    }
+    if (!emptyStatCheck(videoItem.duration)) {
+      semanticsLabel +=
+          ',时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}';
+    }
+    if (videoItem.runtimeType.toString() != "RecVideoItemAppModel" &&
+        videoItem.pubdate != null) {
+      semanticsLabel +=
+          ',${Utils.dateFormat(videoItem.pubdate!, formatType: 'day')}';
+    }
+    if (videoItem.owner.name != '') {
+      semanticsLabel += ',Up主：${videoItem.owner.name}';
+    }
+    if (videoItem.runtimeType.toString() == "RecVideoItemAppModel" ||
+        videoItem.runtimeType.toString() == "RecVideoItemModel" &&
+            videoItem.isFollowed == 1) {
+      semanticsLabel += ',已关注';
+    }
+    return semanticsLabel;
+  }
+
   static String timeFormat(dynamic time) {
     // 1小时内
     if (time is String && time.contains(':')) {
@@ -214,7 +284,8 @@ class Utils {
           closestNumber = number;
         }
       }
-    } catch (_) {} finally {
+    } catch (_) {
+    } finally {
       closestNumber ??= numbers.last;
     }
     return closestNumber;
@@ -347,9 +418,8 @@ class Utils {
   }
 
   static List<int> generateRandomBytes(int minLength, int maxLength) {
-    return List<int>.generate(
-      random.nextInt(maxLength-minLength+1), (_) => random.nextInt(0x60) + 0x20
-    );
+    return List<int>.generate(random.nextInt(maxLength - minLength + 1),
+        (_) => random.nextInt(0x60) + 0x20);
   }
 
   static String base64EncodeRandomString(int minLength, int maxLength) {

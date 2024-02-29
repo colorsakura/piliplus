@@ -76,6 +76,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
           actions: [
             IconButton(
+              tooltip: '搜索',
               onPressed: () => Get.toNamed('/historySearch'),
               icon: const Icon(Icons.search_outlined),
             ),
@@ -129,6 +130,7 @@ class _HistoryPageState extends State<HistoryPage> {
           titleSpacing: 0,
           centerTitle: false,
           leading: IconButton(
+            tooltip: '取消',
             onPressed: () {
               _historyController.enableMultiple.value = false;
               for (var item in _historyController.historyList) {

@@ -90,6 +90,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
                 width: 34,
                 height: 34,
                 child: IconButton(
+                  tooltip: '返回',
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(EdgeInsets.zero),
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -160,7 +161,8 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
             reverse: true,
             itemBuilder: (_, int i) {
               return ChatItem(
-                  item: messageList[i], e_infos: _whisperDetailController.eInfos);
+                  item: messageList[i],
+                  e_infos: _whisperDetailController.eInfos);
             },
           );
         }),
@@ -197,6 +199,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
                 //   ),
                 // ),
                 IconButton(
+                  tooltip: '表情',
                   onPressed: () {
                     // if (toolbarType == 'input') {
                     //   setState(() {
@@ -220,22 +223,25 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
                           .withOpacity(0.08),
                       borderRadius: BorderRadius.circular(40.0),
                     ),
-                    child: TextField(
-                      readOnly: true,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      controller: _replyContentController,
-                      autofocus: false,
-                      focusNode: replyContentFocusNode,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none, // 移除默认边框
-                        hintText: '开发中 ...', // 提示文本
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0), // 内边距
-                      ),
-                    ),
+                    child: Semantics(
+                        label: '私信输入框（开发中）',
+                        child: TextField(
+                          readOnly: true,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          controller: _replyContentController,
+                          autofocus: false,
+                          focusNode: replyContentFocusNode,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none, // 移除默认边框
+                            hintText: '开发中 ...', // 提示文本
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 12.0), // 内边距
+                          ),
+                        )),
                   ),
                 ),
                 IconButton(
+                  tooltip: '发送',
                   // onPressed: _whisperDetailController.sendMsg,
                   onPressed: null,
                   icon: Icon(

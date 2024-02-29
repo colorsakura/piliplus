@@ -104,6 +104,7 @@ class _MemberPageState extends State<MemberPage>
             ),
             actions: [
               IconButton(
+                tooltip: '搜索',
                 onPressed: () => Get.toNamed(
                     '/memberSearch?mid=$mid&uname=${_memberController.memberInfo.value.name!}'),
                 icon: const Icon(Icons.search_outlined),
@@ -310,17 +311,20 @@ class _MemberPageState extends State<MemberPage>
                                 FontAwesomeIcons.venus,
                                 size: 14,
                                 color: Colors.pink,
+                                semanticLabel: _memberController.memberInfo.value.sex,
                               ),
                             if (_memberController.memberInfo.value.sex == '男')
                               const Icon(
                                 FontAwesomeIcons.mars,
                                 size: 14,
                                 color: Colors.blue,
+                                semanticLabel: _memberController.memberInfo.value.sex,
                               ),
                             const SizedBox(width: 4),
                             Image.asset(
                               'assets/images/lv/lv${_memberController.memberInfo.value.level}.png',
                               height: 11,
+                              semanticLabel: '等级${_memberController.memberInfo.value.level}',
                             ),
                             const SizedBox(width: 6),
                             if (_memberController
@@ -333,6 +337,7 @@ class _MemberPageState extends State<MemberPage>
                                 _memberController.memberInfo.value.vip!
                                     .label!['img_label_uri_hans'],
                                 height: 20,
+                                semanticLabel: _memberController.memberInfo.value.vip!.label!['text'],
                               ),
                             ] else if (_memberController
                                         .memberInfo.value.vip!.status ==
@@ -344,6 +349,7 @@ class _MemberPageState extends State<MemberPage>
                                 _memberController.memberInfo.value.vip!
                                     .label!['img_label_uri_hans_static'],
                                 height: 20,
+                                semanticLabel: _memberController.memberInfo.value.vip!.label!['text'],
                               ),
                             ]
                           ],

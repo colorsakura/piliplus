@@ -50,6 +50,7 @@ class _HistorySearchPageState extends State<HistorySearchPage> {
         titleSpacing: 0,
         actions: [
           IconButton(
+              tooltip: '搜索',
               onPressed: () => _historySearchCtr.submit(),
               icon: const Icon(Icons.search_outlined, size: 22)),
           const SizedBox(width: 10)
@@ -65,6 +66,7 @@ class _HistorySearchPageState extends State<HistorySearchPage> {
               hintText: _historySearchCtr.hintText,
               border: InputBorder.none,
               suffixIcon: IconButton(
+                tooltip: '清空',
                 icon: Icon(
                   Icons.clear,
                   size: 22,

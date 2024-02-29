@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
@@ -20,6 +21,7 @@ class NetworkImgLayer extends StatelessWidget {
     // 图片质量 默认1%
     this.quality,
     this.origAspectRatio,
+    this.semanticsLabel,
   });
 
   final String? src;
@@ -30,6 +32,7 @@ class NetworkImgLayer extends StatelessWidget {
   final Duration? fadeInDuration;
   final int? quality;
   final double? origAspectRatio;
+  final String? semanticsLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +52,7 @@ class NetworkImgLayer extends StatelessWidget {
       memCacheWidth = width.cacheSize(context);
       // memCacheHeight = height.cacheSize(context);
     }
-
-    return src != '' && src != null
+    Widget res = src != '' && src != null
         ? ClipRRect(
             clipBehavior: Clip.antiAlias,
             borderRadius: BorderRadius.circular(
@@ -79,6 +81,13 @@ class NetworkImgLayer extends StatelessWidget {
             ),
           )
         : placeholder(context);
+    if (semanticsLabel != null) {
+      return Semantics(
+        label: semanticsLabel,
+        child: res,
+      );
+    }
+    return res;
   }
 
   Widget placeholder(BuildContext context) {

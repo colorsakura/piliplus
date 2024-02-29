@@ -48,6 +48,7 @@ class AuthorPanel extends StatelessWidget {
               children: [
                 Text(
                   item.modules.moduleAuthor.name,
+                  // semanticsLabel: "Up主：${item.modules.moduleAuthor.name}",
                   style: TextStyle(
                     color: item.modules.moduleAuthor!.vip != null &&
                             item.modules.moduleAuthor!.vip['status'] > 0
@@ -81,6 +82,7 @@ class AuthorPanel extends StatelessWidget {
             width: 32,
             height: 32,
             child: IconButton(
+              tooltip: '更多',
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.zero),
               ),

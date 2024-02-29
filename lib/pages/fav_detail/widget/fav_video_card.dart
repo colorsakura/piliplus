@@ -209,6 +209,7 @@ class VideoContent extends StatelessWidget {
                     right: 0,
                     bottom: -4,
                     child: IconButton(
+                      tooltip: '取消收藏',
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
                       ),

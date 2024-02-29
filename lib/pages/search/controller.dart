@@ -64,7 +64,10 @@ class SSearchController extends GetxController {
   void submit() {
     // ignore: unrelated_type_equality_checks
     if (searchKeyWord == '') {
-      return;
+      if (hintText == ''){
+        return;
+      }
+      searchKeyWord.value = hintText;
     }
     List arr = historyCacheList.where((e) => e != searchKeyWord.value).toList();
     arr.insert(0, searchKeyWord.value);

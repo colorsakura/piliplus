@@ -67,6 +67,9 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
       width: 34,
       height: 34,
       child: IconButton(
+        tooltip: widget.controller!.videoPlayerController!.state.playing
+            ? '暂停'
+            : '播放',
         style: ButtonStyle(
           padding: MaterialStateProperty.all(EdgeInsets.zero),
         ),

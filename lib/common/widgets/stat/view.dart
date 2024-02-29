@@ -5,8 +5,9 @@ class StatView extends StatelessWidget {
   final String? theme;
   final dynamic view;
   final String? size;
+  final String? goto;
 
-  const StatView({Key? key, this.theme, this.view, this.size})
+  const StatView({Key? key, this.theme, this.view, this.size, this.goto})
       : super(key: key);
 
   @override
@@ -20,7 +21,9 @@ class StatView extends StatelessWidget {
     return Row(
       children: [
         Icon(
-          Icons.play_circle_outlined,
+          goto == 'picture'
+              ? Icons.remove_red_eye_outlined
+              : Icons.play_circle_outlined,
           size: 13,
           color: color,
         ),
@@ -31,6 +34,8 @@ class StatView extends StatelessWidget {
             fontSize: size == 'medium' ? 12 : 11,
             color: color,
           ),
+          semanticsLabel:
+              '${Utils.numFormat(view!)}次${goto == "picture" ? "浏览" : "播放"}',
         ),
       ],
     );

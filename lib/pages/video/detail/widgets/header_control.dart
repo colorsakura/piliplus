@@ -1027,6 +1027,7 @@ class _HeaderControlState extends State<HeaderControl> {
         children: [
           // SizedBox(width: MediaQuery.of(context).padding.left,),
           ComBtn(
+            tooltip: '上一页',
             icon: const Icon(
               FontAwesomeIcons.arrowLeft,
               size: 15,
@@ -1048,8 +1049,9 @@ class _HeaderControlState extends State<HeaderControl> {
             },
           ),
           SizedBox(width: buttonSpace),
-          if ((videoIntroController.videoDetail.value.title != null) && (isFullScreen ||
-              (!isFullScreen && isLandscape && !horizontalScreen))) ...[
+          if ((videoIntroController.videoDetail.value.title != null) &&
+              (isFullScreen ||
+                  (!isFullScreen && isLandscape && !horizontalScreen))) ...[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1090,6 +1092,7 @@ class _HeaderControlState extends State<HeaderControl> {
             )
           ] else ...[
             ComBtn(
+              tooltip: '返回主页',
               icon: const Icon(
                 FontAwesomeIcons.house,
                 size: 15,
@@ -1118,12 +1121,13 @@ class _HeaderControlState extends State<HeaderControl> {
             width: 34,
             height: 34,
             child: IconButton(
+              tooltip: '发弹幕',
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.zero),
               ),
               onPressed: () => showShootDanmakuSheet(),
               icon: const Icon(
-                Icons.add_card_outlined,
+                Icons.add_comment_outlined,
                 size: 19,
                 color: Colors.white,
               ),
@@ -1135,6 +1139,7 @@ class _HeaderControlState extends State<HeaderControl> {
             height: 34,
             child: Obx(
               () => IconButton(
+                tooltip: "${_.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(EdgeInsets.zero),
                 ),
@@ -1143,8 +1148,8 @@ class _HeaderControlState extends State<HeaderControl> {
                 },
                 icon: Icon(
                   _.isOpenDanmu.value
-                      ? Icons.subtitles_outlined
-                      : Icons.subtitles_off_outlined,
+                      ? Icons.comment_outlined
+                      : Icons.comments_disabled_outlined,
                   size: 19,
                   color: Colors.white,
                 ),
@@ -1157,6 +1162,7 @@ class _HeaderControlState extends State<HeaderControl> {
               width: 34,
               height: 34,
               child: IconButton(
+                tooltip: '画中画',
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(EdgeInsets.zero),
                 ),
@@ -1182,6 +1188,7 @@ class _HeaderControlState extends State<HeaderControl> {
             SizedBox(width: buttonSpace),
           ],
           ComBtn(
+            tooltip: '更多设置',
             icon: const Icon(
               Icons.more_vert_outlined,
               size: 18,

@@ -115,6 +115,7 @@ class _PagesPanelState extends State<PagesPanel> {
                                             .titleMedium,
                                       ),
                                       IconButton(
+                                        tooltip: '关闭',
                                         icon: const Icon(Icons.close),
                                         onPressed: () => Navigator.pop(context),
                                       ),

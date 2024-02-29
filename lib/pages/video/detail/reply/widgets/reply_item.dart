@@ -210,28 +210,30 @@ class ReplyItem extends StatelessWidget {
         // title
         Container(
           margin: const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
-          child: Text.rich(
-            style: const TextStyle(height: 1.75),
-            maxLines:
-                replyItem!.content!.isText! && replyLevel == '1' ? 3 : 999,
-            overflow: TextOverflow.ellipsis,
-            TextSpan(
-              children: [
-                if (replyItem!.isTop!)
-                  const WidgetSpan(
-                    alignment: PlaceholderAlignment.top,
-                    child: PBadge(
-                      text: 'TOP',
-                      size: 'small',
-                      stack: 'normal',
-                      type: 'line',
-                      fs: 9,
-                    ),
-                  ),
-                buildContent(context, replyItem!, replyReply, null),
-              ],
-            ),
-          ),
+          child: Semantics(
+              label: replyItem?.content?.message ?? "",
+              child: Text.rich(
+                style: const TextStyle(height: 1.75),
+                maxLines:
+                    replyItem!.content!.isText! && replyLevel == '1' ? 3 : 999,
+                overflow: TextOverflow.ellipsis,
+                TextSpan(
+                  children: [
+                    if (replyItem!.isTop!)
+                      const WidgetSpan(
+                        alignment: PlaceholderAlignment.top,
+                        child: PBadge(
+                          text: 'TOP',
+                          size: 'small',
+                          stack: 'normal',
+                          type: 'line',
+                          fs: 9,
+                        ),
+                      ),
+                    buildContent(context, replyItem!, replyReply, null),
+                  ],
+                ),
+              )),
         ),
         // 操作区域
         bottonAction(context, replyItem!.replyControl),

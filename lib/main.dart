@@ -148,6 +148,7 @@ class MyApp extends StatelessWidget {
         // 图片缓存
         // PaintingBinding.instance.imageCache.maximumSizeBytes = 1000 << 20;
         return GetMaterialApp(
+          // showSemanticsDebugger: true,
           title: 'PiliPalaX',
           theme: ThemeData(
             // fontFamily: 'HarmonyOS',
