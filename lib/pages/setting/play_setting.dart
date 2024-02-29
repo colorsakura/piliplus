@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
@@ -69,6 +67,12 @@ class _PlaySettingState extends State<PlaySetting> {
       ),
       body: ListView(
         children: [
+          const SetSwitchItem(
+            title: '弹幕开关',
+            subTitle: '设定弹幕是否默认显示',
+            setKey: SettingBoxKey.enableShowDanmaku,
+            defaultVal: false,
+          ),
           ListTile(
             dense: false,
             onTap: () => Get.toNamed('/playSpeedSet'),
@@ -76,22 +80,28 @@ class _PlaySettingState extends State<PlaySetting> {
             subtitle: Text('设置视频播放速度', style: subTitleStyle),
           ),
           const SetSwitchItem(
-            title: '开启1080P',
-            subTitle: '免登录查看1080P视频',
-            setKey: SettingBoxKey.p1080,
-            defaultVal: true,
-          ),
-          const SetSwitchItem(
-            title: 'CDN优化',
-            subTitle: '使用优质CDN线路',
-            setKey: SettingBoxKey.enableCDN,
-            defaultVal: true,
-          ),
-          const SetSwitchItem(
             title: '自动播放',
             subTitle: '进入详情页自动播放',
             setKey: SettingBoxKey.autoPlayEnable,
             defaultVal: true,
+          ),
+          const SetSwitchItem(
+            title: '双击快退/快进',
+            subTitle: '左侧双击快退，右侧双击快进',
+            setKey: SettingBoxKey.enableQuickDouble,
+            defaultVal: true,
+          ),
+          const SetSwitchItem(
+            title: '自动全屏',
+            subTitle: '视频开始播放时进入全屏',
+            setKey: SettingBoxKey.enableAutoEnter,
+            defaultVal: false,
+          ),
+          const SetSwitchItem(
+            title: '自动退出全屏',
+            subTitle: '视频结束播放时退出全屏',
+            setKey: SettingBoxKey.enableAutoExit,
+            defaultVal: false,
           ),
           const SetSwitchItem(
             title: '后台播放',
@@ -101,62 +111,11 @@ class _PlaySettingState extends State<PlaySetting> {
           ),
           if (Platform.isAndroid)
             const SetSwitchItem(
-              title: '自动PiP播放',
-              subTitle: '进入后台时画中画播放',
+              title: '后台画中画',
+              subTitle: '进入后台时以小窗形式（PiP）播放',
               setKey: SettingBoxKey.autoPiP,
               defaultVal: false,
             ),
-          const SetSwitchItem(
-            title: '自动全屏',
-            subTitle: '视频开始播放时进入全屏',
-            setKey: SettingBoxKey.enableAutoEnter,
-            defaultVal: false,
-          ),
-          const SetSwitchItem(
-            title: '自动退出',
-            subTitle: '视频结束播放时退出全屏',
-            setKey: SettingBoxKey.enableAutoExit,
-            defaultVal: false,
-          ),
-          SetSwitchItem(
-            title: '横屏适配（测试）',
-            subTitle: '开启该项在播放页启用横屏布局与逻辑',
-            setKey: SettingBoxKey.horizontalScreen,
-            defaultVal: false,
-            callFn: (value) {
-              if (value) {
-                autoScreen();
-                SmartDialog.showToast('已开启横屏适配');
-              } else {
-                AutoOrientation.portraitUpMode();
-                SmartDialog.showToast('已关闭横屏适配');
-              }
-            }
-          ),
-          const SetSwitchItem(
-            title: '开启硬解',
-            subTitle: '以较低功耗播放视频',
-            setKey: SettingBoxKey.enableHA,
-            defaultVal: true,
-          ),
-          const SetSwitchItem(
-            title: '观看人数',
-            subTitle: '展示同时在看人数',
-            setKey: SettingBoxKey.enableOnlineTotal,
-            defaultVal: false,
-          ),
-          const SetSwitchItem(
-            title: '亮度记忆',
-            subTitle: '返回时自动调整视频亮度',
-            setKey: SettingBoxKey.enableAutoBrightness,
-            defaultVal: false,
-          ),
-          const SetSwitchItem(
-            title: '双击快退/快进',
-            subTitle: '左侧双击快退，右侧双击快进',
-            setKey: SettingBoxKey.enableQuickDouble,
-            defaultVal: true,
-          ),
           const SetSwitchItem(
             title: '全屏手势反向',
             subTitle: '默认播放器中部向上滑动进入全屏，向下退出\n开启后向下全屏，向上退出',
@@ -164,9 +123,9 @@ class _PlaySettingState extends State<PlaySetting> {
             defaultVal: false,
           ),
           const SetSwitchItem(
-            title: '弹幕开关',
-            subTitle: '展示弹幕',
-            setKey: SettingBoxKey.enableShowDanmaku,
+            title: '观看人数',
+            subTitle: '展示同时在看人数',
+            setKey: SettingBoxKey.enableOnlineTotal,
             defaultVal: false,
           ),
           ListTile(
@@ -246,6 +205,30 @@ class _PlaySettingState extends State<PlaySetting> {
                 setState(() {});
               }
             },
+          ),
+          const SetSwitchItem(
+            title: '开启硬解',
+            subTitle: '以较低功耗播放视频',
+            setKey: SettingBoxKey.enableHA,
+            defaultVal: true,
+          ),
+          const SetSwitchItem(
+            title: '亮度记忆',
+            subTitle: '返回时自动调整视频亮度',
+            setKey: SettingBoxKey.enableAutoBrightness,
+            defaultVal: false,
+          ),
+          const SetSwitchItem(
+            title: '免登录1080P',
+            subTitle: '免登录查看1080P视频',
+            setKey: SettingBoxKey.p1080,
+            defaultVal: true,
+          ),
+          const SetSwitchItem(
+            title: 'CDN优化',
+            subTitle: '使用优质CDN线路',
+            setKey: SettingBoxKey.enableCDN,
+            defaultVal: true,
           ),
           ListTile(
             dense: false,

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 import '../../models/common/dynamic_badge_mode.dart';
+import '../../plugin/pl_player/utils/fullscreen.dart';
 import 'controller.dart';
 import 'widgets/switch_item.dart';
 
@@ -60,29 +62,20 @@ class _StyleSettingState extends State<StyleSetting> {
       ),
       body: ListView(
         children: [
-          Obx(
-            () => ListTile(
-              enableFeedback: true,
-              onTap: () => settingController.onOpenFeedBack(),
-              title: const Text('震动反馈'),
-              subtitle: Text('请确定手机设置中已开启震动反馈', style: subTitleStyle),
-              trailing: Transform.scale(
-                alignment: Alignment.centerRight,
-                scale: 0.8,
-                child: Switch(
-                    thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
-                        (Set<MaterialState> states) {
-                      if (states.isNotEmpty &&
-                          states.first == MaterialState.selected) {
-                        return const Icon(Icons.done);
-                      }
-                      return null; // All other states will use the default thumbIcon.
-                    }),
-                    value: settingController.feedBackEnable.value,
-                    onChanged: (value) => settingController.onOpenFeedBack()),
-              ),
-            ),
-          ),
+          SetSwitchItem(
+              title: '横屏适配',
+              subTitle: '开启该项启用横屏布局与逻辑（测试）',
+              setKey: SettingBoxKey.horizontalScreen,
+              defaultVal: false,
+              callFn: (value) {
+                if (value) {
+                  autoScreen();
+                  SmartDialog.showToast('已开启横屏适配');
+                } else {
+                  AutoOrientation.portraitUpMode();
+                  SmartDialog.showToast('已关闭横屏适配');
+                }
+              }),
           const SetSwitchItem(
             title: 'MD3样式底栏',
             subTitle: '符合Material You设计规范的底栏，关闭可使底栏变窄',
@@ -104,7 +97,7 @@ class _StyleSettingState extends State<StyleSetting> {
             needReboot: true,
           ),
           const SetSwitchItem(
-            title: '首页底栏背景渐变',
+            title: '首页背景渐变',
             setKey: SettingBoxKey.enableGradientBg,
             defaultVal: true,
             needReboot: true,
@@ -132,9 +125,10 @@ class _StyleSettingState extends State<StyleSetting> {
               }
             },
             dense: false,
-            title: Text('最大列宽度（dp）', style: titleStyle),
+            title: Text('最大列宽（dp）基准', style: titleStyle),
             subtitle: Text(
-              '当前最大列宽度：${maxRowWidth.toInt()}dp，屏幕宽度：${MediaQuery.of(context).size.width.toPrecision(2)}dp，',
+              '当前：${maxRowWidth.toInt()}dp，屏幕宽度：${MediaQuery.of(context).size.width.toPrecision(2)}dp。'
+                  '该值决定列表在不同屏宽下的列数，部分列表会根据系数折算宽度',
               style: subTitleStyle,
             ),
           ),
@@ -278,7 +272,8 @@ class _StyleSettingState extends State<StyleSetting> {
           ListTile(
             dense: false,
             onTap: () => Get.toNamed('/tabbarSetting'),
-            title: Text('首页tabbar', style: titleStyle),
+            title: Text('首页标签页', style: titleStyle),
+            subtitle: Text('删除或调换首页标签页', style: subTitleStyle),
           ),
           if (Platform.isAndroid)
             ListTile(

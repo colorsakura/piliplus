@@ -66,6 +66,9 @@ class _PrivacySettingState extends State<PrivacySetting> {
             },
             dense: false,
             title: Text('刷新access_key', style: titleStyle),
+            subtitle: Text(
+                'access_key是app端的用户凭证，用于推荐接口。刷新将使用cookie请求新的access_key，小概率导致其他设备下线。若发现app端推荐内容不是个性化内容，可尝试刷新',
+                style: subTitleStyle),
           ),
           ListTile(
               onTap: () {
