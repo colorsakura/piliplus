@@ -94,6 +94,15 @@ jobs:
             KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
             KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
 
+      - name: flutter build apk
+        run: |
+          sed -i "s/version: .*/version: ${{ needs.update_version.outputs.new_version }}0/g" pubspec.yaml
+          flutter build apk --release
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
+
       - name: 重命名应用
         run: |
           for file in build/app/outputs/flutter-apk/app-*.apk; do
