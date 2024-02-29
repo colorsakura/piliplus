@@ -740,6 +740,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 child: Image.asset(
                   'assets/images/loading.gif',
                   height: 25,
+                  semanticLabel: "加载中",
                 ),
               ),
             );

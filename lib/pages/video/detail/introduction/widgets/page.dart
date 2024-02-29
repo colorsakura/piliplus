@@ -144,11 +144,12 @@ class _PagesPanelState extends State<PagesPanel> {
                                           dense: false,
                                           leading: index == currentIndex
                                               ? Image.asset(
-                                                  'assets/images/live.gif',
+                                                  'assets/images/live.png',
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .primary,
                                                   height: 12,
+                                                  semanticLabel: "正在播放：",
                                                 )
                                               : null,
                                           title: Text(
@@ -209,9 +210,10 @@ class _PagesPanelState extends State<PagesPanel> {
                         children: <Widget>[
                           if (i == currentIndex) ...<Widget>[
                             Image.asset(
-                              'assets/images/live.gif',
+                              'assets/images/live.png',
                               color: Theme.of(context).colorScheme.primary,
                               height: 12,
+                              semanticLabel: "正在播放：",
                             ),
                             const SizedBox(width: 6)
                           ],

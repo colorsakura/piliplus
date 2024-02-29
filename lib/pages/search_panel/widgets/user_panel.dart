@@ -50,6 +50,7 @@ Widget searchUserPanel(BuildContext context, ctr, list) {
                       Image.asset(
                         'assets/images/lv/lv${i!.level}.png',
                         height: 11,
+                        semanticLabel: '等级${i.level}',
                       ),
                     ],
                   ),

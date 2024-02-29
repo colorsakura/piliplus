@@ -121,6 +121,7 @@ class ReplyItem extends StatelessWidget {
               child: Image.asset(
                 'assets/images/big-vip.png',
                 height: 14,
+                semanticLabel: "大会员",
               ),
             ),
           ),
@@ -168,6 +169,7 @@ class ReplyItem extends StatelessWidget {
                       Image.asset(
                         'assets/images/lv/lv${replyItem!.member!.level}.png',
                         height: 11,
+                        semanticLabel: "等级：${replyItem!.member!.level}",
                       ),
                       const SizedBox(width: 6),
                       if (replyItem!.isUp!)

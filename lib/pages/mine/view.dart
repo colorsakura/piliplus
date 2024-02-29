@@ -151,7 +151,7 @@ class _MinePageState extends State<MinePage> {
                         semanticsLabel: '头像',
                         width: 85,
                         height: 85)
-                    : Image.asset('assets/images/noface.jpeg'),
+                    : Image.asset('assets/images/noface.jpeg',semanticLabel: "默认头像",),
               ),
             ),
           ),

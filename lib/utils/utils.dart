@@ -95,7 +95,8 @@ class Utils {
     if (videoItem.rcmdReason != null && videoItem.rcmdReason.content != '') {
       semanticsLabel += ',${videoItem.rcmdReason.content}';
     }
-    if (!emptyStatCheck(videoItem.duration)) {
+    if (!emptyStatCheck(videoItem.duration) &&
+        (videoItem.duration is! int || videoItem.duration > 0)) {
       semanticsLabel +=
           ',时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}';
     }
@@ -107,9 +108,9 @@ class Utils {
     if (videoItem.owner.name != '') {
       semanticsLabel += ',Up主：${videoItem.owner.name}';
     }
-    if (videoItem.runtimeType.toString() == "RecVideoItemAppModel" ||
-        videoItem.runtimeType.toString() == "RecVideoItemModel" &&
-            videoItem.isFollowed == 1) {
+    if ((videoItem.runtimeType.toString() == "RecVideoItemAppModel" ||
+            videoItem.runtimeType.toString() == "RecVideoItemModel") &&
+        videoItem.isFollowed == 1) {
       semanticsLabel += ',已关注';
     }
     return semanticsLabel;

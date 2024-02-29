@@ -157,6 +157,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
                                             .colorScheme
                                             .primary,
                                         height: 12,
+                                        semanticLabel: "正在播放：",
                                       )
                                     : null,
                                 title: Text(
@@ -169,9 +170,6 @@ class _SeasonPanelState extends State<SeasonPanel> {
                                             .colorScheme
                                             .onSurface,
                                   ),
-                                  semanticsLabel: index == currentIndex
-                                      ? '当前播放：${episodes![index].title!}'
-                                      : null,
                                 ),
                               ),
                               itemScrollController: itemScrollController,
@@ -197,9 +195,10 @@ class _SeasonPanelState extends State<SeasonPanel> {
                   ),
                   const SizedBox(width: 15),
                   Image.asset(
-                    'assets/images/live.gif',
+                    'assets/images/live.png',
                     color: Theme.of(context).colorScheme.primary,
                     height: 12,
+                    semanticLabel: "正在播放：",
                   ),
                   const SizedBox(width: 10),
                   Text(
