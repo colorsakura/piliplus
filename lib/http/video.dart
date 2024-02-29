@@ -582,6 +582,13 @@ class VideoHttp {
         SmartDialog.showToast("字幕${i['lan_doc']}加载失败, ${res.data['message']}");
       }
     }
+    if (subtitlesVtt.isNotEmpty) {
+      subtitlesVtt.insert(0, {
+        'language': '',
+        'title': '关闭字幕',
+        'text': ""
+      });
+    }
     return subtitlesVtt;
   }
 }

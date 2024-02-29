@@ -97,6 +97,7 @@ class PlPlayerController {
   bool _enableHeart = true;
   bool _isFirstTime = true;
   final RxList<Map<String, String>> _vttSubtitles = <Map<String, String>>[].obs;
+  final RxInt _vttSubtitlesIndex = 0.obs;
 
   Timer? _timer;
   Timer? _timerForSeek;
@@ -150,7 +151,8 @@ class PlPlayerController {
   Stream<bool> get onMuteChanged => _mute.stream;
 
   // 视频字幕
-  RxList<dynamic> get vttSubtitles => _vttSubtitles;
+  RxList<Map<String,String>> get vttSubtitles => _vttSubtitles;
+  RxInt get vttSubtitlesIndex => _vttSubtitlesIndex;
 
   /// [videoPlayerController] instance of Player
   Player? get videoPlayerController => _videoPlayerController;
@@ -302,6 +304,7 @@ class PlPlayerController {
     for (final PlaySpeed i in PlaySpeed.values) {
       speedsList.add(i.value);
     }
+    speedsList.sort();
 
     // _playerEventSubs = onPlayerStatusChanged.listen((PlayerStatus status) {
     //   if (status == PlayerStatus.playing) {
@@ -1106,62 +1109,18 @@ class PlPlayerController {
     }
   }
 
-  /// 选择字幕
-  void showSetSubtitleSheet() async {
-    showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('选择字幕（测试）'),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Wrap(
-              spacing: 8,
-              runSpacing: 2,
-              children: [
-                FilledButton.tonal(
-                  onPressed: () async {
-                    await removeSubtitle();
-                    Get.back();
-                  },
-                  child: const Text("关闭字幕"),
-                ),
-                for (final Map<String, String> i in _vttSubtitles) ...<Widget>[
-                  FilledButton.tonal(
-                    onPressed: () async {
-                      await setSubtitle(i);
-                      Get.back();
-                    },
-                    child: Text(i["title"]!),
-                  ),
-                ]
-              ],
-            );
-          }),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  removeSubtitle() {
-    _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
-  }
-
   // 设定字幕轨道
   setSubtitle(Map<String, String> s) {
+    if (s['text'] == null) {
+      _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
+      _vttSubtitlesIndex.value = 0;
+      return;
+    }
     _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
       s['text']!,
       title: s['title']!,
       language: s['language']!,
     ));
+    _vttSubtitlesIndex.value = _vttSubtitles.indexOf(s);
   }
 }

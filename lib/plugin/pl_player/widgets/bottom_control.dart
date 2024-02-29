@@ -152,16 +152,35 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                     : SizedBox(
                         width: 45,
                         height: 30,
-                        child: IconButton(
-                          tooltip: '字幕',
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          ),
-                          onPressed: () => _.showSetSubtitleSheet(),
-                          icon: const Icon(
-                            Icons.closed_caption_off_outlined,
-                            size: 19,
-                            color: Colors.white,
+                        child: PopupMenuButton<Map<String, String>>(
+                          onSelected: (Map<String, String> value) {
+                            controller!.setSubtitle(value);
+                          },
+                          initialValue:
+                              _.vttSubtitles[_.vttSubtitlesIndex.value],
+                          color: Colors.black.withOpacity(0.8),
+                          itemBuilder: (BuildContext context) {
+                            return _.vttSubtitles
+                                .map((Map<String, String> subtitle) {
+                              return PopupMenuItem<Map<String, String>>(
+                                value: subtitle,
+                                child: Text(
+                                  "${subtitle['title']}",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              );
+                            }).toList();
+                          },
+                          child: Container(
+                            width: 45,
+                            height: 30,
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.closed_caption_off_outlined,
+                              size: 19,
+                              color: Colors.white,
+                              semanticLabel: '字幕',
+                            ),
                           ),
                         ),
                       ),
@@ -169,17 +188,32 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 45,
                 height: 30,
-                child: TextButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () => showSetSpeedSheet(),
-                  child: Obx(
-                    () => Text(
-                      '${_.playbackSpeed}X',
-                      style: const TextStyle(color: Colors.white, fontSize: 13),
-                      semanticsLabel: '${_.playbackSpeed}倍速',
-                    ),
+                child: PopupMenuButton<double>(
+                  onSelected: (double value) {
+                    controller!.setPlaybackSpeed(value);
+                  },
+                  initialValue: _.playbackSpeed,
+                  color: Colors.black.withOpacity(0.8),
+                  itemBuilder: (BuildContext context) {
+                    return _.speedsList.map((double speed) {
+                      return PopupMenuItem<double>(
+                        value: speed,
+                        child: Text(
+                          "${speed}X",
+                          style: const TextStyle(color: Colors.white),
+                          semanticsLabel: "$speed倍速",
+                        ),
+                      );
+                    }).toList();
+                  },
+                  child: Container(
+                    width: 45,
+                    height: 30,
+                    alignment: Alignment.center,
+                    child: Obx(() => Text("${_.playbackSpeed}X",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13),
+                        semanticsLabel: "${_.playbackSpeed}倍速")),
                   ),
                 ),
               ),
@@ -205,66 +239,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(height: 12),
         ],
       ),
-    );
-  }
-
-  /// 选择倍速
-  void showSetSpeedSheet() {
-    final double currentSpeed = controller!.playbackSpeed;
-    List<double> speedsList = controller!.speedsList;
-    showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('播放速度'),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Wrap(
-              spacing: 8,
-              runSpacing: 2,
-              children: [
-                for (final double i in speedsList) ...<Widget>[
-                  if (i == currentSpeed) ...<Widget>[
-                    FilledButton(
-                      onPressed: () async {
-                        // setState(() => currentSpeed = i),
-                        await controller!.setPlaybackSpeed(i);
-                        Get.back();
-                      },
-                      child: Text(i.toString()),
-                    ),
-                  ] else ...[
-                    FilledButton.tonal(
-                      onPressed: () async {
-                        // setState(() => currentSpeed = i),
-                        await controller!.setPlaybackSpeed(i);
-                        Get.back();
-                      },
-                      child: Text(i.toString()),
-                    ),
-                  ]
-                ]
-              ],
-            );
-          }),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                await controller!.setDefaultSpeed();
-                Get.back();
-              },
-              child: const Text('默认速度'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
