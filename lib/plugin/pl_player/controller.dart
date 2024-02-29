@@ -96,7 +96,7 @@ class PlPlayerController {
   int _heartDuration = 0;
   bool _enableHeart = true;
   bool _isFirstTime = true;
-  final RxList<Map<String,String>> _vttSubtitles = <Map<String,String>>[].obs;
+  final RxList<Map<String, String>> _vttSubtitles = <Map<String, String>>[].obs;
 
   Timer? _timer;
   Timer? _timerForSeek;
@@ -282,8 +282,7 @@ class PlPlayerController {
     danmakuDurationVal =
         localCache.get(LocalCacheKey.danmakuDuration, defaultValue: 4.0);
     // 描边粗细
-    strokeWidth =
-        localCache.get(LocalCacheKey.strokeWidth, defaultValue: 1.5);
+    strokeWidth = localCache.get(LocalCacheKey.strokeWidth, defaultValue: 1.5);
     playRepeat = PlayRepeat.values.toList().firstWhere(
           (e) =>
               e.value ==
@@ -377,7 +376,9 @@ class PlPlayerController {
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
       updateDurationSecond();
-      refreshSubtitles();
+      if (videoType.value != 'live') {
+        refreshSubtitles();
+      }
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
 
@@ -433,7 +434,10 @@ class PlPlayerController {
       await pp.setProperty("volume-max", "100");
       await pp.setProperty("ao", "audiotrack,opensles");
     }
-
+    // // vo=gpu-next & gpu-context=android & gpu-api=opengl
+    // await pp.setProperty("vo", "gpu-next");
+    // await pp.setProperty("gpu-context", "android");
+    // await pp.setProperty("gpu-api", "opengl");
     await player.setAudioTrack(
       AudioTrack.auto(),
     );
@@ -950,8 +954,10 @@ class PlPlayerController {
     if (!isFullScreen.value && status) {
       // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
       hideStatusBar();
+
       /// 按照视频宽高比决定全屏方向
       toggleFullScreen(true);
+
       /// 进入全屏
       FullScreenMode mode = FullScreenModeCode.fromCode(
           setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
@@ -968,7 +974,7 @@ class PlPlayerController {
       // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       showStatusBar();
       toggleFullScreen(false);
-      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)){
+      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
         await verticalScreen();
       }
     }
@@ -1086,8 +1092,7 @@ class PlPlayerController {
 
   void refreshSubtitles() async {
     _vttSubtitles.clear();
-    Map res = await VideoHttp.subtitlesJson(
-        bvid: _bvid, cid: _cid);
+    Map res = await VideoHttp.subtitlesJson(bvid: _bvid, cid: _cid);
     if (!res["status"]) {
       SmartDialog.showToast('查询字幕错误，${res["msg"]}');
     }
@@ -1110,29 +1115,29 @@ class PlPlayerController {
           title: const Text('选择字幕（测试）'),
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return Wrap(
-                  spacing: 8,
-                  runSpacing: 2,
-                  children: [
-                    FilledButton.tonal(
-                      onPressed: () async {
-                        await removeSubtitle();
-                        Get.back();
-                      },
-                      child: const Text("关闭字幕"),
-                    ),
-                    for (final Map<String, String> i in _vttSubtitles) ...<Widget>[
-                      FilledButton.tonal(
-                        onPressed: () async {
-                          await setSubtitle(i);
-                          Get.back();
-                        },
-                        child: Text(i["title"]!),
-                      ),
-                    ]
-                  ],
-                );
-              }),
+            return Wrap(
+              spacing: 8,
+              runSpacing: 2,
+              children: [
+                FilledButton.tonal(
+                  onPressed: () async {
+                    await removeSubtitle();
+                    Get.back();
+                  },
+                  child: const Text("关闭字幕"),
+                ),
+                for (final Map<String, String> i in _vttSubtitles) ...<Widget>[
+                  FilledButton.tonal(
+                    onPressed: () async {
+                      await setSubtitle(i);
+                      Get.back();
+                    },
+                    child: Text(i["title"]!),
+                  ),
+                ]
+              ],
+            );
+          }),
           actions: <Widget>[
             TextButton(
               onPressed: () => Get.back(),
@@ -1152,13 +1157,11 @@ class PlPlayerController {
   }
 
   // 设定字幕轨道
-  setSubtitle(Map<String,String> s) {
-    _videoPlayerController?.setSubtitleTrack(
-      SubtitleTrack.data(
-        s['text']!,
-        title: s['title']!,
-        language: s['language']!,
-      )
-    );
+  setSubtitle(Map<String, String> s) {
+    _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
+      s['text']!,
+      title: s['title']!,
+      language: s['language']!,
+    ));
   }
 }
