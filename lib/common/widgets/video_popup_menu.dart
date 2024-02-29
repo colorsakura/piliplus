@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -43,7 +44,7 @@ class VideoPopupMenu extends StatelessWidget {
             height: menuItemHeight,
             child: const Row(
               children: [
-                Icon(Icons.watch_later_outlined, size: 16),
+                Icon(CupertinoIcons.clock, size: 16),
                 SizedBox(width: 6),
                 Text('稍后再看', style: TextStyle(fontSize: 13))
               ],
@@ -90,7 +91,7 @@ class VideoPopupMenu extends StatelessWidget {
             height: menuItemHeight,
             child: Row(
               children: [
-                const Icon(Icons.block, size: 16),
+                const Icon(CupertinoIcons.nosign, size: 16),
                 const SizedBox(width: 6),
                 Text('拉黑：${videoItem.owner.name}',
                     style: const TextStyle(fontSize: 13))
@@ -122,12 +123,12 @@ class VideoPopupMenu extends StatelessWidget {
               children: [
                 Icon(
                   MineController.anonymity
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                      ? CupertinoIcons.shield_slash
+                      : CupertinoIcons.checkmark_shield,
                   size: 16,
                 ),
                 const SizedBox(width: 6),
-                Text(MineController.anonymity ? '退出无痕模式' : '进入无痕模式',
+                Text("${MineController.anonymity ? '退出' : '进入'}无痕模式",
                     style: const TextStyle(fontSize: 13))
               ],
             ),
