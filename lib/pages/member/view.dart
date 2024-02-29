@@ -311,14 +311,14 @@ class _MemberPageState extends State<MemberPage>
                                 FontAwesomeIcons.venus,
                                 size: 14,
                                 color: Colors.pink,
-                                semanticLabel: _memberController.memberInfo.value.sex,
+                                semanticLabel: '女',
                               ),
                             if (_memberController.memberInfo.value.sex == '男')
                               const Icon(
                                 FontAwesomeIcons.mars,
                                 size: 14,
                                 color: Colors.blue,
-                                semanticLabel: _memberController.memberInfo.value.sex,
+                                semanticLabel: '男',
                               ),
                             const SizedBox(width: 4),
                             Image.asset(
