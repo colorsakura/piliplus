@@ -5,6 +5,9 @@ import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/pages/fav/index.dart';
 import 'package:PiliPalaX/pages/fav/widgets/item.dart';
 
+import '../../common/constants.dart';
+import '../../utils/grid.dart';
+
 class FavPage extends StatefulWidget {
   const FavPage({super.key});
 
@@ -60,17 +63,28 @@ class _FavPageState extends State<FavPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map data = snapshot.data as Map;
             if (data['status']) {
-              return Obx(
-                () => ListView.builder(
-                  controller: scrollController,
-                  itemCount: _favController.favFolderData.value.list!.length,
-                  itemBuilder: (context, index) {
-                    return FavItem(
-                        favFolderItem:
-                            _favController.favFolderData.value.list![index]);
-                  },
-                ),
-              );
+              return Obx(() =>
+                  CustomScrollView(controller: scrollController, slivers: [
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          mainAxisSpacing: StyleString.cardSpace,
+                          crossAxisSpacing: StyleString.safeSpace,
+                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                          mainAxisExtent: Grid.calculateActualWidth(context,
+                                  Grid.maxRowWidth * 2, StyleString.safeSpace) /
+                              1.9 /
+                              StyleString.aspectRatio),
+                      delegate: SliverChildBuilderDelegate(
+                        childCount:
+                        _favController.favFolderData.value.list!.length,
+                        (BuildContext context, int index) {
+                          return FavItem(
+                              favFolderItem: _favController
+                                  .favFolderData.value.list![index]);
+                        },
+                      ),
+                    )
+                  ]));
             } else {
               return CustomScrollView(
                 physics: const NeverScrollableScrollPhysics(),

@@ -6,6 +6,9 @@ import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/pages/later/index.dart';
 
+import '../../common/constants.dart';
+import '../../utils/grid.dart';
+
 class LaterPage extends StatefulWidget {
   const LaterPage({super.key});
 
@@ -77,7 +80,18 @@ class _LaterPageState extends State<LaterPage> {
                   return Obx(
                     () => _laterController.laterList.isNotEmpty &&
                             !_laterController.isLoading.value
-                        ? SliverList(
+                        ? SliverGrid(
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisSpacing: StyleString.cardSpace,
+                                    crossAxisSpacing: StyleString.safeSpace,
+                                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                    mainAxisExtent: Grid.calculateActualWidth(
+                                            context,
+                                            Grid.maxRowWidth * 2,
+                                            StyleString.safeSpace) /
+                                        1.9 /
+                                        StyleString.aspectRatio),
                             delegate:
                                 SliverChildBuilderDelegate((context, index) {
                               var videoItem = _laterController.laterList[index];

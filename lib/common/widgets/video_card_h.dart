@@ -173,6 +173,7 @@ class VideoContent extends StatelessWidget {
               ),
             ] else ...[
               RichText(
+                overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 text: TextSpan(
                   children: [

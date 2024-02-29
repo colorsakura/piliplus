@@ -252,7 +252,7 @@ class _DynamicsPageState extends State<DynamicsPage>
                               maxCrossAxisExtent: Grid.maxRowWidth * 2,
                               //cacheExtent: 0.0,
                               crossAxisSpacing: StyleString.safeSpace,
-                              mainAxisSpacing: StyleString.safeSpace,
+                              mainAxisSpacing: StyleString.cardSpace,
 
                               /// follow max child trailing layout offset and layout with full cross axis extend
                               /// last child as loadmore item/no more item in [GridView] and [WaterfallFlow]

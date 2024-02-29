@@ -93,7 +93,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                       () => SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           // 行间距
-                          mainAxisSpacing: StyleString.safeSpace,
+                          mainAxisSpacing: StyleString.cardSpace,
                           // 列间距
                           crossAxisSpacing: StyleString.safeSpace,
                           // 最大宽度

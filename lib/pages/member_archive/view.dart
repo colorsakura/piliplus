@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import '../../common/constants.dart';
 import '../../common/widgets/http_error.dart';
+import '../../utils/grid.dart';
 import 'controller.dart';
 
 class MemberArchivePage extends StatefulWidget {
@@ -72,7 +74,18 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
                   if (data['status']) {
                     return Obx(
                       () => list.isNotEmpty
-                          ? SliverList(
+                          ? SliverGrid(
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                      mainAxisSpacing: StyleString.cardSpace,
+                                      crossAxisSpacing: StyleString.safeSpace,
+                                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                      mainAxisExtent: Grid.calculateActualWidth(
+                                              context,
+                                              Grid.maxRowWidth * 2,
+                                              StyleString.safeSpace) /
+                                          1.9 /
+                                          StyleString.aspectRatio),
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, index) {
                                   return VideoCardH(

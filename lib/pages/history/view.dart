@@ -6,6 +6,8 @@ import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/pages/history/index.dart';
 
+import '../../common/constants.dart';
+import '../../utils/grid.dart';
 import 'widgets/item.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -189,7 +191,18 @@ class _HistoryPageState extends State<HistoryPage> {
                   if (data['status']) {
                     return Obx(
                       () => _historyController.historyList.isNotEmpty
-                          ? SliverList(
+                          ? SliverGrid(
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                      mainAxisSpacing: StyleString.cardSpace,
+                                      crossAxisSpacing: StyleString.safeSpace,
+                                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                      mainAxisExtent: Grid.calculateActualWidth(
+                                              context,
+                                              Grid.maxRowWidth * 2,
+                                              StyleString.safeSpace) /
+                                          2.1 /
+                                          StyleString.aspectRatio),
                               delegate: SliverChildBuilderDelegate(
                                   (context, index) {
                                 return HistoryItem(

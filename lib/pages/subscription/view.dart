@@ -2,6 +2,8 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
+import '../../common/constants.dart';
+import '../../utils/grid.dart';
 import 'controller.dart';
 import 'widgets/item.dart';
 
@@ -51,17 +53,28 @@ class _SubPageState extends State<SubPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map? data = snapshot.data;
             if (data != null && data['status']) {
-              return Obx(
-                () => ListView.builder(
-                  controller: scrollController,
-                  itemCount: _subController.subFolderData.value.list!.length,
-                  itemBuilder: (context, index) {
-                    return SubItem(
-                        subFolderItem:
-                            _subController.subFolderData.value.list![index]);
-                  },
-                ),
-              );
+              return Obx(() =>
+                  CustomScrollView(controller: scrollController, slivers: [
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          mainAxisSpacing: StyleString.cardSpace,
+                          crossAxisSpacing: StyleString.safeSpace,
+                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                          mainAxisExtent: Grid.calculateActualWidth(context,
+                                  Grid.maxRowWidth * 2, StyleString.safeSpace) /
+                              1.9 /
+                              StyleString.aspectRatio),
+                      delegate: SliverChildBuilderDelegate(
+                        childCount:
+                            _subController.subFolderData.value.list!.length,
+                        (BuildContext context, int index) {
+                          return SubItem(
+                              subFolderItem: _subController
+                                  .subFolderData.value.list![index]);
+                        },
+                      ),
+                    )
+                  ]));
             } else {
               return CustomScrollView(
                 physics: const NeverScrollableScrollPhysics(),
