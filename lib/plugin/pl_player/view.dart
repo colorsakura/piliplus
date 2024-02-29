@@ -206,9 +206,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     final Color colorTheme = Theme.of(context).colorScheme.primary;
     const TextStyle subTitleStyle = TextStyle(
       height: 1.5,
-      fontSize: 40.0,
-      letterSpacing: 0.0,
-      wordSpacing: 0.0,
+      fontSize: 65.0,
+      letterSpacing: 0.1,
+      wordSpacing: 0.1,
       color: Color(0xffffffff),
       fontWeight: FontWeight.normal,
       backgroundColor: Color(0xaa000000),
