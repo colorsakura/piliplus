@@ -87,7 +87,6 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Box localCache = GStrorage.localCache;
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) async {
