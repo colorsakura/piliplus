@@ -41,11 +41,10 @@ class HtmlHttp {
       String opusContent =
           opusDetail.querySelector('.opus-module-content')!.innerHtml;
       String? test;
-      try {
-        test = opusDetail
-            .querySelector('.horizontal-scroll-album__pic__img')!
-            .innerHtml;
-      } catch (_) {}
+      test = opusDetail
+              .querySelector('.horizontal-scroll-album__pic__img')
+              ?.innerHtml ??
+          '';
 
       String commentId = opusDetail
           .querySelector('.bili-comment-container')!
@@ -96,7 +95,7 @@ class HtmlHttp {
 
     //
     String opusContent =
-        opusDetail.querySelector('#read-article-holder')!.innerHtml;
+        opusDetail.querySelector('#read-article-holder')?.innerHtml ?? '';
     RegExp digitRegExp = RegExp(r'\d+');
     Iterable<Match> matches = digitRegExp.allMatches(id);
     String number = matches.first.group(0)!;
