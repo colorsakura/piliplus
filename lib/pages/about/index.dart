@@ -62,12 +62,21 @@ class _AboutPageState extends State<AboutPage> {
                     .textTheme
                     .titleMedium!
                     .copyWith(height: 2)),
-            subtitle: Text(
-              '使用Flutter开发的哔哩哔哩第三方客户端',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              semanticsLabel: '与你一起，发现不一样的世界',
-            ),
+            subtitle: Row(children: [
+              const Spacer(),
+              Text(
+                '使用Flutter开发的B站第三方客户端',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+                semanticsLabel: '与你一起，发现不一样的世界',
+              ),
+              const Icon(
+                Icons.accessibility_new,
+                semanticLabel: "无障碍适配",
+                size: 18,
+              ),
+              const Spacer(),
+            ]),
           ),
           Obx(
             () => ListTile(
@@ -106,7 +115,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           ListTile(
             onTap: () => _aboutController.githubUrl(),
-            title: const Text('Github'),
+            title: const Text('Github开源仓库'),
             trailing: Text(
               'github.com/orz12/pilipala',
               style: subTitleStyle,
@@ -123,7 +132,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           ListTile(
             onTap: () => _aboutController.qqGroup(),
-            title: const Text('QQ群'),
+            title: const Text('QQ群：392176105'),
             trailing: Icon(
               Icons.arrow_forward_ios,
               size: 16,
@@ -270,10 +279,32 @@ class AboutController extends GetxController {
 
   // 问题反馈
   feedback() {
-    launchUrl(
-      Uri.parse('https://github.com/orz12/pilipala/issues'),
-      // 系统自带浏览器打开
-      mode: LaunchMode.externalApplication,
+    SmartDialog.show(
+      useSystem: true,
+      animationType: SmartAnimationType.centerFade_otherSlide,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('问题反馈'),
+          actions: [
+            ElevatedButton(
+              onPressed: () => launchUrl(
+                Uri.parse('https://github.com/orz12/pilipala/issues'),
+                // 系统自带浏览器打开
+                mode: LaunchMode.externalApplication,
+              ),
+              child: const Text('GitHub Issue'),
+            ),
+            ElevatedButton(
+              onPressed: () => launchUrl(
+                Uri.parse('https://support.qq.com/embed/phone/637735'),
+                // 系统自带浏览器打开
+                mode: LaunchMode.externalApplication,
+              ),
+              child: const Text('腾讯兔小巢'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -283,6 +314,11 @@ class AboutController extends GetxController {
       const ClipboardData(text: '392176105'),
     );
     SmartDialog.showToast('已复制QQ群号');
+    launchUrl(
+      Uri.parse(
+          'mqqapi://card/show_pslcard?src_type=internal&version=1&uin=392176105&card_type=group&source=qrcode'),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   // tg频道
