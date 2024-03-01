@@ -80,6 +80,7 @@ class _SearchPanelState extends State<SearchPanel>
               RxList list = ctr.resultList;
               if (data['status']) {
                 return Obx(() {
+                  list.length;
                   switch (widget.searchType) {
                     case SearchType.video:
                       return SearchVideoPanel(
