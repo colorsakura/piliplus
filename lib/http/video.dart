@@ -520,7 +520,7 @@ class VideoHttp {
     }
     List<Map<String, String>> subtitlesVtt = [];
 
-    String subtitleTimecode(double seconds) {
+    String subtitleTimecode(num seconds) {
       int h = (seconds / 3600).floor();
       int m = ((seconds % 3600) / 60).floor();
       int s = (seconds % 60).floor();
