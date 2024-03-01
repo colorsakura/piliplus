@@ -17,7 +17,7 @@ Widget searchUserPanel(BuildContext context, ctr, list) {
             mainAxisSpacing: StyleString.cardSpace,
             crossAxisSpacing: StyleString.safeSpace,
             maxCrossAxisExtent: Grid.maxRowWidth * 2,
-            mainAxisExtent: 52),
+            mainAxisExtent: 56),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             var i = list![index];
