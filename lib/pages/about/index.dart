@@ -154,7 +154,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           ListTile(
             onTap: () => _aboutController.aPay(),
-            title: const Text('赞助'),
+            title: const Text('赞赏'),
             trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
           ),
           ListTile(
@@ -314,11 +314,15 @@ class AboutController extends GetxController {
       const ClipboardData(text: '392176105'),
     );
     SmartDialog.showToast('已复制QQ群号');
-    launchUrl(
-      Uri.parse(
-          'mqqapi://card/show_pslcard?src_type=internal&version=1&uin=392176105&card_type=group&source=qrcode'),
-      mode: LaunchMode.externalApplication,
-    );
+    try {
+      launchUrl(
+        Uri.parse(
+            'mqqapi://card/show_pslcard?src_type=internal&version=1&uin=392176105&card_type=group&source=qrcode'),
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   // tg频道
@@ -349,7 +353,7 @@ class AboutController extends GetxController {
     try {
       launchUrl(
         Uri.parse(
-            'alipayqr://platformapi/startapp?saId=10000007&qrcode=https://qr.alipay.com/fkx12886sndepheaukiabc8'),
+            'https://pilipalanet.mysxl.cn/pilipalaxadmire'),
         mode: LaunchMode.externalApplication,
       );
     } catch (e) {
