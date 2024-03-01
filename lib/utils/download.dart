@@ -26,7 +26,7 @@ class DownloadUtils {
           "plpl_${imgType}_${DateTime.now().toString().split('-').join()}";
       final SaveResult result = await SaverGallery.saveImage(
         Uint8List.fromList(response.data),
-        quality: 60,
+        quality: 100,
         name: picName,
         // 保存到 PiliPala文件夹
         androidRelativePath: "Pictures/PiliPala",
@@ -35,6 +35,8 @@ class DownloadUtils {
       SmartDialog.dismiss();
       if (result.isSuccess) {
         await SmartDialog.showToast('「$picName」已保存 ');
+      } else {
+        await SmartDialog.showToast('保存失败，${result.errorMessage}');
       }
       return true;
     } catch (err) {
