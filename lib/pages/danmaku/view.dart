@@ -73,10 +73,10 @@ class _PlDanmakuState extends State<PlDanmaku> {
   // 播放器状态监听
   void playerListener(PlayerStatus? status) {
     if (status == PlayerStatus.paused) {
-      _controller!.pause();
+      _controller?.pause();
     }
     if (status == PlayerStatus.playing) {
-      _controller!.onResume();
+      _controller?.onResume();
     }
   }
 

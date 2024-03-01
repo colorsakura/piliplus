@@ -6,6 +6,9 @@ class Grid {
   static double calculateActualWidth(BuildContext context, double maxCrossAxisExtent, double crossAxisSpacing) {
     double screenWidth = MediaQuery.of(context).size.width;
     int columnCount = ((screenWidth - crossAxisSpacing) / (maxCrossAxisExtent + crossAxisSpacing)).ceil();
+    if (columnCount < 1){
+      columnCount = 1;
+    }
     double columnWidth = (screenWidth - crossAxisSpacing) ~/ columnCount - crossAxisSpacing;
     return columnWidth;
   }

@@ -655,36 +655,36 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     timeLabelLocation: TimeLabelLocation.none,
                     thumbColor: colorTheme,
                     barHeight: 3.5,
-                    thumbRadius: draggingFixedProgressBar.value ? 7 : 4,
-                    onDragStart: (duration) {
-                      draggingFixedProgressBar.value = true;
-                      feedBack();
-                      _.onChangedSliderStart();
-                    },
-                    onDragUpdate: (duration) {
-                      double newProgress = duration.timeStamp.inSeconds / max;
-                      if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
-                        _accessibilityDebounce?.cancel();
-                        _accessibilityDebounce =
-                            Timer(const Duration(milliseconds: 200), () {
-                          SemanticsService.announce(
-                              "${(newProgress * 100).round()}%",
-                              TextDirection.ltr);
-                          _lastAnnouncedValue = newProgress;
-                        });
-                      }
-                      _.onUpdatedSliderProgress(duration.timeStamp);
-                    },
-                    onSeek: (duration) {
-                      draggingFixedProgressBar.value = false;
-                      _.onChangedSliderEnd();
-                      _.onChangedSlider(duration.inSeconds.toDouble());
-                      _.seekTo(Duration(seconds: duration.inSeconds),
-                          type: 'slider');
-                      SemanticsService.announce(
-                          "${(duration.inSeconds / max * 100).round()}%",
-                          TextDirection.ltr);
-                    },
+                    thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
+                    // onDragStart: (duration) {
+                    //   draggingFixedProgressBar.value = true;
+                    //   feedBack();
+                    //   _.onChangedSliderStart();
+                    // },
+                    // onDragUpdate: (duration) {
+                    //   double newProgress = duration.timeStamp.inSeconds / max;
+                    //   if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
+                    //     _accessibilityDebounce?.cancel();
+                    //     _accessibilityDebounce =
+                    //         Timer(const Duration(milliseconds: 200), () {
+                    //       SemanticsService.announce(
+                    //           "${(newProgress * 100).round()}%",
+                    //           TextDirection.ltr);
+                    //       _lastAnnouncedValue = newProgress;
+                    //     });
+                    //   }
+                    //   _.onUpdatedSliderProgress(duration.timeStamp);
+                    // },
+                    // onSeek: (duration) {
+                    //   draggingFixedProgressBar.value = false;
+                    //   _.onChangedSliderEnd();
+                    //   _.onChangedSlider(duration.inSeconds.toDouble());
+                    //   _.seekTo(Duration(seconds: duration.inSeconds),
+                    //       type: 'slider');
+                    //   SemanticsService.announce(
+                    //       "${(duration.inSeconds / max * 100).round()}%",
+                    //       TextDirection.ltr);
+                    // },
                   ),
                   // SlideTransition(
                   //     position: Tween<Offset>(
