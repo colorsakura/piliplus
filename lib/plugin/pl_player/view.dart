@@ -253,11 +253,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     ),
                     height: 32.0,
                     width: 70.0,
-                    child: const Center(
-                      child: Text(
-                        '倍速中',
-                        style: TextStyle(color: Colors.white, fontSize: 13),
-                      ),
+                    child: Center(
+                      child: Obx(() => Text(
+                            '${_.enableAutoLongPressSpeed ? _.playbackSpeed * 2 : _.longPressSpeed}倍速中',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 13),
+                          )),
                     )),
               ),
             ),
