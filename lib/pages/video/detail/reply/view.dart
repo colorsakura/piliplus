@@ -60,7 +60,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     }
 
     fabAnimationCtr = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
+        vsync: this, duration: const Duration(milliseconds: 100));
 
     _videoReplyController.queryReplyList();
 

@@ -125,7 +125,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   void initState() {
     super.initState();
     animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
+        vsync: this, duration: const Duration(milliseconds: 100));
     videoController = widget.controller.videoController!;
     widget.controller.headerControl = widget.headerControl;
     widget.controller.bottomControl = widget.bottomControl;
