@@ -448,6 +448,7 @@ class PlPlayerController {
         );
 
     var pp = player.platform as NativePlayer;
+    await pp.setProperty("audio-pitch-correction", "scaletempo2");
     // 解除倍速限制
     await pp.setProperty("af", "scaletempo2=max-speed=8");
     //  音量不一致
