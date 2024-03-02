@@ -189,7 +189,6 @@ class VideoContent extends StatelessWidget {
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.onSurface,
                         ),
-                        semanticsLabel: i['text'] as String,
                       ),
                     ]
                   ],

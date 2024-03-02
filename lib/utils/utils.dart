@@ -80,7 +80,12 @@ class Utils {
         semanticsLabel += '番剧,';
       }
     }
-    semanticsLabel += '${videoItem.title}';
+    if (videoItem.title is String) {
+      semanticsLabel += videoItem.title;
+    } else {
+      semanticsLabel += videoItem.title.map((e) => e['text'] as String).join('');
+    }
+
     if (!emptyStatCheck(videoItem.stat.view)) {
       semanticsLabel += ',${Utils.numFormat(videoItem.stat.view)}';
       semanticsLabel +=
