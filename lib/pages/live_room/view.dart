@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,8 +35,17 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     }
     videoSourceInit();
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
+    autoEnterFullscreen();
   }
 
+  void autoEnterFullscreen() async {
+    bool autoEnterFullscreen =
+    GStrorage.setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
+    if (autoEnterFullscreen) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      plPlayerController!.triggerFullScreen(status: true);
+    }
+  }
   Future<void> videoSourceInit() async {
     _futureBuilder = _liveRoomController.queryLiveInfoH5();
     plPlayerController = _liveRoomController.plPlayerController;

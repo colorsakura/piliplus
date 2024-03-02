@@ -239,7 +239,6 @@ class VideoDetailController extends GetxController
       bvid: bvid,
       cid: cid.value,
       enableHeart: enableHeart,
-      isFirstTime: isFirstTime,
       autoplay: autoplay,
     );
 

@@ -97,7 +97,6 @@ class PlPlayerController {
   int _cid = 0;
   int _heartDuration = 0;
   bool _enableHeart = true;
-  bool _isFirstTime = true;
   final RxList<Map<String, String>> _vttSubtitles = <Map<String, String>>[].obs;
   final RxInt _vttSubtitlesIndex = 0.obs;
 
@@ -350,8 +349,6 @@ class PlPlayerController {
     int cid = 0,
     // 历史记录开关
     bool enableHeart = true,
-    // 是否首次加载
-    bool isFirstTime = true,
   }) async {
     try {
       _autoPlay = autoplay;
@@ -365,7 +362,6 @@ class PlPlayerController {
       _bvid = bvid;
       _cid = cid;
       _enableHeart = enableHeart;
-      _isFirstTime = isFirstTime;
 
       if (_videoPlayerController != null &&
           _videoPlayerController!.state.playing) {
@@ -407,12 +403,6 @@ class PlPlayerController {
             }
           }
         });
-      }
-      bool autoEnterFullcreen =
-          setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
-      if (autoEnterFullcreen && _isFirstTime) {
-        await Future.delayed(const Duration(milliseconds: 100));
-        triggerFullScreen(status: true);
       }
     } catch (err) {
       dataStatus.status.value = DataStatus.error;

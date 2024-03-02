@@ -102,6 +102,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
       listenFullScreenStatus();
+      autoEnterFullscreen();
+    }
+  }
+
+  void autoEnterFullscreen() async {
+    bool autoEnterFullscreen =
+    setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
+    if (autoEnterFullscreen && videoDetailController.isFirstTime) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      plPlayerController!.triggerFullScreen(status: true);
     }
   }
 
@@ -158,6 +168,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     plPlayerController = videoDetailController.plPlayerController;
     plPlayerController!.addStatusLister(playerListener);
     listenFullScreenStatus();
+    autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
     videoDetailController.isShowCover.value = false;
   }
@@ -195,7 +206,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       });
       if (!status) {
         showStatusBar();
-        if (setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
+        if (horizontalScreen) {
           autoScreen();
         } else {
           verticalScreen();
