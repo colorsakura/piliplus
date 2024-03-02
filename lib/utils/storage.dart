@@ -95,6 +95,7 @@ class SettingBoxKey {
       enableCDN = 'enableCDN',
       autoPiP = 'autoPiP',
       enableAutoLongPressSpeed = 'enableAutoLongPressSpeed',
+      subtitlePreference = 'subtitlePreference',
 
       // youtube 双击快进快退
       enableQuickDouble = 'enableQuickDouble',

@@ -22,6 +22,8 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:universal_platform/universal_platform.dart';
+
+import '../../models/video/play/subtitle.dart';
 // import 'package:wakelock_plus/wakelock_plus.dart';
 
 Box videoStorage = GStrorage.video;
@@ -379,9 +381,6 @@ class PlPlayerController {
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
       updateDurationSecond();
-      if (videoType.value != 'live') {
-        refreshSubtitles();
-      }
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
 
@@ -390,6 +389,25 @@ class PlPlayerController {
         startListeners();
       }
       await _initializePlayer(seekTo: seekTo, duration: _duration.value);
+      if (videoType.value != 'live') {
+        refreshSubtitles().then((value) {
+          if (_vttSubtitles.isNotEmpty){
+            String preference = setting.get(SettingBoxKey.subtitlePreference,
+                defaultValue: SubtitlePreference.values.first.index);
+            if (preference == 'on') {
+              setSubtitle(vttSubtitles[1]);
+            } else if (preference == 'withoutAi') {
+              for (int i = 1; i < _vttSubtitles.length; i++) {
+                if (_vttSubtitles[i]['language']!.startsWith('ai')) {
+                  continue;
+                }
+                setSubtitle(vttSubtitles[i]);
+                break;
+              }
+            }
+          }
+        });
+      }
       bool autoEnterFullcreen =
           setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
       if (autoEnterFullcreen && _isFirstTime) {
@@ -1095,7 +1113,7 @@ class PlPlayerController {
     }
   }
 
-  void refreshSubtitles() async {
+  Future refreshSubtitles() async {
     _vttSubtitles.clear();
     Map res = await VideoHttp.subtitlesJson(bvid: _bvid, cid: _cid);
     if (!res["status"]) {
@@ -1105,10 +1123,10 @@ class PlPlayerController {
       return;
     }
     _vttSubtitles.value = await VideoHttp.vttSubtitles(res["data"]);
-    if (_vttSubtitles.isEmpty) {
-      // SmartDialog.showToast('字幕均加载失败');
-      return;
-    }
+    // if (_vttSubtitles.isEmpty) {
+    //   SmartDialog.showToast('字幕均加载失败');
+    // }
+    return;
   }
 
   // 设定字幕轨道

@@ -9,6 +9,7 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/services/service_locator.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
+import '../../models/video/play/subtitle.dart';
 import 'widgets/switch_item.dart';
 
 class PlaySetting extends StatefulWidget {
@@ -23,6 +24,7 @@ class _PlaySettingState extends State<PlaySetting> {
   late dynamic defaultVideoQa;
   late dynamic defaultAudioQa;
   late dynamic defaultDecode;
+  late String defaultSubtitlePreference;
   late int defaultFullScreenMode;
   late int defaultBtmProgressBehavior;
 
@@ -39,6 +41,8 @@ class _PlaySettingState extends State<PlaySetting> {
         defaultValue: FullScreenMode.values.first.code);
     defaultBtmProgressBehavior = setting.get(SettingBoxKey.btmProgressBehavior,
         defaultValue: BtmProgresBehavior.values.first.code);
+    defaultSubtitlePreference = setting.get(SettingBoxKey.subtitlePreference,
+        defaultValue: SubtitlePreference.values.first.code);
   }
 
   @override
@@ -90,6 +94,33 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '左侧双击快退，右侧双击快进',
             setKey: SettingBoxKey.enableQuickDouble,
             defaultVal: true,
+          ),
+          ListTile(
+            dense: false,
+            title: Text('自动启用字幕', style: titleStyle),
+            subtitle: Text(
+                '当前选择偏好：'
+                '${SubtitlePreferenceCode.fromCode(defaultSubtitlePreference)!.description}',
+                style: subTitleStyle),
+            onTap: () async {
+              String? result = await showDialog(
+                context: context,
+                builder: (context) {
+                  return SelectDialog<String>(
+                      title: '字幕选择偏好',
+                      value: setting.get(SettingBoxKey.subtitlePreference,
+                          defaultValue: SubtitlePreference.values.first.code),
+                      values: SubtitlePreference.values.map((e) {
+                        return {'title': e.description, 'value': e.code};
+                      }).toList());
+                },
+              );
+              if (result != null) {
+                setting.put(SettingBoxKey.subtitlePreference, result);
+                defaultSubtitlePreference = result;
+                setState(() {});
+              }
+            },
           ),
           const SetSwitchItem(
             title: '自动全屏',
