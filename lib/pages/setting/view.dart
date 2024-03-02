@@ -42,7 +42,7 @@ class SettingPage extends StatelessWidget {
             leading: const Icon(Icons.play_arrow_outlined),
             dense: false,
             title: const Text('播放设置'),
-            subtitle: Text('弹幕、播放器行为与手势、画质、音质、解码、底部进度条等', style: subTitleStyle),
+            subtitle: Text('弹幕、字幕、播放器行为与手势、画质、音质、解码、底部进度条等', style: subTitleStyle),
           ),
           ListTile(
             onTap: () => Get.toNamed('/styleSetting'),
