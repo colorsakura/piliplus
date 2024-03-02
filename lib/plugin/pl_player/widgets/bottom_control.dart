@@ -197,10 +197,12 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                   itemBuilder: (BuildContext context) {
                     return _.speedsList.map((double speed) {
                       return PopupMenuItem<double>(
+                        height: 35,
+                        padding: const EdgeInsets.only(left: 30),
                         value: speed,
                         child: Text(
                           "${speed}X",
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white, fontSize: 13),
                           semanticsLabel: "$speed倍速",
                         ),
                       );
