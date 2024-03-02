@@ -30,27 +30,15 @@ class _UpPanelState extends State<UpPanel> {
   @override
   void initState() {
     super.initState();
-    upList = widget.upData!.upList!;
-    if (widget.upData!.liveUsers != null) {
-      liveList = widget.upData!.liveUsers!.items!;
-    }
-    upList.insert(
-      0,
-      UpItem(face: '', uname: '全部动态', mid: -1),
-    );
     userInfo = userInfoCache.get('userInfoCache');
-    upList.insert(
-      1,
-      UpItem(
-        face: userInfo.face,
-        uname: '我',
-        mid: userInfo.mid,
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    upList = widget.upData!.upList!;
+    if (widget.upData!.liveUsers != null) {
+      liveList = widget.upData!.liveUsers!.items!;
+    }
     return SliverPersistentHeader(
       floating: true,
       pinned: false,
@@ -110,8 +98,17 @@ class _UpPanelState extends State<UpPanel> {
                                   .withOpacity(0.5),
                             ),
                           ],
+                          upItemBuild(
+                              UpItem(face: '', uname: '全部动态', mid: -1), 0),
+                          upItemBuild(
+                              UpItem(
+                                face: userInfo.face,
+                                uname: '我',
+                                mid: userInfo.mid,
+                              ),
+                              1),
                           for (int i = 0; i < upList.length; i++) ...[
-                            upItemBuild(upList[i], i)
+                            upItemBuild(upList[i], i + 2)
                           ],
                           const SizedBox(width: 10),
                         ],
