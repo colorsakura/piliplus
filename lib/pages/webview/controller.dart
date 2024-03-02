@@ -40,9 +40,9 @@ class WebviewController extends GetxController {
     webviewInit();
   }
 
-  webviewInit() {
+  webviewInit({String uaType = 'mob'}) {
     controller
-      ..setUserAgent(Request().headerUa())
+      ..setUserAgent(Request().headerUa(type: uaType))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
