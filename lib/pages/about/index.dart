@@ -173,6 +173,36 @@ class _AboutPageState extends State<AboutPage> {
             title: const Text('清除缓存'),
             subtitle: Text('图片及网络缓存 $cacheSize', style: subTitleStyle),
           ),
+          ListTile(
+            title: const Text('重置所有设置'),
+            onTap: () {
+              SmartDialog.show(
+                useSystem: true,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('重置所有设置'),
+                    content: const Text('是否重置所有设置？'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          SmartDialog.dismiss();
+                        },
+                        child: const Text('取消'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          GStrorage.setting.clear();
+                          SmartDialog.showToast('重置成功');
+                          SmartDialog.dismiss();
+                        },
+                        child: const Text('确定'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          )
         ],
       ),
     );
