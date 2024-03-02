@@ -65,6 +65,47 @@ class _BangumiPanelState extends State<BangumiPanel> {
     super.dispose();
   }
 
+  Widget buildPageListItem(
+    EpisodeItem page,
+    int index,
+    bool isCurrentIndex,
+  ) {
+    Color primary = Theme.of(context).colorScheme.primary;
+    return ListTile(
+      onTap: () {
+        Get.back();
+        setState(() {
+          changeFucCall(page, index);
+        });
+      },
+      dense: false,
+      leading: isCurrentIndex
+          ? Image.asset(
+              'assets/images/live.png',
+              color: primary,
+              height: 12,
+              semanticLabel: "正在播放：",
+            )
+          : null,
+      title: Text(
+        '第${index + 1}话  ${page.longTitle!}',
+        style: TextStyle(
+          fontSize: 14,
+          color: isCurrentIndex
+              ? primary
+              : Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      trailing: page.badge != null
+          ? Image.asset(
+              'assets/images/big-vip.png',
+              height: 20,
+              semanticLabel: "大会员",
+            )
+          : const SizedBox(),
+    );
+  }
+
   void showBangumiPanel() {
     showBottomSheet(
       context: context,
@@ -107,39 +148,21 @@ class _BangumiPanelState extends State<BangumiPanel> {
                     child: Material(
                       child: ScrollablePositionedList.builder(
                         itemCount: widget.pages.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            ListTile(
-                          onTap: () {
-                            setState(() {
-                              changeFucCall(widget.pages[index], index);
-                            });
-                          },
-                          dense: false,
-                          leading: index == currentIndex
-                              ? Image.asset(
-                                  'assets/images/live.png',
-                                  color: Theme.of(context).colorScheme.primary,
-                                  height: 12,
-                                  semanticLabel: "正在播放：",
+                        itemBuilder: (BuildContext context, int index) {
+                          bool isLastItem = index == widget.pages.length - 1;
+                          bool isCurrentIndex = currentIndex == index;
+                          return isLastItem
+                              ? SizedBox(
+                                  height:
+                                      MediaQuery.of(context).padding.bottom +
+                                          20,
                                 )
-                              : null,
-                          title: Text(
-                            '第${index + 1}话  ${widget.pages[index].longTitle!}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: index == currentIndex
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          trailing: widget.pages[index].badge != null
-                              ? Image.asset(
-                                  'assets/images/big-vip.png',
-                                  height: 20,
-                                  semanticLabel: "大会员",
-                                )
-                              : const SizedBox(),
-                        ),
+                              : buildPageListItem(
+                                  widget.pages[index],
+                                  index,
+                                  isCurrentIndex,
+                                );
+                        },
                         itemScrollController: itemScrollController,
                       ),
                     ),

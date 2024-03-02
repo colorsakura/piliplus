@@ -56,6 +56,38 @@ class _PagesPanelState extends State<PagesPanel> {
     super.dispose();
   }
 
+  Widget buildEpisodeListItem(
+    Part episode,
+    int index,
+    bool isCurrentIndex,
+  ) {
+    Color primary = Theme.of(context).colorScheme.primary;
+    return ListTile(
+      onTap: () {
+        changeFucCall(episode, index);
+        Get.back();
+      },
+      dense: false,
+      leading: isCurrentIndex
+          ? Image.asset(
+              'assets/images/live.png',
+              color: primary,
+              height: 12,
+              semanticLabel: "正在播放：",
+            )
+          : null,
+      title: Text(
+        episode.pagePart!,
+        style: TextStyle(
+          fontSize: 14,
+          color: isCurrentIndex
+              ? primary
+              : Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -132,40 +164,25 @@ class _PagesPanelState extends State<PagesPanel> {
                                   child: Material(
                                     child: ListView.builder(
                                       controller: _scrollController,
-                                      itemCount: episodes.length,
+                                      itemCount: episodes.length + 1,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        return ListTile(
-                                          onTap: () {
-                                            changeFucCall(
-                                                episodes[index], index);
-                                            Get.back();
-                                          },
-                                          dense: false,
-                                          leading: index == currentIndex
-                                              ? Image.asset(
-                                                  'assets/images/live.png',
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  height: 12,
-                                                  semanticLabel: "正在播放：",
-                                                )
-                                              : null,
-                                          title: Text(
-                                            episodes[index].pagePart!,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: index == currentIndex
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                  : Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface,
-                                            ),
-                                          ),
-                                        );
+                                        bool isLastItem =
+                                            index == episodes.length;
+                                        bool isCurrentIndex =
+                                            currentIndex == index;
+                                        return isLastItem
+                                            ? SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .padding
+                                                        .bottom +
+                                                    20,
+                                              )
+                                            : buildEpisodeListItem(
+                                                episodes[index],
+                                                index,
+                                                isCurrentIndex,
+                                              );
                                       },
                                     ),
                                   ),
@@ -194,6 +211,7 @@ class _PagesPanelState extends State<PagesPanel> {
             itemCount: widget.pages.length,
             itemExtent: 150,
             itemBuilder: (BuildContext context, int i) {
+              bool isCurrentIndex = currentIndex == i;
               return Container(
                 width: 150,
                 margin: const EdgeInsets.only(right: 10),
@@ -208,7 +226,7 @@ class _PagesPanelState extends State<PagesPanel> {
                           vertical: 8, horizontal: 8),
                       child: Row(
                         children: <Widget>[
-                          if (i == currentIndex) ...<Widget>[
+                          if (isCurrentIndex) ...<Widget>[
                             Image.asset(
                               'assets/images/live.png',
                               color: Theme.of(context).colorScheme.primary,
@@ -223,7 +241,7 @@ class _PagesPanelState extends State<PagesPanel> {
                             maxLines: 1,
                             style: TextStyle(
                                 fontSize: 13,
-                                color: i == currentIndex
+                                color: isCurrentIndex
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).colorScheme.onSurface),
                             overflow: TextOverflow.ellipsis,
