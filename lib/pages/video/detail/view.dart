@@ -102,16 +102,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
       listenFullScreenStatus();
-      autoEnterFullscreen();
-    }
-  }
-
-  void autoEnterFullscreen() async {
-    bool autoEnterFullscreen =
-    setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
-    if (autoEnterFullscreen && videoDetailController.isFirstTime) {
-      await Future.delayed(const Duration(milliseconds: 100));
-      plPlayerController!.triggerFullScreen(status: true);
+      await plPlayerController!.autoEnterFullscreen();
     }
   }
 
@@ -168,7 +159,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     plPlayerController = videoDetailController.plPlayerController;
     plPlayerController!.addStatusLister(playerListener);
     listenFullScreenStatus();
-    autoEnterFullscreen();
+    await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
     videoDetailController.isShowCover.value = false;
   }
