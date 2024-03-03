@@ -217,13 +217,13 @@ class VideoContent extends StatelessWidget {
               Expanded(
                 flex: 0,
                 child: Text(
-                  "${showPubdate ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day') + '  ' : ''}  ${showOwner ? videoItem.owner.name : ''}",
+                  "${showPubdate ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day') + ' ' : ''}  ${showOwner ? videoItem.owner.name : ''}",
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 11,
                     height: 1,
                     color: Theme.of(context).colorScheme.outline,
-                    overflow: TextOverflow.fade,
+                    overflow: TextOverflow.clip,
                   ),
                 ),
               ),
