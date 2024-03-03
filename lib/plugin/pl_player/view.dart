@@ -785,6 +785,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               },
                               onSubmitted: (Duration value) {
                                 _ctr.hideSeekBackwardButton.value = true;
+                                _ctr.mountSeekBackwardButton.value = false;
                                 final Player player =
                                     widget.controller.videoPlayerController!;
                                 Duration result = player.state.position - value;
@@ -831,6 +832,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               },
                               onSubmitted: (Duration value) {
                                 _ctr.hideSeekForwardButton.value = true;
+                                _ctr.mountSeekForwardButton.value = false;
                                 final Player player =
                                     widget.controller.videoPlayerController!;
                                 Duration result = player.state.position + value;
