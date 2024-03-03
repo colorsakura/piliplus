@@ -85,7 +85,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                 Hero(
                   tag: content.bvid,
                   child: NetworkImgLayer(
-                    type: floor == 1 ? 'emote' : null,
+                    type: null,
                     width: width,
                     height: width / StyleString.aspectRatio,
                     src: content.cover,
@@ -117,9 +117,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                             Colors.black54,
                           ],
                         ),
-                        borderRadius: floor == 1
-                            ? null
-                            : const BorderRadius.all(Radius.circular(6))),
+                        borderRadius: BorderRadius.circular(StyleString.imgRadius.x)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
