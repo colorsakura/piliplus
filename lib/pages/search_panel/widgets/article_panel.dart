@@ -116,6 +116,7 @@ Widget searchArticlePanel(BuildContext context, ctr, list) {
               ),
             );
           },
+          childCount: list.length,
         ))
   ]);
 }
