@@ -8,6 +8,7 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import '../../models/common/dynamic_badge_mode.dart';
+import '../../models/common/nav_bar_config.dart';
 import '../main/index.dart';
 import 'widgets/select_dialog.dart';
 
@@ -24,6 +25,7 @@ class SettingController extends GetxController {
   Rx<ThemeType> themeType = ThemeType.system.obs;
   var userInfo;
   Rx<DynamicBadgeMode> dynamicBadgeType = DynamicBadgeMode.number.obs;
+  RxInt defaultHomePage = 0.obs;
 
   @override
   void onInit() {
@@ -42,6 +44,8 @@ class SettingController extends GetxController {
     dynamicBadgeType.value = DynamicBadgeMode.values[setting.get(
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.code)];
+    defaultHomePage.value =
+        setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0);
   }
 
   loginOut() async {
@@ -110,6 +114,26 @@ class SettingController extends GetxController {
         mainController.getUnreadDynamic();
       }
       SmartDialog.showToast('设置成功');
+    }
+  }
+
+  // 设置默认启动页
+  seteDefaultHomePage(BuildContext context) async {
+    int? result = await showDialog(
+      context: context,
+      builder: (context) {
+        return SelectDialog<int>(
+            title: '首页启动页',
+            value: defaultHomePage.value,
+            values: defaultNavigationBars.map((e) {
+              return {'title': e['label'], 'value': e['id']};
+            }).toList());
+      },
+    );
+    if (result != null) {
+      defaultHomePage.value = result;
+      setting.put(SettingBoxKey.defaultHomePage, result);
+      SmartDialog.showToast('设置成功，重启生效');
     }
   }
 }
