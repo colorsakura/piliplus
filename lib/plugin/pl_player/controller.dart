@@ -389,7 +389,7 @@ class PlPlayerController {
         refreshSubtitles().then((value) {
           if (_vttSubtitles.isNotEmpty){
             String preference = setting.get(SettingBoxKey.subtitlePreference,
-                defaultValue: SubtitlePreference.values.first.index);
+                defaultValue: SubtitlePreference.values.first.code);
             if (preference == 'on') {
               setSubtitle(vttSubtitles[1]);
             } else if (preference == 'withoutAi') {
@@ -542,6 +542,15 @@ class PlPlayerController {
     // 自动播放
     if (_autoPlay) {
       await play(duration: duration);
+    }
+  }
+
+  Future<void> autoEnterFullscreen() async {
+    bool autoEnterFullscreen =
+      GStrorage.setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
+    if (autoEnterFullscreen) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      triggerFullScreen(status: true);
     }
   }
 
@@ -975,6 +984,9 @@ class PlPlayerController {
       /// 进入全屏
       FullScreenMode mode = FullScreenModeCode.fromCode(
           setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
+      if (mode == FullScreenMode.none) {
+        return;
+      }
       if (mode == FullScreenMode.vertical ||
           (mode == FullScreenMode.auto && direction.value == 'vertical') ||
           (mode == FullScreenMode.ratio &&
@@ -1122,7 +1134,7 @@ class PlPlayerController {
 
   // 设定字幕轨道
   setSubtitle(Map<String, String> s) {
-    if (s['text'] == null) {
+    if (s['text'] == '') {
       _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
       _vttSubtitlesIndex.value = 0;
       return;
