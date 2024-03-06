@@ -73,7 +73,11 @@ class _HeaderControlState extends State<HeaderControl> {
         .videoDetailCtr!.plPlayerController.isFullScreen
         .listen((bool status) {
       isFullScreen = status;
-      setState(() {});
+
+      /// TODO setState() called after dispose()
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 

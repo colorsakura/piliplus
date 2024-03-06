@@ -99,7 +99,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     onUserLeaveHintListener.setMethodCallHandler((call) async {
       if (call.method == 'onUserLeaveHint') {
         if (autoPiP) {
-            autoEnterPip();
+          autoEnterPip();
         }
       }
     });
@@ -202,9 +202,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         videoDetailController.hiddenReplyReplyPanel();
         hideStatusBar();
       }
-      setState(() {
-        isFullScreen.value = status;
-      });
+      isFullScreen.value = status;
+      if (mounted) {
+        setState(() {});
+      }
       if (!status) {
         showStatusBar();
         if (horizontalScreen) {
@@ -250,13 +251,20 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       fullScreenStatusListener.cancel();
       plPlayerController!.pause();
     }
-    setState(() => isShowing = false);
+    isShowing = false;
+    if (mounted) {
+      setState(() => {});
+    }
     super.didPushNext();
   }
 
   @override
   // 返回当前页面时
   void didPopNext() async {
+    isShowing = true;
+    if (mounted) {
+      setState(() => {});
+    }
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
     videoDetailController.playerInit(autoplay: autoplay);
@@ -274,7 +282,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (plPlayerController != null) {
       listenFullScreenStatus();
     }
-    setState(() => isShowing = true);
     super.didPopNext();
   }
 
