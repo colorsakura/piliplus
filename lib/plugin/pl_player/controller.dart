@@ -102,7 +102,7 @@ class PlPlayerController {
   final RxInt _vttSubtitlesIndex = 0.obs;
 
   Timer? _timer;
-  Timer? _timerForSeek;
+  StreamSubscription<Duration>? _bufferedListenerForSeek;
   Timer? _timerForVolume;
   Timer? _timerForShowingVolume;
   Timer? _timerForGettingVolume;
@@ -153,7 +153,7 @@ class PlPlayerController {
   Stream<bool> get onMuteChanged => _mute.stream;
 
   // 视频字幕
-  RxList<Map<String,String>> get vttSubtitles => _vttSubtitles;
+  RxList<Map<String, String>> get vttSubtitles => _vttSubtitles;
   RxInt get vttSubtitlesIndex => _vttSubtitlesIndex;
 
   /// [videoPlayerController] instance of Player
@@ -388,7 +388,7 @@ class PlPlayerController {
       await _initializePlayer(seekTo: seekTo, duration: _duration.value);
       if (videoType.value != 'live') {
         refreshSubtitles().then((value) {
-          if (_vttSubtitles.isNotEmpty){
+          if (_vttSubtitles.isNotEmpty) {
             String preference = setting.get(SettingBoxKey.subtitlePreference,
                 defaultValue: SubtitlePreference.values.first.code);
             if (preference == 'on') {
@@ -547,11 +547,19 @@ class PlPlayerController {
   }
 
   Future<void> autoEnterFullscreen() async {
-    bool autoEnterFullscreen =
-      GStrorage.setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
+    bool autoEnterFullscreen = GStrorage.setting
+        .get(SettingBoxKey.enableAutoEnter, defaultValue: false);
     if (autoEnterFullscreen) {
-      await Future.delayed(const Duration(milliseconds: 300));
-      triggerFullScreen(status: true);
+      if (buffered.value == Duration.zero) {
+        _bufferedListenerForEnterFullscreen = buffered.listen((status) {
+          if (status > Duration.zero) {
+            _bufferedListenerForEnterFullscreen.cancel();
+            triggerFullScreen(status: true);
+          }
+        });
+      } else {
+        triggerFullScreen(status: true);
+      }
     }
   }
 
@@ -656,31 +664,20 @@ class PlPlayerController {
     _position.value = position;
     updatePositionSecond();
     _heartDuration = position.inSeconds;
-    if (duration.value.inSeconds != 0) {
+    if (buffered.value == Duration.zero) {
+      _bufferedListenerForSeek?.cancel();
+      _bufferedListenerForSeek = buffered.listen((status) {
+        if (status.inSeconds != 0) {
+          _bufferedListenerForSeek?.cancel();
+          _videoPlayerController?.seek(position);
+        }
+      });
+    } else {
       if (type != 'slider') {
         /// 拖动进度条调节时，不等待第一帧，防止抖动
         await _videoPlayerController?.stream.buffer.first;
       }
       await _videoPlayerController?.seek(position);
-      // if (playerStatus.stopped) {
-      //   play();
-      // }
-    } else {
-      print('seek duration else');
-      _timerForSeek?.cancel();
-      _timerForSeek =
-          Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
-        //_timerForSeek = null;
-        if (duration.value.inSeconds != 0) {
-          await _videoPlayerController?.stream.buffer.first;
-          await _videoPlayerController?.seek(position);
-          // if (playerStatus.status.value == PlayerStatus.paused) {
-          //   play();
-          // }
-          t.cancel();
-          _timerForSeek = null;
-        }
-      });
     }
   }
 
@@ -1048,7 +1045,7 @@ class PlPlayerController {
     _timerForVolume?.cancel();
     _timerForGettingVolume?.cancel();
     timerForTrackingMouse?.cancel();
-    _timerForSeek?.cancel();
+    _bufferedListenerForSeek?.cancel();
   }
 
   // 记录播放记录
@@ -1098,7 +1095,7 @@ class PlPlayerController {
       _timerForVolume?.cancel();
       _timerForGettingVolume?.cancel();
       timerForTrackingMouse?.cancel();
-      _timerForSeek?.cancel();
+      _bufferedListenerForSeek?.cancel();
       // _position.close();
       _playerEventSubs?.cancel();
       // _sliderPosition.close();
