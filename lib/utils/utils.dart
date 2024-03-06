@@ -83,7 +83,8 @@ class Utils {
     if (videoItem.title is String) {
       semanticsLabel += videoItem.title;
     } else {
-      semanticsLabel += videoItem.title.map((e) => e['text'] as String).join('');
+      semanticsLabel +=
+          videoItem.title.map((e) => e['text'] as String).join('');
     }
 
     if (!emptyStatCheck(videoItem.stat.view)) {
@@ -338,6 +339,19 @@ class Utils {
                     ),
                     const SizedBox(height: 8),
                     Text(data.body!),
+                    TextButton(
+                        onPressed: () {
+                          launchUrl(
+                            Uri.parse(
+                                "https://github.com/orz12/pilipala/commits/main/"),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                        child: Text(
+                          "点此查看完整更新（即commit）内容",
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        )),
                   ],
                 ),
               ),
