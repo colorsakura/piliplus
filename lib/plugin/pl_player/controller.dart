@@ -299,7 +299,7 @@ class PlPlayerController {
         .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
     if (!enableAutoLongPressSpeed) {
       _longPressSpeed.value = videoStorage
-          .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 2.0);
+          .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
     }
     speedsList = List<double>.from(videoStorage
         .get(VideoBoxKey.customSpeedsList, defaultValue: <double>[]));

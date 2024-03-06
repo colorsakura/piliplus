@@ -58,7 +58,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         videoStorage.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
     // 默认长按倍速
     longPressSpeedDefault =
-        videoStorage.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 2.0);
+        videoStorage.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
     // 自定义倍速
     customSpeedsList =
         videoStorage.get(VideoBoxKey.customSpeedsList, defaultValue: []);
@@ -187,7 +187,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         videoStorage.put(VideoBoxKey.playSpeedDefault, playSpeedDefault);
       }
       if (customSpeedsList[index] == longPressSpeedDefault) {
-        longPressSpeedDefault = 2.0;
+        longPressSpeedDefault = 3.0;
         videoStorage.put(
             VideoBoxKey.longPressSpeedDefault, longPressSpeedDefault);
       }
