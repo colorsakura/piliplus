@@ -1149,6 +1149,8 @@ class _HeaderControlState extends State<HeaderControl> {
                 ),
                 onPressed: () {
                   _.isOpenDanmu.value = !_.isOpenDanmu.value;
+                  SmartDialog.showToast(
+                      _.isOpenDanmu.value ? '已临时开启弹幕' : '已临时关闭弹幕', displayTime: const Duration(seconds: 1));
                 },
                 icon: Icon(
                   _.isOpenDanmu.value
