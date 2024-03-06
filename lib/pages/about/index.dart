@@ -358,7 +358,7 @@ class AboutController extends GetxController {
   // tg频道
   tgChanel() {
     Clipboard.setData(
-      const ClipboardData(text: 'https://t.me/+lm_oOVmF0RJiODk1'),
+      const ClipboardData(text: 'https://t.me/+162zlPtZlT9hNWVl'),
     );
     SmartDialog.showToast(
       '已复制，即将在浏览器打开',
