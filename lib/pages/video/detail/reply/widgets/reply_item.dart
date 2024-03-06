@@ -555,6 +555,7 @@ InlineSpan buildContent(
             type: 'emote',
             width: size * 20,
             height: size * 20,
+            semanticsLabel: matchStr,
           ),
         ));
       } else if (matchStr.startsWith("@") &&
