@@ -124,7 +124,7 @@ dependencies:
   # pip
   floating:
     git:
-      url: https://github.com/guozhigq/floating.git
+      url: https://github.com/wrbl606/floating.git
       ref: main
   # html解析
   html: ^0.15.4

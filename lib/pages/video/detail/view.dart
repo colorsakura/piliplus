@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:floating/floating.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -58,10 +59,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late bool autoPiP;
   final Floating floating = Floating();
   // 生命周期监听
-  late final AppLifecycleListener _lifecycleListener;
+  // late final AppLifecycleListener _lifecycleListener;
   bool isShowing = true;
   RxBool isFullScreen = false.obs;
   late StreamSubscription<bool> fullScreenStatusListener;
+  late final MethodChannel onUserLeaveHintListener;
 
   @override
   void initState() {
@@ -91,8 +93,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     autoPiP = setting.get(SettingBoxKey.autoPiP, defaultValue: false);
     videoSourceInit();
     appbarStreamListen();
-    lifecycleListener();
+    // lifecycleListener();
     autoScreen();
+    onUserLeaveHintListener = const MethodChannel("onUserLeaveHint");
+    onUserLeaveHintListener.setMethodCallHandler((call) async {
+      if (call.method == 'onUserLeaveHint') {
+        if (autoPiP) {
+            autoEnterPip();
+        }
+      }
+    });
   }
 
   // 获取视频资源，初始化播放器
@@ -164,26 +174,26 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.isShowCover.value = false;
   }
 
-  // 生命周期监听
-  void lifecycleListener() {
-    _lifecycleListener = AppLifecycleListener(
-      onResume: () => _handleTransition('resume'),
-      // 后台
-      onInactive: () => _handleTransition('inactive'),
-      // 在Android和iOS端不生效
-      onHide: () => _handleTransition('hide'),
-      onShow: () => _handleTransition('show'),
-      onPause: () => _handleTransition('pause'),
-      onRestart: () => _handleTransition('restart'),
-      onDetach: () => _handleTransition('detach'),
-      // 只作用于桌面端
-      onExitRequested: () {
-        ScaffoldMessenger.maybeOf(context)
-            ?.showSnackBar(const SnackBar(content: Text("拦截应用退出")));
-        return Future.value(AppExitResponse.cancel);
-      },
-    );
-  }
+  // // 生命周期监听
+  // void lifecycleListener() {
+  //   _lifecycleListener = AppLifecycleListener(
+  //     onResume: () => _handleTransition('resume'),
+  //     // 后台
+  //     onInactive: () => _handleTransition('inactive'),
+  //     // 在Android和iOS端不生效
+  //     onHide: () => _handleTransition('hide'),
+  //     onShow: () => _handleTransition('show'),
+  //     onPause: () => _handleTransition('pause'),
+  //     onRestart: () => _handleTransition('restart'),
+  //     onDetach: () => _handleTransition('detach'),
+  //     // 只作用于桌面端
+  //     onExitRequested: () {
+  //       ScaffoldMessenger.maybeOf(context)
+  //           ?.showSnackBar(const SnackBar(content: Text("拦截应用退出")));
+  //       return Future.value(AppExitResponse.cancel);
+  //     },
+  //   );
+  // }
 
   void listenFullScreenStatus() {
     fullScreenStatusListener =
@@ -220,7 +230,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController!.dispose();
     }
     videoPlayerServiceHandler.onVideoDetailDispose();
-    _lifecycleListener.dispose();
+    // _lifecycleListener.dispose();
     showStatusBar();
     super.dispose();
   }
@@ -275,16 +285,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         .subscribe(this, ModalRoute.of(context)! as PageRoute);
   }
 
-  void _handleTransition(String name) {
-    switch (name) {
-      case 'inactive':
-        if (plPlayerController != null &&
-            playerStatus == PlayerStatus.playing) {
-          autoEnterPip();
-        }
-        break;
-    }
-  }
+  // void _handleTransition(String name) {
+  //   switch (name) {
+  //     case 'inactive':
+  //       if (plPlayerController != null &&
+  //           playerStatus == PlayerStatus.playing) {
+  //         autoEnterPip();
+  //       }
+  //       break;
+  //   }
+  // }
 
   void autoEnterPip() {
     final String routePath = Get.currentRoute;
