@@ -81,7 +81,6 @@ class PlPlayerController {
 
   final Rx<String> _direction = 'horizontal'.obs;
 
-  Rx<bool> videoFitChanged = false.obs;
   final Rx<BoxFit> _videoFit = Rx(BoxFit.contain);
   final Rx<String> _videoFitDesc = Rx('包含');
 
@@ -106,7 +105,6 @@ class PlPlayerController {
   Timer? _timerForShowingVolume;
   Timer? _timerForGettingVolume;
   Timer? timerForTrackingMouse;
-  Timer? videoFitChangedTimer;
 
   // final Durations durations;
 
@@ -1028,7 +1026,6 @@ class PlPlayerController {
     _timerForGettingVolume?.cancel();
     timerForTrackingMouse?.cancel();
     _timerForSeek?.cancel();
-    videoFitChangedTimer?.cancel();
   }
 
   // 记录播放记录
@@ -1079,7 +1076,6 @@ class PlPlayerController {
       _timerForGettingVolume?.cancel();
       timerForTrackingMouse?.cancel();
       _timerForSeek?.cancel();
-      videoFitChangedTimer?.cancel();
       // _position.close();
       _playerEventSubs?.cancel();
       // _sliderPosition.close();
