@@ -107,7 +107,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
                   }
                 } else {
                   return HttpError(
-                    errMsg: snapshot.data['msg'],
+                    errMsg: "投稿页出现错误",
                     fn: () {},
                   );
                 }
