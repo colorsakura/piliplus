@@ -286,7 +286,7 @@ class ReplyItem extends StatelessWidget {
                         value['data'] != null &&
                         addReply != null)
                       {
-                        addReply!(value['data'])
+                        addReply?.call(value['data'])
                         // replyControl.replies.add(value['data']),
                       }
                   });
@@ -537,8 +537,8 @@ InlineSpan buildContent(
     spanChilds.add(TextSpan(
         text: str,
         recognizer: TapGestureRecognizer()
-          ..onTap =
-              () => replyReply(replyItem.root == 0 ? replyItem : fReplyItem)));
+          ..onTap = () =>
+              replyReply?.call(replyItem.root == 0 ? replyItem : fReplyItem)));
   }
 
   // 分割文本并处理每个部分
@@ -649,6 +649,11 @@ InlineSpan buildContent(
                       } else {
                         final String redirectUrl =
                             await UrlUtils.parseRedirectUrl(matchStr);
+                        if (redirectUrl == matchStr) {
+                          Clipboard.setData(ClipboardData(text: matchStr));
+                          SmartDialog.showToast('地址可能有误');
+                          return;
+                        }
                         final String pathSegment = Uri.parse(redirectUrl).path;
                         final String lastPathSegment =
                             pathSegment.split('/').last;
@@ -967,6 +972,7 @@ class MorePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color errorColor = Theme.of(context).colorScheme.error;
     return Container(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       child: Column(
