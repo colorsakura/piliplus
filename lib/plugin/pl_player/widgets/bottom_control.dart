@@ -177,7 +177,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                             alignment: Alignment.center,
                             child: const Icon(
                               Icons.closed_caption_off_outlined,
-                              size: 19,
+                              size: 22,
                               color: Colors.white,
                               semanticLabel: '字幕',
                             ),
@@ -229,7 +229,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         _.isFullScreen.value
                             ? Icons.fullscreen_exit
                             : Icons.fullscreen,
-                        size: 19,
+                        size: 24,
                         color: Colors.white,
                       ),
                       fuc: () =>
