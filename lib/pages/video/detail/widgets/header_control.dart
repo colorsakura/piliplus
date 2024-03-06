@@ -746,6 +746,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 blockTypes.add(i['value']);
                               }
                               widget.controller!.blockTypes = blockTypes;
+                              widget.controller?.putDanmakuSettings();
                               setState(() {});
                               try {
                                 final DanmakuOption currentOption =
@@ -778,6 +779,7 @@ class _HeaderControlState extends State<HeaderControl> {
                             onTap: () {
                               showArea = i['value'];
                               widget.controller!.showArea = showArea;
+                              widget.controller?.putDanmakuSettings();
                               setState(() {});
                               try {
                                 final DanmakuOption currentOption =
@@ -821,6 +823,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         onChanged: (double val) {
                           opacityVal = val;
                           widget.controller!.opacityVal = opacityVal;
+                          widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
                             final DanmakuOption currentOption =
@@ -859,6 +862,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         onChanged: (double val) {
                           strokeWidth = val;
                           widget.controller!.strokeWidth = val;
+                          widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
                             final DanmakuOption currentOption =
@@ -897,6 +901,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         onChanged: (double val) {
                           fontSizeVal = val;
                           widget.controller!.fontSizeVal = fontSizeVal;
+                          widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
                             final DanmakuOption currentOption =
@@ -938,6 +943,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           danmakuDurationVal = (val * val).toPrecision(2);
                           widget.controller!.danmakuDurationVal =
                               danmakuDurationVal;
+                          widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
                             final DanmakuOption updatedOption =
