@@ -190,9 +190,11 @@ class VideoDetailController extends GetxController
           flag = 1;
           break;
         } else if (i.startsWith(defaultDecodeFormats.code)) {
-          flag += 2;
+          flag = 2;
         } else if (i.startsWith(secondDecodeFormats.code)) {
-          flag += 4;
+          if (flag == 0) {
+            flag = 4;
+          }
         }
       }
       if (flag == 1) {
@@ -203,7 +205,7 @@ class VideoDetailController extends GetxController
           currentDecodeFormats =
               VideoDecodeFormatsCode.fromString(videoList.first.codecs!)!;
           firstVideo = videoList.first;
-        } else if (flag == 2 || flag == 6) {
+        } else if (flag == 2) {
           //defaultDecodeFormats
           currentDecodeFormats = defaultDecodeFormats;
           firstVideo = videoList.firstWhere(
@@ -340,7 +342,7 @@ class VideoDetailController extends GetxController
               flag = 1;
               break;
             } else if (i.startsWith(secondDecodeFormats.code)) {
-              flag += 2;
+              flag = 2;
             }
           }
           if (flag == 2) {
