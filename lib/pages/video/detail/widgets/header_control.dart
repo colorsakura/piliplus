@@ -62,7 +62,9 @@ class _HeaderControlState extends State<HeaderControl> {
     super.initState();
     videoInfo = widget.videoDetailCtr!.data;
     listenFullScreenStatus();
-    heroTag = Get.arguments['heroTag'];
+    if (Get.arguments != null) {
+      heroTag = Get.arguments['heroTag'];
+    }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
