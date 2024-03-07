@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -304,11 +305,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                               if (MineController.anonymity) ...<Widget>[
                                 const SizedBox(width: 10),
                                 Icon(
-                                  Icons.visibility_off_outlined,
+                                  CupertinoIcons.checkmark_shield,
                                   size: 15,
                                   color: t.colorScheme.outline,
                                 ),
-                                const SizedBox(width: 2),
                                 Text(
                                   '无痕',
                                   style: TextStyle(
