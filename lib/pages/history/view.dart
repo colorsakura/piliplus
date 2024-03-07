@@ -178,6 +178,7 @@ class _HistoryPageState extends State<HistoryPage> {
           return;
         },
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: _historyController.scrollController,
           slivers: [
             FutureBuilder(

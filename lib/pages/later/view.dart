@@ -69,6 +69,7 @@ class _LaterPageState extends State<LaterPage> {
         ],
       ),
       body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _laterController.scrollController,
         slivers: [
           FutureBuilder(

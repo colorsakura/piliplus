@@ -85,6 +85,7 @@ class _LivePageState extends State<LivePage>
           return await _liveController.onRefresh();
         },
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: _liveController.scrollController,
           slivers: [
             SliverPadding(

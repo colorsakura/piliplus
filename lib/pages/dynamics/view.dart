@@ -202,6 +202,7 @@ class _DynamicsPageState extends State<DynamicsPage>
       body: RefreshIndicator(
         onRefresh: () => _dynamicsController.onRefresh(),
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: _dynamicsController.scrollController,
           slivers: [
             FutureBuilder(

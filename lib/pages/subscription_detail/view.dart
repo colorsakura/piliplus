@@ -63,6 +63,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverAppBar(
             expandedHeight: 260 - MediaQuery.of(context).padding.top,

@@ -63,28 +63,33 @@ class _FavPageState extends State<FavPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map data = snapshot.data as Map;
             if (data['status']) {
-              return Obx(() =>
-                  CustomScrollView(controller: scrollController, slivers: [
-                    SliverGrid(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          mainAxisSpacing: StyleString.cardSpace,
-                          crossAxisSpacing: StyleString.safeSpace,
-                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                          mainAxisExtent: Grid.calculateActualWidth(context,
-                                  Grid.maxRowWidth * 2, StyleString.safeSpace) /
-                              1.9 /
-                              StyleString.aspectRatio),
-                      delegate: SliverChildBuilderDelegate(
-                        childCount:
-                        _favController.favFolderData.value.list!.length,
-                        (BuildContext context, int index) {
-                          return FavItem(
-                              favFolderItem: _favController
-                                  .favFolderData.value.list![index]);
-                        },
-                      ),
-                    )
-                  ]));
+              return Obx(() => CustomScrollView(
+                      controller: scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                                  mainAxisSpacing: StyleString.cardSpace,
+                                  crossAxisSpacing: StyleString.safeSpace,
+                                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                  mainAxisExtent: Grid.calculateActualWidth(
+                                          context,
+                                          Grid.maxRowWidth * 2,
+                                          StyleString.safeSpace) /
+                                      1.9 /
+                                      StyleString.aspectRatio),
+                          delegate: SliverChildBuilderDelegate(
+                            childCount:
+                                _favController.favFolderData.value.list!.length,
+                            (BuildContext context, int index) {
+                              return FavItem(
+                                  favFolderItem: _favController
+                                      .favFolderData.value.list![index]);
+                            },
+                          ),
+                        )
+                      ]));
             } else {
               return CustomScrollView(
                 physics: const NeverScrollableScrollPhysics(),

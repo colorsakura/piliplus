@@ -80,6 +80,7 @@ class _BangumiPageState extends State<BangumiPage>
       },
       child: CustomScrollView(
         controller: _bangumidController.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Obx(

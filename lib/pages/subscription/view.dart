@@ -53,28 +53,33 @@ class _SubPageState extends State<SubPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map? data = snapshot.data;
             if (data != null && data['status']) {
-              return Obx(() =>
-                  CustomScrollView(controller: scrollController, slivers: [
-                    SliverGrid(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          mainAxisSpacing: StyleString.cardSpace,
-                          crossAxisSpacing: StyleString.safeSpace,
-                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                          mainAxisExtent: Grid.calculateActualWidth(context,
-                                  Grid.maxRowWidth * 2, StyleString.safeSpace) /
-                              1.9 /
-                              StyleString.aspectRatio),
-                      delegate: SliverChildBuilderDelegate(
-                        childCount:
-                            _subController.subFolderData.value.list!.length,
-                        (BuildContext context, int index) {
-                          return SubItem(
-                              subFolderItem: _subController
-                                  .subFolderData.value.list![index]);
-                        },
-                      ),
-                    )
-                  ]));
+              return Obx(() => CustomScrollView(
+                      controller: scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                                  mainAxisSpacing: StyleString.cardSpace,
+                                  crossAxisSpacing: StyleString.safeSpace,
+                                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                  mainAxisExtent: Grid.calculateActualWidth(
+                                          context,
+                                          Grid.maxRowWidth * 2,
+                                          StyleString.safeSpace) /
+                                      1.9 /
+                                      StyleString.aspectRatio),
+                          delegate: SliverChildBuilderDelegate(
+                            childCount:
+                                _subController.subFolderData.value.list!.length,
+                            (BuildContext context, int index) {
+                              return SubItem(
+                                  subFolderItem: _subController
+                                      .subFolderData.value.list![index]);
+                            },
+                          ),
+                        )
+                      ]));
             } else {
               return CustomScrollView(
                 physics: const NeverScrollableScrollPhysics(),

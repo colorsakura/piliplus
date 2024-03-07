@@ -109,6 +109,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               },
               child: CustomScrollView(
                 controller: _videoReplyReplyController.scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
                 slivers: <Widget>[
                   if (widget.firstFloor != null) ...[
                     // const SliverToBoxAdapter(child: SizedBox(height: 10)),

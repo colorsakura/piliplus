@@ -214,6 +214,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           children: [
             CustomScrollView(
               controller: scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 if (action != 'comment')
                   SliverToBoxAdapter(

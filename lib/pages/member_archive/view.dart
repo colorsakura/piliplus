@@ -62,6 +62,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
         ],
       ),
       body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _memberArchivesController.scrollController,
         slivers: [
           FutureBuilder(

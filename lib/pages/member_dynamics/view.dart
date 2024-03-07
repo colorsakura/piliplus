@@ -61,6 +61,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
         title: Text('他的动态', style: Theme.of(context).textTheme.titleMedium),
       ),
       body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _memberDynamicController.scrollController,
         slivers: [
           FutureBuilder(
