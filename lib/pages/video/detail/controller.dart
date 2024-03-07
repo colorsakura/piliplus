@@ -88,6 +88,7 @@ class VideoDetailController extends GetxController
   late bool enableCDN;
   late int? cacheVideoQa;
   late String cacheDecode;
+  late String cacheSecondDecode;
   late int cacheAudioQa;
 
   PersistentBottomSheetController? replyReplyBottomSheetCtr;
@@ -136,6 +137,8 @@ class VideoDetailController extends GetxController
     // 预设的解码格式
     cacheDecode = setting.get(SettingBoxKey.defaultDecode,
         defaultValue: VideoDecodeFormats.values.last.code);
+    cacheSecondDecode = setting.get(SettingBoxKey.secondDecode,
+        defaultValue: VideoDecodeFormats.values[1].code);
     cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
         defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
@@ -172,23 +175,52 @@ class VideoDetailController extends GetxController
     /// 根据currentVideoQa和currentDecodeFormats 重新设置videoUrl
     List<VideoItem> videoList =
         data.dash!.video!.where((i) => i.id == currentVideoQa.code).toList();
+
+    final List supportDecodeFormats = videoList.map((e) => e.codecs!).toList();
+    VideoDecodeFormats defaultDecodeFormats =
+        VideoDecodeFormatsCode.fromString(cacheDecode)!;
+    VideoDecodeFormats secondDecodeFormats =
+        VideoDecodeFormatsCode.fromString(cacheSecondDecode)!;
     try {
-      firstVideo = videoList
-          .firstWhere((i) => i.codecs!.startsWith(currentDecodeFormats.code));
-    } catch (_) {
-      if (currentVideoQa == VideoQuality.dolbyVision) {
-        firstVideo = videoList.first;
-        currentDecodeFormats =
-            VideoDecodeFormatsCode.fromString(videoList.first.codecs!)!;
-      } else {
-        // 当前格式不可用
-        currentDecodeFormats = VideoDecodeFormatsCode.fromString(setting.get(
-            SettingBoxKey.defaultDecode,
-            defaultValue: VideoDecodeFormats.values.last.code))!;
-        firstVideo = videoList
-            .firstWhere((i) => i.codecs!.startsWith(currentDecodeFormats.code));
+      // 当前视频没有对应格式返回第一个
+      int flag = 0;
+      for (var i in supportDecodeFormats) {
+        if (i.startsWith(currentDecodeFormats.code)) {
+          flag = 1;
+          break;
+        } else if (i.startsWith(defaultDecodeFormats.code)) {
+          flag += 2;
+        } else if (i.startsWith(secondDecodeFormats.code)) {
+          flag += 4;
+        }
       }
+      if (flag == 1) {//currentDecodeFormats
+        firstVideo = videoList.first;
+      } else {
+        if (currentVideoQa == VideoQuality.dolbyVision) {
+          currentDecodeFormats =
+              VideoDecodeFormatsCode.fromString(videoList.first.codecs!)!;
+          firstVideo = videoList.first;
+        } else if (flag == 2 || flag == 6) {//defaultDecodeFormats
+          currentDecodeFormats = defaultDecodeFormats;
+          firstVideo = videoList.firstWhere(
+            (i) => i.codecs!.startsWith(defaultDecodeFormats.code),
+          );
+        } else if (flag == 4) {//secondDecodeFormats
+          currentDecodeFormats = secondDecodeFormats;
+          firstVideo = videoList.firstWhere(
+            (i) => i.codecs!.startsWith(secondDecodeFormats.code),
+          );
+        } else if (flag == 0) {
+          currentDecodeFormats =
+              VideoDecodeFormatsCode.fromString(supportDecodeFormats.first)!;
+          firstVideo = videoList.first;
+        }
+      }
+    } catch (err) {
+      SmartDialog.showToast('DecodeFormats error: $err');
     }
+
     videoUrl = firstVideo.baseUrl!;
 
     /// 根据currentAudioQa 重新设置audioUrl
@@ -292,23 +324,30 @@ class VideoDetailController extends GetxController
         // 根据画质选编码格式
         final List supportDecodeFormats =
             supportFormats.firstWhere((e) => e.quality == resVideoQa).codecs!;
-        // 默认从设置中取AVC
+        // 默认从设置中取AV1
         currentDecodeFormats = VideoDecodeFormatsCode.fromString(cacheDecode)!;
+        VideoDecodeFormats secondDecodeFormats =
+            VideoDecodeFormatsCode.fromString(cacheSecondDecode)!;
         try {
           // 当前视频没有对应格式返回第一个
-          bool flag = false;
+          int flag = 0;
           for (var i in supportDecodeFormats) {
             if (i.startsWith(currentDecodeFormats.code)) {
-              flag = true;
+              flag = 1;
+              break;
+            } else if (i.startsWith(secondDecodeFormats.code)) {
+              flag += 2;
             }
           }
-          currentDecodeFormats = flag
-              ? currentDecodeFormats
-              : VideoDecodeFormatsCode.fromString(supportDecodeFormats.first)!;
+          if (flag == 2) {
+            currentDecodeFormats = secondDecodeFormats;
+          } else if (flag == 0) {
+            currentDecodeFormats =
+                VideoDecodeFormatsCode.fromString(supportDecodeFormats.first)!;
+          }
         } catch (err) {
           SmartDialog.showToast('DecodeFormats error: $err');
         }
-
         /// 取出符合当前解码格式的videoItem
         try {
           firstVideo = videosList.firstWhere(

@@ -24,6 +24,7 @@ class _PlaySettingState extends State<PlaySetting> {
   late dynamic defaultVideoQa;
   late dynamic defaultAudioQa;
   late dynamic defaultDecode;
+  late dynamic secondDecode;
   late String defaultSubtitlePreference;
   late int defaultFullScreenMode;
   late int defaultBtmProgressBehavior;
@@ -37,6 +38,8 @@ class _PlaySettingState extends State<PlaySetting> {
         defaultValue: AudioQuality.values.last.code);
     defaultDecode = setting.get(SettingBoxKey.defaultDecode,
         defaultValue: VideoDecodeFormats.values.last.code);
+    secondDecode = setting.get(SettingBoxKey.secondDecode,
+        defaultValue: VideoDecodeFormats.values[1].code);
     defaultFullScreenMode = setting.get(SettingBoxKey.fullScreenMode,
         defaultValue: FullScreenMode.values.first.code);
     defaultBtmProgressBehavior = setting.get(SettingBoxKey.btmProgressBehavior,
@@ -163,7 +166,7 @@ class _PlaySettingState extends State<PlaySetting> {
             dense: false,
             title: Text('默认画质', style: titleStyle),
             subtitle: Text(
-              '当前画质${VideoQualityCode.fromCode(defaultVideoQa)!.description!}',
+              '当前画质：${VideoQualityCode.fromCode(defaultVideoQa)!.description!}',
               style: subTitleStyle,
             ),
             onTap: () async {
@@ -189,7 +192,7 @@ class _PlaySettingState extends State<PlaySetting> {
             dense: false,
             title: Text('默认音质', style: titleStyle),
             subtitle: Text(
-              '当前音质${AudioQualityCode.fromCode(defaultAudioQa)!.description!}',
+              '当前音质：${AudioQualityCode.fromCode(defaultAudioQa)!.description!}',
               style: subTitleStyle,
             ),
             onTap: () async {
@@ -213,9 +216,9 @@ class _PlaySettingState extends State<PlaySetting> {
           ),
           ListTile(
             dense: false,
-            title: Text('默认解码格式', style: titleStyle),
+            title: Text('首选解码格式', style: titleStyle),
             subtitle: Text(
-              '当前解码格式${VideoDecodeFormatsCode.fromCode(defaultDecode)!.description!}',
+              '首选解码格式：${VideoDecodeFormatsCode.fromCode(defaultDecode)!.description!}，请根据设备支持情况与需求调整',
               style: subTitleStyle,
             ),
             onTap: () async {
@@ -237,9 +240,35 @@ class _PlaySettingState extends State<PlaySetting> {
               }
             },
           ),
+          ListTile(
+            dense: false,
+            title: Text('次选解码格式', style: titleStyle),
+            subtitle: Text(
+              '非杜比视频次选：${VideoDecodeFormatsCode.fromCode(secondDecode)!.description!}，仍无则选择首个提供的解码格式',
+              style: subTitleStyle,
+            ),
+            onTap: () async {
+              String? result = await showDialog(
+                context: context,
+                builder: (context) {
+                  return SelectDialog<String>(
+                      title: '次选解码格式',
+                      value: secondDecode,
+                      values: VideoDecodeFormats.values.map((e) {
+                        return {'title': e.description, 'value': e.code};
+                      }).toList());
+                },
+              );
+              if (result != null) {
+                secondDecode = result;
+                setting.put(SettingBoxKey.secondDecode, result);
+                setState(() {});
+              }
+            },
+          ),
           const SetSwitchItem(
             title: '开启硬解',
-            subTitle: '以较低功耗播放视频',
+            subTitle: '以较低功耗播放视频，若使用中异常卡死，请尝试关闭',
             setKey: SettingBoxKey.enableHA,
             defaultVal: true,
           ),

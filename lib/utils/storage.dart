@@ -82,6 +82,7 @@ class SettingBoxKey {
       autoPlayEnable = 'autoPlayEnable',
       fullScreenMode = 'fullScreenMode',
       defaultDecode = 'defaultDecode',
+      secondDecode = 'secondDecode',
       danmakuEnable = 'danmakuEnable',
       defaultToastOp = 'defaultToastOp',
       defaultPicQa = 'defaultPicQa',
