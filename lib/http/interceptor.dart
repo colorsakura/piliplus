@@ -48,6 +48,7 @@ class ApiInterceptor extends Interceptor {
     SmartDialog.showToast(
       await dioError(err),
       displayType: SmartToastType.onlyRefresh,
+      displayTime: const Duration(seconds: 1),
     );
     super.onError(err, handler);
   }
