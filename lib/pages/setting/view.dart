@@ -21,7 +21,7 @@ class SettingPage extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: Column(
+      body: ListView(
         children: [
           ListTile(
             onTap: () => Get.toNamed('/privacySetting'),
