@@ -133,7 +133,8 @@ class VideoDetailController extends GetxController
     // CDN优化
     enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
     // 预设的画质
-    cacheVideoQa = setting.get(SettingBoxKey.defaultVideoQa);
+    cacheVideoQa = setting.get(SettingBoxKey.defaultVideoQa,
+        defaultValue: VideoQuality.values.last.code);
     // 预设的解码格式
     cacheDecode = setting.get(SettingBoxKey.defaultDecode,
         defaultValue: VideoDecodeFormats.values.last.code);
@@ -194,19 +195,22 @@ class VideoDetailController extends GetxController
           flag += 4;
         }
       }
-      if (flag == 1) {//currentDecodeFormats
+      if (flag == 1) {
+        //currentDecodeFormats
         firstVideo = videoList.first;
       } else {
         if (currentVideoQa == VideoQuality.dolbyVision) {
           currentDecodeFormats =
               VideoDecodeFormatsCode.fromString(videoList.first.codecs!)!;
           firstVideo = videoList.first;
-        } else if (flag == 2 || flag == 6) {//defaultDecodeFormats
+        } else if (flag == 2 || flag == 6) {
+          //defaultDecodeFormats
           currentDecodeFormats = defaultDecodeFormats;
           firstVideo = videoList.firstWhere(
             (i) => i.codecs!.startsWith(defaultDecodeFormats.code),
           );
-        } else if (flag == 4) {//secondDecodeFormats
+        } else if (flag == 4) {
+          //secondDecodeFormats
           currentDecodeFormats = secondDecodeFormats;
           firstVideo = videoList.firstWhere(
             (i) => i.codecs!.startsWith(secondDecodeFormats.code),
@@ -348,6 +352,7 @@ class VideoDetailController extends GetxController
         } catch (err) {
           SmartDialog.showToast('DecodeFormats error: $err');
         }
+
         /// 取出符合当前解码格式的videoItem
         try {
           firstVideo = videosList.firstWhere(

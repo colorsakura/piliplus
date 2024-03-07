@@ -26,7 +26,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     final _ = controller!;
     const textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 12,
+      fontSize: 11,
     );
     //阅读器限制
     Timer? _accessibilityDebounce;
@@ -34,7 +34,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       color: Colors.transparent,
       height: 90,
-      padding: const EdgeInsets.only(left: 18, right: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -47,7 +47,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                 return nil;
               }
               return Padding(
-                padding: const EdgeInsets.only(left: 7, right: 7, bottom: 6),
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 7),
                 child: Semantics(
                     // label: '${(value / max * 100).round()}%',
                     value: '${(value / max * 100).round()}%',
@@ -101,7 +101,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                       controller: _,
                     )
                   : nil,
-              const SizedBox(width: 4),
               // 播放时间
               Obx(() {
                 return Text(
@@ -129,7 +128,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               ),
               const Spacer(),
               SizedBox(
-                width: 45,
+                width: 42,
                 height: 30,
                 child: TextButton(
                   onPressed: () => _.toggleVideoFit(),
@@ -150,7 +149,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         width: 0,
                       )
                     : SizedBox(
-                        width: 45,
+                        width: 42,
                         height: 30,
                         child: PopupMenuButton<Map<String, String>>(
                           onSelected: (Map<String, String> value) {
@@ -172,7 +171,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                             }).toList();
                           },
                           child: Container(
-                            width: 45,
+                            width: 42,
                             height: 30,
                             alignment: Alignment.center,
                             child: const Icon(
@@ -186,7 +185,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                       ),
               ),
               SizedBox(
-                width: 45,
+                width: 42,
                 height: 30,
                 child: PopupMenuButton<double>(
                   onSelected: (double value) {
@@ -209,7 +208,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                     }).toList();
                   },
                   child: Container(
-                    width: 45,
+                    width: 42,
                     height: 30,
                     alignment: Alignment.center,
                     child: Obx(() => Text("${_.playbackSpeed}X",
@@ -221,7 +220,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               ),
               // 全屏
               SizedBox(
-                width: 45,
+                width: 42,
                 height: 30,
                 child: Obx(() => ComBtn(
                       tooltip: _.isFullScreen.value ? '退出全屏' : '全屏',

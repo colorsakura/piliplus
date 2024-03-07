@@ -503,6 +503,15 @@ class _HeaderControlState extends State<HeaderControl> {
                               final int quality = videoFormat[i].quality!;
                               widget.videoDetailCtr!.currentVideoQa =
                                   VideoQualityCode.fromCode(quality)!;
+                              String oldQualityDesc = VideoQualityCode.fromCode(
+                                      setting.get(SettingBoxKey.defaultVideoQa,
+                                          defaultValue:
+                                              VideoQuality.values.last.code))!
+                                  .description;
+                              setting.put(
+                                  SettingBoxKey.defaultVideoQa, quality);
+                              SmartDialog.showToast(
+                                  "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}");
                               widget.videoDetailCtr!.updatePlayer();
                               Get.back();
                             },
@@ -512,10 +521,6 @@ class _HeaderControlState extends State<HeaderControl> {
                             contentPadding:
                                 const EdgeInsets.only(left: 20, right: 20),
                             title: Text(videoFormat[i].newDesc!),
-                            subtitle: Text(
-                              videoFormat[i].format!,
-                              style: subTitleStyle,
-                            ),
                             trailing: currentVideoQa.code ==
                                     videoFormat[i].quality
                                 ? Icon(
@@ -523,7 +528,10 @@ class _HeaderControlState extends State<HeaderControl> {
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   )
-                                : const SizedBox(),
+                                : Text(
+                                    videoFormat[i].format!,
+                                    style: subTitleStyle,
+                                  ),
                           ),
                         ]
                       ],
@@ -574,6 +582,14 @@ class _HeaderControlState extends State<HeaderControl> {
                             final int quality = i.id!;
                             widget.videoDetailCtr!.currentAudioQa =
                                 AudioQualityCode.fromCode(quality)!;
+                            String oldQualityDesc = AudioQualityCode.fromCode(
+                                    setting.get(SettingBoxKey.defaultAudioQa,
+                                        defaultValue:
+                                            AudioQuality.values.last.code))!
+                                .description;
+                            setting.put(SettingBoxKey.defaultAudioQa, quality);
+                            SmartDialog.showToast(
+                                "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}");
                             widget.videoDetailCtr!.updatePlayer();
                             Get.back();
                           },
@@ -1034,33 +1050,34 @@ class _HeaderControlState extends State<HeaderControl> {
       primary: false,
       centerTitle: false,
       automaticallyImplyLeading: false,
-      titleSpacing: 14,
+      titleSpacing: 10,
       title: Row(
         children: [
-          // SizedBox(width: MediaQuery.of(context).padding.left,),
-          ComBtn(
-            tooltip: '上一页',
-            icon: const Icon(
-              FontAwesomeIcons.arrowLeft,
-              size: 15,
-              color: Colors.white,
-            ),
-            fuc: () => <Set<void>>{
-              if (widget.controller!.isFullScreen.value)
-                <void>{widget.controller!.triggerFullScreen(status: false)}
-              else
-                <void>{
-                  if (MediaQuery.of(context).orientation ==
-                          Orientation.landscape &&
-                      !horizontalScreen)
-                    {
-                      verticalScreenForTwoSeconds(),
-                    },
-                  Get.back()
-                }
-            },
-          ),
-          SizedBox(width: buttonSpace),
+          SizedBox(
+              width: 42,
+              height: 34,
+              child: IconButton(
+                tooltip: '上一页',
+                icon: const Icon(
+                  FontAwesomeIcons.arrowLeft,
+                  size: 15,
+                  color: Colors.white,
+                ),
+                onPressed: () => <Set<void>>{
+                  if (widget.controller!.isFullScreen.value)
+                    <void>{widget.controller!.triggerFullScreen(status: false)}
+                  else
+                    <void>{
+                      if (MediaQuery.of(context).orientation ==
+                              Orientation.landscape &&
+                          !horizontalScreen)
+                        {
+                          verticalScreenForTwoSeconds(),
+                        },
+                      Get.back()
+                    }
+                },
+              )),
           if ((videoIntroController.videoDetail.value.title != null) &&
               (isFullScreen ||
                   (!isFullScreen && isLandscape && !horizontalScreen))) ...[
@@ -1069,7 +1086,7 @@ class _HeaderControlState extends State<HeaderControl> {
               children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                      maxWidth: isLandscape ? 400 : 150, maxHeight: 20),
+                      maxWidth: isLandscape ? 400 : 140, maxHeight: 25),
                   child: Marquee(
                     text: videoIntroController.videoDetail.value.title!,
                     style: const TextStyle(
@@ -1082,7 +1099,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     velocity: 40,
                     startAfter: const Duration(seconds: 1),
                     showFadingOnlyWhenScrolling: true,
-                    fadingEdgeStartFraction: 0.1,
+                    fadingEdgeStartFraction: 0,
                     fadingEdgeEndFraction: 0.1,
                     numberOfRounds: 1,
                     startPadding: 0,
@@ -1097,28 +1114,31 @@ class _HeaderControlState extends State<HeaderControl> {
                     '${videoIntroController.total.value}人正在看',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 11,
                     ),
                   )
               ],
             )
           ] else ...[
-            ComBtn(
-              tooltip: '返回主页',
-              icon: const Icon(
-                FontAwesomeIcons.house,
-                size: 15,
-                color: Colors.white,
-              ),
-              fuc: () async {
-                // 销毁播放器实例
-                // await widget.controller!.dispose(type: 'all');
-                if (mounted) {
-                  Navigator.popUntil(
-                      context, (Route<dynamic> route) => route.isFirst);
-                }
-              },
-            ),
+            SizedBox(
+                width: 42,
+                height: 34,
+                child: IconButton(
+                  tooltip: '返回主页',
+                  icon: const Icon(
+                    FontAwesomeIcons.house,
+                    size: 15,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    // 销毁播放器实例
+                    // await widget.controller!.dispose(type: 'all');
+                    if (mounted) {
+                      Navigator.popUntil(
+                          context, (Route<dynamic> route) => route.isFirst);
+                    }
+                  },
+                )),
           ],
           const Spacer(),
           // ComBtn(
@@ -1130,7 +1150,7 @@ class _HeaderControlState extends State<HeaderControl> {
           //   fuc: () => _.screenshot(),
           // ),
           SizedBox(
-            width: 34,
+            width: 42,
             height: 34,
             child: IconButton(
               tooltip: '发弹幕',
@@ -1145,9 +1165,8 @@ class _HeaderControlState extends State<HeaderControl> {
               ),
             ),
           ),
-          SizedBox(width: buttonSpace),
           SizedBox(
-            width: 34,
+            width: 42,
             height: 34,
             child: Obx(
               () => IconButton(
@@ -1158,7 +1177,8 @@ class _HeaderControlState extends State<HeaderControl> {
                 onPressed: () {
                   _.isOpenDanmu.value = !_.isOpenDanmu.value;
                   SmartDialog.showToast(
-                      _.isOpenDanmu.value ? '已临时开启弹幕' : '已临时关闭弹幕', displayTime: const Duration(seconds: 1));
+                      _.isOpenDanmu.value ? '已临时开启弹幕' : '已临时关闭弹幕',
+                      displayTime: const Duration(seconds: 1));
                 },
                 icon: Icon(
                   _.isOpenDanmu.value
@@ -1170,10 +1190,9 @@ class _HeaderControlState extends State<HeaderControl> {
               ),
             ),
           ),
-          SizedBox(width: buttonSpace),
-          if (Platform.isAndroid) ...<Widget>[
+          if (Platform.isAndroid)
             SizedBox(
-              width: 34,
+              width: 42,
               height: 34,
               child: IconButton(
                 tooltip: '画中画',
@@ -1199,16 +1218,21 @@ class _HeaderControlState extends State<HeaderControl> {
                 ),
               ),
             ),
-            SizedBox(width: buttonSpace),
-          ],
-          ComBtn(
-            tooltip: '更多设置',
-            icon: const Icon(
-              Icons.more_vert_outlined,
-              size: 18,
-              color: Colors.white,
+          SizedBox(
+            width: 42,
+            height: 34,
+            child: IconButton(
+              tooltip: "更多设置",
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero),
+              ),
+              onPressed: () => showSettingSheet(),
+              icon: const Icon(
+                Icons.more_vert_outlined,
+                size: 19,
+                color: Colors.white,
+              ),
             ),
-            fuc: () => showSettingSheet(),
           ),
         ],
       ),
