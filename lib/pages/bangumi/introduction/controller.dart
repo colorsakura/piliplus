@@ -102,6 +102,8 @@ class BangumiIntroController extends GetxController {
     if (result['status']) {
       bangumiDetail.value = result['data'];
       epId = bangumiDetail.value.episodes!.first.id;
+    } else {
+      SmartDialog.showToast(result['msg']);
     }
     return result;
   }

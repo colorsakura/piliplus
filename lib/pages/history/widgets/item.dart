@@ -98,6 +98,8 @@ class HistoryItem extends StatelessWidget {
                 Get.toNamed('/video?bvid=$bvid&cid=$cid',
                     arguments: {'heroTag': heroTag, 'pic': videoItem.cover});
               }
+            } else {
+              SmartDialog.showToast(result['msg']);
             }
           } else {
             if (videoItem.history.epid != '') {
@@ -120,6 +122,8 @@ class HistoryItem extends StatelessWidget {
                     'bangumiItem': res['data'],
                   },
                 );
+              } else {
+                SmartDialog.showToast(res['msg']);
               }
             }
           }

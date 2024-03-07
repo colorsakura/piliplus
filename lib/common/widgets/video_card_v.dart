@@ -57,6 +57,8 @@ class VideoCardV extends StatelessWidget {
               },
             ),
           );
+        } else {
+          SmartDialog.showToast(result['msg']);
         }
         break;
       case 'av':
@@ -94,6 +96,8 @@ class VideoCardV extends StatelessWidget {
                   'floor': 1,
                   'action': 'detail'
                 });
+              } else {
+                SmartDialog.showToast(res['msg']);
               }
               return;
             }

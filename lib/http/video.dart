@@ -197,18 +197,19 @@ class VideoHttp {
     if (result.code == 0) {
       return {'status': true, 'data': result.data!};
     } else {
-      Map errMap = {
-        -400: '请求错误',
-        -403: '权限不足',
-        -404: '视频资源失效',
-        62002: '稿件不可见',
-        62004: '稿件审核中',
-      };
+      // Map errMap = {
+      //   -400: '请求错误',
+      //   -403: '权限不足',
+      //   -404: '视频资源失效',
+      //   62002: '稿件不可见',
+      //   62004: '稿件审核中',
+      // };
       return {
         'status': false,
         'data': null,
         'code': result.code,
-        'msg': errMap[result.code] ?? '请求异常',
+        'msg': result.message,
+        // 'msg': errMap[result.code] ?? '请求异常',
       };
     }
   }

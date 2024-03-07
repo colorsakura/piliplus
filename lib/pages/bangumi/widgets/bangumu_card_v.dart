@@ -65,6 +65,8 @@ class BangumiCardV extends StatelessWidget {
                     'bangumiItem': res['data'],
                   },
                 );
+              } else {
+                SmartDialog.showToast(res['msg']);
               }
             });
           },

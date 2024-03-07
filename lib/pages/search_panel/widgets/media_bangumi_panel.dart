@@ -138,6 +138,8 @@ Widget searchMbangumiPanel(BuildContext context, ctr, list) {
                                       'bangumiItem': res['data'],
                                     },
                                   );
+                                } else {
+                                  SmartDialog.showToast(res['msg']);
                                 }
                               });
                             },

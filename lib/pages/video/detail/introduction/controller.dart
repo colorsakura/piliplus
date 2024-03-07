@@ -118,6 +118,8 @@ class VideoIntroController extends GetxController {
       // ];
       // 获取到粉丝数再返回
       await queryUserStat();
+    } else {
+      SmartDialog.showToast(result['msg']);
     }
     if (userLogin) {
       // 获取点赞状态

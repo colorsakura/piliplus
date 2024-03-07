@@ -238,6 +238,8 @@ class DynamicsController extends GetxController {
                 'bangumiItem': res['data'],
               },
             );
+          } else {
+            SmartDialog.showToast(res['msg']);
           }
         }
         break;
