@@ -439,13 +439,13 @@ class PlPlayerController {
         );
 
     var pp = player.platform as NativePlayer;
-    await pp.setProperty("audio-pitch-correction", "scaletempo2");
     // 解除倍速限制
     await pp.setProperty("af", "scaletempo2=max-speed=8");
     //  音量不一致
     if (Platform.isAndroid) {
       await pp.setProperty("volume-max", "100");
-      await pp.setProperty("ao", "audiotrack,opensles");
+      // await pp.setProperty("ao", "audiotrack,opensles");
+      await pp.setProperty("ao", "opensles,audiotrack");
     }
     // // vo=gpu-next & gpu-context=android & gpu-api=opengl
     // await pp.setProperty("vo", "gpu-next");
