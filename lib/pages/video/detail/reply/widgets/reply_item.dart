@@ -214,6 +214,7 @@ class ReplyItem extends StatelessWidget {
           margin: const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
           child: Semantics(
               label: replyItem?.content?.message ?? "",
+              excludeSemantics: true,
               child: Text.rich(
                 style: const TextStyle(height: 1.75),
                 maxLines:
@@ -387,48 +388,51 @@ class ReplyItemRow extends StatelessWidget {
                       8,
                       i == 0 && (extraRow == 1 || replies!.length > 1) ? 5 : 6,
                     ),
-                    child: Text.rich(
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      TextSpan(
-                        children: [
+                    child: Semantics(
+                        label: replies![i].member.uname + ' ' + replies![i].content.message,
+                        excludeSemantics: true,
+                        child: Text.rich(
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                           TextSpan(
-                            text: replies![i].member.uname + ' ',
-                            style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .fontSize,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                feedBack();
-                                final String heroTag =
-                                    Utils.makeHeroTag(replies![i].member.mid);
-                                Get.toNamed(
-                                    '/member?mid=${replies![i].member.mid}',
-                                    arguments: {
-                                      'face': replies![i].member.avatar,
-                                      'heroTag': heroTag
-                                    });
-                              },
-                          ),
-                          if (replies![i].isUp)
-                            const WidgetSpan(
-                              alignment: PlaceholderAlignment.top,
-                              child: PBadge(
-                                text: 'UP',
-                                size: 'small',
-                                stack: 'normal',
-                                fs: 9,
+                            children: [
+                              TextSpan(
+                                text: replies![i].member.uname + ' ',
+                                style: TextStyle(
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .fontSize,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    feedBack();
+                                    final String heroTag = Utils.makeHeroTag(
+                                        replies![i].member.mid);
+                                    Get.toNamed(
+                                        '/member?mid=${replies![i].member.mid}',
+                                        arguments: {
+                                          'face': replies![i].member.avatar,
+                                          'heroTag': heroTag
+                                        });
+                                  },
                               ),
-                            ),
-                          buildContent(
-                              context, replies![i], replyReply, replyItem),
-                        ],
-                      ),
-                    ),
+                              if (replies![i].isUp)
+                                const WidgetSpan(
+                                  alignment: PlaceholderAlignment.top,
+                                  child: PBadge(
+                                    text: 'UP',
+                                    size: 'small',
+                                    stack: 'normal',
+                                    fs: 9,
+                                  ),
+                                ),
+                              buildContent(
+                                  context, replies![i], replyReply, replyItem),
+                            ],
+                          ),
+                        )),
                   ),
                 )
               ],

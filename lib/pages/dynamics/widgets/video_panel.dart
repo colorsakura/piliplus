@@ -117,7 +117,8 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                             Colors.black54,
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(StyleString.imgRadius.x)),
+                        borderRadius:
+                            BorderRadius.circular(StyleString.imgRadius.x)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -131,7 +132,12 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                               color: Colors.white),
                           child: Row(
                             children: [
-                              Text(content.durationText ?? ''),
+                              if (content.durationText != null)
+                                Text(
+                                  content.durationText,
+                                  semanticsLabel:
+                                      '时长${Utils.durationReadFormat(content.durationText)}',
+                                ),
                               if (content.durationText != null)
                                 const SizedBox(width: 10),
                               Text(content.stat.play + '次围观'),
