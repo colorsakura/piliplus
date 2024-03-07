@@ -49,7 +49,9 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
     super.initState();
 
     /// fix 全屏时参数丢失
-    heroTag = Get.arguments['heroTag'];
+    if (Get.arguments != null) {
+      heroTag = Get.arguments['heroTag'];
+    }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     _futureBuilderFuture = videoIntroController.queryVideoIntro();
     videoIntroController.videoDetail.listen((value) {
