@@ -88,7 +88,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
             )
           : null,
       title: Text(
-        '第${index + 1}话  ${page.longTitle!}',
+        '第' + (page.title ?? '${index + 1}') + '话  ${page.longTitle!}',
         style: TextStyle(
           fontSize: 14,
           color: isCurrentIndex
@@ -96,13 +96,13 @@ class _BangumiPanelState extends State<BangumiPanel> {
               : Theme.of(context).colorScheme.onSurface,
         ),
       ),
-      trailing: page.badge != null
+      trailing: page.badge != null && page.badge == '会员'
           ? Image.asset(
               'assets/images/big-vip.png',
               height: 20,
               semanticLabel: "大会员",
             )
-          : const SizedBox(),
+          : Text(page.badge ?? ""),
     );
   }
 
@@ -147,15 +147,15 @@ class _BangumiPanelState extends State<BangumiPanel> {
                   Expanded(
                     child: Material(
                       child: ScrollablePositionedList.builder(
-                        itemCount: widget.pages.length,
+                        itemCount: widget.pages.length + 1,
                         itemBuilder: (BuildContext context, int index) {
-                          bool isLastItem = index == widget.pages.length - 1;
+                          bool isLastItem = index == widget.pages.length;
                           bool isCurrentIndex = currentIndex == index;
                           return isLastItem
                               ? SizedBox(
                                   height:
                                       MediaQuery.of(context).padding.bottom +
-                                          20,
+                                          50,
                                 )
                               : buildPageListItem(
                                   widget.pages[index],
@@ -271,7 +271,9 @@ class _BangumiPanelState extends State<BangumiPanel> {
                                 const SizedBox(width: 6)
                               ],
                               Text(
-                                '第${i + 1}话',
+                                '第' +
+                                    (widget.pages[i].title ?? "${i + 1}") +
+                                    '话',
                                 style: TextStyle(
                                     fontSize: 13,
                                     color: i == currentIndex
@@ -282,6 +284,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                               ),
                               const SizedBox(width: 2),
                               if (widget.pages[i].badge != null) ...[
+                                const Spacer(),
                                 if (widget.pages[i].badge == '会员') ...[
                                   Image.asset(
                                     'assets/images/big-vip.png',
@@ -290,7 +293,6 @@ class _BangumiPanelState extends State<BangumiPanel> {
                                   ),
                                 ],
                                 if (widget.pages[i].badge != '会员') ...[
-                                  const Spacer(),
                                   Text(
                                     widget.pages[i].badge!,
                                     style: TextStyle(
