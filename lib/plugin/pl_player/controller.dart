@@ -992,6 +992,8 @@ class PlPlayerController {
 
   // 全屏
   Future<void> triggerFullScreen({bool status = true}) async {
+    FullScreenMode mode = FullScreenModeCode.fromCode(
+        setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
     if (!isFullScreen.value && status) {
       // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
       hideStatusBar();
@@ -1000,8 +1002,6 @@ class PlPlayerController {
       toggleFullScreen(true);
 
       /// 进入全屏
-      FullScreenMode mode = FullScreenModeCode.fromCode(
-          setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
       if (mode == FullScreenMode.none) {
         return;
       }
@@ -1010,7 +1010,7 @@ class PlPlayerController {
           (mode == FullScreenMode.ratio &&
               (Get.height / Get.width < 1.25 ||
                   direction.value == 'vertical'))) {
-        await verticalScreen();
+        await verticalScreenForTwoSeconds();
       } else {
         await landScape();
       }
@@ -1018,8 +1018,9 @@ class PlPlayerController {
       // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       showStatusBar();
       toggleFullScreen(false);
-      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
-        await verticalScreen();
+      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false) &&
+          mode != FullScreenMode.none) {
+        await verticalScreenForTwoSeconds();
       }
     }
   }

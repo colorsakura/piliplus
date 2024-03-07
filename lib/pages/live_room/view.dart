@@ -181,7 +181,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                   }
                   if (MediaQuery.of(context).orientation ==
                       Orientation.landscape) {
-                    verticalScreen();
+                    verticalScreenForTwoSeconds();
                   }
                 },
                 child: SizedBox(

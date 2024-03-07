@@ -200,20 +200,20 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         plPlayerController!.isFullScreen.listen((bool status) {
       if (status) {
         videoDetailController.hiddenReplyReplyPanel();
-        hideStatusBar();
+        // hideStatusBar();
       }
       isFullScreen.value = status;
       if (mounted) {
         setState(() {});
       }
-      if (!status) {
-        showStatusBar();
-        if (horizontalScreen) {
-          autoScreen();
-        } else {
-          verticalScreen();
-        }
-      }
+      // if (!status) {
+        // showStatusBar();
+        // if (horizontalScreen) {
+        //   autoScreen();
+        // } else {
+        //   verticalScreenForTwoSeconds();
+        // }
+      // }
     });
   }
 
@@ -371,7 +371,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               if (MediaQuery.of(context).orientation ==
                                       Orientation.landscape &&
                                   !horizontalScreen) {
-                                verticalScreen();
+                                verticalScreenForTwoSeconds();
                               }
                             },
                             child: Stack(
@@ -623,7 +623,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                   if (MediaQuery.of(context).orientation ==
                                           Orientation.landscape &&
                                       !horizontalScreen) {
-                                    verticalScreen();
+                                    verticalScreenForTwoSeconds();
                                   }
                                 },
                                 child: Stack(

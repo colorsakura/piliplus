@@ -26,6 +26,16 @@ Future<void> landScape() async {
 }
 
 //竖屏
+Future<void> verticalScreenForTwoSeconds() async {
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  Future.delayed(const Duration(seconds: 2), () {
+    autoScreen();
+  });
+}
+
+//竖屏
 Future<void> verticalScreen() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

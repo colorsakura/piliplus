@@ -1052,7 +1052,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           Orientation.landscape &&
                       !horizontalScreen)
                     {
-                      verticalScreen(),
+                      verticalScreenForTwoSeconds(),
                     },
                   Get.back()
                 }
