@@ -164,11 +164,8 @@ class _AboutPageState extends State<AboutPage> {
           ),
           ListTile(
             onTap: () async {
-              var cleanStatus = await CacheManage().clearCacheAll();
-              if (cleanStatus) {
-                getCacheSize();
-                SmartDialog.showToast('清除成功');
-              }
+              await CacheManage().clearCacheAll();
+              getCacheSize();
             },
             title: const Text('清除缓存'),
             subtitle: Text('图片及网络缓存 $cacheSize', style: subTitleStyle),
