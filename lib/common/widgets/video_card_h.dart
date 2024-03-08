@@ -37,6 +37,10 @@ class VideoCardH extends StatelessWidget {
   Widget build(BuildContext context) {
     final int aid = videoItem.aid;
     final String bvid = videoItem.bvid;
+    String type = 'video';
+    try {
+      type = videoItem.type;
+    } catch (_) {}
     final String heroTag = Utils.makeHeroTag(aid);
     return Stack(children: [
       Semantics(
@@ -55,6 +59,10 @@ class VideoCardH extends StatelessWidget {
             // },
             child: InkWell(
               onTap: () async {
+                if (type == 'ketang') {
+                  SmartDialog.showToast('课堂视频暂不支持播放');
+                  return;
+                }
                 try {
                   final int cid = videoItem.cid ??
                       await SearchHttp.ab2c(aid: aid, bvid: bvid);
@@ -100,13 +108,20 @@ class VideoCardH extends StatelessWidget {
                                         height: maxHeight,
                                       ),
                                     ),
-                                    PBadge(
-                                      text:
-                                          Utils.timeFormat(videoItem.duration!),
-                                      right: 6.0,
-                                      bottom: 6.0,
-                                      type: 'gray',
-                                    ),
+                                    if (videoItem.duration != 0)
+                                      PBadge(
+                                        text: Utils.timeFormat(videoItem.duration!),
+                                        right: 6.0,
+                                        bottom: 6.0,
+                                        type: 'gray',
+                                      ),
+                                    if (type != 'video')
+                                      PBadge(
+                                        text: type,
+                                        left: 6.0,
+                                        bottom: 6.0,
+                                        type: 'primary',
+                                      ),
                                     // if (videoItem.rcmdReason != null &&
                                     //     videoItem.rcmdReason.content != '')
                                     //   pBadge(videoItem.rcmdReason.content, context,

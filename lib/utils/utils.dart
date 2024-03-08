@@ -130,6 +130,9 @@ class Utils {
       return time;
     }
     if (time < 3600) {
+      if (time == 0) {
+        return time;
+      }
       final int minute = time ~/ 60;
       final double res = time / 60;
       if (minute != res) {
@@ -167,6 +170,9 @@ class Utils {
 
   // 时间显示，刚刚，x分钟前
   static String dateFormat(timeStamp, {formatType = 'list'}) {
+    if (timeStamp == 0 || timeStamp == null || timeStamp == '') {
+      return '';
+    }
     // 当前时间
     int time = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     // 对比
@@ -193,6 +199,7 @@ class Utils {
         toInt: true,
       );
     }
+    print('distance: $distance');
     if (distance <= 60) {
       return '刚刚';
     } else if (distance <= 3600) {
