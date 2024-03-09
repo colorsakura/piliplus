@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
 import 'package:PiliPalaX/pages/setting/widgets/select_dialog.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-import '../../models/video/play/subtitle.dart';
 import 'widgets/switch_item.dart';
 
 class VideoSetting extends StatefulWidget {
