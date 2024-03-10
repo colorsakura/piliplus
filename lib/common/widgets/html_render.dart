@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import '../../utils/storage.dart';
 import 'network_img_layer.dart';
 
 // ignore: must_be_immutable
@@ -18,6 +19,8 @@ class HtmlRender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double textScale =
+        setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
     return Html(
       data: htmlContent,
       onLinkTap: (String? url, Map<String, String> buildContext, attributes) {},
@@ -54,7 +57,7 @@ class HtmlRender extends StatelessWidget {
               //   height: isEmote ? 22 : null,
               // );
               return NetworkImgLayer(
-                width: isEmote ? 22 : Get.size.width - 24,
+                width: isEmote ? 22 : (Get.size.width - 23) / textScale,
                 height: isEmote ? 22 : 200,
                 src: imgUrl,
                 ignoreHeight: !isEmote,
