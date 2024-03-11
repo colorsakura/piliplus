@@ -9,4 +9,5 @@ enum BottomControlType {
   subtitle,
   speed,
   fullscreen,
+  custom,
 }
