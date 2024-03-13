@@ -93,16 +93,19 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                     return Obx(
                       () => SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          // 行间距
-                          mainAxisSpacing: StyleString.cardSpace,
-                          // 列间距
-                          crossAxisSpacing: StyleString.safeSpace,
-                          // 最大宽度
+                            // 行间距
+                            mainAxisSpacing: StyleString.cardSpace,
+                            // 列间距
+                            crossAxisSpacing: StyleString.cardSpace,
+                            // 最大宽度
                             maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                            mainAxisExtent: Grid.calculateActualWidth(context, Grid.maxRowWidth * 2, StyleString.safeSpace) / 1.9 / StyleString.aspectRatio
-                        ),
-                        delegate:
-                            SliverChildBuilderDelegate((context, index) {
+                            mainAxisExtent: Grid.calculateActualWidth(
+                                    context,
+                                    Grid.maxRowWidth * 2,
+                                    StyleString.safeSpace) /
+                                2.1 /
+                                StyleString.aspectRatio),
+                        delegate: SliverChildBuilderDelegate((context, index) {
                           return VideoCardH(
                             videoItem: _hotController.videoList[index],
                             showPubdate: true,
