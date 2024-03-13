@@ -135,103 +135,107 @@ class _ImagePreviewState extends State<ImagePreview>
       ),
       body: Stack(
         children: [
-          GestureDetector(
-            onLongPress: () => onOpenMenu(),
-            child: ExtendedImageGesturePageView.builder(
-              controller: ExtendedPageController(
-                initialPage: _previewController.initialPage.value,
-                pageSpacing: 0,
-              ),
-              onPageChanged: (int index) => _previewController.onChange(index),
-              canScrollPage: (GestureDetails? gestureDetails) =>
-                  gestureDetails!.totalScale! <= 1.0,
-              itemCount: widget.imgList!.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ExtendedImage.network(
-                  widget.imgList![index],
-                  fit: BoxFit.contain,
-                  mode: ExtendedImageMode.gesture,
-                  onDoubleTap: (ExtendedImageGestureState state) {
-                    final Offset? pointerDownPosition =
-                        state.pointerDownPosition;
-                    final double? begin = state.gestureDetails!.totalScale;
-                    double end;
+          Semantics(
+            label: '双指缩放、长按保存、左右滑动切换图片',
+            child: GestureDetector(
+              onLongPress: () => onOpenMenu(),
+              child: ExtendedImageGesturePageView.builder(
+                controller: ExtendedPageController(
+                  initialPage: _previewController.initialPage.value,
+                  pageSpacing: 0,
+                ),
+                onPageChanged: (int index) =>
+                    _previewController.onChange(index),
+                canScrollPage: (GestureDetails? gestureDetails) =>
+                    gestureDetails!.totalScale! <= 1.0,
+                itemCount: widget.imgList!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ExtendedImage.network(
+                    widget.imgList![index],
+                    fit: BoxFit.contain,
+                    mode: ExtendedImageMode.gesture,
+                    onDoubleTap: (ExtendedImageGestureState state) {
+                      final Offset? pointerDownPosition =
+                          state.pointerDownPosition;
+                      final double? begin = state.gestureDetails!.totalScale;
+                      double end;
 
-                    //remove old
-                    _doubleClickAnimation
-                        ?.removeListener(_doubleClickAnimationListener);
+                      //remove old
+                      _doubleClickAnimation
+                          ?.removeListener(_doubleClickAnimationListener);
 
-                    //stop pre
-                    _doubleClickAnimationController.stop();
+                      //stop pre
+                      _doubleClickAnimationController.stop();
 
-                    //reset to use
-                    _doubleClickAnimationController.reset();
+                      //reset to use
+                      _doubleClickAnimationController.reset();
 
-                    if (begin == doubleTapScales[0]) {
-                      setState(() {
-                        _dismissDisabled = true;
-                      });
-                      end = doubleTapScales[1];
-                    } else {
-                      setState(() {
-                        _dismissDisabled = false;
-                      });
-                      end = doubleTapScales[0];
-                    }
+                      if (begin == doubleTapScales[0]) {
+                        setState(() {
+                          _dismissDisabled = true;
+                        });
+                        end = doubleTapScales[1];
+                      } else {
+                        setState(() {
+                          _dismissDisabled = false;
+                        });
+                        end = doubleTapScales[0];
+                      }
 
-                    _doubleClickAnimationListener = () {
-                      state.handleDoubleTap(
-                          scale: _doubleClickAnimation!.value,
-                          doubleTapPosition: pointerDownPosition);
-                    };
-                    _doubleClickAnimation = _doubleClickAnimationController
-                        .drive(Tween<double>(begin: begin, end: end));
+                      _doubleClickAnimationListener = () {
+                        state.handleDoubleTap(
+                            scale: _doubleClickAnimation!.value,
+                            doubleTapPosition: pointerDownPosition);
+                      };
+                      _doubleClickAnimation = _doubleClickAnimationController
+                          .drive(Tween<double>(begin: begin, end: end));
 
-                    _doubleClickAnimation!
-                        .addListener(_doubleClickAnimationListener);
+                      _doubleClickAnimation!
+                          .addListener(_doubleClickAnimationListener);
 
-                    _doubleClickAnimationController.forward();
-                  },
-                  // ignore: body_might_complete_normally_nullable
-                  loadStateChanged: (ExtendedImageState state) {
-                    if (state.extendedImageLoadState == LoadState.loading) {
-                      final ImageChunkEvent? loadingProgress =
-                          state.loadingProgress;
-                      final double? progress =
-                          loadingProgress?.expectedTotalBytes != null
-                              ? loadingProgress!.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null;
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 150.0,
-                              child: LinearProgressIndicator(
-                                value: progress,
-                                color: Colors.white,
+                      _doubleClickAnimationController.forward();
+                    },
+                    // ignore: body_might_complete_normally_nullable
+                    loadStateChanged: (ExtendedImageState state) {
+                      if (state.extendedImageLoadState == LoadState.loading) {
+                        final ImageChunkEvent? loadingProgress =
+                            state.loadingProgress;
+                        final double? progress =
+                            loadingProgress?.expectedTotalBytes != null
+                                ? loadingProgress!.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null;
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 150.0,
+                                child: LinearProgressIndicator(
+                                  value: progress,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            // const SizedBox(height: 10.0),
-                            // Text('${((progress ?? 0.0) * 100).toInt()}%',),
-                          ],
-                        ),
+                              // const SizedBox(height: 10.0),
+                              // Text('${((progress ?? 0.0) * 100).toInt()}%',),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    initGestureConfigHandler: (ExtendedImageState state) {
+                      return GestureConfig(
+                        inPageView: true,
+                        initialScale: 1.0,
+                        maxScale: 5.0,
+                        animationMaxScale: 6.0,
+                        initialAlignment: InitialAlignment.center,
                       );
-                    }
-                  },
-                  initGestureConfigHandler: (ExtendedImageState state) {
-                    return GestureConfig(
-                      inPageView: true,
-                      initialScale: 1.0,
-                      maxScale: 5.0,
-                      animationMaxScale: 6.0,
-                      initialAlignment: InitialAlignment.center,
-                    );
-                  },
-                );
-              },
+                    },
+                  );
+                },
+              ),
             ),
           ),
           Positioned(
