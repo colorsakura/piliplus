@@ -13,6 +13,8 @@ import 'package:PiliPalaX/pages/home/index.dart';
 import 'package:PiliPalaX/pages/main/index.dart';
 import 'package:PiliPalaX/pages/rank/zone/index.dart';
 
+import '../../../utils/grid.dart';
+
 class ZonePage extends StatefulWidget {
   const ZonePage({Key? key, required this.rid}) : super(key: key);
 
@@ -86,7 +88,20 @@ class _ZonePageState extends State<ZonePage> {
                   Map data = snapshot.data as Map;
                   if (data['status']) {
                     return Obx(
-                      () => SliverList(
+                      () => SliverGrid(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            // 行间距
+                            mainAxisSpacing: StyleString.cardSpace,
+                            // 列间距
+                            crossAxisSpacing: StyleString.cardSpace,
+                            // 最大宽度
+                            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                            mainAxisExtent: Grid.calculateActualWidth(
+                                    context,
+                                    Grid.maxRowWidth * 2,
+                                    StyleString.safeSpace) /
+                                2.1 /
+                                StyleString.aspectRatio),
                         delegate: SliverChildBuilderDelegate((context, index) {
                           return VideoCardH(
                             videoItem: _zoneController.videoList[index],
