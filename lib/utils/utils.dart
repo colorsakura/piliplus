@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../common/widgets/custom_toast.dart';
 import '../http/index.dart';
 import '../models/github/latest.dart';
 
@@ -358,9 +360,20 @@ class Utils {
             ),
             actions: [
               TextButton(
+                onPressed: () {
+                  setting.put(SettingBoxKey.autoUpdate, false);
+                  SmartDialog.dismiss();
+                },
+                child: Text(
+                  '不再提醒',
+                  style:
+                  TextStyle(color: Theme.of(context).colorScheme.outline),
+                ),
+              ),
+              TextButton(
                 onPressed: () => SmartDialog.dismiss(),
                 child: Text(
-                  '稍后',
+                  '取消',
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.outline),
                 ),
