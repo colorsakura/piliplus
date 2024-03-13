@@ -153,11 +153,11 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                                           e['count'] > 0,
                                   child: e['icon'],
                                   backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.primary,
                                   textColor: Theme.of(context)
                                       .colorScheme
                                       .onInverseSurface,
-                                  ),
+                                ),
                               ),
                               selectedIcon: e['selectIcon'],
                               label: e['label'],
@@ -171,6 +171,11 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                         iconSize: 16,
                         selectedFontSize: 12,
                         unselectedFontSize: 12,
+                        type: BottomNavigationBarType.fixed,
+                        // selectedItemColor:
+                        //     Theme.of(context).colorScheme.primary, // 选中项的颜色
+                        // unselectedItemColor:
+                        //     Theme.of(context).colorScheme.onSurface,
                         items: [
                           ..._mainController.navigationBars.map((e) {
                             return BottomNavigationBarItem(
@@ -189,11 +194,11 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                                           e['count'] > 0,
                                   child: e['icon'],
                                   backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.primary,
                                   textColor: Theme.of(context)
                                       .colorScheme
                                       .onInverseSurface,
-                                  ),
+                                ),
                               ),
                               activeIcon: e['selectIcon'],
                               label: e['label'],

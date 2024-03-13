@@ -17,11 +17,11 @@ List defaultNavigationBars = [
   {
     'id': 1,
     'icon': const Icon(
-      Icons.trending_up,
+      Icons.leaderboard_outlined,
       size: 21,
     ),
     'selectIcon': const Icon(
-      Icons.trending_up_outlined,
+      Icons.leaderboard,
       size: 21,
     ),
     'label': "排行榜",

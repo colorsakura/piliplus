@@ -85,15 +85,17 @@ class _RankPageState extends State<RankPage>
                 const SizedBox(height: 4),
                 SizedBox(
                   width: double.infinity,
-                  height: 42,
+                  height: 50,
                   child: Align(
                     alignment: Alignment.center,
                     child: TabBar(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       controller: _rankController.tabController,
                       tabs: [
                         for (var i in _rankController.tabs)
                           Tab(text: i['label'])
                       ],
+                      labelPadding: const EdgeInsets.symmetric(horizontal: 4),
                       isScrollable: true,
                       dividerColor: Colors.transparent,
                       enableFeedback: true,
