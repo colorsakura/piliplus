@@ -67,6 +67,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late final MethodChannel onUserLeaveHintListener;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  StreamSubscription<Duration>? _bufferedListener;
 
   @override
   void initState() {
@@ -243,6 +244,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       AutoOrientation.portraitUpMode();
     }
     shutdownTimerService.handleWaitingFinished();
+    _bufferedListener?.cancel();
     if (plPlayerController != null) {
       plPlayerController!.removeStatusLister(playerListener);
       fullScreenStatusListener.cancel();
@@ -258,6 +260,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   // 离开当前页面时
   void didPushNext() async {
+    _bufferedListener?.cancel();
     /// 开启
     if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
         as bool) {
@@ -295,8 +298,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (autoplay) {
       // await Future.delayed(const Duration(milliseconds: 300));
       if (plPlayerController?.buffered.value == Duration.zero) {
-        plPlayerController?.buffered.listen((p0) {
+        _bufferedListener = plPlayerController?.buffered.listen((p0) {
           if (p0 > Duration.zero) {
+            _bufferedListener!.cancel();
             plPlayerController?.seekTo(videoDetailController.defaultST);
             plPlayerController?.play();
           }
