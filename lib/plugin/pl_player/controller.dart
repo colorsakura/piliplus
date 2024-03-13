@@ -83,8 +83,8 @@ class PlPlayerController {
 
   final Rx<BoxFit> _videoFit = Rx(videoFitType.first['attr']);
   final Rx<String> _videoFitDesc = Rx(videoFitType.first['desc']);
-  late StreamSubscription<Duration> _bufferedListenerForVideoFit;
-  late StreamSubscription<Duration> _bufferedListenerForEnterFullscreen;
+  late StreamSubscription<DataStatus> _dataListenerForVideoFit;
+  late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
   ///
   // ignore: prefer_final_fields
@@ -233,7 +233,6 @@ class PlPlayerController {
   late double strokeWidth;
   late double danmakuDurationVal;
   late List<double> speedsList;
-  // 缓存
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
 
@@ -555,10 +554,10 @@ class PlPlayerController {
     bool autoEnterFullscreen = GStrorage.setting
         .get(SettingBoxKey.enableAutoEnter, defaultValue: false);
     if (autoEnterFullscreen) {
-      if (buffered.value == Duration.zero) {
-        _bufferedListenerForEnterFullscreen = buffered.listen((status) {
-          if (status > Duration.zero) {
-            _bufferedListenerForEnterFullscreen.cancel();
+      if (dataStatus.status.value != DataStatus.loaded) {
+        _dataListenerForEnterFullscreen = dataStatus.status.listen((status) {
+          if (status == DataStatus.loaded) {
+            _dataListenerForEnterFullscreen.cancel();
             triggerFullScreen(status: true);
           }
         });
@@ -930,9 +929,9 @@ class PlPlayerController {
     if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
       if (buffered.value == Duration.zero) {
         attr = BoxFit.contain;
-        _bufferedListenerForVideoFit = buffered.listen((status) {
-          if (status > Duration.zero) {
-            _bufferedListenerForVideoFit.cancel();
+        _dataListenerForVideoFit = dataStatus.status.listen((status) {
+          if (status == DataStatus.loaded) {
+            _dataListenerForVideoFit.cancel();
             int fitValue =
                 videoStorage.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
             var attr = videoFitType[fitValue]['attr'];
@@ -1023,9 +1022,13 @@ class PlPlayerController {
       // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       showStatusBar();
       toggleFullScreen(false);
-      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false) &&
-          mode != FullScreenMode.none) {
+      if (mode == FullScreenMode.none) {
+        return;
+      }
+      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
         await verticalScreenForTwoSeconds();
+      } else {
+        await autoScreen();
       }
     }
   }

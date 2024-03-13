@@ -123,7 +123,9 @@ class MyApp extends StatelessWidget {
           DisplayMode preferred = modes.toList().firstWhere((el) => el == f);
           FlutterDisplayMode.setPreferredMode(preferred);
         });
-      } catch (_) {}
+      } catch (e) {
+        SmartDialog.showToast('设置帧率失败:$e', displayTime: const Duration(milliseconds: 500));
+      }
     }
 
     return DynamicColorBuilder(

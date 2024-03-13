@@ -268,7 +268,9 @@ class VideoDetailController extends GetxController
       // 硬解
       enableHA: enableHA.value,
       seekTo: seekToTime ?? defaultST,
-      duration: duration ?? Duration(milliseconds: data.timeLength ?? 0),
+      duration: duration ?? data.timeLength == null
+          ? null
+          : Duration(milliseconds: data.timeLength!),
       // 宽>高 水平 否则 垂直
       direction: firstVideo.width != null && firstVideo.height != null
           ? ((firstVideo.width! - firstVideo.height!) > 0

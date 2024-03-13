@@ -1063,19 +1063,16 @@ class _HeaderControlState extends State<HeaderControl> {
                   size: 15,
                   color: Colors.white,
                 ),
-                onPressed: () => <Set<void>>{
-                  if (widget.controller!.isFullScreen.value)
-                    <void>{widget.controller!.triggerFullScreen(status: false)}
-                  else
-                    <void>{
-                      if (MediaQuery.of(context).orientation ==
-                              Orientation.landscape &&
-                          !horizontalScreen)
-                        {
-                          verticalScreenForTwoSeconds(),
-                        },
-                      Get.back()
-                    }
+                onPressed: () {
+                  if (widget.controller!.isFullScreen.value) {
+                    widget.controller!.triggerFullScreen(status: false);
+                  } else if (MediaQuery.of(context).orientation ==
+                          Orientation.landscape &&
+                      !horizontalScreen) {
+                    verticalScreenForTwoSeconds();
+                  } else {
+                    Get.back();
+                  }
                 },
               )),
           if ((videoIntroController.videoDetail.value.title != null) &&

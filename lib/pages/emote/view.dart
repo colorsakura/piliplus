@@ -23,8 +23,8 @@ class _EmotePanelState extends State<EmotePanel>
 
   @override
   void initState() {
-    _futureBuilderFuture = _emotePanelController.getEmote();
     super.initState();
+    _futureBuilderFuture = _emotePanelController.getEmote();
   }
 
   @override

@@ -24,8 +24,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   void initState() {
-    _futureBuilderFuture = _historyController.queryHistoryList();
     super.initState();
+    _futureBuilderFuture = _historyController.queryHistoryList();
     scrollController = _historyController.scrollController;
     scrollController.addListener(
       () {

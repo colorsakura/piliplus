@@ -94,7 +94,8 @@ class _RcmdPageState extends State<RcmdPage>
               sliver: FutureBuilder(
                 future: _futureBuilderFuture,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.data != null) {
                     Map data = snapshot.data as Map;
                     if (data['status']) {
                       return Obx(
@@ -111,7 +112,7 @@ class _RcmdPageState extends State<RcmdPage>
                       );
                     } else {
                       return HttpError(
-                        errMsg: data['msg'],
+                        errMsg: data == null ? "" : data['msg'],
                         fn: () {
                           setState(() {
                             _rcmdController.isLoadingMore = true;

@@ -39,11 +39,11 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
 
   @override
   void initState() {
+    super.initState();
     _videoReplyReplyController = Get.put(
         VideoReplyReplyController(
             widget.oid, widget.rpid.toString(), widget.replyType!),
         tag: widget.rpid.toString());
-    super.initState();
 
     // 上拉加载更多
     scrollController = _videoReplyReplyController.scrollController;

@@ -293,10 +293,20 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         !videoDetailController.isShowCover.value;
     videoIntroController.isPaused = false;
     if (autoplay) {
-      await Future.delayed(const Duration(milliseconds: 300));
-      plPlayerController?.seekTo(videoDetailController.defaultST);
-      plPlayerController?.play();
+      // await Future.delayed(const Duration(milliseconds: 300));
+      if (plPlayerController?.buffered.value == Duration.zero) {
+        plPlayerController?.buffered.listen((p0) {
+          if (p0 > Duration.zero) {
+            plPlayerController?.seekTo(videoDetailController.defaultST);
+            plPlayerController?.play();
+          }
+        });
+      } else {
+        plPlayerController?.seekTo(videoDetailController.defaultST);
+        plPlayerController?.play();
+      }
     }
+    AutoOrientation.fullAutoMode();
     plPlayerController?.addStatusLister(playerListener);
     if (plPlayerController != null) {
       listenFullScreenStatus();
