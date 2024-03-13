@@ -131,7 +131,7 @@ class Utils {
     }
     if (time < 3600) {
       if (time == 0) {
-        return time;
+        return time.toString();
       }
       final int minute = time ~/ 60;
       final double res = time / 60;
