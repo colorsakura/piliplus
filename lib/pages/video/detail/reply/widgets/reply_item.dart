@@ -541,13 +541,9 @@ InlineSpan buildContent(
   final RegExp pattern = RegExp(patternStr);
   List<String> matchedStrs = [];
   void addPlainTextSpan(str) {
-    spanChilds.add(WidgetSpan(
-        alignment: PlaceholderAlignment.middle,
-        child: ExcludeSemantics(
-            child: Text(
-      str,
-      style: const TextStyle(height: 1.75),
-    ))));
+    spanChilds.add(TextSpan(
+      text: str,
+    ));
     // TextSpan(
     //
     //     text: str,
