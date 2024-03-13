@@ -18,7 +18,7 @@ Widget searchArticlePanel(BuildContext context, ctr, list) {
             maxCrossAxisExtent: Grid.maxRowWidth * 2,
             mainAxisExtent: Grid.calculateActualWidth(
                     context, Grid.maxRowWidth * 2, StyleString.safeSpace) /
-                1.9 /
+                2.1 /
                 StyleString.aspectRatio),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {

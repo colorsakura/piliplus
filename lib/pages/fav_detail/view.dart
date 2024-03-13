@@ -223,7 +223,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               context,
                                               Grid.maxRowWidth * 2,
                                               StyleString.safeSpace) /
-                                          1.9 /
+                                          2.1 /
                                           StyleString.aspectRatio),
                               delegate:
                                   SliverChildBuilderDelegate((context, index) {
