@@ -46,6 +46,7 @@ import '../pages/setting/pages/home_tabbar_set.dart';
 import '../pages/setting/pages/play_speed_set.dart';
 import '../pages/setting/recommend_setting.dart';
 import '../pages/setting/play_setting.dart';
+import '../pages/setting/video_setting.dart';
 import '../pages/setting/privacy_setting.dart';
 import '../pages/setting/style_setting.dart';
 import '../pages/setting/hidden_settings.dart';
@@ -111,10 +112,12 @@ class Routes {
     // 二级回复
     CustomGetPage(
         name: '/replyReply', page: () => const VideoReplyReplyPanel()),
-    // 推荐设置
+    // 推荐流设置
     CustomGetPage(
         name: '/recommendSetting', page: () => const RecommendSetting()),
-    // 播放设置
+    // 音视频设置
+    CustomGetPage(name: '/videoSetting', page: () => const VideoSetting()),
+    // 播放器设置
     CustomGetPage(name: '/playSetting', page: () => const PlaySetting()),
     // 外观设置
     CustomGetPage(name: '/styleSetting', page: () => const StyleSetting()),

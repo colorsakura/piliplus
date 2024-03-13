@@ -429,12 +429,15 @@ class PlPlayerController {
     if (danmakuController != null) {
       danmakuController!.clear();
     }
+    int bufferSize =
+        setting.get(SettingBoxKey.expandBuffer, defaultValue: false)
+            ? (videoType.value == 'live' ? 64 * 1024 * 1024 : 32 * 1024 * 1024)
+            : (videoType.value == 'live' ? 32 * 1024 * 1024 : 5 * 1024 * 1024);
     Player player = _videoPlayerController ??
         Player(
           configuration: PlayerConfiguration(
-            // 默认缓存 5M 大小
-            bufferSize:
-                videoType.value == 'live' ? 32 * 1024 * 1024 : 5 * 1024 * 1024,
+            // 默认缓冲 5M 大小
+            bufferSize: bufferSize,
           ),
         );
 
@@ -444,8 +447,10 @@ class PlPlayerController {
     //  音量不一致
     if (Platform.isAndroid) {
       await pp.setProperty("volume-max", "100");
-      // await pp.setProperty("ao", "audiotrack,opensles");
-      await pp.setProperty("ao", "opensles,audiotrack");
+      String ao = setting.get(SettingBoxKey.useOpenSLES, defaultValue: true)
+          ? "opensles,audiotrack"
+          : "audiotrack,opensles";
+      await pp.setProperty("ao", ao);
     }
     // // vo=gpu-next & gpu-context=android & gpu-api=opengl
     // await pp.setProperty("vo", "gpu-next");

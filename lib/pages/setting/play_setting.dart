@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPalaX/models/video/play/quality.dart';
 import 'package:PiliPalaX/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/services/service_locator.dart';
@@ -21,10 +20,6 @@ class PlaySetting extends StatefulWidget {
 
 class _PlaySettingState extends State<PlaySetting> {
   Box setting = GStrorage.setting;
-  late dynamic defaultVideoQa;
-  late dynamic defaultAudioQa;
-  late dynamic defaultDecode;
-  late dynamic secondDecode;
   late String defaultSubtitlePreference;
   late int defaultFullScreenMode;
   late int defaultBtmProgressBehavior;
@@ -32,14 +27,6 @@ class _PlaySettingState extends State<PlaySetting> {
   @override
   void initState() {
     super.initState();
-    defaultVideoQa = setting.get(SettingBoxKey.defaultVideoQa,
-        defaultValue: VideoQuality.values.last.code);
-    defaultAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
-        defaultValue: AudioQuality.values.last.code);
-    defaultDecode = setting.get(SettingBoxKey.defaultDecode,
-        defaultValue: VideoDecodeFormats.values.last.code);
-    secondDecode = setting.get(SettingBoxKey.secondDecode,
-        defaultValue: VideoDecodeFormats.values[1].code);
     defaultFullScreenMode = setting.get(SettingBoxKey.fullScreenMode,
         defaultValue: FullScreenMode.values.first.code);
     defaultBtmProgressBehavior = setting.get(SettingBoxKey.btmProgressBehavior,
@@ -68,7 +55,7 @@ class _PlaySettingState extends State<PlaySetting> {
         centerTitle: false,
         titleSpacing: 0,
         title: Text(
-          '播放设置',
+          '播放器设置',
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
@@ -126,6 +113,12 @@ class _PlaySettingState extends State<PlaySetting> {
             },
           ),
           const SetSwitchItem(
+            title: '竖屏扩大展示',
+            subTitle: '小屏竖屏视频由16:9扩大至5:4展示（！暂不支持临时收起）',
+            setKey: SettingBoxKey.enableVerticalExpand,
+            defaultVal: false,
+          ),
+          const SetSwitchItem(
             title: '自动全屏',
             subTitle: '视频开始播放时进入全屏',
             setKey: SettingBoxKey.enableAutoEnter,
@@ -161,134 +154,6 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '展示同时在看人数',
             setKey: SettingBoxKey.enableOnlineTotal,
             defaultVal: false,
-          ),
-          ListTile(
-            dense: false,
-            title: Text('默认画质', style: titleStyle),
-            subtitle: Text(
-              '当前画质：${VideoQualityCode.fromCode(defaultVideoQa)!.description!}',
-              style: subTitleStyle,
-            ),
-            onTap: () async {
-              int? result = await showDialog(
-                context: context,
-                builder: (context) {
-                  return SelectDialog<int>(
-                      title: '默认画质',
-                      value: defaultVideoQa,
-                      values: VideoQuality.values.reversed.map((e) {
-                        return {'title': e.description, 'value': e.code};
-                      }).toList());
-                },
-              );
-              if (result != null) {
-                defaultVideoQa = result;
-                setting.put(SettingBoxKey.defaultVideoQa, result);
-                setState(() {});
-              }
-            },
-          ),
-          ListTile(
-            dense: false,
-            title: Text('默认音质', style: titleStyle),
-            subtitle: Text(
-              '当前音质：${AudioQualityCode.fromCode(defaultAudioQa)!.description!}',
-              style: subTitleStyle,
-            ),
-            onTap: () async {
-              int? result = await showDialog(
-                context: context,
-                builder: (context) {
-                  return SelectDialog<int>(
-                      title: '默认音质',
-                      value: defaultAudioQa,
-                      values: AudioQuality.values.reversed.map((e) {
-                        return {'title': e.description, 'value': e.code};
-                      }).toList());
-                },
-              );
-              if (result != null) {
-                defaultAudioQa = result;
-                setting.put(SettingBoxKey.defaultAudioQa, result);
-                setState(() {});
-              }
-            },
-          ),
-          ListTile(
-            dense: false,
-            title: Text('首选解码格式', style: titleStyle),
-            subtitle: Text(
-              '首选解码格式：${VideoDecodeFormatsCode.fromCode(defaultDecode)!.description!}，请根据设备支持情况与需求调整',
-              style: subTitleStyle,
-            ),
-            onTap: () async {
-              String? result = await showDialog(
-                context: context,
-                builder: (context) {
-                  return SelectDialog<String>(
-                      title: '默认解码格式',
-                      value: defaultDecode,
-                      values: VideoDecodeFormats.values.map((e) {
-                        return {'title': e.description, 'value': e.code};
-                      }).toList());
-                },
-              );
-              if (result != null) {
-                defaultDecode = result;
-                setting.put(SettingBoxKey.defaultDecode, result);
-                setState(() {});
-              }
-            },
-          ),
-          ListTile(
-            dense: false,
-            title: Text('次选解码格式', style: titleStyle),
-            subtitle: Text(
-              '非杜比视频次选：${VideoDecodeFormatsCode.fromCode(secondDecode)!.description!}，仍无则选择首个提供的解码格式',
-              style: subTitleStyle,
-            ),
-            onTap: () async {
-              String? result = await showDialog(
-                context: context,
-                builder: (context) {
-                  return SelectDialog<String>(
-                      title: '次选解码格式',
-                      value: secondDecode,
-                      values: VideoDecodeFormats.values.map((e) {
-                        return {'title': e.description, 'value': e.code};
-                      }).toList());
-                },
-              );
-              if (result != null) {
-                secondDecode = result;
-                setting.put(SettingBoxKey.secondDecode, result);
-                setState(() {});
-              }
-            },
-          ),
-          const SetSwitchItem(
-            title: '开启硬解',
-            subTitle: '以较低功耗播放视频，若使用中异常卡死，请尝试关闭',
-            setKey: SettingBoxKey.enableHA,
-            defaultVal: true,
-          ),
-          const SetSwitchItem(
-            title: '亮度记忆',
-            subTitle: '返回时自动调整视频亮度',
-            setKey: SettingBoxKey.enableAutoBrightness,
-            defaultVal: false,
-          ),
-          const SetSwitchItem(
-            title: '免登录1080P',
-            subTitle: '免登录查看1080P视频',
-            setKey: SettingBoxKey.p1080,
-            defaultVal: true,
-          ),
-          const SetSwitchItem(
-            title: 'CDN优化',
-            subTitle: '使用优质CDN线路',
-            setKey: SettingBoxKey.enableCDN,
-            defaultVal: true,
           ),
           ListTile(
             dense: false,

@@ -1080,7 +1080,7 @@ class _RenderProgressBar extends RenderBox {
     if (total.inMilliseconds == 0) {
       return 0.0;
     }
-    return duration.inMilliseconds / total.inMilliseconds;
+    return (duration.inMilliseconds / total.inMilliseconds).clamp(0.0, 1.0);
   }
 
   String _getTimeString(Duration time) {

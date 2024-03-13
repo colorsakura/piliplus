@@ -56,6 +56,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late bool autoExitFullcreen;
   late bool autoPlayEnable;
   late bool horizontalScreen;
+  late bool enableVerticalExpand;
   late bool autoPiP;
   final Floating floating = Floating();
   // 生命周期监听
@@ -64,6 +65,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   RxBool isFullScreen = false.obs;
   late StreamSubscription<bool> fullScreenStatusListener;
   late final MethodChannel onUserLeaveHintListener;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -91,6 +94,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     autoPlayEnable =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: true);
     autoPiP = setting.get(SettingBoxKey.autoPiP, defaultValue: false);
+    enableVerticalExpand =
+        setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
     videoSourceInit();
     appbarStreamListen();
     // lifecycleListener();
@@ -103,6 +108,19 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         }
       }
     });
+    // _animationController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 300),
+    // );
+    // _animation = Tween<double>(
+    //   begin: MediaQuery.of(context).orientation == Orientation.landscape
+    //       ? context.height
+    //       : ((enableVerticalExpand &&
+    //               plPlayerController?.direction.value == 'vertical')
+    //           ? context.width * 5 / 4
+    //           : context.width * 9 / 16),
+    //   end: 0,
+    // ).animate(_animationController);
   }
 
   // 获取视频资源，初始化播放器
@@ -233,6 +251,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoPlayerServiceHandler.onVideoDetailDispose();
     // _lifecycleListener.dispose();
     showStatusBar();
+    // _animationController.dispose();
     super.dispose();
   }
 
@@ -341,12 +360,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 children: [
                   Obx(
                     () {
-                      final double videoheight = Get.width * 9 / 16;
-                      // final double videoheight =
-                      //     plPlayerController?.direction.value == 'vertical'
-                      //         ? Get.width
-                      //         : Get.width * 9 / 16;
-                      final double videowidth = Get.width;
+                      double videoheight = context.width * 9 / 16;
+                      final double videowidth = context.width;
+                      print(videoDetailController.tabCtr.index);
+                      if (enableVerticalExpand &&
+                          plPlayerController?.direction.value == 'vertical' &&
+                          videoDetailController.tabCtr.index != 1) {
+                        videoheight = context.width * 5 / 4;
+                      }
                       return SizedBox(
                         height: MediaQuery.of(context).orientation ==
                                     Orientation.landscape ||
@@ -357,7 +378,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                     ? 0
                                     : MediaQuery.of(context).padding.top)
                             : videoheight,
-                        width: MediaQuery.of(context).size.width,
+                        width: context.width,
                         child: PopScope(
                             canPop: isFullScreen.value != true &&
                                 (horizontalScreen ||
@@ -514,7 +535,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           Opacity(
                             opacity: 0,
                             child: SizedBox(
-                              width: double.infinity,
+                              width: context.width,
                               height: 0,
                               child: Obx(
                                 () => TabBar(
@@ -598,9 +619,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 // 1812x+2176y+1985.68z=680
                 // 1080x+2340y+1589.72z=540
                 final double videoheight =
-                    sqrt(Get.height * Get.width) * 12.972 -
-                        Get.height * 7.928 -
-                        Get.width * 4.923;
+                    sqrt(context.height * context.width) * 12.972 -
+                        context.height * 7.928 -
+                        context.width * 4.923;
                 final double videowidth = videoheight * 16 / 9;
                 return Row(
                   children: [
@@ -608,10 +629,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       children: [
                         SizedBox(
                             width: isFullScreen.value == true
-                                ? Get.width
+                                ? context.width
                                 : videowidth,
                             height: isFullScreen.value == true
-                                ? Get.height
+                                ? context.height
                                 : videoheight,
                             child: PopScope(
                                 canPop: isFullScreen.value != true,
@@ -758,11 +779,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 ))),
                         SizedBox(
                           width: isFullScreen.value == true
-                              ? Get.width
+                              ? context.width
                               : videowidth,
                           height: isFullScreen.value == true
                               ? 0
-                              : Get.height -
+                              : context.height -
                                   videoheight -
                                   MediaQuery.of(context).padding.top -
                                   MediaQuery.of(context).padding.bottom,
@@ -781,11 +802,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     SizedBox(
                       width: isFullScreen.value == true
                           ? 0
-                          : (Get.width -
+                          : (context.width -
                               MediaQuery.of(context).padding.left -
                               MediaQuery.of(context).padding.right -
                               videowidth),
-                      height: Get.height -
+                      height: context.height -
                           MediaQuery.of(context).padding.top -
                           MediaQuery.of(context).padding.bottom,
                       child: TabBarView(
