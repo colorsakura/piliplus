@@ -554,16 +554,18 @@ class PlPlayerController {
     bool autoEnterFullscreen = GStrorage.setting
         .get(SettingBoxKey.enableAutoEnter, defaultValue: false);
     if (autoEnterFullscreen) {
-      if (dataStatus.status.value != DataStatus.loaded) {
-        _dataListenerForEnterFullscreen = dataStatus.status.listen((status) {
-          if (status == DataStatus.loaded) {
-            _dataListenerForEnterFullscreen.cancel();
-            triggerFullScreen(status: true);
-          }
-        });
-      } else {
-        triggerFullScreen(status: true);
-      }
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (dataStatus.status.value != DataStatus.loaded) {
+          _dataListenerForEnterFullscreen = dataStatus.status.listen((status) {
+            if (status == DataStatus.loaded) {
+              _dataListenerForEnterFullscreen.cancel();
+              triggerFullScreen(status: true);
+            }
+          });
+        } else {
+          triggerFullScreen(status: true);
+        }
+      });
     }
   }
 
