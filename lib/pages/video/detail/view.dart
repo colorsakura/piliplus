@@ -382,6 +382,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           videoDetailController.tabCtr.index != 1) {
                         videoheight = context.width * 5 / 4;
                       }
+                      if (MediaQuery.of(context).orientation ==
+                              Orientation.landscape &&
+                          !horizontalScreen && !isFullScreen.value && isShowing && mounted) {
+                        hideStatusBar();
+                      }
+                      if (MediaQuery.of(context).orientation ==
+                              Orientation.portrait &&
+                          !isFullScreen.value && isShowing && mounted) {
+                        showStatusBar();
+                      }
                       return SizedBox(
                         height: MediaQuery.of(context).orientation ==
                                     Orientation.landscape ||
@@ -855,6 +865,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               ),
             ),
     );
+    if (!horizontalScreen) {
+      Orientation orientation = MediaQuery.of(context).orientation;
+      if (Platform.isAndroid) {
+        return PiPSwitcher(
+          childWhenDisabled: childWhenDisabled,
+          childWhenEnabled: childWhenEnabled,
+          floating: floating,
+        );
+      }
+      return childWhenDisabled;
+    }
+
     return OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
       if (!isShowing) {
