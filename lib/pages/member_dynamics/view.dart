@@ -58,7 +58,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
       appBar: AppBar(
         titleSpacing: 0,
         centerTitle: false,
-        title: Text('他的动态', style: Theme.of(context).textTheme.titleMedium),
+        title: Text('Ta的动态', style: Theme.of(context).textTheme.titleMedium),
       ),
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

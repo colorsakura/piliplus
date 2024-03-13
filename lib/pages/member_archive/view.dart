@@ -49,7 +49,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
       appBar: AppBar(
         titleSpacing: 0,
         centerTitle: false,
-        title: Text('他的投稿', style: Theme.of(context).textTheme.titleMedium),
+        title: Text('Ta的投稿', style: Theme.of(context).textTheme.titleMedium),
         actions: [
           Obx(
             () => TextButton.icon(

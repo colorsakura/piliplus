@@ -34,6 +34,7 @@ class StatView extends StatelessWidget {
             fontSize: size == 'medium' ? 12 : 11,
             color: color,
           ),
+          overflow: TextOverflow.clip,
           semanticsLabel:
               '${Utils.numFormat(view!)}次${goto == "picture" ? "浏览" : "播放"}',
         ),

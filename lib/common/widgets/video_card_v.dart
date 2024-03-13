@@ -128,63 +128,74 @@ class VideoCardV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String heroTag = Utils.makeHeroTag(videoItem.id);
-    return Semantics(
-      label: Utils.videoItemSemantics(videoItem),
-      excludeSemantics: true,
-      child: Card(
-          elevation: 0,
-          clipBehavior: Clip.hardEdge,
-          margin: EdgeInsets.zero,
-          child: GestureDetector(
-            onLongPress: () {
-              if (longPress != null) {
-                longPress!();
-              }
-            },
-            // onLongPressEnd: (details) {
-            //   if (longPressEnd != null) {
-            //     longPressEnd!();
-            //   }
-            // },
-            child: InkWell(
-              onTap: () async => onPushDetail(heroTag),
-              child: Column(
-                children: [
-                  AspectRatio(
-                    aspectRatio: StyleString.aspectRatio,
-                    child: LayoutBuilder(builder: (context, boxConstraints) {
-                      double maxWidth = boxConstraints.maxWidth;
-                      double maxHeight = boxConstraints.maxHeight;
-                      return Stack(
-                        children: [
-                          Hero(
-                            tag: heroTag,
-                            child: NetworkImgLayer(
-                              src: videoItem.pic,
-                              width: maxWidth,
-                              height: maxHeight,
+    return Stack(children: [
+      Semantics(
+        label: Utils.videoItemSemantics(videoItem),
+        excludeSemantics: true,
+        child: Card(
+            elevation: 0,
+            clipBehavior: Clip.hardEdge,
+            margin: EdgeInsets.zero,
+            child: GestureDetector(
+              onLongPress: () {
+                if (longPress != null) {
+                  longPress!();
+                }
+              },
+              // onLongPressEnd: (details) {
+              //   if (longPressEnd != null) {
+              //     longPressEnd!();
+              //   }
+              // },
+              child: InkWell(
+                onTap: () async => onPushDetail(heroTag),
+                child: Column(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: StyleString.aspectRatio,
+                      child: LayoutBuilder(builder: (context, boxConstraints) {
+                        double maxWidth = boxConstraints.maxWidth;
+                        double maxHeight = boxConstraints.maxHeight;
+                        return Stack(
+                          children: [
+                            Hero(
+                              tag: heroTag,
+                              child: NetworkImgLayer(
+                                src: videoItem.pic,
+                                width: maxWidth,
+                                height: maxHeight,
+                              ),
                             ),
-                          ),
-                          if (videoItem.duration > 0)
-                            PBadge(
-                              bottom: 6,
-                              right: 7,
-                              size: 'small',
-                              type: 'gray',
-                              text: Utils.timeFormat(videoItem.duration),
-                              // semanticsLabel:
-                              //     '时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}',
-                            )
-                        ],
-                      );
-                    }),
-                  ),
-                  VideoContent(videoItem: videoItem)
-                ],
+                            if (videoItem.duration > 0)
+                              PBadge(
+                                bottom: 6,
+                                right: 7,
+                                size: 'small',
+                                type: 'gray',
+                                text: Utils.timeFormat(videoItem.duration),
+                                // semanticsLabel:
+                                //     '时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}',
+                              )
+                          ],
+                        );
+                      }),
+                    ),
+                    VideoContent(videoItem: videoItem)
+                  ],
+                ),
               ),
-            ),
-          )),
-    );
+            )),
+      ),
+      if (videoItem.goto == 'av')
+        Positioned(
+            right: 0,
+            bottom: 1,
+            child: VideoPopupMenu(
+              size: 30,
+              iconSize: 16,
+              videoItem: videoItem,
+            )),
+    ]);
   }
 }
 
@@ -203,7 +214,7 @@ class VideoContent extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(videoItem.title,
+                  child: Text(videoItem.title + "\n",
                       // semanticsLabel: "${videoItem.title}",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -260,23 +271,17 @@ class VideoContent extends StatelessWidget {
                     videoItem.owner.name,
                     // semanticsLabel: "Up主：${videoItem.owner.name}",
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.clip,
                     style: TextStyle(
+                      height: 1.5,
                       fontSize:
                           Theme.of(context).textTheme.labelMedium!.fontSize,
                       color: Theme.of(context).colorScheme.outline,
                     ),
                   ),
                 ),
-                if (videoItem.goto == 'av') ...[
-                  VideoPopupMenu(
-                    size: 24,
-                    iconSize: 14,
-                    videoItem: videoItem,
-                  ),
-                ] else ...[
-                  const SizedBox(height: 24)
-                ]
+                if (videoItem.goto == 'av')
+                  const SizedBox(width: 24)
               ],
             ),
           ],

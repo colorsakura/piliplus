@@ -279,6 +279,7 @@ class _ImagePreviewState extends State<ImagePreview>
                     IconButton(
                       onPressed: () => Get.back(),
                       icon: const Icon(Icons.close, color: Colors.white),
+                      tooltip: '关闭',
                     ),
                   ],
                 )),

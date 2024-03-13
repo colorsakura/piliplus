@@ -156,7 +156,7 @@ class _MinePageState extends State<MinePage> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 13),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -173,7 +173,7 @@ class _MinePageState extends State<MinePage> {
             ),
           ],
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -190,7 +190,7 @@ class _MinePageState extends State<MinePage> {
             ]))
           ],
         ),
-        const SizedBox(height: 25),
+        const SizedBox(height: 22),
         if (_mineController.userInfo.value.levelInfo != null) ...[
           LayoutBuilder(
             builder: (context, BoxConstraints box) {
@@ -246,7 +246,7 @@ class _MinePageState extends State<MinePage> {
             },
           ),
         ],
-        const SizedBox(height: 30),
+        const SizedBox(height: 26),
         Padding(
           padding: const EdgeInsets.only(left: 12, right: 12),
           child: LayoutBuilder(

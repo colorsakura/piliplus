@@ -214,7 +214,7 @@ class ReplyItem extends StatelessWidget {
           margin: const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
           child: Semantics(
               label: replyItem?.content?.message ?? "",
-              excludeSemantics: true,
+              // excludeSemantics: true,
               child: Text.rich(
                 style: const TextStyle(height: 1.75),
                 maxLines:
@@ -231,6 +231,7 @@ class ReplyItem extends StatelessWidget {
                           stack: 'normal',
                           type: 'line',
                           fs: 9,
+                          semanticsLabel: '置顶',
                         ),
                       ),
                     buildContent(context, replyItem!, replyReply, null),
@@ -389,7 +390,9 @@ class ReplyItemRow extends StatelessWidget {
                       i == 0 && (extraRow == 1 || replies!.length > 1) ? 5 : 6,
                     ),
                     child: Semantics(
-                        label: replies![i].member.uname + ' ' + replies![i].content.message,
+                        label: replies![i].member.uname +
+                            ' ' +
+                            replies![i].content.message,
                         excludeSemantics: true,
                         child: Text.rich(
                           overflow: TextOverflow.ellipsis,
@@ -538,11 +541,19 @@ InlineSpan buildContent(
   final RegExp pattern = RegExp(patternStr);
   List<String> matchedStrs = [];
   void addPlainTextSpan(str) {
-    spanChilds.add(TextSpan(
-        text: str,
-        recognizer: TapGestureRecognizer()
-          ..onTap = () =>
-              replyReply?.call(replyItem.root == 0 ? replyItem : fReplyItem)));
+    spanChilds.add(WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: ExcludeSemantics(
+            child: Text(
+      str,
+      style: const TextStyle(height: 1.75),
+    ))));
+    // TextSpan(
+    //
+    //     text: str,
+    //     recognizer: TapGestureRecognizer()
+    //       ..onTap = () => replyReply
+    //           ?.call(replyItem.root == 0 ? replyItem : fReplyItem)))));
   }
 
   // 分割文本并处理每个部分
@@ -554,13 +565,14 @@ InlineSpan buildContent(
         // 处理表情
         final int size = content.emote[matchStr]['meta']['size'];
         spanChilds.add(WidgetSpan(
-          child: NetworkImgLayer(
+          child: ExcludeSemantics(
+              child: NetworkImgLayer(
             src: content.emote[matchStr]['url'],
             type: 'emote',
             width: size * 20,
             height: size * 20,
             semanticsLabel: matchStr,
-          ),
+          )),
         ));
       } else if (matchStr.startsWith("@") &&
           content.atNameToMid.containsKey(matchStr.substring(1))) {
@@ -836,6 +848,7 @@ InlineSpan buildContent(
                           src: pictureItem['img_src'],
                           width: box.maxWidth / 2,
                           height: height,
+                          semanticsLabel: '图片1，共1张',
                         ),
                       ),
                       height > Get.size.height * 0.9
@@ -871,11 +884,13 @@ InlineSpan buildContent(
                   );
                 },
                 child: NetworkImgLayer(
-                    src: content.pictures[i]['img_src'],
-                    width: box.maxWidth,
-                    height: box.maxWidth,
-                    origAspectRatio: content.pictures[i]['img_width'] /
-                        content.pictures[i]['img_height']),
+                  src: content.pictures[i]['img_src'],
+                  width: box.maxWidth,
+                  height: box.maxWidth,
+                  origAspectRatio: content.pictures[i]['img_width'] /
+                      content.pictures[i]['img_height'],
+                  semanticsLabel: '图片${i + 1}，共$len张',
+                ),
               );
             },
           ),
@@ -883,31 +898,34 @@ InlineSpan buildContent(
       }
       spanChilds.add(
         WidgetSpan(
-          child: LayoutBuilder(
-            builder: (context, BoxConstraints box) {
-              double maxWidth = box.maxWidth;
-              double crossCount = len < 3 ? 2 : 3;
-              double height = maxWidth /
-                      crossCount *
-                      (len % crossCount == 0
-                          ? len ~/ crossCount
-                          : len ~/ crossCount + 1) +
-                  6;
-              return Container(
-                padding: const EdgeInsets.only(top: 6),
-                height: height,
-                child: GridView.count(
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: crossCount.toInt(),
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  childAspectRatio: 1,
-                  children: list,
-                ),
-              );
-            },
-          ),
+          child: Semantics(
+              explicitChildNodes: true,
+              container: true,
+              child: LayoutBuilder(
+                builder: (context, BoxConstraints box) {
+                  double maxWidth = box.maxWidth;
+                  double crossCount = len < 3 ? 2 : 3;
+                  double height = maxWidth /
+                          crossCount *
+                          (len % crossCount == 0
+                              ? len ~/ crossCount
+                              : len ~/ crossCount + 1) +
+                      6;
+                  return Container(
+                    padding: const EdgeInsets.only(top: 6),
+                    height: height,
+                    child: GridView.count(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: crossCount.toInt(),
+                      mainAxisSpacing: 4.0,
+                      crossAxisSpacing: 4.0,
+                      childAspectRatio: 1,
+                      children: list,
+                    ),
+                  );
+                },
+              )),
         ),
       );
     }

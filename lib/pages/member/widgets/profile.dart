@@ -224,7 +224,7 @@ class ProfilePanel extends StatelessWidget {
                         onPressed: () {
                           Get.toNamed('/webview', parameters: {
                             'url': 'https://account.bilibili.com/account/home',
-                            'pageTitle': '编辑资料（建议浏览器打开）',
+                            'pageTitle': '个人中心（建议浏览器打开）',
                             'type': 'url'
                           });
                         },
@@ -235,7 +235,7 @@ class ProfilePanel extends StatelessWidget {
                           backgroundColor:
                               Theme.of(context).colorScheme.primary,
                         ),
-                        child: const Text('编辑资料'),
+                        child: const Text('个人中心(web)'),
                       )
                     ],
                     if (ctr.ownerMid == -1) ...[

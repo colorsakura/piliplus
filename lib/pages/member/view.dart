@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -324,7 +326,8 @@ class _MemberPageState extends State<MemberPage>
                             Image.asset(
                               'assets/images/lv/lv${_memberController.memberInfo.value.level}.png',
                               height: 11,
-                              semanticLabel: '等级${_memberController.memberInfo.value.level}',
+                              semanticLabel:
+                                  '等级${_memberController.memberInfo.value.level}',
                             ),
                             const SizedBox(width: 6),
                             if (_memberController
@@ -337,7 +340,8 @@ class _MemberPageState extends State<MemberPage>
                                 _memberController.memberInfo.value.vip!
                                     .label!['img_label_uri_hans'],
                                 height: 20,
-                                semanticLabel: _memberController.memberInfo.value.vip!.label!['text'],
+                                semanticLabel: _memberController
+                                    .memberInfo.value.vip!.label!['text'],
                               ),
                             ] else if (_memberController
                                         .memberInfo.value.vip!.status ==
@@ -349,9 +353,26 @@ class _MemberPageState extends State<MemberPage>
                                 _memberController.memberInfo.value.vip!
                                     .label!['img_label_uri_hans_static'],
                                 height: 20,
-                                semanticLabel: _memberController.memberInfo.value.vip!.label!['text'],
+                                semanticLabel: _memberController
+                                    .memberInfo.value.vip!.label!['text'],
                               ),
-                            ]
+                            ],
+                            TextButton(
+                                child: Text("UID ${_memberController.mid}",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme.secondary.withOpacity(0.5),
+                                      fontSize: 12,
+                                      // fontWeight: FontWeight.w200,
+                                    )),
+                                onPressed: () {
+                                  Clipboard.setData(
+                                    ClipboardData(
+                                        text: _memberController.mid.toString()),
+                                  );
+                                  SmartDialog.showToast(
+                                      '已复制${_memberController.mid}至剪贴板');
+                                }),
                           ],
                         ),
                         if (_memberController

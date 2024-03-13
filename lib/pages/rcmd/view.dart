@@ -149,13 +149,15 @@ class _RcmdPageState extends State<RcmdPage>
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         // 行间距
-        mainAxisSpacing: StyleString.safeSpace,
+        mainAxisSpacing: StyleString.cardSpace,
         // 列间距
         crossAxisSpacing: StyleString.safeSpace,
         // 最大宽度
         maxCrossAxisExtent: Grid.maxRowWidth,
-        mainAxisExtent: Grid.calculateActualWidth(context, Grid.maxRowWidth, StyleString.safeSpace) / StyleString.aspectRatio+
-            MediaQuery.textScalerOf(context).scale(96),
+        mainAxisExtent: Grid.calculateActualWidth(
+                    context, Grid.maxRowWidth, StyleString.safeSpace) /
+                StyleString.aspectRatio +
+            MediaQuery.textScalerOf(context).scale(92),
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
