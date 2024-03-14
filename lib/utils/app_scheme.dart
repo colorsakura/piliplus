@@ -20,7 +20,7 @@ class PiliSchame {
     /// 完整链接进入 b23.无效
     appScheme.getLatestScheme().then((SchemeEntity? value) {
       if (value != null) {
-        _fullPathPush(value);
+        _routePush(value);
       }
     });
 
@@ -155,7 +155,7 @@ class PiliSchame {
     final String host = value.host!;
     final String? path = value.path;
     Map<String, String>? query = value.query;
-    RegExp regExp = RegExp(r'^(www\.)?m?\.(bilibili\.com)$');
+    RegExp regExp = RegExp(r'^((www\.)|(m\.))?bilibili\.com$');
     if (regExp.hasMatch(host)) {
       print('bilibili.com');
     } else if (host.contains('live')) {
@@ -203,7 +203,8 @@ class PiliSchame {
     }
 
     if (path != null) {
-      final String area = path.split('/').last;
+      List<String> pathPart = path.split('/');
+      final String area = pathPart[1] == 'mobile' ? pathPart[2] : pathPart[1];
       switch (area) {
         case 'bangumi':
           print('番剧');
@@ -231,6 +232,16 @@ class PiliSchame {
           print('个人空间');
           Get.toNamed('/member?mid=$area', arguments: {'face': ''});
           break;
+        default:
+          SmartDialog.showToast('未知路径或匹配错误:${value.dataString}，先采用浏览器打开');
+          Get.toNamed(
+            '/webview',
+            parameters: {
+              'url': value.dataString ?? "",
+              'type': 'url',
+              'pageTitle': ''
+            },
+          );
       }
     }
   }
