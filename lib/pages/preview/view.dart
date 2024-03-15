@@ -136,7 +136,7 @@ class _ImagePreviewState extends State<ImagePreview>
       body: Stack(
         children: [
           Semantics(
-            label: '双指缩放、长按保存、左右滑动切换图片',
+            label: '长按保存',
             child: GestureDetector(
               onLongPress: () => onOpenMenu(),
               child: ExtendedImageGesturePageView.builder(

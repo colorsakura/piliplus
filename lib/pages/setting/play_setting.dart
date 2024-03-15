@@ -114,7 +114,7 @@ class _PlaySettingState extends State<PlaySetting> {
           ),
           const SetSwitchItem(
             title: '竖屏扩大展示',
-            subTitle: '小屏竖屏视频由16:9扩大至5:4展示（！暂不支持临时收起）',
+            subTitle: '小屏竖屏视频宽高比由16:9扩大至4:5（！暂不支持临时收起）',
             setKey: SettingBoxKey.enableVerticalExpand,
             defaultVal: false,
           ),

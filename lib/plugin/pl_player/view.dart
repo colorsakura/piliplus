@@ -448,7 +448,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           right: 15,
           bottom: 15,
           child: Semantics(
-            label: '双击开关播放控件，左右滑动调整进度',
+            label: '双击开关控件',
             child: GestureDetector(
               onTap: () {
                 _.controls = !_.showControls.value;
