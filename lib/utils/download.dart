@@ -23,13 +23,14 @@ class DownloadUtils {
       var response = await Dio()
           .get(imgUrl, options: Options(responseType: ResponseType.bytes));
       String picName =
-          "plpl_${imgType}_${DateTime.now().toString().split('-').join()}";
+          "PiliPalaX_${imgType}_${DateTime.now().toString().split('-').join()}";
       final SaveResult result = await SaverGallery.saveImage(
         Uint8List.fromList(response.data),
         quality: 100,
         name: picName,
-        // 保存到 PiliPala文件夹
-        androidRelativePath: "Pictures/PiliPala",
+        fileExtension: 'jpg',
+        // 保存到 PiliPalaX文件夹
+        androidRelativePath: "Pictures/PiliPalaX",
         androidExistNotSave: false,
       );
       SmartDialog.dismiss();
