@@ -98,6 +98,7 @@ class SettingBoxKey {
       p1080 = 'p1080',
       enableCDN = 'enableCDN',
       autoPiP = 'autoPiP',
+      pipNoDanmaku = 'pipNoDanmaku',
       enableAutoLongPressSpeed = 'enableAutoLongPressSpeed',
       subtitlePreference = 'subtitlePreference',
 

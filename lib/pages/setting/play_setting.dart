@@ -143,6 +143,13 @@ class _PlaySettingState extends State<PlaySetting> {
               setKey: SettingBoxKey.autoPiP,
               defaultVal: false,
             ),
+          if (Platform.isAndroid)
+            const SetSwitchItem(
+              title: '画中画不加载弹幕',
+              subTitle: '当弹幕开关开启时，小窗屏蔽弹幕以获得较好的体验',
+              setKey: SettingBoxKey.pipNoDanmaku,
+              defaultVal: true,
+            ),
           const SetSwitchItem(
             title: '全屏手势反向',
             subTitle: '默认播放器中部向上滑动进入全屏，向下退出\n开启后向下全屏，向上退出',

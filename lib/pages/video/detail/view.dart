@@ -58,6 +58,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late bool horizontalScreen;
   late bool enableVerticalExpand;
   late bool autoPiP;
+  late bool pipNoDanmaku;
   final Floating floating = Floating();
   // 生命周期监听
   // late final AppLifecycleListener _lifecycleListener;
@@ -95,6 +96,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     autoPlayEnable =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: true);
     autoPiP = setting.get(SettingBoxKey.autoPiP, defaultValue: false);
+    pipNoDanmaku = setting.get(SettingBoxKey.pipNoDanmaku, defaultValue: true);
     enableVerticalExpand =
         setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
     videoSourceInit();
@@ -226,12 +228,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         setState(() {});
       }
       // if (!status) {
-        // showStatusBar();
-        // if (horizontalScreen) {
-        //   autoScreen();
-        // } else {
-        //   verticalScreenForTwoSeconds();
-        // }
+      // showStatusBar();
+      // if (horizontalScreen) {
+      //   autoScreen();
+      // } else {
+      //   verticalScreenForTwoSeconds();
+      // }
       // }
     });
   }
@@ -384,12 +386,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       }
                       if (MediaQuery.of(context).orientation ==
                               Orientation.landscape &&
-                          !horizontalScreen && !isFullScreen.value && isShowing && mounted) {
+                          !horizontalScreen &&
+                          !isFullScreen.value &&
+                          isShowing &&
+                          mounted) {
                         hideStatusBar();
                       }
                       if (MediaQuery.of(context).orientation ==
                               Orientation.portrait &&
-                          !isFullScreen.value && isShowing && mounted) {
+                          !isFullScreen.value &&
+                          isShowing &&
+                          mounted) {
                         showStatusBar();
                       }
                       return SizedBox(
@@ -863,6 +870,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 controller: plPlayerController,
                 videoDetailCtr: videoDetailController,
               ),
+              danmuWidget: pipNoDanmaku
+                  ? null
+                  : Obx(
+                      () => PlDanmaku(
+                        key: Key(
+                            videoDetailController.danmakuCid.value.toString()),
+                        cid: videoDetailController.danmakuCid.value,
+                        playerController: plPlayerController!,
+                      ),
+                    ),
             ),
     );
     if (!horizontalScreen) {
