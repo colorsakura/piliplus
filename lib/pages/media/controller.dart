@@ -24,11 +24,6 @@ class MediaController extends GetxController {
       'onTap': () => Get.toNamed('/history'),
     },
     {
-      'icon': Icons.star_border,
-      'title': '我的收藏',
-      'onTap': () => Get.toNamed('/fav'),
-    },
-    {
       'icon': Icons.subscriptions_outlined,
       'title': '我的订阅',
       'onTap': () => Get.toNamed('/subscription'),

@@ -102,7 +102,7 @@ class _MediaPageState extends State<MediaPage>
             ],
             Obx(() => mediaController.userLogin.value
                 ? favFolder(mediaController, context)
-                : const SizedBox())
+                : const SizedBox(height: 0))
           ],
         ),
       ),
@@ -113,11 +113,11 @@ class _MediaPageState extends State<MediaPage>
     return Column(
       children: [
         Divider(
-          height: 35,
+          height: 20,
           color: Theme.of(context).dividerColor.withOpacity(0.1),
         ),
         ListTile(
-          onTap: () {},
+          onTap: () => Get.toNamed('/fav'),
           leading: null,
           dense: true,
           title: Padding(
@@ -127,7 +127,7 @@ class _MediaPageState extends State<MediaPage>
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: '收藏夹 ',
+                      text: '我的收藏  ',
                       style: TextStyle(
                           fontSize:
                               Theme.of(context).textTheme.titleMedium!.fontSize,
