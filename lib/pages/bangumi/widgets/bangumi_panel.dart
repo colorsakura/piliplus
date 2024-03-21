@@ -204,7 +204,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 6),
+          padding: const EdgeInsets.only(top: 5, bottom: 3),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

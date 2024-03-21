@@ -174,9 +174,13 @@ class _BangumiInfoState extends State<BangumiInfo> {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return SliverPadding(
-      padding: const EdgeInsets.only(
-          left: StyleString.safeSpace, right: StyleString.safeSpace, top: 20),
+      padding: EdgeInsets.only(
+          left: StyleString.safeSpace,
+          right: StyleString.safeSpace,
+          top: isLandscape ? 10 : 20),
       sliver: SliverToBoxAdapter(
         child: !widget.loadingStatus || bangumiItem != null
             ? Column(
@@ -188,8 +192,8 @@ class _BangumiInfoState extends State<BangumiInfo> {
                       Stack(
                         children: [
                           NetworkImgLayer(
-                            width: 105,
-                            height: 160,
+                            width: isLandscape ? 160 : 105,
+                            height: isLandscape ? 105 : 160,
                             src: !widget.loadingStatus
                                 ? widget.bangumiDetail!.cover!
                                 : bangumiItem!.cover!,
@@ -212,7 +216,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                         child: InkWell(
                           onTap: () => showIntroDetail(),
                           child: SizedBox(
-                            height: 158,
+                            height: isLandscape ? 103 : 158,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
@@ -234,8 +238,8 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                     ),
                                     const SizedBox(width: 20),
                                     SizedBox(
-                                      width: 34,
-                                      height: 34,
+                                      width: 30,
+                                      height: 30,
                                       child: IconButton(
                                         tooltip: '收藏',
                                         style: ButtonStyle(
@@ -280,7 +284,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: isLandscape ? 2 : 6),
                                 Row(
                                   children: [
                                     Text(
@@ -327,7 +331,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                                 const Spacer(),
                                 Text(
                                   '简介：${!widget.loadingStatus ? widget.bangumiDetail!.evaluate! : bangumiItem!.evaluate!}',
-                                  maxLines: 3,
+                                  maxLines: isLandscape ? 1 : 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 13,
@@ -388,9 +392,9 @@ class _BangumiInfoState extends State<BangumiInfo> {
         builder: (BuildContext context, BoxConstraints constraints) {
       return Material(
         child: Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 8),
+          padding: const EdgeInsets.only(top: 1),
           child: SizedBox(
-            height: constraints.maxWidth / 5 * 0.8,
+            height: 48,
             child: GridView.count(
               primary: false,
               padding: EdgeInsets.zero,
@@ -420,7 +424,8 @@ class _BangumiInfoState extends State<BangumiInfo> {
                       loadingStatus: false,
                       semanticsLabel: '投币',
                       text: !widget.loadingStatus
-                          ? Utils.numFormat(widget.bangumiDetail!.stat!['coins']!)
+                          ? Utils.numFormat(
+                              widget.bangumiDetail!.stat!['coins']!)
                           : Utils.numFormat(bangumiItem!.stat!['coins']!)),
                 ),
                 Obx(
@@ -432,7 +437,8 @@ class _BangumiInfoState extends State<BangumiInfo> {
                       loadingStatus: false,
                       semanticsLabel: '收藏',
                       text: !widget.loadingStatus
-                          ? Utils.numFormat(widget.bangumiDetail!.stat!['favorite']!)
+                          ? Utils.numFormat(
+                              widget.bangumiDetail!.stat!['favorite']!)
                           : Utils.numFormat(bangumiItem!.stat!['favorite']!)),
                 ),
                 ActionItem(

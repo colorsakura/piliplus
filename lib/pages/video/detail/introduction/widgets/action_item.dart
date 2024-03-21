@@ -41,7 +41,7 @@ class ActionItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 4),
+          // const SizedBox(height: 2),
           Icon(
             selectStatus
                 ? selectIcon!.icon!
@@ -51,7 +51,7 @@ class ActionItem extends StatelessWidget {
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.outline,
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 3),
           AnimatedOpacity(
             opacity: loadingStatus! ? 0 : 1,
             duration: const Duration(milliseconds: 200),

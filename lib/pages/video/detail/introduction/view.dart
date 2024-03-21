@@ -396,7 +396,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     onTap: onPushMember,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 4),
+                          vertical: 8, horizontal: 4),
                       child: Row(
                         children: [
                           NetworkImgLayer(
@@ -491,8 +491,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
-        margin: const EdgeInsets.only(top: 6, bottom: 4),
-        height: constraints.maxWidth / 5 * 0.8,
+        margin: const EdgeInsets.only(top: 1),
+        height: 48,
         child: GridView.count(
           primary: false,
           padding: EdgeInsets.zero,
