@@ -23,7 +23,7 @@ class DownloadUtils {
       var response = await Dio()
           .get(imgUrl, options: Options(responseType: ResponseType.bytes));
       String picName =
-          "PiliPalaX_${imgType}_${DateTime.now().toString().split('-').join()}";
+          "${imgType}_${DateTime.now().toString().replaceAll(' ', '_').replaceAll(':', '-').split('.').first}";
       final SaveResult result = await SaverGallery.saveImage(
         Uint8List.fromList(response.data),
         quality: 100,

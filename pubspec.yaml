@@ -141,6 +141,9 @@ dependencies:
   #瀑布流
   waterfall_flow: ^3.0.3
   marquee: ^2.2.3
+dependency_overrides:
+  mime:
+    git: https://github.com/orz12/mime/
 
 dev_dependencies:
   flutter_test:

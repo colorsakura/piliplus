@@ -935,12 +935,13 @@ packages:
     source: hosted
     version: "1.10.0"
   mime:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
-      url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub/"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "922e1f3d0b68291c42a2ec3a83542a886ea9b041"
+      url: "https://github.com/orz12/mime/"
+    source: git
     version: "1.0.5"
   nil:
     dependency: "direct main"
