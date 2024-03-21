@@ -56,6 +56,7 @@ class _HeaderControlState extends State<HeaderControl> {
   late VideoDetailData videoDetail;
   late StreamSubscription<bool> fullScreenStatusListener;
   late bool horizontalScreen;
+  RxString now = ''.obs;
 
   @override
   void initState() {
@@ -68,6 +69,7 @@ class _HeaderControlState extends State<HeaderControl> {
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
+    startClock();
   }
 
   void listenFullScreenStatus() {
@@ -1037,11 +1039,20 @@ class _HeaderControlState extends State<HeaderControl> {
     );
   }
 
+  startClock() {
+    Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      if (!mounted) {
+        return;
+      }
+      now.value = DateTime.now().toString().split(' ')[1].substring(0, 8);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _ = widget.controller!;
-    final bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    // final bool isLandscape =
+    //     MediaQuery.of(context).orientation == Orientation.landscape;
     return AppBar(
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
@@ -1077,13 +1088,20 @@ class _HeaderControlState extends State<HeaderControl> {
               )),
           if ((videoIntroController.videoDetail.value.title != null) &&
               (isFullScreen ||
-                  (!isFullScreen && isLandscape && !horizontalScreen))) ...[
+                  (!isFullScreen &&
+                      MediaQuery.of(context).orientation ==
+                          Orientation.landscape &&
+                      !horizontalScreen))) ...[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                      maxWidth: isLandscape ? 400 : 140, maxHeight: 25),
+                      maxWidth: MediaQuery.of(context).orientation ==
+                              Orientation.landscape
+                          ? 400
+                          : 140,
+                      maxHeight: 25),
                   child: Marquee(
                     text: videoIntroController.videoDetail.value.title!,
                     style: const TextStyle(
@@ -1115,7 +1133,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     ),
                   )
               ],
-            )
+            ),
           ] else ...[
             SizedBox(
                 width: 42,
@@ -1138,6 +1156,25 @@ class _HeaderControlState extends State<HeaderControl> {
                 )),
           ],
           const Spacer(),
+          if ((isFullScreen &&
+                  MediaQuery.of(context).orientation ==
+                      Orientation.landscape) ||
+              (!isFullScreen &&
+                  MediaQuery.of(context).orientation == Orientation.landscape &&
+                  !horizontalScreen)) ...[
+            // const Spacer(),
+            // show current datetime
+            Obx(
+              () => Text(
+                now.value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+            const SizedBox(width: 15,),
+          ],
           // ComBtn(
           //   icon: const Icon(
           //     FontAwesomeIcons.cropSimple,
