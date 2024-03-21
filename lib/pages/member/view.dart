@@ -56,6 +56,8 @@ class _MemberPageState extends State<MemberPage>
   @override
   void dispose() {
     _extendNestCtr.removeListener(() {});
+    _extendNestCtr.dispose();
+    appbarStream.close();
     super.dispose();
   }
 
@@ -361,7 +363,9 @@ class _MemberPageState extends State<MemberPage>
                                 child: Text("UID ${_memberController.mid}",
                                     style: TextStyle(
                                       color: Theme.of(context)
-                                          .colorScheme.secondary.withOpacity(0.5),
+                                          .colorScheme
+                                          .secondary
+                                          .withOpacity(0.5),
                                       fontSize: 12,
                                       // fontWeight: FontWeight.w200,
                                     )),
