@@ -14,8 +14,8 @@ class StatView extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, Color> colorObject = {
       'white': Colors.white,
-      'gray': Theme.of(context).colorScheme.outline,
-      'black': Theme.of(context).colorScheme.onBackground.withOpacity(0.8),
+      'gray': Theme.of(context).colorScheme.outline.withOpacity(0.8),
+      'black': Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
     };
     Color color = colorObject[theme]!;
     return Row(

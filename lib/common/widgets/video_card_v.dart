@@ -189,7 +189,7 @@ class VideoCardV extends StatelessWidget {
       if (videoItem.goto == 'av')
         Positioned(
             right: 0,
-            bottom: 1,
+            bottom: 0,
             child: VideoPopupMenu(
               size: 30,
               iconSize: 16,
@@ -206,7 +206,7 @@ class VideoContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(5, 8, 5, 4),
+        padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,7 +219,7 @@ class VideoContent extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        height: 1.42,
+                        height: 1.38,
                       )),
                 ),
               ],
@@ -268,7 +268,7 @@ class VideoContent extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    videoItem.owner.name,
+                    videoItem.owner.name.toString(),
                     // semanticsLabel: "Up主：${videoItem.owner.name}",
                     maxLines: 1,
                     overflow: TextOverflow.clip,
@@ -321,7 +321,7 @@ class VideoStat extends StatelessWidget {
             text: TextSpan(
                 style: TextStyle(
                   fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-                  color: Theme.of(context).colorScheme.outline,
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
                 ),
                 text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
           ),

@@ -76,7 +76,7 @@ class _LivePageState extends State<LivePage>
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(
-          left: StyleString.safeSpace, right: StyleString.safeSpace),
+          left: StyleString.cardSpace, right: StyleString.cardSpace),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(StyleString.imgRadius),
       ),
@@ -143,9 +143,9 @@ class _LivePageState extends State<LivePage>
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         // 行间距
-        mainAxisSpacing: StyleString.safeSpace,
+        mainAxisSpacing: StyleString.cardSpace,
         // 列间距
-        crossAxisSpacing: StyleString.safeSpace,
+        crossAxisSpacing: StyleString.cardSpace,
         // 最大宽度
         maxCrossAxisExtent: Grid.maxRowWidth,
         mainAxisExtent: Grid.calculateActualWidth(context, Grid.maxRowWidth, StyleString.safeSpace) / StyleString.aspectRatio+

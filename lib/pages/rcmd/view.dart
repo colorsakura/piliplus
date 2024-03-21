@@ -90,7 +90,7 @@ class _RcmdPageState extends State<RcmdPage>
           slivers: [
             SliverPadding(
               padding:
-                  const EdgeInsets.fromLTRB(0, StyleString.safeSpace, 0, 0),
+                  const EdgeInsets.fromLTRB(0, StyleString.cardSpace, 0, 0),
               sliver: FutureBuilder(
                 future: _futureBuilderFuture,
                 builder: (context, snapshot) {
@@ -145,19 +145,18 @@ class _RcmdPageState extends State<RcmdPage>
   }
 
   Widget contentGrid(ctr, videoList) {
-
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         // 行间距
         mainAxisSpacing: StyleString.cardSpace,
         // 列间距
-        crossAxisSpacing: StyleString.safeSpace,
+        crossAxisSpacing: StyleString.cardSpace,
         // 最大宽度
         maxCrossAxisExtent: Grid.maxRowWidth,
         mainAxisExtent: Grid.calculateActualWidth(
                     context, Grid.maxRowWidth, StyleString.safeSpace) /
                 StyleString.aspectRatio +
-            MediaQuery.textScalerOf(context).scale(92),
+            MediaQuery.textScalerOf(context).scale(90),
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

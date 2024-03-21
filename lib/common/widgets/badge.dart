@@ -40,7 +40,7 @@ class PBadge extends StatelessWidget {
       color = Colors.white;
     }
     if (type == 'color') {
-      bgColor = t.primaryContainer.withOpacity(0.6);
+      bgColor = t.primaryContainer.withOpacity(0.5);
       color = t.primary;
     }
     if (type == 'line') {
