@@ -2,6 +2,7 @@ import 'package:appscheme/appscheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import '../http/dynamics.dart';
 import '../http/search.dart';
 import '../models/common/search_type.dart';
 import 'id_utils.dart';
@@ -85,9 +86,30 @@ class PiliSchame {
         }
       } else if (host == 'search') {
         Get.toNamed('/searchResult', parameters: {'keyword': ''});
+      } else if (host == 'article') {
+        final String id = path.split('/').last.split('?').first;
+        Get.toNamed(
+          '/htmlRender',
+          parameters: {
+            'url': 'www.bilibili.com/read/cv$id',
+            'title': '',
+            'id': 'cv$id',
+            'dynamicType': 'read'
+          },
+        );
+      } else {
+        print(value.dataString);
+        SmartDialog.showToast('未知路径:${value.dataString}，请截图反馈给开发者');
+        // Get.toNamed(
+        //   '/webview',
+        //   parameters: {
+        //     'url': value.dataString ?? "",
+        //     'type': 'url',
+        //     'pageTitle': ''
+        //   },
+        // );
       }
-    }
-    if (scheme == 'https') {
+    } else if (scheme == 'https') {
       _fullPathPush(value);
     }
   }
@@ -164,6 +186,7 @@ class PiliSchame {
         '/liveRoom?roomid=$roomId',
         arguments: {'liveItem': null, 'heroTag': roomId.toString()},
       );
+      return;
     } else if (host.contains('space')) {
       var mid = path!.split('/').last;
       Get.toNamed('/member?mid=$mid', arguments: {'face': ''});
@@ -200,6 +223,7 @@ class PiliSchame {
           parameters: {'url': redirectUrl, 'type': 'url', 'pageTitle': ''},
         );
       }
+      return;
     }
 
     if (path != null) {
@@ -227,6 +251,13 @@ class PiliSchame {
           break;
         case 'read':
           print('专栏');
+          String id = 'cv${matchNum(query!['id']!).first}';
+          Get.toNamed('/htmlRender', parameters: {
+            'url': value.dataString!,
+            'title': '',
+            'id': id,
+            'dynamicType': 'read'
+          });
           break;
         case 'space':
           print('个人空间');
