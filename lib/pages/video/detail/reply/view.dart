@@ -132,8 +132,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
             key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
               SliverPersistentHeader(
-                pinned: false,
-                floating: true,
+                pinned: true,
+                floating: false,
                 delegate: _MySliverPersistentHeaderDelegate(
                   child: Container(
                     height: 45,
