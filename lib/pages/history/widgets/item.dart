@@ -109,12 +109,18 @@ class HistoryItem extends StatelessWidget {
               SmartDialog.dismiss();
               if (res['status']) {
                 EpisodeItem episode = res['data'].episodes.first;
+                for (EpisodeItem i in res['data'].episodes) {
+                  if (i.epId == videoItem.history.epid) {
+                    episode = i;
+                    break;
+                  }
+                }
                 String bvid = episode.bvid!;
                 int cid = episode.cid!;
                 String pic = episode.cover!;
                 String heroTag = Utils.makeHeroTag(cid);
                 Get.toNamed(
-                  '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}',
+                  '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epid=${episode.epId}',
                   arguments: {
                     'pic': pic,
                     'heroTag': heroTag,

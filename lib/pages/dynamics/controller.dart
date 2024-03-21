@@ -225,12 +225,23 @@ class DynamicsController extends GetxController {
           SmartDialog.dismiss();
           if (res['status']) {
             EpisodeItem episode = res['data'].episodes.first;
+            int? epId = res['data'].userStatus?.progress?.lastEpId;
+            if (epId == null) {
+              epId = episode.epId;
+            } else {
+              for (var item in res['data'].episodes) {
+                if (item.epId == epId) {
+                  episode = item;
+                  break;
+                }
+              }
+            }
             String bvid = episode.bvid!;
             int cid = episode.cid!;
             String pic = episode.cover!;
             String heroTag = Utils.makeHeroTag(cid);
             Get.toNamed(
-              '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}',
+              '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epid=$epId',
               arguments: {
                 'pic': pic,
                 'heroTag': heroTag,
