@@ -216,9 +216,11 @@ class ReplyItem extends StatelessWidget {
               label: replyItem?.content?.message ?? "",
               // excludeSemantics: true,
               child: Text.rich(
-                style: const TextStyle(height: 1.75),
+                style: TextStyle(
+                    height: 1.75,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
                 maxLines:
-                    replyItem!.content!.isText! && replyLevel == '1' ? 3 : 999,
+                    replyItem!.content!.isText! && replyLevel == '1' ? 6 : 999,
                 overflow: TextOverflow.ellipsis,
                 TextSpan(
                   children: [
@@ -358,7 +360,7 @@ class ReplyItemRow extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 42, right: 4, top: 0),
       child: Material(
-        color: Theme.of(context).colorScheme.onInverseSurface,
+        color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.02),
         borderRadius: BorderRadius.circular(6),
         clipBehavior: Clip.hardEdge,
         animationDuration: Duration.zero,
@@ -385,9 +387,9 @@ class ReplyItemRow extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(
                       8,
-                      i == 0 && (extraRow == 1 || replies!.length > 1) ? 8 : 5,
+                      i == 0 && (extraRow == 1 || replies!.length > 1) ? 8 : 4,
                       8,
-                      i == 0 && (extraRow == 1 || replies!.length > 1) ? 5 : 6,
+                      i == 0 && (extraRow == 1 || replies!.length > 1) ? 4 : 6,
                     ),
                     child: Semantics(
                         label: replies![i].member.uname +
@@ -395,6 +397,16 @@ class ReplyItemRow extends StatelessWidget {
                             replies![i].content.message,
                         excludeSemantics: true,
                         child: Text.rich(
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.85),
+                              height: 1.6),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           TextSpan(
@@ -402,11 +414,10 @@ class ReplyItemRow extends StatelessWidget {
                               TextSpan(
                                 text: replies![i].member.uname + ' ',
                                 style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .fontSize,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.85),
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -454,11 +465,20 @@ class ReplyItemRow extends StatelessWidget {
                       ),
                       children: [
                         if (replyControl!.upReply!)
-                          const TextSpan(text: 'up主等人 '),
+                          TextSpan(
+                              text: 'up主等人 ',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.85))),
                         TextSpan(
                           text: replyControl!.entryText!,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.85),
                           ),
                         )
                       ],
