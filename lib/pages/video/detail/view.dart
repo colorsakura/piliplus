@@ -648,11 +648,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 // 系数是以下三个方程（分别代表特定平板、折叠屏内屏、普通手机横屏尺寸）的近似解
                 // 820x+1180y+983.67z=450
                 // 1812x+2176y+1985.68z=680
-                // 1080x+2340y+1589.72z=540
+                // 1080x+2340y+1589.72z=560
                 final double videoheight =
-                    sqrt(context.height * context.width) * 12.972 -
-                        context.height * 7.928 -
-                        context.width * 4.923;
+                    sqrt(context.height * context.width) * 12.555 -
+                        context.height * 7.690 -
+                        context.width * 4.741;
                 final double videowidth = videoheight * 16 / 9;
                 return Row(
                   children: [
@@ -809,25 +809,28 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                   ],
                                 ))),
                         SizedBox(
-                          width: isFullScreen.value == true
-                              ? context.width
-                              : videowidth,
-                          height: isFullScreen.value == true
-                              ? 0
-                              : context.height -
-                                  videoheight -
-                                  MediaQuery.of(context).padding.top -
-                                  MediaQuery.of(context).padding.bottom,
-                          child: (videoDetailController.videoType ==
-                                  SearchType.video)
-                              ? const CustomScrollView(
-                                  slivers: [VideoIntroPanel()])
-                              : (videoDetailController.videoType ==
-                                      SearchType.media_bangumi)
-                                  ? Obx(() => BangumiIntroPanel(
-                                      cid: videoDetailController.cid.value))
-                                  : const SizedBox(),
-                        )
+                            width: isFullScreen.value == true
+                                ? context.width
+                                : videowidth,
+                            height: isFullScreen.value == true
+                                ? 0
+                                : context.height -
+                                    videoheight -
+                                    MediaQuery.of(context).padding.top -
+                                    MediaQuery.of(context).padding.bottom,
+                            child: CustomScrollView(
+                              key: const PageStorageKey<String>('简介'),
+                              slivers: <Widget>[
+                                if (videoDetailController.videoType ==
+                                    SearchType.video) ...[
+                                  const VideoIntroPanel(),
+                                ] else if (videoDetailController.videoType ==
+                                    SearchType.media_bangumi) ...[
+                                  Obx(() => BangumiIntroPanel(
+                                      cid: videoDetailController.cid.value)),
+                                ]
+                              ],
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -843,11 +846,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       child: TabBarView(
                         controller: videoDetailController.tabCtr,
                         children: <Widget>[
-                          const CustomScrollView(
-                            slivers: [
-                              RelatedVideoPanel(),
-                            ],
-                          ),
+                          if (videoDetailController.videoType ==
+                              SearchType.video)
+                            const CustomScrollView(
+                              slivers: [
+                                RelatedVideoPanel(),
+                              ],
+                            ),
                           Obx(
                             () => VideoReplyPanel(
                               bvid: videoDetailController.bvid,
@@ -883,7 +888,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             ),
     );
     if (!horizontalScreen) {
-      Orientation orientation = MediaQuery.of(context).orientation;
       if (Platform.isAndroid) {
         return PiPSwitcher(
           childWhenDisabled: childWhenDisabled,
