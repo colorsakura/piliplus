@@ -222,7 +222,7 @@ class VideoIntroController extends GetxController {
     if (result['status']) {
       // hasLike.value = result["data"] == 1 ? true : false;
       if (!hasLike.value) {
-        SmartDialog.showToast('点赞成功 👍');
+        SmartDialog.showToast('点赞成功');
         hasLike.value = true;
         videoDetail.value.stat!.like = videoDetail.value.stat!.like! + 1;
       } else if (hasLike.value) {
@@ -280,7 +280,7 @@ class VideoIntroController extends GetxController {
                     var res = await VideoHttp.coinVideo(
                         bvid: bvid, multiply: _tempThemeValue);
                     if (res['status']) {
-                      SmartDialog.showToast('投币成功 👏');
+                      SmartDialog.showToast('投币成功');
                       hasCoin.value = true;
                       videoDetail.value.stat!.coin =
                           videoDetail.value.stat!.coin! + _tempThemeValue;
@@ -342,7 +342,7 @@ class VideoIntroController extends GetxController {
       Get.back();
       // 重新获取收藏状态
       await queryHasFavVideo();
-      SmartDialog.showToast('✅ 操作成功');
+      SmartDialog.showToast('操作成功');
     } else {
       SmartDialog.showToast(result['msg']);
     }

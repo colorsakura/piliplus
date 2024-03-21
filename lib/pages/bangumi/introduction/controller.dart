@@ -135,7 +135,7 @@ class BangumiIntroController extends GetxController {
   Future actionLikeVideo() async {
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
-      SmartDialog.showToast(!hasLike.value ? '点赞成功 👍' : '取消赞');
+      SmartDialog.showToast(!hasLike.value ? '点赞成功' : '取消赞');
       hasLike.value = !hasLike.value;
       bangumiDetail.value.stat!['likes'] =
           bangumiDetail.value.stat!['likes'] + (!hasLike.value ? 1 : -1);
@@ -189,7 +189,7 @@ class BangumiIntroController extends GetxController {
                     var res = await VideoHttp.coinVideo(
                         bvid: bvid, multiply: _tempThemeValue);
                     if (res['status']) {
-                      SmartDialog.showToast('投币成功 👏');
+                      SmartDialog.showToast('投币成功');
                       hasCoin.value = true;
                       bangumiDetail.value.stat!['coins'] =
                           bangumiDetail.value.stat!['coins'] + _tempThemeValue;
@@ -224,7 +224,7 @@ class BangumiIntroController extends GetxController {
       delMediaIdsNew = [];
       // 重新获取收藏状态
       queryHasFavVideo();
-      SmartDialog.showToast('✅ 操作成功');
+      SmartDialog.showToast('操作成功');
       Get.back();
     }
   }
