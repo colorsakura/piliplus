@@ -90,7 +90,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           bangumiIntroController.bangumiDetail.value, p0);
     });
     autoExitFullcreen =
-        setting.get(SettingBoxKey.enableAutoExit, defaultValue: false);
+        setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
     autoPlayEnable =

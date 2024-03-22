@@ -63,7 +63,7 @@ class _PlaySettingState extends State<PlaySetting> {
         children: [
           const SetSwitchItem(
             title: '弹幕开关',
-            subTitle: '设定弹幕是否默认显示',
+            subTitle: '是否展示弹幕',
             setKey: SettingBoxKey.enableShowDanmaku,
             defaultVal: false,
           ),
@@ -128,7 +128,7 @@ class _PlaySettingState extends State<PlaySetting> {
             title: '自动退出全屏',
             subTitle: '视频结束播放时退出全屏',
             setKey: SettingBoxKey.enableAutoExit,
-            defaultVal: false,
+            defaultVal: true,
           ),
           const SetSwitchItem(
             title: '后台播放',
