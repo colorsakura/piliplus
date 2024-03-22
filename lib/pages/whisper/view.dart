@@ -1,5 +1,6 @@
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/utils/utils.dart';
@@ -103,6 +104,10 @@ class _WhisperPageState extends State<WhisperPage> {
                               ],
                             ),
                             onTap: () {
+                              if (!_whisperController.msgFeedTop[idx]['enabled']) {
+                                SmartDialog.showToast('已禁用');
+                                return;
+                              }
                               setState(() {
                                 _whisperController.msgFeedTop[idx]['value'] = 0;
                               });
@@ -182,18 +187,18 @@ class _WhisperPageState extends State<WhisperPage> {
                                                         .content !=
                                                     ''
                                             ? (sessionList[i]
-                                                .lastMsg
-                                                .content['text'] ??
-                                            sessionList[i]
-                                                .lastMsg
-                                                .content['content'] ??
-                                            sessionList[i]
-                                                .lastMsg
-                                                .content['title'] ??
-                                            sessionList[i]
-                                                .lastMsg
-                                                .content['reply_content'])
-                                        : '不支持的消息类型',
+                                                    .lastMsg
+                                                    .content['text'] ??
+                                                sessionList[i]
+                                                    .lastMsg
+                                                    .content['content'] ??
+                                                sessionList[i]
+                                                    .lastMsg
+                                                    .content['title'] ??
+                                                sessionList[i]
+                                                    .lastMsg
+                                                    .content['reply_content'])
+                                            : '不支持的消息类型',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
@@ -205,7 +210,8 @@ class _WhisperPageState extends State<WhisperPage> {
                                                     .outline)),
                                     trailing: Text(
                                       Utils.dateFormat(
-                                          sessionList[i].lastMsg.timestamp, formatType: "day"),
+                                          sessionList[i].lastMsg.timestamp,
+                                          formatType: "day"),
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall!

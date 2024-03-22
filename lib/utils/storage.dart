@@ -132,6 +132,7 @@ class SettingBoxKey {
       enableSearchWord = 'enableSearchWord',
       enableSystemProxy = 'enableSystemProxy',
       enableAi = 'enableAi',
+      disableLikeMsg = 'disableLikeMsg',
       defaultHomePage = 'defaultHomePage';
 
   /// 外观

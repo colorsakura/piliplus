@@ -198,6 +198,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.enableAi,
             defaultVal: true,
           ),
+          const SetSwitchItem(
+            title: '消息页禁用“收到的赞”功能',
+            subTitle: '禁止打开入口，降低网络社交依赖',
+            setKey: SettingBoxKey.disableLikeMsg,
+            defaultVal: false,
+          ),
           ListTile(
             dense: false,
             title: Text('评论展示', style: titleStyle),
