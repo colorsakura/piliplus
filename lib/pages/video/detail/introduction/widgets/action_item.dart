@@ -26,54 +26,56 @@ class ActionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: (text ?? "") + (selectStatus ? "已" :"") + semanticsLabel,
-      child:
-      InkWell(
-      onTap: () => {
-        feedBack(),
-        onTap!(),
-      },
-      onLongPress: () => {
-        if (onLongPress != null) {onLongPress!()}
-      },
-      borderRadius: StyleString.mdRadius,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // const SizedBox(height: 2),
-          Icon(
-            selectStatus
-                ? selectIcon!.icon!
-                : icon!.icon!,
-            size: 18,
-            color: selectStatus
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.outline,
-          ),
-          const SizedBox(height: 3),
-          AnimatedOpacity(
-            opacity: loadingStatus! ? 0 : 1,
-            duration: const Duration(milliseconds: 200),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return ScaleTransition(scale: animation, child: child);
+    return Expanded(
+        child: Semantics(
+            label: (text ?? "") + (selectStatus ? "已" : "") + semanticsLabel,
+            child: InkWell(
+              onTap: () => {
+                feedBack(),
+                onTap!(),
               },
-              child: Text(
-                text ?? '',
-                key: ValueKey<String>(text ?? ''),
-                style: TextStyle(
+              onLongPress: () => {
+                if (onLongPress != null) {onLongPress!()}
+              },
+              // borderRadius: StyleString.mdRadius,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // const SizedBox(height: 2),
+                  Icon(
+                    selectStatus ? selectIcon!.icon! : icon!.icon!,
+                    size: 18,
                     color: selectStatus
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.outline,
-                    fontSize: Theme.of(context).textTheme.labelSmall!.fontSize),
-                semanticsLabel: "",
+                  ),
+                  const SizedBox(height: 3),
+                  AnimatedOpacity(
+                    opacity: loadingStatus! ? 0 : 1,
+                    duration: const Duration(milliseconds: 200),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
+                      child: Text(
+                        text ?? '',
+                        key: ValueKey<String>(text ?? ''),
+                        style: TextStyle(
+                            color: selectStatus
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.outline,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .fontSize),
+                        semanticsLabel: "",
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
-        ],
-      ),
-    ));
+            )));
   }
 }

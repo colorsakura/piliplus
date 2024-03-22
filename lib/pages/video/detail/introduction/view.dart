@@ -493,12 +493,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       return Container(
         margin: const EdgeInsets.only(top: 1),
         height: 48,
-        child: GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          primary: false,
-          padding: EdgeInsets.zero,
-          crossAxisCount: 5,
-          childAspectRatio: 1.25,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Obx(
               () => ActionItem(
