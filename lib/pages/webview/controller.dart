@@ -64,6 +64,15 @@ class WebviewController extends GetxController {
               }
             }
           },
+          onPageFinished: (String url) {
+            if (type.value == 'liveRoom') {
+              print("adding");
+              //注入js
+              controller.runJavaScriptReturningResult('''
+                document.styleSheets[0].insertRule('div.open-app-btn.bili-btn-warp {display:none;}', 0);
+                ''').then((value) => print(value));
+            }
+          },
           // 加载完成
           onUrlChange: (UrlChange urlChange) async {
             loadShow.value = false;

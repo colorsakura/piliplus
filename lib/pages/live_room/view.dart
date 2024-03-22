@@ -164,6 +164,37 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                                   ),
                               ],
                             ),
+                            const Spacer(),
+                            //刷新
+                            IconButton(
+                              tooltip: '刷新',
+                              onPressed: () {
+                                _futureBuilderFuture =
+                                    _liveRoomController.queryLiveInfo();
+                                // videoSourceInit();
+                              },
+                              icon: const Icon(Icons.refresh),
+                            ),
+                            //内置浏览器打开
+                            IconButton(
+                              tooltip: '内置浏览器打开',
+                                onPressed: () {
+                                  Get.toNamed(
+                                    '/webview',
+                                    parameters: {
+                                      'url':
+                                          'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
+                                      'type': 'liveRoom',
+                                      'pageTitle': _liveRoomController
+                                          .roomInfoH5
+                                          .value
+                                          .anchorInfo!
+                                          .baseInfo!
+                                          .uname!,
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.open_in_browser)),
                           ],
                         ),
                       );

@@ -385,7 +385,7 @@ class PlPlayerController {
         startListeners();
       }
       await _initializePlayer(seekTo: seekTo, duration: _duration.value);
-      if (videoType.value != 'live') {
+      if (videoType.value != 'live' && _cid != 0) {
         refreshSubtitles().then((value) {
           if (_vttSubtitles.isNotEmpty){
             String preference = setting.get(SettingBoxKey.subtitlePreference,
