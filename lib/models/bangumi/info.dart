@@ -121,7 +121,9 @@ class BangumiInfoModel {
     title = json['title'];
     total = json['total'];
     type = json['type'];
-    userStatus = UserStatus.fromJson(json['user_status']);
+    if (json['user_status'] != null) {
+      userStatus = UserStatus.fromJson(json['user_status']);
+    }
     staff = json['staff'];
   }
 }
@@ -218,6 +220,7 @@ class EpisodeItem {
     vid = json['vid'];
   }
 }
+
 class UserStatus {
   UserStatus({
     this.areaLimit,
@@ -249,11 +252,16 @@ class UserStatus {
     login = json['login'];
     pay = json['pay'];
     payPackPaid = json['pay_pack_paid'];
-    progress = UserProgress.fromJson(json['progress']);
+    if (json['progress'] != null) {
+      progress = UserProgress.fromJson(json['progress']);
+    }
     sponsor = json['sponsor'];
-    vipInfo = VipInfo.fromJson(json['vip_info']);
+    if (json['vip_info'] != null) {
+      vipInfo = VipInfo.fromJson(json['vip_info']);
+    }
   }
 }
+
 class UserProgress {
   UserProgress({
     this.lastEpId,
@@ -269,6 +277,7 @@ class UserProgress {
     lastTime = json['last_time'];
   }
 }
+
 class VipInfo {
   VipInfo({
     this.dueDate,
