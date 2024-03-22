@@ -57,6 +57,7 @@ class _HeaderControlState extends State<HeaderControl> {
   late StreamSubscription<bool> fullScreenStatusListener;
   late bool horizontalScreen;
   RxString now = ''.obs;
+  late Timer clock;
 
   @override
   void initState() {
@@ -89,6 +90,7 @@ class _HeaderControlState extends State<HeaderControl> {
   void dispose() {
     widget.floating?.dispose();
     fullScreenStatusListener.cancel();
+    clock.cancel();
     super.dispose();
   }
 
@@ -1040,11 +1042,11 @@ class _HeaderControlState extends State<HeaderControl> {
   }
 
   startClock() {
-    Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    clock = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (!mounted) {
         return;
       }
-      now.value = DateTime.now().toString().split(' ')[1].substring(0, 8);
+      now.value = DateTime.now().toString().split(' ')[1].substring(0, 5);
     });
   }
 
@@ -1053,224 +1055,229 @@ class _HeaderControlState extends State<HeaderControl> {
     final _ = widget.controller!;
     // final bool isLandscape =
     //     MediaQuery.of(context).orientation == Orientation.landscape;
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      foregroundColor: Colors.white,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      primary: false,
-      centerTitle: false,
-      automaticallyImplyLeading: false,
-      titleSpacing: 10,
-      title: Row(
-        children: [
-          SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: '上一页',
-                icon: const Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 15,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (widget.controller!.isFullScreen.value) {
-                    widget.controller!.triggerFullScreen(status: false);
-                  } else if (MediaQuery.of(context).orientation ==
-                          Orientation.landscape &&
-                      !horizontalScreen) {
-                    verticalScreenForTwoSeconds();
-                  } else {
-                    Get.back();
-                  }
-                },
-              )),
-          if ((videoIntroController.videoDetail.value.title != null) &&
-              (isFullScreen ||
-                  (!isFullScreen &&
-                      MediaQuery.of(context).orientation ==
-                          Orientation.landscape &&
-                      !horizontalScreen))) ...[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).orientation ==
-                              Orientation.landscape
-                          ? 400
-                          : 140,
-                      maxHeight: 25),
-                  child: Marquee(
-                    text: videoIntroController.videoDetail.value.title!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                    scrollAxis: Axis.horizontal,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    blankSpace: 200,
-                    velocity: 40,
-                    startAfter: const Duration(seconds: 1),
-                    showFadingOnlyWhenScrolling: true,
-                    fadingEdgeStartFraction: 0,
-                    fadingEdgeEndFraction: 0.1,
-                    numberOfRounds: 1,
-                    startPadding: 0,
-                    accelerationDuration: const Duration(seconds: 1),
-                    accelerationCurve: Curves.linear,
-                    decelerationDuration: const Duration(milliseconds: 500),
-                    decelerationCurve: Curves.easeOut,
-                  ),
-                ),
-                if (videoIntroController.isShowOnlineTotal)
-                  Text(
-                    '${videoIntroController.total.value}人正在看',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
-                    ),
-                  )
-              ],
-            ),
-          ] else ...[
+
+    return LayoutBuilder(builder: (context, boxConstraints) {
+      return AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        primary: false,
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        titleSpacing: 10,
+        title: Row(
+          children: [
             SizedBox(
                 width: 42,
                 height: 34,
                 child: IconButton(
-                  tooltip: '返回主页',
+                  tooltip: '上一页',
                   icon: const Icon(
-                    FontAwesomeIcons.house,
+                    FontAwesomeIcons.arrowLeft,
                     size: 15,
                     color: Colors.white,
                   ),
-                  onPressed: () async {
-                    // 销毁播放器实例
-                    // await widget.controller!.dispose(type: 'all');
-                    if (mounted) {
-                      Navigator.popUntil(
-                          context, (Route<dynamic> route) => route.isFirst);
+                  onPressed: () {
+                    if (widget.controller!.isFullScreen.value) {
+                      widget.controller!.triggerFullScreen(status: false);
+                    } else if (MediaQuery.of(context).orientation ==
+                            Orientation.landscape &&
+                        !horizontalScreen) {
+                      verticalScreenForTwoSeconds();
+                    } else {
+                      Get.back();
                     }
                   },
                 )),
-          ],
-          const Spacer(),
-          if ((isFullScreen &&
-                  MediaQuery.of(context).orientation ==
-                      Orientation.landscape) ||
-              (!isFullScreen &&
-                  MediaQuery.of(context).orientation == Orientation.landscape &&
-                  !horizontalScreen)) ...[
-            // const Spacer(),
-            // show current datetime
-            Obx(
-              () => Text(
-                now.value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
+            if ((videoIntroController.videoDetail.value.title != null) &&
+                (isFullScreen ||
+                    (!isFullScreen &&
+                        MediaQuery.of(context).orientation ==
+                            Orientation.landscape &&
+                        !horizontalScreen))) ...[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                        maxWidth: boxConstraints.maxWidth / 2 - 60,
+                        maxHeight: 25),
+                    child: Marquee(
+                      text: videoIntroController.videoDetail.value.title!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                      scrollAxis: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      blankSpace: 200,
+                      velocity: 40,
+                      startAfter: const Duration(seconds: 1),
+                      showFadingOnlyWhenScrolling: true,
+                      fadingEdgeStartFraction: 0,
+                      fadingEdgeEndFraction: 0.1,
+                      numberOfRounds: 1,
+                      startPadding: 0,
+                      accelerationDuration: const Duration(seconds: 1),
+                      accelerationCurve: Curves.linear,
+                      decelerationDuration: const Duration(milliseconds: 500),
+                      decelerationCurve: Curves.easeOut,
+                    ),
+                  ),
+                  if (videoIntroController.isShowOnlineTotal)
+                    Text(
+                      '${videoIntroController.total.value}人正在看',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                      ),
+                    )
+                ],
+              ),
+            ] else ...[
+              SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '返回主页',
+                    icon: const Icon(
+                      FontAwesomeIcons.house,
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      // 销毁播放器实例
+                      // await widget.controller!.dispose(type: 'all');
+                      if (mounted) {
+                        Navigator.popUntil(
+                            context, (Route<dynamic> route) => route.isFirst);
+                      }
+                    },
+                  )),
+            ],
+            const Spacer(),
+            if ((isFullScreen &&
+                    MediaQuery.of(context).orientation ==
+                        Orientation.landscape) ||
+                (!isFullScreen &&
+                    MediaQuery.of(context).orientation ==
+                        Orientation.landscape &&
+                    !horizontalScreen)) ...[
+              // const Spacer(),
+              // show current datetime
+              Obx(
+                () => Text(
+                  now.value,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 15,),
-          ],
-          // ComBtn(
-          //   icon: const Icon(
-          //     FontAwesomeIcons.cropSimple,
-          //     size: 15,
-          //     color: Colors.white,
-          //   ),
-          //   fuc: () => _.screenshot(),
-          // ),
-          SizedBox(
-            width: 42,
-            height: 34,
-            child: IconButton(
-              tooltip: '发弹幕',
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(EdgeInsets.zero),
+              const SizedBox(
+                width: 15,
               ),
-              onPressed: () => showShootDanmakuSheet(),
-              icon: const Icon(
-                Icons.add_comment_outlined,
-                size: 19,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 42,
-            height: 34,
-            child: Obx(
-              () => IconButton(
-                tooltip: "${_.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: () {
-                  _.isOpenDanmu.value = !_.isOpenDanmu.value;
-                  SmartDialog.showToast(
-                      _.isOpenDanmu.value ? '已临时开启弹幕' : '已临时关闭弹幕',
-                      displayTime: const Duration(seconds: 1));
-                },
-                icon: Icon(
-                  _.isOpenDanmu.value
-                      ? Icons.comment_outlined
-                      : Icons.comments_disabled_outlined,
-                  size: 19,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          if (Platform.isAndroid)
+            ],
+            // ComBtn(
+            //   icon: const Icon(
+            //     FontAwesomeIcons.cropSimple,
+            //     size: 15,
+            //     color: Colors.white,
+            //   ),
+            //   fuc: () => _.screenshot(),
+            // ),
             SizedBox(
               width: 42,
               height: 34,
               child: IconButton(
-                tooltip: '画中画',
+                tooltip: '发弹幕',
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(EdgeInsets.zero),
                 ),
-                onPressed: () async {
-                  bool canUsePiP = widget.floating != null &&
-                      await widget.floating!.isPipAvailable;
-                  widget.controller!.hiddenControls(false);
-                  if (canUsePiP) {
-                    final Rational aspectRatio = Rational(
-                      widget.videoDetailCtr!.data.dash!.video!.first.width!,
-                      widget.videoDetailCtr!.data.dash!.video!.first.height!,
-                    );
-                    await widget.floating!.enable(aspectRatio: aspectRatio);
-                  } else {}
-                },
+                onPressed: () => showShootDanmakuSheet(),
                 icon: const Icon(
-                  Icons.picture_in_picture_outlined,
+                  Icons.add_comment_outlined,
                   size: 19,
                   color: Colors.white,
                 ),
               ),
             ),
-          SizedBox(
-            width: 42,
-            height: 34,
-            child: IconButton(
-              tooltip: "更多设置",
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(EdgeInsets.zero),
-              ),
-              onPressed: () => showSettingSheet(),
-              icon: const Icon(
-                Icons.more_vert_outlined,
-                size: 19,
-                color: Colors.white,
+            SizedBox(
+              width: 42,
+              height: 34,
+              child: Obx(
+                () => IconButton(
+                  tooltip: "${_.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () {
+                    _.isOpenDanmu.value = !_.isOpenDanmu.value;
+                    setting.put(
+                        SettingBoxKey.enableShowDanmaku, _.isOpenDanmu.value);
+                    SmartDialog.showToast(
+                        "已${_.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
+                        displayTime: const Duration(seconds: 1));
+                  },
+                  icon: Icon(
+                    _.isOpenDanmu.value
+                        ? Icons.comment_outlined
+                        : Icons.comments_disabled_outlined,
+                    size: 19,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            if (Platform.isAndroid)
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: IconButton(
+                  tooltip: '画中画',
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () async {
+                    bool canUsePiP = widget.floating != null &&
+                        await widget.floating!.isPipAvailable;
+                    widget.controller!.hiddenControls(false);
+                    if (canUsePiP) {
+                      final Rational aspectRatio = Rational(
+                        widget.videoDetailCtr!.data.dash!.video!.first.width!,
+                        widget.videoDetailCtr!.data.dash!.video!.first.height!,
+                      );
+                      await widget.floating!.enable(aspectRatio: aspectRatio);
+                    } else {}
+                  },
+                  icon: const Icon(
+                    Icons.picture_in_picture_outlined,
+                    size: 19,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            SizedBox(
+              width: 42,
+              height: 34,
+              child: IconButton(
+                tooltip: "更多设置",
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(EdgeInsets.zero),
+                ),
+                onPressed: () => showSettingSheet(),
+                icon: const Icon(
+                  Icons.more_vert_outlined,
+                  size: 19,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
