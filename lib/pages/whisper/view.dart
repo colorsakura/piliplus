@@ -59,17 +59,14 @@ class _WhisperPageState extends State<WhisperPage> {
                 return Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: SizedBox(
-                    height: constraints.maxWidth / 4 + 10,
+                    height: 90,
                     child: Obx(
-                      () => GridView.count(
-                        primary: false,
-                        crossAxisCount: 4,
-                        padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
-                        childAspectRatio: 1.2,
+                      () => Row(
                         children: Iterable<int>.generate(
                                 _whisperController.msgFeedTop.length)
                             .map((idx) {
-                          return GestureDetector(
+                          return Expanded(
+                              child: GestureDetector(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +109,7 @@ class _WhisperPageState extends State<WhisperPage> {
                               Get.toNamed(
                                   _whisperController.msgFeedTop[idx]['route']);
                             },
-                          );
+                          ));
                         }).toList(),
                       ),
                     ),
