@@ -24,17 +24,10 @@ class ReplyHttp {
         'data': ReplyData.fromJson(res.data['data']),
       };
     } else {
-      Map errMap = {
-        -400: '请求错误',
-        -404: '无此项',
-        12002: '当前页面评论功能已关闭',
-        12009: '评论主体的type不合法',
-        12061: 'UP主已关闭评论区',
-      };
       return {
         'status': false,
         'date': [],
-        'msg': errMap[res.data['code']] ?? res.data['message'],
+        'msg': res.data['message'],
       };
     }
   }
@@ -60,16 +53,10 @@ class ReplyHttp {
         'data': ReplyData.fromJson(res.data['data']),
       };
     } else {
-      Map errMap = {
-        -400: '请求错误',
-        -404: '无此项',
-        12002: '评论区已关闭',
-        12009: '评论主体的type不合法',
-      };
       return {
         'status': false,
         'date': [],
-        'msg': errMap[res.data['code']] ?? '请求异常',
+        'msg': res.data['message'],
       };
     }
   }
