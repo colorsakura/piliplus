@@ -396,6 +396,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
           child: SizedBox(
             height: 48,
             child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
               primary: false,
               padding: EdgeInsets.zero,
               crossAxisCount: 5,
