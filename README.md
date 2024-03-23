@@ -42,7 +42,7 @@
 ## 技术交流
 
 Telegram: https://t.me/+162zlPtZlT9hNWVl
-QQ频道: https://pd.qq.com/s/365esodk3
+QQ频道: https://pd.qq.com/s/3n0b3m5dm
 
 
 <br/>
