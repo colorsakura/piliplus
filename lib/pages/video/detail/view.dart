@@ -312,7 +312,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         plPlayerController?.play();
       }
     }
-    AutoOrientation.fullAutoMode();
+    Future.delayed(const Duration(milliseconds: 600), () {
+      AutoOrientation.fullAutoMode();
+    });
     plPlayerController?.addStatusLister(playerListener);
     if (plPlayerController != null) {
       listenFullScreenStatus();
