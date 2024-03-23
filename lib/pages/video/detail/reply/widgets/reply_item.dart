@@ -631,9 +631,8 @@ InlineSpan buildContent(
                     Get.find<VideoDetailController>(
                             tag: Get.arguments['heroTag'])
                         .plPlayerController
-                        .seekTo(
-                          Duration(seconds: Utils.duration(matchStr)),
-                        );
+                        .seekTo(Duration(seconds: Utils.duration(matchStr)),
+                            type: 'slider');
                   } catch (e) {
                     SmartDialog.showToast('跳转失败: $e');
                   }
