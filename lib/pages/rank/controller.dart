@@ -9,20 +9,20 @@ import 'package:PiliPalaX/utils/storage.dart';
 class RankController extends GetxController with GetTickerProviderStateMixin {
   bool flag = false;
   late RxList tabs = [].obs;
-  RxInt initialIndex = 1.obs;
+  RxInt initialIndex = 0.obs;
   late TabController tabController;
   late List tabsCtrList;
   late List<Widget> tabsPageList;
   Box setting = GStrorage.setting;
-  late final StreamController<bool> searchBarStream =
-      StreamController<bool>.broadcast();
+  // late final StreamController<bool> searchBarStream =
+  //     StreamController<bool>.broadcast();
   late bool enableGradientBg;
 
   @override
   void onInit() {
     super.onInit();
-    enableGradientBg =
-        setting.get(SettingBoxKey.enableGradientBg, defaultValue: true);
+    // enableGradientBg =
+    //     setting.get(SettingBoxKey.enableGradientBg, defaultValue: true);
     // 进行tabs配置
     setTabConfig();
   }
@@ -51,20 +51,20 @@ class RankController extends GetxController with GetTickerProviderStateMixin {
       vsync: this,
     );
     // 监听 tabController 切换
-    if (enableGradientBg) {
-      tabController.animation!.addListener(() {
-        if (tabController.indexIsChanging) {
-          if (initialIndex.value != tabController.index) {
-            initialIndex.value = tabController.index;
-          }
-        } else {
-          final int temp = tabController.animation!.value.round();
-          if (initialIndex.value != temp) {
-            initialIndex.value = temp;
-            tabController.index = initialIndex.value;
-          }
-        }
-      });
-    }
+    // if (enableGradientBg) {
+    //   tabController.animation!.addListener(() {
+    //     if (tabController.indexIsChanging) {
+    //       if (initialIndex.value != tabController.index) {
+    //         initialIndex.value = tabController.index;
+    //       }
+    //     } else {
+    //       final int temp = tabController.animation!.value.round();
+    //       if (initialIndex.value != temp) {
+    //         initialIndex.value = temp;
+    //         tabController.index = initialIndex.value;
+    //       }
+    //     }
+    //   });
+    // }
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:async';
-
+import 'package:PiliPalaX/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
+import '../../utils/feed_back.dart';
 import './controller.dart';
 
 class RankPage extends StatefulWidget {
@@ -16,8 +16,7 @@ class RankPage extends StatefulWidget {
 class _RankPageState extends State<RankPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   final RankController _rankController = Get.put(RankController());
-  List videoList = [];
-  late Stream<bool> stream;
+  late int _selectedTabIndex = 0;
 
   @override
   bool get wantKeepAlive => true;
@@ -25,127 +24,86 @@ class _RankPageState extends State<RankPage>
   @override
   void initState() {
     super.initState();
-    stream = _rankController.searchBarStream.stream;
+    _rankController.tabController =
+        TabController(vsync: this, length: _rankController.tabs.length);
+    _selectedTabIndex = _rankController.initialIndex.value;
+    _rankController.tabController.addListener(() {
+      print("_rankController.tabController.index");
+      print(_rankController.tabController.index);
+      if (!_rankController.tabController.indexIsChanging) {
+        // _rankController.onRefresh();
+        setState(() {
+          _selectedTabIndex = _rankController.tabController.index;
+        });
+      }
+    });
   }
-
+  @override
+  void dispose() {
+    _rankController.tabController.removeListener(() {});
+    _rankController.tabController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
-    // 设置状态栏图标的亮度
-    if (_rankController.enableGradientBg) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarIconBrightness: currentBrightness == Brightness.light
-            ? Brightness.dark
-            : Brightness.light,
-      ));
-    }
+
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: false,
-      appBar: _rankController.enableGradientBg
-          ? null
-          : AppBar(toolbarHeight: 0, elevation: 0),
-      body: Stack(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          // Customize the status bar here
+          statusBarIconBrightness:
+              MediaQuery.of(context).platformBrightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+        ),
+      ),
+      body: Row(
         children: [
-          // gradient background
-          if (_rankController.enableGradientBg) ...[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Opacity(
-                opacity: 0.6,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.9),
-                          Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.5),
-                          Theme.of(context).colorScheme.surface
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: const [0, 0.0034, 0.34]),
-                  ),
-                ),
-              ),
-            ),
-          ],
-          Column(
-            children: [
-              const CustomAppBar(),
-              if (_rankController.tabs.length > 1) ...[
-                const SizedBox(height: 4),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: TabBar(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      controller: _rankController.tabController,
-                      tabs: [
-                        for (var i in _rankController.tabs)
-                          Tab(text: i['label'])
-                      ],
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-                      isScrollable: true,
-                      dividerColor: Colors.transparent,
-                      enableFeedback: true,
-                      splashBorderRadius: BorderRadius.circular(10),
-                      tabAlignment: TabAlignment.center,
-                      onTap: (value) {
+          const SizedBox(
+            width: StyleString.cardSpace,
+          ),
+          LayoutBuilder(builder: (context, constraint) {
+            return SingleChildScrollView(
+                child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minHeight: constraint.maxHeight + 100),
+                    child: IntrinsicHeight(
+                        child: NavigationRail(
+                      minWidth: 55.0,
+                      selectedIndex: _selectedTabIndex,
+                      onDestinationSelected: (int index) {
                         feedBack();
-                        if (_rankController.initialIndex.value == value) {
-                          _rankController.tabsCtrList[value]().animateToTop();
+                        if (_selectedTabIndex == index) {
+                          _rankController.tabsCtrList[index]().animateToTop();
+                        } else {
+                          setState(() {
+                            _rankController.tabController.index = index;
+                            _selectedTabIndex = index;
+                          });
                         }
-                        _rankController.initialIndex.value = value;
                       },
-                    ),
-                  ),
-                ),
-              ] else ...[
-                const SizedBox(height: 6),
-              ],
-              Expanded(
-                child: TabBarView(
-                  controller: _rankController.tabController,
-                  children: _rankController.tabsPageList,
-                ),
-              ),
-            ],
+                      labelType: NavigationRailLabelType.none,
+                      destinations: [
+                        for (var tab in _rankController.tabs)
+                          NavigationRailDestination(
+                            icon: Text(tab['label']),
+                            // selectedIcon: Text(tab['label']),
+                            label: const SizedBox.shrink(),
+                          ),
+                      ],
+                    ))));
+          }),
+          Expanded(
+            child: TabBarView(
+              controller: _rankController.tabController,
+              children: _rankController.tabsPageList,
+            ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final double height;
-
-  const CustomAppBar({
-    super.key,
-    this.height = kToolbarHeight,
-  });
-
-  @override
-  Size get preferredSize => Size.fromHeight(height);
-
-  @override
-  Widget build(BuildContext context) {
-    final double top = MediaQuery.of(context).padding.top;
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: top,
-      color: Colors.transparent,
     );
   }
 }

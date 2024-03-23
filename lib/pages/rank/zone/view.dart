@@ -96,10 +96,10 @@ class _ZonePageState extends State<ZonePage> {
                             crossAxisSpacing: StyleString.cardSpace,
                             // 最大宽度
                             maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                            mainAxisExtent: Grid.calculateActualWidth(
-                                    context,
-                                    Grid.maxRowWidth * 2,
-                                    StyleString.safeSpace) /
+                            mainAxisExtent: Grid.calculateActualWidth(context,
+                                    Grid.maxRowWidth * 2, StyleString.cardSpace,
+                                    screenWidthOffset:
+                                        StyleString.cardSpace + 55) /
                                 2.1 /
                                 StyleString.aspectRatio),
                         delegate: SliverChildBuilderDelegate((context, index) {
