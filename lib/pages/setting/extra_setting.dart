@@ -136,7 +136,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
         centerTitle: false,
         titleSpacing: 0,
         title: Text(
-          '其他设置',
+          '其它设置',
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
