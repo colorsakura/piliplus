@@ -4,6 +4,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'dart:math';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
@@ -374,7 +375,7 @@ class Utils {
                 child: Text(
                   '不再提醒',
                   style:
-                  TextStyle(color: Theme.of(context).colorScheme.outline),
+                      TextStyle(color: Theme.of(context).colorScheme.outline),
                 ),
               ),
               TextButton(
@@ -437,7 +438,15 @@ class Utils {
     double height = context.height.abs();
     double width = context.width.abs();
     if (height > width) {
-      return height * 0.7;
+      //return height * 0.7;
+      double paddingTop = MediaQueryData.fromView(
+              WidgetsBinding.instance.platformDispatcher.views.single)
+          .padding
+          .top;
+      print("paddingTop");
+      print(paddingTop);
+      paddingTop += width * 9 / 16;
+      return height - paddingTop;
     }
     //横屏状态
     return height;
