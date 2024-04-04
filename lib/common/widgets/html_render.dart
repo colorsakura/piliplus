@@ -57,6 +57,7 @@ class HtmlRender extends StatelessWidget {
                 width: isEmote ? 22 : Get.size.width - 24,
                 height: isEmote ? 22 : 200,
                 src: imgUrl,
+                ignoreHeight: !isEmote,
               );
             } catch (err) {
               return const SizedBox();
@@ -66,20 +67,26 @@ class HtmlRender extends StatelessWidget {
       ],
       style: {
         'html': Style(
-          fontSize: FontSize.medium,
-          lineHeight: LineHeight.percent(140),
+          fontSize: FontSize.large,
+          lineHeight: LineHeight.percent(160),
+          letterSpacing: 0.3,
         ),
+        // 'br': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
         'body': Style(margin: Margins.zero, padding: HtmlPaddings.zero),
         'a': Style(
           color: Theme.of(context).colorScheme.primary,
           textDecoration: TextDecoration.none,
         ),
+        'br': Style(
+          lineHeight: LineHeight.percent(-1),
+        ),
         'p': Style(
-          margin: Margins.only(bottom: 10),
+          margin: Margins.only(bottom: 4),
+          // margin: Margins.zero,
         ),
         'span': Style(
           fontSize: FontSize.medium,
-          height: Height(1.65),
+          height: Height(1.8),
         ),
         'div': Style(height: Height.auto()),
         'li > p': Style(
@@ -90,6 +97,25 @@ class HtmlRender extends StatelessWidget {
           textAlign: TextAlign.justify,
         ),
         'img': Style(margin: Margins.only(top: 4, bottom: 4)),
+        'h1,h2': Style(
+          fontSize: FontSize.xLarge,
+          fontWeight: FontWeight.bold,
+          margin: Margins.only(bottom: 8),
+        ),
+        'h3,h4,h5': Style(
+          fontSize: FontSize.large,
+          fontWeight: FontWeight.bold,
+          margin: Margins.only(bottom: 4),
+        ),
+        'figcaption': Style(
+          fontSize: FontSize.medium,
+          textAlign: TextAlign.center,
+          // margin: Margins.only(top: 4),
+        ),
+        'strong': Style(fontWeight: FontWeight.bold),
+        'figure': Style(
+          margin: Margins.zero,
+        ),
       },
     );
   }
