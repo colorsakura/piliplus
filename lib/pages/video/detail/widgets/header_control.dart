@@ -23,6 +23,7 @@ import '../../../../models/video_detail_res.dart';
 import '../../../../services/service_locator.dart';
 import '../introduction/index.dart';
 import 'package:marquee/marquee.dart';
+import '../../../danmaku/controller.dart';
 
 class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
   const HeaderControl({
@@ -714,6 +715,9 @@ class _HeaderControlState extends State<HeaderControl> {
       {'value': 0.75, 'label': '3/4屏'},
       {'value': 1.0, 'label': '满屏'},
     ];
+    // 智能云屏蔽
+    int danmakuWeight = widget.controller!.danmakuWeight.value;
+    // 显示区域
     double showArea = widget.controller!.showArea;
     // 不透明度
     double opacityVal = widget.controller!.opacityVal;
@@ -752,6 +756,46 @@ class _HeaderControlState extends State<HeaderControl> {
                     child: Center(child: Text('弹幕设置', style: titleStyle)),
                   ),
                   const SizedBox(height: 10),
+                  Text('智能云屏蔽 $danmakuWeight 级'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max: 10,
+                        value: danmakuWeight.toDouble(),
+                        divisions: 10,
+                        label: '$danmakuWeight',
+                        onChanged: (double val) {
+                          danmakuWeight = val.toInt();
+                          widget.controller!.danmakuWeight.value =
+                              danmakuWeight;
+                          widget.controller!.putDanmakuSettings();
+                          setState(() {});
+                          // try {
+                          //   final DanmakuOption currentOption =
+                          //       danmakuController.option;
+                          //   final DanmakuOption updatedOption =
+                          //   currentOption.copyWith(strokeWidth: val);
+                          //   danmakuController.updateOption(updatedOption);
+                          // } catch (_) {}
+                        },
+                      ),
+                    ),
+                  ),
                   const Text('按类型屏蔽'),
                   Padding(
                     padding: const EdgeInsets.only(top: 12, bottom: 18),

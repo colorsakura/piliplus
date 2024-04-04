@@ -228,6 +228,9 @@ class PlPlayerController {
 
   /// 弹幕开关
   Rx<bool> isOpenDanmu = false.obs;
+
+  /// 弹幕权重
+  ValueNotifier<int> danmakuWeight = ValueNotifier(0);
   // 关联弹幕控制器
   DanmakuController? danmakuController;
   // 弹幕相关配置
@@ -277,6 +280,8 @@ class PlPlayerController {
     _videoType = videoType;
     isOpenDanmu.value =
         setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: false);
+    danmakuWeight.value =
+        localCache.get(LocalCacheKey.danmakuWeight, defaultValue: 0);
     blockTypes =
         localCache.get(LocalCacheKey.danmakuBlockType, defaultValue: []);
     showArea = localCache.get(LocalCacheKey.danmakuShowArea, defaultValue: 0.5);
@@ -1121,6 +1126,7 @@ class PlPlayerController {
   }
 
   void putDanmakuSettings() {
+    localCache.put(LocalCacheKey.danmakuWeight, danmakuWeight.value);
     localCache.put(LocalCacheKey.danmakuBlockType, blockTypes);
     localCache.put(LocalCacheKey.danmakuShowArea, showArea);
     localCache.put(LocalCacheKey.danmakuOpacity, opacityVal);
