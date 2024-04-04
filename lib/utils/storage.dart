@@ -124,6 +124,7 @@ class SettingBoxKey {
 
       /// 其他
       autoUpdate = 'autoUpdate',
+      autoClearCache = 'autoClearCache',
       replySortType = 'replySortType',
       defaultDynamicType = 'defaultDynamicType',
       enableHotKey = 'enableHotKey',

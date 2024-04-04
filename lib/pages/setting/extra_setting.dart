@@ -285,6 +285,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
             ),
           ),
           const SetSwitchItem(
+            title: '自动清除缓存',
+            subTitle: '每次启动时清除缓存',
+            setKey: SettingBoxKey.autoClearCache,
+            defaultVal: false,
+          ),
+          const SetSwitchItem(
             title: '检查更新',
             subTitle: '每次启动时检查是否需要更新',
             setKey: SettingBoxKey.autoUpdate,
