@@ -585,6 +585,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           ),
                           Expanded(
                             child: TabBarView(
+                              physics: const BouncingScrollPhysics(),
                               controller: videoDetailController.tabCtr,
                               children: <Widget>[
                                 CustomScrollView(
@@ -846,6 +847,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           MediaQuery.of(context).padding.top -
                           MediaQuery.of(context).padding.bottom,
                       child: TabBarView(
+                        physics: const BouncingScrollPhysics(),
                         controller: videoDetailController.tabCtr,
                         children: <Widget>[
                           if (videoDetailController.videoType ==
