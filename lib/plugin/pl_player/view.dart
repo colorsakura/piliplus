@@ -75,7 +75,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late int defaultBtmProgressBehavior;
   late bool enableQuickDouble;
   late bool fullScreenGestureReverse;
-  late bool enableBackgroundPlay;
 
   // 用于记录上一次全屏切换手势触发时间，避免误触
   DateTime? lastFullScreenToggleTime;
@@ -136,8 +135,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         setting.get(SettingBoxKey.enableQuickDouble, defaultValue: true);
     fullScreenGestureReverse = setting
         .get(SettingBoxKey.fullScreenGestureReverse, defaultValue: false);
-    enableBackgroundPlay =
-        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: false);
     Future.microtask(() async {
       try {
         FlutterVolumeController.updateShowSystemUI(true);
@@ -223,10 +220,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: <Widget>[
         Obx(
           () => Video(
-            key: ValueKey(_.videoFit.value),
+            key: ValueKey('${_.videoFit.value}${_.backgroundPlay.value}'),
             controller: videoController,
             controls: NoVideoControls,
-            pauseUponEnteringBackgroundMode: !enableBackgroundPlay,
+            pauseUponEnteringBackgroundMode: !_.backgroundPlay.value,
             resumeUponEnteringForegroundMode: true,
             subtitleViewConfiguration: const SubtitleViewConfiguration(
               style: subTitleStyle,

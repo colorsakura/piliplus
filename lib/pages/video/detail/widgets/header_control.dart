@@ -20,6 +20,7 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/services/shutdown_timer_service.dart';
 import '../../../../models/video_detail_res.dart';
+import '../../../../services/service_locator.dart';
 import '../introduction/index.dart';
 import 'package:marquee/marquee.dart';
 
@@ -1244,6 +1245,72 @@ class _HeaderControlState extends State<HeaderControl> {
                         await widget.floating!.isPipAvailable;
                     widget.controller!.hiddenControls(false);
                     if (canUsePiP) {
+                      bool enableBackgroundPlay = setting.get(
+                          SettingBoxKey.enableBackgroundPlay,
+                          defaultValue: false);
+                      if (!enableBackgroundPlay) {
+                        // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
+                        // await Future.delayed(const Duration(seconds: 2), () {
+                        // });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Column(children: <Widget>[
+                              const Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text('画中画',
+                                      style:
+                                          TextStyle(fontSize: 15, height: 1.5))
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                  '建议开启【后台播放】功能\n'
+                                  '避免画中画没有暂停按钮',
+                                  style:
+                                      TextStyle(fontSize: 12.5, height: 1.5)),
+                              Row(children: [
+                                TextButton(
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) {
+                                        return Theme.of(context)
+                                            .snackBarTheme
+                                            .actionTextColor;
+                                      }),
+                                    ),
+                                    onPressed: () async {
+                                      _.setBackgroundPlay(true);
+                                      SmartDialog.showToast("请重新载入本页面刷新");
+                                      // Get.back();
+                                    },
+                                    child: const Text('启用后台播放（推荐）')),
+                                const SizedBox(width: 10),
+                                TextButton(
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) {
+                                        return Theme.of(context)
+                                            .snackBarTheme
+                                            .actionTextColor;
+                                      }),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Text('不启用'))
+                              ])
+                            ]),
+                            duration: const Duration(seconds: 2),
+                            showCloseIcon: true,
+                          ),
+                        );
+                        await Future.delayed(const Duration(seconds: 3), () {});
+                      }
                       final Rational aspectRatio = Rational(
                         widget.videoDetailCtr!.data.dash!.video!.first.width!,
                         widget.videoDetailCtr!.data.dash!.video!.first.height!,

@@ -85,6 +85,8 @@ class PlPlayerController {
   final Rx<String> _videoFitDesc = Rx(videoFitType.first['desc']);
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
+  /// 后台播放
+  final Rx<bool> _backgroundPlay = false.obs;
 
   ///
   // ignore: prefer_final_fields
@@ -153,7 +155,7 @@ class PlPlayerController {
   Stream<bool> get onMuteChanged => _mute.stream;
 
   // 视频字幕
-  RxList<Map<String,String>> get vttSubtitles => _vttSubtitles;
+  RxList<Map<String, String>> get vttSubtitles => _vttSubtitles;
   RxInt get vttSubtitlesIndex => _vttSubtitlesIndex;
 
   /// [videoPlayerController] instance of Player
@@ -201,6 +203,9 @@ class PlPlayerController {
   /// 视频比例
   Rx<BoxFit> get videoFit => _videoFit;
   Rx<String> get videoFitDEsc => _videoFitDesc;
+
+  /// 后台播放
+  Rx<bool> get backgroundPlay => _backgroundPlay;
 
   /// 是否长按倍速
   Rx<bool> get doubleSpeedStatus => _doubleSpeedStatus;
@@ -296,6 +301,9 @@ class PlPlayerController {
         videoStorage.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
     enableAutoLongPressSpeed = setting
         .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
+    // 后台播放
+    _backgroundPlay.value =
+        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: false);
     if (!enableAutoLongPressSpeed) {
       _longPressSpeed.value = videoStorage
           .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
@@ -387,7 +395,7 @@ class PlPlayerController {
       await _initializePlayer(seekTo: seekTo, duration: _duration.value);
       if (videoType.value != 'live' && _cid != 0) {
         refreshSubtitles().then((value) {
-          if (_vttSubtitles.isNotEmpty){
+          if (_vttSubtitles.isNotEmpty) {
             String preference = setting.get(SettingBoxKey.subtitlePreference,
                 defaultValue: SubtitlePreference.values.first.code);
             if (preference == 'on') {
@@ -551,8 +559,8 @@ class PlPlayerController {
   }
 
   Future<void> autoEnterFullscreen() async {
-    bool autoEnterFullscreen =
-      GStrorage.setting.get(SettingBoxKey.enableAutoEnter, defaultValue: false);
+    bool autoEnterFullscreen = GStrorage.setting
+        .get(SettingBoxKey.enableAutoEnter, defaultValue: false);
     if (autoEnterFullscreen) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (dataStatus.status.value != DataStatus.loaded) {
@@ -959,6 +967,13 @@ class PlPlayerController {
     }
     _videoFit.value = attr;
     _videoFitDesc.value = videoFitType[fitValue]['desc'];
+  }
+
+  /// 设置后台播放
+  Future<void> setBackgroundPlay(bool val) async {
+    _backgroundPlay.value = val;
+    setting.put(SettingBoxKey.enableBackgroundPlay, val);
+    videoPlayerServiceHandler.revalidateSetting();
   }
 
   /// 读取亮度
