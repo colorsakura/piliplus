@@ -263,6 +263,12 @@ class _StyleSettingState extends State<StyleSetting> {
                 '当前主题：${colorSelectController.type.value == 0 ? '动态取色' : '指定颜色'}',
                 style: subTitleStyle)),
           ),
+          const SetSwitchItem(
+            title: '默认展示评论区',
+            subTitle: '在视频详情页默认切换至评论区页',
+            setKey: SettingBoxKey.defaultShowComment,
+            defaultVal: false,
+          ),
           ListTile(
             dense: false,
             onTap: () => settingController.seteDefaultHomePage(context),
