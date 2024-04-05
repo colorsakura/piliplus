@@ -85,6 +85,7 @@ class PlPlayerController {
   final Rx<String> _videoFitDesc = Rx(videoFitType.first['desc']);
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
+
   /// 后台播放
   final Rx<bool> _backgroundPlay = false.obs;
 
@@ -125,6 +126,9 @@ class PlPlayerController {
   PreferredSizeWidget? headerControl;
   PreferredSizeWidget? bottomControl;
   Widget? danmuWidget;
+
+  String get bvid => _bvid;
+  int get cid => _cid;
 
   /// 数据加载监听
   Stream<DataStatus> get onDataStatusChanged => dataStatus.status.stream;
@@ -620,7 +624,7 @@ class PlPlayerController {
           } else {
             // playerStatus.status.value = PlayerStatus.playing;
           }
-          makeHeartBeat(positionSeconds.value, type: 'status');
+          makeHeartBeat(positionSeconds.value, type: 'completed');
         }),
         videoPlayerController!.stream.position.listen((event) {
           _position.value = event;
@@ -1100,15 +1104,17 @@ class PlPlayerController {
     if (videoType.value == 'live') {
       return;
     }
+    bool isComplete = playerStatus.status.value == PlayerStatus.completed ||
+        type == 'completed';
     // 播放状态变化时，更新
-    if (type == 'status') {
+    if (type == 'status' || type == 'completed') {
       await VideoHttp.heartBeat(
         bvid: _bvid,
         cid: _cid,
-        progress:
-            playerStatus.status.value == PlayerStatus.completed ? -1 : progress,
+        progress: isComplete ? -1 : progress,
       );
-    } else
+      return;
+    }
     // 正常播放时，间隔5秒更新一次
     if (progress - _heartDuration >= 5) {
       _heartDuration = progress;
