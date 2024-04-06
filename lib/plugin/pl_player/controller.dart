@@ -312,7 +312,7 @@ class PlPlayerController {
         .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
     // 后台播放
     _backgroundPlay.value =
-        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: false);
+        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);
     if (!enableAutoLongPressSpeed) {
       _longPressSpeed.value = videoStorage
           .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);

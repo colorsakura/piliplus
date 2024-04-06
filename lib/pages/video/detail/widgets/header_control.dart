@@ -1291,7 +1291,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     if (canUsePiP) {
                       bool enableBackgroundPlay = setting.get(
                           SettingBoxKey.enableBackgroundPlay,
-                          defaultValue: false);
+                          defaultValue: true);
                       if (!enableBackgroundPlay) {
                         // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
                         // await Future.delayed(const Duration(seconds: 2), () {

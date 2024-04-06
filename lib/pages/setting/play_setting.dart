@@ -135,7 +135,7 @@ class _PlaySettingState extends State<PlaySetting> {
             title: '后台播放',
             subTitle: '进入后台时继续播放',
             setKey: SettingBoxKey.enableBackgroundPlay,
-            defaultVal: false,
+            defaultVal: true,
           ),
           if (Platform.isAndroid)
             SetSwitchItem(
@@ -146,7 +146,7 @@ class _PlaySettingState extends State<PlaySetting> {
                 callFn: (val) {
                   if (val &&
                       !setting.get(SettingBoxKey.enableBackgroundPlay,
-                          defaultValue: false)) {
+                          defaultValue: true)) {
                     SmartDialog.showToast('建议开启后台播放');
                   }
                 }),
