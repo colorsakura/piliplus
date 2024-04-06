@@ -132,6 +132,12 @@ class _PlaySettingState extends State<PlaySetting> {
             defaultVal: true,
           ),
           const SetSwitchItem(
+            title: '全向旋转',
+            subTitle: '非全屏时可受重力转为临时全屏，若系统锁定旋转仍异常触发请关闭，无异常可保持开启',
+            setKey: SettingBoxKey.allowRotateScreen,
+            defaultVal: true,
+          ),
+          const SetSwitchItem(
             title: '后台播放',
             subTitle: '进入后台时继续播放',
             setKey: SettingBoxKey.enableBackgroundPlay,
