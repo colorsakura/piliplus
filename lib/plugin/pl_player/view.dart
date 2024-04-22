@@ -496,10 +496,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: <Widget>[
         Obx(
           () => Video(
-            key: ValueKey('${_.videoFit.value}${_.backgroundPlay.value}'),
+            key: ValueKey('${_.videoFit.value}${_.continuePlayInBackground.value}'),
             controller: videoController,
             controls: NoVideoControls,
-            pauseUponEnteringBackgroundMode: !_.backgroundPlay.value,
+            pauseUponEnteringBackgroundMode: !_.continuePlayInBackground.value,
             resumeUponEnteringForegroundMode: true,
             subtitleViewConfiguration: const SubtitleViewConfiguration(
               style: subTitleStyle,

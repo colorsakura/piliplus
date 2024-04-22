@@ -1313,7 +1313,7 @@ class _HeaderControlState extends State<HeaderControl> {
                               ),
                               const SizedBox(height: 10),
                               const Text(
-                                  '建议开启【后台播放】功能\n'
+                                  '建议开启【后台音频服务】\n'
                                   '避免画中画没有暂停按钮',
                                   style:
                                       TextStyle(fontSize: 12.5, height: 1.5)),
@@ -1333,7 +1333,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                       SmartDialog.showToast("请重新载入本页面刷新");
                                       // Get.back();
                                     },
-                                    child: const Text('启用后台播放（推荐）')),
+                                    child: const Text('启用后台音频服务')),
                                 const SizedBox(width: 10),
                                 TextButton(
                                     style: ButtonStyle(

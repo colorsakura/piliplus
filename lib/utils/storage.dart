@@ -108,6 +108,7 @@ class SettingBoxKey {
       fullScreenGestureReverse = 'fullScreenGestureReverse',
       enableShowDanmaku = 'enableShowDanmaku',
       enableBackgroundPlay = 'enableBackgroundPlay',
+      continuePlayInBackground = 'continuePlayInBackground',
 
       /// 隐私
       blackMidsList = 'blackMidsList',
