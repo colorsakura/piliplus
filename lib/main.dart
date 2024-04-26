@@ -38,7 +38,7 @@ void main() async {
       //支持竖屏与横屏
       [
         DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
+        // DeviceOrientation.portraitDown,
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ],
