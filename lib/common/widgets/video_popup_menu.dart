@@ -5,6 +5,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../http/user.dart';
 import '../../http/video.dart';
 import '../../pages/mine/controller.dart';
+import '../../utils/storage.dart';
 
 class VideoPopupMenu extends StatelessWidget {
   final double? size;
@@ -77,6 +78,14 @@ class VideoPopupMenu extends StatelessWidget {
                             act: 5,
                             reSrc: 11,
                           );
+                          List<int> blackMidsList = GStrorage.setting
+                              .get(SettingBoxKey.blackMidsList,
+                                  defaultValue: [-1])
+                              .map<int>((i) => i as int)
+                              .toList();
+                          blackMidsList.insert(0, videoItem.owner.mid);
+                          GStrorage.setting
+                              .put(SettingBoxKey.blackMidsList, blackMidsList);
                           SmartDialog.dismiss();
                           SmartDialog.showToast(res['msg'] ?? '成功');
                         },
