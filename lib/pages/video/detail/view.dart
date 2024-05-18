@@ -244,7 +244,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     plPlayerController = videoDetailController.plPlayerController;
     videoDetailController.isShowCover.value = false;
-    await videoDetailController.playerInit();
+    await videoDetailController.playerInit(autoplay: true);
     plPlayerController!.addStatusLister(playerListener);
     await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
@@ -354,7 +354,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     if (videoDetailController.videoUrl != null) {
-      await videoDetailController.playerInit(autoplay: autoplay);
+      await videoDetailController.playerInit();
     }
 
     if (videoDetailController.playerStatus == PlayerStatus.playing) {

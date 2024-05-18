@@ -371,7 +371,7 @@ class VideoDetailController extends GetxController
     audio,
     seekToTime,
     duration,
-    bool autoplay = true,
+    bool? autoplay,
   }) async {
     await plPlayerController.setDataSource(
       DataSource(
@@ -400,7 +400,7 @@ class VideoDetailController extends GetxController
       bvid: bvid,
       cid: cid.value,
       enableHeart: enableHeart,
-      autoplay: autoplay,
+      autoplay: autoplay ?? autoPlay.value,
     );
 
     _initSkip();
