@@ -304,7 +304,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
             subTitle: '每次启动时清除缓存',
             leading: Icon(Icons.auto_delete_outlined),
             setKey: SettingBoxKey.autoClearCache,
-            defaultVal: true,
+            defaultVal: false,
           ),
           const SetSwitchItem(
             title: '检查更新',
