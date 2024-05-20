@@ -69,11 +69,17 @@ class _PrivacySettingState extends State<PrivacySetting> {
             leading: const Icon(Icons.block),
           ),
           ListTile(
-            onTap: () {
+            onTap: () async {
               if (!userLogin) {
                 SmartDialog.showToast('请先登录');
+                return;
               }
-              MemberHttp.cookieToKey();
+              var res = await MemberHttp.cookieToKey();
+              if (res['status']) {
+                SmartDialog.showToast(res['msg']);
+              } else {
+                SmartDialog.showToast('刷新失败：${res['msg']}');
+              }
             },
             dense: false,
             title: Text('刷新access_key', style: titleStyle),

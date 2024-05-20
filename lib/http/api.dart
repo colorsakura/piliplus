@@ -461,12 +461,12 @@ class Api {
   static const getWebKey = '${HttpString.passBaseUrl}/x/passport-login/web/key';
 
   /// cookie转access_key
-  static const cookieToKey =
+  static const qrcodeConfirm =
       '${HttpString.passBaseUrl}/x/passport-tv-login/h5/qrcode/confirm';
 
   /// 申请二维码(TV端)
   static const getTVCode =
-      'https://passport.snm0516.aisee.tv/x/passport-tv-login/qrcode/auth_code';
+      'https://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code';
 
   ///扫码登录（TV端）
   static const qrcodePoll =
