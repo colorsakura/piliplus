@@ -54,10 +54,9 @@ class _ExtraSettingState extends State<ExtraSetting> {
     var systemProxyHost = '';
     var systemProxyPort = '';
 
-    SmartDialog.show(
-      useSystem: true,
-      animationType: SmartAnimationType.centerFade_otherSlide,
-      builder: (BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
         return AlertDialog(
           title: const Text('设置代理'),
           content: Column(
@@ -101,7 +100,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
           actions: [
             TextButton(
               onPressed: () async {
-                SmartDialog.dismiss();
+                Get.back();
               },
               child: Text(
                 '取消',
@@ -112,7 +111,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
               onPressed: () async {
                 setting.put(SettingBoxKey.systemProxyHost, systemProxyHost);
                 setting.put(SettingBoxKey.systemProxyPort, systemProxyPort);
-                SmartDialog.dismiss();
+                Get.back();
                 // Request.dio;
               },
               child: const Text('确认'),
@@ -208,6 +207,13 @@ class _ExtraSettingState extends State<ExtraSetting> {
             subTitle: '禁止打开入口，降低网络社交依赖',
             leading: Icon(Icons.beach_access_outlined),
             setKey: SettingBoxKey.disableLikeMsg,
+            defaultVal: false,
+          ),
+          const SetSwitchItem(
+            title: '默认展示评论区',
+            subTitle: '在视频详情页默认切换至评论区页（仅tab型布局）',
+            leading: Icon(Icons.mode_comment_outlined),
+            setKey: SettingBoxKey.defaultShowComment,
             defaultVal: false,
           ),
           ListTile(
