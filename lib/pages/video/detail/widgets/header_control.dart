@@ -945,7 +945,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         min: 0,
                         max: 8,
                         value: fontWeight.toDouble(),
-                        divisions: 9,
+                        divisions: 8,
                         label: '${fontWeight + 1}',
                         onChanged: (double val) {
                           fontWeight = val.toInt();
