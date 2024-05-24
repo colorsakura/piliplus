@@ -774,8 +774,13 @@ class _HeaderControlState extends State<HeaderControl> {
                             minimumSize: Size.zero,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          onPressed: () => Get.toNamed('/danmakuBlock'),
-                          child: const Text("屏蔽管理"))
+                          onPressed: () => {
+                                Get.back(),
+                                Get.toNamed('/danmakuBlock',
+                                    arguments: widget.controller)
+                              },
+                          child: Text(
+                              "屏蔽管理(${widget.controller!.danmakuFilterRule.value.length})")),
                     ],
                   ),
                   Padding(
