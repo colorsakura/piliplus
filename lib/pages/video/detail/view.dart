@@ -291,7 +291,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   // 返回当前页面时
   void didPopNext() async {
-    if (!Get.isRegistered<VideoDetailController>()) return;
     isShowing = true;
     if (mounted) {
       setState(() => {});
