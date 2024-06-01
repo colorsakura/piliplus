@@ -282,6 +282,41 @@ class PlPlayerController {
     }
   }
 
+  static bool instanceExists() {
+    return _instance != null;
+  }
+
+  static Future<void> playIfExists(
+      {bool repeat = false, bool hideControls = true, dynamic duration}) async {
+    await _instance?.play(
+        repeat: repeat, hideControls: hideControls, duration: duration);
+  }
+
+  // try to get PlayerStatus
+  static PlayerStatus? getPlayerStatusIfExists() {
+    return _instance?.playerStatus.status.value;
+  }
+
+  static Future<void> pauseIfExists(
+      {bool notify = true, bool isInterrupt = false}) async {
+    if (_instance?.playerStatus.status.value == PlayerStatus.playing) {
+      await _instance?.pause(notify: notify, isInterrupt: isInterrupt);
+    }
+  }
+
+  static Future<void> seekToIfExists(Duration position, {type = 'seek'}) async {
+    await _instance?.seekTo(position, type: type);
+  }
+
+  static double? getVolumeIfExists() {
+    return _instance?.volume.value;
+  }
+
+  static Future<void> setVolumeIfExists(double volumeNew,
+      {bool videoPlayerVolume = false}) async {
+    await _instance?.setVolume(volumeNew, videoPlayerVolume: videoPlayerVolume);
+  }
+
   // 添加一个私有构造函数
   PlPlayerController._() {
     _videoType = videoType;
@@ -439,8 +474,9 @@ class PlPlayerController {
           }
         });
       }
-    } catch (err) {
+    } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
+      debugPrint(stackTrace.toString());
       print('plPlayer err:  $err');
     }
   }
@@ -564,6 +600,7 @@ class PlPlayerController {
     Duration seekTo = Duration.zero,
     Duration? duration,
   }) async {
+    if (_instance == null) return;
     // 设置倍速
     if (videoType.value == 'live') {
       await setPlaybackSpeed(1.0);
@@ -586,7 +623,8 @@ class PlPlayerController {
 
     // 自动播放
     if (_autoPlay) {
-      await play(duration: duration);
+      await playIfExists(duration: duration);
+      // await play(duration: duration);
     }
   }
 
@@ -781,6 +819,7 @@ class PlPlayerController {
   /// TODO  _duration.value丢失
   Future<void> play(
       {bool repeat = false, bool hideControls = true, dynamic duration}) async {
+    if (_playerCount.value == 0) return;
     // 播放时自动隐藏控制条
     controls = !hideControls;
     // repeat为true，将从头播放
@@ -1237,10 +1276,12 @@ class PlPlayerController {
       return;
     }
     Map<String, String> s = _vttSubtitles[index];
+    debugPrint(s['text']);
     _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
       s['text']!,
       title: s['title']!,
       language: s['language']!,
     ));
+    _vttSubtitlesIndex.value = index;
   }
 }
