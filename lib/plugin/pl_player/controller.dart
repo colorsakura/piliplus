@@ -413,17 +413,27 @@ class PlPlayerController {
       if (videoType.value != 'live' && _cid != 0) {
         refreshSubtitles().then((value) {
           if (_vttSubtitles.isNotEmpty) {
-            String preference = setting.get(SettingBoxKey.subtitlePreference,
-                defaultValue: SubtitlePreference.values.first.code);
-            if (preference == 'on') {
-              setSubtitle(vttSubtitles[1]);
-            } else if (preference == 'withoutAi') {
-              for (int i = 1; i < _vttSubtitles.length; i++) {
-                if (_vttSubtitles[i]['language']!.startsWith('ai')) {
-                  continue;
+            if (_vttSubtitlesIndex > 0 &&
+                _vttSubtitlesIndex < _vttSubtitles.length) {
+              setSubtitle(_vttSubtitlesIndex.value);
+            } else {
+              String preference = setting.get(SettingBoxKey.subtitlePreference,
+                  defaultValue: SubtitlePreference.values.first.code);
+              if (preference == 'on') {
+                setSubtitle(1);
+              } else if (preference == 'withoutAi') {
+                bool found = false;
+                for (int i = 1; i < _vttSubtitles.length; i++) {
+                  if (_vttSubtitles[i]['language']!.startsWith('ai')) {
+                    continue;
+                  }
+                  found = true;
+                  setSubtitle(i);
+                  break;
                 }
-                setSubtitle(vttSubtitles[i]);
-                break;
+                if (!found) _vttSubtitlesIndex.value = 0;
+              } else {
+                _vttSubtitlesIndex.value = 0;
               }
             }
           }
@@ -1220,17 +1230,17 @@ class PlPlayerController {
   }
 
   // 设定字幕轨道
-  setSubtitle(Map<String, String> s) {
-    if (s['text'] == '') {
+  setSubtitle(int index) {
+    if (index == 0) {
       _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
       _vttSubtitlesIndex.value = 0;
       return;
     }
+    Map<String, String> s = _vttSubtitles[index];
     _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
       s['text']!,
       title: s['title']!,
       language: s['language']!,
     ));
-    _vttSubtitlesIndex.value = _vttSubtitles.indexOf(s);
   }
 }

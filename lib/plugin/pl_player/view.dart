@@ -374,18 +374,21 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             : SizedBox(
                 width: 42,
                 height: 30,
-                child: PopupMenuButton<Map<String, String>>(
-                  onSelected: (Map<String, String> value) {
+                child: PopupMenuButton<int>(
+                  onSelected: (int value) {
                     _.setSubtitle(value);
                   },
-                  initialValue: _.vttSubtitles[_.vttSubtitlesIndex.value],
+                  initialValue:
+                      _.vttSubtitles.length < _.vttSubtitlesIndex.value
+                          ? 0
+                          : _.vttSubtitlesIndex.value,
                   color: Colors.black.withOpacity(0.8),
                   itemBuilder: (BuildContext context) {
-                    return _.vttSubtitles.map((Map<String, String> subtitle) {
-                      return PopupMenuItem<Map<String, String>>(
-                        value: subtitle,
+                    return _.vttSubtitles.asMap().entries.map((entry) {
+                      return PopupMenuItem<int>(
+                        value: entry.key,
                         child: Text(
-                          "${subtitle['title']}",
+                          "${entry.value['title']}",
                           style: const TextStyle(color: Colors.white),
                         ),
                       );
