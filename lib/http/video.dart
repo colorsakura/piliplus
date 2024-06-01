@@ -618,10 +618,10 @@ class VideoHttp {
       if (res.data != null) {
         String vttData = "WEBVTT\n\n";
         for (var item in res.data['body']) {
-          vttData += "${item['sid']}\n";
+          vttData += "${item['sid'] ?? 0}\n";
           vttData +=
               "${subtitleTimecode(item['from'])} --> ${subtitleTimecode(item['to'])}\n";
-          vttData += "${item['content']}\n\n";
+          vttData += "${item['content'].trim()}\n\n";
         }
         subtitlesVtt.add({
           'language': i['lan'],
