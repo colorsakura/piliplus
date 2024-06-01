@@ -28,11 +28,13 @@ class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
     this.controller,
     this.videoDetailCtr,
     this.floating,
+    required this.heroTag,
     super.key,
   });
   final PlPlayerController? controller;
   final VideoDetailController? videoDetailCtr;
   final Floating? floating;
+  final String heroTag;
 
   @override
   State<HeaderControl> createState() => _HeaderControlState();
@@ -64,9 +66,10 @@ class _HeaderControlState extends State<HeaderControl> {
     super.initState();
     videoInfo = widget.videoDetailCtr!.data;
     listenFullScreenStatus();
-    if (Get.arguments != null) {
-      heroTag = Get.arguments['heroTag'];
-    }
+    heroTag = widget.heroTag;
+    // if (Get.arguments != null && Get.arguments['heroTag'] != null) {
+    //   heroTag = Get.arguments['heroTag'];
+    // }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);

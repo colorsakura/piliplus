@@ -72,7 +72,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   void initState() {
     super.initState();
-    heroTag = Get.arguments['heroTag'];
+    if (Get.arguments != null && Get.arguments['heroTag'] != null) {
+      heroTag = Get.arguments['heroTag'];
+    }
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     videoIntroController.videoDetail.listen((value) {
@@ -247,6 +249,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void dispose() {
     videoDetailController.floating?.dispose();
     floating.dispose();
+    videoIntroController.videoDetail.close();
+    bangumiIntroController.bangumiDetail.close();
+    videoDetailController.cid.close();
     if (!horizontalScreen) {
       AutoOrientation.portraitUpMode();
     }
@@ -1124,6 +1129,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               headerControl: HeaderControl(
                 controller: plPlayerController,
                 videoDetailCtr: videoDetailController,
+                heroTag: heroTag,
               ),
               danmuWidget: pipNoDanmaku
                   ? null

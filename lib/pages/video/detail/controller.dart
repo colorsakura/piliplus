@@ -134,6 +134,7 @@ class VideoDetailController extends GetxController
       controller: plPlayerController,
       videoDetailCtr: this,
       floating: floating,
+      heroTag: heroTag,
     );
     // CDN优化
     enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
