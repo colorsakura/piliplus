@@ -43,19 +43,18 @@ class VideoCardV extends StatelessWidget {
         int epId = videoItem.param;
         SmartDialog.showLoading(msg: '资源获取中');
         var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);
+        SmartDialog.dismiss();
         if (result['status']) {
           var bangumiDetail = result['data'];
           int cid = bangumiDetail.episodes!.first.cid;
           String bvid = IdUtils.av2bv(bangumiDetail.episodes!.first.aid);
-          SmartDialog.dismiss().then(
-            (value) => Get.toNamed(
-              '/video?bvid=$bvid&cid=$cid&epId=$epId',
-              arguments: {
-                'pic': videoItem.pic,
-                'heroTag': heroTag,
-                'videoType': SearchType.media_bangumi,
-              },
-            ),
+          Get.toNamed(
+            '/video?bvid=$bvid&cid=$cid&epId=$epId',
+            arguments: {
+              'pic': videoItem.pic,
+              'heroTag': heroTag,
+              'videoType': SearchType.media_bangumi,
+            },
           );
         } else {
           SmartDialog.showToast(result['msg']);
@@ -281,8 +280,7 @@ class VideoContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (videoItem.goto == 'av')
-                  const SizedBox(width: 24)
+                if (videoItem.goto == 'av') const SizedBox(width: 24)
               ],
             ),
           ],
