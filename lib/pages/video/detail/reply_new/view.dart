@@ -118,10 +118,10 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
       _debouncer.run(() {
         if (!mounted) return;
         if (keyboardHeight == 0 && emoteHeight == 0) {
-          setState(() {
-            emoteHeight = keyboardHeight =
-                keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
-          });
+          emoteHeight = keyboardHeight =
+              keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
+          if (emoteHeight < 200) emoteHeight = 200;
+          setState(() {});
         }
       });
     });
@@ -224,7 +224,8 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
                 ),
                 const Spacer(),
                 TextButton(
-                    onPressed: () => Get.back(), child: Text('取消',
+                    onPressed: () => Get.back(),
+                    child: Text('取消',
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary))),
                 const SizedBox(width: 10),
@@ -240,6 +241,11 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
               onChoose: (package, emote) => onChooseEmote(package, emote),
             ),
           ),
+          if (toolbarType == 'input' && keyboardHeight == 0.0)
+            SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).padding.bottom,
+            )
         ],
       ),
     );

@@ -113,7 +113,7 @@ class _EmotePanelState extends State<EmotePanel>
                         )
                         .toList(),
                   ),
-                  SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom),
                 ],
               );
             } else {
