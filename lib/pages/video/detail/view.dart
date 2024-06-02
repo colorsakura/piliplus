@@ -60,6 +60,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late bool autoPiP;
   late bool pipNoDanmaku;
   late bool removeSafeArea;
+  late bool showStatusBarBackgroundColor;
   final Floating floating = Floating();
   // 生命周期监听
   // late final AppLifecycleListener _lifecycleListener;
@@ -101,6 +102,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     enableVerticalExpand =
         setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
     removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
+        defaultValue: false);
+    showStatusBarBackgroundColor = setting.get(
+        SettingBoxKey.videoPlayerShowStatusBarBackgroundColor,
         defaultValue: false);
     if (removeSafeArea) hideStatusBar();
     videoSourceInit();
@@ -465,11 +469,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               appBar: removeSafeArea
                   ? null
                   : AppBar(
-                      backgroundColor: Colors.black,
+                      backgroundColor:
+                          showStatusBarBackgroundColor ? null : Colors.black,
                       elevation: 0,
                       toolbarHeight: 0,
-                      systemOverlayStyle: const SystemUiOverlayStyle(
-                          statusBarIconBrightness: Brightness.light),
+                      systemOverlayStyle: showStatusBarBackgroundColor
+                          ? null
+                          : const SystemUiOverlayStyle(
+                              statusBarIconBrightness: Brightness.light),
                     ),
               // appBar: PreferredSize(
               //   preferredSize: const Size.fromHeight(0),
@@ -508,7 +515,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         if (!removeSafeArea) showStatusBar();
                       }
                       return Container(
-                        color: Colors.black,
+                        color:
+                            showStatusBarBackgroundColor ? null : Colors.black,
                         height: MediaQuery.of(context).orientation ==
                                     Orientation.landscape ||
                                 isFullScreen.value == true
@@ -831,10 +839,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       if (enableVerticalExpand &&
           plPlayerController?.direction.value == 'vertical') {
         final double videoheight = context.height -
-            (removeSafeArea
-                ? 0
-                : (MediaQuery.of(context).padding.top +
-                    MediaQuery.of(context).padding.bottom));
+            (removeSafeArea ? 0 : MediaQuery.of(context).padding.top);
         final double videowidth = videoheight * 9 / 16;
         return Row(
           children: [
@@ -1018,8 +1023,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           videoheight -
                           (removeSafeArea
                               ? 0
-                              : (MediaQuery.of(context).padding.top +
-                                  MediaQuery.of(context).padding.bottom)),
+                              : MediaQuery.of(context).padding.top),
                   child: CustomScrollView(
                     key: PageStorageKey<String>(
                         '简介${videoDetailController.bvid}'),
@@ -1048,10 +1052,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           : (MediaQuery.of(context).padding.left +
                               MediaQuery.of(context).padding.right))),
               height: context.height -
-                  (removeSafeArea
-                      ? 0
-                      : (MediaQuery.of(context).padding.top +
-                          MediaQuery.of(context).padding.bottom)),
+                  (removeSafeArea ? 0 : MediaQuery.of(context).padding.top),
               child:
                   // TabBarView(
                   //   physics: const BouncingScrollPhysics(),
@@ -1076,52 +1077,54 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         ],
       );
     });
-    Widget childWhenDisabledLandscape = SafeArea(
-        left: !removeSafeArea && isFullScreen.value != true,
-        right: !removeSafeArea && isFullScreen.value != true,
-        top: !removeSafeArea,
-        bottom: !removeSafeArea,
-        child: Stack(children: [
-          Scaffold(
-              resizeToAvoidBottomInset: false,
-              key: videoDetailController.scaffoldKey,
-              backgroundColor: Colors.black,
-              appBar: removeSafeArea
-                  ? null
-                  : AppBar(
-                      backgroundColor: Colors.black,
-                      elevation: 0,
-                      toolbarHeight: 0,
-                      systemOverlayStyle: const SystemUiOverlayStyle(
-                          statusBarIconBrightness: Brightness.light),
-                    ),
-              body: Container(
-                  color: Theme.of(context).colorScheme.background,
-                  child: childWhenDisabledLandscapeInner))
-        ]));
-    Widget childWhenDisabledAlmostSquare = SafeArea(
-        left: !removeSafeArea && isFullScreen.value != true,
-        right: !removeSafeArea && isFullScreen.value != true,
-        top: !removeSafeArea,
-        bottom: !removeSafeArea,
-        child: Stack(children: [
-          Scaffold(
-              resizeToAvoidBottomInset: false,
-              key: videoDetailController.scaffoldKey,
-              backgroundColor: Colors.black,
-              appBar: removeSafeArea
-                  ? null
-                  : AppBar(
-                      backgroundColor: Colors.black,
-                      elevation: 0,
-                      toolbarHeight: 0,
-                      systemOverlayStyle: const SystemUiOverlayStyle(
-                          statusBarIconBrightness: Brightness.light),
-                    ),
-              body: Container(
-                  color: Theme.of(context).colorScheme.background,
-                  child: childWhenDisabledAlmostSquareInner))
-        ]));
+    Widget childWhenDisabledLandscape = Stack(children: [
+      Scaffold(
+          resizeToAvoidBottomInset: false,
+          key: videoDetailController.scaffoldKey,
+          // backgroundColor: Colors.black,
+          appBar: removeSafeArea
+              ? null
+              : AppBar(
+                  backgroundColor:
+                      showStatusBarBackgroundColor ? null : Colors.black,
+                  elevation: 0,
+                  toolbarHeight: 0,
+                  // systemOverlayStyle: const SystemUiOverlayStyle(
+                  //     statusBarIconBrightness: Brightness.light),
+                ),
+          body: Container(
+              color: Theme.of(context).colorScheme.background,
+              child: SafeArea(
+                  left: !removeSafeArea && isFullScreen.value != true,
+                  right: !removeSafeArea && isFullScreen.value != true,
+                  top: !removeSafeArea,
+                  bottom: false, //!removeSafeArea,
+                  child: childWhenDisabledLandscapeInner)))
+    ]);
+    Widget childWhenDisabledAlmostSquare = Stack(children: [
+      Scaffold(
+          resizeToAvoidBottomInset: false,
+          key: videoDetailController.scaffoldKey,
+          // backgroundColor: Colors.black,
+          appBar: removeSafeArea
+              ? null
+              : AppBar(
+                  backgroundColor:
+                      showStatusBarBackgroundColor ? null : Colors.black,
+                  elevation: 0,
+                  toolbarHeight: 0,
+                  // systemOverlayStyle: const SystemUiOverlayStyle(
+                  //     statusBarIconBrightness: Brightness.light),
+                ),
+          body: Container(
+              color: Theme.of(context).colorScheme.background,
+              child: SafeArea(
+                  left: !removeSafeArea && isFullScreen.value != true,
+                  right: !removeSafeArea && isFullScreen.value != true,
+                  top: !removeSafeArea,
+                  bottom: false, //!removeSafeArea,
+                  child: childWhenDisabledAlmostSquareInner)))
+    ]);
     Widget childWhenEnabled = Obx(
       () => !videoDetailController.autoPlay.value
           ? const SizedBox()

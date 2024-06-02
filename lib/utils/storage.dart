@@ -181,6 +181,8 @@ class SettingBoxKey {
       displayMode = 'displayMode',
       maxRowWidth = 'maxRowWidth', // 首页列最大宽度（dp）
       videoPlayerRemoveSafeArea = 'videoPlayerRemoveSafeArea', // 视频播放器移除安全边距
+      videoPlayerShowStatusBarBackgroundColor =
+          'videoPlayerShowStatusBarBackgroundColor', // 播放页状态栏显示为背景色
       dynamicsWaterfallFlow = 'dynamicsWaterfallFlow', // 动态瀑布流
       upPanelPosition = 'upPanelPosition', // up主面板位置
       useSideBar = 'useSideBar',

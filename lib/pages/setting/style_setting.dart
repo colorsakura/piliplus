@@ -134,6 +134,14 @@ class _StyleSettingState extends State<StyleSetting> {
             ),
           ),
           const SetSwitchItem(
+            title: '播放页状态栏显示为背景色',
+            subTitle: '关闭则显示为黑色',
+            leading: Icon(Icons.border_outer_outlined),
+            setKey: SettingBoxKey.videoPlayerShowStatusBarBackgroundColor,
+            defaultVal: false,
+            needReboot: true,
+          ),
+          const SetSwitchItem(
             title: '播放页移除安全边距',
             subTitle: '隐藏状态栏、撑满屏幕，但播放控件仍处于安全域内',
             leading: Icon(Icons.fit_screen_outlined),
