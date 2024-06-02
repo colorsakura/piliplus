@@ -350,8 +350,8 @@ class Utils {
                         },
                         child: Text(
                           "点此查看完整更新（即commit）内容",
-                          style:
-                              TextStyle(color: Theme.of(context).colorScheme.primary),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
                         )),
                   ],
                 ),
@@ -361,7 +361,7 @@ class Utils {
               TextButton(
                 onPressed: () {
                   setting.put(SettingBoxKey.autoUpdate, false);
-                  Get.back();
+                  SmartDialog.dismiss();
                 },
                 child: Text(
                   '不再提醒',
@@ -370,7 +370,7 @@ class Utils {
                 ),
               ),
               TextButton(
-                onPressed: () => Get.back(),
+                onPressed: () => SmartDialog.dismiss(),
                 child: Text(
                   '取消',
                   style:
