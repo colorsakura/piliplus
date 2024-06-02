@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage>
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarIconBrightness:
-              MediaQuery.of(context).platformBrightness == Brightness.dark
+              Theme.of(context).brightness == Brightness.dark
                   ? Brightness.light
                   : Brightness.dark,
         ),
