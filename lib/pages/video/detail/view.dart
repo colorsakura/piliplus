@@ -474,9 +474,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       elevation: 0,
                       toolbarHeight: 0,
                       systemOverlayStyle: SystemUiOverlayStyle(
-                          statusBarIconBrightness: showStatusBarBackgroundColor
-                              ? null
-                              : Brightness.light,
+                          statusBarIconBrightness:
+                              Theme.of(context).brightness == Brightness.dark ||
+                                      !showStatusBarBackgroundColor
+                                  ? Brightness.light
+                                  : Brightness.dark,
                           systemNavigationBarColor: Colors.transparent),
                     ),
               body: Column(
@@ -1081,9 +1083,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   elevation: 0,
                   toolbarHeight: 0,
                   systemOverlayStyle: SystemUiOverlayStyle(
-                      statusBarIconBrightness: showStatusBarBackgroundColor
-                          ? null
-                          : Brightness.light,
+                      statusBarIconBrightness:
+                          Theme.of(context).brightness == Brightness.dark ||
+                                  !showStatusBarBackgroundColor
+                              ? Brightness.light
+                              : Brightness.dark,
                       systemNavigationBarColor: Colors.transparent),
                 ),
           body: Container(
@@ -1108,9 +1112,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   elevation: 0,
                   toolbarHeight: 0,
                   systemOverlayStyle: SystemUiOverlayStyle(
-                      statusBarIconBrightness: showStatusBarBackgroundColor
-                          ? null
-                          : Brightness.light,
+                      statusBarIconBrightness:
+                          Theme.of(context).brightness == Brightness.dark ||
+                                  !showStatusBarBackgroundColor
+                              ? Brightness.light
+                              : Brightness.dark,
                       systemNavigationBarColor: Colors.transparent),
                 ),
           body: Container(
