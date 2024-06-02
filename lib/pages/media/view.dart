@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/user/fav_folder.dart';
@@ -63,7 +64,16 @@ class _MediaPageState extends State<MediaPage>
     Color primary = Theme.of(context).colorScheme.primary;
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(toolbarHeight: 30, backgroundColor: Colors.transparent),
+      appBar: AppBar(
+        toolbarHeight: 30,
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness:
+              Theme.of(context).brightness == Brightness.light
+                  ? Brightness.dark
+                  : Brightness.light,
+        ),
+      ),
       body: SingleChildScrollView(
         controller: mediaController.scrollController,
         child: Column(
