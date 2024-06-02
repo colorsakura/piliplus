@@ -112,15 +112,13 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     // print(StackTrace.current);
     if (!PlPlayerController.instanceExists()) return;
     if (data == null) return;
-    if (Get.arguments == null || Get.arguments['heroTag'] == null) return;
-    final heroTag = Get.arguments['heroTag'];
 
     late MediaItem? mediaItem;
     if (data is VideoDetailData) {
       if ((data.pages?.length ?? 0) > 1) {
         final current = data.pages?.firstWhere((element) => element.cid == cid);
         mediaItem = MediaItem(
-          id: heroTag,
+          id: UniqueKey().toString(),
           title: current?.pagePart ?? "",
           artist: data.title ?? "",
           album: data.title ?? "",
@@ -129,7 +127,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         );
       } else {
         mediaItem = MediaItem(
-          id: heroTag,
+          id: UniqueKey().toString(),
           title: data.title ?? "",
           artist: data.owner?.name ?? "",
           duration: Duration(seconds: data.duration ?? 0),
@@ -140,7 +138,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       final current =
           data.episodes?.firstWhere((element) => element.cid == cid);
       mediaItem = MediaItem(
-        id: heroTag,
+        id: UniqueKey().toString(),
         title: current?.longTitle ?? "",
         artist: data.title ?? "",
         duration: Duration(milliseconds: current?.duration ?? 0),
@@ -148,7 +146,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       );
     }
     if (mediaItem == null) return;
-    print("exist: ${PlPlayerController.instanceExists()}");
+    // print("exist: ${PlPlayerController.instanceExists()}");
     if (!PlPlayerController.instanceExists()) return;
     setMediaItem(mediaItem);
     _item.add(mediaItem);
