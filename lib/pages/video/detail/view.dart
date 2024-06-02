@@ -473,21 +473,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           showStatusBarBackgroundColor ? null : Colors.black,
                       elevation: 0,
                       toolbarHeight: 0,
-                      systemOverlayStyle: showStatusBarBackgroundColor
-                          ? null
-                          : const SystemUiOverlayStyle(
-                              statusBarIconBrightness: Brightness.light),
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarIconBrightness: showStatusBarBackgroundColor
+                              ? null
+                              : Brightness.light,
+                          systemNavigationBarColor: Colors.transparent),
                     ),
-              // appBar: PreferredSize(
-              //   preferredSize: const Size.fromHeight(0),
-              //   child: AppBar(
-              //     backgroundColor: Colors.transparent,
-              //     elevation: 0,
-              //     systemOverlayStyle: const SystemUiOverlayStyle(
-              //         statusBarColor: Colors.transparent,
-              //         statusBarIconBrightness: Brightness.light),
-              //   ),
-              // ),
               body: Column(
                 children: [
                   Obx(
@@ -1089,8 +1080,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       showStatusBarBackgroundColor ? null : Colors.black,
                   elevation: 0,
                   toolbarHeight: 0,
-                  // systemOverlayStyle: const SystemUiOverlayStyle(
-                  //     statusBarIconBrightness: Brightness.light),
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                      statusBarIconBrightness: showStatusBarBackgroundColor
+                          ? null
+                          : Brightness.light,
+                      systemNavigationBarColor: Colors.transparent),
                 ),
           body: Container(
               color: Theme.of(context).colorScheme.background,
@@ -1113,8 +1107,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       showStatusBarBackgroundColor ? null : Colors.black,
                   elevation: 0,
                   toolbarHeight: 0,
-                  // systemOverlayStyle: const SystemUiOverlayStyle(
-                  //     statusBarIconBrightness: Brightness.light),
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                      statusBarIconBrightness: showStatusBarBackgroundColor
+                          ? null
+                          : Brightness.light,
+                      systemNavigationBarColor: Colors.transparent),
                 ),
           body: Container(
               color: Theme.of(context).colorScheme.background,
