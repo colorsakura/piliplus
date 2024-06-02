@@ -86,7 +86,7 @@ class _StyleSettingState extends State<StyleSetting> {
             title: '改用侧边栏',
             subTitle: '开启后底栏被替换，且底栏相关设置失效',
             leading: Icon(Icons.chrome_reader_mode_outlined),
-            setKey: SettingBoxKey.adaptiveNavBar,
+            setKey: SettingBoxKey.useSideBar,
             defaultVal: false,
           ),
           const SetSwitchItem(
@@ -136,7 +136,7 @@ class _StyleSettingState extends State<StyleSetting> {
           const SetSwitchItem(
             title: '播放页移除安全边距',
             subTitle: '隐藏状态栏、撑满屏幕，但播放控件仍处于安全域内',
-            leading: Icon(Icons.crop_outlined),
+            leading: Icon(Icons.fit_screen_outlined),
             setKey: SettingBoxKey.videoPlayerRemoveSafeArea,
             defaultVal: false,
             needReboot: true,
@@ -153,7 +153,8 @@ class _StyleSettingState extends State<StyleSetting> {
             dense: false,
             title: Text('动态页Up主显示位置', style: titleStyle),
             leading: const Icon(Icons.person_outlined),
-            subtitle: Text('当前：${upPanelPosition.labels}', style: subTitleStyle),
+            subtitle:
+                Text('当前：${upPanelPosition.labels}', style: subTitleStyle),
             onTap: () async {
               UpPanelPosition? result = await showDialog(
                 context: context,

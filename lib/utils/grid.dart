@@ -11,7 +11,7 @@ class Grid {
   //   if (screenWidthOffset != null) {
   //     screenWidth -= screenWidthOffset;
   //   }
-  //   if (GStrorage.setting.get(SettingBoxKey.adaptiveNavBar, defaultValue: false) as bool) {
+  //   if (GStrorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false) as bool) {
   //     screenWidth -= 55;
   //   }
   //   int columnCount = ((screenWidth - crossAxisSpacing) / (maxCrossAxisExtent + crossAxisSpacing)).ceil();

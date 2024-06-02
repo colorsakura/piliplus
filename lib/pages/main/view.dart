@@ -29,7 +29,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
   int? _lastSelectTime; //上次点击时间
   Box setting = GStrorage.setting;
   late bool enableMYBar;
-  late bool adaptiveNavBar;
+  late bool useSideBar;
   late bool enableGradientBg;
 
   @override
@@ -39,8 +39,8 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
     _mainController.pageController =
         PageController(initialPage: _mainController.selectedIndex);
     enableMYBar = setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
-    adaptiveNavBar =
-        setting.get(SettingBoxKey.adaptiveNavBar, defaultValue: false);
+    useSideBar =
+        setting.get(SettingBoxKey.useSideBar, defaultValue: false);
     enableGradientBg = setting.get(SettingBoxKey.enableGradientBg,
         defaultValue: true);
   }
@@ -150,7 +150,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (adaptiveNavBar) ...[
+              if (useSideBar) ...[
                 SizedBox(
                     width: 55,
                     child: NavigationRail(
@@ -205,7 +205,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
             ],
           )
         ]),
-        bottomNavigationBar: adaptiveNavBar
+        bottomNavigationBar: useSideBar
             ? null
             : StreamBuilder(
                 stream: _mainController.hideTabBar

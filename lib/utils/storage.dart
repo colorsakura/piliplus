@@ -180,10 +180,10 @@ class SettingBoxKey {
       enableSingleRow = 'enableSingleRow', // 首页单列
       displayMode = 'displayMode',
       maxRowWidth = 'maxRowWidth', // 首页列最大宽度（dp）
-      videoPlayerRemoveSafeArea = 'videoPlayerHideStatusBar',
+      videoPlayerRemoveSafeArea = 'videoPlayerRemoveSafeArea', // 视频播放器移除安全边距
       dynamicsWaterfallFlow = 'dynamicsWaterfallFlow', // 动态瀑布流
       upPanelPosition = 'upPanelPosition', // up主面板位置
-      adaptiveNavBar = 'adaptiveNavBar',
+      useSideBar = 'useSideBar',
       enableMYBar = 'enableMYBar',
       hideSearchBar = 'hideSearchBar', // 收起顶栏
       hideTabBar = 'hideTabBar', // 收起底栏
