@@ -16,12 +16,14 @@ class VideoReplyPanel extends StatefulWidget {
   final int? oid;
   final int rpid;
   final String? replyLevel;
+  final String heroTag;
 
   const VideoReplyPanel({
     this.bvid,
     this.oid,
     this.rpid = 0,
     this.replyLevel,
+    required this.heroTag,
     super.key,
   });
 
@@ -47,7 +49,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   void initState() {
     super.initState();
     // int oid = widget.bvid != null ? IdUtils.bv2av(widget.bvid!) : 0;
-    heroTag = Get.arguments['heroTag'];
+    // heroTag = Get.arguments['heroTag'];
+    heroTag = widget.heroTag;
     replyLevel = widget.replyLevel ?? '1';
     if (replyLevel == '2') {
       _videoReplyController = Get.put(

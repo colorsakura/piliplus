@@ -21,9 +21,11 @@ import 'widgets/intro_detail.dart';
 
 class BangumiIntroPanel extends StatefulWidget {
   final int? cid;
+  final String heroTag;
   const BangumiIntroPanel({
     Key? key,
     this.cid,
+    required this.heroTag,
   }) : super(key: key);
 
   @override
@@ -46,7 +48,8 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   @override
   void initState() {
     super.initState();
-    heroTag = Get.arguments['heroTag'];
+    // heroTag = Get.arguments['heroTag'];
+    heroTag = widget.heroTag;
     cid = widget.cid!;
     bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);

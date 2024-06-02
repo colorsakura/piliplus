@@ -10,8 +10,8 @@ import '../../../../utils/grid.dart';
 import './controller.dart';
 
 class RelatedVideoPanel extends StatefulWidget {
-  const RelatedVideoPanel({super.key});
-
+  const RelatedVideoPanel({super.key, required this.heroTag});
+  final String heroTag;
   @override
   State<RelatedVideoPanel> createState() => _RelatedVideoPanelState();
 }
@@ -27,8 +27,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
   @override
   void initState() {
     super.initState();
-    _releatedController =
-        Get.put(ReleatedController(), tag: Get.arguments?['heroTag']);
+    _releatedController = Get.put(ReleatedController(), tag: widget.heroTag);
     _futureBuilder = _releatedController.queryRelatedVideo();
   }
 

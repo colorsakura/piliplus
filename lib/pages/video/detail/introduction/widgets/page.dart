@@ -15,11 +15,13 @@ class PagesPanel extends StatefulWidget {
     this.cid,
     required this.bvid,
     required this.changeFuc,
+    required this.heroTag,
   });
   final List<Part> pages;
   final int? cid;
   final String bvid;
   final Function changeFuc;
+  final String heroTag;
 
   @override
   State<PagesPanel> createState() => _PagesPanelState();
@@ -29,7 +31,8 @@ class _PagesPanelState extends State<PagesPanel> {
   late List<Part> episodes;
   late int cid;
   late int currentIndex;
-  final String heroTag = Get.arguments['heroTag'];
+  // final String heroTag = Get.arguments['heroTag'];
+  late final String heroTag;
   late VideoDetailController _videoDetailController;
   final ScrollController _scrollController2 = ScrollController();
 
@@ -38,6 +41,7 @@ class _PagesPanelState extends State<PagesPanel> {
     super.initState();
     cid = widget.cid!;
     episodes = widget.pages;
+    heroTag = widget.heroTag;
     _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
     currentIndex = episodes.indexWhere((Part e) => e.cid == cid);
     _videoDetailController.cid.listen((int p0) {

@@ -607,11 +607,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                   slivers: <Widget>[
                                     if (videoDetailController.videoType ==
                                         SearchType.video) ...[
-                                      const VideoIntroPanel(),
+                                      VideoIntroPanel(heroTag: heroTag),
                                     ] else if (videoDetailController
                                             .videoType ==
                                         SearchType.media_bangumi) ...[
                                       Obx(() => BangumiIntroPanel(
+                                          heroTag: heroTag,
                                           cid:
                                               videoDetailController.cid.value)),
                                     ],
@@ -624,13 +625,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                             .withOpacity(0.06),
                                       ),
                                     ),
-                                    const RelatedVideoPanel(),
+                                    RelatedVideoPanel(heroTag: heroTag),
                                   ],
                                 ),
                                 Obx(
                                   () => VideoReplyPanel(
                                     bvid: videoDetailController.bvid,
                                     oid: videoDetailController.oid.value,
+                                    heroTag: heroTag,
                                   ),
                                 )
                               ],
@@ -711,10 +713,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   slivers: <Widget>[
                     if (videoDetailController.videoType ==
                         SearchType.video) ...[
-                      const VideoIntroPanel(),
+                      VideoIntroPanel(heroTag: heroTag),
                     ] else if (videoDetailController.videoType ==
                         SearchType.media_bangumi) ...[
                       Obx(() => BangumiIntroPanel(
+                          heroTag: heroTag,
                           cid: videoDetailController.cid.value)),
                     ],
                     SliverToBoxAdapter(
@@ -724,13 +727,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         color: Theme.of(context).dividerColor.withOpacity(0.06),
                       ),
                     ),
-                    const RelatedVideoPanel(),
+                    RelatedVideoPanel(heroTag: heroTag),
                   ],
                 ),
                 Obx(
                   () => VideoReplyPanel(
                     bvid: videoDetailController.bvid,
                     oid: videoDetailController.oid.value,
+                    heroTag: heroTag,
                   ),
                 )
               ],
@@ -801,12 +805,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               key: PageStorageKey<String>('简介${videoDetailController.bvid}'),
               slivers: <Widget>[
                 if (videoDetailController.videoType == SearchType.video) ...[
-                  const VideoIntroPanel(),
-                  const RelatedVideoPanel(),
+                  VideoIntroPanel(heroTag: heroTag),
+                  RelatedVideoPanel(heroTag: heroTag),
                 ] else if (videoDetailController.videoType ==
                     SearchType.media_bangumi) ...[
-                  Obx(() =>
-                      BangumiIntroPanel(cid: videoDetailController.cid.value)),
+                  Obx(() => BangumiIntroPanel(
+                      heroTag: heroTag, cid: videoDetailController.cid.value)),
                 ]
               ],
             )),
@@ -815,6 +819,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 () => VideoReplyPanel(
                   bvid: videoDetailController.bvid,
                   oid: videoDetailController.oid.value,
+                  heroTag: heroTag,
                 ),
               ),
             )
@@ -888,11 +893,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 key: PageStorageKey<String>('简介${videoDetailController.bvid}'),
                 slivers: <Widget>[
                   if (videoDetailController.videoType == SearchType.video) ...[
-                    const VideoIntroPanel(),
-                    const RelatedVideoPanel(),
+                    VideoIntroPanel(heroTag: heroTag),
+                    RelatedVideoPanel(heroTag: heroTag),
                   ] else if (videoDetailController.videoType ==
                       SearchType.media_bangumi) ...[
                     Obx(() => BangumiIntroPanel(
+                        heroTag: heroTag,
                         cid: videoDetailController.cid.value)),
                   ]
                 ],
@@ -902,6 +908,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   () => VideoReplyPanel(
                     bvid: videoDetailController.bvid,
                     oid: videoDetailController.oid.value,
+                    heroTag: heroTag,
                   ),
                 ),
               )
@@ -1019,11 +1026,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     slivers: <Widget>[
                       if (videoDetailController.videoType ==
                           SearchType.video) ...[
-                        const VideoIntroPanel(),
-                        const RelatedVideoPanel(),
+                        VideoIntroPanel(heroTag: heroTag),
+                        RelatedVideoPanel(heroTag: heroTag),
                       ] else if (videoDetailController.videoType ==
                           SearchType.media_bangumi) ...[
                         Obx(() => BangumiIntroPanel(
+                            heroTag: heroTag,
                             cid: videoDetailController.cid.value)),
                       ]
                     ],
@@ -1059,6 +1067,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 () => VideoReplyPanel(
                   bvid: videoDetailController.bvid,
                   oid: videoDetailController.oid.value,
+                  heroTag: heroTag,
                 ),
               )
               //   ],

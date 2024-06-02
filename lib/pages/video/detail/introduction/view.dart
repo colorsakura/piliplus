@@ -26,7 +26,8 @@ import 'widgets/page.dart';
 import 'widgets/season.dart';
 
 class VideoIntroPanel extends StatefulWidget {
-  const VideoIntroPanel({super.key});
+  const VideoIntroPanel({required this.heroTag, super.key});
+  final String heroTag;
 
   @override
   State<VideoIntroPanel> createState() => _VideoIntroPanelState();
@@ -48,9 +49,10 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
     super.initState();
 
     /// fix 全屏时参数丢失
-    if (Get.arguments != null) {
-      heroTag = Get.arguments['heroTag'];
-    }
+    // if (Get.arguments != null) {
+    //   heroTag = Get.arguments['heroTag'];
+    // }
+    heroTag = widget.heroTag;
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     _futureBuilderFuture = videoIntroController.queryVideoIntro();
     videoIntroController.videoDetail.listen((value) {
@@ -482,6 +484,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       widget.videoDetail!.ugcSeason != null) ...[
                     Obx(
                       () => SeasonPanel(
+                        heroTag: heroTag,
                         ugcSeason: widget.videoDetail!.ugcSeason!,
                         cid: videoIntroController.lastPlayCid.value != 0
                             ? videoIntroController.lastPlayCid.value
@@ -494,6 +497,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       widget.videoDetail!.pages != null &&
                       widget.videoDetail!.pages!.length > 1) ...[
                     Obx(() => PagesPanel(
+                          heroTag: heroTag,
                           pages: widget.videoDetail!.pages!,
                           cid: videoIntroController.lastPlayCid.value,
                           bvid: videoIntroController.bvid,

@@ -10,10 +10,12 @@ class SeasonPanel extends StatefulWidget {
     required this.ugcSeason,
     this.cid,
     required this.changeFuc,
+    required this.heroTag,
   });
   final UgcSeason ugcSeason;
   final int? cid;
   final Function changeFuc;
+  final String heroTag;
 
   @override
   State<SeasonPanel> createState() => _SeasonPanelState();
@@ -23,7 +25,8 @@ class _SeasonPanelState extends State<SeasonPanel> {
   List<EpisodeItem>? episodes;
   late int cid;
   int currentIndex = 0;
-  final String heroTag = Get.arguments['heroTag'];
+  // final String heroTag = Get.arguments['heroTag'];
+  late final String heroTag;
   late VideoDetailController _videoDetailController;
   final ScrollController _scrollController = ScrollController();
 
@@ -31,6 +34,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
   void initState() {
     super.initState();
     cid = widget.cid!;
+    heroTag = widget.heroTag;
     _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
 
     /// 根据 cid 找到对应集，找到对应 episodes
