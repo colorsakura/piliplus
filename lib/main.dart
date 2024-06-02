@@ -30,7 +30,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   await GStrorage.init();
-  if (GStrorage.setting.get(SettingBoxKey.autoClearCache, defaultValue: false)) {
+  if (GStrorage.setting
+      .get(SettingBoxKey.autoClearCache, defaultValue: false)) {
     await CacheManage.clearLibraryCache();
   }
   if (GStrorage.setting
@@ -56,7 +57,8 @@ void main() async {
   Request();
   await Request.setCookie();
   RecommendFilter();
-
+  SmartDialog.config.toast =
+      SmartConfigToast(displayType: SmartToastType.onlyRefresh);
   // 异常捕获 logo记录
   final Catcher2Options debugConfig = Catcher2Options(
     SilentReportMode(),
