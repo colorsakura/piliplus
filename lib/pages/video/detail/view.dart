@@ -254,8 +254,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
-    videoDetailController.floating?.dispose();
     floating.dispose();
+    videoDetailController.floating?.dispose();
     videoIntroController.videoDetail.close();
     bangumiIntroController.bangumiDetail.close();
     videoDetailController.cid.close();
