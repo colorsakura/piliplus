@@ -148,8 +148,8 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     if (mediaItem == null) return;
     // print("exist: ${PlPlayerController.instanceExists()}");
     if (!PlPlayerController.instanceExists()) return;
-    setMediaItem(mediaItem);
     _item.add(mediaItem);
+    setMediaItem(mediaItem);
   }
 
   onVideoDetailDispose() {
@@ -164,15 +164,14 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     }
     if (_item.isNotEmpty) {
       setMediaItem(_item.last);
+      stop();
     } else {
-      mediaItem?.close();
+      clear();
     }
-    stop();
   }
 
   clear() {
     if (!enableBackgroundPlay) return;
-
     mediaItem.add(null);
     playbackState.add(PlaybackState(
       processingState: AudioProcessingState.idle,
