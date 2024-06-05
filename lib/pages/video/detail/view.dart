@@ -79,15 +79,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     videoIntroController.videoDetail.listen((value) {
+      if (!context.mounted) return;
       videoPlayerServiceHandler.onVideoDetailChange(
           value, videoDetailController.cid.value);
     });
     bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
     bangumiIntroController.bangumiDetail.listen((value) {
+      if (!context.mounted) return;
       videoPlayerServiceHandler.onVideoDetailChange(
           value, videoDetailController.cid.value);
     });
     videoDetailController.cid.listen((p0) {
+      if (!context.mounted) return;
       videoPlayerServiceHandler.onVideoDetailChange(
           bangumiIntroController.bangumiDetail.value, p0);
     });
