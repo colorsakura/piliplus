@@ -85,7 +85,7 @@ class _ZonePageState extends State<ZonePage>
           SliverPadding(
             // 单列布局 EdgeInsets.zero
             padding:
-                const EdgeInsets.fromLTRB(StyleString.safeSpace, StyleString.safeSpace, 0, 0),
+                const EdgeInsets.fromLTRB(StyleString.cardSpace, StyleString.safeSpace, 0, 0),
             sliver: FutureBuilder(
               future: _futureBuilderFuture,
               builder: (context, snapshot) {

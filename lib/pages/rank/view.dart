@@ -88,33 +88,44 @@ class _RankPageState extends State<RankPage>
               child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: constraint.maxHeight),
                   child: IntrinsicHeight(
-                      child: NavigationRail(
-                    backgroundColor: Colors.transparent,
-                    minWidth: 50.0,
-                    // elevation: 0,
-                    selectedIndex: _selectedTabIndex,
-                    onDestinationSelected: (int index) {
-                      feedBack();
-                      if (_selectedTabIndex == index) {
-                        _rankController.tabsCtrList[index]().animateToTop();
-                      } else {
-                        setState(() {
-                          _rankController.tabController.index = index;
-                          _selectedTabIndex = index;
-                        });
-                      }
-                    },
-                    labelType: NavigationRailLabelType.none,
-                    destinations: [
-                      for (var tab in _rankController.tabs)
-                        NavigationRailDestination(
-                          icon: Text(tab['label']),
-                          // selectedIcon: Text(tab['label']),
-                          label: const SizedBox.shrink(),
-                        ),
-                    ],
-                    trailing: const SizedBox(height: 100),
-                  ))));
+                      child: MediaQuery.removePadding(
+                          context: context,
+                          removeLeft: true,
+                          removeRight: true,
+                          removeTop: true,
+                          child: NavigationRail(
+                            groupAlignment: -1.0,
+                            backgroundColor: Colors.transparent,
+                            minWidth: 40.0,
+                            useIndicator: false,
+                            // elevation: 0,
+                            selectedIndex: _selectedTabIndex,
+                            onDestinationSelected: (int index) {
+                              feedBack();
+                              if (_selectedTabIndex == index) {
+                                _rankController.tabsCtrList[index]()
+                                    .animateToTop();
+                              } else {
+                                setState(() {
+                                  _rankController.tabController.index = index;
+                                  _selectedTabIndex = index;
+                                });
+                              }
+                            },
+                            labelType: NavigationRailLabelType.none,
+                            destinations: [
+                              for (var tab in _rankController.tabs)
+                                NavigationRailDestination(
+                                  icon: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4),
+                                      child: Text(tab['label'])),
+                                  // selectedIcon: Text(tab['label']),
+                                  label: const SizedBox.shrink(),
+                                ),
+                            ],
+                            trailing: const SizedBox(height: 100),
+                          )))));
         }),
         Expanded(
           child: TabBarView(
