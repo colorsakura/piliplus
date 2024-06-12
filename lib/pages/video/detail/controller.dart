@@ -117,6 +117,7 @@ class VideoDetailController extends GetxController
         length: 2, vsync: this, initialIndex: defaultShowComment ? 1 : 0);
     autoPlay.value =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: true);
+    if (autoPlay.value) isShowCover.value = false;
     enableHA.value = setting.get(SettingBoxKey.enableHA, defaultValue: true);
     hwdec.value = setting.get(SettingBoxKey.hardwareDecoding,
         defaultValue: Platform.isAndroid ? 'auto-safe' : 'auto');
@@ -319,8 +320,8 @@ class VideoDetailController extends GetxController
         currentDecodeFormats = VideoDecodeFormatsCode.fromString('avc1')!;
         currentVideoQa = VideoQualityCode.fromCode(data.quality!)!;
         if (autoPlay.value) {
-          await playerInit();
           isShowCover.value = false;
+          await playerInit();
         }
         return result;
       }
@@ -421,8 +422,8 @@ class VideoDetailController extends GetxController
       }
       defaultST = Duration(milliseconds: data.lastPlayTime!);
       if (autoPlay.value) {
-        await playerInit();
         isShowCover.value = false;
+        await playerInit();
       }
     } else {
       if (result['code'] == -404) {

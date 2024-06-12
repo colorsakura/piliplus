@@ -101,6 +101,8 @@ class PlPlayerController {
   int _cid = 0;
   int _heartDuration = 0;
   bool _enableHeart = true;
+
+  late DataSource dataSource;
   final RxList<Map<String, String>> _vttSubtitles = <Map<String, String>>[].obs;
   final RxInt _vttSubtitlesIndex = 0.obs;
 
@@ -411,6 +413,7 @@ class PlPlayerController {
     bool enableHeart = true,
   }) async {
     try {
+      this.dataSource = dataSource;
       _autoPlay = autoplay;
       _looping = looping;
       // 初始化视频倍速
@@ -593,6 +596,16 @@ class PlPlayerController {
     // );
 
     return player;
+  }
+
+  Future refreshPlayer() async {
+    await _videoPlayerController?.open(
+      Media(
+        dataSource.videoSource!,
+        httpHeaders: dataSource.httpHeaders,
+      ),
+      play: true,
+    );
   }
 
   // 开始播放
@@ -1102,6 +1115,8 @@ class PlPlayerController {
   Future<void> triggerFullScreen({bool status = true}) async {
     FullScreenMode mode = FullScreenModeCode.fromCode(
         setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
+    bool removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
+        defaultValue: false);
     if (!isFullScreen.value && status) {
       // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
       hideStatusBar();
@@ -1124,7 +1139,7 @@ class PlPlayerController {
       }
     } else if (isFullScreen.value && !status) {
       // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
-      showStatusBar();
+      if (!removeSafeArea) showStatusBar();
       toggleFullScreen(false);
       if (mode == FullScreenMode.none) {
         return;

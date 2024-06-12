@@ -200,13 +200,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   /// 未开启自动播放时触发播放
   Future<void> handlePlay() async {
+    videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit();
     plPlayerController = videoDetailController.plPlayerController;
     plPlayerController!.addStatusLister(playerListener);
     listenFullScreenStatus();
     await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
-    videoDetailController.isShowCover.value = false;
   }
 
   // // 生命周期监听
@@ -310,11 +310,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     super.didPopNext();
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
+    videoDetailController.autoPlay.value =
+    !videoDetailController.isShowCover.value;
     await videoDetailController.playerInit(autoplay: autoplay);
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
-    videoDetailController.autoPlay.value =
-        !videoDetailController.isShowCover.value;
     videoIntroController.isPaused = false;
     // if (autoplay) {
     //   // await Future.delayed(const Duration(milliseconds: 300));

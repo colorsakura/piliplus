@@ -1043,7 +1043,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         Obx(() {
           if (_.dataStatus.loading || _.isBuffering.value) {
             return Center(
-              child: Container(
+              child: GestureDetector(
+                onTap: () {
+                  _.refreshPlayer();
+                },
+                child:
+              Container(
                 padding: const EdgeInsets.all(30),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
@@ -1057,7 +1062,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   semanticLabel: "加载中",
                 ),
               ),
-            );
+            ));
           } else {
             return const SizedBox();
           }
