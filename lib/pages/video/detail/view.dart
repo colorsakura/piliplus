@@ -53,7 +53,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   final Box<dynamic> setting = GStrorage.setting;
   late Future _futureBuilderFuture;
   // 自动退出全屏
-  late bool autoExitFullcreen;
+  late bool autoExitFullscreen;
   late bool autoPlayEnable;
   late bool horizontalScreen;
   late bool enableVerticalExpand;
@@ -94,7 +94,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoPlayerServiceHandler.onVideoDetailChange(
           bangumiIntroController.bangumiDetail.value, p0);
     });
-    autoExitFullcreen =
+    autoExitFullscreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
@@ -174,16 +174,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       /// 单个循环
       if (plPlayerController!.playRepeat == PlayRepeat.singleCycle) {
         notExitFlag = true;
-        plPlayerController!.seekTo(Duration.zero);
-        plPlayerController!.play();
+        plPlayerController!.play(repeat: true);
       }
 
       // 结束播放退出全屏
-      if (!notExitFlag && autoExitFullcreen) {
+      if (!notExitFlag && autoExitFullscreen) {
         plPlayerController!.triggerFullScreen(status: false);
       }
       // 播放完展示控制栏
-      if (videoDetailController.floating != null) {
+      if (videoDetailController.floating != null && !notExitFlag) {
         PiPStatus currentStatus =
             await videoDetailController.floating!.pipStatus;
         if (currentStatus == PiPStatus.disabled) {
@@ -311,7 +310,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
     videoDetailController.autoPlay.value =
-    !videoDetailController.isShowCover.value;
+        !videoDetailController.isShowCover.value;
     await videoDetailController.playerInit(autoplay: autoplay);
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
