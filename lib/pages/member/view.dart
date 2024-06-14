@@ -163,36 +163,36 @@ class _MemberPageState extends State<MemberPage>
                     Row(children: [
                       const Spacer(),
                       InkWell(
-                            onTap: _memberController.pushDynamicsPage,
-                            child: const Row(
-                              children: [
-                                Text('Ta的动态', style: TextStyle(height: 2)),
-                                SizedBox(width: 5),
-                                Icon(Icons.arrow_forward_ios, size: 19),
-                              ],
-                            ),
-                          ),
+                        onTap: _memberController.pushDynamicsPage,
+                        child: const Row(
+                          children: [
+                            Text('Ta的动态', style: TextStyle(height: 2)),
+                            SizedBox(width: 5),
+                            Icon(Icons.arrow_forward_ios, size: 19),
+                          ],
+                        ),
+                      ),
                       const Spacer(),
                       InkWell(
-                            onTap: _memberController.pushArchivesPage,
-                            child: const Row(
-                              children: [
-                                Text('Ta的投稿', style: TextStyle(height: 2)),
-                                SizedBox(width: 5),
-                                Icon(Icons.arrow_forward_ios, size: 19),
-                              ],
-                            ),
-                          ),
+                        onTap: _memberController.pushArchivesPage,
+                        child: const Row(
+                          children: [
+                            Text('Ta的投稿', style: TextStyle(height: 2)),
+                            SizedBox(width: 5),
+                            Icon(Icons.arrow_forward_ios, size: 19),
+                          ],
+                        ),
+                      ),
                       const Spacer(),
                       InkWell(
-                            onTap: () {},
-                            child: const Row(
-                              children: [
-                                Text('Ta的专栏', style: TextStyle(height: 2)),
-                                SizedBox(width: 5),
-                              ],
-                            ),
-                          ),
+                        onTap: () {},
+                        child: const Row(
+                          children: [
+                            Text('Ta的专栏', style: TextStyle(height: 2)),
+                            SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
                       const Spacer(),
                     ]),
                     MediaQuery.removePadding(
@@ -391,8 +391,8 @@ class _MemberPageState extends State<MemberPage>
                   height: 20,
                   semanticLabel:
                       _memberController.memberInfo.value.vip!.label!['text'],
-                ),
-              if (_memberController.memberInfo.value.vip
+                )
+              else if (_memberController.memberInfo.value.vip
                       ?.label?['img_label_uri_hans_static'] !=
                   '')
                 Image.network(
