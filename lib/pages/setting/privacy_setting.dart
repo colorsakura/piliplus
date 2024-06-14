@@ -78,7 +78,7 @@ class _PrivacySettingState extends State<PrivacySetting> {
               if (res['status']) {
                 SmartDialog.showToast(res['msg']);
               } else {
-                SmartDialog.showToast('刷新失败：${res['msg']}');
+                SmartDialog.showToast("刷新失败：${res['msg']}");
               }
             },
             dense: false,

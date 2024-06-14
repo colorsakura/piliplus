@@ -22,6 +22,7 @@ class RecVideoItemAppModel {
     this.bangumiBadge,
     this.cardType,
     this.adInfo,
+    this.threePoint,
   });
 
   int? id;
@@ -46,6 +47,7 @@ class RecVideoItemAppModel {
 
   String? cardType;
   Map? adInfo;
+  ThreePoint? threePoint;
 
   RecVideoItemAppModel.fromJson(Map<String, dynamic> json) {
     id = json['player_args'] != null
@@ -89,6 +91,9 @@ class RecVideoItemAppModel {
 
     cardType = json['card_type'];
     adInfo = json['ad_info'];
+    threePoint = json['three_point'] != null
+        ? ThreePoint.fromJson(json['three_point'])
+        : null;
   }
 }
 
@@ -133,5 +138,69 @@ class RcmdReason {
 
   RcmdReason.fromJson(Map<String, dynamic> json) {
     content = json["text"] ?? '';
+  }
+}
+
+class ThreePoint {
+  ThreePoint({
+    this.dislikeReasons,
+    this.feedbacks,
+    this.watchLater,
+  });
+
+  List<DislikeReason>? dislikeReasons;
+  List<FeedbackReason>? feedbacks;
+  int? watchLater;
+
+  ThreePoint.fromJson(Map<String, dynamic> json) {
+    if (json['dislike_reasons'] != null) {
+      dislikeReasons = [];
+      json['dislike_reasons'].forEach((v) {
+        dislikeReasons!.add(DislikeReason.fromJson(v));
+      });
+    }
+    if (json['feedbacks'] != null) {
+      feedbacks = [];
+      json['feedbacks'].forEach((v) {
+        feedbacks!.add(FeedbackReason.fromJson(v));
+      });
+    }
+    watchLater = json['watch_later'];
+  }
+}
+
+class DislikeReason {
+  DislikeReason({
+    this.id,
+    this.name,
+    this.toast,
+  });
+
+  int? id;
+  String? name;
+  String? toast;
+
+  DislikeReason.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    toast = json['toast'];
+  }
+}
+
+class FeedbackReason {
+  FeedbackReason({
+    this.id,
+    this.name,
+    this.toast,
+  });
+
+  int? id;
+  String? name;
+  String? toast;
+
+  FeedbackReason.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    toast = json['toast'];
   }
 }

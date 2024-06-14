@@ -6,6 +6,10 @@ class Api {
       '${HttpString.appBaseUrl}/x/v2/feed/index';
   static const String recommendListWeb = '/x/web-interface/index/top/feed/rcmd';
 
+  // APP端不感兴趣、取消不感兴趣
+  static const String feedDislike = '${HttpString.appBaseUrl}/x/feed/dislike';
+  static const String feedDislikeCancel = '${HttpString.appBaseUrl}/x/feed/dislike/cancel';
+
   // 热门视频
   static const String hotList = '/x/web-interface/popular';
 

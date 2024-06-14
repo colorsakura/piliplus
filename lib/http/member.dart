@@ -416,7 +416,8 @@ class MemberHttp {
     var authCodeRes = await getTVCode();
     if (authCodeRes['status']) {
       SmartDialog.showLoading(msg: "正在确认登录...");
-      var confirmRes = await Request().post(Api.qrcodeConfirm, queryParameters: {
+      var confirmRes =
+          await Request().post(Api.qrcodeConfirm, queryParameters: {
         'auth_code': authCodeRes['data'],
         'local_id': '0',
         'build': 1442100,
@@ -427,6 +428,14 @@ class MemberHttp {
       print(confirmRes);
       SmartDialog.dismiss();
       if (confirmRes.data['code'] != 0) {
+        if (confirmRes.data['code'] == -101 ||
+            confirmRes.data['message'] == "账号未登录") {
+          return {
+            'status': false,
+            'data': [],
+            'msg': "请在设置中退出账号并重新登录再试",
+          };
+        }
         return {
           'status': false,
           'data': [],
@@ -478,7 +487,11 @@ class MemberHttp {
       var userInfo = userInfoCache.get('userInfoCache');
       localCache.put(
           LocalCacheKey.accessKey, {'mid': userInfo.mid, 'value': accessKey});
-      return {'status': true, 'data': [], 'message': '操作成功，当前获取的access_key为：$accessKey'};
+      return {
+        'status': true,
+        'data': [],
+        'message': '操作成功，当前获取的access_key为：$accessKey'
+      };
     } else {
       return {
         'status': false,
