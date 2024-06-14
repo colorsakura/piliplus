@@ -429,7 +429,7 @@ class _MemberPageState extends State<MemberPage>
             TextSpan(
               text: _memberController.memberInfo.value.official!['role'] == 1
                   ? '个人认证：'
-                  : '企业认证：',
+                  : '机构认证：',
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
               ),

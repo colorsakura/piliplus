@@ -111,11 +111,12 @@ class ReplyItem extends StatelessWidget {
               ),
             ),
           ),
+        //https://www.bilibili.com/blackboard/activity-whPrHsYJ2.html
         if (replyItem!.member!.officialVerify != null &&
             replyItem!.member!.officialVerify!['type'] == 0)
           Positioned(
-            left: -1,
-            bottom: -1,
+            left: 0,
+            bottom: 0,
             child: Container(
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(8),
@@ -125,15 +126,16 @@ class ReplyItem extends StatelessWidget {
               child: const Icon(
                 Icons.offline_bolt,
                 color: Colors.yellow,
-                size: 16,
+                size: 14,
+                semanticLabel: "认证个人",
               ),
             ),
           ),
         if (replyItem!.member!.officialVerify != null &&
             replyItem!.member!.officialVerify!['type'] == 1)
           Positioned(
-            left: -1,
-            bottom: -1,
+            left: 0,
+            bottom: 0,
             child: Container(
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(8),
@@ -143,7 +145,8 @@ class ReplyItem extends StatelessWidget {
               child: const Icon(
                 Icons.offline_bolt,
                 color: Colors.lightBlueAccent,
-                size: 16,
+                size: 14,
+                semanticLabel: "认证机构",
               ),
             ),
           ),
