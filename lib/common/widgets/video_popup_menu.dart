@@ -55,7 +55,7 @@ class VideoPopupMenu extends StatelessWidget {
           PopupMenuItem<String>(
             onTap: () async {
               Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
-                'face': videoItem.owner.face,
+                // 'face': videoItem.owner.face,
                 'heroTag': '${videoItem.owner.mid}',
               });
             },
