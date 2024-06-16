@@ -88,6 +88,7 @@ class _StyleSettingState extends State<StyleSetting> {
             leading: Icon(Icons.chrome_reader_mode_outlined),
             setKey: SettingBoxKey.useSideBar,
             defaultVal: false,
+            needReboot: true,
           ),
           const SetSwitchItem(
             title: 'MD3样式底栏',

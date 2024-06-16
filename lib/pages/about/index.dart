@@ -445,7 +445,7 @@ class AboutController extends GetxController {
       displayTime: const Duration(milliseconds: 500),
     ).then(
       (value) => launchUrl(
-        Uri.parse('https://t.me/+lm_oOVmF0RJiODk1'),
+        Uri.parse('https://t.me/+162zlPtZlT9hNWVl'),
         mode: LaunchMode.externalApplication,
       ),
     );

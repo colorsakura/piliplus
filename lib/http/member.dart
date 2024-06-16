@@ -428,18 +428,11 @@ class MemberHttp {
       print(confirmRes);
       SmartDialog.dismiss();
       if (confirmRes.data['code'] != 0) {
-        if (confirmRes.data['code'] == -101 ||
-            confirmRes.data['message'] == "账号未登录") {
-          return {
-            'status': false,
-            'data': [],
-            'msg': "请在设置中退出账号并重新登录再试",
-          };
-        }
         return {
           'status': false,
           'data': [],
-          'msg': "确认登录失败：${confirmRes.data['message']}",
+          'msg':
+              "确认登录失败：${confirmRes.data['message']}\n\n请在设置中退出账号，重启app，重新登录再试",
         };
       }
       SmartDialog.showLoading(msg: "等待500毫秒...");
@@ -449,12 +442,12 @@ class MemberHttp {
       var res = await qrcodePoll(authCodeRes['data']);
       SmartDialog.dismiss();
       if (res['status']) {
-        return {'status': true, 'data': [], 'msg': res['message']};
+        return {'status': true, 'data': [], 'msg': res['msg']};
       } else {
         return {
           'status': false,
           'data': [],
-          'msg': "登录结果获取失败：${res.data['message']}",
+          'msg': "登录结果获取失败：${res.data['msg']}",
         };
       }
     } else {
@@ -490,7 +483,7 @@ class MemberHttp {
       return {
         'status': true,
         'data': [],
-        'message': '操作成功，当前获取的access_key为：$accessKey'
+        'msg': '操作成功，当前获取的access_key为：$accessKey'
       };
     } else {
       return {
