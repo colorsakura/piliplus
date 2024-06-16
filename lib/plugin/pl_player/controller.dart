@@ -290,8 +290,7 @@ class PlPlayerController {
 
   static Future<void> playIfExists(
       {bool repeat = false, bool hideControls = true}) async {
-    await _instance?.play(
-        repeat: repeat, hideControls: hideControls);
+    await _instance?.play(repeat: repeat, hideControls: hideControls);
   }
 
   // try to get PlayerStatus
@@ -599,6 +598,7 @@ class PlPlayerController {
   }
 
   Future refreshPlayer() async {
+    Duration currentPos = _position.value;
     await _videoPlayerController?.open(
       Media(
         dataSource.videoSource!,
@@ -606,12 +606,11 @@ class PlPlayerController {
       ),
       play: true,
     );
+    seekTo(currentPos);
   }
 
   // 开始播放
-  Future _initializePlayer({
-    Duration seekTo = Duration.zero
-  }) async {
+  Future _initializePlayer({Duration seekTo = Duration.zero}) async {
     if (_instance == null) return;
     // 设置倍速
     if (videoType.value == 'live') {
@@ -829,8 +828,7 @@ class PlPlayerController {
 
   /// 播放视频
   /// TODO  _duration.value丢失
-  Future<void> play(
-      {bool repeat = false, bool hideControls = true}) async {
+  Future<void> play({bool repeat = false, bool hideControls = true}) async {
     if (_playerCount.value == 0) return;
     // 播放时自动隐藏控制条
     controls = !hideControls;
