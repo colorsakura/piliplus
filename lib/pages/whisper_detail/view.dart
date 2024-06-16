@@ -28,7 +28,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
   late double emoteHeight = 0.0;
   double keyboardHeight = 0.0; // 键盘高度
   String toolbarType = 'none';
-  Box userInfoCache = GStrorage.userInfo;
+  Box userInfoCache = GStorage.userInfo;
 
   @override
   void initState() {

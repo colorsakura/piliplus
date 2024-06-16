@@ -4,14 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'storage.dart';
 class Grid {
-  static double maxRowWidth = GStrorage.setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0) as double;
+  static double maxRowWidth = GStorage.setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0) as double;
   //
   // static double calculateActualWidth(BuildContext context, double maxCrossAxisExtent, double crossAxisSpacing, {double? screenWidthOffset}) {
   //   double screenWidth = MediaQuery.of(context).size.width;
   //   if (screenWidthOffset != null) {
   //     screenWidth -= screenWidthOffset;
   //   }
-  //   if (GStrorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false) as bool) {
+  //   if (GStorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false) as bool) {
   //     screenWidth -= 55;
   //   }
   //   int columnCount = ((screenWidth - crossAxisSpacing) / (maxCrossAxisExtent + crossAxisSpacing)).ceil();
