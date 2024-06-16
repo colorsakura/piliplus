@@ -509,10 +509,11 @@ class VideoHttp {
       're_src': reSrc,
       'csrf': await Request.getCsrf(),
     });
+    print(res);
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {'status': true};
     } else {
-      return {'status': false, 'data': []};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

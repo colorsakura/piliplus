@@ -11,14 +11,18 @@ import 'package:PiliPalaX/models/member/info.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../video/detail/introduction/widgets/group_panel.dart';
+
 class MemberController extends GetxController {
-  late int mid;
+  int? mid;
+  MemberController({this.mid});
   Rx<MemberInfoModel> memberInfo = MemberInfoModel().obs;
   late Map userStat;
   RxString face = ''.obs;
   String? heroTag;
   Box userInfoCache = GStrorage.userInfo;
   late int ownerMid;
+  bool specialFollowed = false;
   // 投稿列表
   RxList<VListItemModel>? archiveList = <VListItemModel>[].obs;
   dynamic userInfo;
@@ -27,9 +31,9 @@ class MemberController extends GetxController {
   RxList<MemberCoinsDataModel> recentCoinsList = <MemberCoinsDataModel>[].obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    mid = int.parse(Get.parameters['mid']!);
+    mid = mid ?? int.parse(Get.parameters['mid']!);
     userInfo = userInfoCache.get('userInfoCache');
     ownerMid = userInfo != null ? userInfo.mid : -1;
     face.value = Get.arguments['face'] ?? '';
@@ -60,11 +64,19 @@ class MemberController extends GetxController {
 
   // 获取用户播放数 获赞数
   Future<Map<String, dynamic>> getMemberView() async {
-    var res = await MemberHttp.memberView(mid: mid);
+    var res = await MemberHttp.memberView(mid: mid!);
     if (res['status']) {
       userStat.addAll(res['data']);
     }
     return res;
+  }
+
+  Future delayedUpdateRelation() async {
+    await Future.delayed(const Duration(milliseconds: 1000), () async {
+      SmartDialog.showToast('更新状态');
+      await relationSearch();
+      memberInfo.update((val) {});
+    });
   }
 
   // 关注/取关up
@@ -85,62 +97,97 @@ class MemberController extends GetxController {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('提示'),
-          content: Text(memberInfo.value.isFollowed! ? '取消关注UP主?' : '关注UP主?'),
+          title: const Text('操作'),
           actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '点错了',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+            if (memberInfo.value.isFollowed!) ...[
+              TextButton(
+                onPressed: () async {
+                  final res = await MemberHttp.addUsers(
+                      mid, specialFollowed ? '0' : '-10');
+                  SmartDialog.showToast(res['msg']);
+                  if (res['status']) {
+                    specialFollowed = !specialFollowed;
+                  }
+                  Get.back();
+                },
+                child: Text(specialFollowed ? '移除特别关注' : '加入特别关注'),
               ),
-            ),
+              TextButton(
+                onPressed: () async {
+                  await Get.bottomSheet(
+                    GroupPanel(mid: mid),
+                    isScrollControlled: true,
+                  );
+                  Get.back();
+                },
+                child: const Text('设置分组'),
+              ),
+            ],
             TextButton(
               onPressed: () async {
-                Get.back();
-                await VideoHttp.relationMod(
-                  mid: mid,
+                var res = await VideoHttp.relationMod(
+                  mid: mid!,
                   act: memberInfo.value.isFollowed! ? 2 : 1,
                   reSrc: 11,
                 );
-                memberInfo.value.isFollowed = !memberInfo.value.isFollowed!;
-                relationSearch();
-                memberInfo.update((val) {});
+                SmartDialog.showToast(res['status'] ? "操作成功" : res['msg']);
+                if (res['status']) {
+                  memberInfo.value.isFollowed = !memberInfo.value.isFollowed!;
+                }
+                Get.back();
               },
-              child: const Text('确认'),
-            )
+              child: Text(memberInfo.value.isFollowed! ? '取消关注' : '关注'),
+            ),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              ),
+            ),
           ],
         );
       },
     );
+    await delayedUpdateRelation();
   }
 
   // 关系查询
   Future relationSearch() async {
     if (userInfo == null) return;
     if (mid == ownerMid) return;
-    var res = await UserHttp.hasFollow(mid);
+    var res = await UserHttp.hasFollow(mid!);
     if (res['status']) {
       attribute.value = res['data']['attribute'];
       switch (attribute.value) {
         case 1:
           attributeText.value = '悄悄关注';
+          memberInfo.value.isFollowed = true;
           break;
         case 2:
           attributeText.value = '已关注';
+          memberInfo.value.isFollowed = true;
           break;
         case 6:
           attributeText.value = '已互关';
+          memberInfo.value.isFollowed = true;
           break;
         case 128:
           attributeText.value = '已拉黑';
+          memberInfo.value.isFollowed = false;
           break;
         default:
           attributeText.value = '关注';
+          memberInfo.value.isFollowed = false;
       }
       if (res['data']['special'] == 1) {
-        attributeText.value += 'SP';
+        specialFollowed = true;
+        attributeText.value += ' 🔔';
+      } else {
+        specialFollowed = false;
       }
+    } else {
+      SmartDialog.showToast(res['msg']);
     }
   }
 
@@ -168,7 +215,7 @@ class MemberController extends GetxController {
               onPressed: () async {
                 Get.back();
                 var res = await VideoHttp.relationMod(
-                  mid: mid,
+                  mid: mid!,
                   act: attribute.value != 128 ? 5 : 6,
                   reSrc: 11,
                 );
@@ -205,7 +252,7 @@ class MemberController extends GetxController {
   // 请求投币视频
   Future getRecentCoinVideo() async {
     if (userInfo == null) return;
-    var res = await MemberHttp.getRecentCoinVideo(mid: mid);
+    var res = await MemberHttp.getRecentCoinVideo(mid: mid!);
     recentCoinsList.value = res['data'];
     return res;
   }

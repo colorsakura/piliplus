@@ -18,6 +18,8 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPalaX/pages/member/controller.dart';
 
 import '../related/index.dart';
 import 'widgets/group_panel.dart';
@@ -191,9 +193,7 @@ class VideoIntroController extends GetxController {
           title: const Text('提示'),
           content: const Text('一键三连 给UP送温暖'),
           actions: [
-            TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('点错了')),
+            TextButton(onPressed: () => Get.back(), child: const Text('点错了')),
             TextButton(
               onPressed: () async {
                 Get.back();
@@ -446,82 +446,14 @@ class VideoIntroController extends GetxController {
   // 关注/取关up
   Future actionRelationMod(BuildContext context) async {
     feedBack();
-    if (userInfo == null) {
-      SmartDialog.showToast('账号未登录');
-      return;
-    }
-    final int currentStatus = followStatus['attribute'];
-    int actionStatus = 0;
-    switch (currentStatus) {
-      case 0:
-        actionStatus = 1;
-        break;
-      case 2:
-        actionStatus = 2;
-        break;
-      default:
-        actionStatus = 0;
-        break;
-    }
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('提示'),
-          content: Text(currentStatus == 0 ? '关注UP主?' : '取消关注UP主?'),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '点错了',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                var result = await VideoHttp.relationMod(
-                  mid: videoDetail.value.owner!.mid!,
-                  act: actionStatus,
-                  reSrc: 14,
-                );
-                if (result['status']) {
-                  switch (currentStatus) {
-                    case 0:
-                      actionStatus = 2;
-                      break;
-                    case 2:
-                      actionStatus = 0;
-                      break;
-                    default:
-                      actionStatus = 0;
-                      break;
-                  }
-                  followStatus['attribute'] = actionStatus;
-                  followStatus.refresh();
-                  if (actionStatus == 2) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('关注成功'),
-                          duration: const Duration(seconds: 2),
-                          action: SnackBarAction(
-                            label: '设置分组',
-                            onPressed: setFollowGroup,
-                          ),
-                          showCloseIcon: true,
-                        ),
-                      );
-                    }
-                  }
-                }
-                Get.back();
-              },
-              child: const Text('确认'),
-            )
-          ],
-        );
-      },
-    );
+    int mid = videoDetail.value.owner!.mid!;
+    MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
+        tag: mid.toString());
+    await _.getInfo();
+    if (context.mounted) await _.actionRelationMod(context);
+    followStatus['attribute'] = _.attribute.value;
+    followStatus.refresh();
+    Get.delete<MemberController>(tag: mid.toString());
   }
 
   // 修改分P或番剧分集
