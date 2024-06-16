@@ -195,6 +195,7 @@ class MessageItem {
     this.msgStatus,
     this.notifyCode,
     this.newFaceVersion,
+    this.msgSource,
   });
 
   int? senderUid;
@@ -209,6 +210,7 @@ class MessageItem {
   int? msgStatus;
   String? notifyCode;
   int? newFaceVersion;
+  int? msgSource;
 
   MessageItem.fromJson(Map<String, dynamic> json) {
     senderUid = json['sender_uid'];
@@ -226,5 +228,6 @@ class MessageItem {
     msgStatus = json['msg_status'];
     notifyCode = json['notify_code'];
     newFaceVersion = json['new_face_version'];
+    msgSource = json['msg_source'];
   }
 }

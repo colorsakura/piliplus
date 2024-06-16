@@ -238,7 +238,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
             width: double.infinity,
             height: toolbarType == 'input' ? keyboardHeight : emoteHeight,
             child: EmotePanel(
-              onChoose: (package, emote) => onChooseEmote(package, emote),
+              onChoose: onChooseEmote,
             ),
           ),
           if (toolbarType == 'input' && keyboardHeight == 0.0)

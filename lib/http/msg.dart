@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:dio/dio.dart';
+
 import '../models/msg/account.dart';
 import '../models/msg/session.dart';
 import '../utils/wbi_sign.dart';
@@ -6,7 +8,6 @@ import 'api.dart';
 import 'init.dart';
 
 class MsgHttp {
-
   static Future msgFeedReplyMe({int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedReply, data: {
       'id': cursor == -1 ? null : cursor,
@@ -25,8 +26,9 @@ class MsgHttp {
       };
     }
   }
+
   static Future msgFeedAtMe({int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedAt,data: {
+    var res = await Request().get(Api.msgFeedAt, data: {
       'id': cursor == -1 ? null : cursor,
       'at_time': cursorTime == -1 ? null : cursorTime,
     });
@@ -43,8 +45,9 @@ class MsgHttp {
       };
     }
   }
+
   static Future msgFeedLikeMe({int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedLike,data: {
+    var res = await Request().get(Api.msgFeedLike, data: {
       'id': cursor == -1 ? null : cursor,
       'like_time': cursorTime == -1 ? null : cursorTime,
     });
@@ -61,6 +64,7 @@ class MsgHttp {
       };
     }
   }
+
   static Future msgFeedSysUserNotify() async {
     String csrf = await Request.getCsrf();
     var res = await Request().get(Api.msgSysUserNotify, data: {
@@ -81,6 +85,7 @@ class MsgHttp {
       };
     }
   }
+
   static Future msgFeedSysUnifiedNotify() async {
     String csrf = await Request.getCsrf();
     var res = await Request().get(Api.msgSysUnifiedNotify, data: {
@@ -136,6 +141,7 @@ class MsgHttp {
       };
     }
   }
+
   // 会话列表
   static Future sessionList({int? endTs}) async {
     Map<String, dynamic> params = {
@@ -271,7 +277,7 @@ class MsgHttp {
     dynamic content,
   }) async {
     String csrf = await Request.getCsrf();
-    Map<String, dynamic> params = await WbiSign().makSign({
+    Map<String, dynamic> base = {
       'msg[sender_uid]': senderUid,
       'msg[receiver_id]': receiverId,
       'msg[receiver_type]': receiverType ?? 1,
@@ -286,21 +292,17 @@ class MsgHttp {
       'mobi_app': 'web',
       'csrf_token': csrf,
       'csrf': csrf,
-    });
-    var res =
-        await Request().post(Api.sendMsg, queryParameters: <String, dynamic>{
-      ...params,
-      'csrf_token': csrf,
-      'csrf': csrf,
-    }, data: {
-      'w_sender_uid': params['msg[sender_uid]'],
-      'w_receiver_id': params['msg[receiver_id]'],
-      'w_dev_id': params['msg[dev_id]'],
-      'w_rid': params['w_rid'],
-      'wts': params['wts'],
-      'csrf_token': csrf,
-      'csrf': csrf,
-    });
+    };
+    Map<String, dynamic> params = await WbiSign().makSign(base);
+    var res = await Request().post(Api.sendMsg,
+        queryParameters: <String, dynamic>{
+          'w_sender_uid': params['msg[sender_uid]'],
+          'w_receiver_id': params['msg[receiver_id]'],
+          'w_dev_id': params['msg[dev_id]'],
+          'w_rid': params['w_rid'],
+          'wts': params['wts'],
+        },
+        data: FormData.fromMap(base));
     if (res.data['code'] == 0) {
       return {
         'status': true,

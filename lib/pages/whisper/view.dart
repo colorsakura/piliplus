@@ -153,6 +153,17 @@ class _WhisperPageState extends State<WhisperPage> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (_, int i) {
+                                  dynamic content =
+                                      sessionList[i].lastMsg.content;
+                                  if (content == null || content == "") {
+                                    content = '不支持的消息类型';
+                                  } else {
+                                    content = content['text'] ??
+                                        content['content'] ??
+                                        content['title'] ??
+                                        content['reply_content'] ??
+                                        content.toString();
+                                  }
                                   return ListTile(
                                     onTap: () {
                                       setState(() {
@@ -195,28 +206,7 @@ class _WhisperPageState extends State<WhisperPage> {
                                     ),
                                     title:
                                         Text(sessionList[i].accountInfo.name),
-                                    subtitle: Text(
-                                        sessionList[i].lastMsg.content !=
-                                                    null &&
-                                                sessionList[i]
-                                                        .lastMsg
-                                                        .content !=
-                                                    ''
-                                            ? (sessionList[i]
-                                                        .lastMsg
-                                                        .content['text'] ??
-                                                    sessionList[i]
-                                                        .lastMsg
-                                                        .content['content'] ??
-                                                    sessionList[i]
-                                                        .lastMsg
-                                                        .content['title'] ??
-                                                    sessionList[i]
-                                                            .lastMsg
-                                                            .content[
-                                                        'reply_content']) ??
-                                                sessionList[i].lastMsg.content
-                                            : '不支持的消息类型',
+                                    subtitle: Text(content,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)

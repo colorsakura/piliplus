@@ -32,7 +32,15 @@ class WhisperDetailController extends GetxController {
     if (res['status']) {
       messageList.value = res['data'].messages;
       if (messageList.isNotEmpty) {
-        ackSessionMsg();
+        if (messageList.length == 1 &&
+            messageList.last.msgType == 18 &&
+            messageList.last.msgSource == 18) {
+          // print(messageList.last);
+          // print(messageList.last.content);
+          //{content: [{"text":"对方主动回复或关注你前，最多发送1条消息","color_day":"#9499A0","color_nig":"#9499A0"}]}
+        } else {
+          ackSessionMsg();
+        }
         if (res['data'].eInfos != null) {
           eInfos = res['data'].eInfos;
         }
@@ -68,13 +76,20 @@ class WhisperDetailController extends GetxController {
       SmartDialog.showToast('请输入内容');
       return;
     }
+    if (mid == null) {
+      SmartDialog.showToast('这里不能发');
+      return;
+    }
     var result = await MsgHttp.sendMsg(
       senderUid: userInfo.mid,
       receiverId: int.parse(mid),
-      content: {'content': message},
+      content: '{"content":"$message"}',
       msgType: 1,
     );
     if (result['status']) {
+      print(result['data']);
+      querySessionMsg();
+      replyContentController.text = "";
       SmartDialog.showToast('发送成功');
     } else {
       SmartDialog.showToast(result['msg']);
