@@ -236,7 +236,7 @@ class Utils {
       MM = (int.parse(MM)).toString();
       DD = (int.parse(DD)).toString();
       hh = (int.parse(hh)).toString();
-      mm = (int.parse(mm)).toString();
+      // mm = (int.parse(mm)).toString();
     }
 
     if (date == null) {
