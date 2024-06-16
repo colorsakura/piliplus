@@ -80,15 +80,25 @@ class ChatItem extends StatelessWidget {
           emojiMap[e['text']] = e['url'];
         }
         text.splitMapJoin(
-          RegExp(r"\[.+?\]"),
+          RegExp(r"\[[^\[\]]+\]"),
           onMatch: (Match match) {
             final String emojiKey = match[0]!;
+            print(emojiKey);
             if (emojiMap.containsKey(emojiKey)) {
               children.add(WidgetSpan(
                 child: NetworkImgLayer(
                   width: 18,
                   height: 18,
                   src: emojiMap[emojiKey]!,
+                ),
+              ));
+            } else {
+              children.add(TextSpan(
+                text: emojiKey,
+                style: TextStyle(
+                  color: textColor(context),
+                  letterSpacing: 0.6,
+                  height: 1.5,
                 ),
               ));
             }
@@ -174,7 +184,7 @@ class ChatItem extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                content['title'],
+                content['title'] ?? "",
                 style: TextStyle(
                   letterSpacing: 0.6,
                   height: 1.5,
@@ -184,7 +194,7 @@ class ChatItem extends StatelessWidget {
               ),
               const SizedBox(height: 1),
               Text(
-                content['author'],
+                content['author'] ?? "",
                 style: TextStyle(
                   letterSpacing: 0.6,
                   height: 1.5,
