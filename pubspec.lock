@@ -501,10 +501,10 @@ packages:
     dependency: "direct main"
     description:
       name: floating
-      sha256: "04c3c96909b94dd6d2d121c69707739825e1f3dceca5ae451a9b8c0e652d246b"
+      sha256: ddcd7f28247746dbb62997c48c89d1824118676796df47fdc6f864f8d02849bc
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub/"
     source: hosted
-    version: "2.0.2"
+    version: "3.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
