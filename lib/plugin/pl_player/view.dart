@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -91,8 +92,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   // 用于记录上一次全屏切换手势触发时间，避免误触
   DateTime? lastFullScreenToggleTime;
-  // 记录上一次音量调整值作平均，避免音量调整抖动
-  double lastVolume = -1.0;
   // 是否在调整固定进度条
   RxBool draggingFixedProgressBar = false.obs;
   // 阅读器限制
@@ -839,14 +838,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 } else {
                   // 右边区域 👈
                   final double level = renderBox.size.height * 0.5;
-                  if (lastVolume < 0) {
-                    lastVolume = _volumeValue.value;
-                  }
-                  final double volume =
-                      (lastVolume + _volumeValue.value - delta / level) / 2;
-                  final double result = volume.clamp(0.0, 1.0);
-                  lastVolume = result;
-                  setVolume(result);
+                  EasyThrottle.throttle(
+                      'setVolume', const Duration(milliseconds: 20), () {
+                    final double volume = _volumeValue.value - delta / level;
+                    final double result = volume.clamp(0.0, 1.0);
+                    setVolume(result);
+                  });
                 }
               },
               onVerticalDragEnd: (DragEndDetails details) {},
@@ -1043,12 +1040,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         Obx(() {
           if (_.dataStatus.loading || _.isBuffering.value) {
             return Center(
-              child: GestureDetector(
-                onTap: () {
-                  _.refreshPlayer();
-                },
-                child:
-              Container(
+                child: GestureDetector(
+              onTap: () {
+                _.refreshPlayer();
+              },
+              child: Container(
                 padding: const EdgeInsets.all(30),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
