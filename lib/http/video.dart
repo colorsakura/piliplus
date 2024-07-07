@@ -46,8 +46,8 @@ class VideoHttp {
       );
       if (res.data['code'] == 0) {
         List<RecVideoItemModel> list = [];
-        List<int> blackMidsList = setting
-            .get(SettingBoxKey.blackMidsList, defaultValue: [-1])
+        List<int> blackMidsList = localCache
+            .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
             .map<int>((e) => e as int)
             .toList();
         for (var i in res.data['data']['item']) {
@@ -94,8 +94,8 @@ class VideoHttp {
       );
       if (res.data['code'] == 0) {
         List<RecVideoItemAppModel> list = [];
-        List<int> blackMidsList = setting
-            .get(SettingBoxKey.blackMidsList, defaultValue: [-1])
+        List<int> blackMidsList = localCache
+            .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
             .map<int>((e) => e as int)
             .toList();
         for (var i in res.data['data']['items']) {
@@ -128,8 +128,8 @@ class VideoHttp {
       );
       if (res.data['code'] == 0) {
         List<HotVideoItemModel> list = [];
-        List<int> blackMidsList = setting
-            .get(SettingBoxKey.blackMidsList, defaultValue: [-1])
+        List<int> blackMidsList = localCache
+            .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
             .map<int>((e) => e as int)
             .toList();
         for (var i in res.data['data']['list']) {
@@ -711,8 +711,8 @@ class VideoHttp {
       var res = await Request().get(rankApi);
       if (res.data['code'] == 0) {
         List<HotVideoItemModel> list = [];
-        List<int> blackMidsList = setting
-            .get(SettingBoxKey.blackMidsList, defaultValue: [-1])
+        List<int> blackMidsList = localCache
+            .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
             .map<int>((e) => e as int)
             .toList();
         for (var i in res.data['data']['list']) {
