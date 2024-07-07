@@ -325,7 +325,7 @@ class PlPlayerController {
         setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: false);
     danmakuWeight.value =
         setting.get(SettingBoxKey.danmakuWeight, defaultValue: 0);
-    danmakuFilterRule.value = setting.get(SettingBoxKey.danmakuFilterRule,
+    danmakuFilterRule.value = localCache.get(LocalCacheKey.danmakuFilterRule,
         defaultValue: []).map<Map<String, dynamic>>((e) {
       return Map<String, dynamic>.from(e);
     }).toList();
