@@ -47,11 +47,12 @@ class ApiInterceptor extends Interceptor {
     // handler.next(err);
     String url = err.requestOptions.uri.toString();
     print('🌹🌹ApiInterceptor: $url');
-    if (!url.contains('heartbeat')) {
+    // 屏蔽弹幕和心跳请求的错误提示
+    if (!url.contains('heartbeat') && !url.contains('seg.so')) {
       SmartDialog.showToast(
-        await dioError(err),
+        await dioError(err) + url,
         displayType: SmartToastType.onlyRefresh,
-        displayTime: const Duration(milliseconds: 1500),
+        displayTime: const Duration(milliseconds: 1200),
       );
     }
     super.onError(err, handler);
@@ -75,7 +76,7 @@ class ApiInterceptor extends Interceptor {
         return '发送请求超时，请检查网络设置';
       case DioExceptionType.unknown:
         final String res = await checkConnect();
-        return '$res，网络异常！';
+        return '$res，${error.error} ${error.message} 网络异常！';
     }
   }
 
