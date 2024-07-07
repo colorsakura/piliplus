@@ -325,7 +325,7 @@ class VideoHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     if (accessKey == null || accessKey == "") {
-      return {'status': false, 'msg': "本操作使用app端接口，请前往【隐私设置】刷新access_key"};
+      return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     var res = await Request().post(
       Api.dislikeVideo,
@@ -355,7 +355,7 @@ class VideoHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     if (accessKey == null || accessKey == "") {
-      return {'status': false, 'msg': "本操作使用app端接口，请前往【隐私设置】刷新access_key"};
+      return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     assert((reasonId != null) ^ (feedbackId != null));
     var res = await Request().get(Api.feedDislike, data: {
@@ -386,7 +386,7 @@ class VideoHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     if (accessKey == null || accessKey == "") {
-      return {'status': false, 'msg': "本操作使用app端接口，请前往【隐私设置】刷新access_key"};
+      return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     // assert ((reasonId != null) ^ (feedbackId != null));
     var res = await Request().get(Api.feedDislikeCancel, data: {

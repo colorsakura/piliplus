@@ -3,43 +3,42 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:hive/hive.dart';
-import '../utils/storage.dart';
 
 class ApiInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // print("请求之前");
-    // 在请求之前添加头部或认证信息
-    // options.headers['Authorization'] = 'Bearer token';
-    // options.headers['Content-Type'] = 'application/json';
-    handler.next(options);
-  }
+  // @override
+  // void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  //   print("请求之前");
+  //   // 在请求之前添加头部或认证信息
+  //   options.headers['Authorization'] = 'Bearer token';
+  //   options.headers['Content-Type'] = 'application/json';
+  //   handler.next(options);
+  // }
 
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    try {
-      if (response.statusCode == 302) {
-        final List<String> locations = response.headers['location']!;
-        if (locations.isNotEmpty) {
-          if (locations.first.startsWith('https://www.mcbbs.net')) {
-            final Uri uri = Uri.parse(locations.first);
-            final String? accessKey = uri.queryParameters['access_key'];
-            final String? mid = uri.queryParameters['mid'];
-            try {
-              Box localCache = GStorage.localCache;
-              localCache.put(LocalCacheKey.accessKey,
-                  <String, String?>{'mid': mid, 'value': accessKey});
-            } catch (_) {}
-          }
-        }
-      }
-    } catch (err) {
-      print('ApiInterceptor: $err');
-    }
+  // @override
+  // void onResponse(Response response, ResponseInterceptorHandler handler) {
+  //   try {
+  //     if (response.statusCode == 302) {
+  //       final List<String> locations = response.headers['location']!;
+  //       if (locations.isNotEmpty) {
+  //         if (locations.first.startsWith('https://www.mcbbs.net')) {
+  //           print('ApiInterceptor@@@@@: ${locations.first}');
+  //           final Uri uri = Uri.parse(locations.first);
+  //           final String? accessKey = uri.queryParameters['access_key'];
+  //           final String? mid = uri.queryParameters['mid'];
+  //           try {
+  //             Box localCache = GStorage.localCache;
+  //             localCache.put(LocalCacheKey.accessKey,
+  //                 <String, String?>{'mid': mid, 'value': accessKey});
+  //           } catch (_) {}
+  //         }
+  //       }
+  //     }
+  //   } catch (err) {
+  //     print('ApiInterceptor: $err');
+  //   }
 
-    handler.next(response);
-  }
+  //   handler.next(response);
+  // }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {

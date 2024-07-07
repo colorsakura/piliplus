@@ -77,7 +77,7 @@ class VideoPopupMenu extends StatelessWidget {
               String? accessKey = GStorage.localCache
                   .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
               if (accessKey == null || accessKey == "") {
-                SmartDialog.showToast("本操作使用app端接口，请前往【隐私设置】刷新access_key");
+                SmartDialog.showToast("请退出账号后重新登录");
                 return;
               }
               if (videoItem is RecVideoItemAppModel) {

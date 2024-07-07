@@ -36,22 +36,20 @@ class MineController extends GetxController {
 
   onLogin() async {
     if (!userLogin.value) {
-      Get.toNamed(
-        '/webview',
-        parameters: {
-          'url': 'https://passport.bilibili.com/h5-app/passport/login',
-          'type': 'login',
-          'pageTitle': '登录bilibili',
-        },
-      );
-      // Get.toNamed('/loginPage');
+      // Get.toNamed(
+      //   '/webview',
+      //   parameters: {
+      //     'url': 'https://passport.bilibili.com/h5-app/passport/login',
+      //     'type': 'login',
+      //     'pageTitle': '登录bilibili',
+      //   },
+      // );
+      Get.toNamed('/loginPage', preventDuplicates: false);
     } else {
       int mid = userInfo.value.mid!;
       String face = userInfo.value.face!;
-      Get.toNamed(
-        '/member?mid=$mid',
-        arguments: {'face': face},
-      );
+      Get.toNamed('/member?mid=$mid',
+          arguments: {'face': face}, preventDuplicates: false);
     }
   }
 
