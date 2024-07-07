@@ -575,7 +575,7 @@ InlineSpan buildContent(
     return e.replaceAllMapped(
         RegExp(r'[?+*]'), (match) => '\\${match.group(0)}');
   }).toList();
-
+  specialTokens.sort((a, b) => b.length.compareTo(a.length));
   String patternStr = specialTokens.map(RegExp.escape).join('|');
   if (patternStr.isNotEmpty) {
     patternStr += "|";
