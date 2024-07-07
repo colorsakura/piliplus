@@ -271,6 +271,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController!.dispose();
     }
     videoPlayerServiceHandler.onVideoDetailDispose();
+    VideoDetailPage.routeObserver.unsubscribe(this);
     // _lifecycleListener.dispose();
     showStatusBar();
     // _animationController.dispose();
