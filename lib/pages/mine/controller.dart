@@ -69,7 +69,8 @@ class MineController extends GetxController {
         resetUserInfo();
       }
     } else {
-      resetUserInfo();
+      // resetUserInfo();
+      SmartDialog.showToast(res['msg']);
     }
     await queryUserStatOwner();
     return res;
