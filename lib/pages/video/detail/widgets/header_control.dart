@@ -319,6 +319,7 @@ class _HeaderControlState extends State<HeaderControl> {
       -1,
       15,
       30,
+      45,
       60,
     ];
     showModalBottomSheet(
