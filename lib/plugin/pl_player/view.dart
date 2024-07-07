@@ -983,7 +983,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: FractionalTranslation(
                 translation: const Offset(1, -0.4),
                 child: Visibility(
-                  visible: _.showControls.value,
+                  visible: _.showControls.value && _.isFullScreen.value,
                   child: ComBtn(
                     tooltip: _.controlsLock.value ? '解锁' : '锁定',
                     icon: Icon(
@@ -1016,20 +1016,58 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     size: 20,
                     color: Colors.white,
                   ),
-                  fuc: () => {
+                  fuc: () {
+                    SmartDialog.showToast('截图中');
                     _.videoPlayerController
                         ?.screenshot(format: 'image/png')
                         .then((value) {
                       if (value != null) {
-                        SmartDialog.showToast('截图成功');
-                        String _name = DateTime.now().toString();
-                        SaverGallery.saveImage(value,
-                            name: _name,
-                            androidRelativePath: "Pictures/Screenshots",
-                            androidExistNotSave: false);
-                        SmartDialog.showToast('$_name.png已保存到相册/截图');
+                        SmartDialog.showToast('点击弹窗保存截图');
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              // title: const Text('点击保存'),
+                              titlePadding: EdgeInsets.zero,
+                              contentPadding: const EdgeInsets.all(8),
+                              insetPadding:
+                                  EdgeInsets.only(left: context.width / 2),
+                              //移除圆角
+                              shape: const RoundedRectangleBorder(),
+                              content: GestureDetector(
+                                onTap: () async {
+                                  String name = DateTime.now().toString();
+                                  final SaveResult result =
+                                      await SaverGallery.saveImage(
+                                    value,
+                                    name: name,
+                                    androidRelativePath: "Pictures/Screenshots",
+                                    androidExistNotSave: false,
+                                  );
+
+                                  if (result.isSuccess) {
+                                    Get.back();
+                                    SmartDialog.showToast('$name.png已保存到相册/截图');
+                                  } else {
+                                    await SmartDialog.showToast(
+                                        '保存失败，${result.errorMessage}');
+                                  }
+                                },
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: context.width / 3,
+                                    maxHeight: context.height / 3,
+                                  ),
+                                  child: Image.memory(value),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        SmartDialog.showToast('截图失败');
                       }
-                    })
+                    });
                   },
                 ),
               ),
