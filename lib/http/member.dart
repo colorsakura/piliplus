@@ -72,7 +72,7 @@ class MemberHttp {
 
   static Future memberArchive({
     int? mid,
-    int ps = 30,
+    int ps = 40,
     int tid = 0,
     int? pn,
     String? keyword,
