@@ -192,29 +192,44 @@ class MineController extends GetxController {
   }
 
   onChangeTheme() {
-    Brightness currentBrightness =
-        MediaQuery.of(Get.context!).platformBrightness;
     ThemeType currentTheme = themeType.value;
+    //system -> dark -> light -> system
     switch (currentTheme) {
+      case ThemeType.system:
+        setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
+        themeType.value = ThemeType.dark;
+        break;
       case ThemeType.dark:
         setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
         themeType.value = ThemeType.light;
         break;
       case ThemeType.light:
-        setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
-        themeType.value = ThemeType.dark;
-        break;
-      case ThemeType.system:
-        // 判断当前的颜色模式
-        if (currentBrightness == Brightness.light) {
-          setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
-          themeType.value = ThemeType.dark;
-        } else {
-          setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
-          themeType.value = ThemeType.light;
-        }
+        setting.put(SettingBoxKey.themeMode, ThemeType.system.code);
+        themeType.value = ThemeType.system;
         break;
     }
+    // Brightness currentBrightness =
+    //     MediaQuery.of(Get.context!).platformBrightness;
+    // switch (currentTheme) {
+    //   case ThemeType.dark:
+    //     setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
+    //     themeType.value = ThemeType.light;
+    //     break;
+    //   case ThemeType.light:
+    //     setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
+    //     themeType.value = ThemeType.dark;
+    //     break;
+    //   case ThemeType.system:
+    //     // 判断当前的颜色模式
+    //     if (currentBrightness == Brightness.light) {
+    //       setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
+    //       themeType.value = ThemeType.dark;
+    //     } else {
+    //       setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
+    //       themeType.value = ThemeType.light;
+    //     }
+    //     break;
+    // }
     Get.forceAppUpdate();
   }
 
