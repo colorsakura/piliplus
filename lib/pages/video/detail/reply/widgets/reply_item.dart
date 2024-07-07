@@ -703,6 +703,13 @@ InlineSpan buildContent(
                           title,
                           '',
                         );
+                      } else if (RegExp(r'^[Cc][Vv][0-9]+$').hasMatch(matchStr)) {
+                        Get.toNamed('/htmlRender', parameters: {
+                          'url': 'https://www.bilibili.com/read/$matchStr',
+                          'title': title,
+                          'id': matchStr.substring(2),
+                          'dynamicType': 'read'
+                        });
                       } else {
                         final String redirectUrl =
                             await UrlUtils.parseRedirectUrl(matchStr);
