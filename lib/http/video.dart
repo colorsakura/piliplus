@@ -256,7 +256,7 @@ class VideoHttp {
       // };
       return {
         'status': false,
-        'data': null,
+        'data': result.data,
         'code': result.code,
         'msg': result.message,
         // 'msg': errMap[result.code] ?? '请求异常',
@@ -307,12 +307,16 @@ class VideoHttp {
     var res = await Request().post(
       Api.coinVideo,
       queryParameters: {
-        'bvid': bvid,
+        'aid': IdUtils.bv2av(bvid),
+        // 'bvid': bvid,
         'multiply': multiply,
         'select_like': 0,
-        'csrf': await Request.getCsrf(),
+        'access_key': GStorage.localCache
+            .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
+        // 'csrf': await Request.getCsrf(),
       },
     );
+    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -351,10 +355,16 @@ class VideoHttp {
     var res = await Request().post(
       Api.likeVideo,
       queryParameters: {
-        'bvid': bvid,
-        'like': type ? 1 : 2,
-        'csrf': await Request.getCsrf(),
-      },
+        'aid': IdUtils.bv2av(bvid),
+        'like': type ? 0 : 1,
+        'access_key': GStorage.localCache
+            .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
+      }
+      // queryParameters: {
+      //   'bvid': bvid,
+      //   'like': type ? 1 : 2,
+      //   'csrf': await Request.getCsrf(),
+      // },
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
