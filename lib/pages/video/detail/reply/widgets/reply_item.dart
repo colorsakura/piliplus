@@ -571,7 +571,7 @@ InlineSpan buildContent(
     ...content.topicsMeta?.keys?.map((e) => '#$e#') ?? [],
     ...content.atNameToMid.keys.map((e) => '@$e'),
   ];
-  List<dynamic> jumpUrlKeysList = content.jumpUrl.keys.map((e) {
+  List<String> jumpUrlKeysList = content.jumpUrl.keys.map<String>((String e) {
     return e.replaceAllMapped(
         RegExp(r'[?+*]'), (match) => '\\${match.group(0)}');
   }).toList();
@@ -582,7 +582,7 @@ InlineSpan buildContent(
   }
   patternStr += r'(\b(?:\d+[:：])?[0-5]?[0-9][:：][0-5]?[0-9]\b)';
   if (jumpUrlKeysList.isNotEmpty) {
-    patternStr += '|${jumpUrlKeysList.join('|')}';
+    patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
   }
   final RegExp pattern = RegExp(patternStr);
   List<String> matchedStrs = [];
@@ -703,7 +703,8 @@ InlineSpan buildContent(
                           title,
                           '',
                         );
-                      } else if (RegExp(r'^[Cc][Vv][0-9]+$').hasMatch(matchStr)) {
+                      } else if (RegExp(r'^[Cc][Vv][0-9]+$')
+                          .hasMatch(matchStr)) {
                         Get.toNamed('/htmlRender', parameters: {
                           'url': 'https://www.bilibili.com/read/$matchStr',
                           'title': title,
@@ -792,9 +793,9 @@ InlineSpan buildContent(
           );
           // 只显示一次
           matchedStrs.add(matchStr);
-        } else if (content
-                .topicsMeta[matchStr.substring(1, matchStr.length - 1)] !=
-            null) {
+        } else if (matchStr.length > 1 &&
+            content.topicsMeta[matchStr.substring(1, matchStr.length - 1)] !=
+                null) {
           spanChildren.add(
             TextSpan(
               text: matchStr,
