@@ -532,7 +532,7 @@ InlineSpan buildContent(
 
   // 投票
   if (content.vote.isNotEmpty) {
-    content.message.splitMapJoin(RegExp(r"\{vote:.*?\}"),
+    content.message.splitMapJoin(RegExp(r"\{vote:\d+?\}"),
         onMatch: (Match match) {
       // String matchStr = match[0]!;
       spanChildren.add(
@@ -556,8 +556,8 @@ InlineSpan buildContent(
     }, onNonMatch: (String str) {
       return str;
     });
+    content.message = content.message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
   }
-  // content.message = content.message.replaceAll(RegExp(r"\{vote:.*?\}"), ' ');
   content.message = content.message
       .replaceAll('&amp;', '&')
       .replaceAll('&lt;', '<')
