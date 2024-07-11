@@ -1079,24 +1079,39 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           if (_.dataStatus.loading || _.isBuffering.value) {
             return Center(
                 child: GestureDetector(
-              onTap: () {
-                _.refreshPlayer();
-              },
-              child: Container(
-                padding: const EdgeInsets.all(30),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [Colors.black26, Colors.transparent],
-                  ),
-                ),
-                child: Image.asset(
-                  'assets/images/loading.gif',
-                  height: 25,
-                  semanticLabel: "加载中",
-                ),
-              ),
-            ));
+                    onTap: () {
+                      _.refreshPlayer();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(30),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [Colors.black26, Colors.transparent],
+                        ),
+                      ),
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Image.asset(
+                          'assets/images/loading.gif',
+                          height: 25,
+                          semanticLabel: "加载中",
+                        ),
+                        if (_.isBuffering.value)
+                          Obx(() {
+                            if (_.buffered.value == Duration.zero) {
+                              return const Text('Buffering...',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12));
+                            }
+                            String bufferStr = _.buffered.toString();
+                            return Text(
+                              bufferStr.substring(0, bufferStr.length - 3),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
+                            );
+                          }),
+                      ]),
+                    )));
           } else {
             return const SizedBox();
           }
