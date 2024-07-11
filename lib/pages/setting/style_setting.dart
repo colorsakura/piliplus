@@ -185,6 +185,13 @@ class _StyleSettingState extends State<StyleSetting> {
               }
             },
           ),
+          const SetSwitchItem(
+            title: '动态页显示所有已关注Up主',
+            subTitle: '并以最常访问排序Up',
+            leading: Icon(Icons.people_alt_outlined),
+            setKey: SettingBoxKey.dynamicsShowAllFollowedUp,
+            defaultVal: false,
+          ),
           ListTile(
             dense: false,
             onTap: () => settingController.setDynamicBadgeMode(context),
