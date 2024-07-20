@@ -729,14 +729,14 @@ class PlPlayerController {
           }
           makeHeartBeat(event.inSeconds);
         }),
-        videoPlayerController!.stream.duration.listen((event) {
+        videoPlayerController!.stream.duration.listen((Duration event) {
           duration.value = event;
         }),
-        videoPlayerController!.stream.buffer.listen((event) {
+        videoPlayerController!.stream.buffer.listen((Duration event) {
           _buffered.value = event;
           updateBufferedSecond();
         }),
-        videoPlayerController!.stream.buffering.listen((event) {
+        videoPlayerController!.stream.buffering.listen((bool event) {
           isBuffering.value = event;
           videoPlayerServiceHandler.onStatusChange(
               playerStatus.status.value, event);
@@ -746,23 +746,33 @@ class PlPlayerController {
         //   print(event);
         //   SmartDialog.showToast('视频加载日志： $event');
         // }),
-        videoPlayerController!.stream.error.listen((event) {
-          if (event.startsWith("Failed to open https://")) {
+        videoPlayerController!.stream.error.listen((String event) {
+          if (event.startsWith("Failed to open https://") ||
+              event.startsWith("Can not open external file https://") ||
+              //tcp: ffurl_read returned 0xdfb9b0bb
+              //tcp: ffurl_read returned 0xffffff99
+              event.startsWith('tcp: ffurl_read returned ')) {
             EasyThrottle.throttle('videoPlayerController!.stream.error.listen',
-                const Duration(milliseconds: 1000), () {
-              SmartDialog.showToast('视频链接打开失败，重试中',
-                  displayTime: const Duration(milliseconds: 500));
-              refreshPlayer();
+                const Duration(milliseconds: 10000), () {
+              Future.delayed(const Duration(milliseconds: 3000), () {
+                print("isBuffering.value: ${isBuffering.value}");
+                print("_buffered.value: ${_buffered.value}");
+                if (isBuffering.value && _buffered.value == Duration.zero) {
+                  refreshPlayer();
+                  SmartDialog.showToast('视频链接打开失败，重试中',
+                      displayTime: const Duration(milliseconds: 500));
+                }
+              });
             });
             return;
           }
           print('videoPlayerController!.stream.error.listen');
           print(event);
-          //tcp: ffurl_read returned 0xdfb9b0bb
-          //tcp: ffurl_read returned 0xffffff99
-          if (!event.startsWith('tcp: ffurl_read returned ')) {
-            SmartDialog.showToast('视频加载错误, $event');
+          if (event.startsWith('Could not open codec')) {
+            SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
+            return;
           }
+          SmartDialog.showToast('视频加载错误, $event');
         }),
         // videoPlayerController!.stream.volume.listen((event) {
         //   if (!mute.value && _volumeBeforeMute != event) {
@@ -770,10 +780,10 @@ class PlPlayerController {
         //   }
         // }),
         // 媒体通知监听
-        onPlayerStatusChanged.listen((event) {
+        onPlayerStatusChanged.listen((PlayerStatus event) {
           videoPlayerServiceHandler.onStatusChange(event, isBuffering.value);
         }),
-        onPositionChanged.listen((event) {
+        onPositionChanged.listen((Duration event) {
           EasyThrottle.throttle(
               'mediaServicePosition',
               const Duration(seconds: 1),
