@@ -39,8 +39,11 @@ class Utils {
     if (number is String) {
       return number;
     }
-    final String res = (number / 10000).toString();
-    if (int.parse(res.split('.')[0]) >= 1) {
+    if (number >= 100000000) {
+      return '${(number / 100000000).toStringAsFixed(1)}亿';
+    } else if (number >= 100000) {
+      return '${(number ~/ 10000).toString()}万';
+    } else if (number > 10000) {
       return '${(number / 10000).toStringAsFixed(1)}万';
     } else {
       return number.toString();
