@@ -20,8 +20,11 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
   void initState() {
     super.initState();
     defaultTabs = tabsConfig;
-    tabbarSort = settingStorage.get(SettingBoxKey.tabbarSort,
-        defaultValue: ['live', 'rcmd', 'hot', 'rank', 'bangumi']);
+    tabbarSort = settingStorage
+        .get(SettingBoxKey.tabbarSort,
+            defaultValue: ['live', 'rcmd', 'hot', 'rank', 'bangumi'])
+        .map<String>((i) => i.toString())
+        .toList();
     // 对 tabData 进行排序
     defaultTabs.sort((a, b) {
       int indexA = tabbarSort.indexOf((a['type'] as TabType).id);
@@ -89,6 +92,8 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
         physics: const NeverScrollableScrollPhysics(),
         footer: SizedBox(
           height: MediaQuery.of(context).padding.bottom + 30,
+          child: const Align(
+              alignment: Alignment.centerRight, child: Text('*长按拖动排序        ')),
         ),
         children: listTiles,
       ),
