@@ -86,7 +86,7 @@ class VideoDetailController extends GetxController
   Floating? floating;
   late PreferredSizeWidget headerControl;
 
-  late bool enableCDN;
+  // late bool enableCDN;
   late int? cacheVideoQa;
   late String cacheDecode;
   late String cacheSecondDecode;
@@ -138,7 +138,8 @@ class VideoDetailController extends GetxController
       heroTag: heroTag,
     );
     // CDN优化
-    enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
+    // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
+
     // 预设的画质
     cacheVideoQa = setting.get(SettingBoxKey.defaultVideoQa,
         defaultValue: VideoQuality.values.last.code);
@@ -388,9 +389,10 @@ class VideoDetailController extends GetxController
           (e) => e.codecs!.startsWith(currentDecodeFormats.code),
           orElse: () => videosList.first);
 
-      videoUrl = enableCDN
-          ? VideoUtils.getCdnUrl(firstVideo)
-          : (firstVideo.backupUrl ?? firstVideo.baseUrl!);
+      // videoUrl = enableCDN
+      //     ? VideoUtils.getCdnUrl(firstVideo)
+      //     : (firstVideo.backupUrl ?? firstVideo.baseUrl!);
+      videoUrl = VideoUtils.getCdnUrl(firstVideo);
 
       /// 优先顺序 设置中指定质量 -> 当前可选的最高质量
       late AudioItem? firstAudio;
@@ -415,9 +417,10 @@ class VideoDetailController extends GetxController
         }
         firstAudio = audiosList.firstWhere((e) => e.id == closestNumber,
             orElse: () => audiosList.first);
-        audioUrl = enableCDN
-            ? VideoUtils.getCdnUrl(firstAudio)
-            : (firstAudio.backupUrl ?? firstAudio.baseUrl!);
+        // audioUrl = enableCDN
+        //     ? VideoUtils.getCdnUrl(firstAudio)
+        //     : (firstAudio.backupUrl ?? firstAudio.baseUrl!);
+        audioUrl = VideoUtils.getCdnUrl(firstAudio);
         if (firstAudio.id != null) {
           currentAudioQa = AudioQualityCode.fromCode(firstAudio.id!)!;
         }

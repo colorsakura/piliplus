@@ -18,7 +18,7 @@ class LiveRoomController extends GetxController {
   PlPlayerController plPlayerController =
       PlPlayerController.getInstance(videoType: 'live');
   Rx<RoomInfoH5Model> roomInfoH5 = RoomInfoH5Model().obs;
-  late bool enableCDN;
+  // late bool enableCDN;
 
   @override
   void onInit() {
@@ -35,7 +35,7 @@ class LiveRoomController extends GetxController {
       }
     }
     // CDN优化
-    enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
+    // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
   }
 
   playerInit(source) async {
@@ -62,11 +62,7 @@ class LiveRoomController extends GetxController {
       List<CodecItem> codec =
           res['data'].playurlInfo.playurl.stream.first.format.first.codec;
       CodecItem item = codec.first;
-      String videoUrl = enableCDN
-          ? VideoUtils.getCdnUrl(item)
-          : (item.urlInfo?.first.host)! +
-              item.baseUrl! +
-              item.urlInfo!.first.extra!;
+      String videoUrl = VideoUtils.getCdnUrl(item);
       await playerInit(videoUrl);
       return res;
     }
