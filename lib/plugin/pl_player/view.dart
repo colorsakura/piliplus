@@ -91,7 +91,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late bool fullScreenGestureReverse;
 
   Offset _initialFocalPoint = Offset.zero;
-  String? _gestureDirection; // 'horizontal' or 'vertical'
+  String? _gestureType;
   //播放器放缩
   bool interacting = false;
 
@@ -528,14 +528,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 interacting = true;
               }
               _initialFocalPoint = details.localFocalPoint;
-              _gestureDirection = null;
+              _gestureType = null;
             },
 
             onInteractionUpdate: (ScaleUpdateDetails details) {
               if (interacting) return;
-              if (details.pointerCount == 2) {
+              Offset cumulativeDelta =
+                  details.localFocalPoint - _initialFocalPoint;
+              if (details.pointerCount == 2 && cumulativeDelta.distance < 1.5) {
                 interacting = true;
-                _gestureDirection = null;
+                _gestureType = null;
                 return;
               }
 
@@ -544,15 +546,27 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               RenderBox renderBox =
                   _playerKey.currentContext!.findRenderObject() as RenderBox;
 
-              if (_gestureDirection == null) {
-                Offset cumulativeDelta =
-                    details.localFocalPoint - _initialFocalPoint;
+              if (_gestureType == null) {
                 if (cumulativeDelta.distance < 1.5) return;
                 if (cumulativeDelta.dx.abs() > 4 * cumulativeDelta.dy.abs()) {
-                  _gestureDirection = 'horizontal';
+                  _gestureType = 'horizontal';
                 } else if (cumulativeDelta.dy.abs() >
                     4 * cumulativeDelta.dx.abs()) {
-                  _gestureDirection = 'vertical';
+                  // _gestureType = 'vertical';
+
+                  final double totalWidth = renderBox.size.width;
+                  final double tapPosition = details.localFocalPoint.dx;
+                  final double sectionWidth = totalWidth / 4;
+                  if (tapPosition < sectionWidth) {
+                    // 左边区域
+                    _gestureType = 'left';
+                  } else if (tapPosition < sectionWidth * 3) {
+                    // 全屏
+                    _gestureType = 'center';
+                  } else {
+                    // 右边区域
+                    _gestureType = 'right';
+                  }
                 } else {
                   return;
                 }
@@ -560,7 +574,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
               Offset delta = details.focalPointDelta;
 
-              if (_gestureDirection == 'horizontal') {
+              if (_gestureType == 'horizontal') {
                 // live模式下禁用
                 if (_.videoType.value == 'live') return;
                 final int curSliderPosition =
@@ -573,60 +587,65 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     pos.clamp(Duration.zero, _.duration.value);
                 _.onUpdatedSliderProgress(result);
                 _.onChangedSliderStart();
-              } else if (_gestureDirection == 'vertical') {
-                // 垂直方向 音量/亮度调节
-                final double totalWidth = renderBox.size.width;
-                final double tapPosition = details.localFocalPoint.dx;
-                final double sectionWidth = totalWidth / 4;
-                if (tapPosition < sectionWidth) {
-                  // 左边区域 👈
-                  final double level = renderBox.size.height * 3;
-                  final double brightness =
-                      _brightnessValue.value - delta.dy / level;
-                  final double result = brightness.clamp(0.0, 1.0);
-                  setBrightness(result);
-                } else if (tapPosition < sectionWidth * 3) {
-                  // 全屏
-                  const double threshold = 10; // 滑动阈值
-                  void fullScreenTrigger(bool status) async {
-                    EasyThrottle.throttle(
-                        'fullScreen', const Duration(milliseconds: 1000), () {
-                      _.triggerFullScreen(status: status);
-                    });
-                  }
-                  double cumulativeDy =
-                      details.localFocalPoint.dy - _initialFocalPoint.dy;
-                  if (cumulativeDy > threshold) {
-                    // 下滑
-                    if (_.isFullScreen.value ^ fullScreenGestureReverse) {
-                      fullScreenTrigger(fullScreenGestureReverse);
-                    }
-                  } else if (cumulativeDy < -threshold) {
-                    // 上划
-                    if (!_.isFullScreen.value ^ fullScreenGestureReverse) {
-                      fullScreenTrigger(!fullScreenGestureReverse);
-                    }
-                  }
-                } else {
-                  // 右边区域
-                  final double level = renderBox.size.height * 0.5;
-                  EasyThrottle.throttle(
-                      'setVolume', const Duration(milliseconds: 20), () {
-                    final double volume = _volumeValue.value - delta.dy / level;
-                    final double result = volume.clamp(0.0, 1.0);
-                    setVolume(result);
-                  });
+              } else if (_gestureType == 'left') {
+                // 左边区域 👈
+                final double level = renderBox.size.height * 3;
+                final double brightness =
+                    _brightnessValue.value - delta.dy / level;
+                final double result = brightness.clamp(0.0, 1.0);
+                setBrightness(result);
+              } else if (_gestureType == 'center') {
+                // 全屏
+                const double threshold = 7; // 滑动阈值
+                // void fullScreenTrigger(bool status) async {
+                //   EasyThrottle.throttle(
+                //       'fullScreen', const Duration(milliseconds: 1000), () {
+                //     _.triggerFullScreen(status: status);
+                //   });
+                // }
+
+                double cumulativeDy =
+                    details.localFocalPoint.dy - _initialFocalPoint.dy;
+                if (cumulativeDy > threshold) {
+                  _gestureType = 'center_down';
+                } else if (cumulativeDy < -threshold) {
+                  _gestureType = 'center_up';
                 }
+              } else if (_gestureType == 'right') {
+                // 右边区域
+                final double level = renderBox.size.height * 0.5;
+                EasyThrottle.throttle(
+                    'setVolume', const Duration(milliseconds: 20), () {
+                  final double volume = _volumeValue.value - delta.dy / level;
+                  final double result = volume.clamp(0.0, 1.0);
+                  setVolume(result);
+                });
               }
             },
-            onInteractionEnd: (details) {
+            onInteractionEnd: (ScaleEndDetails details) {
               if (_.isSliderMoving.value) {
                 _.onChangedSliderEnd();
                 _.seekTo(_.sliderPosition.value, type: 'slider');
               }
+              void fullScreenTrigger(bool status) async {
+                EasyThrottle.throttle(
+                    'fullScreen', const Duration(milliseconds: 1000), () {
+                  _.triggerFullScreen(status: status);
+                });
+              }
+
+              if (_gestureType == 'center_down') {
+                if (_.isFullScreen.value ^ fullScreenGestureReverse) {
+                  fullScreenTrigger(fullScreenGestureReverse);
+                }
+              } else if (_gestureType == 'center_up') {
+                if (!_.isFullScreen.value ^ fullScreenGestureReverse) {
+                  fullScreenTrigger(!fullScreenGestureReverse);
+                }
+              }
               interacting = false;
               _initialFocalPoint = Offset.zero;
-              _gestureDirection = null;
+              _gestureType = null;
             },
             child: Video(
               key: ValueKey('${_.videoFit.value}'),
