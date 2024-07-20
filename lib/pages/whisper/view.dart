@@ -201,11 +201,11 @@ class _WhisperPageState extends State<WhisperPage> {
                                         width: 45,
                                         height: 45,
                                         type: 'avatar',
-                                        src: sessionList[i].accountInfo.face,
+                                        src: sessionList[i].accountInfo?.face,
                                       ),
                                     ),
-                                    title:
-                                        Text(sessionList[i].accountInfo.name),
+                                    title: Text(
+                                        sessionList[i].accountInfo?.name ?? ""),
                                     subtitle: Text(content,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
