@@ -443,23 +443,21 @@ class VideoIntroController extends GetxController {
     // 重新获取视频资源
     final VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: heroTag);
-    final RelatedController relatedCtr =
-        Get.find<RelatedController>(tag: heroTag);
     videoDetailCtr.bvid = bvid;
     videoDetailCtr.oid.value = aid ?? IdUtils.bv2av(bvid);
     videoDetailCtr.cid.value = cid;
     videoDetailCtr.danmakuCid.value = cid;
     videoDetailCtr.queryVideoUrl();
-    relatedCtr.bvid = bvid;
-    relatedCtr.queryRelatedVideo();
+    // 重新请求相关视频
+    final RelatedController? relatedCtr =
+        Get.find<RelatedController?>(tag: heroTag);
+    relatedCtr?.bvid = bvid;
+    relatedCtr?.queryRelatedVideo();
     // 重新请求评论
-    try {
-      /// 未渲染回复组件时可能异常
-      final VideoReplyController videoReplyCtr =
-          Get.find<VideoReplyController>(tag: heroTag);
-      videoReplyCtr.aid = aid;
-      videoReplyCtr.queryReplyList(type: 'init');
-    } catch (_) {}
+    final VideoReplyController? videoReplyCtr =
+        Get.find<VideoReplyController?>(tag: heroTag);
+    videoReplyCtr?.aid = aid;
+    videoReplyCtr?.queryReplyList(type: 'init');
     this.bvid = bvid;
     lastPlayCid.value = cid;
     await queryVideoIntro();
