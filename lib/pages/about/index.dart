@@ -272,11 +272,22 @@ class _AboutPageState extends State<AboutPage> {
                         onPressed: () {
                           Get.back();
                           GStorage.setting.clear();
-                          GStorage.localCache.clear();
                           GStorage.video.clear();
                           SmartDialog.showToast('重置成功');
                         },
-                        child: const Text('确定'),
+                        child: const Text('重置可导出的设置'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          GStorage.userInfo.clear();
+                          GStorage.setting.clear();
+                          GStorage.localCache.clear();
+                          GStorage.video.clear();
+                          GStorage.historyWord.clear();
+                          SmartDialog.showToast('重置成功');
+                        },
+                        child: const Text('重置所有数据（含登录信息）'),
                       ),
                     ],
                   );
