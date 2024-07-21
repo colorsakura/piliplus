@@ -78,7 +78,7 @@ class _HeaderControlState extends State<HeaderControl> {
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
     defaultCDNService = setting.get(SettingBoxKey.CDNService,
-        defaultValue: CDNService.ali.code);
+        defaultValue: CDNService.backupUrl.code);
     startClock();
   }
 
