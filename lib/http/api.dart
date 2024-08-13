@@ -502,6 +502,26 @@ class Api {
   static const String loginByPwdApi =
       '${HttpString.passBaseUrl}/x/passport-login/oauth2/login';
 
+  /// 密码登录时，提示“本次登录环境存在风险, 需使用手机号进行验证或绑定”
+  /// 根据https://ivan.hanloth.cn/archives/530/流程进行手机号验证
+  /// tmp_code
+  static const String safeCenterGetInfo =
+      '${HttpString.passBaseUrl}/x/safecenter/user/info';
+
+  /// 验证绑定手机号前的人机验证
+  static const String preCapture =
+      '${HttpString.passBaseUrl}/x/safecenter/captcha/pre';
+
+  /// 密码登录时风控发送手机验证码
+  ///sms_type	str	loginTelCheck
+  /// tmp_code	str	验证标记代码	来自数据处理中的解析出的参数tmp_token
+  /// gee_challenge	str	极验id	申请人机验证时得到(data->gee_challenge)
+  /// gee_seccode	str	极验key	人机验证后得到(result->geetest_seccode)
+  /// gee_validate	str	极验result	人机验证后得到(result->geetest_validate)
+  /// recaptcha_token	str	验证token	申请人机验证时得到(data->recaptcha_token)
+  static const String safeCenterSmsCode =
+      '${HttpString.passBaseUrl}/x/safecenter/common/sms/send';
+
   /// 密码加密密钥
   /// disable_rcmd
   /// local_id
