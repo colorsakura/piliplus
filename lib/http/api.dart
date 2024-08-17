@@ -522,6 +522,14 @@ class Api {
   static const String safeCenterSmsCode =
       '${HttpString.passBaseUrl}/x/safecenter/common/sms/send';
 
+  /// type	str	loginTelCheck
+  /// code	int	验证码内容
+  /// tmp_code	str	验证标记代码	来自数据处理中的解析出的参数tmp_token
+  /// request_id	str	验证请求标记	来自数据处理中的解析出的参数requestId
+  /// captcha_key	str	验证秘钥	来自申请验证码的captcha_key（data->captcha_key）
+  static const String safeCenterSmsVerify =
+      '${HttpString.passBaseUrl}/x/safecenter/login/tel/verify';
+
   /// 密码加密密钥
   /// disable_rcmd
   /// local_id

@@ -316,32 +316,85 @@ class LoginPageController extends GetxController
           return;
         }
         Map<String, String> accountInfo = {
-          "telVerify": safeCenterRes['data']['account_info']!['tel_verify']!,
-          "hide_tel": safeCenterRes['data']['account_info']!["hide_tel"]!,
+          "telVerify": safeCenterRes['data']['account_info']!['tel_verify'],
+          "bindTel": safeCenterRes['data']['account_info']!["bind_tel"],
+          "mailVerify": safeCenterRes['data']['account_info']!['mailVerify'],
+          "bindMail": safeCenterRes['data']['account_info']!["bind_mail"],
         };
-        SmartDialog.showNotify(
-            msg: "将给你的手机号：${accountInfo['hide_tel']}发送短信验证码",
-            notifyType: NotifyType.alert,
-            alignment: Alignment.topCenter);
+        TextEditingController _textFieldController = TextEditingController();
+        String captchaKey = '';
+        Get.dialog(AlertDialog(
+          title: const Text("本次登录需要验证您的手机号"),
+          content: Column(
+            children:[
+              Text(accountInfo['bindTel'] ?? '未能获取手机号'),
+          TextField(
+            controller: _textFieldController,
+            decoration: const InputDecoration(hintText: "请输入短信验证码"),
+          ),]),
 
-        var preCaptureRes = await LoginHttp.preCapture();
-        if (!preCaptureRes['status']) {
-          SmartDialog.showToast("获取验证码失败，请尝试其它登录方式\n"
-              "(${preCaptureRes['code']}) ${preCaptureRes['msg']}");
-          return;
-        }
-        String geeGt = preCaptureRes['data']['gee_gt']!;
-        String geeChallenge = preCaptureRes['data']['gee_challenge'];
-        captchaData.token = preCaptureRes['data']['recaptcha_token']!;
+          actions: <Widget>[
+            TextButton(
+              child: const Text("发送验证码 "),
+              onPressed: () async {
+                var preCaptureRes = await LoginHttp.preCapture();
+                if (!preCaptureRes['status']) {
+                  SmartDialog.showToast("获取验证码失败，请尝试其它登录方式\n"
+                      "(${preCaptureRes['code']}) ${preCaptureRes['msg']}");
+                  return;
+                }
+                String geeGt = preCaptureRes['data']['gee_gt']!;
+                String geeChallenge = preCaptureRes['data']['gee_challenge'];
+                captchaData.token = preCaptureRes['data']['recaptcha_token']!;
 
-        getCaptcha(geeGt, geeChallenge, () {
-          LoginHttp.safeCenterSmsCode(
-              tmpCode: currentUri.queryParameters['tmp_token']!,
-              geeChallenge: geeChallenge,
-              geeSeccode: captchaData.seccode!,
-              geeValidate: captchaData.validate!,
-              recaptchaToken: captchaData.token!);
-        });
+                getCaptcha(geeGt, geeChallenge, () async {
+                  var safeCenterSendSmsCodeRes = await LoginHttp.safeCenterSmsCode(
+                      tmpCode: currentUri.queryParameters['tmp_token']!,
+                      geeChallenge: geeChallenge,
+                      geeSeccode: captchaData.seccode!,
+                      geeValidate: captchaData.validate!,
+                      recaptchaToken: captchaData.token!);
+                  if (!safeCenterSendSmsCodeRes['status']) {
+                    SmartDialog.showToast("发送短信验证码失败，请尝试其它登录方式\n"
+                        "(${safeCenterSendSmsCodeRes['code']}) ${safeCenterSendSmsCodeRes['msg']}");
+                    return;
+                  }
+                  SmartDialog.showToast("短信验证码已发送，请查收");
+                  captchaKey = safeCenterSendSmsCodeRes['data']['captcha_key'];
+                });
+              },
+            ),
+            TextButton(
+              onPressed: Get.back,
+              child: const Text(" 取消"),
+            ),
+            TextButton(
+              onPressed: () async {
+                String? code = _textFieldController.text;
+                if (code.isEmpty) {
+                  SmartDialog.showToast("请输入短信验证码");
+                  return;
+                }
+                var safeCenterSmsVerifyRes = await LoginHttp.safeCenterSmsVerify(
+                    code: code,
+                    tmpCode: currentUri.queryParameters['tmp_token']!,
+                    requestId: currentUri.queryParameters['request_id']!,
+                    source: currentUri.queryParameters['source']!,
+                    captchaKey: captchaKey,
+                );
+                if (!safeCenterSmsVerifyRes['status']) {
+                  SmartDialog.showToast("验证短信验证码失败，请尝试其它登录方式\n"
+                      "(${safeCenterSmsVerifyRes['code']}) ${safeCenterSmsVerifyRes['msg']}");
+                  return;
+                }
+                SmartDialog.showToast("验证成功，正在登录");
+                // loginByPassword();
+              },
+              child: const Text("确认"),
+            ),
+          ],
+        ));
+
 
         return;
       }

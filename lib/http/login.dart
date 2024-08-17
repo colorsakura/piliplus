@@ -415,4 +415,32 @@ class LoginHttp {
       };
     }
   }
+
+  static Future safeCenterSmsVerify(
+      {String? type,
+      required String code,
+      required String tmpCode,
+      required String requestId,
+      required String source,
+      required String captchaKey}) async {
+    var res = await Request().post(Api.safeCenterSmsVerify, data: {
+      'type': type ?? 'loginTelCheck',
+      'code': code,
+      'tmp_code': tmpCode,
+      'request_id': requestId,
+      'source': source,
+      'captcha_key': captchaKey,
+    });
+    print(res);
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {
+        'status': false,
+        'code': res.data['code'],
+        'msg': res.data['message'],
+        'data': res.data['data']
+      };
+    }
+  }
 }
