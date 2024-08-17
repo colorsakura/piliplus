@@ -188,7 +188,9 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               ),
               Obx(
                 () => _videoReplyController.isLoadingMore &&
-                        _videoReplyController.replyList.isEmpty
+                        _videoReplyController.replyList.isEmpty &&
+                        (_videoReplyController.noMore.value == '' ||
+                            _videoReplyController.noMore.value == '加载中...')
                     ? SliverList(
                         delegate: SliverChildBuilderDelegate(
                             (BuildContext context, index) {
