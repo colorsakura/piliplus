@@ -103,7 +103,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       _dynamicDetailController =
           Get.put(DynamicDetailController(oid, replyType), tag: oid.toString());
     }
-    _futureBuilderFuture = _dynamicDetailController.queryReplyList();
+    _futureBuilderFuture =
+        _dynamicDetailController.queryReplyList(reqType: 'init');
   }
 
   // 查看二级评论
@@ -210,7 +211,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await _dynamicDetailController.queryReplyList();
+          await _dynamicDetailController.queryReplyList(reqType: 'init');
         },
         child: Stack(
           children: [
