@@ -51,8 +51,7 @@ class ChatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isOwner =
-        item.senderUid == GStorage.userInfo.get('userInfoCache').mid;
+    bool isOwner = item.senderUid == GStorage.userInfo.get('userInfoCache').mid;
 
     bool isPic = item.msgType == MsgType.pic.value; // 图片
     bool isText = item.msgType == MsgType.text.value; // 文本
@@ -85,7 +84,8 @@ class ChatItem extends StatelessWidget {
             final String emojiKey = match[0]!;
             print(emojiKey);
             if (emojiMap.containsKey(emojiKey)) {
-              children.add(WidgetSpan(
+              children.add(
+                  WidgetSpan(
                 child: NetworkImgLayer(
                   width: 18,
                   height: 18,
@@ -115,13 +115,13 @@ class ChatItem extends StatelessWidget {
             return '';
           },
         );
-        return RichText(
-          text: TextSpan(
+        return SelectableText.rich(
+          TextSpan(
             children: children,
           ),
         );
       } else {
-        return Text(
+        return SelectableText(
           text,
           style: TextStyle(
             letterSpacing: 0.6,
@@ -234,7 +234,7 @@ class ChatItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(
+              SelectableText(
                 content['title'],
                 style: TextStyle(
                   letterSpacing: 0.6,
@@ -487,7 +487,7 @@ class SystemNotice extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(content['title'],
+              SelectableText(content['title'],
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
@@ -502,7 +502,7 @@ class SystemNotice extends StatelessWidget {
               Divider(
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
               ),
-              Text(
+              SelectableText(
                 content['text'],
               )
             ],
