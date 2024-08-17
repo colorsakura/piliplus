@@ -141,7 +141,10 @@ dependencies:
   path: 1.8.3
   #瀑布流
   waterfall_flow: ^3.0.3
+  #跑马灯
   marquee: ^2.2.3
+  #富文本
+  extended_text: ^14.0.1
 dependency_overrides:
   mime:
     git: https://github.com/orz12/mime.git
