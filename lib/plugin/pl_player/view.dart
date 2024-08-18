@@ -523,16 +523,20 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             scaleEnabled: true, // 启用缩放
             minScale: 1.0,
             maxScale: 2.0,
+            panAxis: PanAxis.aligned,
             onInteractionStart: (ScaleStartDetails details) {
+              // 如果起点太靠上则屏蔽
+              if (details.localFocalPoint.dy < 40) return;
               if (details.pointerCount == 2) {
                 interacting = true;
               }
               _initialFocalPoint = details.localFocalPoint;
+              // print("_initialFocalPoint$_initialFocalPoint");
               _gestureType = null;
             },
 
             onInteractionUpdate: (ScaleUpdateDetails details) {
-              if (interacting) return;
+              if (interacting || _initialFocalPoint == Offset.zero) return;
               Offset cumulativeDelta =
                   details.localFocalPoint - _initialFocalPoint;
               if (details.pointerCount == 2 && cumulativeDelta.distance < 1.5) {
@@ -547,20 +551,20 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   _playerKey.currentContext!.findRenderObject() as RenderBox;
 
               if (_gestureType == null) {
-                if (cumulativeDelta.distance < 1.5) return;
-                if (cumulativeDelta.dx.abs() > 4 * cumulativeDelta.dy.abs()) {
+                if (cumulativeDelta.distance < 1) return;
+                if (cumulativeDelta.dx.abs() > 3 * cumulativeDelta.dy.abs()) {
                   _gestureType = 'horizontal';
                 } else if (cumulativeDelta.dy.abs() >
-                    4 * cumulativeDelta.dx.abs()) {
+                    3 * cumulativeDelta.dx.abs()) {
                   // _gestureType = 'vertical';
 
                   final double totalWidth = renderBox.size.width;
                   final double tapPosition = details.localFocalPoint.dx;
-                  final double sectionWidth = totalWidth / 4;
+                  final double sectionWidth = totalWidth / 3;
                   if (tapPosition < sectionWidth) {
                     // 左边区域
                     _gestureType = 'left';
-                  } else if (tapPosition < sectionWidth * 3) {
+                  } else if (tapPosition < sectionWidth * 2) {
                     // 全屏
                     _gestureType = 'center';
                   } else {
@@ -596,20 +600,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 setBrightness(result);
               } else if (_gestureType == 'center') {
                 // 全屏
-                const double threshold = 5; // 滑动阈值
-                // void fullScreenTrigger(bool status) async {
-                //   EasyThrottle.throttle(
-                //       'fullScreen', const Duration(milliseconds: 1000), () {
-                //     _.triggerFullScreen(status: status);
-                //   });
-                // }
-
+                const double threshold = 2; // 滑动阈值
                 double cumulativeDy =
                     details.localFocalPoint.dy - _initialFocalPoint.dy;
                 if (cumulativeDy > threshold) {
                   _gestureType = 'center_down';
+                  // print('center_down:$cumulativeDy');
                 } else if (cumulativeDy < -threshold) {
                   _gestureType = 'center_up';
+                  // print('center_up:$cumulativeDy');
                 }
               } else if (_gestureType == 'right') {
                 // 右边区域
@@ -627,10 +626,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 _.onChangedSliderEnd();
                 _.seekTo(_.sliderPosition.value, type: 'slider');
               }
-              void fullScreenTrigger(bool status) async {
+              void fullScreenTrigger(bool status) {
                 EasyThrottle.throttle(
-                    'fullScreen', const Duration(milliseconds: 1000), () {
-                  _.triggerFullScreen(status: status);
+                    'fullScreen', const Duration(milliseconds: 500), () async {
+                  await _.triggerFullScreen(status: status);
                 });
               }
 
@@ -695,46 +694,49 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
 
         /// 时间进度 toast
-        Obx(
-          () => Align(
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
             alignment: Alignment.topCenter,
             child: FractionalTranslation(
               translation: const Offset(0.0, 1.0), // 上下偏移量（负数向上偏移）
-              child: AnimatedOpacity(
-                curve: Curves.easeInOut,
-                opacity: _.isSliderMoving.value ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 150),
-                child: IntrinsicWidth(
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: const Color(0x88000000),
-                      borderRadius: BorderRadius.circular(64.0),
-                    ),
-                    height: 34.0,
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Obx(() {
-                          return Text(
-                            Utils.timeFormat(
-                                _.sliderTempPosition.value.inSeconds),
-                            style: textStyle,
-                          );
-                        }),
-                        const SizedBox(width: 2),
-                        const Text('/', style: textStyle),
-                        const SizedBox(width: 2),
-                        Obx(
-                          () => Text(
-                            _.duration.value.inMinutes >= 60
-                                ? printDurationWithHours(_.duration.value)
-                                : printDuration(_.duration.value),
-                            style: textStyle,
+              child: Obx(
+                () => AnimatedOpacity(
+                  curve: Curves.easeInOut,
+                  opacity: _.isSliderMoving.value ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 150),
+                  child: IntrinsicWidth(
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color(0x88000000),
+                        borderRadius: BorderRadius.circular(64.0),
+                      ),
+                      height: 34.0,
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              Utils.timeFormat(
+                                  _.sliderTempPosition.value.inSeconds),
+                              style: textStyle,
+                            );
+                          }),
+                          const SizedBox(width: 2),
+                          const Text('/', style: textStyle),
+                          const SizedBox(width: 2),
+                          Obx(
+                            () => Text(
+                              _.duration.value.inMinutes >= 60
+                                  ? printDurationWithHours(_.duration.value)
+                                  : printDuration(_.duration.value),
+                              style: textStyle,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -744,50 +746,53 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
 
         /// 音量🔊 控制条展示
-        Obx(
-          () => Align(
-            child: AnimatedOpacity(
-              curve: Curves.easeInOut,
-              opacity: _volumeIndicator.value ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 150),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0x88000000),
-                  borderRadius: BorderRadius.circular(64.0),
-                ),
-                height: 34.0,
-                width: 70.0,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 34.0,
-                      width: 28.0,
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        _volumeValue.value == 0.0
-                            ? Icons.volume_off
-                            : _volumeValue.value < 0.5
-                                ? Icons.volume_down
-                                : Icons.volume_up,
-                        color: const Color(0xFFFFFFFF),
-                        size: 20.0,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        '${(_volumeValue.value * 100.0).round()}%',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          color: Color(0xFFFFFFFF),
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
+            child: Obx(
+              () => AnimatedOpacity(
+                curve: Curves.easeInOut,
+                opacity: _volumeIndicator.value ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 150),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0x88000000),
+                    borderRadius: BorderRadius.circular(64.0),
+                  ),
+                  height: 34.0,
+                  width: 70.0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 34.0,
+                        width: 28.0,
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          _volumeValue.value == 0.0
+                              ? Icons.volume_off
+                              : _volumeValue.value < 0.5
+                                  ? Icons.volume_down
+                                  : Icons.volume_up,
+                          color: const Color(0xFFFFFFFF),
+                          size: 20.0,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 6.0),
-                  ],
+                      Expanded(
+                        child: Text(
+                          '${(_volumeValue.value * 100.0).round()}%',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6.0),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -795,51 +800,54 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
 
         /// 亮度🌞 控制条展示
-        Obx(
-          () => Align(
-            child: AnimatedOpacity(
-              curve: Curves.easeInOut,
-              opacity: _brightnessIndicator.value ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 150),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0x88000000),
-                  borderRadius: BorderRadius.circular(64.0),
-                ),
-                height: 34.0,
-                width: 70.0,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 30.0,
-                      width: 28.0,
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        _brightnessValue.value < 1.0 / 3.0
-                            ? Icons.brightness_low
-                            : _brightnessValue.value < 2.0 / 3.0
-                                ? Icons.brightness_medium
-                                : Icons.brightness_high,
-                        color: const Color(0xFFFFFFFF),
-                        size: 18.0,
-                      ),
-                    ),
-                    const SizedBox(width: 2.0),
-                    Expanded(
-                      child: Text(
-                        '${(_brightnessValue.value * 100.0).round()}%',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          color: Color(0xFFFFFFFF),
+        IgnorePointer(
+          ignoring: true,
+          child: Align(
+            child: Obx(
+              () => AnimatedOpacity(
+                curve: Curves.easeInOut,
+                opacity: _brightnessIndicator.value ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 150),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0x88000000),
+                    borderRadius: BorderRadius.circular(64.0),
+                  ),
+                  height: 34.0,
+                  width: 70.0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 30.0,
+                        width: 28.0,
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          _brightnessValue.value < 1.0 / 3.0
+                              ? Icons.brightness_low
+                              : _brightnessValue.value < 2.0 / 3.0
+                                  ? Icons.brightness_medium
+                                  : Icons.brightness_high,
+                          color: const Color(0xFFFFFFFF),
+                          size: 18.0,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 6.0),
-                  ],
+                      const SizedBox(width: 2.0),
+                      Expanded(
+                        child: Text(
+                          '${(_brightnessValue.value * 100.0).round()}%',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6.0),
+                    ],
+                  ),
                 ),
               ),
             ),
