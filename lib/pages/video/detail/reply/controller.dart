@@ -92,7 +92,7 @@ class VideoReplyController extends GetxController {
           }
         }
         replies.insertAll(0, res['data'].topReplies);
-        count.value = res['data'].cursor.allCount;
+        count.value = res['data'].cursor.allCount ?? 0;
         replyList.value = replies;
       } else {
         replyList.addAll(replies);

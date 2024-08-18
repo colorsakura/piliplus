@@ -382,7 +382,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     return FutureBuilder(
       future: _futureBuilderFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
           Map data = snapshot.data as Map;
           if (snapshot.data['status']) {
             // 请求成功

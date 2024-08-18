@@ -63,7 +63,7 @@ class DynamicDetailController extends GetxController {
     isLoadingMore = false;
     if (res['status']) {
       List<ReplyItemModel> replies = res['data'].replies;
-      acount.value = res['data'].cursor.allCount;
+      acount.value = res['data'].cursor.allCount ?? 0;
       nextOffset = res['data'].cursor.paginationReply.nextOffset ?? "";
       if (replies.isNotEmpty) {
         noMore.value = '加载中...';
