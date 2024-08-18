@@ -520,11 +520,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         Obx(
           () => InteractiveViewer(
             panEnabled: false, // 启用平移 //单指平移会与横竖手势冲突
-            scaleEnabled: true, // 启用缩放
+            scaleEnabled: !_.controlsLock.value, // 启用缩放
             minScale: 1.0,
             maxScale: 2.0,
             panAxis: PanAxis.aligned,
             onInteractionStart: (ScaleStartDetails details) {
+              if (_.controlsLock.value) return;
               // 如果起点太靠上则屏蔽
               if (details.localFocalPoint.dy < 40) return;
               if (details.pointerCount == 2) {
@@ -1051,7 +1052,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: FractionalTranslation(
                 translation: const Offset(1, -0.4),
                 child: Visibility(
-                  visible: _.showControls.value && _.isFullScreen.value,
+                  visible: _.showControls.value &&
+                      (_.isFullScreen.value || _.controlsLock.value),
                   child: ComBtn(
                     tooltip: _.controlsLock.value ? '解锁' : '锁定',
                     icon: Icon(
