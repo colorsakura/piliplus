@@ -63,11 +63,11 @@ class _AtMePageState extends State<AtMePage> {
                   itemBuilder: (_, int i) {
                     return ListTile(
                       onTap: () {
-                        String nativeUri = _atMeController
-                                .msgFeedAtMeList[i].item?.nativeUri ??
-                            "";
-                        PiliScheme.routePush(
-                            PiliScheme.stringToSchemeEntity(nativeUri));
+                        String? nativeUri = _atMeController
+                                .msgFeedAtMeList[i].item?.nativeUri;
+                        if (nativeUri != null) {
+                          PiliScheme.routePush(Uri.parse(nativeUri));
+                        }
                         // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
                       },
                       leading: NetworkImgLayer(

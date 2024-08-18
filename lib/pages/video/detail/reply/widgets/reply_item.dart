@@ -1,5 +1,4 @@
 import 'package:PiliPalaX/http/video.dart';
-import 'package:appscheme/appscheme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -720,16 +719,7 @@ InlineSpan buildContent(
                         //   return;
                         // }
                         Uri uri = Uri.parse(redirectUrl);
-                        SchemeEntity scheme = SchemeEntity(
-                          scheme: uri.scheme,
-                          host: uri.host,
-                          port: uri.port,
-                          path: uri.path,
-                          query: uri.queryParameters,
-                          source: '',
-                          dataString: redirectUrl,
-                        );
-                        PiliScheme.routePush(scheme);
+                        PiliScheme.routePush(uri);
                         // final String pathSegment = Uri.parse(redirectUrl).path;
                         // final String lastPathSegment =
                         //     pathSegment.split('/').last;

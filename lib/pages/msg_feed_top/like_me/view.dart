@@ -113,8 +113,10 @@ class LikeMeList extends StatelessWidget {
       itemBuilder: (_, int i) {
         return ListTile(
           onTap: () {
-            String nativeUri = msgFeedLikeMeList[i].item?.nativeUri ?? "";
-            PiliScheme.routePush(PiliScheme.stringToSchemeEntity(nativeUri));
+            String? nativeUri = msgFeedLikeMeList[i].item?.nativeUri;
+            if (nativeUri != null) {
+              PiliScheme.routePush(Uri.parse(nativeUri));
+            }
             // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
           },
           leading: Column(

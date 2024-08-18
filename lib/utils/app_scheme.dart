@@ -1,4 +1,6 @@
-import 'package:appscheme/appscheme.dart';
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -9,49 +11,23 @@ import 'url_utils.dart';
 import 'utils.dart';
 
 class PiliScheme {
-  static AppScheme appScheme = AppSchemeImpl.getInstance()!;
+  static late AppLinks appLinks;
   static Future<void> init() async {
-    ///
-    final SchemeEntity? value = await appScheme.getInitScheme();
-    if (value != null) {
-      routePush(value);
-    }
+    // Register our protocol only on Windows platform
+    // registerProtocolHandler('bilibili');
+    appLinks = AppLinks();
 
-    /// 完整链接进入 b23.无效
-    appScheme.getLatestScheme().then((SchemeEntity? value) {
-      if (value != null) {
-        routePush(value);
-      }
+    appLinks.uriLinkStream.listen((uri) {
+      debugPrint('onAppLink: $uri');
+      routePush(uri);
     });
-
-    /// 注册从外部打开的Scheme监听信息 #
-    appScheme.registerSchemeListener().listen((SchemeEntity? event) {
-      if (event != null) {
-        routePush(event);
-      }
-    });
-  }
-
-  static SchemeEntity stringToSchemeEntity(String dataString) {
-    Uri uri = Uri.parse(dataString);
-    Map<String, String>? queryParams =
-        uri.query.isNotEmpty ? Uri.splitQueryString(uri.query) : null;
-    return SchemeEntity(
-      scheme: uri.scheme,
-      host: uri.host,
-      port: uri.hasPort ? uri.port : null,
-      path: uri.path,
-      query: queryParams,
-      source: dataString,
-      dataString: dataString,
-    );
   }
 
   /// 路由跳转
-  static void routePush(SchemeEntity value) async {
-    final String scheme = value.scheme!;
-    final String host = value.host!;
-    final String path = value.path!;
+  static void routePush(Uri value) async {
+    final String scheme = value.scheme;
+    final String host = value.host;
+    final String path = value.path;
 
     if (scheme == 'bilibili') {
       if (host == 'root') {
@@ -122,8 +98,8 @@ class PiliScheme {
           },
         );
       } else {
-        print(value.dataString);
-        SmartDialog.showToast('未知路径:${value.dataString}，请截图反馈给开发者');
+        print(value);
+        SmartDialog.showToast('未知路径:$value，请截图反馈给开发者');
         // Get.toNamed(
         //   '/webview',
         //   parameters: {
@@ -195,13 +171,13 @@ class PiliScheme {
     }
   }
 
-  static Future<void> fullPathPush(SchemeEntity value) async {
+  static Future<void> fullPathPush(Uri value) async {
     // https://m.bilibili.com/bangumi/play/ss39708
     // https | m.bilibili.com | /bangumi/play/ss39708
     // final String scheme = value.scheme!;
-    final String host = value.host!;
+    final String host = value.host;
     final String? path = value.path;
-    Map<String, String>? query = value.query;
+    Map<String, String>? query = value.queryParameters;
     RegExp regExp = RegExp(r'^((www\.)|(m\.))?bilibili\.com$');
     if (regExp.hasMatch(host)) {
       print('bilibili.com');
@@ -289,7 +265,7 @@ class PiliScheme {
             id = 'cv${matchNum(path).first}';
           }
           Get.toNamed('/htmlRender', parameters: {
-            'url': value.dataString!,
+            'url': value.toString(),
             'title': '',
             'id': id,
             'dynamicType': 'read'
@@ -306,11 +282,11 @@ class PiliScheme {
           } else if (res.containsKey('BV')) {
             videoPush(null, res['BV'] as String);
           } else {
-            SmartDialog.showToast('未知路径或匹配错误:${value.dataString}，先采用浏览器打开');
+            SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
             Get.toNamed(
               '/webview',
               parameters: {
-                'url': value.dataString ?? "",
+                'url': value.toString(),
                 'type': 'url',
                 'pageTitle': ''
               },

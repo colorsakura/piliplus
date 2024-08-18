@@ -64,11 +64,11 @@ class _ReplyMePageState extends State<ReplyMePage> {
                   itemBuilder: (_, int i) {
                     return ListTile(
                       onTap: () {
-                        String nativeUri = _replyMeController
-                                .msgFeedReplyMeList[i].item?.nativeUri ??
-                            "";
-                        PiliScheme.routePush(
-                            PiliScheme.stringToSchemeEntity(nativeUri));
+                        String? nativeUri = _replyMeController
+                            .msgFeedReplyMeList[i].item?.nativeUri;
+                        if (nativeUri != null) {
+                          PiliScheme.routePush(Uri.parse(nativeUri));
+                        }
                         // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
                       },
                       leading: NetworkImgLayer(
