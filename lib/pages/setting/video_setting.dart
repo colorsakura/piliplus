@@ -86,6 +86,29 @@ class _VideoSettingState extends State<VideoSetting> {
             defaultVal: true,
           ),
           ListTile(
+            enabled: false,
+            onTap: null,
+            title: Text("b站定向流量支持", style: titleStyle),
+            subtitle:
+                Text("若套餐含b站定向流量，则会自动使用。可查阅运营商的流量记录确认。", style: subTitleStyle),
+            leading: const Icon(Icons.perm_data_setting_outlined),
+            trailing: Transform.scale(
+              alignment: Alignment.centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
+              scale: 0.8,
+              child: Switch(
+                  thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                      (Set<WidgetState> states) {
+                    if (states.isNotEmpty &&
+                        states.first == WidgetState.selected) {
+                      return const Icon(Icons.done);
+                    }
+                    return null; // All other states will use the default thumbIcon.
+                  }),
+                  value: true,
+                  onChanged: null),
+            ),
+          ),
+          ListTile(
             title: Text('CDN 设置', style: titleStyle),
             leading: Icon(MdiIcons.cloudPlusOutline),
             subtitle: Text(
