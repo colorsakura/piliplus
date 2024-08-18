@@ -68,7 +68,8 @@ class DynamicDetailController extends GetxController {
           noMore.value = '没有更多了';
         }
       } else {
-        noMore.value = nextOffset == "" ? '还没有评论' : '没有更多了';
+        noMore.value =
+            nextOffset == "" && reqType == 'init' ? '还没有评论' : '没有更多了';
       }
       if (reqType == 'init') {
         // 添加置顶回复

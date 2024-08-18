@@ -82,7 +82,7 @@ class VideoReplyController extends GetxController {
 
       } else {
         // 未登录状态replies可能返回null
-        noMore.value = nextOffset == "" ? '还没有评论' : '没有更多了';
+        noMore.value = nextOffset == "" && type == 'init' ? '还没有评论' : '没有更多了';
       }
       if (type == 'init') {
         // 添加置顶回复
