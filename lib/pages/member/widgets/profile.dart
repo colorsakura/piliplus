@@ -234,24 +234,22 @@ class ProfilePanel extends StatelessWidget {
                         });
                       },
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(left: 80, right: 80),
                         foregroundColor:
                             Theme.of(context).colorScheme.onPrimary,
                         backgroundColor: Theme.of(context).colorScheme.primary,
                       ),
-                      child: const Text('个人中心(web)'),
+                      child: const Text(' 个人中心(web) '),
                     )
                   ],
                   if (ctr.ownerMid == -1) ...[
                     TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(left: 80, right: 80),
                         foregroundColor: Theme.of(context).colorScheme.outline,
                         backgroundColor:
                             Theme.of(context).colorScheme.onInverseSurface,
                       ),
-                      child: const Text('未登录'),
+                      child: const Text(' 未登录 '),
                     )
                   ]
                 ],
