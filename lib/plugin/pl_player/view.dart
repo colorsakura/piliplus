@@ -601,14 +601,27 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 setBrightness(result);
               } else if (_gestureType == 'center') {
                 // 全屏
-                const double threshold = 2; // 滑动阈值
+                const double threshold = 2.5; // 滑动阈值
                 double cumulativeDy =
                     details.localFocalPoint.dy - _initialFocalPoint.dy;
+
+                void fullScreenTrigger(bool status) {
+                  EasyThrottle.throttle(
+                      'fullScreen', const Duration(milliseconds: 800), () async {
+                    await _.triggerFullScreen(status: status);
+                  });
+                }
                 if (cumulativeDy > threshold) {
                   _gestureType = 'center_down';
+                  if (_.isFullScreen.value ^ fullScreenGestureReverse) {
+                    fullScreenTrigger(fullScreenGestureReverse);
+                  }
                   // print('center_down:$cumulativeDy');
                 } else if (cumulativeDy < -threshold) {
                   _gestureType = 'center_up';
+                  if (!_.isFullScreen.value ^ fullScreenGestureReverse) {
+                    fullScreenTrigger(!fullScreenGestureReverse);
+                  }
                   // print('center_up:$cumulativeDy');
                 }
               } else if (_gestureType == 'right') {
@@ -626,22 +639,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               if (_.isSliderMoving.value) {
                 _.onChangedSliderEnd();
                 _.seekTo(_.sliderPosition.value, type: 'slider');
-              }
-              void fullScreenTrigger(bool status) {
-                EasyThrottle.throttle(
-                    'fullScreen', const Duration(milliseconds: 500), () async {
-                  await _.triggerFullScreen(status: status);
-                });
-              }
-
-              if (_gestureType == 'center_down') {
-                if (_.isFullScreen.value ^ fullScreenGestureReverse) {
-                  fullScreenTrigger(fullScreenGestureReverse);
-                }
-              } else if (_gestureType == 'center_up') {
-                if (!_.isFullScreen.value ^ fullScreenGestureReverse) {
-                  fullScreenTrigger(!fullScreenGestureReverse);
-                }
               }
               interacting = false;
               _initialFocalPoint = Offset.zero;
