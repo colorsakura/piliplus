@@ -119,7 +119,9 @@ class VideoIntroController extends GetxController {
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
       videoDetail.value = result['data']!;
-      if (videoDetail.value.pages!.isNotEmpty && lastPlayCid.value == 0) {
+      if (videoDetail.value.pages != null &&
+          videoDetail.value.pages!.isNotEmpty &&
+          lastPlayCid.value == 0) {
         lastPlayCid.value = videoDetail.value.pages!.first.cid!;
       }
       // Get.find<VideoDetailController>(tag: heroTag).tabs.value = [
