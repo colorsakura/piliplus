@@ -122,7 +122,7 @@ class _AboutPageState extends State<AboutPage> {
             leading: const Icon(Icons.star_outline_outlined),
             title: const Text('Github开源仓库'),
             trailing: Text(
-              'github.com/orz12/pilipala',
+              'github.com/orz12/PiliPalaX',
               style: subTitleStyle,
             ),
           ),
@@ -150,15 +150,6 @@ class _AboutPageState extends State<AboutPage> {
             leading: const Icon(Icons.group_add_outlined),
             title: const Text('TG频道'),
             trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
-          ),
-          ListTile(
-            onTap: () => _aboutController.webSiteUrl(),
-            leading: const Icon(Icons.language),
-            title: const Text('官网'),
-            trailing: Text(
-              'pilipalanet.mysxl.cn/pilipala-x',
-              style: subTitleStyle,
-            ),
           ),
           ListTile(
             onTap: () => _aboutController.aPay(),
@@ -405,7 +396,7 @@ class AboutController extends GetxController {
       context: context,
       builder: (context) {
         return SimpleDialog(
-          title: const Text('问题反馈'),
+          title: const Text('问题反馈（建议直接加群反馈）'),
           children: [
             ListTile(
               title: const Text('GitHub Issue'),
@@ -415,14 +406,14 @@ class AboutController extends GetxController {
                 mode: LaunchMode.externalApplication,
               ),
             ),
-            ListTile(
-              title: const Text('腾讯兔小巢'),
-              onTap: () => launchUrl(
-                Uri.parse('https://support.qq.com/embed/phone/637735'),
-                // 系统自带浏览器打开
-                mode: LaunchMode.externalApplication,
-              ),
-            ),
+            // ListTile(
+            //   title: const Text('腾讯兔小巢'),
+            //   onTap: () => launchUrl(
+            //     Uri.parse('https://support.qq.com/embed/phone/637735'),
+            //     // 系统自带浏览器打开
+            //     mode: LaunchMode.externalApplication,
+            //   ),
+            // ),
           ],
         );
       },
@@ -463,22 +454,25 @@ class AboutController extends GetxController {
   }
 
   // 官网
-  webSiteUrl() {
-    launchUrl(
-      Uri.parse('https://pilipalanet.mysxl.cn/pilipala-x'),
-      mode: LaunchMode.externalApplication,
-    );
-  }
+  // webSiteUrl() {
+  //   launchUrl(
+  //     Uri.parse('https://pilipalanet.mysxl.cn/pilipala-x'),
+  //     mode: LaunchMode.externalApplication,
+  //   );
+  // }
 
+  // aPay() {
+  //   try {
+  //     launchUrl(
+  //       Uri.parse('https://pilipalanet.mysxl.cn/pilipalaxadmire'),
+  //       mode: LaunchMode.externalApplication,
+  //     );
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
   aPay() {
-    try {
-      launchUrl(
-        Uri.parse('https://pilipalanet.mysxl.cn/pilipalaxadmire'),
-        mode: LaunchMode.externalApplication,
-      );
-    } catch (e) {
-      print(e);
-    }
+    SmartDialog.showToast('新接口来不及写了，直接来群里找作者吧');
   }
 
   // 日志
