@@ -1128,7 +1128,7 @@ class PlPlayerController {
   }
 
   /// 设置长按倍速状态 live模式下禁用
-  void setDoubleSpeedStatus(bool val) {
+  void setDoubleSpeedStatus(bool val) async {
     if (videoType.value == 'live') {
       return;
     }
@@ -1137,11 +1137,11 @@ class PlPlayerController {
     }
     _doubleSpeedStatus.value = val;
     if (val) {
-      setPlaybackSpeed(
+      await setPlaybackSpeed(
           enableAutoLongPressSpeed ? playbackSpeed * 2 : longPressSpeed);
     } else {
       print(playbackSpeed);
-      setPlaybackSpeed(playbackSpeed);
+      await setPlaybackSpeed(playbackSpeed);
     }
   }
 

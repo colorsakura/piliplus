@@ -901,8 +901,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 doubleTapFuc(type);
               },
               onLongPressStart: (LongPressStartDetails detail) {
-                feedBack();
                 _.setDoubleSpeedStatus(true);
+                feedBack();
               },
               onLongPressEnd: (LongPressEndDetails details) {
                 _.setDoubleSpeedStatus(false);
