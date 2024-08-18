@@ -62,7 +62,9 @@ class HtmlRenderController extends GetxController {
   Future queryReplyList({reqType = 'init'}) async {
     if (reqType == 'init') {
       nextOffset = "";
+      noMore.value = "";
     }
+    if (noMore.value == '没有更多了') return;
     var res = await ReplyHttp.replyList(
       oid: oid.value,
       nextOffset: nextOffset,

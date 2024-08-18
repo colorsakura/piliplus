@@ -49,7 +49,10 @@ class DynamicDetailController extends GetxController {
   Future queryReplyList({reqType = 'init'}) async {
     if (reqType == 'init') {
       nextOffset = "";
+      noMore.value = "";
     }
+    if (isLoadingMore) return;
+    if (noMore.value == '没有更多了') return;
     isLoadingMore = true;
     var res = await ReplyHttp.replyList(
       oid: oid!,

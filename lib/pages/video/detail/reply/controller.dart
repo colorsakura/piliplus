@@ -58,9 +58,7 @@ class VideoReplyController extends GetxController {
       nextOffset = '';
       noMore.value = '';
     }
-    if (noMore.value == '没有更多了') {
-      return;
-    }
+    if (noMore.value == '没有更多了') return;
     isLoadingMore = true;
     final res = await ReplyHttp.replyList(
       oid: aid!,
