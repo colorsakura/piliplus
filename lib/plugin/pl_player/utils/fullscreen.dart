@@ -58,6 +58,10 @@ Future<void> autoScreen() async {
   ]);
 }
 
+Future<void> fullAutoModeForceSensor() async {
+  await AutoOrientation.fullAutoMode(forceSensor: true);
+}
+
 Future<void> hideStatusBar() async {
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,

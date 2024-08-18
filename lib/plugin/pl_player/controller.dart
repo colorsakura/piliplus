@@ -1173,6 +1173,10 @@ class PlPlayerController {
       if (mode == FullScreenMode.none) {
         return;
       }
+      if (mode == FullScreenMode.gravity) {
+        fullAutoModeForceSensor();
+        return;
+      }
       if (mode == FullScreenMode.vertical ||
           (mode == FullScreenMode.auto && direction.value == 'vertical') ||
           (mode == FullScreenMode.ratio &&

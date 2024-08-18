@@ -129,10 +129,11 @@ packages:
   auto_orientation:
     dependency: "direct main"
     description:
-      name: auto_orientation
-      sha256: cd56bb59b36fa54cc28ee254bc600524f022a4862f31d5ab20abd7bb1c54e678
-      url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub/"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "4d28c7d6dad6c099a44058527ddc65405a94b4d0"
+      url: "https://github.com/orz12/auto_orientation.git"
+    source: git
     version: "2.3.1"
   boolean_selector:
     dependency: transitive
