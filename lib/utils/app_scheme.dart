@@ -229,7 +229,6 @@ class PiliScheme {
 
   // 投稿跳转
   static Future<void> videoPush(int? aidVal, String? bvidVal) async {
-    SmartDialog.showLoading<dynamic>(msg: '获取中...');
     try {
       int? aid = aidVal;
       String? bvid = bvidVal;
@@ -239,17 +238,17 @@ class PiliScheme {
       if (bvidVal == null) {
         bvid = IdUtils.av2bv(aidVal!);
       }
+      SmartDialog.showLoading<dynamic>(msg: '获取中...');
       final int cid = await SearchHttp.ab2c(bvid: bvidVal, aid: aidVal);
+      SmartDialog.dismiss();
       final String heroTag = Utils.makeHeroTag(aid);
-      SmartDialog.dismiss<dynamic>().then(
-        // ignore: always_specify_types
-        (e) => Get.toNamed<dynamic>('/video?bvid=$bvid&cid=$cid',
-            arguments: <String, String?>{
-              'pic': null,
-              'heroTag': heroTag,
-            }),
-      );
+      Get.toNamed<dynamic>('/video?bvid=$bvid&cid=$cid',
+          arguments: <String, String?>{
+            'pic': null,
+            'heroTag': heroTag,
+          });
     } catch (e) {
+      SmartDialog.dismiss();
       SmartDialog.showToast('video获取失败: $e');
     }
   }
