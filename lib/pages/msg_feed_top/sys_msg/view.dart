@@ -81,7 +81,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                          Text(
+                          SelectableText(
                               "$content",
                               style: Theme.of(context)
                                   .textTheme
