@@ -79,25 +79,27 @@ class _WebviewPageState extends State<WebviewPage> {
               ),
             ],
             Expanded(
-              child: WebViewWidget(
-                  controller: _webviewController.controller,
-                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                    Factory<VerticalDragGestureRecognizer>(
-                      () => VerticalDragGestureRecognizer(),
-                    ),
-                    Factory<PanGestureRecognizer>(
-                      () => PanGestureRecognizer(),
-                    ),
-                    Factory<ForcePressGestureRecognizer>(
-                      () => ForcePressGestureRecognizer(),
-                    ),
-                    Factory<EagerGestureRecognizer>(
-                      () => EagerGestureRecognizer(),
-                    ),
-                    Factory<HorizontalDragGestureRecognizer>(
-                      () => HorizontalDragGestureRecognizer(),
-                    ),
-                  }),
+              child: SafeArea(
+                child: WebViewWidget(
+                    controller: _webviewController.controller,
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                      Factory<VerticalDragGestureRecognizer>(
+                        () => VerticalDragGestureRecognizer(),
+                      ),
+                      Factory<PanGestureRecognizer>(
+                        () => PanGestureRecognizer(),
+                      ),
+                      Factory<ForcePressGestureRecognizer>(
+                        () => ForcePressGestureRecognizer(),
+                      ),
+                      Factory<EagerGestureRecognizer>(
+                        () => EagerGestureRecognizer(),
+                      ),
+                      Factory<HorizontalDragGestureRecognizer>(
+                        () => HorizontalDragGestureRecognizer(),
+                      ),
+                    }),
+              ),
             ),
           ],
         ));
