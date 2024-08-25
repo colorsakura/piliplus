@@ -105,7 +105,7 @@ class LiveContent extends StatelessWidget {
               liveItem.title,
               textAlign: TextAlign.start,
               style: const TextStyle(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0.3,
               ),
               maxLines: 2,

@@ -74,7 +74,7 @@ Widget searchArticlePanel(BuildContext context, ctr, list) {
                                         TextSpan(
                                           text: i['text'],
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w600,
                                             letterSpacing: 0.3,
                                             color: i['type'] == 'em'
                                                 ? Theme.of(context)
