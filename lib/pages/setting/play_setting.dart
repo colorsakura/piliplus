@@ -85,7 +85,7 @@ class _PlaySettingState extends State<PlaySetting> {
           ),
           const SetSwitchItem(
             title: '双击快退/快进',
-            subTitle: '左侧双击快退，右侧双击快进',
+            subTitle: '左侧双击快退/右侧双击快进，关闭则双击均为暂停/播放',
             leading: Icon(Icons.touch_app_outlined),
             setKey: SettingBoxKey.enableQuickDouble,
             defaultVal: true,
@@ -138,6 +138,13 @@ class _PlaySettingState extends State<PlaySetting> {
             leading: Icon(Icons.fullscreen_exit_outlined),
             setKey: SettingBoxKey.enableAutoExit,
             defaultVal: true,
+          ),
+          const SetSwitchItem(
+              title: '延长播放控件显示时间',
+              subTitle: '开启后延长至30秒，便于屏幕阅读器滑动切换控件焦点',
+              leading: Icon(Icons.timer_outlined),
+              setKey: SettingBoxKey.enableLongShowControl,
+              defaultVal: false
           ),
           const SetSwitchItem(
             title: '全向旋转',

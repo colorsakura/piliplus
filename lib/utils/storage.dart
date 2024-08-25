@@ -112,6 +112,7 @@ class SettingBoxKey {
       enableAutoBrightness = 'enableAutoBrightness',
       enableAutoEnter = 'enableAutoEnter',
       enableAutoExit = 'enableAutoExit',
+      enableLongShowControl = 'enableLongShowControl',
       allowRotateScreen = 'allowRotateScreen',
       horizontalScreen = 'horizontalScreen',
       p1080 = 'p1080',

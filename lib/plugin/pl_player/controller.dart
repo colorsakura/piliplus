@@ -253,6 +253,7 @@ class PlPlayerController {
   late List<double> speedsList;
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
+  late bool enableLongShowControl;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -361,6 +362,8 @@ class PlPlayerController {
       _longPressSpeed.value = videoStorage
           .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
     }
+    enableLongShowControl =
+        setting.get(SettingBoxKey.enableLongShowControl, defaultValue: false);
     speedsList = List<double>.from(videoStorage
         .get(VideoBoxKey.customSpeedsList, defaultValue: <double>[]));
     for (final PlaySpeed i in PlaySpeed.values) {
@@ -927,7 +930,8 @@ class PlPlayerController {
     if (_timer != null) {
       _timer!.cancel();
     }
-    _timer = Timer(const Duration(milliseconds: 3000), () {
+    Duration waitingTime = Duration(seconds: enableLongShowControl ? 30 : 3);
+    _timer = Timer(waitingTime, () {
       if (!isSliderMoving.value) {
         controls = false;
       }

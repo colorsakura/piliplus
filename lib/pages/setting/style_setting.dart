@@ -69,7 +69,7 @@ class _StyleSettingState extends State<StyleSetting> {
         children: [
           SetSwitchItem(
               title: '横屏适配',
-              subTitle: '启用横屏布局与逻辑，适用于平板等设备；推荐全屏方向设为【不改变当前方向】',
+              subTitle: '启用横屏布局与逻辑，平板、折叠屏等可开启；建议全屏方向设为【不改变当前方向】',
               leading: const Icon(Icons.phonelink_outlined),
               setKey: SettingBoxKey.horizontalScreen,
               defaultVal: false,
