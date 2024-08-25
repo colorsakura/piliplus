@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:ns_danmaku/ns_danmaku.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
@@ -222,6 +223,22 @@ class _HeaderControlState extends State<HeaderControl> {
                           widget.videoDetailCtr!.queryVideoUrl();
                         }
                       },
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Get.back();
+                        Player? player =
+                            widget.controller?.videoPlayerController;
+                        if (player == null) {
+                          SmartDialog.showToast('播放器未初始化');
+                          return;
+                        }
+                        var pp = player.platform as NativePlayer;
+                        pp.setProperty("video", "no");
+                      },
+                      dense: true,
+                      leading: const Icon(Icons.headphones_outlined, size: 20),
+                      title: const Text('听视频（需返回首页才能终止该状态）', style: titleStyle),
                     ),
                     ListTile(
                       onTap: () => {Get.back(), showSetVideoQa()},
