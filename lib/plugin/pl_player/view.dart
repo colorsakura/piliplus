@@ -231,6 +231,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         child: ComBtn(
           icon: const Icon(
             Icons.skip_previous,
+            semanticLabel: '上一集',
             size: 22,
             color: Colors.white,
           ),
@@ -246,7 +247,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               SmartDialog.showToast('已经是第一集了');
             }
           },
-          tooltip: '上一集',
         ),
       ),
 
@@ -263,6 +263,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         child: ComBtn(
           icon: const Icon(
             Icons.skip_next,
+            semanticLabel: '下一集',
             size: 22,
             color: Colors.white,
           ),
@@ -278,7 +279,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               SmartDialog.showToast('已经是最后一集了');
             }
           },
-          tooltip: '下一集',
         ),
       ),
 
@@ -327,10 +327,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         child: ComBtn(
           icon: const Icon(
             Icons.list,
+            semanticLabel: '选集',
             size: 22,
             color: Colors.white,
           ),
-          tooltip: '选集',
           fuc: () {
             int currentCid = widget.controller.cid;
             String bvid = widget.controller.bvid;
@@ -466,9 +466,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         width: 42,
         height: 30,
         child: Obx(() => ComBtn(
-              tooltip: _.isFullScreen.value ? '退出全屏' : '全屏',
               icon: Icon(
                 _.isFullScreen.value ? Icons.fullscreen_exit : Icons.fullscreen,
+                semanticLabel: _.isFullScreen.value ? '退出全屏' : '全屏',
                 size: 24,
                 color: Colors.white,
               ),
@@ -607,10 +607,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
                 void fullScreenTrigger(bool status) {
                   EasyThrottle.throttle(
-                      'fullScreen', const Duration(milliseconds: 800), () async {
+                      'fullScreen', const Duration(milliseconds: 800),
+                      () async {
                     await _.triggerFullScreen(status: status);
                   });
                 }
+
                 if (cumulativeDy > threshold) {
                   _gestureType = 'center_down';
                   if (_.isFullScreen.value ^ fullScreenGestureReverse) {
@@ -1052,11 +1054,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   visible: _.showControls.value &&
                       (_.isFullScreen.value || _.controlsLock.value),
                   child: ComBtn(
-                    tooltip: _.controlsLock.value ? '解锁' : '锁定',
                     icon: Icon(
                       _.controlsLock.value
                           ? FontAwesomeIcons.lock
                           : FontAwesomeIcons.lockOpen,
+                      semanticLabel: _.controlsLock.value ? '解锁' : '锁定',
                       size: 15,
                       color: Colors.white,
                     ),
@@ -1077,9 +1079,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: Visibility(
                 visible: _.showControls.value && _.isFullScreen.value,
                 child: ComBtn(
-                  tooltip: '截图',
                   icon: const Icon(
                     Icons.photo_camera,
+                    semanticLabel: '截图',
                     size: 20,
                     color: Colors.white,
                   ),
@@ -1224,7 +1226,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   Duration.zero,
                                   player.state.duration,
                                 );
-                                player.seek(result);
+                                widget.controller.seekTo(result, type: 'slider');
                                 widget.controller.play();
                               },
                             ),
@@ -1269,7 +1271,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   Duration.zero,
                                   player.state.duration,
                                 );
-                                player.seek(result);
+                                widget.controller.seekTo(result, type: 'slider');
                                 widget.controller.play();
                               },
                             ),

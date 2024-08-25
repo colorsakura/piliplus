@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 class ComBtn extends StatelessWidget {
   final Widget? icon;
   final Function? fuc;
-  final String tooltip;
 
   const ComBtn({
     this.icon,
     this.fuc,
-    required this.tooltip,
     super.key,
   });
 
@@ -17,15 +15,11 @@ class ComBtn extends StatelessWidget {
     return SizedBox(
       width: 34,
       height: 34,
-      child: IconButton(
-        tooltip: tooltip,
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
-        ),
-        onPressed: () {
+      child: InkWell(
+        onTap: () {
           fuc!();
         },
-        icon: icon!,
+        child: icon!,
       ),
     );
   }
