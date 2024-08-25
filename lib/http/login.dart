@@ -355,7 +355,7 @@ class LoginHttp {
     required String tmpCode,
   }) async {
     var res = await Request().get(Api.safeCenterGetInfo, data: {
-      tmpCode: tmpCode,
+      'tmp_code': tmpCode,
     });
     print(res);
     if (res.data['code'] == 0) {

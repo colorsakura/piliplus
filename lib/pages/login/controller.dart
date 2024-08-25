@@ -310,6 +310,7 @@ class LoginPageController extends GetxController
         Uri currentUri = Uri.parse(Url);
         var safeCenterRes = await LoginHttp.safeCenterGetInfo(
             tmpCode: currentUri.queryParameters['tmp_token']!);
+        //{"code":0,"message":"0","ttl":1,"data":{"account_info":{"hide_tel":"111*****111","hide_mail":"aaa*****aaaa.aaa","bind_mail":true,"bind_tel":true,"tel_verify":true,"mail_verify":true,"unneeded_check":false,"bind_safe_question":false,"mid":1111111},"member_info":{"nickname":"xxxxxxx","face":"https://i0.hdslb.com/bfs/face/xxxxxxx.jpg","realname_status":false},"sns_info":{"bind_google":false,"bind_fb":false,"bind_apple":false,"bind_qq":true,"bind_weibo":true,"bind_wechat":false},"account_safe":{"score":80}}}
         if (!safeCenterRes['status']) {
           SmartDialog.showToast("获取安全验证信息失败，请尝试其它登录方式\n"
               "(${safeCenterRes['code']}) ${safeCenterRes['msg']}");
@@ -317,9 +318,9 @@ class LoginPageController extends GetxController
         }
         Map<String, String> accountInfo = {
           "telVerify": safeCenterRes['data']['account_info']!['tel_verify'],
-          "bindTel": safeCenterRes['data']['account_info']!["bind_tel"],
+          "hindTel": safeCenterRes['data']['account_info']!["hide_tel"],
           "mailVerify": safeCenterRes['data']['account_info']!['mailVerify'],
-          "bindMail": safeCenterRes['data']['account_info']!["bind_mail"],
+          "hindMail": safeCenterRes['data']['account_info']!["hide_mail"],
         };
         TextEditingController _textFieldController = TextEditingController();
         String captchaKey = '';
@@ -327,7 +328,7 @@ class LoginPageController extends GetxController
           title: const Text("本次登录需要验证您的手机号"),
           content: Column(
             children:[
-              Text(accountInfo['bindTel'] ?? '未能获取手机号'),
+              Text(accountInfo['hindTel'] ?? '未能获取手机号'),
           TextField(
             controller: _textFieldController,
             decoration: const InputDecoration(hintText: "请输入短信验证码"),
