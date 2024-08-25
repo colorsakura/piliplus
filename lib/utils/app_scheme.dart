@@ -1,11 +1,15 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/models/common/reply_type.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import '../http/search.dart';
 import '../models/common/search_type.dart';
+import '../pages/video/detail/reply_reply/view.dart';
 import 'id_utils.dart';
 import 'url_utils.dart';
 import 'utils.dart';
@@ -30,6 +34,7 @@ class PiliScheme {
     final String path = value.path;
 
     if (scheme == 'bilibili') {
+      print(value);
       if (host == 'root') {
         Navigator.popUntil(
             Get.context!, (Route<dynamic> route) => route.isFirst);
@@ -41,6 +46,38 @@ class PiliScheme {
         );
       } else if (host == 'video') {
         String pathQuery = path.split('/').last;
+        if (value.queryParameters['comment_root_id'] != null) {
+          Get.to(
+            () => Scaffold(
+              appBar: AppBar(
+                titleSpacing: 0,
+                centerTitle: false,
+                title: Text(
+                  '评论详情',
+                  // style: Theme.of(context).textTheme.titleMedium,
+                ),
+                actions: [
+                  IconButton(
+                    tooltip: '前往原视频',
+                    onPressed: () {
+                      String? enterUri = value.toString().split('?').first;
+                      routePush(Uri.parse(enterUri));
+                    },
+                    icon: const Icon(Icons.open_in_new),
+                  ),
+                ],
+              ),
+              body: VideoReplyReplyPanel(
+                oid: int.tryParse(pathQuery),
+                rpid: int.tryParse(value.queryParameters['comment_root_id']!),
+                source: 'routePush',
+                replyType: ReplyType.video,
+                firstFloor: null,
+              ),
+            ),
+          );
+          return;
+        }
         final numericRegex = RegExp(r'^[0-9]+$');
         if (numericRegex.hasMatch(pathQuery)) {
           pathQuery = 'AV$pathQuery';
@@ -87,16 +124,92 @@ class PiliScheme {
             'dynamicType': 'read'
           },
         );
-      } else if (host == 'following' && path.startsWith("/detail/")) {
-        var opusId = path.split('/').last;
-        Get.toNamed(
-          '/webview',
-          parameters: {
-            'url': 'https://www.bilibili.com/opus/$opusId',
-            'type': 'url',
-            'pageTitle': '',
-          },
+      } else if (host == 'comment' && path.startsWith("/detail/")) {
+        //bilibili://comment/detail/17/832703053858603029/238686570016/?subType=0&anchor=238686628816&showEnter=1&extraIntentId=0&scene=1&enterName=%E6%9F%A5%E7%9C%8B%E5%8A%A8%E6%80%81%E8%AF%A6%E6%83%85&enterUri=bilibili://following/detail/832703053858603029
+        //fmt.Sprintf("bilibili://comment/detail/%d/%d/%d/?subType=%d&anchor=%d&showEnter=1&extraIntentId=%d", rp.Type, rp.Oid, rootID, subType, rp.RpID, extraIntentID)
+        print(value.queryParameters);
+        List<String> pathParts = path.split('/');
+        int type = int.parse(pathParts[2]);
+        int oid = int.parse(pathParts[3]);
+        int rootId = int.parse(pathParts[4]);
+        int subType = int.parse(value.queryParameters['subType'] ?? '0');
+        int RpID = int.parse(value.queryParameters['anchor'] ?? '0');
+        int extraIntentId =
+            int.parse(value.queryParameters['extraIntentId'] ?? '0');
+        Get.to(
+          () => Scaffold(
+            appBar: AppBar(
+              titleSpacing: 0,
+              centerTitle: false,
+              title: Text(
+                '评论详情',
+                // style: Theme.of(context).textTheme.titleMedium,
+              ),
+              actions: [
+                IconButton(
+                  tooltip: '前往',
+                  onPressed: () {
+                    String? enterUri = value.queryParameters['enterUri'];
+                    if (enterUri != null) {
+                      routePush(Uri.parse(enterUri));
+                    }
+                  },
+                  icon: const Icon(Icons.open_in_new),
+                ),
+              ],
+            ),
+            body: VideoReplyReplyPanel(
+                oid: oid,
+                rpid: RpID,
+                source: 'routePush',
+                replyType: ReplyType.dynamics,
+                firstFloor: null),
+          ),
         );
+      } else if (host == 'following' && path.startsWith("/detail/")) {
+        void getToOpusWeb() {
+          var opusId = path.split('/').last;
+          Get.toNamed(
+            '/webview',
+            parameters: {
+              'url': 'https://m.bilibili.com/dynamic/$opusId',
+              'type': 'url',
+              'pageTitle': '',
+            },
+          );
+        }
+
+        if (value.queryParameters['comment_root_id'] != null) {
+          Get.to(
+            () => Scaffold(
+              appBar: AppBar(
+                titleSpacing: 0,
+                centerTitle: false,
+                title: Text(
+                  '评论详情',
+                  // style: Theme.of(context).textTheme.titleMedium,
+                ),
+                actions: [
+                  IconButton(
+                    tooltip: '前往',
+                    onPressed: () {
+                      getToOpusWeb();
+                    },
+                    icon: const Icon(Icons.open_in_new),
+                  ),
+                ],
+              ),
+              body: VideoReplyReplyPanel(
+                  oid: int.tryParse(path.split('/').last),
+                  rpid: int.tryParse(value.queryParameters['comment_root_id']!),
+                  source: 'routePush',
+                  replyType: ReplyType.dynamics,
+                  firstFloor: null),
+            ),
+          );
+        } else {
+          getToOpusWeb();
+        }
       } else {
         print(value);
         SmartDialog.showToast('未知路径:$value，请截图反馈给开发者');

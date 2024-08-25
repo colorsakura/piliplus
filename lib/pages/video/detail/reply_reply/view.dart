@@ -73,7 +73,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.source == 'videoDetail' ? Utils.getSheetHeight(context) : null,
+      height:
+          widget.source == 'videoDetail' ? Utils.getSheetHeight(context) : null,
       color: Theme.of(context).colorScheme.background,
       child: Column(
         children: [
@@ -137,60 +138,91 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                   FutureBuilder(
                     future: _futureBuilderFuture,
                     builder: (BuildContext context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
                         final Map data = snapshot.data as Map;
                         if (data['status']) {
                           // 请求成功
-                          return Obx(
-                            () => SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  if (index ==
-                                      _videoReplyReplyController
-                                          .replyList.length) {
-                                    return Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .padding
-                                              .bottom),
-                                      height: MediaQuery.of(context)
-                                              .padding
-                                              .bottom +
-                                          100,
-                                      child: Center(
-                                        child: Obx(
-                                          () => Text(
-                                            _videoReplyReplyController
-                                                .noMore.value,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
+                          return SliverMainAxisGroup(
+                            slivers: <Widget>[
+                              if (widget.firstFloor == null &&
+                                  _videoReplyReplyController.root != null) ...[
+                                SliverToBoxAdapter(
+                                  child: ReplyItem(
+                                    replyItem: _videoReplyReplyController.root,
+                                    replyLevel: '2',
+                                    showReplyRow: false,
+                                    addReply: (replyItem) {
+                                      _videoReplyReplyController.replyList
+                                          .add(replyItem);
+                                    },
+                                    replyType: widget.replyType,
+                                    replyReply: (replyItem) =>
+                                        replyReply(replyItem),
+                                  ),
+                                ),
+                                SliverToBoxAdapter(
+                                  child: Divider(
+                                    height: 20,
+                                    color: Theme.of(context)
+                                        .dividerColor
+                                        .withOpacity(0.1),
+                                    thickness: 6,
+                                  ),
+                                ),
+                              ],
+                              Obx(
+                                () => SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                      if (index ==
+                                          _videoReplyReplyController
+                                              .replyList.length) {
+                                        return Container(
+                                          padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom),
+                                          height: MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom +
+                                              100,
+                                          child: Center(
+                                            child: Obx(
+                                              () => Text(
+                                                _videoReplyReplyController
+                                                    .noMore.value,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .outline,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return ReplyItem(
-                                      replyItem: _videoReplyReplyController
-                                          .replyList[index],
-                                      replyLevel: '2',
-                                      showReplyRow: false,
-                                      addReply: (replyItem) {
-                                        _videoReplyReplyController.replyList
-                                            .add(replyItem);
-                                      },
-                                      replyType: widget.replyType,
-                                    );
-                                  }
-                                },
-                                childCount: _videoReplyReplyController
-                                        .replyList.length +
-                                    1,
+                                        );
+                                      } else {
+                                        return ReplyItem(
+                                          replyItem: _videoReplyReplyController
+                                              .replyList[index],
+                                          replyLevel: '2',
+                                          showReplyRow: false,
+                                          addReply: (replyItem) {
+                                            _videoReplyReplyController.replyList
+                                                .add(replyItem);
+                                          },
+                                          replyType: widget.replyType,
+                                        );
+                                      }
+                                    },
+                                    childCount: _videoReplyReplyController
+                                            .replyList.length +
+                                        1,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           );
                         } else {
                           // 请求错误

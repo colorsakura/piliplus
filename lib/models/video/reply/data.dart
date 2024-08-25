@@ -44,6 +44,7 @@ class ReplyReplyData {
     this.replies,
     this.topReplies,
     this.upper,
+    this.root,
   });
 
   ReplyPage? page;
@@ -51,6 +52,7 @@ class ReplyReplyData {
   late List<ReplyItemModel>? replies;
   late List<ReplyItemModel>? topReplies;
   ReplyUpper? upper;
+  ReplyItemModel? root;
 
   ReplyReplyData.fromJson(Map<String, dynamic> json) {
     page = ReplyPage.fromJson(json['page']);
@@ -67,5 +69,6 @@ class ReplyReplyData {
         isTopStatus: true)))
         : <ReplyItemModel>[];
     upper = ReplyUpper.fromJson(json['upper']);
+    root = ReplyItemModel.fromJson(json['root'], json['upper']['mid']);
   }
 }
