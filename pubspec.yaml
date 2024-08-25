@@ -152,6 +152,7 @@ dependency_overrides:
   mime:
     git: https://github.com/orz12/mime.git
   fading_edge_scrollview: ^4.1.1
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
