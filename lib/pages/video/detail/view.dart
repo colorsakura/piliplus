@@ -453,7 +453,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 bottom: 10,
                 child: IconButton(
                     tooltip: '播放',
-                    onPressed: () => handlePlay(),
+                    onPressed: handlePlay,
                     icon: Image.asset(
                       'assets/images/play.png',
                       width: 60,
@@ -565,9 +565,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                         left: 0,
                                         right: 0,
                                         child: GestureDetector(
-                                          onTap: () {
-                                            handlePlay();
-                                          },
+                                          onTap: handlePlay,
                                           child: NetworkImgLayer(
                                             type: 'emote',
                                             src: videoDetailController
@@ -698,9 +696,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         left: 0,
                         right: 0,
                         child: GestureDetector(
-                          onTap: () {
-                            handlePlay();
-                          },
+                          onTap: handlePlay,
                           child: NetworkImgLayer(
                             type: 'emote',
                             src: videoDetailController.videoItem['pic'],
@@ -793,9 +789,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         left: 0,
                         right: 0,
                         child: GestureDetector(
-                          onTap: () {
-                            handlePlay();
-                          },
+                          onTap: handlePlay,
                           child: NetworkImgLayer(
                             type: 'emote',
                             src: videoDetailController.videoItem['pic'],
@@ -891,9 +885,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             left: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () {
-                                handlePlay();
-                              },
+                              onTap: handlePlay,
                               child: NetworkImgLayer(
                                 type: 'emote',
                                 src: videoDetailController.videoItem['pic'],
@@ -997,9 +989,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                   left: 0,
                                   right: 0,
                                   child: GestureDetector(
-                                    onTap: () {
-                                      handlePlay();
-                                    },
+                                    onTap: handlePlay,
                                     child: NetworkImgLayer(
                                       type: 'emote',
                                       src: videoDetailController

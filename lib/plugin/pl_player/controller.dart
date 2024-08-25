@@ -895,13 +895,18 @@ class PlPlayerController {
 
     await _videoPlayerController?.play();
 
-    await getCurrentVolume();
-    await getCurrentBrightness();
-
     playerStatus.status.value = PlayerStatus.playing;
     // screenManager.setOverlays(false);
 
     audioSessionHandler.setActive(true);
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      getCurrentVolume();
+      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+          as bool) {
+        getCurrentBrightness();
+      }
+    });
   }
 
   /// 暂停播放
@@ -1313,7 +1318,10 @@ class PlPlayerController {
       }
       _instance = null;
       // 关闭所有视频页面恢复亮度
-      resetBrightness();
+      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+          as bool) {
+        resetBrightness();
+      }
       videoPlayerServiceHandler.clear();
     } catch (err) {
       print(err);
