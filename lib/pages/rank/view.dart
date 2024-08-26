@@ -1,7 +1,5 @@
-import 'package:PiliPalaX/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../utils/feed_back.dart';
 import './controller.dart';
 
 class RankPage extends StatefulWidget {
@@ -14,7 +12,6 @@ class RankPage extends StatefulWidget {
 class _RankPageState extends State<RankPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   final RankController _rankController = Get.put(RankController());
-  late int _selectedTabIndex = 0;
 
   @override
   bool get wantKeepAlive => true;
@@ -24,20 +21,10 @@ class _RankPageState extends State<RankPage>
     super.initState();
     _rankController.tabController =
         TabController(vsync: this, length: _rankController.tabs.length);
-    _selectedTabIndex = _rankController.initialIndex.value;
-    _rankController.tabController.addListener(() {
-      if (!_rankController.tabController.indexIsChanging) {
-        // _rankController.onRefresh();
-        setState(() {
-          _selectedTabIndex = _rankController.tabController.index;
-        });
-      }
-    });
   }
 
   @override
   void dispose() {
-    _rankController.tabController.removeListener(() {});
     _rankController.tabController.dispose();
     super.dispose();
   }
@@ -45,88 +32,65 @@ class _RankPageState extends State<RankPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Row(
       children: [
-        const SizedBox(
-          width: StyleString.cardSpace,
-        ),
-        // SizedBox(
-        //     width: 55,
-        //     child: NavigationRail(
-        //
-        //       backgroundColor: Colors.transparent,
-        //       minWidth: 50.0,
-        //       // elevation: 0,
-        //       selectedIndex: _selectedTabIndex,
-        //       onDestinationSelected: (int index) {
-        //         feedBack();
-        //         if (_selectedTabIndex == index) {
-        //           _rankController.tabsCtrList[index]().animateToTop();
-        //         } else {
-        //           setState(() {
-        //             _rankController.tabController.index = index;
-        //             _selectedTabIndex = index;
-        //           });
-        //         }
-        //       },
-        //       labelType: NavigationRailLabelType.none,
-        //       destinations: [
-        //         for (var tab in _rankController.tabs)
-        //           NavigationRailDestination(
-        //             padding: EdgeInsets.zero,
-        //             icon: Text(tab['label']),
-        //             // selectedIcon: Text(tab['label']),
-        //             label: const SizedBox.shrink(),
-        //           ),
-        //       ],
-        //       trailing: const SizedBox(height: 100),
-        //     )),
-        LayoutBuilder(builder: (context, constraint) {
-          return SingleChildScrollView(
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                  child: IntrinsicHeight(
-                      child: MediaQuery.removePadding(
-                          context: context,
-                          removeLeft: true,
-                          removeRight: true,
-                          removeTop: true,
-                          child: NavigationRail(
-                            groupAlignment: -1.0,
-                            backgroundColor: Colors.transparent,
-                            minWidth: 40.0,
-                            useIndicator: false,
-                            // elevation: 0,
-                            selectedIndex: _selectedTabIndex,
-                            onDestinationSelected: (int index) {
-                              feedBack();
-                              if (_selectedTabIndex == index) {
-                                _rankController.tabsCtrList[index]()
-                                    .animateToTop();
-                              } else {
-                                setState(() {
-                                  _rankController.tabController.index = index;
-                                  _selectedTabIndex = index;
-                                });
-                              }
-                            },
-                            labelType: NavigationRailLabelType.none,
-                            destinations: [
-                              for (var tab in _rankController.tabs)
-                                NavigationRailDestination(
-                                  icon: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4),
-                                      child: Text(tab['label'])),
-                                  // selectedIcon: Text(tab['label']),
-                                  label: const SizedBox.shrink(),
-                                ),
-                            ],
-                            trailing: const SizedBox(height: 100),
-                          )))));
-        }),
         Expanded(
+          flex: 18,
+          child: ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            itemCount: _rankController.tabs.length,
+            itemBuilder: (context, index) => IntrinsicHeight(
+              child: Obx(
+                () => InkWell(
+                  onTap: () {
+                    _rankController.initialIndex.value = index;
+                    _rankController.tabController.animateTo(index);
+                  },
+                  child: Container(
+                    color: index == _rankController.initialIndex.value
+                        ? Theme.of(context).colorScheme.onInverseSurface
+                        : Colors.transparent,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: double.infinity,
+                          width: 3,
+                          color: index == _rankController.initialIndex.value
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.transparent,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              _rankController.tabs[index]['label'],
+                              style: TextStyle(
+                                color: index ==
+                                        _rankController.initialIndex.value
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                fontSize: 15,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 82,
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _rankController.tabController,
