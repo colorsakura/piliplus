@@ -1,31 +1,44 @@
+import 'package:dio/dio.dart';
+
 import '../models/video/reply/data.dart';
 import '../models/video/reply/emote.dart';
 import 'api.dart';
+import 'constants.dart';
 import 'init.dart';
 
 class ReplyHttp {
+  static final _dio = Dio();
   static Future replyList({
     required int oid,
     required String nextOffset,
     required int type,
     int sort = 1,
   }) async {
-    var res = await Request().get(Api.replyList, data: {
-      'oid': oid,
-      'type': type,
-      'pagination_str': '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
-      'mode': sort + 2, //2:按时间排序；3：按热度排序
-    });
-    if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': ReplyData.fromJson(res.data['data']),
-      };
-    } else {
+    try {
+      var res = await _dio
+          .get('${HttpString.apiBaseUrl}${Api.replyList}', queryParameters: {
+        'oid': oid,
+        'type': type,
+        'pagination_str': '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
+        'mode': sort + 2, //2:按时间排序；3：按热度排序
+      });
+      if (res.data['code'] == 0) {
+        return {
+          'status': true,
+          'data': ReplyData.fromJson(res.data['data']),
+        };
+      } else {
+        return {
+          'status': false,
+          'date': [],
+          'msg': res.data['message'],
+        };
+      }
+    } catch (e) {
       return {
         'status': false,
         'date': [],
-        'msg': res.data['message'],
+        'msg': e.toString(),
       };
     }
   }
@@ -37,24 +50,33 @@ class ReplyHttp {
     required int type,
     int sort = 1,
   }) async {
-    var res = await Request().get(Api.replyReplyList, data: {
-      'oid': oid,
-      'root': root,
-      'pn': pageNum,
-      'type': type,
-      'sort': 1,
-      'csrf': await Request.getCsrf(),
-    });
-    if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': ReplyReplyData.fromJson(res.data['data']),
-      };
-    } else {
+    try {
+      var res = await _dio.get('${HttpString.apiBaseUrl}${Api.replyReplyList}',
+          queryParameters: {
+            'oid': oid,
+            'root': root,
+            'pn': pageNum,
+            'type': type,
+            'sort': 1,
+            'csrf': await Request.getCsrf(),
+          });
+      if (res.data['code'] == 0) {
+        return {
+          'status': true,
+          'data': ReplyReplyData.fromJson(res.data['data']),
+        };
+      } else {
+        return {
+          'status': false,
+          'date': [],
+          'msg': res.data['message'],
+        };
+      }
+    } catch (e) {
       return {
         'status': false,
         'date': [],
-        'msg': res.data['message'],
+        'msg': e.toString(),
       };
     }
   }
@@ -86,7 +108,6 @@ class ReplyHttp {
       };
     }
   }
-
 
   static Future getEmoteList({String? business}) async {
     var res = await Request().get(Api.myEmote, data: {
