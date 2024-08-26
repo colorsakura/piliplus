@@ -64,6 +64,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
               onChanged: (dynamic val) async {
                 ctr.type.value = 1;
                 ctr.setting.put(SettingBoxKey.dynamicColor, false);
+                Get.forceAppUpdate();
               },
             ),
           ),
