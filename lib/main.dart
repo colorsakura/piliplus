@@ -162,6 +162,10 @@ class MyApp extends StatelessWidget {
                 ? darkColorScheme
                 : lightColorScheme,
             useMaterial3: true,
+            navigationBarTheme: NavigationBarThemeData(
+                surfaceTintColor: (lightDynamic != null && isDynamicColor)
+                    ? lightColorScheme.surfaceTint
+                    : lightColorScheme.surfaceContainer),
             snackBarTheme: SnackBarThemeData(
               actionTextColor: lightColorScheme.primary,
               backgroundColor: lightColorScheme.secondaryContainer,
@@ -183,6 +187,10 @@ class MyApp extends StatelessWidget {
                 ? lightColorScheme
                 : darkColorScheme,
             useMaterial3: true,
+            navigationBarTheme: NavigationBarThemeData(
+                surfaceTintColor: (darkDynamic != null && isDynamicColor)
+                    ? darkColorScheme.surfaceTint
+                    : darkColorScheme.surfaceContainer),
             snackBarTheme: SnackBarThemeData(
               actionTextColor: darkColorScheme.primary,
               backgroundColor: darkColorScheme.secondaryContainer,
