@@ -473,8 +473,7 @@ class ReplyItemRow extends StatelessWidget {
                                 )
                               ],
                               TextSpan(
-                                  text: replies![i].content?.members?.isEmpty ==
-                                          true
+                                  text: replies![i].root == replies![i].parent
                                       ? ': '
                                       : ' '),
                               buildContent(
