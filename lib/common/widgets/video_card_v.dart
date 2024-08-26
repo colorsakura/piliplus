@@ -132,7 +132,6 @@ class VideoCardV extends StatelessWidget {
         label: Utils.videoItemSemantics(videoItem),
         excludeSemantics: true,
         child: Card(
-            elevation: 0,
             clipBehavior: Clip.hardEdge,
             margin: EdgeInsets.zero,
             child: GestureDetector(

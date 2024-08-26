@@ -180,6 +180,20 @@ class MyApp extends StatelessWidget {
                 ),
               },
             ),
+            popupMenuTheme: PopupMenuThemeData(
+              surfaceTintColor: lightColorScheme.surfaceTint,
+            ),
+            cardTheme: CardTheme(
+              elevation: 2,
+              surfaceTintColor: lightColorScheme.surfaceTint,
+              shadowColor: Colors.transparent,
+            ),
+            dialogTheme: DialogTheme(
+              surfaceTintColor: lightColorScheme.surfaceTint,
+            ),
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              refreshBackgroundColor: lightColorScheme.onSecondary,
+            ),
           ),
           darkTheme: ThemeData(
             // fontFamily: 'HarmonyOS',
@@ -197,6 +211,20 @@ class MyApp extends StatelessWidget {
               closeIconColor: darkColorScheme.secondary,
               contentTextStyle: TextStyle(color: darkColorScheme.secondary),
               elevation: 20,
+            ),
+            popupMenuTheme: PopupMenuThemeData(
+              surfaceTintColor: darkColorScheme.surfaceTint,
+            ),
+            cardTheme: CardTheme(
+              elevation: 2,
+              surfaceTintColor: darkColorScheme.surfaceTint,
+              shadowColor: Colors.transparent,
+            ),
+            dialogTheme: DialogTheme(
+              surfaceTintColor: darkColorScheme.surfaceTint,
+            ),
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              refreshBackgroundColor: darkColorScheme.onSecondary,
             ),
           ),
           localizationsDelegates: const [

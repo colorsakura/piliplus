@@ -26,7 +26,6 @@ class BangumiCardV extends StatelessWidget {
   Widget build(BuildContext context) {
     String heroTag = Utils.makeHeroTag(bangumiItem.mediaId);
     return Card(
-      elevation: 0,
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: GestureDetector(

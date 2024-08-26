@@ -22,7 +22,6 @@ class LiveCardV extends StatelessWidget {
   Widget build(BuildContext context) {
     String heroTag = Utils.makeHeroTag(liveItem.roomId);
     return Card(
-      elevation: 0,
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: GestureDetector(
@@ -60,18 +59,18 @@ class LiveCardV extends StatelessWidget {
                             height: maxHeight,
                           ),
                         ),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: AnimatedOpacity(
-                              opacity: 1,
-                              duration: const Duration(milliseconds: 200),
-                              child: VideoStat(
-                                liveItem: liveItem,
-                              ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: AnimatedOpacity(
+                            opacity: 1,
+                            duration: const Duration(milliseconds: 200),
+                            child: VideoStat(
+                              liveItem: liveItem,
                             ),
                           ),
+                        ),
                       ],
                     );
                   }),
@@ -88,9 +87,7 @@ class LiveCardV extends StatelessWidget {
 
 class LiveContent extends StatelessWidget {
   final dynamic liveItem;
-  const LiveContent(
-      {Key? key, required this.liveItem})
-      : super(key: key);
+  const LiveContent({Key? key, required this.liveItem}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Expanded(
