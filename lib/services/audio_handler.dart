@@ -54,7 +54,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     playbackState.add(playbackState.value.copyWith(
       updatePosition: position,
     ));
-    await PlPlayerController.seekToIfExists(position);
+    await PlPlayerController.seekToIfExists(position, type: 'slider');
     // await player.seekTo(position);
   }
 

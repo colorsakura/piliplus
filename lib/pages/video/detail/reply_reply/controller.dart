@@ -11,7 +11,7 @@ class VideoReplyReplyController extends GetxController {
   int? aid;
   // rpid 请求楼中楼回复
   String? rpid;
-  ReplyType replyType = ReplyType.video;
+  ReplyType replyType; // = ReplyType.video;
   RxList<ReplyItemModel> replyList = <ReplyItemModel>[].obs;
   // 当前页
   int currentPage = 0;
@@ -19,6 +19,7 @@ class VideoReplyReplyController extends GetxController {
   RxString noMore = ''.obs;
   // 当前回复的回复
   ReplyItemModel? currentReplyItem;
+  ReplyItemModel? root;
 
   @override
   void onInit() {
@@ -41,6 +42,7 @@ class VideoReplyReplyController extends GetxController {
       type: replyType.index,
     );
     if (res['status']) {
+      if (res['data'].root != null) root = res['data'].root;
       final List<ReplyItemModel> replies = res['data'].replies;
       if (replies.isNotEmpty) {
         noMore.value = '加载中...';

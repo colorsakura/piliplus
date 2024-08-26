@@ -4,11 +4,13 @@ import 'dart:math';
 
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:ns_danmaku/ns_danmaku.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
@@ -224,6 +226,22 @@ class _HeaderControlState extends State<HeaderControl> {
                       },
                     ),
                     ListTile(
+                      onTap: () {
+                        Get.back();
+                        Player? player =
+                            widget.controller?.videoPlayerController;
+                        if (player == null) {
+                          SmartDialog.showToast('播放器未初始化');
+                          return;
+                        }
+                        var pp = player.platform as NativePlayer;
+                        pp.setProperty("video", "no");
+                      },
+                      dense: true,
+                      leading: const Icon(Icons.headphones_outlined, size: 20),
+                      title: const Text('听视频（需返回首页才能终止该状态）', style: titleStyle),
+                    ),
+                    ListTile(
                       onTap: () => {Get.back(), showSetVideoQa()},
                       dense: true,
                       leading: const Icon(Icons.play_circle_outline, size: 20),
@@ -265,6 +283,172 @@ class _HeaderControlState extends State<HeaderControl> {
                       leading: const Icon(Icons.subtitles_outlined, size: 20),
                       title: const Text('弹幕设置', style: titleStyle),
                     ),
+                    ListTile(
+                        title: const Text('播放信息', style: titleStyle),
+                        leading: const Icon(Icons.info_outline, size: 20),
+                        onTap: () {
+                          Player? player =
+                              widget.controller?.videoPlayerController;
+                          if (player == null) {
+                            SmartDialog.showToast('播放器未初始化');
+                            return;
+                          }
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('播放信息'),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  child: ListView(
+                                    children: [
+                                      ListTile(
+                                        title: const Text("Resolution"),
+                                        subtitle: Text(
+                                            '${player.state.width}x${player.state.height}'),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "Resolution\n${player.state.width}x${player.state.height}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: const Text("VideoParams"),
+                                        subtitle: Text(player.state.videoParams
+                                            .toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "VideoParams\n${player.state.videoParams}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: const Text("AudioParams"),
+                                        subtitle: Text(player.state.audioParams
+                                            .toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "AudioParams\n${player.state.audioParams}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: const Text("Media"),
+                                        subtitle: Text(
+                                            player.state.playlist.toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "Media\n${player.state.playlist}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: const Text("AudioTrack"),
+                                        subtitle: Text(player.state.track.audio
+                                            .toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "AudioTrack\n${player.state.track.audio}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: const Text("VideoTrack"),
+                                        subtitle: Text(player.state.track.video
+                                            .toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "VideoTrack\n${player.state.track.audio}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                          title: const Text("pitch"),
+                                          subtitle: Text(
+                                              player.state.pitch.toString()),
+                                          onTap: () {
+                                            Clipboard.setData(
+                                              ClipboardData(
+                                                text:
+                                                    "pitch\n${player.state.pitch}",
+                                              ),
+                                            );
+                                          }),
+                                      ListTile(
+                                          title: const Text("rate"),
+                                          subtitle: Text(
+                                              player.state.rate.toString()),
+                                          onTap: () {
+                                            Clipboard.setData(
+                                              ClipboardData(
+                                                text:
+                                                "rate\n${player.state.rate}",
+                                              ),
+                                            );
+                                          }),
+                                      ListTile(
+                                        title: const Text("AudioBitrate"),
+                                        subtitle: Text(player.state.audioBitrate
+                                            .toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "AudioBitrate\n${player.state.audioBitrate}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: const Text("Volume"),
+                                        subtitle: Text(
+                                            player.state.volume.toString()),
+                                        onTap: () {
+                                          Clipboard.setData(
+                                            ClipboardData(
+                                              text:
+                                                  "Volume\n${player.state.volume}",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: Text(
+                                      '确定',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        })
                   ],
                 ),
               ))

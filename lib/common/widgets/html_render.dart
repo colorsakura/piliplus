@@ -25,7 +25,8 @@ class HtmlRender extends StatelessWidget {
   Widget build(BuildContext context) {
     double textScale =
         setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
-    return Html(
+    return SelectionArea(
+        child: Html(
       data: htmlContent,
       onLinkTap: (String? url, Map<String, String> buildContext, attributes) {},
       extensions: [
@@ -124,6 +125,6 @@ class HtmlRender extends StatelessWidget {
           margin: Margins.zero,
         ),
       },
-    );
+    ));
   }
 }

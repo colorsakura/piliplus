@@ -253,6 +253,7 @@ class PlPlayerController {
   late List<double> speedsList;
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
+  late bool enableLongShowControl;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -361,6 +362,8 @@ class PlPlayerController {
       _longPressSpeed.value = videoStorage
           .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
     }
+    enableLongShowControl =
+        setting.get(SettingBoxKey.enableLongShowControl, defaultValue: false);
     speedsList = List<double>.from(videoStorage
         .get(VideoBoxKey.customSpeedsList, defaultValue: <double>[]));
     for (final PlaySpeed i in PlaySpeed.values) {
@@ -892,13 +895,18 @@ class PlPlayerController {
 
     await _videoPlayerController?.play();
 
-    await getCurrentVolume();
-    await getCurrentBrightness();
-
     playerStatus.status.value = PlayerStatus.playing;
     // screenManager.setOverlays(false);
 
     audioSessionHandler.setActive(true);
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      getCurrentVolume();
+      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+          as bool) {
+        getCurrentBrightness();
+      }
+    });
   }
 
   /// 暂停播放
@@ -927,7 +935,8 @@ class PlPlayerController {
     if (_timer != null) {
       _timer!.cancel();
     }
-    _timer = Timer(const Duration(milliseconds: 3000), () {
+    Duration waitingTime = Duration(seconds: enableLongShowControl ? 30 : 3);
+    _timer = Timer(waitingTime, () {
       if (!isSliderMoving.value) {
         controls = false;
       }
@@ -1309,7 +1318,10 @@ class PlPlayerController {
       }
       _instance = null;
       // 关闭所有视频页面恢复亮度
-      resetBrightness();
+      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+          as bool) {
+        resetBrightness();
+      }
       videoPlayerServiceHandler.clear();
     } catch (err) {
       print(err);

@@ -102,9 +102,7 @@ class _BottomControlState extends State<BottomControl> {
                     canUsePiP = false;
                   }
                   if (canUsePiP) {
-                    await widget.floating!.enable(
-                      const EnableManual()
-                    );
+                    await widget.floating!.enable(const EnableManual());
                   } else {}
                 },
                 icon: const Icon(
@@ -117,9 +115,9 @@ class _BottomControlState extends State<BottomControl> {
             const SizedBox(width: 4),
           ],
           ComBtn(
-            tooltip: '全屏切换',
             icon: const Icon(
               Icons.fullscreen,
+              semanticLabel: '全屏切换',
               size: 20,
               color: Colors.white,
             ),

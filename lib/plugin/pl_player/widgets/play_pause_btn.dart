@@ -66,25 +66,23 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
     return SizedBox(
       width: 42,
       height: 34,
-      child: IconButton(
-        tooltip: widget.controller!.videoPlayerController!.state.playing
-            ? '暂停'
-            : '播放',
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
-        ),
-        onPressed: player.playOrPause,
-        color: Colors.white,
-        iconSize: 25,
+      child: InkWell(
+        onTap: player.playOrPause,
         // iconSize: widget.iconSize ?? _theme(context).buttonBarButtonSize,
         // color: widget.iconColor ?? _theme(context).buttonBarButtonColor,
-        icon: AnimatedIcon(
-          progress: animation,
-          icon: AnimatedIcons.play_pause,
-          color: Colors.white,
-          size: 20,
-          // size: widget.iconSize ?? _theme(context).buttonBarButtonSize,
-          // color: widget.iconColor ?? _theme(context).buttonBarButtonColor,
+        child: Center(
+          child: AnimatedIcon(
+            semanticLabel:
+                widget.controller!.videoPlayerController!.state.playing
+                    ? '暂停'
+                    : '播放',
+            progress: animation,
+            icon: AnimatedIcons.play_pause,
+            color: Colors.white,
+            size: 20,
+            // size: widget.iconSize ?? _theme(context).buttonBarButtonSize,
+            // color: widget.iconColor ?? _theme(context).buttonBarButtonColor,
+          ),
         ),
       ),
     );

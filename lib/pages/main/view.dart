@@ -139,7 +139,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        stops: const [0.1, 0.4 ,0.7]),
+                        stops: const [0.1, 0.4, 0.7]),
                   ),
                 ),
               ),

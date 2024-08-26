@@ -54,7 +54,8 @@ jobs:
           fi
 
           version_code=$(echo $last_tag | cut -d "+" -f 2)
-          beta_code=0$(echo $last_tag | cut -d "+" -f 1 | cut -d "." -f 4)
+          beta_code=$(echo $last_tag | cut -d "+" -f 1 | cut -d "." -f 4)
+          beta_code=${beta_code:-0}
 
           echo "beta-code=$beta_code" >> $GITHUB_OUTPUT
           echo "version-code=$version_code" >> $GITHUB_OUTPUT

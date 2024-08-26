@@ -30,8 +30,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   await GStorage.init();
-  if (GStorage.setting
-      .get(SettingBoxKey.autoClearCache, defaultValue: false)) {
+  if (GStorage.setting.get(SettingBoxKey.autoClearCache, defaultValue: false)) {
     await CacheManage.clearLibraryCache();
   }
   if (GStorage.setting
@@ -90,6 +89,7 @@ void main() async {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
     statusBarColor: Colors.transparent,
+    systemNavigationBarContrastEnforced: false,
   ));
   Data.init();
   PiliScheme.init();

@@ -63,9 +63,9 @@ class _DynamicsPageState extends State<DynamicsPage>
       scrollController.addListener(() {
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent - 300) {
-            EasyThrottle.throttle('following', const Duration(seconds: 1), () {
-              _dynamicsController.queryFollowing2();
-            });
+          EasyThrottle.throttle('following', const Duration(seconds: 1), () {
+            _dynamicsController.queryFollowing2();
+          });
         }
       });
     }
