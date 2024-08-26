@@ -44,94 +44,89 @@ class VideoCardH extends StatelessWidget {
     final String heroTag = Utils.makeHeroTag(aid);
     return Stack(children: [
       Semantics(
-          label: Utils.videoItemSemantics(videoItem),
-          excludeSemantics: true,
-          child: GestureDetector(
-            onLongPress: () {
-              if (longPress != null) {
-                longPress!();
-              }
+        label: Utils.videoItemSemantics(videoItem),
+        excludeSemantics: true,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onLongPress: () {
+            if (longPress != null) {
+              longPress!();
+            }
+          },
+          onTap: () async {
+            if (type == 'ketang') {
+              SmartDialog.showToast('课堂视频暂不支持播放');
+              return;
+            }
+            try {
+              final int cid =
+                  videoItem.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
+              Get.toNamed('/video?bvid=$bvid&cid=$cid',
+                  arguments: {'videoItem': videoItem, 'heroTag': heroTag});
+            } catch (err) {
+              SmartDialog.showToast(err.toString());
+            }
+          },
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints boxConstraints) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: StyleString.aspectRatio,
+                    child: LayoutBuilder(
+                      builder: (BuildContext context,
+                          BoxConstraints boxConstraints) {
+                        final double maxWidth = boxConstraints.maxWidth;
+                        final double maxHeight = boxConstraints.maxHeight;
+                        return Stack(
+                          children: [
+                            Hero(
+                              tag: heroTag,
+                              child: NetworkImgLayer(
+                                src: videoItem.pic as String,
+                                width: maxWidth,
+                                height: maxHeight,
+                              ),
+                            ),
+                            if (videoItem.duration != 0)
+                              PBadge(
+                                text: Utils.timeFormat(videoItem.duration!),
+                                right: 6.0,
+                                bottom: 6.0,
+                                type: 'gray',
+                              ),
+                            if (type != 'video')
+                              PBadge(
+                                text: type,
+                                left: 6.0,
+                                bottom: 6.0,
+                                type: 'primary',
+                              ),
+                            // if (videoItem.rcmdReason != null &&
+                            //     videoItem.rcmdReason.content != '')
+                            //   pBadge(videoItem.rcmdReason.content, context,
+                            //       6.0, 6.0, null, null),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  VideoContent(
+                    videoItem: videoItem,
+                    source: source,
+                    showOwner: showOwner,
+                    showView: showView,
+                    showDanmaku: showDanmaku,
+                    showPubdate: showPubdate,
+                  )
+                ],
+              );
             },
-            // onLongPressEnd: (details) {
-            //   if (longPressEnd != null) {
-            //     longPressEnd!();
-            //   }
-            // },
-            child: InkWell(
-              onTap: () async {
-                if (type == 'ketang') {
-                  SmartDialog.showToast('课堂视频暂不支持播放');
-                  return;
-                }
-                try {
-                  final int cid = videoItem.cid ??
-                      await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                  Get.toNamed('/video?bvid=$bvid&cid=$cid',
-                      arguments: {'videoItem': videoItem, 'heroTag': heroTag});
-                } catch (err) {
-                  SmartDialog.showToast(err.toString());
-                }
-              },
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints boxConstraints) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      AspectRatio(
-                        aspectRatio: StyleString.aspectRatio,
-                        child: LayoutBuilder(
-                          builder: (BuildContext context,
-                              BoxConstraints boxConstraints) {
-                            final double maxWidth = boxConstraints.maxWidth;
-                            final double maxHeight = boxConstraints.maxHeight;
-                            return Stack(
-                              children: [
-                                Hero(
-                                  tag: heroTag,
-                                  child: NetworkImgLayer(
-                                    src: videoItem.pic as String,
-                                    width: maxWidth,
-                                    height: maxHeight,
-                                  ),
-                                ),
-                                if (videoItem.duration != 0)
-                                  PBadge(
-                                    text: Utils.timeFormat(videoItem.duration!),
-                                    right: 6.0,
-                                    bottom: 6.0,
-                                    type: 'gray',
-                                  ),
-                                if (type != 'video')
-                                  PBadge(
-                                    text: type,
-                                    left: 6.0,
-                                    bottom: 6.0,
-                                    type: 'primary',
-                                  ),
-                                // if (videoItem.rcmdReason != null &&
-                                //     videoItem.rcmdReason.content != '')
-                                //   pBadge(videoItem.rcmdReason.content, context,
-                                //       6.0, 6.0, null, null),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      VideoContent(
-                        videoItem: videoItem,
-                        source: source,
-                        showOwner: showOwner,
-                        showView: showView,
-                        showDanmaku: showDanmaku,
-                        showPubdate: showPubdate,
-                      )
-                    ],
-                  );
-                },
-              ),
-            ),
-          )),
+          ),
+        ),
+      ),
       if (source == 'normal')
         Positioned(
           bottom: 0,
@@ -183,7 +178,7 @@ class VideoContent extends StatelessWidget {
                   videoItem.title as String,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w400,
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     height: 1.42,
                     letterSpacing: 0.3,
@@ -203,7 +198,7 @@ class VideoContent extends StatelessWidget {
                         TextSpan(
                           text: i['text'] as String,
                           style: TextStyle(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w400,
                             fontSize: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
@@ -242,7 +237,7 @@ class VideoContent extends StatelessWidget {
               Expanded(
                 flex: 0,
                 child: Text(
-                  "${pubdate} ${showOwner ? videoItem.owner.name : ''}",
+                  "$pubdate ${showOwner ? videoItem.owner.name : ''}",
                   maxLines: 1,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,

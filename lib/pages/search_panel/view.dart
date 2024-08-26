@@ -126,7 +126,8 @@ class _SearchPanelState extends State<SearchPanel>
                     errMsg: '没有相关数据',
                     fn: () {
                       setState(() {
-                        _searchPanelController.onSearch();
+                        _futureBuilderFuture =
+                            _searchPanelController.onSearch();
                       });
                     },
                   ),

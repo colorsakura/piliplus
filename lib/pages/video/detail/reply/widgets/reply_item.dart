@@ -29,6 +29,7 @@ class ReplyItem extends StatelessWidget {
     this.showReplyRow = true,
     this.replyReply,
     this.replyType,
+    this.needDivider = true,
     super.key,
   });
   final ReplyItemModel? replyItem;
@@ -37,6 +38,7 @@ class ReplyItem extends StatelessWidget {
   final bool? showReplyRow;
   final Function? replyReply;
   final ReplyType? replyType;
+  final bool needDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +68,16 @@ class ReplyItem extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
               child: content(context),
             ),
-            Divider(
-              indent: 55,
-              endIndent: 15,
-              height: 0.3,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onInverseSurface
-                  .withOpacity(0.5),
-            )
+            if (needDivider)
+              Divider(
+                indent: 55,
+                endIndent: 15,
+                height: 0.3,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onInverseSurface
+                    .withOpacity(0.5),
+              )
           ],
         ),
       ),

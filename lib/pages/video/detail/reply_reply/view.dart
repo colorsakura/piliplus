@@ -75,7 +75,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     return Container(
       height:
           widget.source == 'videoDetail' ? Utils.getSheetHeight(context) : null,
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
           if (widget.source == 'videoDetail')
@@ -125,6 +125,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         },
                         replyType: widget.replyType,
                         replyReply: (replyItem) => replyReply(replyItem),
+                        needDivider: false,
                       ),
                     ),
                     SliverToBoxAdapter(

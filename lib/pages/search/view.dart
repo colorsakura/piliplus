@@ -103,25 +103,24 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   }
 
   Widget _searchSuggest() {
-    SSearchController ssCtr = _searchController;
     return Obx(
-      () => ssCtr.searchSuggestList.isNotEmpty &&
-              ssCtr.searchSuggestList.first.term != null &&
-              ssCtr.controller.value.text != ''
+      () => _searchController.searchSuggestList.isNotEmpty &&
+              _searchController.searchSuggestList.first.term != null &&
+              _searchController.controller.value.text != ''
           ? ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: ssCtr.searchSuggestList.length,
+              itemCount: _searchController.searchSuggestList.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  onTap: () => ssCtr
-                      .onClickKeyword(ssCtr.searchSuggestList[index].term!),
+                  onTap: () => _searchController.onClickKeyword(
+                      _searchController.searchSuggestList[index].term!),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, top: 9, bottom: 9),
-                    child: ssCtr.searchSuggestList[index].textRich,
+                    child: _searchController.searchSuggestList[index].textRich,
                   ),
                 );
               },
@@ -152,7 +151,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                   height: 34,
                   child: TextButton.icon(
                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                      padding: WidgetStateProperty.all(const EdgeInsets.only(
                           left: 10, top: 6, bottom: 6, right: 10)),
                     ),
                     onPressed: () => ctr.queryHotSearchList(),
