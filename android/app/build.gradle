@@ -1,3 +1,5 @@
+import com.android.build.OutputFile
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -28,7 +30,8 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-def _storeFile = file(System.getenv("KEYSTORE") ?: keystoreProperties["storeFile"] ?: "vvex.jks")
+def _filePath = System.getenv("KEYSTORE") ?: keystoreProperties["storeFile"]
+def _storeFile = _filePath != null ? file(_filePath) : null
 def _storePassword = System.getenv("KEYSTORE_PASSWORD") ?: keystoreProperties["storePassword"]
 def _keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties["keyAlias"]
 def _keyPassword = System.getenv("KEY_PASSWORD") ?: keystoreProperties["keyPassword"]
@@ -66,14 +69,16 @@ android {
 
     signingConfigs {
         // 添加签名配置
-        release {
-            // 配置密钥库文件的位置、别名、密码等信息
-            storeFile _storeFile
-            storePassword _storePassword
-            keyAlias _keyAlias
-            keyPassword _keyPassword
-            v1SigningEnabled true
-            v2SigningEnabled true
+        if(_storeFile != null) {
+            release {
+                // 配置密钥库文件的位置、别名、密码等信息
+                storeFile _storeFile
+                storePassword _storePassword
+                keyAlias _keyAlias
+                keyPassword _keyPassword
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
         }
     }
 
@@ -81,7 +86,7 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
+            signingConfig _storeFile != null ? signingConfigs.release : signingConfigs.debug
         }
         debug {
             //applicationId "com.orz12.PiliPalaX.debug"
@@ -98,7 +103,6 @@ dependencies {
 }
 
 ext.abiCodes = ["x86_64": 1, "armeabi-v7a": 2, "arm64-v8a": 3]
-import com.android.build.OutputFile
 android.applicationVariants.all { variant ->
   variant.outputs.each { output ->
     def abiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
