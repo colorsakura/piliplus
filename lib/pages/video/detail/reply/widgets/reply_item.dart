@@ -188,7 +188,9 @@ class ReplyItem extends StatelessWidget {
                         style: TextStyle(
                           color: (replyItem!.member!.vip!['vipStatus'] > 0 &&
                                   replyItem!.member!.vip!['vipType'] == 2)
-                              ? const Color.fromARGB(255, 251, 100, 163)
+                              ? GStorage.brightness == Brightness.light
+                                  ? const Color(0xFFFF6699)
+                                  : const Color(0xFFD44E7D)
                               : Theme.of(context).colorScheme.outline,
                           fontSize: 13,
                         ),
@@ -1040,7 +1042,6 @@ class MorePanel extends StatelessWidget {
           context: Get.context!,
           builder: (context) {
             return AlertDialog(
-              title: const Text('自由复制'),
               content: SelectableText(message),
             );
           },

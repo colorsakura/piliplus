@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
+import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:PiliPalaX/models/model_owner.dart';
@@ -13,6 +15,19 @@ class GStorage {
   static late final Box<dynamic> localCache;
   static late final Box<dynamic> setting;
   static late final Box<dynamic> video;
+
+  static Brightness get brightness {
+    switch (setting.get(SettingBoxKey.themeMode,
+        defaultValue: ThemeType.system.code)) {
+      case 0:
+        return Brightness.light;
+      case 1:
+        return Brightness.dark;
+      case 2:
+      default:
+        return PlatformDispatcher.instance.platformBrightness;
+    }
+  }
 
   static Future<void> init() async {
     final Directory dir = await getApplicationSupportDirectory();
