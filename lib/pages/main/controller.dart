@@ -39,7 +39,7 @@ class MainController extends GetxController {
     if (setting.get(SettingBoxKey.autoUpdate, defaultValue: false)) {
       Utils.checkUpdate();
     }
-    hideTabBar = setting.get(SettingBoxKey.hideTabBar, defaultValue: false);
+    hideTabBar = setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
     int defaultHomePage =
         setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;
     selectedIndex = defaultNavigationBars

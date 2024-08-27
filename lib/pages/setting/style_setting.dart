@@ -101,7 +101,7 @@ class _StyleSettingState extends State<StyleSetting> {
             title: '首页背景渐变',
             setKey: SettingBoxKey.enableGradientBg,
             leading: Icon(Icons.gradient_outlined),
-            defaultVal: true,
+            defaultVal: false,
             needReboot: true,
           ),
           ListTile(
@@ -206,7 +206,7 @@ class _StyleSettingState extends State<StyleSetting> {
             subTitle: '首页列表滑动时，收起顶栏',
             leading: Icon(Icons.vertical_align_top_outlined),
             setKey: SettingBoxKey.hideSearchBar,
-            defaultVal: false,
+            defaultVal: true,
             needReboot: true,
           ),
           const SetSwitchItem(
@@ -214,7 +214,7 @@ class _StyleSettingState extends State<StyleSetting> {
             subTitle: '首页列表滑动时，收起底栏',
             leading: Icon(Icons.vertical_align_bottom_outlined),
             setKey: SettingBoxKey.hideTabBar,
-            defaultVal: false,
+            defaultVal: true,
             needReboot: true,
           ),
           ListTile(

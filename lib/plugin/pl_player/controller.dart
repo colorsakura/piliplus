@@ -324,7 +324,7 @@ class PlPlayerController {
   PlPlayerController._() {
     _videoType = videoType;
     isOpenDanmu.value =
-        setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: false);
+        setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
     danmakuWeight.value =
         setting.get(SettingBoxKey.danmakuWeight, defaultValue: 0);
     danmakuFilterRule.value = localCache.get(LocalCacheKey.danmakuFilterRule,

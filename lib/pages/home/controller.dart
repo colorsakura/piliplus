@@ -39,12 +39,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     userLogin.value = userInfo != null;
     userFace.value = userInfo != null ? userInfo.face : '';
     hideSearchBar =
-        setting.get(SettingBoxKey.hideSearchBar, defaultValue: false);
+        setting.get(SettingBoxKey.hideSearchBar, defaultValue: true);
     if (setting.get(SettingBoxKey.enableSearchWord, defaultValue: true)) {
       searchDefault();
     }
     enableGradientBg =
-        setting.get(SettingBoxKey.enableGradientBg, defaultValue: true);
+        setting.get(SettingBoxKey.enableGradientBg, defaultValue: false);
     useSideBar = setting.get(SettingBoxKey.useSideBar, defaultValue: false);
     // 进行tabs配置
     setTabConfig();

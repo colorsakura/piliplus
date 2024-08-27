@@ -34,7 +34,7 @@ class HtmlRenderController extends GetxController {
     dynamicType = Get.parameters['dynamicType']!;
     type = dynamicType == 'picture' ? 11 : 12;
     int defaultReplySortIndex =
-        setting.get(SettingBoxKey.replySortType, defaultValue: 0) as int;
+        setting.get(SettingBoxKey.replySortType, defaultValue: 1) as int;
     if (defaultReplySortIndex == 2) {
       setting.put(SettingBoxKey.replySortType, 0);
       defaultReplySortIndex = 0;

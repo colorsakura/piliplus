@@ -106,7 +106,7 @@ class VideoIntroController extends GetxController {
     userLogin = userInfo != null;
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
     isShowOnlineTotal =
-        setting.get(SettingBoxKey.enableOnlineTotal, defaultValue: false);
+        setting.get(SettingBoxKey.enableOnlineTotal, defaultValue: true);
     if (isShowOnlineTotal) {
       queryOnlineTotal();
       startTimer(); // 在页面加载时启动定时器

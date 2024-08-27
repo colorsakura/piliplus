@@ -40,7 +40,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
     enableMYBar = setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar = setting.get(SettingBoxKey.useSideBar, defaultValue: false);
     enableGradientBg =
-        setting.get(SettingBoxKey.enableGradientBg, defaultValue: true);
+        setting.get(SettingBoxKey.enableGradientBg, defaultValue: false);
   }
 
   void setIndex(int value) async {

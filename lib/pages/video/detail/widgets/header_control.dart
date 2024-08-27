@@ -400,7 +400,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                             Clipboard.setData(
                                               ClipboardData(
                                                 text:
-                                                "rate\n${player.state.rate}",
+                                                    "rate\n${player.state.rate}",
                                               ),
                                             );
                                           }),
@@ -1548,7 +1548,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 () => IconButton(
                   tooltip: "${_.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () {
                     _.isOpenDanmu.value = !_.isOpenDanmu.value;
@@ -1575,7 +1575,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 child: IconButton(
                   tooltip: '画中画',
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () async {
                     bool canUsePiP = widget.floating != null &&
@@ -1584,7 +1584,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     if (canUsePiP) {
                       bool enableBackgroundPlay = setting.get(
                           SettingBoxKey.enableBackgroundPlay,
-                          defaultValue: true);
+                          defaultValue: false);
                       if (!enableBackgroundPlay) {
                         // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
                         // await Future.delayed(const Duration(seconds: 2), () {

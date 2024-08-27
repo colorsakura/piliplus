@@ -67,7 +67,7 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '是否展示弹幕',
             leading: Icon(Icons.comment_outlined),
             setKey: SettingBoxKey.enableShowDanmaku,
-            defaultVal: false,
+            defaultVal: true,
           ),
           ListTile(
             dense: false,
@@ -81,7 +81,7 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '进入详情页自动播放',
             leading: Icon(Icons.motion_photos_auto_outlined),
             setKey: SettingBoxKey.autoPlayEnable,
-            defaultVal: true,
+            defaultVal: false,
           ),
           const SetSwitchItem(
             title: '双击快退/快进',
@@ -144,8 +144,7 @@ class _PlaySettingState extends State<PlaySetting> {
               subTitle: '开启后延长至30秒，便于屏幕阅读器滑动切换控件焦点',
               leading: Icon(Icons.timer_outlined),
               setKey: SettingBoxKey.enableLongShowControl,
-              defaultVal: false
-          ),
+              defaultVal: false),
           const SetSwitchItem(
             title: '全向旋转',
             subTitle: '小屏可受重力转为临时全屏，若系统锁定旋转仍触发请关闭，关闭会影响横屏适配',
@@ -170,7 +169,7 @@ class _PlaySettingState extends State<PlaySetting> {
                 callFn: (val) {
                   if (val &&
                       !setting.get(SettingBoxKey.enableBackgroundPlay,
-                          defaultValue: true)) {
+                          defaultValue: false)) {
                     SmartDialog.showToast('建议开启后台音频服务');
                   }
                 }),
@@ -194,7 +193,7 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '展示同时在看人数',
             leading: Icon(Icons.people_outlined),
             setKey: SettingBoxKey.enableOnlineTotal,
-            defaultVal: false,
+            defaultVal: true,
           ),
           ListTile(
             dense: false,
@@ -255,7 +254,7 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '避免画中画没有播放暂停功能',
             leading: Icon(Icons.volume_up_outlined),
             setKey: SettingBoxKey.enableBackgroundPlay,
-            defaultVal: true,
+            defaultVal: false,
           ),
         ],
       ),

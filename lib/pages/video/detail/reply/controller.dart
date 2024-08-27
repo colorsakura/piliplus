@@ -41,7 +41,7 @@ class VideoReplyController extends GetxController {
   void onInit() {
     super.onInit();
     int defaultReplySortIndex =
-        setting.get(SettingBoxKey.replySortType, defaultValue: 0) as int;
+        setting.get(SettingBoxKey.replySortType, defaultValue: 1) as int;
     if (defaultReplySortIndex == 2) {
       setting.put(SettingBoxKey.replySortType, 0);
       defaultReplySortIndex = 0;

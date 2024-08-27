@@ -116,7 +116,7 @@ class VideoDetailController extends GetxController
     tabCtr = TabController(
         length: 2, vsync: this, initialIndex: defaultShowComment ? 1 : 0);
     autoPlay.value =
-        setting.get(SettingBoxKey.autoPlayEnable, defaultValue: true);
+        setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
     if (autoPlay.value) isShowCover.value = false;
     enableHA.value = setting.get(SettingBoxKey.enableHA, defaultValue: true);
     hwdec.value = setting.get(SettingBoxKey.hardwareDecoding,

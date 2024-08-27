@@ -36,7 +36,7 @@ class DynamicDetailController extends GetxController {
           int.parse(item!.modules!.moduleStat!.comment!.count ?? '0');
     }
     int defaultReplySortIndex =
-        setting.get(SettingBoxKey.replySortType, defaultValue: 0);
+        setting.get(SettingBoxKey.replySortType, defaultValue: 1);
     if (defaultReplySortIndex == 2) {
       setting.put(SettingBoxKey.replySortType, 0);
       defaultReplySortIndex = 0;

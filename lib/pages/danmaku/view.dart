@@ -43,7 +43,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
   void initState() {
     super.initState();
     enableShowDanmaku =
-        setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: false);
+        setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
     _plDanmakuController = PlDanmakuController(
         widget.cid,
         widget.playerController.danmakuWeight,
