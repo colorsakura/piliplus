@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -55,18 +56,24 @@ class MainController extends GetxController {
   }
 
   void onBackPressed(BuildContext context) {
-    if (_lastPressedAt == null ||
-        DateTime.now().difference(_lastPressedAt!) >
-            const Duration(seconds: 2)) {
-      // 两次点击时间间隔超过2秒，重新记录时间戳
-      _lastPressedAt = DateTime.now();
-      if (selectedIndex != 0) {
-        pageController.jumpTo(0);
+    // if (_lastPressedAt == null ||
+    // DateTime.now().difference(_lastPressedAt!) >
+    //     const Duration(seconds: 2)) {
+    // 两次点击时间间隔超过2秒，重新记录时间戳
+    // _lastPressedAt = DateTime.now();
+    if (selectedIndex != 0) {
+      pageController.jumpTo(0);
+    } else {
+      if (Platform.isAndroid) {
+        const MethodChannel("onUserLeaveHint").invokeMethod('back');
+      } else {
+        SystemNavigator.pop(); // 退出应用
       }
-      SmartDialog.showToast("再按一次退出PiliPalaX");
-      return; // 不退出应用
     }
-    SystemNavigator.pop(); // 退出应用
+    // SmartDialog.showToast("再按一次退出PiliPalaX");
+    // return; // 不退出应用
+    // }
+    // SystemNavigator.pop(); // 退出应用
   }
 
   void getUnreadDynamic() async {
