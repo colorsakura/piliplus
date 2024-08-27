@@ -363,31 +363,46 @@ class VideoIntroController extends GetxController {
         builder: (context) {
           String videoUrl = '${HttpString.baseUrl}/video/$bvid';
           return AlertDialog(
-            title: const Text('请选择'),
-            actions: [
-              TextButton(
-                  onPressed: () {
+            clipBehavior: Clip.hardEdge,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: const Text(
+                    '复制链接',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
                     Clipboard.setData(ClipboardData(text: videoUrl));
                     SmartDialog.showToast('已复制');
                     Get.back();
                   },
-                  child: const Text('复制链接')),
-              TextButton(
-                  onPressed: () {
+                ),
+                ListTile(
+                  title: const Text(
+                    '其它app打开',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
                     launchUrl(Uri.parse(videoUrl));
-                  },
-                  child: const Text('其它app打开')),
-              TextButton(
-                  onPressed: () async {
-                    var result = await Share.share('${videoDetail.value.title} '
-                            'UP主: ${videoDetail.value.owner!.name!}'
-                            ' - $videoUrl')
-                        .whenComplete(() {});
                     Get.back();
-                    return result;
                   },
-                  child: const Text('分享视频')),
-            ],
+                ),
+                ListTile(
+                  title: const Text(
+                    '分享视频',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () async {
+                    await Share.share('${videoDetail.value.title} '
+                        'UP主: ${videoDetail.value.owner!.name!}'
+                        ' - $videoUrl');
+                    Get.back();
+                  },
+                ),
+              ],
+            ),
           );
         });
   }
