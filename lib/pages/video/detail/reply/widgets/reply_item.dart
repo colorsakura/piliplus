@@ -188,9 +188,7 @@ class ReplyItem extends StatelessWidget {
                         style: TextStyle(
                           color: (replyItem!.member!.vip!['vipStatus'] > 0 &&
                                   replyItem!.member!.vip!['vipType'] == 2)
-                              ? GStorage.brightness == Brightness.light
-                                  ? const Color(0xFFFF6699)
-                                  : const Color(0xFFD44E7D)
+                              ? Utils.vipColor
                               : Theme.of(context).colorScheme.outline,
                           fontSize: 13,
                         ),

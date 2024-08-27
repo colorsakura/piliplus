@@ -94,9 +94,8 @@ class _MemberPageState extends State<MemberPage>
                             () => Text(
                               _memberController.memberInfo.value.name ?? '',
                               style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontSize: 14),
                             ),
                           ),
@@ -152,6 +151,9 @@ class _MemberPageState extends State<MemberPage>
           ),
           Expanded(
             child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
               controller: _extendNestCtr,
               child: Padding(
                 padding: EdgeInsets.only(
@@ -353,10 +355,14 @@ class _MemberPageState extends State<MemberPage>
               _memberController.memberInfo.value.name ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: _memberController.memberInfo.value.vip?.status !=
+                                null &&
+                            _memberController.memberInfo.value.vip!.status! > 0
+                        ? Utils.vipColor
+                        : Theme.of(context).colorScheme.onSurface,
+                  ),
             )),
             const SizedBox(width: 2),
             if (_memberController.memberInfo.value.sex == '女')
@@ -403,22 +409,37 @@ class _MemberPageState extends State<MemberPage>
                       _memberController.memberInfo.value.vip!.label!['text'],
                 ),
             ],
-            TextButton(
-                child: Text("UID ${_memberController.mid}",
-                    style: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary
-                          .withOpacity(0.5),
-                      fontSize: 12,
-                      // fontWeight: FontWeight.w200,
-                    )),
-                onPressed: () {
-                  Clipboard.setData(
-                    ClipboardData(text: _memberController.mid.toString()),
-                  );
-                  SmartDialog.showToast('已复制${_memberController.mid}至剪贴板');
-                }),
+            const SizedBox(width: 5),
+            GestureDetector(
+              onTap: () {
+                Clipboard.setData(
+                  ClipboardData(text: _memberController.mid.toString()),
+                );
+                SmartDialog.showToast('已复制${_memberController.mid}至剪贴板');
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Text(
+                  'UID: ${_memberController.mid}',
+                  style: TextStyle(
+                    height: 1,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  strutStyle: const StrutStyle(
+                    height: 1,
+                    leading: 0,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         if (_memberController.memberInfo.value.official != null &&

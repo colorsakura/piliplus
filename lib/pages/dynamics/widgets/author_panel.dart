@@ -1,4 +1,3 @@
-import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -58,9 +57,7 @@ class AuthorPanel extends StatelessWidget {
                   style: TextStyle(
                     color: item.modules.moduleAuthor!.vip != null &&
                             item.modules.moduleAuthor!.vip['status'] > 0
-                        ? GStorage.brightness == Brightness.light
-                            ? const Color(0xFFFF6699)
-                            : const Color(0xFFD44E7D)
+                        ? Utils.vipColor
                         : Theme.of(context).colorScheme.onSurface,
                     fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                   ),

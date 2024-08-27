@@ -21,6 +21,12 @@ import '../models/github/latest.dart';
 class Utils {
   static final Random random = Random();
 
+  static Color get vipColor {
+    return GStorage.brightness == Brightness.light
+        ? const Color(0xFFFF6699)
+        : const Color(0xFFD44E7D);
+  }
+
   static Future<String> getCookiePath() async {
     final Directory tempDir = await getApplicationSupportDirectory();
     final String tempPath = "${tempDir.path}/.plpl/";
