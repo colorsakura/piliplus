@@ -239,7 +239,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   feedBack();
                   showModalBottomSheet(
                     context: context,
-                    isDismissible: false,
                     isScrollControlled: true,
                     builder: (BuildContext context) {
                       return VideoReplyNewDialog(

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:auto_orientation/auto_orientation.dart';
