@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:floating/floating.dart';
@@ -715,12 +716,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                               videoDetailController.cid.value)),
                                     ],
                                     SliverToBoxAdapter(
-                                      child: Divider(
-                                        indent: 12,
-                                        endIndent: 12,
-                                        color: Theme.of(context)
-                                            .dividerColor
-                                            .withOpacity(0.06),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: StyleString.safeSpace,
+                                        ),
+                                        child: Divider(
+                                          height: 1,
+                                          indent: 12,
+                                          endIndent: 12,
+                                          color: Theme.of(context)
+                                              .dividerColor
+                                              .withOpacity(0.06),
+                                        ),
                                       ),
                                     ),
                                     RelatedVideoPanel(heroTag: heroTag),
@@ -817,10 +824,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           cid: videoDetailController.cid.value)),
                     ],
                     SliverToBoxAdapter(
-                      child: Divider(
-                        indent: 12,
-                        endIndent: 12,
-                        color: Theme.of(context).dividerColor.withOpacity(0.06),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: StyleString.safeSpace),
+                        child: Divider(
+                          height: 1,
+                          indent: 12,
+                          endIndent: 12,
+                          color:
+                              Theme.of(context).dividerColor.withOpacity(0.06),
+                        ),
                       ),
                     ),
                     RelatedVideoPanel(heroTag: heroTag),

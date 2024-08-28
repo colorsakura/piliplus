@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/pages/mine/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -303,7 +299,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     //     : videoItem['title'] ?? "",
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -459,9 +455,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       () => TextButton(
         onPressed: () => videoIntroController.actionRelationMod(context),
         style: TextButton.styleFrom(
-          visualDensity: VisualDensity.compact,
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          padding: const EdgeInsets.only(left: 6, right: 6),
+          visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
           foregroundColor:
               (videoIntroController.followStatus['attribute'] ?? 0) != 0
                   ? t.colorScheme.outline

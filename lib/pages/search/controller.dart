@@ -36,7 +36,7 @@ class SSearchController extends GetxController {
         searchKeyWord.value = hintText;
       }
     }
-    historyCacheList = List<String>.from(historyWord.get('cacheList')??[]);
+    historyCacheList = List<String>.from(historyWord.get('cacheList') ?? []);
     historyList.value = historyCacheList;
     enableHotKey = setting.get(SettingBoxKey.enableHotKey, defaultValue: true);
   }
@@ -55,6 +55,7 @@ class SSearchController extends GetxController {
       controller.value.clear();
       searchKeyWord.value = '';
       searchSuggestList.value = [];
+      searchFocusNode.requestFocus();
     } else {
       Get.back();
     }
@@ -64,12 +65,13 @@ class SSearchController extends GetxController {
   void submit() {
     // ignore: unrelated_type_equality_checks
     if (searchKeyWord == '') {
-      if (hintText == ''){
+      if (hintText == '') {
         return;
       }
       searchKeyWord.value = hintText;
     }
-    List<String> arr = historyCacheList.where((e) => e != searchKeyWord.value).toList();
+    List<String> arr =
+        historyCacheList.where((e) => e != searchKeyWord.value).toList();
     arr.insert(0, searchKeyWord.value);
     historyCacheList = arr;
 

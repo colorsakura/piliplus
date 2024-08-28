@@ -181,6 +181,7 @@ class _AboutPageState extends State<AboutPage> {
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
+                      clipBehavior: Clip.hardEdge,
                       title: const Text('导入/导出设置'),
                       children: [
                         ListTile(

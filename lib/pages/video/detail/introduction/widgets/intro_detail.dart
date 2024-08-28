@@ -16,7 +16,7 @@ class IntroDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         padding: const EdgeInsets.only(left: 14, right: 14),
         height: Utils.getSheetHeight(context),
         child: Column(
@@ -47,7 +47,7 @@ class IntroDetail extends StatelessWidget {
                       videoDetail!.title,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 6),

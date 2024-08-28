@@ -85,10 +85,12 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
                 );
               } else {
                 // 请求错误
-                return HttpError(errMsg: '出错了', fn: () {
-                  _futureBuilder = _relatedController.queryRelatedVideo();
-                  _futureBuilder.then((value) => setState(() {}));
-                });
+                return HttpError(
+                    errMsg: '出错了',
+                    fn: () {
+                      _futureBuilder = _relatedController.queryRelatedVideo();
+                      _futureBuilder.then((value) => setState(() {}));
+                    });
               }
             } else {
               // 骨架屏

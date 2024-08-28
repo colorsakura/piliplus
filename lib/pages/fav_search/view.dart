@@ -67,11 +67,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
               border: InputBorder.none,
               suffixIcon: IconButton(
                 tooltip: '清空',
-                icon: Icon(
-                  Icons.clear,
-                  size: 22,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+                icon: const Icon(Icons.clear, size: 22),
                 onPressed: () => _favSearchCtr.onClear(),
               ),
             ),

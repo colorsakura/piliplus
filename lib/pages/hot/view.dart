@@ -82,8 +82,8 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
         slivers: [
           SliverPadding(
             // 单列布局 EdgeInsets.zero
-            padding: const EdgeInsets.fromLTRB(
-                StyleString.safeSpace, StyleString.safeSpace - 5, 0, 0),
+            padding: const EdgeInsets.fromLTRB(StyleString.safeSpace,
+                StyleString.safeSpace - 5, StyleString.safeSpace, 0),
             sliver: FutureBuilder(
               future: _futureBuilderFuture,
               builder: (context, snapshot) {
