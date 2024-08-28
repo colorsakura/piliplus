@@ -68,7 +68,7 @@ class SearchVideoPanel extends StatelessWidget {
                 child: IconButton(
                   tooltip: '筛选',
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () => controller.onShowFilterDialog(context, ctr),
                   icon: Icon(
@@ -178,10 +178,11 @@ class VideoPanelController extends GetxController {
     super.onInit();
   }
 
-  onShowFilterDialog(BuildContext context, SearchPanelController searchPanelCtr) {
+  onShowFilterDialog(
+      BuildContext context, SearchPanelController searchPanelCtr) {
     showDialog(
-    context: context,
-    builder: (context) {
+      context: context,
+      builder: (context) {
         TextStyle textStyle = Theme.of(context).textTheme.titleMedium!;
         return AlertDialog(
           title: const Text('时长筛选'),
@@ -197,6 +198,7 @@ class VideoPanelController extends GetxController {
                     title: Text(i['label'], style: textStyle),
                     groupValue: currentTimeFilterval.value,
                     onChanged: (value) async {
+                      Get.back();
                       currentTimeFilterval.value = value!;
                       setState(() {});
                       SmartDialog.dismiss();
