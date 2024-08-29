@@ -16,18 +16,16 @@ class FavSearchPage extends StatefulWidget {
 
 class _FavSearchPageState extends State<FavSearchPage> {
   final FavSearchController _favSearchCtr = Get.put(FavSearchController());
-  late ScrollController scrollController;
   late int searchType;
 
   @override
   void initState() {
     super.initState();
     searchType = int.parse(Get.parameters['searchType']!);
-    scrollController = _favSearchCtr.scrollController;
-    scrollController.addListener(
+    _favSearchCtr.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_favSearchCtr.scrollController.position.pixels >=
+            _favSearchCtr.scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('fav', const Duration(seconds: 1), () {
             _favSearchCtr.onLoad();
           });
@@ -38,8 +36,9 @@ class _FavSearchPageState extends State<FavSearchPage> {
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _favSearchCtr.searchFocusNode.dispose();
+    _favSearchCtr.scrollController.removeListener(() {});
+    _favSearchCtr.scrollController.dispose();
     super.dispose();
   }
 
@@ -86,7 +85,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
               )
             : _favSearchCtr.favList.isNotEmpty
                 ? ListView.builder(
-                    controller: scrollController,
+                    controller: _favSearchCtr.scrollController,
                     itemCount: _favSearchCtr.favList.length + 1,
                     itemBuilder: (context, index) {
                       if (index == _favSearchCtr.favList.length) {

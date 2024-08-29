@@ -26,7 +26,6 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   final HotController _hotController = Get.put(HotController());
   List videoList = [];
   Future? _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   bool get wantKeepAlive => true;
@@ -35,15 +34,14 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     _futureBuilderFuture = _hotController.queryHotFeed('init');
-    scrollController = _hotController.scrollController;
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    scrollController.addListener(
+    _hotController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_hotController.scrollController.position.pixels >=
+            _hotController.scrollController.position.maxScrollExtent - 200) {
           if (!_hotController.isLoadingMore) {
             _hotController.isLoadingMore = true;
             _hotController.onLoad();
@@ -51,7 +49,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
         }
 
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _hotController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
           searchBarStream.add(true);
@@ -65,7 +63,8 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    _hotController.scrollController.removeListener(() {});
+    _hotController.scrollController.dispose();
     super.dispose();
   }
 

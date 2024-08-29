@@ -32,6 +32,13 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
     });
   }
 
+  @override
+  void dispose() {
+    controller.removeListener(() {});
+    controller.dispose();
+    super.dispose();
+  }
+
   // 获取所有的mode
   Future<void> fetchAll() async {
     preferred = await FlutterDisplayMode.preferred;

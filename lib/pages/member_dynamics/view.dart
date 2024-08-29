@@ -21,7 +21,6 @@ class MemberDynamicsPage extends StatefulWidget {
 class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
   late MemberDynamicsController _memberDynamicController;
   late Future _futureBuilderFuture;
-  late ScrollController scrollController;
   late int mid;
   late bool dynamicsWaterfallFlow;
 
@@ -34,11 +33,11 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
         Get.put(MemberDynamicsController(), tag: heroTag);
     _futureBuilderFuture =
         _memberDynamicController.getMemberDynamic('onRefresh');
-    scrollController = _memberDynamicController.scrollController;
-    scrollController.addListener(
+    _memberDynamicController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_memberDynamicController.scrollController.position.pixels >=
+            _memberDynamicController.scrollController.position.maxScrollExtent -
+                200) {
           EasyThrottle.throttle(
               'member_dynamics', const Duration(milliseconds: 1000), () {
             _memberDynamicController.onLoad();
@@ -53,6 +52,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
   @override
   void dispose() {
     _memberDynamicController.scrollController.removeListener(() {});
+    _memberDynamicController.scrollController.dispose();
     super.dispose();
   }
 

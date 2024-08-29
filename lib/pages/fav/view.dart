@@ -39,6 +39,13 @@ class _FavPageState extends State<FavPage> {
   }
 
   @override
+  void dispose() {
+    scrollController.removeListener(() {});
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

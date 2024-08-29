@@ -55,6 +55,7 @@ class _MediaPageState extends State<MediaPage>
   @override
   void dispose() {
     mediaController.scrollController.removeListener(() {});
+    mediaController.scrollController.dispose();
     super.dispose();
   }
 

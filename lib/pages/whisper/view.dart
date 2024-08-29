@@ -28,6 +28,13 @@ class _WhisperPageState extends State<WhisperPage> {
     _scrollController.addListener(_scrollListener);
   }
 
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future _scrollListener() async {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
@@ -201,7 +208,8 @@ class _WhisperPageState extends State<WhisperPage> {
                                         width: 45,
                                         height: 45,
                                         type: 'avatar',
-                                        src: sessionList[i].accountInfo?.face ?? "",
+                                        src: sessionList[i].accountInfo?.face ??
+                                            "",
                                       ),
                                     ),
                                     title: Text(

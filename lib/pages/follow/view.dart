@@ -14,7 +14,6 @@ class FollowPage extends StatefulWidget {
 class _FollowPageState extends State<FollowPage> {
   late String mid;
   late FollowController _followController;
-  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -39,10 +38,9 @@ class _FollowPageState extends State<FollowPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => Get.toNamed('/followSearch?mid=$mid'),
-            icon: const Icon(Icons.search_outlined),
-            tooltip: '搜索'
-          ),
+              onPressed: () => Get.toNamed('/followSearch?mid=$mid'),
+              icon: const Icon(Icons.search_outlined),
+              tooltip: '搜索'),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[

@@ -17,18 +17,24 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
   final MemberSeasonsController _memberSeasonsController =
       Get.put(MemberSeasonsController());
   late Future _futureBuilderFuture;
-  late ScrollController scrollController;
+
+  @override
+  void dispose() {
+    _memberSeasonsController.scrollController.removeListener(() {});
+    _memberSeasonsController.scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     _futureBuilderFuture =
         _memberSeasonsController.getSeasonDetail('onRefresh');
-    scrollController = _memberSeasonsController.scrollController;
-    scrollController.addListener(
+    _memberSeasonsController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_memberSeasonsController.scrollController.position.pixels >=
+            _memberSeasonsController.scrollController.position.maxScrollExtent -
+                200) {
           EasyThrottle.throttle(
               'member_archives', const Duration(milliseconds: 500), () {
             _memberSeasonsController.onLoad();

@@ -44,6 +44,9 @@ class _MemberSearchPageState extends State<MemberSearchPage>
   @override
   void dispose() {
     // _tabController.dispose();
+    _memberSearchCtr.searchFocusNode.dispose();
+    scrollController.removeListener(() {});
+    scrollController.dispose();
     super.dispose();
   }
 

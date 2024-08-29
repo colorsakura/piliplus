@@ -44,6 +44,7 @@ class _FansPageState extends State<FansPage> {
   @override
   void dispose() {
     scrollController.removeListener(() {});
+    scrollController.dispose();
     super.dispose();
   }
 

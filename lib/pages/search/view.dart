@@ -26,6 +26,12 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   }
 
   @override
+  void dispose() {
+    _searchController.searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   // 返回当前页面时
   void didPopNext() async {
     _searchController.searchFocusNode.requestFocus();

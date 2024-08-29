@@ -262,6 +262,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
+    appbarStream.close();
     floating.dispose();
     videoDetailController.floating?.dispose();
     videoIntroController.videoDetail.close();

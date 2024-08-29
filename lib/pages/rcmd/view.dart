@@ -65,6 +65,7 @@ class _RcmdPageState extends State<RcmdPage>
   @override
   void dispose() {
     _rcmdController.scrollController.removeListener(() {});
+    _rcmdController.scrollController.dispose();
     super.dispose();
   }
 

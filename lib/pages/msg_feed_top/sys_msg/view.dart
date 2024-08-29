@@ -24,6 +24,13 @@ class _SysMsgPageState extends State<SysMsgPage> {
     _scrollController.addListener(_scrollListener);
   }
 
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future _scrollListener() async {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
@@ -60,7 +67,8 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (_, int i) {
-                    String? content = _sysMsgController.msgFeedSysMsgList[i].content;
+                    String? content =
+                        _sysMsgController.msgFeedSysMsgList[i].content;
                     if (content != null) {
                       try {
                         dynamic jsonContent = json.decode(content);
@@ -73,36 +81,38 @@ class _SysMsgPageState extends State<SysMsgPage> {
                         onTap: () {},
                         title: Text(
                           "${_sysMsgController.msgFeedSysMsgList[i].title}",
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: Theme.of(context).colorScheme.primary
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                         subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                          SelectableText(
-                              "$content",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outline)),
+                              SelectableText("$content",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline)),
                               const SizedBox(height: 4),
-                          Text(
-                              "${_sysMsgController.msgFeedSysMsgList[i].timeAt}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outline.withOpacity(0.8))),
-                        ]));
+                              Text(
+                                  "${_sysMsgController.msgFeedSysMsgList[i].timeAt}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline
+                                              .withOpacity(0.8))),
+                            ]));
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return Divider(

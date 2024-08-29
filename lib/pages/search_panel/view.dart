@@ -32,7 +32,6 @@ class _SearchPanelState extends State<SearchPanel>
   late SearchPanelController _searchPanelController;
 
   late Future _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   bool get wantKeepAlive => true;
@@ -47,10 +46,10 @@ class _SearchPanelState extends State<SearchPanel>
       ),
       tag: widget.searchType!.type + widget.keyword!,
     );
-    scrollController = _searchPanelController.scrollController;
-    scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 100) {
+    _searchPanelController.scrollController.addListener(() async {
+      if (_searchPanelController.scrollController.position.pixels >=
+          _searchPanelController.scrollController.position.maxScrollExtent -
+              100) {
         EasyThrottle.throttle('history', const Duration(seconds: 1), () {
           _searchPanelController.onSearch(type: 'onLoad');
         });
@@ -61,7 +60,8 @@ class _SearchPanelState extends State<SearchPanel>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    _searchPanelController.scrollController.removeListener(() {});
+    _searchPanelController.scrollController.dispose();
     super.dispose();
   }
 

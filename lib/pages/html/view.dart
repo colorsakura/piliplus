@@ -54,6 +54,14 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     scrollListener();
   }
 
+  @override
+  void dispose() {
+    fabAnimationCtr.dispose();
+    scrollController.removeListener(() {});
+    scrollController.dispose();
+    super.dispose();
+  }
+
   void scrollListener() {
     scrollController = _htmlRenderCtr.scrollController;
     scrollController.addListener(

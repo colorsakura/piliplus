@@ -33,9 +33,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
 
 class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   late VideoReplyReplyController _videoReplyReplyController;
-  late AnimationController replyAnimationCtl;
   Future? _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   void initState() {
@@ -46,11 +44,12 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         tag: widget.rpid.toString());
 
     // 上拉加载更多
-    scrollController = _videoReplyReplyController.scrollController;
-    scrollController.addListener(
+    _videoReplyReplyController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_videoReplyReplyController.scrollController.position.pixels >=
+            _videoReplyReplyController
+                    .scrollController.position.maxScrollExtent -
+                300) {
           EasyThrottle.throttle('replylist', const Duration(milliseconds: 200),
               () {
             _videoReplyReplyController.queryReplyList(type: 'onLoad');
@@ -66,7 +65,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
 
   @override
   void dispose() {
-    // scrollController.dispose();
+    _videoReplyReplyController.scrollController.removeListener(() {});
+    _videoReplyReplyController.scrollController.dispose();
     super.dispose();
   }
 

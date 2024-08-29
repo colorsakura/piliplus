@@ -182,8 +182,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    titleStreamC.close();
     fabAnimationCtr.dispose();
+    scrollController.removeListener(() {});
     scrollController.dispose();
     super.dispose();
   }

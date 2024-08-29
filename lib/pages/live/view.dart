@@ -27,7 +27,6 @@ class _LivePageState extends State<LivePage>
     with AutomaticKeepAliveClientMixin {
   final LiveController _liveController = Get.put(LiveController());
   late Future _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   bool get wantKeepAlive => true;
@@ -36,15 +35,14 @@ class _LivePageState extends State<LivePage>
   void initState() {
     super.initState();
     _futureBuilderFuture = _liveController.queryLiveList('init');
-    scrollController = _liveController.scrollController;
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    scrollController.addListener(
+    _liveController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_liveController.scrollController.position.pixels >=
+            _liveController.scrollController.position.maxScrollExtent - 200) {
           EasyThrottle.throttle('liveList', const Duration(milliseconds: 200),
               () {
             _liveController.onLoad();
@@ -52,7 +50,7 @@ class _LivePageState extends State<LivePage>
         }
 
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _liveController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
           searchBarStream.add(true);
@@ -66,7 +64,8 @@ class _LivePageState extends State<LivePage>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    _liveController.scrollController.removeListener(() {});
+    _liveController.scrollController.dispose();
     super.dispose();
   }
 

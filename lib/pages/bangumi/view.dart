@@ -26,7 +26,6 @@ class _BangumiPageState extends State<BangumiPage>
   final BangumiController _bangumiController = Get.put(BangumiController());
   late Future? _futureBuilderFuture;
   late Future? _futureBuilderFutureFollow;
-  late ScrollController scrollController;
 
   @override
   bool get wantKeepAlive => true;
@@ -34,17 +33,17 @@ class _BangumiPageState extends State<BangumiPage>
   @override
   void initState() {
     super.initState();
-    scrollController = _bangumiController.scrollController;
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
     _futureBuilderFuture = _bangumiController.queryBangumiListFeed();
     _futureBuilderFutureFollow = _bangumiController.queryBangumiFollow();
-    scrollController.addListener(
+    _bangumiController.scrollController.addListener(
       () async {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_bangumiController.scrollController.position.pixels >=
+            _bangumiController.scrollController.position.maxScrollExtent -
+                200) {
           EasyThrottle.throttle('my-throttler', const Duration(seconds: 1), () {
             _bangumiController.isLoadingMore = true;
             _bangumiController.onLoad();
@@ -52,7 +51,7 @@ class _BangumiPageState extends State<BangumiPage>
         }
 
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _bangumiController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
           searchBarStream.add(true);
@@ -66,7 +65,8 @@ class _BangumiPageState extends State<BangumiPage>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    _bangumiController.scrollController.removeListener(() {});
+    _bangumiController.scrollController.dispose();
     super.dispose();
   }
 

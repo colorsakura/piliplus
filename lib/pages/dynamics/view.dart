@@ -26,7 +26,6 @@ class _DynamicsPageState extends State<DynamicsPage>
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
   late Future _futureBuilderFutureUp;
   Box userInfoCache = GStorage.userInfo;
-  late ScrollController scrollController;
   late UpPanelPosition upPanelPosition;
 
   @override
@@ -57,12 +56,12 @@ class _DynamicsPageState extends State<DynamicsPage>
         SettingBoxKey.upPanelPosition,
         defaultValue: UpPanelPosition.leftFixed.code)];
     print('upPanelPosition: $upPanelPosition');
-    scrollController = _dynamicsController.scrollController;
     if (GStorage.setting
         .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
-      scrollController.addListener(() {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+      _dynamicsController.scrollController.addListener(() {
+        if (_dynamicsController.scrollController.position.pixels >=
+            _dynamicsController.scrollController.position.maxScrollExtent -
+                300) {
           EasyThrottle.throttle('following', const Duration(seconds: 1), () {
             _dynamicsController.queryFollowing2();
           });
@@ -75,6 +74,8 @@ class _DynamicsPageState extends State<DynamicsPage>
   void dispose() {
     _dynamicsController.tabController.removeListener(() {});
     _dynamicsController.tabController.dispose();
+    _dynamicsController.scrollController.removeListener(() {});
+    _dynamicsController.scrollController.dispose();
     super.dispose();
   }
 
@@ -96,8 +97,8 @@ class _DynamicsPageState extends State<DynamicsPage>
                 }
                 Map data = snapshot.data;
                 if (data['status']) {
-                  return Obx(() => UpPanel(
-                      _dynamicsController.upData.value, scrollController));
+                  return Obx(() => UpPanel(_dynamicsController.upData.value,
+                      _dynamicsController.scrollController));
                 } else {
                   return const SizedBox();
                 }

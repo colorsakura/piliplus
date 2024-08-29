@@ -33,6 +33,7 @@ class AnimatedDialogState extends State<AnimatedDialog>
 
   @override
   void dispose() {
+    controller!.removeListener(() {});
     controller!.dispose();
     super.dispose();
   }

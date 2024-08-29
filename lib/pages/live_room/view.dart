@@ -45,7 +45,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   @override
   void dispose() {
     floating?.dispose();
-    plPlayerController!.dispose();
+    plPlayerController?.dispose();
     super.dispose();
   }
 
@@ -176,7 +176,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                             ),
                             //内置浏览器打开
                             IconButton(
-                              tooltip: '内置浏览器打开',
+                                tooltip: '内置浏览器打开',
                                 onPressed: () {
                                   Get.offNamed(
                                     '/webview',

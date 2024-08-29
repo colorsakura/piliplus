@@ -28,7 +28,6 @@ class _ZonePageState extends State<ZonePage>
     with AutomaticKeepAliveClientMixin {
   late ZoneController _zoneController;
   Future? _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   bool get wantKeepAlive => true;
@@ -38,15 +37,14 @@ class _ZonePageState extends State<ZonePage>
     super.initState();
     _zoneController = Get.put(ZoneController(), tag: widget.rid.toString());
     _futureBuilderFuture = _zoneController.queryRankFeed('init', widget.rid);
-    scrollController = _zoneController.scrollController;
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    scrollController.addListener(
+    _zoneController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_zoneController.scrollController.position.pixels >=
+            _zoneController.scrollController.position.maxScrollExtent - 200) {
           if (!_zoneController.isLoadingMore) {
             _zoneController.isLoadingMore = true;
             _zoneController.onLoad();
@@ -54,7 +52,7 @@ class _ZonePageState extends State<ZonePage>
         }
 
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _zoneController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
           searchBarStream.add(true);
@@ -68,7 +66,8 @@ class _ZonePageState extends State<ZonePage>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    _zoneController.scrollController.removeListener(() {});
+    _zoneController.scrollController.dispose();
     super.dispose();
   }
 
@@ -80,12 +79,12 @@ class _ZonePageState extends State<ZonePage>
         return await _zoneController.onRefresh();
       },
       child: CustomScrollView(
-        controller: scrollController,
+        controller: _zoneController.scrollController,
         slivers: [
           SliverPadding(
             // 单列布局 EdgeInsets.zero
-            padding:
-                const EdgeInsets.fromLTRB(StyleString.cardSpace, StyleString.safeSpace, 0, 0),
+            padding: const EdgeInsets.fromLTRB(
+                StyleString.cardSpace, StyleString.safeSpace, 0, 0),
             sliver: FutureBuilder(
               future: _futureBuilderFuture,
               builder: (context, snapshot) {

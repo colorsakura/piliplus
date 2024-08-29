@@ -22,7 +22,6 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
     with WidgetsBindingObserver {
   final WhisperDetailController _whisperDetailController =
       Get.put(WhisperDetailController());
-  late TextEditingController _replyContentController;
   final FocusNode replyContentFocusNode = FocusNode();
   final _debouncer = Debouncer(milliseconds: 200); // 设置延迟时间
   late double emoteHeight = 0.0;
@@ -35,7 +34,6 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _whisperDetailController.querySessionMsg();
-    _replyContentController = _whisperDetailController.replyContentController;
     _focusListener();
   }
 
@@ -82,17 +80,20 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
     WidgetsBinding.instance.removeObserver(this);
     replyContentFocusNode.removeListener(() {});
     replyContentFocusNode.dispose();
+    _whisperDetailController.replyContentController.dispose();
     super.dispose();
   }
 
   void onChooseEmote(Packages package, Emote emote) {
-    int cursorPosition = _replyContentController.selection.baseOffset;
+    int cursorPosition =
+        _whisperDetailController.replyContentController.selection.baseOffset;
     if (cursorPosition == -1) cursorPosition = 0;
-    final String currentText = _replyContentController.text;
+    final String currentText =
+        _whisperDetailController.replyContentController.text;
     final String newText = currentText.substring(0, cursorPosition) +
         emote.text! +
         currentText.substring(cursorPosition);
-    _replyContentController.value = TextEditingValue(
+    _whisperDetailController.replyContentController.value = TextEditingValue(
       text: newText,
       selection:
           TextSelection.collapsed(offset: cursorPosition + emote.text!.length),
@@ -261,7 +262,8 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
                         label: '私信输入框',
                         child: TextField(
                           style: Theme.of(context).textTheme.titleMedium,
-                          controller: _replyContentController,
+                          controller:
+                              _whisperDetailController.replyContentController,
                           autofocus: false,
                           focusNode: replyContentFocusNode,
                           decoration: const InputDecoration(

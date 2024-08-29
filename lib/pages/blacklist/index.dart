@@ -48,6 +48,7 @@ class _BlackListPageState extends State<BlackListPage> {
         _blackListController.blackList.map<int>((e) => e.mid!).toList();
     localCache.put(LocalCacheKey.blackMidsList, blackMidsList);
     scrollController.removeListener(() {});
+    scrollController.dispose();
     super.dispose();
   }
 

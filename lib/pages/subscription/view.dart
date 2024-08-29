@@ -17,17 +17,22 @@ class SubPage extends StatefulWidget {
 class _SubPageState extends State<SubPage> {
   final SubController _subController = Get.put(SubController());
   late Future _futureBuilderFuture;
-  late ScrollController scrollController;
+
+  @override
+  void dispose() {
+    _subController.scrollController.removeListener(() {});
+    _subController.scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     _futureBuilderFuture = _subController.querySubFolder();
-    scrollController = _subController.scrollController;
-    scrollController.addListener(
+    _subController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_subController.scrollController.position.pixels >=
+            _subController.scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('history', const Duration(seconds: 1), () {
             _subController.onLoad();
           });
@@ -54,7 +59,7 @@ class _SubPageState extends State<SubPage> {
             Map? data = snapshot.data;
             if (data != null && data['status']) {
               return Obx(() => CustomScrollView(
-                      controller: scrollController,
+                      controller: _subController.scrollController,
                       physics: const AlwaysScrollableScrollPhysics(),
                       slivers: [
                         SliverGrid(

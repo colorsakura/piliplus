@@ -14,7 +14,7 @@ class SearchResultPage extends StatefulWidget {
 class _SearchResultPageState extends State<SearchResultPage>
     with TickerProviderStateMixin {
   late SearchResultController? _searchResultController;
-  late TabController? _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -27,6 +27,12 @@ class _SearchResultPageState extends State<SearchResultPage>
       length: SearchType.values.length,
       initialIndex: _searchResultController!.tabIndex,
     );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override

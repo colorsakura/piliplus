@@ -61,6 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void dispose() {
     scrollController.removeListener(() {});
+    scrollController.dispose();
     super.dispose();
   }
 

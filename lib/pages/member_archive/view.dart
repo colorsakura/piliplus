@@ -18,8 +18,14 @@ class MemberArchivePage extends StatefulWidget {
 class _MemberArchivePageState extends State<MemberArchivePage> {
   late MemberArchiveController _memberArchivesController;
   late Future _futureBuilderFuture;
-  late ScrollController scrollController;
   late int mid;
+
+  @override
+  void dispose() {
+    _memberArchivesController.scrollController.removeListener(() {});
+    _memberArchivesController.scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -29,11 +35,12 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
     _memberArchivesController =
         Get.put(MemberArchiveController(), tag: heroTag);
     _futureBuilderFuture = _memberArchivesController.getMemberArchive('init');
-    scrollController = _memberArchivesController.scrollController;
-    scrollController.addListener(
+    _memberArchivesController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_memberArchivesController.scrollController.position.pixels >=
+            _memberArchivesController
+                    .scrollController.position.maxScrollExtent -
+                200) {
           EasyThrottle.throttle(
               'member_archives', const Duration(milliseconds: 500), () {
             _memberArchivesController.onLoad();

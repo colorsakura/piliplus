@@ -1,5 +1,4 @@
 import 'package:easy_debounce/easy_throttle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
@@ -19,6 +18,14 @@ class _FollowSearchPageState extends State<FollowSearchPage> {
       Get.put(FollowSearchController());
   late Future? _futureBuilder;
   final ScrollController scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _followSearchController.searchFocusNode.dispose();
+    scrollController.removeListener(() {});
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {

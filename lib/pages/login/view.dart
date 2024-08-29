@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   // 二维码生成时间
   bool showPassword = false;
   GlobalKey globalKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +34,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _loginPageCtr.dispose();
+    _loginPageCtr.telTextController.dispose();
+    _loginPageCtr.usernameTextController.dispose();
+    _loginPageCtr.passwordTextController.dispose();
+    _loginPageCtr.smsCodeTextController.dispose();
     super.dispose();
   }
 

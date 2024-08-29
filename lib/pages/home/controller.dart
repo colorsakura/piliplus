@@ -116,6 +116,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
+  @override
+  void dispose() {
+    tabController.animation!.removeListener(() {});
+    super.dispose();
+  }
+
   void searchDefault() async {
     var res = await Request().get(Api.searchDefault);
     if (res.data['code'] == 0) {

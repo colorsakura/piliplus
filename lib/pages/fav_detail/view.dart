@@ -54,6 +54,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
 
   @override
   void dispose() {
+    titleStreamC.close();
+    _controller.removeListener(() {});
     _controller.dispose();
     super.dispose();
   }
