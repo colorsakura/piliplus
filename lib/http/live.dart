@@ -1,5 +1,5 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-
+import 'package:PiliPalaX/models/live/danmu_info.dart';
 import '../models/live/item.dart';
 import '../models/live/room_info.dart';
 import '../models/live/room_info_h5.dart';
@@ -57,6 +57,21 @@ class LiveHttp {
         'status': true,
         'data': RoomInfoH5Model.fromJson(res.data['data'])
       };
+    } else {
+      return {
+        'status': false,
+        'data': [],
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future liveRoomGetDanmakuToken({roomId}) async {
+    var res = await Request().get(Api.liveRoomDmToken, data: {
+      'id': roomId,
+    });
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': LiveDanmakuInfo.fromJson(res.data)};
     } else {
       return {
         'status': false,

@@ -287,6 +287,10 @@ class Api {
   static const String liveRoomInfoH5 =
       '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/getH5InfoByRoom';
 
+  //直播间弹幕密钥获取接口
+  static const String liveRoomDmToken =
+      '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/getDanmuInfo';
+
   // 用户信息 需要Wbi签名
   // https://api.bilibili.com/x/space/wbi/acc/info?mid=503427686&token=&platform=web&web_location=1550101&w_rid=d709892496ce93e3d94d6d37c95bde91&wts=1689301482
   static const String memberInfo = '/x/space/wbi/acc/info';

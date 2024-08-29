@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:PiliPalaX/pages/live_room/widgets/chat.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
 
+import '../../utils/storage.dart';
 import 'controller.dart';
 import 'widgets/bottom_control.dart';
 
@@ -229,6 +231,15 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                   child: videoPlayerPanel,
                 ),
               ),
+              Container(
+                  height: MediaQuery.of(context).orientation ==
+                          Orientation.landscape
+                      ? Get.size.height
+                      : Get.size.height - (Get.size.width * 9 / 16) - 100,
+                  color: const Color(0x10000000),
+                  width: Get.size.width,
+                  child: LiveRoomChat(
+                      roomId: int.parse(Get.parameters['roomid']!)))
             ],
           ),
         ],
