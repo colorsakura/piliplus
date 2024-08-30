@@ -2,15 +2,15 @@ name: CI
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'main'
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
-      - '.github/**'
-      - '.idea/**'
-      - '!.github/workflows/CI.yml'
+  # push:
+  #   branches:
+  #     - 'main'
+  #   paths-ignore:
+  #     - '**.md'
+  #     - '**.txt'
+  #     - '.github/**'
+  #     - '.idea/**'
+  #     - '!.github/workflows/CI.yml'
 
 jobs:
   update_version:
