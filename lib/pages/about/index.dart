@@ -298,10 +298,10 @@ class AboutController extends GetxController {
   final SettingController settingController = Get.put(SettingController());
   RxString currentVersion = ''.obs;
   RxString remoteVersion = ''.obs;
-  late LatestDataModel remoteAppInfo;
+  LatestDataModel? remoteAppInfo;
   RxBool isUpdate = true.obs;
   RxBool isLoading = true.obs;
-  late LatestDataModel data;
+  LatestDataModel? data;
   RxInt count = 0.obs;
 
   @override
@@ -349,7 +349,7 @@ class AboutController extends GetxController {
     }
     data = LatestDataModel.fromJson(result.data[0]);
     remoteAppInfo = data;
-    remoteVersion.value = data.tagName!;
+    remoteVersion.value = data!.tagName!;
     isUpdate.value =
         Utils.needUpdate(currentVersion.value, remoteVersion.value);
     isLoading.value = false;
@@ -357,7 +357,9 @@ class AboutController extends GetxController {
 
   // 跳转下载/本地更新
   Future onUpdate() async {
-    Utils.matchVersion(data);
+    if (data != null) {
+      Utils.matchVersion(data);
+    }
   }
 
   // 跳转github
