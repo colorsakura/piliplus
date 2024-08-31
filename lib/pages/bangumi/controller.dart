@@ -44,6 +44,10 @@ class BangumiController extends GetxController {
     return result;
   }
 
+  Future onRefresh() async {
+    await queryBangumiListFeed();
+  }
+
   // 上拉加载
   Future onLoad() async {
     queryBangumiListFeed(type: 'onLoad');
