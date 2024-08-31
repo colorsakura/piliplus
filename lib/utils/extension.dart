@@ -10,11 +10,7 @@ extension ImageExtension on num {
 extension ScrollControllerExt on ScrollController {
   void animToTop() {
     if (!hasClients) return;
-    if (offset >= MediaQuery.of(Get.context!).size.height * 5) {
-      jumpTo(0);
-    } else {
-      animateTo(0,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-    }
+    animateTo(0,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 }
