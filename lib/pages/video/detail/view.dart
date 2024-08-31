@@ -208,6 +208,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   /// 未开启自动播放时触发播放
   Future<void> handlePlay() async {
+    if (videoDetailController.videoUrl == null ||
+        videoDetailController.audioUrl == null) {
+      SmartDialog.showToast('not initialized');
+      return;
+    }
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit();
     plPlayerController = videoDetailController.plPlayerController;
