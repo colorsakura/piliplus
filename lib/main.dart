@@ -227,6 +227,7 @@ class MyApp extends StatelessWidget {
               refreshBackgroundColor: darkColorScheme.onSecondary,
             ),
           ),
+          themeMode: GStorage.themeMode,
           localizationsDelegates: const [
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
