@@ -317,11 +317,13 @@ class LoginPageController extends GetxController
           return;
         }
         Map<String, String> accountInfo = {
-          "telVerify": safeCenterRes['data']['account_info']!['tel_verify'],
           "hindTel": safeCenterRes['data']['account_info']!["hide_tel"],
-          "mailVerify": safeCenterRes['data']['account_info']!['mailVerify'],
           "hindMail": safeCenterRes['data']['account_info']!["hide_mail"],
         };
+        if (!safeCenterRes['data']['account_info']!['tel_verify']) {
+          SmartDialog.showToast("当前账号未支持手机号验证，请尝试其它登录方式");
+          return;
+        }
         TextEditingController _textFieldController = TextEditingController();
         String captchaKey = '';
         Get.dialog(AlertDialog(
