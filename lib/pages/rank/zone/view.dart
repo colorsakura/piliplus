@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/animated_dialog.dart';
-import 'package:PiliPalaX/common/widgets/overlay_pop.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
@@ -162,10 +161,7 @@ class _ZonePageState extends State<ZonePage>
     return OverlayEntry(
       builder: (context) => AnimatedDialog(
         closeFn: _removePopupDialog,
-        child: OverlayPop(
-          videoItem: videoItem,
-          closeFn: _removePopupDialog,
-        ),
+        videoItem: videoItem,
       ),
     );
   }
