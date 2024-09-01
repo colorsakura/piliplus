@@ -2,17 +2,26 @@ name: Build for iOS
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        required: false
+        default: 'main'
 
 jobs:
   build-macos-app:
     name: Release IOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
       - name: Setup flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+
       - name: Set up xcode
         uses: BoundfoxStudios/action-xcode-select@v1
 
