@@ -23,7 +23,6 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   final AboutController _aboutController = Get.put(AboutController());
-  String cacheSize = '';
 
   @override
   void initState() {
@@ -34,9 +33,7 @@ class _AboutPageState extends State<AboutPage> {
 
   Future<void> getCacheSize() async {
     final res = await CacheManage().loadApplicationCache();
-    cacheSize = res;
-    if (!mounted) return;
-    setState(() => {});
+    _aboutController.cacheSize.value = res;
   }
 
   @override
@@ -170,7 +167,12 @@ class _AboutPageState extends State<AboutPage> {
             },
             leading: const Icon(Icons.delete_outline),
             title: const Text('清除缓存'),
-            subtitle: Text('图片及网络缓存 $cacheSize', style: subTitleStyle),
+            subtitle: Obx(
+              () => Text(
+                '图片及网络缓存 ${_aboutController.cacheSize.value}',
+                style: subTitleStyle,
+              ),
+            ),
           ),
           ListTile(
               title: const Text('导入/导出设置'),
@@ -303,6 +305,7 @@ class AboutController extends GetxController {
   RxBool isLoading = true.obs;
   LatestDataModel? data;
   RxInt count = 0.obs;
+  RxString cacheSize = ''.obs;
 
   @override
   void onInit() {

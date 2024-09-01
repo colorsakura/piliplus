@@ -149,6 +149,7 @@ class ColorSelectController extends GetxController {
   RxInt type = 0.obs;
   late final List<Map<String, dynamic>> colorThemes;
   RxInt currentColor = 0.obs;
+  RxDouble currentTextScale = 1.0.obs;
 
   @override
   void onInit() {
@@ -159,6 +160,8 @@ class ColorSelectController extends GetxController {
     type.value = dynamicColor.value ? 0 : 1;
     currentColor.value =
         setting.get(SettingBoxKey.customColor, defaultValue: 0);
+    currentTextScale.value =
+        setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
     super.onInit();
   }
 }

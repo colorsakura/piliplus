@@ -359,9 +359,20 @@ class _StyleSettingState extends State<StyleSetting> {
           ),
           ListTile(
             dense: false,
-            onTap: () => Get.toNamed('/fontSizeSetting'),
+            onTap: () async {
+              dynamic result = await Get.toNamed('/fontSizeSetting');
+              if (result != null) {
+                colorSelectController.currentTextScale.value = result;
+              }
+            },
             title: Text('字体大小', style: titleStyle),
             leading: const Icon(Icons.format_size_outlined),
+            subtitle: Obx(() => Text(
+                  colorSelectController.currentTextScale.value == 1.0
+                      ? '默认'
+                      : colorSelectController.currentTextScale.value.toString(),
+                  style: subTitleStyle,
+                )),
           ),
           ListTile(
             dense: false,

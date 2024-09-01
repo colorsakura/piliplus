@@ -77,8 +77,8 @@ class CacheManage {
   }
 
   // 清除缓存
-  Future<bool> clearCacheAll(BuildContext context) async {
-    bool cleanStatus = await showDialog(
+  Future<void> clearCacheAll(BuildContext context) async {
+    await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -99,10 +99,8 @@ class CacheManage {
                 try {
                   // 清除缓存 图片缓存
                   await clearLibraryCache();
-                  Timer(const Duration(milliseconds: 500), () {
-                    SmartDialog.dismiss().then((res) {
-                      SmartDialog.showToast('清除成功');
-                    });
+                  SmartDialog.dismiss().then((res) {
+                    SmartDialog.showToast('清除成功');
                   });
                 } catch (err) {
                   SmartDialog.dismiss();
@@ -114,10 +112,7 @@ class CacheManage {
           ],
         );
       },
-    ).then((res) {
-      return true;
-    });
-    return cleanStatus;
+    );
   }
 
   /// 清除 Documents 目录下的 DioCache.db
