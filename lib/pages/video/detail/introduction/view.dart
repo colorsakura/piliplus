@@ -374,8 +374,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   if (enableAi)
                     Positioned(
                       right: 10,
-                      top: 6,
-                      child: Semantics(
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: Semantics(
                           label: 'AI总结',
                           child: GestureDetector(
                             onTap: () async {
@@ -387,7 +389,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             },
                             child:
                                 Image.asset('assets/images/ai.png', height: 22),
-                          )),
+                          ),
+                        ),
+                      ),
                     )
                 ],
               ),
