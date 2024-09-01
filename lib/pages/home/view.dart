@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
-import '../../utils/storage.dart';
 import './controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,30 +32,15 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
-    // // 设置状态栏图标的亮度
-    // if (_homeController.enableGradientBg) {
-    //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //     statusBarIconBrightness: currentBrightness == Brightness.light
-    //         ? Brightness.dark
-    //         : Brightness.light,
-    //   ));
-    // }
+    Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
+    // 设置状态栏图标的亮度
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: currentBrightness == Brightness.light
+          ? Brightness.dark
+          : Brightness.light,
+    ));
     return Scaffold(
-      extendBody: true,
-      // extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        toolbarHeight: 0,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness:
-              Theme.of(context).brightness == Brightness.dark
-                  ? Brightness.light
-                  : Brightness.dark,
-        ),
-      ),
+      appBar: AppBar(toolbarHeight: 0, elevation: 0),
       body: Column(
         children: [
           if (!_homeController.useSideBar)
@@ -67,9 +51,7 @@ class _HomePageState extends State<HomePage>
               ctr: _homeController,
             ),
           if (_homeController.tabs.length > 1) ...[
-            if (_homeController.enableGradientBg) ...[
-              const CustomTabs(),
-            ] else ...[
+            ...[
               const SizedBox(height: 4),
               SizedBox(
                 width: double.infinity,

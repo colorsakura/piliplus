@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +28,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   late List defaultTabs;
   late List<String> tabbarSort;
   RxString defaultSearch = ''.obs;
-  late bool enableGradientBg;
   late bool useSideBar;
 
   @override
@@ -43,8 +41,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     if (setting.get(SettingBoxKey.enableSearchWord, defaultValue: true)) {
       searchDefault();
     }
-    enableGradientBg =
-        setting.get(SettingBoxKey.enableGradientBg, defaultValue: false);
     useSideBar = setting.get(SettingBoxKey.useSideBar, defaultValue: false);
     // 进行tabs配置
     setTabConfig();
@@ -98,22 +94,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       length: tabs.length,
       vsync: this,
     );
-    // 监听 tabController 切换
-    if (enableGradientBg) {
-      tabController.animation!.addListener(() {
-        if (tabController.indexIsChanging) {
-          if (initialIndex.value != tabController.index) {
-            initialIndex.value = tabController.index;
-          }
-        } else {
-          final int temp = tabController.animation!.value.round();
-          if (initialIndex.value != temp) {
-            initialIndex.value = temp;
-            tabController.index = initialIndex.value;
-          }
-        }
-      });
-    }
   }
 
   @override

@@ -29,7 +29,6 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
   Box setting = GStorage.setting;
   late bool enableMYBar;
   late bool useSideBar;
-  late bool enableGradientBg;
 
   @override
   void initState() {
@@ -39,8 +38,6 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
         PageController(initialPage: _mainController.selectedIndex);
     enableMYBar = setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar = setting.get(SettingBoxKey.useSideBar, defaultValue: false);
-    enableGradientBg =
-        setting.get(SettingBoxKey.enableGradientBg, defaultValue: false);
   }
 
   void setIndex(int value) async {
@@ -114,103 +111,71 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
       },
       child: Scaffold(
         extendBody: true,
-        body: Stack(children: [
-          // gradient background
-          if (enableGradientBg) ...[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Opacity(
-                opacity: 0.6,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.6),
-                          Theme.of(context)
-                              .colorScheme
-                              .primaryContainer
-                              .withOpacity(0.6),
-                          Theme.of(context).colorScheme.surface
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: const [0.1, 0.4, 0.7]),
-                  ),
-                ),
+        body: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (useSideBar) ...[
+              SizedBox(
+                  width: context.width * 0.0387 +
+                      36.801 +
+                      MediaQuery.of(context).padding.left,
+                  child: NavigationRail(
+                    groupAlignment: 1,
+                    minWidth: context.width * 0.0286 + 28.56,
+                    backgroundColor: Colors.transparent,
+                    selectedIndex: _mainController.selectedIndex,
+                    onDestinationSelected: (value) => setIndex(value),
+                    labelType: NavigationRailLabelType.none,
+                    leading: UserAndSearchVertical(ctr: _homeController),
+                    destinations: _mainController.navigationBars
+                        .map((e) => NavigationRailDestination(
+                              icon: Badge(
+                                label: _mainController.dynamicBadgeType ==
+                                        DynamicBadgeMode.number
+                                    ? Text(e['count'].toString())
+                                    : null,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                isLabelVisible:
+                                    _mainController.dynamicBadgeType !=
+                                            DynamicBadgeMode.hidden &&
+                                        e['count'] > 0,
+                                child: e['icon'],
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
+                              ),
+                              selectedIcon: e['selectIcon'],
+                              label: Text(e['label']),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0.01 * context.height),
+                            ))
+                        .toList(),
+                    trailing: SizedBox(height: 0.1 * context.height),
+                  )),
+            ],
+            VerticalDivider(
+              width: 1,
+              indent: MediaQuery.of(context).padding.top,
+              endIndent: MediaQuery.of(context).padding.bottom,
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
+            ),
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _mainController.pageController,
+                onPageChanged: (index) {
+                  _mainController.selectedIndex = index;
+                  setState(() {});
+                },
+                children: _mainController.pages,
               ),
             ),
+            if (useSideBar) SizedBox(width: context.width * 0.004),
           ],
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (useSideBar) ...[
-                SizedBox(
-                    width: context.width * 0.0387 +
-                        36.801 +
-                        MediaQuery.of(context).padding.left,
-                    child: NavigationRail(
-                      groupAlignment: 1,
-                      minWidth: context.width * 0.0286 + 28.56,
-                      backgroundColor: Colors.transparent,
-                      selectedIndex: _mainController.selectedIndex,
-                      onDestinationSelected: (value) => setIndex(value),
-                      labelType: NavigationRailLabelType.none,
-                      leading: UserAndSearchVertical(ctr: _homeController),
-                      destinations: _mainController.navigationBars
-                          .map((e) => NavigationRailDestination(
-                                icon: Badge(
-                                  label: _mainController.dynamicBadgeType ==
-                                          DynamicBadgeMode.number
-                                      ? Text(e['count'].toString())
-                                      : null,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  isLabelVisible:
-                                      _mainController.dynamicBadgeType !=
-                                              DynamicBadgeMode.hidden &&
-                                          e['count'] > 0,
-                                  child: e['icon'],
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onInverseSurface,
-                                ),
-                                selectedIcon: e['selectIcon'],
-                                label: Text(e['label']),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0.01 * context.height),
-                              ))
-                          .toList(),
-                      trailing: SizedBox(height: 0.1 * context.height),
-                    )),
-              ],
-              VerticalDivider(
-                width: 1,
-                indent: MediaQuery.of(context).padding.top,
-                endIndent: MediaQuery.of(context).padding.bottom,
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
-              ),
-              Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _mainController.pageController,
-                  onPageChanged: (index) {
-                    _mainController.selectedIndex = index;
-                    setState(() {});
-                  },
-                  children: _mainController.pages,
-                ),
-              ),
-              if (useSideBar) SizedBox(width: context.width * 0.004),
-            ],
-          )
-        ]),
+        ),
         bottomNavigationBar: useSideBar
             ? null
             : StreamBuilder(
