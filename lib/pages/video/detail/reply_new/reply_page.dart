@@ -23,6 +23,8 @@ class ReplyPage extends StatefulWidget {
   final int? parent;
   final ReplyType? replyType;
   final ReplyItemModel? replyItem;
+  final String? savedReply;
+  final Function(String reply)? onSaveReply;
 
   const ReplyPage({
     super.key,
@@ -31,6 +33,8 @@ class ReplyPage extends StatefulWidget {
     this.parent,
     this.replyType,
     this.replyItem,
+    this.savedReply,
+    this.onSaveReply,
   });
 
   @override
@@ -41,7 +45,8 @@ class _ReplyPageState extends State<ReplyPage>
     with SingleTickerProviderStateMixin {
   late final _focusNode = FocusNode();
   late final _controller = ChatBottomPanelContainerController<PanelType>();
-  final TextEditingController _replyContentController = TextEditingController();
+  late final TextEditingController _replyContentController =
+      TextEditingController(text: widget.savedReply);
   PanelType _currentPanelType = PanelType.none;
   bool _readOnly = false;
   final _readOnlyStream = StreamController<bool>();
@@ -54,6 +59,11 @@ class _ReplyPageState extends State<ReplyPage>
   @override
   void initState() {
     super.initState();
+
+    if (widget.savedReply != null && widget.savedReply!.isNotEmpty) {
+      _enablePublish = true;
+    }
+
     () async {
       await Future.delayed(const Duration(milliseconds: 300));
       if (mounted) {
@@ -194,6 +204,9 @@ class _ReplyPageState extends State<ReplyPage>
                         _enablePublish = false;
                         _publishStream.add(false);
                       }
+                      if (widget.onSaveReply != null) {
+                        widget.onSaveReply!(value);
+                      }
                     },
                     focusNode: _focusNode,
                     decoration: const InputDecoration(
@@ -255,7 +268,7 @@ class _ReplyPageState extends State<ReplyPage>
                 ),
                 const Spacer(),
                 StreamBuilder(
-                  initialData: false,
+                  initialData: _enablePublish,
                   stream: _publishStream.stream,
                   builder: (_, snapshot) => FilledButton.tonal(
                     onPressed: snapshot.data == true ? submitReplyAdd : null,

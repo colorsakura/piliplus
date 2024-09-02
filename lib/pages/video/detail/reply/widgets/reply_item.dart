@@ -31,6 +31,7 @@ class ReplyItem extends StatelessWidget {
     this.replyReply,
     this.replyType,
     this.needDivider = true,
+    this.onReply,
     super.key,
   });
   final ReplyItemModel? replyItem;
@@ -40,6 +41,7 @@ class ReplyItem extends StatelessWidget {
   final Function? replyReply;
   final ReplyType? replyType;
   final bool needDivider;
+  final Function()? onReply;
 
   @override
   Widget build(BuildContext context) {
@@ -303,6 +305,10 @@ class ReplyItem extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               feedBack();
+              if (onReply != null) {
+                onReply!();
+                return;
+              }
               Navigator.of(context)
                   .push(
                     GetDialogRoute(

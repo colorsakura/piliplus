@@ -37,6 +37,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   late VideoReplyController _videoReplyController;
   late AnimationController fabAnimationCtr;
 
+  late final _savedReplies = {};
+
   bool _isFabVisible = true;
   String replyLevel = '1';
   late String heroTag;
@@ -218,6 +220,59 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                                 replyReply: (replyItem) =>
                                     replyReply(replyItem),
                                 replyType: ReplyType.video,
+                                onReply: () {
+                                  dynamic oid = _videoReplyController
+                                      .replyList[index].oid;
+                                  dynamic root = _videoReplyController
+                                      .replyList[index].rpid;
+                                  dynamic parent = _videoReplyController
+                                      .replyList[index].rpid;
+                                  dynamic key = oid + root + parent;
+                                  Navigator.of(context)
+                                      .push(
+                                    GetDialogRoute(
+                                      pageBuilder: (buildContext, animation,
+                                          secondaryAnimation) {
+                                        return ReplyPage(
+                                          oid: oid,
+                                          root: root,
+                                          parent: parent,
+                                          replyType: ReplyType.video,
+                                          replyItem: _videoReplyController
+                                              .replyList[index],
+                                          savedReply: _savedReplies[key],
+                                          onSaveReply: (reply) {
+                                            _savedReplies[key] = reply;
+                                          },
+                                        );
+                                      },
+                                      transitionDuration:
+                                          const Duration(milliseconds: 500),
+                                      transitionBuilder: (context, animation,
+                                          secondaryAnimation, child) {
+                                        const begin = Offset(0.0, 1.0);
+                                        const end = Offset.zero;
+                                        const curve = Curves.linear;
+
+                                        var tween = Tween(
+                                                begin: begin, end: end)
+                                            .chain(CurveTween(curve: curve));
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  )
+                                      .then((value) {
+                                    // 完成评论，数据添加
+                                    if (value != null &&
+                                        value['data'] != null) {
+                                      _savedReplies[key] = null;
+                                    }
+                                  });
+                                },
                               );
                             }
                           },
@@ -243,46 +298,51 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 heroTag: null,
                 onPressed: () {
                   feedBack();
+                  dynamic oid = _videoReplyController.aid ??
+                      IdUtils.bv2av(Get.parameters['bvid']!);
                   Navigator.of(context)
                       .push(
-                        GetDialogRoute(
-                          pageBuilder:
-                              (buildContext, animation, secondaryAnimation) {
-                            return ReplyPage(
-                              oid: _videoReplyController.aid ??
-                                  IdUtils.bv2av(Get.parameters['bvid']!),
-                              root: 0,
-                              parent: 0,
-                              replyType: ReplyType.video,
-                            );
+                    GetDialogRoute(
+                      pageBuilder:
+                          (buildContext, animation, secondaryAnimation) {
+                        return ReplyPage(
+                          oid: oid,
+                          root: 0,
+                          parent: 0,
+                          replyType: ReplyType.video,
+                          savedReply: _savedReplies[oid],
+                          onSaveReply: (reply) {
+                            _savedReplies[oid] = reply;
                           },
-                          transitionDuration: const Duration(milliseconds: 500),
-                          transitionBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(0.0, 1.0);
-                            const end = Offset.zero;
-                            const curve = Curves.linear;
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 500),
+                      transitionBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.linear;
 
-                            var tween = Tween(begin: begin, end: end)
-                                .chain(CurveTween(curve: curve));
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
 
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      )
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ),
+                  )
                       .then(
-                        (value) => {
-                          // 完成评论，数据添加
-                          if (value != null && value['data'] != null)
-                            {
-                              _videoReplyController.replyList
-                                  .insert(0, value['data'])
-                            }
-                        },
-                      );
+                    (value) {
+                      // 完成评论，数据添加
+                      if (value != null && value['data'] != null) {
+                        _savedReplies[oid] = null;
+                        _videoReplyController.replyList
+                            .insert(0, value['data']);
+                      }
+                    },
+                  );
                   // showModalBottomSheet(
                   //   context: context,
                   //   isScrollControlled: true,
