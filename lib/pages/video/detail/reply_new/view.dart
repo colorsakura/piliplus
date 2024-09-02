@@ -214,7 +214,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
                     FocusScope.of(context).requestFocus(replyContentFocusNode);
                   },
                   icon: const Icon(Icons.keyboard, size: 22),
-                  toolbarType: toolbarType,
+                  // toolbarType: toolbarType,
                   selected: toolbarType == 'input',
                 ),
                 const SizedBox(width: 20),
@@ -229,7 +229,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
                     FocusScope.of(context).unfocus();
                   },
                   icon: const Icon(Icons.emoji_emotions, size: 22),
-                  toolbarType: toolbarType,
+                  // toolbarType: toolbarType,
                   selected: toolbarType == 'emote',
                 ),
                 const Spacer(),

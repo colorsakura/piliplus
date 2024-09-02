@@ -41,41 +41,43 @@ class _EmotePanelState extends State<EmotePanel>
               return Column(
                 children: [
                   Expanded(
-                      child: TabBarView(
-                    controller: _emotePanelController.tabController,
-                    children: emotePackage.map(
-                      (e) {
-                        int size = e.emote!.first.meta!.size!;
-                        int type = e.type!;
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
-                          child: type != 4
-                              ? GridView.builder(
-                                  gridDelegate:
-                                      SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: (size == 1 ? 40 : 60),
-                                    crossAxisSpacing: 8,
-                                    mainAxisSpacing: 8,
-                                    mainAxisExtent: size == 1 ? 40 : 60,
-                                  ),
-                                  itemCount: e.emote!.length,
-                                  itemBuilder: (context, index) {
-                                    return Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        borderRadius: BorderRadius.circular(8),
-                                        onTap: () {
-                                          widget.onChoose(e, e.emote![index]);
-                                        },
-                                        child: Tooltip(
-                                          message: e.emote![index].text!
-                                              .substring(
-                                                  1,
-                                                  e.emote![index].text!.length -
-                                                      1),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: NetworkImgLayer(
+                    child: TabBarView(
+                      controller: _emotePanelController.tabController,
+                      children: emotePackage.map(
+                        (e) {
+                          int size = e.emote!.first.meta!.size!;
+                          int type = e.type!;
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent:
+                                    type == 4 ? 100 : (size == 1 ? 40 : 60),
+                                crossAxisSpacing: 8,
+                                mainAxisSpacing: 8,
+                                mainAxisExtent: size == 1 ? 40 : 60,
+                              ),
+                              itemCount: e.emote!.length,
+                              itemBuilder: (context, index) {
+                                return Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(8),
+                                    onTap: () {
+                                      widget.onChoose(e, e.emote![index]);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6),
+                                      child: type == 4
+                                          ? Center(
+                                              child: Text(
+                                                e.emote![index].text!,
+                                                overflow: TextOverflow.clip,
+                                                maxLines: 1,
+                                              ),
+                                            )
+                                          : NetworkImgLayer(
                                               src: e.emote![index].url!,
                                               width: size * 38,
                                               height: size * 38,
@@ -83,42 +85,16 @@ class _EmotePanelState extends State<EmotePanel>
                                                   e.emote![index].text!,
                                               type: 'emote',
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )
-                              : SingleChildScrollView(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Wrap(
-                                    spacing: 8,
-                                    runSpacing: 8,
-                                    children: e.emote!
-                                        .map(
-                                          (item) => Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              onTap: () {
-                                                widget.onChoose(e, item);
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(6),
-                                                child: Text(item.text!),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
+                                    ),
                                   ),
-                                ),
-                        );
-                      },
-                    ).toList(),
-                  )),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
                   Divider(
                     height: 1,
                     color: Theme.of(context).dividerColor.withOpacity(0.1),

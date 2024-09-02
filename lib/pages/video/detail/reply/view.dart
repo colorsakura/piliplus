@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'controller.dart';
 import 'widgets/reply_item.dart';
 
@@ -35,7 +36,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   late VideoReplyController _videoReplyController;
   late AnimationController fabAnimationCtr;
-  late ScrollController scrollController;
 
   bool _isFabVisible = true;
   String replyLevel = '1';
@@ -70,17 +70,17 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   @override
   void dispose() {
     fabAnimationCtr.dispose();
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _videoReplyController.scrollController.removeListener(() {});
+    _videoReplyController.scrollController.dispose();
     super.dispose();
   }
 
   void scrollListener() {
-    scrollController = _videoReplyController.scrollController;
-    scrollController.addListener(
+    _videoReplyController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_videoReplyController.scrollController.position.pixels >=
+            _videoReplyController.scrollController.position.maxScrollExtent -
+                300) {
           EasyThrottle.throttle('replylist', const Duration(milliseconds: 200),
               () {
             _videoReplyController.onLoad();
@@ -88,7 +88,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         }
 
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _videoReplyController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           _showFab();
         } else if (direction == ScrollDirection.reverse) {
@@ -134,7 +134,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
       child: Stack(
         children: [
           CustomScrollView(
-            controller: scrollController,
+            controller: _videoReplyController.scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
@@ -243,28 +243,68 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 heroTag: null,
                 onPressed: () {
                   feedBack();
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return VideoReplyNewDialog(
-                        oid: _videoReplyController.aid ??
-                            IdUtils.bv2av(Get.parameters['bvid']!),
-                        root: 0,
-                        parent: 0,
-                        replyType: ReplyType.video,
+                  Navigator.of(context)
+                      .push(
+                        GetDialogRoute(
+                          pageBuilder:
+                              (buildContext, animation, secondaryAnimation) {
+                            return ReplyPage(
+                              oid: _videoReplyController.aid ??
+                                  IdUtils.bv2av(Get.parameters['bvid']!),
+                              root: 0,
+                              parent: 0,
+                              replyType: ReplyType.video,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 500),
+                          transitionBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0, 1.0);
+                            const end = Offset.zero;
+                            const curve = Curves.linear;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ),
+                      )
+                      .then(
+                        (value) => {
+                          // 完成评论，数据添加
+                          if (value != null && value['data'] != null)
+                            {
+                              _videoReplyController.replyList
+                                  .insert(0, value['data'])
+                            }
+                        },
                       );
-                    },
-                  ).then(
-                    (value) => {
-                      // 完成评论，数据添加
-                      if (value != null && value['data'] != null)
-                        {
-                          _videoReplyController.replyList
-                              .insert(0, value['data'])
-                        }
-                    },
-                  );
+                  // showModalBottomSheet(
+                  //   context: context,
+                  //   isScrollControlled: true,
+                  //   builder: (BuildContext context) {
+                  //     return VideoReplyNewDialog(
+                  //       oid: _videoReplyController.aid ??
+                  //           IdUtils.bv2av(Get.parameters['bvid']!),
+                  //       root: 0,
+                  //       parent: 0,
+                  //       replyType: ReplyType.video,
+                  //     );
+                  //   },
+                  // ).then(
+                  //   (value) => {
+                  //     // 完成评论，数据添加
+                  //     if (value != null && value['data'] != null)
+                  //       {
+                  //         _videoReplyController.replyList
+                  //             .insert(0, value['data'])
+                  //       }
+                  //   },
+                  // );
                 },
                 tooltip: '发表评论',
                 child: const Icon(Icons.reply),

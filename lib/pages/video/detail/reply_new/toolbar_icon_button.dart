@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class ToolbarIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Icon icon;
-  final String toolbarType;
   final bool selected;
   final String tooltip;
 
@@ -11,7 +10,6 @@ class ToolbarIconButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.icon,
-    required this.toolbarType,
     required this.selected,
     required this.tooltip,
   });
@@ -30,8 +28,8 @@ class ToolbarIconButton extends StatelessWidget {
             ? Theme.of(context).colorScheme.onSecondaryContainer
             : Theme.of(context).colorScheme.outline,
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
+          padding: WidgetStateProperty.all(EdgeInsets.zero),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
             return selected
                 ? Theme.of(context).colorScheme.secondaryContainer
                 : null;
