@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 extension ImageExtension on num {
   int cacheSize(BuildContext context) {

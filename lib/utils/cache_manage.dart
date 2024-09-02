@@ -94,7 +94,6 @@ class CacheManage {
             ),
             TextButton(
               onPressed: () async {
-                Get.back();
                 SmartDialog.showLoading(msg: '正在清除...');
                 try {
                   // 清除缓存 图片缓存
@@ -106,6 +105,7 @@ class CacheManage {
                   SmartDialog.dismiss();
                   SmartDialog.showToast(err.toString());
                 }
+                Get.back();
               },
               child: const Text('确认'),
             )

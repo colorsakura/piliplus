@@ -98,7 +98,10 @@ class _ReplyPageState extends State<ReplyPage>
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   splashFactory: NoSplashFactory(),
-                  onTap: Get.back,
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    Get.back();
+                  },
                 ),
               ),
               _buildInputView(),
@@ -386,5 +389,8 @@ class _ReplyPageState extends State<ReplyPage>
       selection:
           TextSelection.collapsed(offset: cursorPosition + emote.text!.length),
     );
+    if (widget.onSaveReply != null) {
+      widget.onSaveReply!(_replyContentController.text);
+    }
   }
 }

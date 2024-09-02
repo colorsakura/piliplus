@@ -402,6 +402,7 @@ class AboutController extends GetxController {
       context: context,
       builder: (context) {
         return SimpleDialog(
+          clipBehavior: Clip.hardEdge,
           title: const Text('问题反馈（建议直接加群反馈）'),
           children: [
             ListTile(
