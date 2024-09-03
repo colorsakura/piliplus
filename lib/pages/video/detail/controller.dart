@@ -30,7 +30,7 @@ class VideoDetailController extends GetxController
   RxInt danmakuCid = 0.obs;
   String heroTag = Get.arguments['heroTag'];
   // 视频详情
-  Map videoItem = {};
+  RxMap videoItem = {}.obs;
   // 视频类型 默认投稿视频
   SearchType videoType = Get.arguments['videoType'] ?? SearchType.video;
 

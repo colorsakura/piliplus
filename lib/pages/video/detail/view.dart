@@ -677,12 +677,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                         right: 0,
                                         child: GestureDetector(
                                           onTap: handlePlay,
-                                          child: NetworkImgLayer(
-                                            type: 'emote',
-                                            src: videoDetailController
-                                                .videoItem['pic'],
-                                            width: videoWidth,
-                                            height: videoHeight,
+                                          child: Obx(
+                                            () => NetworkImgLayer(
+                                              type: 'emote',
+                                              src: videoDetailController
+                                                  .videoItem['pic'],
+                                              width: videoWidth,
+                                              height: videoHeight,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -798,11 +800,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         right: 0,
                         child: GestureDetector(
                           onTap: handlePlay,
-                          child: NetworkImgLayer(
-                            type: 'emote',
-                            src: videoDetailController.videoItem['pic'],
-                            width: videoWidth,
-                            height: videoHeight,
+                          child: Obx(
+                            () => NetworkImgLayer(
+                              type: 'emote',
+                              src: videoDetailController.videoItem['pic'],
+                              width: videoWidth,
+                              height: videoHeight,
+                            ),
                           ),
                         ),
                       ),
@@ -897,11 +901,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         right: 0,
                         child: GestureDetector(
                           onTap: handlePlay,
-                          child: NetworkImgLayer(
-                            type: 'emote',
-                            src: videoDetailController.videoItem['pic'],
-                            width: videoWidth,
-                            height: videoHeight,
+                          child: Obx(
+                            () => NetworkImgLayer(
+                              type: 'emote',
+                              src: videoDetailController.videoItem['pic'],
+                              width: videoWidth,
+                              height: videoHeight,
+                            ),
                           ),
                         ),
                       ),
@@ -993,11 +999,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             right: 0,
                             child: GestureDetector(
                               onTap: handlePlay,
-                              child: NetworkImgLayer(
-                                type: 'emote',
-                                src: videoDetailController.videoItem['pic'],
-                                width: videoWidth,
-                                height: videoHeight,
+                              child: Obx(
+                                () => NetworkImgLayer(
+                                  type: 'emote',
+                                  src: videoDetailController.videoItem['pic'],
+                                  width: videoWidth,
+                                  height: videoHeight,
+                                ),
                               ),
                             ),
                           ),
@@ -1097,12 +1105,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                   right: 0,
                                   child: GestureDetector(
                                     onTap: handlePlay,
-                                    child: NetworkImgLayer(
-                                      type: 'emote',
-                                      src: videoDetailController
-                                          .videoItem['pic'],
-                                      width: videoWidth,
-                                      height: videoHeight,
+                                    child: Obx(
+                                      () => NetworkImgLayer(
+                                        type: 'emote',
+                                        src: videoDetailController
+                                            .videoItem['pic'],
+                                        width: videoWidth,
+                                        height: videoHeight,
+                                      ),
                                     ),
                                   ),
                                 ),

@@ -40,7 +40,7 @@ class NetworkImgLayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final int defaultImgQuality = GlobalData().imgQuality;
     final String imageUrl =
-        '${src!.startsWith('//') ? 'https:${src!}' : src!}@${quality ?? defaultImgQuality}q.webp';
+        '${src?.startsWith('//') == true ? 'https:$src' : src}@${quality ?? defaultImgQuality}q.webp';
     int? memCacheWidth, memCacheHeight;
 
     if (width > height || (origAspectRatio != null && origAspectRatio! > 1)) {
@@ -66,7 +66,8 @@ class NetworkImgLayer extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               width: width,
-              height: ignoreHeight == null || ignoreHeight == false? height:null,
+              height:
+                  ignoreHeight == null || ignoreHeight == false ? height : null,
               memCacheWidth: memCacheWidth,
               memCacheHeight: memCacheHeight,
               fit: BoxFit.cover,

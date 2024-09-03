@@ -114,11 +114,15 @@ class VideoIntroController extends GetxController {
     queryVideoIntro();
   }
 
+  late final videoDetailController =
+      Get.find<VideoDetailController>(tag: heroTag);
+
   // 获取视频简介&分p
   void queryVideoIntro() async {
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
       videoDetail.value = result['data']!;
+      videoDetailController.videoItem['pic'] = result['pic']!;
       if (videoDetail.value.pages != null &&
           videoDetail.value.pages!.isNotEmpty &&
           lastPlayCid.value == 0) {

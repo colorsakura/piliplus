@@ -245,7 +245,11 @@ class VideoHttp {
     var res = await Request().get(Api.videoIntro, data: {'bvid': bvid});
     VideoDetailResponse result = VideoDetailResponse.fromJson(res.data);
     if (result.code == 0) {
-      return {'status': true, 'data': result.data!};
+      return {
+        'status': true,
+        'data': result.data!,
+        'pic': result.data?.pic ?? '',
+      };
     } else {
       // Map errMap = {
       //   -400: '请求错误',

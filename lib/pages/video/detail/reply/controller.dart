@@ -130,4 +130,10 @@ class VideoReplyController extends GetxController {
   void animToTop() {
     scrollController.animToTop();
   }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
 }
