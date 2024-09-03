@@ -17,14 +17,22 @@ class _WebviewPageState extends State<WebviewPage> {
   final WebviewController _webviewController = Get.put(WebviewController());
 
   @override
+  void dispose() {
+    Get.delete<WebviewController>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
           titleSpacing: 0,
-          title: Text(
-            _webviewController.pageTitle,
-            style: Theme.of(context).textTheme.titleMedium,
+          title: Obx(
+            () => Text(
+              _webviewController.pageTitle.value,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           actions: [
             const SizedBox(width: 4),

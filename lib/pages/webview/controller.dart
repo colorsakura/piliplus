@@ -9,7 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebviewController extends GetxController {
   String url = '';
   RxString type = ''.obs;
-  String pageTitle = '';
+  RxString pageTitle = ''.obs;
   String uaType = '';
   final WebViewController controller = WebViewController();
   RxInt loadProgress = 0.obs;
@@ -19,9 +19,9 @@ class WebviewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    url = Get.parameters['url']!;
-    type.value = Get.parameters['type']!;
-    pageTitle = Get.parameters['pageTitle']!;
+    url = Get.parameters['url'] ?? '';
+    type.value = Get.parameters['type'] ?? '';
+    pageTitle.value = Get.parameters['pageTitle'] ?? '';
     uaType = Get.parameters['uaType'] ?? 'mob';
 
     webviewInit(uaType: uaType);
@@ -54,7 +54,7 @@ class WebviewController extends GetxController {
               }
             }
           },
-          onPageFinished: (String url) {
+          onPageFinished: (String url) async {
             if (type.value == 'liveRoom') {
               print("adding");
               //注入js
@@ -68,6 +68,7 @@ class WebviewController extends GetxController {
                 document.querySelector('#message-navbar').remove();
               ''').then((value) => print(value));
             }
+            pageTitle.value = await controller.getTitle() ?? '';
           },
           // 加载完成
           onUrlChange: (UrlChange urlChange) async {
@@ -92,5 +93,4 @@ class WebviewController extends GetxController {
       )
       ..loadRequest(Uri.parse(url));
   }
-
 }
