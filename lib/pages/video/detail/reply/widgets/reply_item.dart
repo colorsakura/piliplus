@@ -1071,11 +1071,23 @@ InlineSpan buildContent(
 
 class MorePanel extends StatelessWidget {
   final ReplyItemModel item;
+
   const MorePanel({super.key, required this.item});
 
   Future<dynamic> menuActionHandler(String type) async {
     String message = item.content?.message ?? '';
     switch (type) {
+      case 'report':
+        Get.back();
+        Get.toNamed(
+          '/webview',
+          parameters: {
+            'url':
+                'https://www.bilibili.com/h5/comment/report?mid=${item.mid}&oid=${item.oid}&pageType=1&rpid=${item.rpid}&platform=android',
+            'type': 'url',
+          },
+        );
+        break;
       case 'copyAll':
         await Clipboard.setData(ClipboardData(text: message));
         SmartDialog.showToast('已复制');
@@ -1100,6 +1112,7 @@ class MorePanel extends StatelessWidget {
       //   break;
       case 'delete':
         //弹出确认提示：
+        Get.back();
         bool? isDelete = await showDialog<bool>(
           context: Get.context!,
           builder: (context) {
@@ -1187,6 +1200,17 @@ class MorePanel extends StatelessWidget {
                       .titleSmall!
                       .copyWith(color: errorColor)),
             ),
+          if (GStorage.userInfo.get('userInfoCache') != null)
+            ListTile(
+              onTap: () async => await menuActionHandler('report'),
+              minLeadingWidth: 0,
+              leading: Icon(Icons.error_outline, color: errorColor, size: 19),
+              title: Text('举报',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: errorColor)),
+            ),
           ListTile(
             onTap: () async => await menuActionHandler('copyAll'),
             minLeadingWidth: 0,
@@ -1199,6 +1223,7 @@ class MorePanel extends StatelessWidget {
             leading: const Icon(Icons.copy_outlined, size: 19),
             title: Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
           ),
+
           // ListTile(
           //   onTap: () async => await menuActionHandler('block'),
           //   minLeadingWidth: 0,

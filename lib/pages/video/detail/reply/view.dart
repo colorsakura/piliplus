@@ -73,7 +73,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   void dispose() {
     fabAnimationCtr.dispose();
     _videoReplyController.scrollController.removeListener(() {});
-    _videoReplyController.scrollController.dispose();
+    // _videoReplyController.scrollController.dispose();
     super.dispose();
   }
 
