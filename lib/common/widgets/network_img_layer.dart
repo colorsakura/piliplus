@@ -23,6 +23,7 @@ class NetworkImgLayer extends StatelessWidget {
     this.origAspectRatio,
     this.semanticsLabel,
     this.ignoreHeight,
+    this.radius,
   });
 
   final String? src;
@@ -35,6 +36,7 @@ class NetworkImgLayer extends StatelessWidget {
   final double? origAspectRatio;
   final String? semanticsLabel;
   final bool? ignoreHeight;
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +59,13 @@ class NetworkImgLayer extends StatelessWidget {
         ? ClipRRect(
             clipBehavior: Clip.antiAlias,
             borderRadius: BorderRadius.circular(
-              type == 'avatar'
-                  ? 50
-                  : type == 'emote'
-                      ? 0
-                      : StyleString.imgRadius.x,
+              radius != null
+                  ? radius!
+                  : type == 'avatar'
+                      ? 50
+                      : type == 'emote'
+                          ? 0
+                          : StyleString.imgRadius.x,
             ),
             child: CachedNetworkImage(
               imageUrl: imageUrl,

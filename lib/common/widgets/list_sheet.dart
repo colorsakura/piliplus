@@ -1,3 +1,6 @@
+import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
+import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
+import 'package:PiliPalaX/models/video_detail_res.dart' as video;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -117,18 +120,46 @@ class _ListSheetContentState extends State<ListSheetContent> {
         }
       },
       dense: false,
-      leading: isCurrentIndex
-          ? Image.asset(
-              'assets/images/live.png',
-              color: primary,
-              height: 12,
-              semanticLabel: "正在播放：",
+      leading: (episode is video.EpisodeItem && episode.arc?.pic != null) ||
+              (episode is video.Part && episode.firstFrame != null) ||
+              (episode is bangumi.EpisodeItem && episode.cover != null)
+          ? Container(
+              margin: const EdgeInsets.symmetric(vertical: 6),
+              decoration: isCurrentIndex
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        width: 1.8,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    )
+                  : null,
+              child: LayoutBuilder(
+                builder: (_, constraints) => NetworkImgLayer(
+                  radius: 6,
+                  src: episode is video.EpisodeItem
+                      ? episode.arc?.pic
+                      : episode is bangumi.EpisodeItem
+                          ? episode.cover
+                          : episode.firstFrame,
+                  width: constraints.maxHeight * 16 / 9,
+                  height: constraints.maxHeight,
+                ),
+              ),
             )
-          : null,
+          : isCurrentIndex
+              ? Image.asset(
+                  'assets/images/live.png',
+                  color: primary,
+                  height: 12,
+                  semanticLabel: "正在播放：",
+                )
+              : null,
       title: Text(
         title,
         style: TextStyle(
           fontSize: 14,
+          fontWeight: isCurrentIndex ? FontWeight.bold : null,
           color: isCurrentIndex
               ? primary
               : Theme.of(context).colorScheme.onSurface,
@@ -187,6 +218,15 @@ class _ListSheetContentState extends State<ListSheetContent> {
                   onPressed: () {
                     itemScrollController.scrollTo(
                       index: !reverse ? widget.episodes!.length - 1 : 0,
+                      duration: const Duration(milliseconds: 200),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.my_location),
+                  onPressed: () {
+                    itemScrollController.scrollTo(
+                      index: currentIndex,
                       duration: const Duration(milliseconds: 200),
                     );
                   },

@@ -597,6 +597,18 @@ class UgcSeason {
   }
 }
 
+class Arc {
+  Arc({
+    this.pic,
+  });
+
+  String? pic;
+
+  Arc.fromJson(Map<String, dynamic> json) {
+    pic = json['pic'] as String?;
+  }
+}
+
 class SectionItem {
   SectionItem({
     this.seasonId,
@@ -636,6 +648,7 @@ class EpisodeItem {
     this.page,
     this.bvid,
     this.badge,
+    this.arc,
   });
   int? seasonId;
   int? sectionId;
@@ -648,6 +661,7 @@ class EpisodeItem {
   Part? page;
   String? bvid;
   String? badge;
+  Arc? arc;
 
   EpisodeItem.fromJson(Map<String, dynamic> json) {
     seasonId = json['season_id'];
@@ -661,5 +675,8 @@ class EpisodeItem {
     page = Part.fromJson(json['page']);
     bvid = json['bvid'];
     badge = json['badge'];
+    arc = json['arc'] == null
+        ? null
+        : Arc.fromJson(json['arc'] as Map<String, dynamic>);
   }
 }
