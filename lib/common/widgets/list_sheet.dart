@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPalaX/models/video_detail_res.dart' as video;
@@ -130,6 +131,7 @@ class _ListSheetContentState extends State<ListSheetContent> {
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         width: 1.8,
+                        strokeAlign: BorderSide.strokeAlignOutside,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     )
@@ -142,7 +144,7 @@ class _ListSheetContentState extends State<ListSheetContent> {
                       : episode is bangumi.EpisodeItem
                           ? episode.cover
                           : episode.firstFrame,
-                  width: constraints.maxHeight * 16 / 9,
+                  width: constraints.maxHeight * StyleString.aspectRatio,
                   height: constraints.maxHeight,
                 ),
               ),

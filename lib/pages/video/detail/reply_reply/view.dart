@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/models/video/reply/item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 import '../../../../utils/utils.dart';
 import 'controller.dart';
@@ -34,6 +36,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
 class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   late VideoReplyReplyController _videoReplyReplyController;
   Future? _futureBuilderFuture;
+  late final _savedReplies = {};
 
   @override
   void initState() {
@@ -126,6 +129,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         replyType: widget.replyType,
                         replyReply: (replyItem) => replyReply(replyItem),
                         needDivider: false,
+                        onReply: () {
+                          _onReply(widget.firstFloor);
+                        },
                       ),
                     ),
                     SliverToBoxAdapter(
@@ -160,6 +166,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                     replyType: widget.replyType,
                                     replyReply: (replyItem) =>
                                         replyReply(replyItem),
+                                    onReply: () {
+                                      _onReply(_videoReplyReplyController.root);
+                                    },
                                   ),
                                 ),
                                 SliverToBoxAdapter(
@@ -214,6 +223,10 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                                 .add(replyItem);
                                           },
                                           replyType: widget.replyType,
+                                          onReply: () {
+                                            _onReply(_videoReplyReplyController
+                                                .replyList[index]);
+                                          },
                                         );
                                       }
                                     },
@@ -250,5 +263,50 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         ],
       ),
     );
+  }
+
+  void _onReply(ReplyItemModel? item) {
+    dynamic oid = item?.oid;
+    dynamic root = item?.rpid;
+    dynamic parent = item?.rpid;
+    dynamic key = oid + root + parent;
+    Navigator.of(context)
+        .push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return ReplyPage(
+            oid: oid,
+            root: root,
+            parent: parent,
+            replyType: ReplyType.video,
+            replyItem: item,
+            savedReply: _savedReplies[key],
+            onSaveReply: (reply) {
+              _savedReplies[key] = reply;
+            },
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.linear;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    )
+        .then((value) {
+      // 完成评论，数据添加
+      if (value != null && value['data'] != null) {
+        _savedReplies[key] = null;
+      }
+    });
   }
 }
