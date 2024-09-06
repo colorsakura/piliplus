@@ -37,6 +37,8 @@ class VideoReplyController extends GetxController {
 
   Box setting = GStorage.setting;
 
+  Future? futureBuilderFuture;
+
   @override
   void onInit() {
     super.onInit();
@@ -98,6 +100,7 @@ class VideoReplyController extends GetxController {
         replyList.addAll(replies);
       }
     }
+    return res;
   }
 
   // 上拉加载
