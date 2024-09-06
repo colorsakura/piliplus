@@ -39,11 +39,9 @@ class ModelResult {
   ModelResult.fromJson(Map<String, dynamic> json) {
     resultType = json['result_type'];
     summary = json['summary'];
-    outline = json['result_type'] == 2
-        ? json['outline']
-            .map<OutlineItem>((e) => OutlineItem.fromJson(e))
-            .toList()
-        : <OutlineItem>[];
+    outline = json['outline']
+        .map<OutlineItem>((e) => OutlineItem.fromJson(e))
+        .toList();
   }
 }
 

@@ -17,8 +17,8 @@ class AiDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
-      padding: const EdgeInsets.only(left: 14, right: 14),
+      color: Theme.of(context).colorScheme.surface,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       height: Utils.getSheetHeight(context),
       child: Column(
         children: [
@@ -43,15 +43,22 @@ class AiDetail extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    modelResult!.summary!,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
+                  if (modelResult!.summary != null &&
+                      modelResult!.summary!.isNotEmpty) ...[
+                    Text(
+                      '总结: ${modelResult!.summary!}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        height: 1.5,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    if (modelResult!.outline!.isNotEmpty)
+                      Divider(
+                        height: 20,
+                        color: Theme.of(context).dividerColor.withOpacity(0.1),
+                        thickness: 6,
+                      )
+                  ],
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: modelResult!.outline!.length,
@@ -85,7 +92,7 @@ class AiDetail extends StatelessWidget {
                                             fontSize: 13,
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onBackground,
+                                                .onSurface,
                                             height: 1.5,
                                           ),
                                           children: [
