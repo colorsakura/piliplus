@@ -277,6 +277,26 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                                     }
                                   });
                                 },
+                                onDelete: (rpid, frpid) {
+                                  frpid == null
+                                      ? _videoReplyController.replyList.value =
+                                          _videoReplyController.replyList
+                                              .where(
+                                                  (item) => item.rpid != rpid)
+                                              .toList()
+                                      : _videoReplyController.replyList
+                                          .map((item) {
+                                          if (item.rpid == frpid) {
+                                            return item
+                                              ..replies = item.replies
+                                                  ?.where((reply) =>
+                                                      reply.rpid != rpid)
+                                                  .toList();
+                                          } else {
+                                            return item;
+                                          }
+                                        }).toList();
+                                },
                               );
                             }
                           },

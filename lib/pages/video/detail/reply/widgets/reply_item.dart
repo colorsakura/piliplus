@@ -24,6 +24,7 @@ Box setting = GStorage.setting;
 
 class ReplyItem extends StatelessWidget {
   const ReplyItem({
+    super.key,
     this.replyItem,
     this.addReply,
     this.replyLevel,
@@ -32,7 +33,7 @@ class ReplyItem extends StatelessWidget {
     this.replyType,
     this.needDivider = true,
     this.onReply,
-    super.key,
+    this.onDelete,
   });
   final ReplyItemModel? replyItem;
   final Function? addReply;
@@ -42,6 +43,7 @@ class ReplyItem extends StatelessWidget {
   final ReplyType? replyType;
   final bool needDivider;
   final Function()? onReply;
+  final Function(dynamic rpid, dynamic frpid)? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,14 @@ class ReplyItem extends StatelessWidget {
             useRootNavigator: true,
             isScrollControlled: true,
             builder: (context) {
-              return MorePanel(item: replyItem!);
+              return MorePanel(
+                item: replyItem!,
+                onDelete: (rpid) {
+                  if (onDelete != null) {
+                    onDelete!(rpid, null);
+                  }
+                },
+              );
             },
           );
         },
@@ -107,7 +116,7 @@ class ReplyItem extends StatelessWidget {
               decoration: BoxDecoration(
                 //borderRadius: BorderRadius.circular(7),
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.surface,
               ),
               child: Image.asset(
                 'assets/images/big-vip.png',
@@ -288,6 +297,11 @@ class ReplyItem extends StatelessWidget {
               // f_rpid: replyItem!.rpid,
               replyItem: replyItem,
               replyReply: replyReply,
+              onDelete: (rpid) {
+                if (onDelete != null) {
+                  onDelete!(rpid, replyItem!.rpid);
+                }
+              },
             ),
           ),
         ],
@@ -423,12 +437,14 @@ class ReplyItemRow extends StatelessWidget {
     // this.f_rpid,
     this.replyItem,
     this.replyReply,
+    this.onDelete,
   });
   final List<ReplyItemModel>? replies;
   ReplyControl? replyControl;
   // int? f_rpid;
   ReplyItemModel? replyItem;
   Function? replyReply;
+  final Function(dynamic rpid)? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -456,7 +472,10 @@ class ReplyItemRow extends StatelessWidget {
                       useRootNavigator: true,
                       isScrollControlled: true,
                       builder: (context) {
-                        return MorePanel(item: replies![i]);
+                        return MorePanel(
+                          item: replies![i],
+                          onDelete: onDelete,
+                        );
                       },
                     );
                   },
@@ -1071,8 +1090,9 @@ InlineSpan buildContent(
 
 class MorePanel extends StatelessWidget {
   final ReplyItemModel item;
+  final Function(dynamic rpid)? onDelete;
 
-  const MorePanel({super.key, required this.item});
+  const MorePanel({super.key, required this.item, this.onDelete});
 
   Future<dynamic> menuActionHandler(String type) async {
     String message = item.content?.message ?? '';
@@ -1145,8 +1165,11 @@ class MorePanel extends StatelessWidget {
             type: item.type!, oid: item.oid!, rpid: item.rpid!);
         SmartDialog.dismiss();
         if (result['status']) {
-          SmartDialog.showToast('删除成功，请刷新');
+          SmartDialog.showToast('删除成功');
           // Get.back();
+          if (onDelete != null) {
+            onDelete!(item.rpid!);
+          }
         } else {
           SmartDialog.showToast('删除失败, ${result["msg"]}');
         }

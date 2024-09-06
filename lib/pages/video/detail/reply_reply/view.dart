@@ -127,7 +127,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                           _videoReplyReplyController.replyList.add(replyItem);
                         },
                         replyType: widget.replyType,
-                        replyReply: (replyItem) => replyReply(replyItem),
+                        replyReply: replyReply,
                         needDivider: false,
                         onReply: () {
                           _onReply(widget.firstFloor);
@@ -164,8 +164,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                           .add(replyItem);
                                     },
                                     replyType: widget.replyType,
-                                    replyReply: (replyItem) =>
-                                        replyReply(replyItem),
+                                    replyReply: replyReply,
+                                    needDivider: false,
                                     onReply: () {
                                       _onReply(_videoReplyReplyController.root);
                                     },
@@ -226,6 +226,15 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                           onReply: () {
                                             _onReply(_videoReplyReplyController
                                                 .replyList[index]);
+                                          },
+                                          onDelete: (rpid, frpid) {
+                                            _videoReplyReplyController
+                                                    .replyList.value =
+                                                _videoReplyReplyController
+                                                    .replyList
+                                                    .where((item) =>
+                                                        item.rpid != rpid)
+                                                    .toList();
                                           },
                                         );
                                       }
