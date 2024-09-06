@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -938,130 +939,142 @@ InlineSpan buildContent(
   }
   // 图片渲染
   if (content.pictures.isNotEmpty) {
-    final List<String> picList = <String>[];
-    final int len = content.pictures.length;
+    // final List<String> picList = <String>[];
+    // final int len = content.pictures.length;
     spanChildren.add(const TextSpan(text: '\n'));
-    if (len == 1) {
-      Map pictureItem = content.pictures.first;
-      picList.add(pictureItem['img_src']);
-      spanChildren.add(
-        WidgetSpan(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints box) {
-              double maxHeight = box.maxWidth * 0.6; // 设置最大高度
-              // double width = (box.maxWidth / 2).truncateToDouble();
-              double height = 100;
-              try {
-                height = ((box.maxWidth /
-                        2 *
-                        pictureItem['img_height'] /
-                        pictureItem['img_width']))
-                    .truncateToDouble();
-              } catch (_) {}
+    spanChildren.add(
+      WidgetSpan(
+        child: LayoutBuilder(
+          builder: (_, constraints) => image(
+            constraints.maxWidth,
+            content.pictures,
+          ),
+        ),
+      ),
+    );
+    // if (len == 1) {
+    //   Map pictureItem = content.pictures.first;
+    //   picList.add(pictureItem['img_src']);
+    //   spanChildren.add(
+    //     WidgetSpan(
+    //       child: LayoutBuilder(
+    //         builder: (BuildContext context, BoxConstraints box) {
+    //           double maxHeight = box.maxWidth * 0.6; // 设置最大高度
+    //           // double width = (box.maxWidth / 2).truncateToDouble();
+    //           double height = 100;
+    //           try {
+    //             height = ((box.maxWidth /
+    //                     2 *
+    //                     pictureItem['img_height'] /
+    //                     pictureItem['img_width']))
+    //                 .truncateToDouble();
+    //           } catch (_) {}
 
-              return GestureDetector(
-                onTap: () {
-                  showDialog(
-                    useSafeArea: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ImagePreview(initialPage: 0, imgList: picList);
-                    },
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(top: 4),
-                  constraints: BoxConstraints(maxHeight: maxHeight),
-                  width: box.maxWidth / 2,
-                  height: height,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: NetworkImgLayer(
-                          src: pictureItem['img_src'],
-                          width: box.maxWidth / 2,
-                          height: height,
-                          semanticsLabel: '图片1，共1张',
-                        ),
-                      ),
-                      height > Get.size.height * 0.9
-                          ? const PBadge(
-                              text: '长图',
-                              right: 8,
-                              bottom: 8,
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      );
-    } else if (len > 1) {
-      List<Widget> list = [];
-      for (var i = 0; i < len; i++) {
-        picList.add(content.pictures[i]['img_src']);
-        list.add(
-          LayoutBuilder(
-            builder: (context, BoxConstraints box) {
-              return GestureDetector(
-                onTap: () {
-                  showDialog(
-                    useSafeArea: false,
-                    context: context,
-                    builder: (context) {
-                      return ImagePreview(initialPage: i, imgList: picList);
-                    },
-                  );
-                },
-                child: NetworkImgLayer(
-                  src: content.pictures[i]['img_src'],
-                  width: box.maxWidth,
-                  height: box.maxWidth,
-                  origAspectRatio: content.pictures[i]['img_width'] /
-                      content.pictures[i]['img_height'],
-                  semanticsLabel: '图片${i + 1}，共$len张',
-                ),
-              );
-            },
-          ),
-        );
-      }
-      spanChildren.add(
-        WidgetSpan(
-          child: Semantics(
-              explicitChildNodes: true,
-              container: true,
-              child: LayoutBuilder(
-                builder: (context, BoxConstraints box) {
-                  double maxWidth = box.maxWidth;
-                  double crossCount = len < 3 ? 2 : 3;
-                  double height = maxWidth /
-                          crossCount *
-                          (len % crossCount == 0
-                              ? len ~/ crossCount
-                              : len ~/ crossCount + 1) +
-                      6;
-                  return Container(
-                    padding: const EdgeInsets.only(top: 6),
-                    height: height,
-                    child: GridView.count(
-                      padding: EdgeInsets.zero,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: crossCount.toInt(),
-                      mainAxisSpacing: 4.0,
-                      crossAxisSpacing: 4.0,
-                      childAspectRatio: 1,
-                      children: list,
-                    ),
-                  );
-                },
-              )),
-        ),
-      );
-    }
+    //           return GestureDetector(
+    //             onTap: () {
+    //               showDialog(
+    //                 useSafeArea: false,
+    //                 context: context,
+    //                 builder: (BuildContext context) {
+    //                   return ImagePreview(initialPage: 0, imgList: picList);
+    //                 },
+    //               );
+    //             },
+    //             child: Container(
+    //               padding: const EdgeInsets.only(top: 4),
+    //               constraints: BoxConstraints(maxHeight: maxHeight),
+    //               width: box.maxWidth / 2,
+    //               height: height,
+    //               child: Stack(
+    //                 children: [
+    //                   Positioned.fill(
+    //                     child: NetworkImgLayer(
+    //                       src: pictureItem['img_src'],
+    //                       width: box.maxWidth / 2,
+    //                       height: height,
+    //                       semanticsLabel: '图片1，共1张',
+    //                     ),
+    //                   ),
+    //                   height > Get.size.height * 0.9
+    //                       ? const PBadge(
+    //                           text: '长图',
+    //                           right: 8,
+    //                           bottom: 8,
+    //                         )
+    //                       : const SizedBox(),
+    //                 ],
+    //               ),
+    //             ),
+    //           );
+    //         },
+    //       ),
+    //     ),
+    //   );
+    // } else if (len > 1) {
+    //   List<Widget> list = [];
+    //   for (var i = 0; i < len; i++) {
+    //     picList.add(content.pictures[i]['img_src']);
+    //     list.add(
+    //       LayoutBuilder(
+    //         builder: (context, BoxConstraints box) {
+    //           return GestureDetector(
+    //             onTap: () {
+    //               showDialog(
+    //                 useSafeArea: false,
+    //                 context: context,
+    //                 builder: (context) {
+    //                   return ImagePreview(initialPage: i, imgList: picList);
+    //                 },
+    //               );
+    //             },
+    //             child: NetworkImgLayer(
+    //               src: content.pictures[i]['img_src'],
+    //               width: box.maxWidth,
+    //               height: box.maxWidth,
+    //               origAspectRatio: content.pictures[i]['img_width'] /
+    //                   content.pictures[i]['img_height'],
+    //               semanticsLabel: '图片${i + 1}，共$len张',
+    //             ),
+    //           );
+    //         },
+    //       ),
+    //     );
+    //   }
+    //   spanChildren.add(
+    //     WidgetSpan(
+    //       // child: NineGridView(),
+    //       child: Semantics(
+    //         explicitChildNodes: true,
+    //         container: true,
+    //         child: LayoutBuilder(
+    //           builder: (context, BoxConstraints box) {
+    //             double maxWidth = box.maxWidth;
+    //             double crossCount = len < 3 ? 2 : 3;
+    //             double height = maxWidth /
+    //                     crossCount *
+    //                     (len % crossCount == 0
+    //                         ? len ~/ crossCount
+    //                         : len ~/ crossCount + 1) +
+    //                 6;
+    //             return Container(
+    //               padding: const EdgeInsets.only(top: 6),
+    //               height: height,
+    //               child: GridView.count(
+    //                 padding: EdgeInsets.zero,
+    //                 physics: const NeverScrollableScrollPhysics(),
+    //                 crossAxisCount: crossCount.toInt(),
+    //                 mainAxisSpacing: 4.0,
+    //                 crossAxisSpacing: 4.0,
+    //                 childAspectRatio: 1,
+    //                 children: list,
+    //               ),
+    //             );
+    //           },
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   // 笔记链接
