@@ -1337,7 +1337,10 @@ class PlPlayerController {
     if (res["data"].length == 0) {
       return;
     }
-    _vttSubtitles.value = await VideoHttp.vttSubtitles(res["data"]);
+    var result = await VideoHttp.vttSubtitles(res["data"]);
+    if (result != null) {
+      _vttSubtitles.value = result;
+    }
     // if (_vttSubtitles.isEmpty) {
     //   SmartDialog.showToast('字幕均加载失败');
     // }
