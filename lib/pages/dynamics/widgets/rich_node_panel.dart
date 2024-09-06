@@ -96,7 +96,7 @@ InlineSpan richNode(item, context) {
               child: GestureDetector(
                 onTap: () {
                   Get.toNamed(
-                    '/webview',
+                    '/webviewnew',
                     parameters: {
                       'url': i.origText,
                       'type': 'url',
@@ -122,7 +122,7 @@ InlineSpan richNode(item, context) {
                   try {
                     String dynamicId = item.basic['comment_id_str'];
                     Get.toNamed(
-                      '/webview',
+                      '/webviewnew',
                       parameters: {
                         'url':
                             'https://t.bilibili.com/vote/h5/index/#/result?vote_id=${i.rid}&dynamic_id=$dynamicId&isWeb=1',

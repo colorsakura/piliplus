@@ -70,6 +70,7 @@ dependencies:
   webview_cookie_manager: ^2.0.6
   # 浏览器
   webview_flutter: ^4.2.2
+  flutter_inappwebview: ^6.0.0
   # 解决sliver滑动不同步
   extended_nested_scroll_view: ^6.1.2
   # 上拉加载
@@ -154,6 +155,7 @@ dependency_overrides:
     git: https://github.com/orz12/mime.git
   fading_edge_scrollview: ^4.1.1
   rxdart: ^0.28.0
+  webview_flutter_android: 3.16.1
 
 dev_dependencies:
   flutter_test:

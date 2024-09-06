@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:PiliPalaX/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -80,6 +81,7 @@ class Routes {
     // ),
     //
     CustomGetPage(name: '/webview', page: () => const WebviewPage()),
+    CustomGetPage(name: '/webviewnew', page: () => const WebviewPageNew()),
     // 设置
     CustomGetPage(name: '/setting', page: () => const SettingPage()),
     //

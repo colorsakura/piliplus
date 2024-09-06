@@ -65,7 +65,7 @@ class CacheManage {
   }
 
   // 缓存大小格式转换
-  String formatSize(double value) {
+  static String formatSize(double value) {
     List<String> unitArr = ['B', 'K', 'M', 'G'];
     int index = 0;
     while (value > 1024) {

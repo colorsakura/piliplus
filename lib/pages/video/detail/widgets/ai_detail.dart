@@ -6,7 +6,6 @@ import 'package:PiliPalaX/models/video/ai.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
-
 class AiDetail extends StatelessWidget {
   final ModelResult? modelResult;
 
@@ -185,7 +184,7 @@ class AiDetail extends StatelessWidget {
                     // 处理点击事件
                     try {
                       Get.toNamed(
-                        '/webview',
+                        '/webviewnew',
                         parameters: {
                           'url': match.group(0)!,
                           'type': 'url',

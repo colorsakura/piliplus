@@ -84,8 +84,7 @@ class ChatItem extends StatelessWidget {
             final String emojiKey = match[0]!;
             print(emojiKey);
             if (emojiMap.containsKey(emojiKey)) {
-              children.add(
-                  WidgetSpan(
+              children.add(WidgetSpan(
                 child: NetworkImgLayer(
                   width: 18,
                   height: 18,
@@ -315,7 +314,7 @@ class ChatItem extends StatelessWidget {
                             }
                           } else {
                             SmartDialog.showToast('未匹配到 BV 号');
-                            Get.toNamed('/webview',
+                            Get.toNamed('/webviewnew',
                                 arguments: {'url': i['jump_url']});
                           }
                         },

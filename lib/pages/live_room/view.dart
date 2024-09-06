@@ -179,7 +179,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                                 tooltip: '内置浏览器打开',
                                 onPressed: () {
                                   Get.offNamed(
-                                    '/webview',
+                                    '/webviewnew',
                                     parameters: {
                                       'url':
                                           'https://live.bilibili.com/h5/${_liveRoomController.roomId}',

@@ -625,7 +625,7 @@ InlineSpan buildContent(
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () => Get.toNamed(
-                  '/webview',
+                  '/webviewnew',
                   parameters: {
                     'url': content.vote['url'],
                     'type': 'vote',
@@ -814,7 +814,7 @@ InlineSpan buildContent(
                         //   );
                         // } else {
                         //   Get.toNamed(
-                        //     '/webview',
+                        //     '/webviewnew',
                         //     parameters: {
                         //       'url': redirectUrl,
                         //       'type': 'url',
@@ -841,7 +841,7 @@ InlineSpan buildContent(
                           );
                         } else {
                           Get.toNamed(
-                            '/webview',
+                            '/webviewnew',
                             parameters: {
                               'url': redirectUrl,
                               'type': 'url',
@@ -851,7 +851,7 @@ InlineSpan buildContent(
                         }
                       } else {
                         Get.toNamed(
-                          '/webview',
+                          '/webviewnew',
                           parameters: {
                             'url': matchStr,
                             'type': 'url',
@@ -922,7 +922,7 @@ InlineSpan buildContent(
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   Get.toNamed(
-                    '/webview',
+                    '/webviewnew',
                     parameters: {
                       'url': patternStr,
                       'type': 'url',
@@ -1074,7 +1074,7 @@ InlineSpan buildContent(
         ),
         recognizer: TapGestureRecognizer()
           ..onTap = () => Get.toNamed(
-                '/webview',
+                '/webviewnew',
                 parameters: {
                   'url': content.richText['note']['click_url'],
                   'type': 'note',
@@ -1100,11 +1100,10 @@ class MorePanel extends StatelessWidget {
       case 'report':
         Get.back();
         Get.toNamed(
-          '/webview',
+          '/webviewnew',
           parameters: {
             'url':
                 'https://www.bilibili.com/h5/comment/report?mid=${item.mid}&oid=${item.oid}&pageType=1&rpid=${item.rpid}&platform=android',
-            'type': 'url',
           },
         );
         break;

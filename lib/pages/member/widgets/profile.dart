@@ -239,7 +239,7 @@ class ProfilePanel extends StatelessWidget {
                   if (ctr.ownerMid == ctr.mid && ctr.ownerMid != -1) ...[
                     TextButton(
                       onPressed: () {
-                        Get.toNamed('/webview', parameters: {
+                        Get.toNamed('/webviewnew', parameters: {
                           'url': 'https://account.bilibili.com/account/home',
                           'pageTitle': '个人中心（建议浏览器打开）',
                           'type': 'url'

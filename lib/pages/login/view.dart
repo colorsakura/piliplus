@@ -202,6 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
+                      clipBehavior: Clip.hardEdge,
                       title: const Text('忘记密码？'),
                       contentPadding:
                           const EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 16.0),
@@ -220,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                             dense: false,
                             onTap: () async {
                               Get.back();
-                              Get.toNamed('/webview', parameters: {
+                              Get.toNamed('/webviewnew', parameters: {
                                 'url':
                                     'https://passport.bilibili.com/h5-app/passport/login/findPassword',
                                 'type': 'url',
@@ -238,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
                             dense: false,
                             onTap: () async {
                               Get.back();
-                              Get.toNamed('/webview', parameters: {
+                              Get.toNamed('/webviewnew', parameters: {
                                 'url':
                                     'https://passport.bilibili.com/pc/passport/findPassword',
                                 'type': 'url',

@@ -36,11 +36,11 @@ class MediaController extends GetxController {
     {
       'icon': Icons.create_outlined,
       'title': '创作中心(web)',
-      'onTap': () => Get.toNamed('/webview', parameters: {
-        'url': 'https://member.bilibili.com/platform/home',
-        'type': 'url',
-        'pageTitle': "创作中心（建议浏览器打开）",
-      }),
+      'onTap': () => Get.toNamed('/webviewnew', parameters: {
+            'url': 'https://member.bilibili.com/platform/home',
+            'type': 'url',
+            'pageTitle': "创作中心（建议浏览器打开）",
+          }),
     },
   ];
   var userInfo;

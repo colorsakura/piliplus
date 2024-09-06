@@ -9,6 +9,7 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -20,6 +21,22 @@ import '../models/github/latest.dart';
 
 class Utils {
   static final Random random = Random();
+
+  static void copyText(String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    SmartDialog.showToast('已复制');
+  }
+
+  static launchURL(String url) async {
+    try {
+      final Uri uri = Uri.parse(url);
+      if (!await launchUrl(uri)) {
+        SmartDialog.showToast('Could not launch $url');
+      }
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
+    }
+  }
 
   static Color get vipColor {
     return GStorage.brightness == Brightness.light
