@@ -241,8 +241,8 @@ class _ReplyPageState extends State<ReplyPage>
                       if (!_selectKeyboard) {
                         _selectKeyboard = true;
                         _keyboardStream.add(true);
+                        updatePanelType(PanelType.keyboard);
                       }
-                      updatePanelType(PanelType.keyboard);
                     },
                     icon: const Icon(Icons.keyboard, size: 22),
                     selected: snapshot.data!,
@@ -255,14 +255,10 @@ class _ReplyPageState extends State<ReplyPage>
                   builder: (_, snapshot) => ToolbarIconButton(
                     tooltip: '表情',
                     onPressed: () {
-                      updatePanelType(
-                        PanelType.emoji == _currentPanelType
-                            ? PanelType.keyboard
-                            : PanelType.emoji,
-                      );
                       if (_selectKeyboard) {
                         _selectKeyboard = false;
                         _keyboardStream.add(false);
+                        updatePanelType(PanelType.emoji);
                       }
                     },
                     icon: const Icon(Icons.emoji_emotions, size: 22),
