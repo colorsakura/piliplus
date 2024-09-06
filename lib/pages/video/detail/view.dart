@@ -189,6 +189,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
       // 结束播放退出全屏
       if (!notExitFlag && autoExitFullscreen) {
+        plPlayerController!.setDoubleSpeedStatus(false);
         plPlayerController!.triggerFullScreen(status: false);
       }
       // 播放完展示控制栏
