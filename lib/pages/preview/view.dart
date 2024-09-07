@@ -155,6 +155,8 @@ class _ImagePreviewState extends State<ImagePreview>
                     widget.imgList![index],
                     fit: BoxFit.contain,
                     mode: ExtendedImageMode.gesture,
+                    handleLoadingProgress: true,
+                    clearMemoryCacheWhenDispose: true,
                     onDoubleTap: (ExtendedImageGestureState state) {
                       final Offset? pointerDownPosition =
                           state.pointerDownPosition;
@@ -214,9 +216,7 @@ class _ImagePreviewState extends State<ImagePreview>
                               SizedBox(
                                 width: 150.0,
                                 child: LinearProgressIndicator(
-                                  value: progress,
-                                  color: Colors.white,
-                                ),
+                                    value: progress ?? 0),
                               ),
                               // const SizedBox(height: 10.0),
                               // Text('${((progress ?? 0.0) * 100).toInt()}%',),
