@@ -659,7 +659,7 @@ class VideoIntroController extends GetxController {
     final res = await VideoHttp.aiConclusion(
       bvid: bvid,
       cid: lastPlayCid.value,
-      upMid: videoDetail.value.owner!.mid!,
+      upMid: videoDetail.value.owner?.mid,
     );
     SmartDialog.dismiss();
     if (res['status']) {

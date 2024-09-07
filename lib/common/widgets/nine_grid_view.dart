@@ -140,7 +140,8 @@ class _NineGridViewState extends State<NineGridView> {
     double space = widget.space;
     double itemW;
     if (widget.type == NineGridType.weiBo &&
-        (itemCount == 1 || itemCount == 2 || itemCount == 4)) {
+        (itemCount == 1 || itemCount == 2)) {
+      // || itemCount == 4
       itemW = (width - space) / 2;
     } else {
       itemW = (width - space * 2) / 3;

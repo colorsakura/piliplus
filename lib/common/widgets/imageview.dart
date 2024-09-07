@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/badge.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/common/widgets/nine_grid_view.dart';
 import 'package:PiliPalaX/pages/preview/view.dart';
@@ -23,6 +24,8 @@ Widget image(
             ? 2 * imageWidth
             : imageWidth;
     imageHeight = imageWidth * min(ratioHW, maxRatio);
+  } else if (picArr.length == 2) {
+    imageWidth = imageHeight = 2 * imageWidth;
   }
   return NineGridView(
     type: NineGridType.weiBo,
@@ -46,15 +49,25 @@ Widget image(
           },
         );
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: NetworkImgLayer(
-          src: picArr[index]['img_src'],
-          width: imageWidth,
-          height: imageWidth,
-          origAspectRatio:
-              picArr[index]['img_width'] / picArr[index]['img_height'],
-        ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: NetworkImgLayer(
+              src: picArr[index]['img_src'],
+              width: imageWidth,
+              height: imageHeight,
+              origAspectRatio:
+                  picArr[index]['img_width'] / picArr[index]['img_height'],
+            ),
+          ),
+          if (picArr[index]['img_height'] / picArr[index]['img_width'] > 22 / 9)
+            const PBadge(
+              text: '长图',
+              right: 8,
+              bottom: 8,
+            ),
+        ],
       ),
     ),
   );

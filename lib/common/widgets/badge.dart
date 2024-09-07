@@ -50,7 +50,7 @@ class PBadge extends StatelessWidget {
     }
 
     EdgeInsets paddingStyle =
-        const EdgeInsets.symmetric(vertical: 1, horizontal: 6);
+        const EdgeInsets.symmetric(vertical: 1, horizontal: 3);
     double fontSize = 11;
     BorderRadius br = BorderRadius.circular(4);
 
