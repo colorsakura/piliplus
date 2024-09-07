@@ -14,6 +14,7 @@ import 'controller.dart';
 
 class VideoReplyReplyPanel extends StatefulWidget {
   const VideoReplyReplyPanel({
+    this.rcount,
     this.oid,
     this.rpid,
     this.closePanel,
@@ -22,6 +23,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.replyType,
     super.key,
   });
+  final dynamic rcount;
   final int? oid;
   final int? rpid;
   final Function? closePanel;
@@ -88,7 +90,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Text('评论详情'),
+                  Text('评论详情${widget.rcount > 0 ? '（${widget.rcount}）' : ''}'),
                   IconButton(
                     tooltip: '关闭',
                     icon: const Icon(Icons.close, size: 20),

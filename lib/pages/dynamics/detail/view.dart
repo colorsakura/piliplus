@@ -117,7 +117,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           titleSpacing: 0,
           centerTitle: false,
           title: Text(
-            '评论详情',
+            '评论详情${replyItem.rcount > 0 ? '（${replyItem.rcount}）' : ''}',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
@@ -425,7 +425,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   _dynamicDetailController.replyList[index],
                               showReplyRow: true,
                               replyLevel: '1',
-                              replyReply: (replyItem) => replyReply(replyItem),
+                              replyReply: replyReply,
                               replyType: ReplyType.values[replyType],
                               addReply: (replyItem) {
                                 _dynamicDetailController

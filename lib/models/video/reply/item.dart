@@ -31,6 +31,7 @@ class ReplyItemModel {
     this.isUp,
     this.isTop,
     this.cardLabel,
+    this.rcount,
   });
 
   int? rpid;
@@ -61,6 +62,7 @@ class ReplyItemModel {
   bool? isUp;
   bool? isTop = false;
   List? cardLabel;
+  dynamic rcount;
 
   ReplyItemModel.fromJson(Map<String, dynamic> json, upperMid,
       {isTopStatus = false}) {
@@ -99,6 +101,7 @@ class ReplyItemModel {
     cardLabel = json['card_label'] != null
         ? json['card_label'].map((e) => e['text_content']).toList()
         : [];
+    rcount = json['rcount'];
   }
 }
 

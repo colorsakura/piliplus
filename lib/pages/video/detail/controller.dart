@@ -153,13 +153,14 @@ class VideoDetailController extends GetxController
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
   }
 
-  showReplyReplyPanel() {
+  showReplyReplyPanel(dynamic rcount) {
     replyReplyBottomSheetCtr =
         scaffoldKey.currentState?.showBottomSheet((BuildContext context) {
       // SmartDialog.show(
       //     alignment: Alignment.bottomRight,
       //     builder: (context) {
       return VideoReplyReplyPanel(
+        rcount: rcount,
         oid: oid.value,
         rpid: fRpid,
         closePanel: () => {

@@ -127,7 +127,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
       videoDetailCtr.oid.value = replyItem.oid;
       videoDetailCtr.fRpid = replyItem.rpid!;
       videoDetailCtr.firstFloor = replyItem;
-      videoDetailCtr.showReplyReplyPanel();
+      videoDetailCtr.showReplyReplyPanel(replyItem.rcount);
     }
   }
 
