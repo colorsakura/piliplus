@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -25,7 +26,6 @@ class LivePage extends StatefulWidget {
 class _LivePageState extends State<LivePage>
     with AutomaticKeepAliveClientMixin {
   final LiveController _liveController = Get.put(LiveController());
-  late Future _futureBuilderFuture;
 
   @override
   bool get wantKeepAlive => true;
@@ -33,7 +33,6 @@ class _LivePageState extends State<LivePage>
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _liveController.queryLiveList('init');
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
@@ -44,7 +43,7 @@ class _LivePageState extends State<LivePage>
             _liveController.scrollController.position.maxScrollExtent - 200) {
           EasyThrottle.throttle('liveList', const Duration(milliseconds: 200),
               () {
-            _liveController.onLoad();
+            _liveController.onLoadMore();
           });
         }
 
@@ -64,7 +63,6 @@ class _LivePageState extends State<LivePage>
   @override
   void dispose() {
     _liveController.scrollController.removeListener(() {});
-    _liveController.scrollController.dispose();
     super.dispose();
   }
 
@@ -90,35 +88,20 @@ class _LivePageState extends State<LivePage>
               // 单列布局 EdgeInsets.zero
               padding:
                   const EdgeInsets.fromLTRB(0, StyleString.cardSpace, 0, 0),
-              sliver: FutureBuilder(
-                future: _futureBuilderFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.data == null) {
-                      return const SliverToBoxAdapter(child: SizedBox());
-                    }
-                    Map data = snapshot.data as Map;
-                    if (data['status']) {
-                      return SliverLayoutBuilder(
-                          builder: (context, boxConstraints) {
-                        return Obx(() => contentGrid(
-                            _liveController, _liveController.liveList));
-                      });
-                    } else {
-                      return HttpError(
-                        errMsg: data['msg'],
+              sliver: Obx(
+                () => _liveController.loadingState.value is Loading ||
+                        _liveController.loadingState.value is Success
+                    ? contentGrid(_liveController.loadingState.value)
+                    : HttpError(
+                        errMsg: _liveController.loadingState.value is Error
+                            ? (_liveController.loadingState.value as Error)
+                                .errMsg
+                            : '没有相关数据',
                         fn: () {
-                          setState(() {
-                            _futureBuilderFuture =
-                                _liveController.queryLiveList('init');
-                          });
-                        },
-                      );
-                    }
-                  } else {
-                    return contentGrid(_liveController, []);
-                  }
-                },
+                          _liveController.loadingState.value =
+                              LoadingState.loading();
+                          _liveController.onRefresh();
+                        }),
               ),
             ),
           ],
@@ -141,7 +124,7 @@ class _LivePageState extends State<LivePage>
     );
   }
 
-  Widget contentGrid(ctr, liveList) {
+  Widget contentGrid(LoadingState loadingState) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
         mainAxisSpacing: StyleString.cardSpace,
@@ -152,12 +135,12 @@ class _LivePageState extends State<LivePage>
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return liveList!.isNotEmpty
+          return loadingState is Success
               ? LiveCardV(
-                  liveItem: liveList[index],
+                  liveItem: loadingState.response[index],
                   longPress: () {
                     _liveController.popupDialog
-                        .add(_createPopupDialog(liveList[index]));
+                        .add(_createPopupDialog(loadingState.response[index]));
                     Overlay.of(context)
                         .insert(_liveController.popupDialog.last!);
                   },
@@ -165,7 +148,7 @@ class _LivePageState extends State<LivePage>
                 )
               : const VideoCardVSkeleton();
         },
-        childCount: liveList!.isNotEmpty ? liveList!.length : 10,
+        childCount: loadingState is Success ? loadingState.response.length : 10,
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+
 import '../models/live/item.dart';
 import '../models/live/room_info.dart';
 import '../models/live/room_info_h5.dart';
@@ -5,23 +7,21 @@ import 'api.dart';
 import 'init.dart';
 
 class LiveHttp {
-  static Future liveList(
+  static Future<LoadingState> liveList(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
     var res = await Request().get(Api.liveList,
         data: {'page': pn, 'page_size': 30, 'platform': 'web'});
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data']['list']
-            .map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
-            .toList()
-      };
+      List<LiveItemModel> list = res.data['data']['list']
+          .map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
+          .toList();
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 
