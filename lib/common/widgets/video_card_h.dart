@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import '../../http/search.dart';
@@ -41,11 +42,17 @@ class VideoCardH extends StatelessWidget {
     try {
       type = videoItem.type;
     } catch (_) {}
+    List<VideoCustomAction> actions =
+        VideoCustomActions(videoItem, context).actions;
     final String heroTag = Utils.makeHeroTag(aid);
     return Stack(children: [
       Semantics(
         label: Utils.videoItemSemantics(videoItem),
         excludeSemantics: true,
+        customSemanticsActions: <CustomSemanticsAction, void Function()>{
+          for (var item in actions)
+            CustomSemanticsAction(label: item.title): item.onTap!,
+        },
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onLongPress: () {
@@ -134,7 +141,7 @@ class VideoCardH extends StatelessWidget {
           child: VideoPopupMenu(
             size: 29,
             iconSize: 17,
-            videoItem: videoItem,
+            actions: actions,
           ),
         ),
     ]);
