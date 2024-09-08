@@ -1,21 +1,18 @@
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:flutter/material.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/bangumi.dart';
-import 'package:PiliPalaX/models/bangumi/list.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class BangumiController extends GetxController {
-  final ScrollController scrollController = ScrollController();
-  RxList<BangumiListItemModel> bangumiList = <BangumiListItemModel>[].obs;
-  RxList<BangumiListItemModel> bangumiFollowList = <BangumiListItemModel>[].obs;
-  int _currentPage = 1;
+class BangumiController extends CommonController {
   bool isLoadingMore = true;
   Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
   late int mid;
-  var userInfo;
+  dynamic userInfo;
+
+  Rx<LoadingState> followState = LoadingState.loading().obs;
 
   @override
   void onInit() {
@@ -25,49 +22,20 @@ class BangumiController extends GetxController {
       mid = userInfo.mid;
     }
     userLogin.value = userInfo != null;
-  }
 
-  Future queryBangumiListFeed({type = 'init'}) async {
-    if (type == 'init') {
-      _currentPage = 1;
-    }
-    var result = await BangumiHttp.bangumiList(page: _currentPage);
-    if (result['status']) {
-      if (type == 'init') {
-        bangumiList.value = result['data'].list;
-      } else {
-        bangumiList.addAll(result['data'].list);
-      }
-      _currentPage += 1;
-    } else {}
-    isLoadingMore = false;
-    return result;
-  }
-
-  Future onRefresh() async {
-    await queryBangumiListFeed();
-  }
-
-  // 上拉加载
-  Future onLoad() async {
-    queryBangumiListFeed(type: 'onLoad');
+    queryData();
+    queryBangumiFollow();
   }
 
   // 我的订阅
   Future queryBangumiFollow() async {
     userInfo = userInfo ?? userInfoCache.get('userInfoCache');
-    if (userInfo == null) {
-      return;
+    if (userInfo != null) {
+      followState.value = await BangumiHttp.bangumiFollow(mid: userInfo.mid);
     }
-    var result = await BangumiHttp.bangumiFollow(mid: userInfo.mid);
-    if (result['status']) {
-      bangumiFollowList.value = result['data'].list;
-    } else {}
-    return result;
   }
 
-  // 返回顶部并刷新
-  void animateToTop() {
-    scrollController.animToTop();
-  }
+  @override
+  Future<LoadingState> customGetData() =>
+      BangumiHttp.bangumiList(page: currentPage);
 }

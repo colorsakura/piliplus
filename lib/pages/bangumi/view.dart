@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,8 +25,6 @@ class BangumiPage extends StatefulWidget {
 class _BangumiPageState extends State<BangumiPage>
     with AutomaticKeepAliveClientMixin {
   final BangumiController _bangumiController = Get.put(BangumiController());
-  late Future? _futureBuilderFuture;
-  late Future? _futureBuilderFutureFollow;
 
   @override
   bool get wantKeepAlive => true;
@@ -37,16 +36,13 @@ class _BangumiPageState extends State<BangumiPage>
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    _futureBuilderFuture = _bangumiController.queryBangumiListFeed();
-    _futureBuilderFutureFollow = _bangumiController.queryBangumiFollow();
     _bangumiController.scrollController.addListener(
       () async {
         if (_bangumiController.scrollController.position.pixels >=
             _bangumiController.scrollController.position.maxScrollExtent -
                 200) {
           EasyThrottle.throttle('my-throttler', const Duration(seconds: 1), () {
-            _bangumiController.isLoadingMore = true;
-            _bangumiController.onLoad();
+            _bangumiController.onLoadMore();
           });
         }
 
@@ -66,7 +62,6 @@ class _BangumiPageState extends State<BangumiPage>
   @override
   void dispose() {
     _bangumiController.scrollController.removeListener(() {});
-    _bangumiController.scrollController.dispose();
     super.dispose();
   }
 
@@ -75,8 +70,8 @@ class _BangumiPageState extends State<BangumiPage>
     super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
-        await _bangumiController.queryBangumiListFeed();
-        return _bangumiController.queryBangumiFollow();
+        await _bangumiController.queryData();
+        await _bangumiController.queryBangumiFollow();
       },
       child: CustomScrollView(
         controller: _bangumiController.scrollController,
@@ -101,10 +96,7 @@ class _BangumiPageState extends State<BangumiPage>
                           IconButton(
                             tooltip: '刷新',
                             onPressed: () {
-                              setState(() {
-                                _futureBuilderFutureFollow =
-                                    _bangumiController.queryBangumiFollow();
-                              });
+                              _bangumiController.queryBangumiFollow();
                             },
                             icon: const Icon(
                               Icons.refresh,
@@ -116,57 +108,17 @@ class _BangumiPageState extends State<BangumiPage>
                     ),
                     SizedBox(
                       height: Grid.maxRowWidth * 1,
-                      child: FutureBuilder(
-                        future: _futureBuilderFutureFollow,
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            if (snapshot.data == null) {
-                              return const SizedBox();
-                            }
-                            Map data = snapshot.data as Map;
-                            List list = _bangumiController.bangumiFollowList;
-                            if (data['status']) {
-                              return Obx(
-                                () => list.isNotEmpty
-                                    ? ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: list.length,
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            width: Grid.maxRowWidth / 2,
-                                            height: Grid.maxRowWidth * 1,
-                                            margin: EdgeInsets.only(
-                                                left: StyleString.safeSpace,
-                                                right: index ==
-                                                        _bangumiController
-                                                                .bangumiFollowList
-                                                                .length -
-                                                            1
-                                                    ? StyleString.safeSpace
-                                                    : 0),
-                                            child: BangumiCardV(
-                                              bangumiItem: _bangumiController
-                                                  .bangumiFollowList[index],
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : const SizedBox(
-                                        child: Center(
-                                          child: Text('还没有追番'),
-                                        ),
-                                      ),
-                              );
-                            } else {
-                              return nil;
-                            }
-                          } else {
-                            return nil;
-                          }
-                        },
-                      ),
+                      child: Obx(() =>
+                          _bangumiController.followState.value is Empty
+                              ? const SizedBox(
+                                  child: Center(
+                                    child: Text('还没有追番'),
+                                  ),
+                                )
+                              : _bangumiController.followState.value is Success
+                                  ? _buildFollowList(_bangumiController
+                                      .followState.value as Success)
+                                  : const SizedBox()),
                     ),
                   ],
                 ),
@@ -190,29 +142,23 @@ class _BangumiPageState extends State<BangumiPage>
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(
                 StyleString.safeSpace, 0, StyleString.safeSpace, 0),
-            sliver: FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  Map data = snapshot.data as Map;
-                  if (data['status']) {
-                    return Obx(() => contentGrid(
-                        _bangumiController, _bangumiController.bangumiList));
-                  } else {
-                    return HttpError(
-                      errMsg: data['msg'],
-                      fn: () {
-                        setState(() {
-                          _futureBuilderFuture =
-                              _bangumiController.queryBangumiListFeed();
-                        });
-                      },
-                    );
-                  }
-                } else {
-                  return contentGrid(_bangumiController, []);
-                }
-              },
+            sliver: Obx(
+              () => _bangumiController.loadingState.value is Loading
+                  ? contentGrid([])
+                  : _bangumiController.loadingState.value is Success
+                      ? contentGrid(
+                          (_bangumiController.loadingState.value as Success)
+                              .response)
+                      : HttpError(
+                          errMsg: _bangumiController.loadingState.value is Error
+                              ? (_bangumiController.loadingState.value as Error)
+                                  .errMsg
+                              : '没有相关数据',
+                          fn: () {
+                            _bangumiController.loadingState.value =
+                                LoadingState.loading();
+                            _bangumiController.onRefresh();
+                          }),
             ),
           ),
         ],
@@ -220,7 +166,28 @@ class _BangumiPageState extends State<BangumiPage>
     );
   }
 
-  Widget contentGrid(ctr, bangumiList) {
+  Widget _buildFollowList(Success loadingState) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: loadingState.response.length,
+      itemBuilder: (context, index) {
+        return Container(
+          width: Grid.maxRowWidth / 2,
+          height: Grid.maxRowWidth * 1,
+          margin: EdgeInsets.only(
+              left: StyleString.safeSpace,
+              right: index == loadingState.response.length - 1
+                  ? StyleString.safeSpace
+                  : 0),
+          child: BangumiCardV(
+            bangumiItem: loadingState.response[index],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget contentGrid(List list) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
         // 行间距
@@ -234,11 +201,9 @@ class _BangumiPageState extends State<BangumiPage>
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return bangumiList!.isNotEmpty
-              ? BangumiCardV(bangumiItem: bangumiList[index])
-              : nil;
+          return list.isNotEmpty ? BangumiCardV(bangumiItem: list[index]) : nil;
         },
-        childCount: bangumiList!.isNotEmpty ? bangumiList!.length : 10,
+        childCount: list.isNotEmpty ? list.length : 10,
       ),
     );
   }
