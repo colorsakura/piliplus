@@ -782,27 +782,25 @@ class VideoHttp {
   }
 
   // 视频排行
-  static Future getRankVideoList(int rid) async {
-    try {
-      var rankApi = "${Api.getRankApi}?rid=$rid&type=all";
-      var res = await Request().get(rankApi);
-      if (res.data['code'] == 0) {
-        List<HotVideoItemModel> list = [];
-        List<int> blackMidsList = localCache
-            .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
-            .map<int>((e) => e as int)
-            .toList();
-        for (var i in res.data['data']['list']) {
-          if (!blackMidsList.contains(i['owner']['mid'])) {
-            list.add(HotVideoItemModel.fromJson(i));
-          }
+  static Future<LoadingState> getRankVideoList(int rid) async {
+    var rankApi = "${Api.getRankApi}?rid=$rid&type=all";
+    var res = await Request().get(rankApi);
+    if (res.data['code'] == 0) {
+      List<HotVideoItemModel> list = [];
+      List<int> blackMidsList =
+          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+      for (var i in res.data['data']['list']) {
+        if (!blackMidsList.contains(i['owner']['mid'])) {
+          list.add(HotVideoItemModel.fromJson(i));
         }
-        return {'status': true, 'data': list};
-      } else {
-        return {'status': false, 'data': [], 'msg': res.data['message']};
       }
-    } catch (err) {
-      return {'status': false, 'data': [], 'msg': err};
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
+    } else {
+      return LoadingState.error(res.data['message']);
     }
   }
 }

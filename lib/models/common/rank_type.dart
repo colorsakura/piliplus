@@ -81,7 +81,7 @@ List tabsConfig = [
     ),
     'label': '全站',
     'type': RandType.all,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '0'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 0), tag: '0'),
     'page': const ZonePage(rid: 0),
   },
   {
@@ -91,7 +91,7 @@ List tabsConfig = [
     ),
     'label': '国创',
     'type': RandType.creation,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '168'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 168), tag: '168'),
     'page': const ZonePage(rid: 168),
   },
   {
@@ -101,7 +101,7 @@ List tabsConfig = [
     ),
     'label': '动画',
     'type': RandType.animation,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '1'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 1), tag: '1'),
     'page': const ZonePage(rid: 1),
   },
   {
@@ -111,7 +111,7 @@ List tabsConfig = [
     ),
     'label': '音乐',
     'type': RandType.music,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '3'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 3), tag: '3'),
     'page': const ZonePage(rid: 3),
   },
   {
@@ -121,7 +121,7 @@ List tabsConfig = [
     ),
     'label': '舞蹈',
     'type': RandType.dance,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '129'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 129), tag: '129'),
     'page': const ZonePage(rid: 129),
   },
   {
@@ -131,7 +131,7 @@ List tabsConfig = [
     ),
     'label': '游戏',
     'type': RandType.game,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '4'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 4), tag: '4'),
     'page': const ZonePage(rid: 4),
   },
   {
@@ -141,7 +141,7 @@ List tabsConfig = [
     ),
     'label': '知识',
     'type': RandType.knowledge,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '36'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 36), tag: '36'),
     'page': const ZonePage(rid: 36),
   },
   {
@@ -151,7 +151,7 @@ List tabsConfig = [
     ),
     'label': '科技',
     'type': RandType.technology,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '188'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 188), tag: '188'),
     'page': const ZonePage(rid: 188),
   },
   {
@@ -161,7 +161,7 @@ List tabsConfig = [
     ),
     'label': '运动',
     'type': RandType.sport,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '234'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 234), tag: '234'),
     'page': const ZonePage(rid: 234),
   },
   {
@@ -171,7 +171,7 @@ List tabsConfig = [
     ),
     'label': '汽车',
     'type': RandType.car,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '223'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 223), tag: '223'),
     'page': const ZonePage(rid: 223),
   },
   {
@@ -181,7 +181,7 @@ List tabsConfig = [
     ),
     'label': '生活',
     'type': RandType.life,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '160'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 160), tag: '160'),
     'page': const ZonePage(rid: 160),
   },
   {
@@ -191,7 +191,7 @@ List tabsConfig = [
     ),
     'label': '美食',
     'type': RandType.food,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '211'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 211), tag: '211'),
     'page': const ZonePage(rid: 211),
   },
   {
@@ -201,7 +201,7 @@ List tabsConfig = [
     ),
     'label': '动物',
     'type': RandType.animal,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '217'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 217), tag: '217'),
     'page': const ZonePage(rid: 217),
   },
   {
@@ -211,7 +211,7 @@ List tabsConfig = [
     ),
     'label': '鬼畜',
     'type': RandType.madness,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '119'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 119), tag: '119'),
     'page': const ZonePage(rid: 119),
   },
   {
@@ -221,7 +221,7 @@ List tabsConfig = [
     ),
     'label': '时尚',
     'type': RandType.fashion,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '155'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 155), tag: '155'),
     'page': const ZonePage(rid: 155),
   },
   {
@@ -231,7 +231,7 @@ List tabsConfig = [
     ),
     'label': '娱乐',
     'type': RandType.entertainment,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '5'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 5), tag: '5'),
     'page': const ZonePage(rid: 5),
   },
   {
@@ -241,7 +241,7 @@ List tabsConfig = [
     ),
     'label': '影视',
     'type': RandType.film,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '181'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 181), tag: '181'),
     'page': const ZonePage(rid: 181),
   },
   {
@@ -251,7 +251,7 @@ List tabsConfig = [
     ),
     'label': '纪录',
     'type': RandType.documentary,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '177'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 177), tag: '177'),
     'page': const ZonePage(rid: 177),
   },
   {
@@ -261,7 +261,7 @@ List tabsConfig = [
     ),
     'label': '电影',
     'type': RandType.movie,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '23'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 23), tag: '23'),
     'page': const ZonePage(rid: 23),
   },
   {
@@ -271,7 +271,7 @@ List tabsConfig = [
     ),
     'label': '剧集',
     'type': RandType.teleplay,
-    'ctr': Get.put<ZoneController>(ZoneController(), tag: '11'),
+    'ctr': Get.put<ZoneController>(ZoneController(zoneID: 11), tag: '11'),
     'page': const ZonePage(rid: 11),
   }
 ];

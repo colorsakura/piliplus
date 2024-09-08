@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,6 @@ class ZonePage extends StatefulWidget {
 class _ZonePageState extends State<ZonePage>
     with AutomaticKeepAliveClientMixin {
   late ZoneController _zoneController;
-  Future? _futureBuilderFuture;
 
   @override
   bool get wantKeepAlive => true;
@@ -34,22 +34,14 @@ class _ZonePageState extends State<ZonePage>
   @override
   void initState() {
     super.initState();
-    _zoneController = Get.put(ZoneController(), tag: widget.rid.toString());
-    _futureBuilderFuture = _zoneController.queryRankFeed('init', widget.rid);
+    _zoneController =
+        Get.put(ZoneController(zoneID: widget.rid), tag: widget.rid.toString());
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
     _zoneController.scrollController.addListener(
       () {
-        if (_zoneController.scrollController.position.pixels >=
-            _zoneController.scrollController.position.maxScrollExtent - 200) {
-          if (!_zoneController.isLoadingMore) {
-            _zoneController.isLoadingMore = true;
-            _zoneController.onLoad();
-          }
-        }
-
         final ScrollDirection direction =
             _zoneController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
@@ -66,7 +58,6 @@ class _ZonePageState extends State<ZonePage>
   @override
   void dispose() {
     _zoneController.scrollController.removeListener(() {});
-    _zoneController.scrollController.dispose();
     super.dispose();
   }
 
@@ -82,71 +73,30 @@ class _ZonePageState extends State<ZonePage>
         slivers: [
           SliverPadding(
             // 单列布局 EdgeInsets.zero
-            padding: const EdgeInsets.fromLTRB(
-                StyleString.cardSpace, StyleString.safeSpace, 0, 0),
-            sliver: FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  Map data = snapshot.data as Map;
-                  if (data['status']) {
-                    return Obx(
-                      () => SliverGrid(
-                        gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                            mainAxisSpacing: StyleString.safeSpace,
-                            crossAxisSpacing: StyleString.safeSpace,
-                            maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                            childAspectRatio: StyleString.aspectRatio * 2.4,
-                            mainAxisExtent: 13),
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return VideoCardH(
-                            videoItem: _zoneController.videoList[index],
-                            showPubdate: true,
-                            longPress: () {
-                              _zoneController.popupDialog.add(
-                                  _createPopupDialog(
-                                      _zoneController.videoList[index]));
-                              Overlay.of(context)
-                                  .insert(_zoneController.popupDialog.last!);
-                            },
-                            longPressEnd: _removePopupDialog,
-                          );
-                        }, childCount: _zoneController.videoList.length),
-                      ),
-                    );
-                  } else {
-                    return HttpError(
-                      errMsg: data['msg'],
-                      fn: () {
-                        setState(() {
-                          _futureBuilderFuture =
-                              _zoneController.queryRankFeed('init', widget.rid);
-                        });
-                      },
-                    );
-                  }
-                } else {
-                  // 骨架屏
-                  return SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: StyleString.safeSpace,
-                        crossAxisSpacing: StyleString.safeSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.4,
-                        mainAxisExtent: 0),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return const VideoCardHSkeleton();
-                    }, childCount: 10),
-                  );
-                }
-              },
+            padding: EdgeInsets.fromLTRB(
+              StyleString.cardSpace,
+              StyleString.safeSpace,
+              0,
+              MediaQuery.of(context).padding.bottom + 10,
+            ),
+            sliver: Obx(
+              () => _zoneController.loadingState.value is Loading
+                  ? _buildSkeleton()
+                  : _zoneController.loadingState.value is Success
+                      ? _buildBody(
+                          _zoneController.loadingState.value as Success)
+                      : HttpError(
+                          errMsg: _zoneController.loadingState.value is Error
+                              ? (_zoneController.loadingState.value as Error)
+                                  .errMsg
+                              : '没有相关数据',
+                          fn: () {
+                            _zoneController.loadingState.value =
+                                LoadingState.loading();
+                            _zoneController.onRefresh();
+                          }),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).padding.bottom + 10,
-            ),
-          )
         ],
       ),
     );
@@ -162,6 +112,51 @@ class _ZonePageState extends State<ZonePage>
       builder: (context) => AnimatedDialog(
         closeFn: _removePopupDialog,
         videoItem: videoItem,
+      ),
+    );
+  }
+
+  Widget _buildSkeleton() {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+        mainAxisSpacing: StyleString.safeSpace,
+        crossAxisSpacing: StyleString.safeSpace,
+        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+        childAspectRatio: StyleString.aspectRatio * 2.4,
+        mainAxisExtent: 0,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return const VideoCardHSkeleton();
+        },
+        childCount: 10,
+      ),
+    );
+  }
+
+  Widget _buildBody(Success loadingState) {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+        mainAxisSpacing: StyleString.safeSpace,
+        crossAxisSpacing: StyleString.safeSpace,
+        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+        childAspectRatio: StyleString.aspectRatio * 2.4,
+        mainAxisExtent: 13,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return VideoCardH(
+            videoItem: loadingState.response[index],
+            showPubdate: true,
+            longPress: () {
+              _zoneController.popupDialog
+                  .add(_createPopupDialog(loadingState.response[index]));
+              Overlay.of(context).insert(_zoneController.popupDialog.last!);
+            },
+            longPressEnd: _removePopupDialog,
+          );
+        },
+        childCount: loadingState.response.length,
       ),
     );
   }
