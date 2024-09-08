@@ -24,61 +24,54 @@ class LiveCardV extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
-      child: GestureDetector(
+      child: InkWell(
+        onTap: () async {
+          Get.toNamed('/liveRoom?roomid=${liveItem.roomId}',
+              arguments: {'liveItem': liveItem, 'heroTag': heroTag});
+        },
         onLongPress: () {
           if (longPress != null) {
             longPress!();
           }
         },
-        // onLongPressEnd: (details) {
-        //   if (longPressEnd != null) {
-        //     longPressEnd!();
-        //   }
-        // },
-        child: InkWell(
-          onTap: () async {
-            Get.toNamed('/liveRoom?roomid=${liveItem.roomId}',
-                arguments: {'liveItem': liveItem, 'heroTag': heroTag});
-          },
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(StyleString.imgRadius),
-                child: AspectRatio(
-                  aspectRatio: StyleString.aspectRatio,
-                  child: LayoutBuilder(builder: (context, boxConstraints) {
-                    double maxWidth = boxConstraints.maxWidth;
-                    double maxHeight = boxConstraints.maxHeight;
-                    return Stack(
-                      children: [
-                        Hero(
-                          tag: heroTag,
-                          child: NetworkImgLayer(
-                            src: liveItem.cover!,
-                            width: maxWidth,
-                            height: maxHeight,
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.all(StyleString.imgRadius),
+              child: AspectRatio(
+                aspectRatio: StyleString.aspectRatio,
+                child: LayoutBuilder(builder: (context, boxConstraints) {
+                  double maxWidth = boxConstraints.maxWidth;
+                  double maxHeight = boxConstraints.maxHeight;
+                  return Stack(
+                    children: [
+                      Hero(
+                        tag: heroTag,
+                        child: NetworkImgLayer(
+                          src: liveItem.cover!,
+                          width: maxWidth,
+                          height: maxHeight,
+                        ),
+                      ),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: AnimatedOpacity(
+                          opacity: 1,
+                          duration: const Duration(milliseconds: 200),
+                          child: VideoStat(
+                            liveItem: liveItem,
                           ),
                         ),
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: AnimatedOpacity(
-                            opacity: 1,
-                            duration: const Duration(milliseconds: 200),
-                            child: VideoStat(
-                              liveItem: liveItem,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
-                ),
+                      ),
+                    ],
+                  );
+                }),
               ),
-              LiveContent(liveItem: liveItem)
-            ],
-          ),
+            ),
+            LiveContent(liveItem: liveItem)
+          ],
         ),
       ),
     );

@@ -22,7 +22,7 @@ List tabsConfig = [
     'label': '直播',
     'type': TabType.live,
     'ctr': Get.find<LiveController>,
-    'page': const LivePage(),
+    'page': const RcmdPage(tabType: TabType.live),
   },
   {
     'icon': const Icon(
@@ -32,7 +32,7 @@ List tabsConfig = [
     'label': '推荐',
     'type': TabType.rcmd,
     'ctr': Get.find<RcmdController>,
-    'page': const RcmdPage(),
+    'page': const RcmdPage(tabType: TabType.rcmd),
   },
   {
     'icon': const Icon(

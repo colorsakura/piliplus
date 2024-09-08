@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/common/tab_type.dart';
+import 'package:PiliPalaX/pages/common/popup_controller.dart';
+import 'package:PiliPalaX/pages/live/controller.dart';
+import 'package:PiliPalaX/pages/live/widgets/live_item.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,7 +21,9 @@ import '../../utils/grid.dart';
 import 'controller.dart';
 
 class RcmdPage extends StatefulWidget {
-  const RcmdPage({super.key});
+  const RcmdPage({super.key, required this.tabType});
+
+  final TabType tabType;
 
   @override
   State<RcmdPage> createState() => _RcmdPageState();
@@ -25,7 +31,10 @@ class RcmdPage extends StatefulWidget {
 
 class _RcmdPageState extends State<RcmdPage>
     with AutomaticKeepAliveClientMixin {
-  final RcmdController _rcmdController = Get.put(RcmdController());
+  late final PopupController _controller = Get.put(
+    widget.tabType == TabType.rcmd ? RcmdController() : LiveController(),
+    tag: widget.tabType.name,
+  );
 
   @override
   bool get wantKeepAlive => true;
@@ -37,17 +46,17 @@ class _RcmdPageState extends State<RcmdPage>
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    _rcmdController.scrollController.addListener(
+    _controller.scrollController.addListener(
       () {
-        if (_rcmdController.scrollController.position.pixels >=
-            _rcmdController.scrollController.position.maxScrollExtent - 200) {
+        if (_controller.scrollController.position.pixels >=
+            _controller.scrollController.position.maxScrollExtent - 200) {
           EasyThrottle.throttle(
               'my-throttler', const Duration(milliseconds: 200), () {
-            _rcmdController.onLoadMore();
+            _controller.onLoadMore();
           });
         }
         final ScrollDirection direction =
-            _rcmdController.scrollController.position.userScrollDirection;
+            _controller.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
           searchBarStream.add(true);
@@ -61,7 +70,7 @@ class _RcmdPageState extends State<RcmdPage>
 
   @override
   void dispose() {
-    _rcmdController.scrollController.removeListener(() {});
+    _controller.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -77,27 +86,26 @@ class _RcmdPageState extends State<RcmdPage>
       ),
       child: RefreshIndicator(
         onRefresh: () async {
-          await _rcmdController.onRefresh();
+          await _controller.onRefresh();
         },
         child: CustomScrollView(
-          controller: _rcmdController.scrollController,
+          controller: _controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(
               padding: const EdgeInsets.only(top: StyleString.cardSpace),
               sliver: Obx(
-                () => _rcmdController.loadingState.value is Loading ||
-                        _rcmdController.loadingState.value is Success
-                    ? contentGrid(_rcmdController.loadingState.value)
+                () => _controller.loadingState.value is Loading ||
+                        _controller.loadingState.value is Success
+                    ? contentGrid(_controller.loadingState.value)
                     : HttpError(
-                        errMsg: _rcmdController.loadingState.value is Error
-                            ? (_rcmdController.loadingState.value as Error)
-                                .errMsg
+                        errMsg: _controller.loadingState.value is Error
+                            ? (_controller.loadingState.value as Error).errMsg
                             : '没有相关数据',
                         fn: () {
-                          _rcmdController.loadingState.value =
+                          _controller.loadingState.value =
                               LoadingState.loading();
-                          _rcmdController.onRefresh();
+                          _controller.onRefresh();
                         }),
               ),
             ),
@@ -108,8 +116,8 @@ class _RcmdPageState extends State<RcmdPage>
   }
 
   void _removePopupDialog() {
-    _rcmdController.popupDialog.last?.remove();
-    _rcmdController.popupDialog.removeLast();
+    _controller.popupDialog.last?.remove();
+    _controller.popupDialog.removeLast();
   }
 
   OverlayEntry _createPopupDialog(videoItem) {
@@ -136,16 +144,27 @@ class _RcmdPageState extends State<RcmdPage>
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return loadingState is Success
-              ? VideoCardV(
-                  videoItem: loadingState.response[index],
-                  longPress: () {
-                    _rcmdController.popupDialog
-                        .add(_createPopupDialog(loadingState.response[index]));
-                    Overlay.of(context)
-                        .insert(_rcmdController.popupDialog.last!);
-                  },
-                  longPressEnd: _removePopupDialog,
-                )
+              ? widget.tabType == TabType.rcmd
+                  ? VideoCardV(
+                      videoItem: loadingState.response[index],
+                      longPress: () {
+                        _controller.popupDialog.add(
+                            _createPopupDialog(loadingState.response[index]));
+                        Overlay.of(context)
+                            .insert(_controller.popupDialog.last!);
+                      },
+                      longPressEnd: _removePopupDialog,
+                    )
+                  : LiveCardV(
+                      liveItem: loadingState.response[index],
+                      longPress: () {
+                        _controller.popupDialog.add(
+                            _createPopupDialog(loadingState.response[index]));
+                        Overlay.of(context)
+                            .insert(_controller.popupDialog.last!);
+                      },
+                      longPressEnd: _removePopupDialog,
+                    )
               : const VideoCardVSkeleton();
         },
         childCount: loadingState is Success ? loadingState.response.length : 10,

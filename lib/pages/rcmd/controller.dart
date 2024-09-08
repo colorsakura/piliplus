@@ -1,14 +1,12 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/home/rcmd/result.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:PiliPalaX/pages/common/popup_controller.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class RcmdController extends CommonController {
+class RcmdController extends PopupController {
   late bool enableSaveLastData;
   late String defaultRcmdType = 'web';
-  List<OverlayEntry?> popupDialog = <OverlayEntry?>[];
 
   @override
   void onInit() {
