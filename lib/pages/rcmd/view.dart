@@ -31,10 +31,9 @@ class RcmdPage extends StatefulWidget {
 
 class _RcmdPageState extends State<RcmdPage>
     with AutomaticKeepAliveClientMixin {
-  late final PopupController _controller = Get.put(
-    widget.tabType == TabType.rcmd ? RcmdController() : LiveController(),
-    tag: widget.tabType.name,
-  );
+  late final PopupController _controller = widget.tabType == TabType.rcmd
+      ? Get.put<RcmdController>(RcmdController())
+      : Get.put<LiveController>(LiveController());
 
   @override
   bool get wantKeepAlive => true;
