@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -480,7 +481,7 @@ class VideoIntroController extends GetxController {
       final RelatedController relatedCtr =
           Get.find<RelatedController>(tag: heroTag);
       relatedCtr.bvid = bvid;
-      relatedCtr.queryRelatedVideo();
+      relatedCtr.queryData();
     } catch (_) {}
     // 重新请求评论
     try {
@@ -614,13 +615,13 @@ class VideoIntroController extends GetxController {
     late RelatedController relatedCtr;
     try {
       relatedCtr = Get.find<RelatedController>(tag: heroTag);
-      if (relatedCtr.relatedVideoList.isEmpty) {
+      if (relatedCtr.loadingState.value is Empty) {
         SmartDialog.showToast('暂无相关视频，停止连播');
         return false;
       }
     } catch (_) {
       relatedCtr = Get.put(RelatedController(), tag: heroTag);
-      relatedCtr.queryRelatedVideo().then((value) {
+      relatedCtr.queryData().then((value) {
         if (value['status']) {
           playRelated();
         }
@@ -628,7 +629,8 @@ class VideoIntroController extends GetxController {
       return false;
     }
 
-    final HotVideoItemModel videoItem = relatedCtr.relatedVideoList[0];
+    final HotVideoItemModel videoItem =
+        (relatedCtr.loadingState.value as Success).response[0];
     try {
       if (videoItem.cid != null) {
         Get.offNamed('/video?bvid=${videoItem.bvid}&cid=${videoItem.cid}',

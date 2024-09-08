@@ -102,15 +102,10 @@ class _ZonePageState extends State<ZonePage>
     );
   }
 
-  void _removePopupDialog() {
-    _zoneController.popupDialog.last?.remove();
-    _zoneController.popupDialog.removeLast();
-  }
-
   OverlayEntry _createPopupDialog(videoItem) {
     return OverlayEntry(
       builder: (context) => AnimatedDialog(
-        closeFn: _removePopupDialog,
+        closeFn: _zoneController.removePopupDialog,
         videoItem: videoItem,
       ),
     );
@@ -153,7 +148,7 @@ class _ZonePageState extends State<ZonePage>
                   .add(_createPopupDialog(loadingState.response[index]));
               Overlay.of(context).insert(_zoneController.popupDialog.last!);
             },
-            longPressEnd: _removePopupDialog,
+            longPressEnd: _zoneController.removePopupDialog,
           );
         },
         childCount: loadingState.response.length,

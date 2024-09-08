@@ -275,7 +275,7 @@ class VideoHttp {
   }
 
   // 相关视频
-  static Future relatedVideoList({required String bvid}) async {
+  static Future<LoadingState> relatedVideoList({required String bvid}) async {
     var res = await Request().get(Api.relatedList, data: {'bvid': bvid});
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = [];
@@ -285,9 +285,13 @@ class VideoHttp {
           list.add(videoItem);
         }
       }
-      return {'status': true, 'data': list};
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
@@ -17,107 +18,80 @@ class RelatedVideoPanel extends StatefulWidget {
 
 class _RelatedVideoPanelState extends State<RelatedVideoPanel>
     with AutomaticKeepAliveClientMixin {
-  late RelatedController _relatedController;
-  late Future _futureBuilder;
+  late final RelatedController _relatedController =
+      Get.put(RelatedController(), tag: widget.heroTag);
 
   @override
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-    _relatedController = Get.put(RelatedController(), tag: widget.heroTag);
-    _futureBuilder = _relatedController.queryRelatedVideo();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return SliverPadding(
-        padding: const EdgeInsets.all(StyleString.safeSpace),
-        sliver: FutureBuilder(
-          future: _futureBuilder,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data == null) {
-                return const SliverToBoxAdapter(child: SizedBox());
-              }
-              if (snapshot.data!['status'] && snapshot.hasData) {
-                RxList relatedVideoList = _relatedController.relatedVideoList;
-                // 请求成功
-                return Obx(
-                  () => SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: StyleString.safeSpace,
-                        crossAxisSpacing: StyleString.safeSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.4,
-                        mainAxisExtent: 0),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      if (index == relatedVideoList.length) {
-                        return SizedBox(
-                            height: MediaQuery.of(context).padding.bottom);
-                      } else {
-                        return Material(
-                          child: VideoCardH(
-                            videoItem: relatedVideoList[index],
-                            showPubdate: true,
-                            longPress: () {
-                              try {
-                                _relatedController.popupDialog.add(
-                                    _createPopupDialog(_relatedController
-                                        .relatedVideoList[index]));
-                                Overlay.of(context).insert(
-                                    _relatedController.popupDialog.last!);
-                              } catch (err) {
-                                return {};
-                              }
-                            },
-                            longPressEnd: _removePopupDialog,
-                          ),
-                        );
-                      }
-                    }, childCount: relatedVideoList.length + 1),
+      padding: const EdgeInsets.all(StyleString.safeSpace),
+      sliver: Obx(() => _buildBody(_relatedController.loadingState.value)),
+    );
+  }
+
+  OverlayEntry _createPopupDialog(videoItem) {
+    return OverlayEntry(
+      builder: (BuildContext context) => AnimatedDialog(
+        closeFn: _relatedController.removePopupDialog,
+        videoItem: videoItem,
+      ),
+    );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? SliverGrid(
+            gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.safeSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.4,
+                mainAxisExtent: 0),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index == loadingState.response.length) {
+                return SizedBox(height: MediaQuery.of(context).padding.bottom);
+              } else {
+                return Material(
+                  child: VideoCardH(
+                    videoItem: loadingState.response[index],
+                    showPubdate: true,
+                    longPress: () {
+                      _relatedController.popupDialog.add(
+                          _createPopupDialog(loadingState.response[index]));
+                      Overlay.of(context)
+                          .insert(_relatedController.popupDialog.last!);
+                    },
+                    longPressEnd: _relatedController.removePopupDialog,
                   ),
                 );
-              } else {
-                // 请求错误
-                return HttpError(
-                    errMsg: '出错了',
-                    fn: () {
-                      _futureBuilder = _relatedController.queryRelatedVideo();
-                      _futureBuilder.then((value) => setState(() {}));
-                    });
               }
-            } else {
-              // 骨架屏
-              return SliverGrid(
+            }, childCount: loadingState.response.length + 1),
+          )
+        : loadingState is Error
+            ? HttpError(
+                errMsg: '出错了',
+                fn: () {
+                  _relatedController.loadingState.value =
+                      LoadingState.loading();
+                  _relatedController.queryData();
+                })
+            : SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
                     mainAxisSpacing: StyleString.safeSpace,
                     crossAxisSpacing: StyleString.safeSpace,
                     maxCrossAxisExtent: Grid.maxRowWidth * 2,
                     childAspectRatio: StyleString.aspectRatio * 2.4,
                     mainAxisExtent: 0),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return const VideoCardHSkeleton();
-                }, childCount: 5),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return const VideoCardHSkeleton();
+                  },
+                  childCount: 5,
+                ),
               );
-            }
-          },
-        ));
-  }
-
-  void _removePopupDialog() {
-    _relatedController.popupDialog.last?.remove();
-    _relatedController.popupDialog.removeLast();
-  }
-
-  OverlayEntry _createPopupDialog(videoItem) {
-    return OverlayEntry(
-      builder: (BuildContext context) => AnimatedDialog(
-        closeFn: _removePopupDialog,
-        videoItem: videoItem,
-      ),
-    );
   }
 }

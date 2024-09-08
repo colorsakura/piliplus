@@ -114,15 +114,10 @@ class _RcmdPageState extends State<RcmdPage>
     );
   }
 
-  void _removePopupDialog() {
-    _controller.popupDialog.last?.remove();
-    _controller.popupDialog.removeLast();
-  }
-
   OverlayEntry _createPopupDialog(videoItem) {
     return OverlayEntry(
       builder: (context) => AnimatedDialog(
-        closeFn: _removePopupDialog,
+        closeFn: _controller.removePopupDialog,
         videoItem: videoItem,
       ),
     );
@@ -152,7 +147,7 @@ class _RcmdPageState extends State<RcmdPage>
                         Overlay.of(context)
                             .insert(_controller.popupDialog.last!);
                       },
-                      longPressEnd: _removePopupDialog,
+                      longPressEnd: _controller.removePopupDialog,
                     )
                   : LiveCardV(
                       liveItem: loadingState.response[index],
@@ -162,7 +157,7 @@ class _RcmdPageState extends State<RcmdPage>
                         Overlay.of(context)
                             .insert(_controller.popupDialog.last!);
                       },
-                      longPressEnd: _removePopupDialog,
+                      longPressEnd: _controller.removePopupDialog,
                     )
               : const VideoCardVSkeleton();
         },

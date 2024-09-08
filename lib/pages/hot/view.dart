@@ -102,15 +102,10 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  void _removePopupDialog() {
-    _hotController.popupDialog.last?.remove();
-    _hotController.popupDialog.removeLast();
-  }
-
   OverlayEntry _createPopupDialog(videoItem) {
     return OverlayEntry(
       builder: (context) => AnimatedDialog(
-        closeFn: _removePopupDialog,
+        closeFn: _hotController.removePopupDialog,
         videoItem: videoItem,
       ),
     );
@@ -152,7 +147,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                   .add(_createPopupDialog(loadingState.response[index]));
               Overlay.of(context).insert(_hotController.popupDialog.last!);
             },
-            longPressEnd: _removePopupDialog,
+            longPressEnd: _hotController.removePopupDialog,
           );
         },
         childCount: loadingState.response.length,
