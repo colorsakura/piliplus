@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -34,8 +36,6 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   late String dynamicType;
   late int type;
   bool _isFabVisible = true;
-  late final Future _futureBuilderFuture;
-  late ScrollController scrollController;
   late AnimationController fabAnimationCtr;
 
   @override
@@ -46,31 +46,29 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     url = Get.parameters['url']!;
     dynamicType = Get.parameters['dynamicType']!;
     type = dynamicType == 'picture' ? 11 : 12;
-    _futureBuilderFuture = _htmlRenderCtr.reqHtml(id);
     fabAnimationCtr = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    fabAnimationCtr.forward();
     scrollListener();
   }
 
   @override
   void dispose() {
     fabAnimationCtr.dispose();
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _htmlRenderCtr.scrollController.removeListener(() {});
     super.dispose();
   }
 
   void scrollListener() {
-    scrollController = _htmlRenderCtr.scrollController;
-    scrollController.addListener(
+    _htmlRenderCtr.scrollController.addListener(
       () {
         // 分页加载
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_htmlRenderCtr.scrollController.position.pixels >=
+            _htmlRenderCtr.scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('replylist', const Duration(seconds: 2), () {
-            _htmlRenderCtr.queryReplyList(reqType: 'onLoad');
+            _htmlRenderCtr.onLoadMore();
           });
         }
 
@@ -85,7 +83,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
         // fab按钮
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _htmlRenderCtr.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           _showFab();
         } else if (direction == ScrollDirection.reverse) {
@@ -161,7 +159,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
                 onTap: () => {
-                  _htmlRenderCtr.reqHtml(id),
+                  _htmlRenderCtr.reqHtml(),
                 },
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
@@ -225,23 +223,17 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             double padding = max(context.width / 2 - Grid.maxRowWidth, 0);
             return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
-                  child: SingleChildScrollView(
-                controller: orientation == Orientation.portrait
-                    ? scrollController
-                    : ScrollController(),
-                child: Padding(
+                child: SingleChildScrollView(
+                  controller: orientation == Orientation.portrait
+                      ? _htmlRenderCtr.scrollController
+                      : ScrollController(),
+                  child: Padding(
                     padding: orientation == Orientation.portrait
                         ? EdgeInsets.symmetric(horizontal: padding)
                         : EdgeInsets.only(left: padding / 2),
-                    child: FutureBuilder(
-                      future: _futureBuilderFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done &&
-                            snapshot.hasData) {
-                          var data = snapshot.data;
-                          // fabAnimationCtr.forward();
-                          if (data != null && data['status']) {
-                            return Column(
+                    child: Obx(
+                      () => _htmlRenderCtr.loaded.value
+                          ? Column(
                               children: [
                                 Padding(
                                   padding:
@@ -306,35 +298,38 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                           .dividerColor
                                           .withOpacity(0.05)),
                                   replyHeader(),
-                                  replyList(),
+                                  Obx(
+                                    () => replyList(
+                                        _htmlRenderCtr.loadingState.value),
+                                  ),
                                 ]
                               ],
-                            );
-                          } else {
-                            return const Text('error');
-                          }
-                        } else {
-                          // 骨架屏
-                          return const SizedBox();
-                        }
-                      },
-                    )),
-              )),
+                            )
+                          : const SizedBox(),
+                    ),
+                  ),
+                ),
+              ),
               if (orientation == Orientation.landscape) ...[
                 VerticalDivider(
                     thickness: 8,
                     color: Theme.of(context).dividerColor.withOpacity(0.05)),
                 Expanded(
-                    child: SingleChildScrollView(
-                        controller: scrollController,
-                        child: Padding(
-                            padding: EdgeInsets.only(right: padding / 2),
-                            child: Column(
-                              children: [
-                                replyHeader(),
-                                replyList(),
-                              ],
-                            ))))
+                  child: SingleChildScrollView(
+                    controller: _htmlRenderCtr.scrollController,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: padding / 2),
+                      child: Column(
+                        children: [
+                          replyHeader(),
+                          Obx(
+                            () => replyList(_htmlRenderCtr.loadingState.value),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ]
             ]);
           }),
@@ -365,13 +360,18 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                       );
                     },
                   ).then(
-                    (value) => {
+                    (value) {
                       // 完成评论，数据添加
-                      if (value != null && value['data'] != null)
-                        {
-                          _htmlRenderCtr.replyList.insert(0, value['data']),
-                          _htmlRenderCtr.acount.value++
-                        }
+                      if (value != null && value['data'] != null) {
+                        _htmlRenderCtr.count.value++;
+                        List list = _htmlRenderCtr.loadingState.value is Success
+                            ? (_htmlRenderCtr.loadingState.value as Success)
+                                .response
+                            : [];
+                        list.insert(0, value['data']);
+                        _htmlRenderCtr.loadingState.value =
+                            LoadingState.success(list);
+                      }
                     },
                   );
                 },
@@ -385,54 +385,59 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     );
   }
 
-  Obx replyList() {
-    return Obx(
-      () => _htmlRenderCtr.replyList.isEmpty && _htmlRenderCtr.isLoadingMore
-          ? ListView.builder(
-              itemCount: 5,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return const VideoReplySkeleton();
-              },
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _htmlRenderCtr.replyList.length + 1,
-              itemBuilder: (context, index) {
-                if (index == _htmlRenderCtr.replyList.length) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom),
-                    height: MediaQuery.of(context).padding.bottom + 100,
-                    child: Center(
-                      child: Obx(
-                        () => Text(
-                          _htmlRenderCtr.noMore.value,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
+  Widget replyList(LoadingState loadingState) {
+    return loadingState is Success
+        ? ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: loadingState.response.length + 1,
+            itemBuilder: (context, index) {
+              if (index == loadingState.response.length) {
+                return Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom),
+                  height: MediaQuery.of(context).padding.bottom + 100,
+                  child: Center(
+                    child: Obx(
+                      () => Text(
+                        _htmlRenderCtr.noMore.value,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.outline,
                         ),
                       ),
                     ),
-                  );
-                } else {
-                  return ReplyItem(
-                    replyItem: _htmlRenderCtr.replyList[index],
-                    showReplyRow: true,
-                    replyLevel: '1',
-                    replyReply: (replyItem) => replyReply(replyItem),
-                    replyType: ReplyType.values[type],
-                    addReply: (replyItem) {
-                      _htmlRenderCtr.replyList[index].replies!.add(replyItem);
-                    },
-                  );
-                }
-              },
-            ),
-    );
+                  ),
+                );
+              } else {
+                return ReplyItem(
+                  replyItem: loadingState.response[index],
+                  showReplyRow: true,
+                  replyLevel: '1',
+                  replyReply: (replyItem) => replyReply(replyItem),
+                  replyType: ReplyType.values[type],
+                  addReply: (replyItem) {
+                    loadingState.response[index].replies!.add(replyItem);
+                  },
+                );
+              }
+            },
+          )
+        : loadingState is Error
+            ? HttpError(
+                errMsg: _htmlRenderCtr.loadingState.value is Error
+                    ? (_htmlRenderCtr.loadingState.value as Error).errMsg
+                    : '没有相关数据',
+                fn: _htmlRenderCtr.onReload,
+              )
+            : ListView.builder(
+                itemCount: 5,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return const VideoReplySkeleton();
+                },
+              );
   }
 
   Container replyHeader() {

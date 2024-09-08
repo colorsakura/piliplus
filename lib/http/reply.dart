@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:dio/dio.dart';
 
 import '../models/video/reply/data.dart';
@@ -8,7 +10,7 @@ import 'init.dart';
 
 class ReplyHttp {
   static final _dio = Dio();
-  static Future replyList({
+  static Future<LoadingState> replyList({
     required int oid,
     required String nextOffset,
     required int type,
@@ -23,27 +25,16 @@ class ReplyHttp {
         'mode': sort + 2, //2:按时间排序；3：按热度排序
       });
       if (res.data['code'] == 0) {
-        return {
-          'status': true,
-          'data': ReplyData.fromJson(res.data['data']),
-        };
+        return LoadingState.success(ReplyData.fromJson(res.data['data']));
       } else {
-        return {
-          'status': false,
-          'date': [],
-          'msg': res.data['message'],
-        };
+        return LoadingState.error(res.data['message']);
       }
     } catch (e) {
-      return {
-        'status': false,
-        'date': [],
-        'msg': e.toString(),
-      };
+      return LoadingState.error(e.toString());
     }
   }
 
-  static Future replyReplyList({
+  static Future<LoadingState> replyReplyList({
     required int oid,
     required String root,
     required int pageNum,
@@ -61,23 +52,12 @@ class ReplyHttp {
             'csrf': await Request.getCsrf(),
           });
       if (res.data['code'] == 0) {
-        return {
-          'status': true,
-          'data': ReplyReplyData.fromJson(res.data['data']),
-        };
+        return LoadingState.success(ReplyReplyData.fromJson(res.data['data']));
       } else {
-        return {
-          'status': false,
-          'date': [],
-          'msg': res.data['message'],
-        };
+        return LoadingState.error(res.data['message']);
       }
     } catch (e) {
-      return {
-        'status': false,
-        'date': [],
-        'msg': e.toString(),
-      };
+      return LoadingState.error(e.toString());
     }
   }
 

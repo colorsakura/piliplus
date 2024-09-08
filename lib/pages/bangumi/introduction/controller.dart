@@ -294,7 +294,7 @@ class BangumiIntroController extends GetxController {
       VideoReplyController videoReplyCtr =
           Get.find<VideoReplyController>(tag: Get.arguments['heroTag']);
       videoReplyCtr.aid = aid;
-      videoReplyCtr.queryReplyList(type: 'init');
+      videoReplyCtr.queryData();
     } catch (_) {}
   }
 

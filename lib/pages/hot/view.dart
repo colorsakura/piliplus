@@ -90,11 +90,8 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                               ? (_hotController.loadingState.value as Error)
                                   .errMsg
                               : '没有相关数据',
-                          fn: () {
-                            _hotController.loadingState.value =
-                                LoadingState.loading();
-                            _hotController.onRefresh();
-                          }),
+                          fn: _hotController.onReload,
+                        ),
             ),
           ),
         ],

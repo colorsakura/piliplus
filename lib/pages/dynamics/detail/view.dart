@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -32,7 +33,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     with TickerProviderStateMixin {
   late DynamicDetailController _dynamicDetailController;
   late AnimationController fabAnimationCtr;
-  Future? _futureBuilderFuture;
   late StreamController<bool> titleStreamC; // appBar title
   late ScrollController scrollController;
   bool _visibleTitle = false;
@@ -103,8 +103,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       _dynamicDetailController =
           Get.put(DynamicDetailController(oid, replyType), tag: oid.toString());
     }
-    _futureBuilderFuture =
-        _dynamicDetailController.queryReplyList(reqType: 'init');
   }
 
   // 查看二级评论
@@ -141,7 +139,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('replylist', const Duration(seconds: 2), () {
-            _dynamicDetailController.queryReplyList(reqType: 'onLoad');
+            _dynamicDetailController.onLoadMore();
           });
         }
 
@@ -185,7 +183,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     titleStreamC.close();
     fabAnimationCtr.dispose();
     scrollController.removeListener(() {});
-    scrollController.dispose();
     super.dispose();
   }
 
@@ -212,7 +209,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await _dynamicDetailController.queryReplyList(reqType: 'init');
+          await _dynamicDetailController.onRefresh();
         },
         child: Stack(
           children: [
@@ -231,7 +228,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         ),
                       ),
                       replyPersistentHeader(context),
-                      replyList(),
+                      Obx(
+                        () => replyList(
+                            _dynamicDetailController.loadingState.value),
+                      ),
                     ]
                         .map<Widget>((e) => SliverPadding(
                             padding: EdgeInsets.symmetric(horizontal: padding),
@@ -265,8 +265,12 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   padding: EdgeInsets.only(right: padding / 2),
                                   sliver: replyPersistentHeader(context)),
                               SliverPadding(
-                                  padding: EdgeInsets.only(right: padding / 2),
-                                  sliver: replyList()),
+                                padding: EdgeInsets.only(right: padding / 2),
+                                sliver: Obx(
+                                  () => replyList(_dynamicDetailController
+                                      .loadingState.value),
+                                ),
+                              ),
                             ]
                             // .map<Widget>(
                             //     (e) => SliverPadding(padding: padding, sliver: e))
@@ -306,14 +310,22 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         );
                       },
                     ).then(
-                      (value) => {
+                      (value) {
                         // 完成评论，数据添加
-                        if (value != null && value['data'] != null)
-                          {
-                            _dynamicDetailController.replyList
-                                .add(value['data']),
-                            _dynamicDetailController.acount.value++
+                        if (value != null && value['data'] != null) {
+                          _dynamicDetailController.count.value++;
+                          if (value != null && value['data'] != null) {
+                            List list = _dynamicDetailController
+                                    .loadingState.value is Success
+                                ? (_dynamicDetailController.loadingState.value
+                                        as Success)
+                                    .response
+                                : [];
+                            list.insert(0, value['data']);
+                            _dynamicDetailController.loadingState.value =
+                                LoadingState.success(list);
                           }
+                        }
                       },
                     );
                   },
@@ -353,8 +365,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Text(
-                    '${_dynamicDetailController.acount.value}条回复',
-                    key: ValueKey<int>(_dynamicDetailController.acount.value),
+                    '${_dynamicDetailController.count.value}条回复',
+                    key: ValueKey<int>(_dynamicDetailController.count.value),
                   ),
                 ),
               ),
@@ -378,85 +390,57 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     );
   }
 
-  FutureBuilder<dynamic> replyList() {
-    return FutureBuilder(
-      future: _futureBuilderFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          Map data = snapshot.data as Map;
-          if (snapshot.data['status']) {
-            // 请求成功
-            return Obx(
-              () => _dynamicDetailController.replyList.isEmpty &&
-                      _dynamicDetailController.isLoadingMore
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        return const VideoReplySkeleton();
-                      }, childCount: 8),
-                    )
-                  : SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index ==
-                              _dynamicDetailController.replyList.length) {
-                            return Container(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).padding.bottom),
-                              height:
-                                  MediaQuery.of(context).padding.bottom + 100,
-                              child: Center(
-                                child: Obx(
-                                  () => Text(
-                                    _dynamicDetailController.noMore.value,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return ReplyItem(
-                              replyItem:
-                                  _dynamicDetailController.replyList[index],
-                              showReplyRow: true,
-                              replyLevel: '1',
-                              replyReply: replyReply,
-                              replyType: ReplyType.values[replyType],
-                              addReply: (replyItem) {
-                                _dynamicDetailController
-                                    .replyList[index].replies!
-                                    .add(replyItem);
-                              },
-                            );
-                          }
-                        },
-                        childCount:
-                            _dynamicDetailController.replyList.length + 1,
+  Widget replyList(LoadingState loadingState) {
+    return loadingState is Success
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index == loadingState.response.length) {
+                  return Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                    height: MediaQuery.of(context).padding.bottom + 100,
+                    child: Center(
+                      child: Obx(
+                        () => Text(
+                          _dynamicDetailController.noMore.value,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
                       ),
                     ),
-            );
-          } else {
-            // 请求错误
-            return HttpError(
-              errMsg: data['msg'],
-              fn: () => setState(() {}),
-            );
-          }
-        } else {
-          // 骨架屏
-          return SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return const VideoReplySkeleton();
-            }, childCount: 8),
-          );
-        }
-      },
-    );
+                  );
+                } else {
+                  return ReplyItem(
+                    replyItem: loadingState.response[index],
+                    showReplyRow: true,
+                    replyLevel: '1',
+                    replyReply: replyReply,
+                    replyType: ReplyType.values[replyType],
+                    addReply: (replyItem) {
+                      // loadingState.response[index].replies!.add(replyItem);
+                    },
+                  );
+                }
+              },
+              childCount: loadingState.response.length + 1,
+            ),
+          )
+        : loadingState is Error
+            ? HttpError(
+                errMsg: loadingState.errMsg,
+                fn: _dynamicDetailController.onReload,
+              )
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return const VideoReplySkeleton();
+                  },
+                  childCount: 8,
+                ),
+              );
   }
 }
 

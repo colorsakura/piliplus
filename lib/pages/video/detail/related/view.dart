@@ -74,11 +74,8 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
         : loadingState is Error
             ? HttpError(
                 errMsg: '出错了',
-                fn: () {
-                  _relatedController.loadingState.value =
-                      LoadingState.loading();
-                  _relatedController.queryData();
-                })
+                fn: _relatedController.onReload,
+              )
             : SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
                     mainAxisSpacing: StyleString.safeSpace,

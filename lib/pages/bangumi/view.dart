@@ -70,7 +70,7 @@ class _BangumiPageState extends State<BangumiPage>
     super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
-        await _bangumiController.queryData();
+        await _bangumiController.onRefresh();
         await _bangumiController.queryBangumiFollow();
       },
       child: CustomScrollView(
@@ -154,11 +154,8 @@ class _BangumiPageState extends State<BangumiPage>
                               ? (_bangumiController.loadingState.value as Error)
                                   .errMsg
                               : '没有相关数据',
-                          fn: () {
-                            _bangumiController.loadingState.value =
-                                LoadingState.loading();
-                            _bangumiController.onRefresh();
-                          }),
+                          fn: _bangumiController.onReload,
+                        ),
             ),
           ),
         ],

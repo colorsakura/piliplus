@@ -101,11 +101,8 @@ class _RcmdPageState extends State<RcmdPage>
                         errMsg: _controller.loadingState.value is Error
                             ? (_controller.loadingState.value as Error).errMsg
                             : '没有相关数据',
-                        fn: () {
-                          _controller.loadingState.value =
-                              LoadingState.loading();
-                          _controller.onRefresh();
-                        }),
+                        fn: _controller.onReload,
+                      ),
               ),
             ),
           ],

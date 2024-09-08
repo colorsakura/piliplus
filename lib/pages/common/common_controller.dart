@@ -12,8 +12,12 @@ abstract class CommonController extends GetxController {
 
   Future<LoadingState> customGetData();
 
-  List? handleResponse(List currentList, List dataList) {
+  List? handleListResponse(List currentList, List dataList) {
     return null;
+  }
+
+  bool customHandleResponse(Success response) {
+    return false;
   }
 
   void handleSuccess(List currentList, List dataList) {}
@@ -23,17 +27,19 @@ abstract class CommonController extends GetxController {
     isLoading = true;
     LoadingState response = await customGetData();
     if (response is Success) {
+      if (!customHandleResponse(response)) {
+        List currentList = loadingState.value is Success
+            ? (loadingState.value as Success).response
+            : [];
+        List? handleList = handleListResponse(currentList, response.response);
+        loadingState.value = isRefresh
+            ? handleList != null
+                ? LoadingState.success(handleList)
+                : response
+            : LoadingState.success(currentList + response.response);
+        handleSuccess(currentList, response.response);
+      }
       currentPage++;
-      List currentList = loadingState.value is Success
-          ? (loadingState.value as Success).response
-          : [];
-      List? handleList = handleResponse(currentList, response.response);
-      loadingState.value = isRefresh
-          ? handleList != null
-              ? LoadingState.success(handleList)
-              : response
-          : LoadingState.success(currentList + response.response);
-      handleSuccess(currentList, response.response);
     } else {
       if (isRefresh) {
         loadingState.value = response;
@@ -53,6 +59,11 @@ abstract class CommonController extends GetxController {
 
   void animateToTop() {
     scrollController.animToTop();
+  }
+
+  void onReload() {
+    loadingState.value = LoadingState.loading();
+    queryData();
   }
 
   @override

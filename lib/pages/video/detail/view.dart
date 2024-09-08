@@ -148,8 +148,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 获取视频资源，初始化播放器
   Future<void> videoSourceInit() async {
     _futureBuilderFuture = videoDetailController.queryVideoUrl();
-    _videoReplyController.futureBuilderFuture =
-        _videoReplyController.queryReplyList(type: 'init');
+    _videoReplyController.queryData();
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
@@ -429,7 +428,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       if (value == 0) {
                         _introController.animToTop();
                       } else {
-                        _videoReplyController.animToTop();
+                        _videoReplyController.animateToTop();
                       }
                     }
                   },

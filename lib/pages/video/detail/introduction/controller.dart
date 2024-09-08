@@ -488,7 +488,7 @@ class VideoIntroController extends GetxController {
       final VideoReplyController videoReplyCtr =
           Get.find<VideoReplyController>(tag: heroTag);
       videoReplyCtr.aid = aid;
-      videoReplyCtr.queryReplyList(type: 'init');
+      videoReplyCtr.queryData();
     } catch (_) {}
     this.bvid = bvid;
     lastPlayCid.value = cid;
