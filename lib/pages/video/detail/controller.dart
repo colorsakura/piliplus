@@ -7,12 +7,9 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
 import 'package:PiliPalaX/models/video/play/url.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
@@ -64,10 +61,7 @@ class VideoDetailController extends GetxController
   Box setting = GStorage.setting;
 
   RxInt oid = 0.obs;
-  // 评论id 请求楼中楼评论使用
-  int fRpid = 0;
 
-  ReplyItemModel? firstFloor;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   RxString bgCover = ''.obs;
   PlPlayerController plPlayerController = PlPlayerController.getInstance();
@@ -151,29 +145,6 @@ class VideoDetailController extends GetxController
     cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
         defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
-  }
-
-  showReplyReplyPanel(dynamic rcount) {
-    replyReplyBottomSheetCtr =
-        scaffoldKey.currentState?.showBottomSheet((BuildContext context) {
-      // SmartDialog.show(
-      //     alignment: Alignment.bottomRight,
-      //     builder: (context) {
-      return VideoReplyReplyPanel(
-        rcount: rcount,
-        oid: oid.value,
-        rpid: fRpid,
-        closePanel: () => {
-          fRpid = 0,
-        },
-        firstFloor: firstFloor,
-        replyType: ReplyType.video,
-        source: 'videoDetail',
-      );
-    });
-    replyReplyBottomSheetCtr?.closed.then((value) {
-      fRpid = 0;
-    });
   }
 
   /// 更新画质、音质

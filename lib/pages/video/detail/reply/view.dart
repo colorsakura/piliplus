@@ -1,13 +1,13 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
@@ -121,14 +121,17 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
 
   // 展示二级回复
   void replyReply(replyItem) {
-    final VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: heroTag);
-    if (replyItem != null) {
-      videoDetailCtr.oid.value = replyItem.oid;
-      videoDetailCtr.fRpid = replyItem.rpid!;
-      videoDetailCtr.firstFloor = replyItem;
-      videoDetailCtr.showReplyReplyPanel(replyItem.rcount);
-    }
+    showBottomSheet(
+      context: context,
+      builder: (context) => VideoReplyReplyPanel(
+        rcount: replyItem.rcount,
+        oid: replyItem.oid,
+        rpid: replyItem.rpid,
+        firstFloor: replyItem,
+        replyType: ReplyType.video,
+        source: 'videoDetail',
+      ),
+    );
   }
 
   @override
@@ -311,7 +314,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     replyItem: loadingState.response[index],
                     showReplyRow: true,
                     replyLevel: replyLevel,
-                    replyReply: (replyItem) => replyReply(replyItem),
+                    replyReply: replyReply,
                     replyType: ReplyType.video,
                     onReply: () {
                       dynamic oid = loadingState.response[index].oid;

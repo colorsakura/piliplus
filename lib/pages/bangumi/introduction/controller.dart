@@ -19,7 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class BangumiIntroController extends GetxController {
   // 视频bvid
-  String bvid = Get.parameters['bvid']!;
+  String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
       ? int.parse(Get.parameters['seasonId']!)
       : null;
@@ -294,7 +294,7 @@ class BangumiIntroController extends GetxController {
       VideoReplyController videoReplyCtr =
           Get.find<VideoReplyController>(tag: Get.arguments['heroTag']);
       videoReplyCtr.aid = aid;
-      videoReplyCtr.queryData();
+      videoReplyCtr.onRefresh();
     } catch (_) {}
   }
 

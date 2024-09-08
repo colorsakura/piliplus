@@ -1,6 +1,5 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
@@ -51,6 +50,12 @@ class VideoReplyReplyController extends CommonController {
     }
     loadingState.value = LoadingState.success(replies);
     return true;
+  }
+
+  @override
+  Future queryData([bool isRefresh = true]) {
+    if (noMore.value == '没有更多了') return Future.value();
+    return super.queryData(isRefresh);
   }
 
   @override

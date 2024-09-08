@@ -76,19 +76,21 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
                 errMsg: '出错了',
                 fn: _relatedController.onReload,
               )
-            : SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.safeSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.4,
-                    mainAxisExtent: 0),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return const VideoCardHSkeleton();
-                  },
-                  childCount: 5,
-                ),
-              );
+            : loadingState is Empty
+                ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                : SliverGrid(
+                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                        mainAxisSpacing: StyleString.safeSpace,
+                        crossAxisSpacing: StyleString.safeSpace,
+                        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                        childAspectRatio: StyleString.aspectRatio * 2.4,
+                        mainAxisExtent: 0),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return const VideoCardHSkeleton();
+                      },
+                      childCount: 5,
+                    ),
+                  );
   }
 }

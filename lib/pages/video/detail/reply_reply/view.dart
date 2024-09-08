@@ -18,7 +18,6 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.rcount,
     this.oid,
     this.rpid,
-    this.closePanel,
     this.firstFloor,
     this.source,
     this.replyType,
@@ -27,7 +26,6 @@ class VideoReplyReplyPanel extends StatefulWidget {
   final dynamic rcount;
   final int? oid;
   final int? rpid;
-  final Function? closePanel;
   final ReplyItemModel? firstFloor;
   final String? source;
   final ReplyType? replyType;
@@ -44,9 +42,10 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   void initState() {
     super.initState();
     _videoReplyReplyController = Get.put(
-        VideoReplyReplyController(
-            widget.oid, widget.rpid.toString(), widget.replyType!),
-        tag: widget.rpid.toString());
+      VideoReplyReplyController(
+          widget.oid, widget.rpid.toString(), widget.replyType!),
+      tag: widget.rpid.toString(),
+    );
 
     // 上拉加载更多
     _videoReplyReplyController.scrollController.addListener(
@@ -64,11 +63,10 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     );
   }
 
-  void replyReply(replyItem) {}
-
   @override
   void dispose() {
     _videoReplyReplyController.scrollController.removeListener(() {});
+    Get.delete<VideoReplyReplyController>(tag: widget.rpid.toString());
     super.dispose();
   }
 
@@ -91,10 +89,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                   IconButton(
                     tooltip: '关闭',
                     icon: const Icon(Icons.close, size: 20),
-                    onPressed: () {
-                      widget.closePanel!();
-                      Navigator.pop(context);
-                    },
+                    onPressed: Get.back,
                   ),
                 ],
               ),
@@ -123,7 +118,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                           // _videoReplyReplyController.replyList.add(replyItem);
                         },
                         replyType: widget.replyType,
-                        replyReply: replyReply,
+                        replyReply: () {},
                         needDivider: false,
                         onReply: () {
                           _onReply(widget.firstFloor);
@@ -209,7 +204,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                       // _videoReplyReplyController.replyList.add(replyItem);
                     },
                     replyType: widget.replyType,
-                    replyReply: replyReply,
+                    replyReply: () {},
                     needDivider: false,
                     onReply: () {
                       _onReply(_videoReplyReplyController.root);
