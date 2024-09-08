@@ -1,6 +1,6 @@
 import 'dart:developer';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hive/hive.dart';
 import '../common/constants.dart';
@@ -34,7 +34,8 @@ class VideoHttp {
   static Box userInfoCache = GStorage.userInfo;
 
   // 首页推荐视频
-  static Future rcmdVideoList({required int ps, required int freshIdx}) async {
+  static Future<LoadingState> rcmdVideoList(
+      {required int ps, required int freshIdx}) async {
     var res = await Request().get(
       Api.recommendListWeb,
       data: {
@@ -49,10 +50,8 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemModel> list = [];
-      List<int> blackMidsList = localCache
-          .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
-          .map<int>((e) => e as int)
-          .toList();
+      List<int> blackMidsList =
+          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
       for (var i in res.data['data']['item']) {
         //过滤掉live与ad，以及拉黑用户
         if (i['goto'] == 'av' &&
@@ -64,14 +63,18 @@ class VideoHttp {
           }
         }
       }
-      return {'status': true, 'data': list};
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 
   // 添加额外的loginState变量模拟未登录状态
-  static Future rcmdVideoListApp(
+  static Future<LoadingState> rcmdVideoListApp(
       {bool loginStatus = true, required int freshIdx}) async {
     var data = {
       'access_key': loginStatus
@@ -138,10 +141,8 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemAppModel> list = [];
-      List<int> blackMidsList = localCache
-          .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
-          .map<int>((e) => e as int)
-          .toList();
+      List<int> blackMidsList =
+          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
       for (var i in res.data['data']['items']) {
         // 屏蔽推广和拉黑用户
         if (i['card_goto'] != 'ad_av' &&
@@ -156,36 +157,41 @@ class VideoHttp {
           }
         }
       }
-      return {'status': true, 'data': list};
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 
   // 最热视频
-  static Future hotVideoList({required int pn, required int ps}) async {
-    try {
-      var res = await Request().get(
-        Api.hotList,
-        data: {'pn': pn, 'ps': ps},
-      );
-      if (res.data['code'] == 0) {
-        List<HotVideoItemModel> list = [];
-        List<int> blackMidsList = localCache
-            .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
-            .map<int>((e) => e as int)
-            .toList();
-        for (var i in res.data['data']['list']) {
-          if (!blackMidsList.contains(i['owner']['mid'])) {
-            list.add(HotVideoItemModel.fromJson(i));
-          }
+  static Future<LoadingState> hotVideoList(
+      {required int pn, required int ps}) async {
+    var res = await Request().get(
+      Api.hotList,
+      data: {'pn': pn, 'ps': ps},
+    );
+    if (res.data['code'] == 0) {
+      List<HotVideoItemModel> list = [];
+      List<int> blackMidsList = localCache
+          .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
+          .map<int>((e) => e as int)
+          .toList();
+      for (var i in res.data['data']['list']) {
+        if (!blackMidsList.contains(i['owner']['mid'])) {
+          list.add(HotVideoItemModel.fromJson(i));
         }
-        return {'status': true, 'data': list};
-      } else {
-        return {'status': false, 'data': [], 'msg': res.data['message']};
       }
-    } catch (err) {
-      return {'status': false, 'data': [], 'msg': err};
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
+    } else {
+      return LoadingState.error(res.data['message']);
     }
   }
 

@@ -132,57 +132,51 @@ class VideoCardV extends StatelessWidget {
         label: Utils.videoItemSemantics(videoItem),
         excludeSemantics: true,
         child: Card(
-            clipBehavior: Clip.hardEdge,
-            margin: EdgeInsets.zero,
-            child: GestureDetector(
-              onLongPress: () {
-                if (longPress != null) {
-                  longPress!();
-                }
-              },
-              // onLongPressEnd: (details) {
-              //   if (longPressEnd != null) {
-              //     longPressEnd!();
-              //   }
-              // },
-              child: InkWell(
-                onTap: () async => onPushDetail(heroTag),
-                child: Column(
-                  children: [
-                    AspectRatio(
-                      aspectRatio: StyleString.aspectRatio,
-                      child: LayoutBuilder(builder: (context, boxConstraints) {
-                        double maxWidth = boxConstraints.maxWidth;
-                        double maxHeight = boxConstraints.maxHeight;
-                        return Stack(
-                          children: [
-                            Hero(
-                              tag: heroTag,
-                              child: NetworkImgLayer(
-                                src: videoItem.pic,
-                                width: maxWidth,
-                                height: maxHeight,
-                              ),
-                            ),
-                            if (videoItem.duration > 0)
-                              PBadge(
-                                bottom: 6,
-                                right: 7,
-                                size: 'small',
-                                type: 'gray',
-                                text: Utils.timeFormat(videoItem.duration),
-                                // semanticsLabel:
-                                //     '时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}',
-                              )
-                          ],
-                        );
-                      }),
-                    ),
-                    VideoContent(videoItem: videoItem)
-                  ],
+          clipBehavior: Clip.hardEdge,
+          margin: EdgeInsets.zero,
+          child: InkWell(
+            onTap: () async => onPushDetail(heroTag),
+            onLongPress: () {
+              if (longPress != null) {
+                longPress!();
+              }
+            },
+            child: Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: StyleString.aspectRatio,
+                  child: LayoutBuilder(builder: (context, boxConstraints) {
+                    double maxWidth = boxConstraints.maxWidth;
+                    double maxHeight = boxConstraints.maxHeight;
+                    return Stack(
+                      children: [
+                        Hero(
+                          tag: heroTag,
+                          child: NetworkImgLayer(
+                            src: videoItem.pic,
+                            width: maxWidth,
+                            height: maxHeight,
+                          ),
+                        ),
+                        if (videoItem.duration > 0)
+                          PBadge(
+                            bottom: 6,
+                            right: 7,
+                            size: 'small',
+                            type: 'gray',
+                            text: Utils.timeFormat(videoItem.duration),
+                            // semanticsLabel:
+                            //     '时长${Utils.durationReadFormat(Utils.timeFormat(videoItem.duration))}',
+                          )
+                      ],
+                    );
+                  }),
                 ),
-              ),
-            )),
+                VideoContent(videoItem: videoItem)
+              ],
+            ),
+          ),
+        ),
       ),
       if (videoItem.goto == 'av')
         Positioned(

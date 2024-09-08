@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -23,8 +24,6 @@ class HotPage extends StatefulWidget {
 
 class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   final HotController _hotController = Get.put(HotController());
-  List videoList = [];
-  Future? _futureBuilderFuture;
 
   @override
   bool get wantKeepAlive => true;
@@ -32,7 +31,6 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _hotController.queryHotFeed('init');
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
@@ -41,10 +39,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
       () {
         if (_hotController.scrollController.position.pixels >=
             _hotController.scrollController.position.maxScrollExtent - 200) {
-          if (!_hotController.isLoadingMore) {
-            _hotController.isLoadingMore = true;
-            _hotController.onLoad();
-          }
+          _hotController.onLoadMore();
         }
 
         final ScrollDirection direction =
@@ -63,7 +58,6 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   @override
   void dispose() {
     _hotController.scrollController.removeListener(() {});
-    _hotController.scrollController.dispose();
     super.dispose();
   }
 
@@ -80,69 +74,29 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
         slivers: [
           SliverPadding(
             // 单列布局 EdgeInsets.zero
-            padding: const EdgeInsets.fromLTRB(StyleString.safeSpace,
-                StyleString.safeSpace - 5, StyleString.safeSpace, 0),
-            sliver: FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  Map data = snapshot.data as Map;
-                  if (data['status']) {
-                    return Obx(
-                      () => SliverGrid(
-                        gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                            mainAxisSpacing: StyleString.safeSpace,
-                            crossAxisSpacing: StyleString.safeSpace,
-                            maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                            childAspectRatio: StyleString.aspectRatio * 2.4,
-                            mainAxisExtent: 0),
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return VideoCardH(
-                            videoItem: _hotController.videoList[index],
-                            showPubdate: true,
-                            longPress: () {
-                              _hotController.popupDialog.add(_createPopupDialog(
-                                  _hotController.videoList[index]));
-                              Overlay.of(context)
-                                  .insert(_hotController.popupDialog.last!);
-                            },
-                            longPressEnd: _removePopupDialog,
-                          );
-                        }, childCount: _hotController.videoList.length),
-                      ),
-                    );
-                  } else {
-                    return HttpError(
-                      errMsg: data['msg'],
-                      fn: () {
-                        setState(() {
-                          _futureBuilderFuture =
-                              _hotController.queryHotFeed('init');
-                        });
-                      },
-                    );
-                  }
-                } else {
-                  // 骨架屏
-                  return SliverGrid(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        mainAxisSpacing: StyleString.cardSpace,
-                        crossAxisSpacing: StyleString.cardSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.4),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return const VideoCardHSkeleton();
-                    }, childCount: 10),
-                  );
-                }
-              },
+            padding: EdgeInsets.fromLTRB(
+              StyleString.safeSpace,
+              StyleString.safeSpace - 5,
+              StyleString.safeSpace,
+              MediaQuery.of(context).padding.bottom + 10,
+            ),
+            sliver: Obx(
+              () => _hotController.loadingState.value is Loading
+                  ? _buildSkeleton()
+                  : _hotController.loadingState.value is Success
+                      ? _buildBody(_hotController.loadingState.value as Success)
+                      : HttpError(
+                          errMsg: _hotController.loadingState.value is Error
+                              ? (_hotController.loadingState.value as Error)
+                                  .errMsg
+                              : '没有相关数据',
+                          fn: () {
+                            _hotController.loadingState.value =
+                                LoadingState.loading();
+                            _hotController.onRefresh();
+                          }),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).padding.bottom + 10,
-            ),
-          )
         ],
       ),
     );
@@ -158,6 +112,50 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
       builder: (context) => AnimatedDialog(
         closeFn: _removePopupDialog,
         videoItem: videoItem,
+      ),
+    );
+  }
+
+  Widget _buildSkeleton() {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        mainAxisSpacing: StyleString.cardSpace,
+        crossAxisSpacing: StyleString.cardSpace,
+        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+        childAspectRatio: StyleString.aspectRatio * 2.4,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return const VideoCardHSkeleton();
+        },
+        childCount: 10,
+      ),
+    );
+  }
+
+  Widget _buildBody(Success loadingState) {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+        mainAxisSpacing: StyleString.safeSpace,
+        crossAxisSpacing: StyleString.safeSpace,
+        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+        childAspectRatio: StyleString.aspectRatio * 2.4,
+        mainAxisExtent: 0,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return VideoCardH(
+            videoItem: loadingState.response[index],
+            showPubdate: true,
+            longPress: () {
+              _hotController.popupDialog
+                  .add(_createPopupDialog(loadingState.response[index]));
+              Overlay.of(context).insert(_hotController.popupDialog.last!);
+            },
+            longPressEnd: _removePopupDialog,
+          );
+        },
+        childCount: loadingState.response.length,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -25,7 +26,6 @@ class RcmdPage extends StatefulWidget {
 class _RcmdPageState extends State<RcmdPage>
     with AutomaticKeepAliveClientMixin {
   final RcmdController _rcmdController = Get.put(RcmdController());
-  late Future _futureBuilderFuture;
 
   @override
   bool get wantKeepAlive => true;
@@ -33,23 +33,21 @@ class _RcmdPageState extends State<RcmdPage>
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _rcmdController.queryRcmdFeed('init');
-    ScrollController scrollController = _rcmdController.scrollController;
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    scrollController.addListener(
+    _rcmdController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_rcmdController.scrollController.position.pixels >=
+            _rcmdController.scrollController.position.maxScrollExtent - 200) {
           EasyThrottle.throttle(
               'my-throttler', const Duration(milliseconds: 200), () {
-            _rcmdController.onLoad();
+            _rcmdController.onLoadMore();
           });
         }
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            _rcmdController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
           searchBarStream.add(true);
@@ -64,7 +62,6 @@ class _RcmdPageState extends State<RcmdPage>
   @override
   void dispose() {
     _rcmdController.scrollController.removeListener(() {});
-    _rcmdController.scrollController.dispose();
     super.dispose();
   }
 
@@ -81,44 +78,27 @@ class _RcmdPageState extends State<RcmdPage>
       child: RefreshIndicator(
         onRefresh: () async {
           await _rcmdController.onRefresh();
-          await Future.delayed(const Duration(milliseconds: 300));
         },
         child: CustomScrollView(
           controller: _rcmdController.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(
-              padding:
-                  const EdgeInsets.fromLTRB(0, StyleString.cardSpace, 0, 0),
-              sliver: FutureBuilder(
-                future: _futureBuilderFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.data != null) {
-                    Map data = snapshot.data as Map;
-                    if (data['status']) {
-                      return Obx(
-                        () => contentGrid(
-                            _rcmdController,
-                            _rcmdController.videoList.isEmpty
-                                ? []
-                                : _rcmdController.videoList),
-                      );
-                    } else {
-                      return HttpError(
-                        errMsg: data == null ? "" : data['msg'],
+              padding: const EdgeInsets.only(top: StyleString.cardSpace),
+              sliver: Obx(
+                () => _rcmdController.loadingState.value is Loading ||
+                        _rcmdController.loadingState.value is Success
+                    ? contentGrid(_rcmdController.loadingState.value)
+                    : HttpError(
+                        errMsg: _rcmdController.loadingState.value is Error
+                            ? (_rcmdController.loadingState.value as Error)
+                                .errMsg
+                            : '没有相关数据',
                         fn: () {
-                          setState(() {
-                            _futureBuilderFuture =
-                                _rcmdController.queryRcmdFeed('init');
-                          });
-                        },
-                      );
-                    }
-                  } else {
-                    return contentGrid(_rcmdController, []);
-                  }
-                },
+                          _rcmdController.loadingState.value =
+                              LoadingState.loading();
+                          _rcmdController.onRefresh();
+                        }),
               ),
             ),
           ],
@@ -141,7 +121,7 @@ class _RcmdPageState extends State<RcmdPage>
     );
   }
 
-  Widget contentGrid(ctr, videoList) {
+  Widget contentGrid(LoadingState loadingState) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
         // 行间距
@@ -155,12 +135,12 @@ class _RcmdPageState extends State<RcmdPage>
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return videoList!.isNotEmpty
+          return loadingState is Success
               ? VideoCardV(
-                  videoItem: videoList[index],
+                  videoItem: loadingState.response[index],
                   longPress: () {
                     _rcmdController.popupDialog
-                        .add(_createPopupDialog(videoList[index]));
+                        .add(_createPopupDialog(loadingState.response[index]));
                     Overlay.of(context)
                         .insert(_rcmdController.popupDialog.last!);
                   },
@@ -168,7 +148,7 @@ class _RcmdPageState extends State<RcmdPage>
                 )
               : const VideoCardVSkeleton();
         },
-        childCount: videoList!.isNotEmpty ? videoList!.length : 10,
+        childCount: loadingState is Success ? loadingState.response.length : 10,
       ),
     );
   }
