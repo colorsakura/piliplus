@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,8 +32,6 @@ class _SearchPanelState extends State<SearchPanel>
     with AutomaticKeepAliveClientMixin {
   late SearchPanelController _searchPanelController;
 
-  late Future _futureBuilderFuture;
-
   @override
   bool get wantKeepAlive => true;
 
@@ -51,17 +50,15 @@ class _SearchPanelState extends State<SearchPanel>
           _searchPanelController.scrollController.position.maxScrollExtent -
               100) {
         EasyThrottle.throttle('history', const Duration(seconds: 1), () {
-          _searchPanelController.onSearch(type: 'onLoad');
+          _searchPanelController.onLoadMore();
         });
       }
     });
-    _futureBuilderFuture = _searchPanelController.onSearch();
   }
 
   @override
   void dispose() {
     _searchPanelController.scrollController.removeListener(() {});
-    _searchPanelController.scrollController.dispose();
     super.dispose();
   }
 
@@ -72,101 +69,86 @@ class _SearchPanelState extends State<SearchPanel>
       onRefresh: () async {
         await _searchPanelController.onRefresh();
       },
-      child: FutureBuilder(
-        future: _futureBuilderFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data != null) {
-              Map data = snapshot.data;
-              var ctr = _searchPanelController;
-              RxList list = ctr.resultList;
-              if (data['status']) {
-                return Obx(() {
-                  list.length;
-                  switch (widget.searchType) {
-                    case SearchType.video:
-                      return SearchVideoPanel(
-                        ctr: _searchPanelController,
-                        // ignore: invalid_use_of_protected_member
-                        list: list.value,
-                      );
-                    case SearchType.media_bangumi:
-                      return searchBangumiPanel(context, ctr, list);
-                    case SearchType.bili_user:
-                      return searchUserPanel(context, ctr, list);
-                    case SearchType.live_room:
-                      return searchLivePanel(context, ctr, list);
-                    case SearchType.article:
-                      return searchArticlePanel(context, ctr, list);
-                    default:
-                      return const SizedBox();
-                  }
-                });
-              } else {
-                return CustomScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  slivers: [
-                    HttpError(
-                      errMsg: data['msg'],
-                      fn: () {
-                        setState(() {
-                          _futureBuilderFuture =
-                              _searchPanelController.onSearch();
-                        });
-                      },
-                    ),
-                  ],
-                );
-              }
-            } else {
-              return CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                slivers: [
-                  HttpError(
-                    errMsg: '没有相关数据',
-                    fn: () {
-                      setState(() {
-                        _futureBuilderFuture =
-                            _searchPanelController.onSearch();
-                      });
-                    },
-                  ),
-                ],
-              );
-            }
-          } else {
-            // 骨架屏
-            return CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverGrid(
-                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                          mainAxisSpacing: StyleString.safeSpace,
-                          crossAxisSpacing: StyleString.safeSpace,
-                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                          childAspectRatio: StyleString.aspectRatio * 2.4,
-                          mainAxisExtent: 0),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          switch (widget.searchType) {
-                            case SearchType.video:
-                              return const VideoCardHSkeleton();
-                            case SearchType.media_bangumi:
-                              return const MediaBangumiSkeleton();
-                            case SearchType.bili_user:
-                              return const VideoCardHSkeleton();
-                            case SearchType.live_room:
-                              return const VideoCardHSkeleton();
-                            default:
-                              return const VideoCardHSkeleton();
-                          }
-                        },
-                        childCount: 15,
-                      ))
-                ]);
-          }
-        },
-      ),
+      child: Obx(() => _buildBody(_searchPanelController.loadingState.value)),
     );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    if (loadingState is Success) {
+      switch (widget.searchType) {
+        case SearchType.video:
+          return SearchVideoPanel(
+            ctr: _searchPanelController,
+            list: loadingState.response,
+          );
+        case SearchType.media_bangumi:
+          return searchBangumiPanel(
+            context,
+            _searchPanelController,
+            loadingState.response,
+          );
+        case SearchType.bili_user:
+          return searchUserPanel(
+            context,
+            _searchPanelController,
+            loadingState.response,
+          );
+        case SearchType.live_room:
+          return searchLivePanel(
+            context,
+            _searchPanelController,
+            loadingState.response,
+          );
+        case SearchType.article:
+          return searchArticlePanel(
+            context,
+            _searchPanelController,
+            loadingState.response,
+          );
+        default:
+          return const SizedBox();
+      }
+    } else if (loadingState is Loading) {
+      return CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.safeSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.4,
+                mainAxisExtent: 0),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                switch (widget.searchType) {
+                  case SearchType.video:
+                    return const VideoCardHSkeleton();
+                  case SearchType.media_bangumi:
+                    return const MediaBangumiSkeleton();
+                  case SearchType.bili_user:
+                    return const VideoCardHSkeleton();
+                  case SearchType.live_room:
+                    return const VideoCardHSkeleton();
+                  default:
+                    return const VideoCardHSkeleton();
+                }
+              },
+              childCount: 15,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return CustomScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [
+          HttpError(
+            errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
+            fn: _searchPanelController.onReload,
+          ),
+        ],
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:hive/hive.dart';
 import '../models/bangumi/info.dart';
 import '../models/common/search_type.dart';
@@ -68,7 +69,7 @@ class SearchHttp {
   }
 
   // 分类搜索
-  static Future searchByType({
+  static Future<LoadingState> searchByType({
     required SearchType searchType,
     required String keyword,
     required page,
@@ -86,14 +87,12 @@ class SearchHttp {
     };
     var res = await Request().get(Api.searchByType, data: reqData);
     if (res.data['code'] == 0 && res.data['data']['numPages'] > 0) {
-      Object data;
+      dynamic data;
       try {
         switch (searchType) {
           case SearchType.video:
             List<int> blackMidsList = localCache
-                .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
-                .map<int>((i) => i as int)
-                .toList();
+                .get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
             for (var i in res.data['data']['result']) {
               // 屏蔽推广和拉黑用户
               i['available'] = !blackMidsList.contains(i['mid']);
@@ -113,21 +112,20 @@ class SearchHttp {
             data = SearchArticleModel.fromJson(res.data['data']);
             break;
         }
-        return {
-          'status': true,
-          'data': data,
-        };
+        if (data.list.isNotEmpty) {
+          return LoadingState.success(data.list);
+        } else {
+          return LoadingState.empty();
+        }
       } catch (err) {
         print(err);
+        return LoadingState.error(err.toString());
       }
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['data'] != null && res.data['data']['numPages'] == 0
-            ? '没有相关数据'
-            : res.data['message'],
-      };
+      return LoadingState.error(
+          res.data['data'] != null && res.data['data']['numPages'] == 0
+              ? '没有相关数据'
+              : res.data['message']);
     }
   }
 
