@@ -102,10 +102,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     });
     videoDetailController.cid.listen((p0) {
       if (!context.mounted) return;
-      videoPlayerServiceHandler.onVideoDetailChange(
-        (bangumiIntroController.loadingState.value as Success).response,
-        p0,
-      );
+      if (bangumiIntroController.loadingState.value is Success) {
+        videoPlayerServiceHandler.onVideoDetailChange(
+          (bangumiIntroController.loadingState.value as Success).response,
+          p0,
+        );
+      }
     });
     autoExitFullscreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
