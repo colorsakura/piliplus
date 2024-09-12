@@ -108,6 +108,9 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         _mainController.onBackPressed(context);
+        if (_dynamicController.flag) {
+          _dynamicController.flag = false;
+        }
       },
       child: Scaffold(
         extendBody: true,
