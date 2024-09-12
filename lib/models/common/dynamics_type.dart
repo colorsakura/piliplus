@@ -17,40 +17,33 @@ extension BusinessTypeExtension on DynamicsType {
 
 List tabsConfig = [
   {
+    'tag': 'all',
     'value': DynamicsType.all,
     'label': '全部',
     'enabled': true,
-    'ctr': Get.put<DynamicsTabController>(DynamicsTabController(), tag: 'all'),
-    'page': const DynamicsTabPage(dynamicsType: 'all'),
   },
   {
+    'tag': 'video',
     'value': DynamicsType.video,
     'label': '投稿',
     'enabled': true,
-    'ctr':
-        Get.put<DynamicsTabController>(DynamicsTabController(), tag: 'video'),
-    'page': const DynamicsTabPage(dynamicsType: 'video'),
   },
   {
+    'tag': 'pgc',
     'value': DynamicsType.pgc,
     'label': '番剧',
     'enabled': true,
-    'ctr': Get.put<DynamicsTabController>(DynamicsTabController(), tag: 'pgc'),
-    'page': const DynamicsTabPage(dynamicsType: 'pgc'),
   },
   {
+    'tag': 'article',
     'value': DynamicsType.article,
     'label': '专栏',
     'enabled': true,
-    'ctr':
-        Get.put<DynamicsTabController>(DynamicsTabController(), tag: 'article'),
-    'page': const DynamicsTabPage(dynamicsType: 'article'),
   },
   {
+    'tag': 'up',
     'value': DynamicsType.up,
     'label': 'Up',
     'enabled': true,
-    'ctr': Get.put<DynamicsTabController>(DynamicsTabController(), tag: 'up'),
-    'page': const DynamicsTabPage(dynamicsType: 'up'),
   },
 ];

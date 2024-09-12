@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/home/controller.dart';
+import 'package:PiliPalaX/pages/main/controller.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -11,7 +13,6 @@ import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 import '../../../common/skeleton/dynamic_card.dart';
-import '../../../models/dynamics/result.dart';
 import '../../../utils/grid.dart';
 
 import '../index.dart';
@@ -31,8 +32,6 @@ class DynamicsTabPage extends StatefulWidget {
 class _DynamicsTabPageState extends State<DynamicsTabPage>
     with AutomaticKeepAliveClientMixin {
   late DynamicsTabController _dynamicsTabController;
-  late Future _futureBuilderFuture;
-  late ScrollController scrollController;
   late bool dynamicsWaterfallFlow;
   late final DynamicsController dynamicsController;
 
@@ -42,31 +41,38 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   @override
   void initState() {
     super.initState();
-    _dynamicsTabController =
-        Get.put(DynamicsTabController(), tag: widget.dynamicsType);
+    _dynamicsTabController = Get.put(
+      DynamicsTabController(dynamicsType: widget.dynamicsType),
+      tag: widget.dynamicsType,
+    );
     dynamicsController = Get.find<DynamicsController>();
 
-    _futureBuilderFuture = _dynamicsTabController.queryFollowDynamic(
-        'init', widget.dynamicsType, dynamicsController.mid.value);
-    scrollController = _dynamicsTabController.scrollController
-      ..addListener(() {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
-          if (!_dynamicsTabController.isLoadingMore.value) {
-            EasyThrottle.throttle('_dynamicsTabController_onLoad',
-                const Duration(milliseconds: 500), () {
-              _dynamicsTabController.isLoadingMore.value = true;
-              _dynamicsTabController.onLoad();
-              _dynamicsTabController.isLoadingMore.value = false;
-            });
-          }
-        }
-      });
+    _dynamicsTabController.scrollController.addListener(() {
+      if (_dynamicsTabController.scrollController.position.pixels >=
+          _dynamicsTabController.scrollController.position.maxScrollExtent -
+              200) {
+        _dynamicsTabController.onLoadMore();
+      }
+
+      StreamController<bool> mainStream =
+          Get.find<MainController>().bottomBarStream;
+      StreamController<bool> searchBarStream =
+          Get.find<HomeController>().searchBarStream;
+      final ScrollDirection direction =
+          _dynamicsTabController.scrollController.position.userScrollDirection;
+      if (direction == ScrollDirection.forward) {
+        mainStream.add(true);
+        searchBarStream.add(true);
+      } else if (direction == ScrollDirection.reverse) {
+        mainStream.add(false);
+        searchBarStream.add(false);
+      }
+    });
     dynamicsController.mid.listen((mid) {
       print('midListen: $mid');
-      scrollController.jumpTo(0);
-      _futureBuilderFuture = _dynamicsTabController.queryFollowDynamic(
-          'init', widget.dynamicsType, mid);
+      _dynamicsTabController.mid = mid;
+      _dynamicsTabController.scrollController.jumpTo(0);
+      _dynamicsTabController.onReload();
     });
     dynamicsWaterfallFlow = GStorage.setting
         .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
@@ -74,7 +80,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    _dynamicsTabController.scrollController.removeListener(() {});
     dynamicsController.mid.close();
     super.dispose();
   }
@@ -84,147 +90,118 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
     super.build(context);
     // print(widget.dynamicsType + widget.mid.value.toString());
     return RefreshIndicator(
-        // key:
-        //     ValueKey<String>(widget.dynamicsType + widget.mid.value.toString()),
-        onRefresh: () async {
-          dynamicsWaterfallFlow = GStorage.setting
-              .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
-          await Future.wait(<Future>[
-            _dynamicsTabController.onRefresh(),
-            dynamicsController.queryFollowUp()
-          ]);
-        },
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _dynamicsTabController.scrollController,
-          slivers: [
-            FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (context, snapshot) {
-                // print(snapshot);
-                // print(widget.dynamicsType + "${widget.mid?.value}");
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data == null) {
-                    return const NoData();
-                  }
-                  Map data = snapshot.data;
-                  // print('data: $data');
-                  if (data['status']) {
-                    List<DynamicItemModel> list =
-                        _dynamicsTabController.dynamicsList;
-                    // print('list: $list');
-                    return Obx(
-                      () {
-                        if (list.isEmpty) {
-                          if (_dynamicsTabController.isLoadingMore.value) {
-                            return skeleton();
-                          }
-                          return const NoData();
-                        }
-                        if (!dynamicsWaterfallFlow) {
-                          return SliverCrossAxisGroup(
-                            slivers: [
-                              const SliverFillRemaining(),
-                              SliverConstrainedCrossAxis(
-                                  maxExtent: Grid.maxRowWidth * 2,
-                                  sliver: SliverList(
-                                    delegate: SliverChildBuilderDelegate(
-                                      (context, index) {
-                                        if ((dynamicsController
-                                                        .tabController.index ==
-                                                    4 &&
-                                                dynamicsController.mid.value !=
-                                                    -1) ||
-                                            !dynamicsController.tempBannedList
-                                                .contains(list[index]
-                                                    .modules
-                                                    ?.moduleAuthor
-                                                    ?.mid)) {
-                                          return DynamicPanel(
-                                              item: list[index]);
-                                        }
-                                        return const SizedBox();
-                                      },
-                                      childCount: list.length,
-                                    ),
-                                  )),
-                              const SliverFillRemaining(),
-                            ],
-                          );
-                        }
-                        return SliverWaterfallFlow.extent(
-                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                          //cacheExtent: 0.0,
-                          crossAxisSpacing: StyleString.cardSpace / 2,
-                          mainAxisSpacing: StyleString.cardSpace / 2,
-
-                          lastChildLayoutTypeBuilder: (index) =>
-                              index == list.length
-                                  ? LastChildLayoutType.foot
-                                  : LastChildLayoutType.none,
-                          children: [
-                            if (dynamicsController.tabController.index == 4 &&
-                                dynamicsController.mid.value != -1) ...[
-                              for (var i in list) DynamicPanel(item: i),
-                            ] else ...[
-                              for (var i in list)
-                                if (!dynamicsController.tempBannedList
-                                    .contains(i.modules?.moduleAuthor?.mid))
-                                  DynamicPanel(item: i),
-                            ]
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    return HttpError(
-                      errMsg: data['msg'],
-                      fn: () {
-                        // setState(() {
-                        _futureBuilderFuture =
-                            _dynamicsTabController.queryFollowDynamic(
-                                'init',
-                                widget.dynamicsType,
-                                dynamicsController.mid.value);
-                        // });
-                        dynamicsController.onRefresh();
-                      },
-                    );
-                  }
-                } else {
-                  // 骨架屏
-                  return skeleton();
-                }
-              },
-            )
-          ],
-        ));
+      // key:
+      //     ValueKey<String>(widget.dynamicsType + widget.mid.value.toString()),
+      onRefresh: () async {
+        dynamicsWaterfallFlow = GStorage.setting
+            .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
+        await _dynamicsTabController.onRefresh();
+        await dynamicsController.queryFollowUp();
+      },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: _dynamicsTabController.scrollController,
+        slivers: [
+          Obx(() => _buildBody(_dynamicsTabController.loadingState.value)),
+        ],
+      ),
+    );
   }
 
   Widget skeleton() {
     if (!dynamicsWaterfallFlow) {
-      return SliverCrossAxisGroup(slivers: [
-        const SliverFillRemaining(),
-        SliverConstrainedCrossAxis(
-          maxExtent: Grid.maxRowWidth * 2,
-          sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            return const DynamicCardSkeleton();
-          }, childCount: 10)),
-        ),
-        const SliverFillRemaining()
-      ]);
+      return SliverCrossAxisGroup(
+        slivers: [
+          const SliverFillRemaining(),
+          SliverConstrainedCrossAxis(
+            maxExtent: Grid.maxRowWidth * 2,
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return const DynamicCardSkeleton();
+                },
+                childCount: 10,
+              ),
+            ),
+          ),
+          const SliverFillRemaining()
+        ],
+      );
     }
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
-          crossAxisSpacing: StyleString.cardSpace / 2,
-          mainAxisSpacing: StyleString.cardSpace / 2,
-          maxCrossAxisExtent: Grid.maxRowWidth * 2,
-          childAspectRatio: StyleString.aspectRatio,
-          mainAxisExtent: 50),
-      delegate: SliverChildBuilderDelegate((context, index) {
-        return const DynamicCardSkeleton();
-      }, childCount: 10),
+        crossAxisSpacing: StyleString.cardSpace / 2,
+        mainAxisSpacing: StyleString.cardSpace / 2,
+        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+        childAspectRatio: StyleString.aspectRatio,
+        mainAxisExtent: 50,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return const DynamicCardSkeleton();
+        },
+        childCount: 10,
+      ),
     );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? dynamicsWaterfallFlow
+            ? SliverWaterfallFlow.extent(
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                //cacheExtent: 0.0,
+                crossAxisSpacing: StyleString.cardSpace / 2,
+                mainAxisSpacing: StyleString.cardSpace / 2,
+
+                lastChildLayoutTypeBuilder: (index) =>
+                    index == loadingState.response.length
+                        ? LastChildLayoutType.foot
+                        : LastChildLayoutType.none,
+                children: [
+                  if (dynamicsController.tabController.index == 4 &&
+                      dynamicsController.mid.value != -1) ...[
+                    for (var i in loadingState.response) DynamicPanel(item: i),
+                  ] else ...[
+                    for (var i in loadingState.response)
+                      if (!dynamicsController.tempBannedList
+                          .contains(i.modules?.moduleAuthor?.mid))
+                        DynamicPanel(item: i),
+                  ]
+                ],
+              )
+            : SliverCrossAxisGroup(
+                slivers: [
+                  const SliverFillRemaining(),
+                  SliverConstrainedCrossAxis(
+                    maxExtent: Grid.maxRowWidth * 2,
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          if ((dynamicsController.tabController.index == 4 &&
+                                  dynamicsController.mid.value != -1) ||
+                              !dynamicsController.tempBannedList.contains(
+                                  loadingState.response[index].modules
+                                      ?.moduleAuthor?.mid)) {
+                            return DynamicPanel(
+                                item: loadingState.response[index]);
+                          }
+                          return const SizedBox();
+                        },
+                        childCount: loadingState.response.length,
+                      ),
+                    ),
+                  ),
+                  const SliverFillRemaining(),
+                ],
+              )
+        : loadingState is Empty
+            ? const NoData()
+            : loadingState is Error
+                ? HttpError(
+                    errMsg: loadingState.errMsg,
+                    fn: _dynamicsTabController.onReload,
+                  )
+                : skeleton();
   }
 }

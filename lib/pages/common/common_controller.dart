@@ -63,7 +63,7 @@ abstract class CommonController extends GetxController {
 
   void onReload() {
     loadingState.value = LoadingState.loading();
-    queryData();
+    onRefresh();
   }
 
   @override

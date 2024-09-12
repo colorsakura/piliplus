@@ -1,9 +1,12 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
+
 import '../models/dynamics/result.dart';
 import '../models/dynamics/up.dart';
 import 'index.dart';
 
 class DynamicsHttp {
-  static Future followDynamic({
+  static Future<LoadingState> followDynamic({
     String? type,
     String? offset,
     int? mid,
@@ -21,23 +24,17 @@ class DynamicsHttp {
     var res = await Request().get(Api.followDynamic, data: data);
     if (res.data['code'] == 0) {
       try {
-        return {
-          'status': true,
-          'data': DynamicsDataModel.fromJson(res.data['data']),
-        };
+        DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+        if (!data.items.isNullOrEmpty) {
+          return LoadingState.success(data);
+        } else {
+          return LoadingState.empty();
+        }
       } catch (err) {
-        return {
-          'status': false,
-          'data': [],
-          'msg': err.toString(),
-        };
+        return LoadingState.error(err.toString());
       }
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 

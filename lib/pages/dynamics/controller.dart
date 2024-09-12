@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:PiliPalaX/http/follow.dart';
+import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
+import 'package:PiliPalaX/pages/dynamics/tab/view.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -36,7 +38,7 @@ class DynamicsController extends GetxController
   RxInt initialValue = 0.obs;
   Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
-  var userInfo;
+  dynamic userInfo;
   RxBool isLoadingDynamic = false.obs;
   Box setting = GStorage.setting;
   List<UpItem> hasUpdatedUps = <UpItem>[];
@@ -51,13 +53,13 @@ class DynamicsController extends GetxController
     super.onInit();
 
     tabController = TabController(
-        length: tabsConfig.length,
-        vsync: this,
-        initialIndex:
-            setting.get(SettingBoxKey.defaultDynamicType, defaultValue: 0));
-    tabsPageList = tabsConfig.map((e) {
-      return e['page'] as Widget;
-    }).toList();
+      length: tabsConfig.length,
+      vsync: this,
+      initialIndex:
+          setting.get(SettingBoxKey.defaultDynamicType, defaultValue: 0),
+    );
+    tabsPageList =
+        tabsConfig.map((e) => DynamicsTabPage(dynamicsType: e['tag'])).toList();
   }
 
   void refreshNotifier() {
@@ -304,17 +306,18 @@ class DynamicsController extends GetxController
   }
 
   onRefresh() async {
-    print('onRefresh');
-    print(tabsConfig[tabController.index]['ctr']);
     await Future.wait(<Future>[
       queryFollowUp(),
-      tabsConfig[tabController.index]['ctr'].onRefresh()
+      Get.find<DynamicsTabController>(
+              tag: tabsConfig[tabController.index]['tag'])
+          .onRefresh()
     ]);
   }
 
   // 返回顶部并刷新
   void animateToTop() async {
-    tabsConfig[tabController.index]['ctr'].animateToTop();
+    Get.find<DynamicsTabController>(tag: tabsConfig[tabController.index]['tag'])
+        .animateToTop();
     scrollController.animToTop();
   }
 }
