@@ -20,13 +20,16 @@ class DynamicDetailController extends ReplyController {
       count.value = int.parse(item!.modules!.moduleStat!.comment!.count ?? '0');
     }
 
-    queryData();
+    if (oid != 0) {
+      queryData();
+    }
   }
 
   // 根据jumpUrl获取动态html
   reqHtmlByOpusId(int id) async {
     var res = await HtmlHttp.reqHtml(id, 'opus');
     oid = res['commentId'];
+    queryData();
   }
 
   @override

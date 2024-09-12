@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -17,7 +16,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/url_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import '../../../../../utils/app_scheme.dart';
-import '../../reply_new/reply_page.dart';
 import 'zan.dart';
 
 Box setting = GStorage.setting;
@@ -26,7 +24,6 @@ class ReplyItem extends StatelessWidget {
   const ReplyItem({
     super.key,
     this.replyItem,
-    this.addReply,
     this.replyLevel,
     this.showReplyRow = true,
     this.replyReply,
@@ -36,7 +33,6 @@ class ReplyItem extends StatelessWidget {
     this.onDelete,
   });
   final ReplyItemModel? replyItem;
-  final Function? addReply;
   final String? replyLevel;
   final bool? showReplyRow;
   final Function? replyReply;
@@ -324,68 +320,6 @@ class ReplyItem extends StatelessWidget {
                 onReply!();
                 return;
               }
-              Navigator.of(context)
-                  .push(
-                    GetDialogRoute(
-                      pageBuilder:
-                          (buildContext, animation, secondaryAnimation) {
-                        return ReplyPage(
-                          oid: replyItem!.oid,
-                          root: replyItem!.rpid,
-                          parent: replyItem!.rpid,
-                          replyType: replyType,
-                          replyItem: replyItem,
-                        );
-                      },
-                      transitionDuration: const Duration(milliseconds: 500),
-                      transitionBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(0.0, 1.0);
-                        const end = Offset.zero;
-                        const curve = Curves.linear;
-
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  )
-                  .then((value) => {
-                        // 完成评论，数据添加
-                        if (value != null &&
-                            value['data'] != null &&
-                            addReply != null)
-                          {
-                            addReply?.call(value['data'])
-                            // replyControl.replies.add(value['data']),
-                          }
-                      });
-              // showModalBottomSheet(
-              //   context: context,
-              //   isScrollControlled: true,
-              //   builder: (builder) {
-              //     return VideoReplyNewDialog(
-              //       oid: replyItem!.oid,
-              //       root: replyItem!.rpid,
-              //       parent: replyItem!.rpid,
-              //       replyType: replyType,
-              //       replyItem: replyItem,
-              //     );
-              //   },
-              // ).then((value) => {
-              //       // 完成评论，数据添加
-              //       if (value != null &&
-              //           value['data'] != null &&
-              //           addReply != null)
-              //         {
-              //           addReply?.call(value['data'])
-              //           // replyControl.replies.add(value['data']),
-              //         }
-              //     });
             },
             child: Row(children: [
               Icon(Icons.reply,

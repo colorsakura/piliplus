@@ -47,7 +47,7 @@ class _ReplyPageState extends State<ReplyPage>
   late final _controller = ChatBottomPanelContainerController<PanelType>();
   late final TextEditingController _replyContentController =
       TextEditingController(text: widget.savedReply);
-  PanelType _currentPanelType = PanelType.none;
+  // PanelType _currentPanelType = PanelType.none;
   bool _readOnly = false;
   final _readOnlyStream = StreamController<bool>();
   late final _enableSend = StreamController<bool>();
@@ -124,28 +124,28 @@ class _ReplyPageState extends State<ReplyPage>
             return const SizedBox.shrink();
         }
       },
-      onPanelTypeChange: (panelType, data) {
-        debugPrint('panelType: $panelType');
-        switch (panelType) {
-          case ChatBottomPanelType.none:
-            _currentPanelType = PanelType.none;
-            break;
-          case ChatBottomPanelType.keyboard:
-            _currentPanelType = PanelType.keyboard;
-            break;
-          case ChatBottomPanelType.other:
-            if (data == null) return;
-            switch (data) {
-              case PanelType.emoji:
-                _currentPanelType = PanelType.emoji;
-                break;
-              default:
-                _currentPanelType = PanelType.none;
-                break;
-            }
-            break;
-        }
-      },
+      // onPanelTypeChange: (panelType, data) {
+      //   debugPrint('panelType: $panelType');
+      //   switch (panelType) {
+      //     case ChatBottomPanelType.none:
+      //       _currentPanelType = PanelType.none;
+      //       break;
+      //     case ChatBottomPanelType.keyboard:
+      //       _currentPanelType = PanelType.keyboard;
+      //       break;
+      //     case ChatBottomPanelType.other:
+      //       if (data == null) return;
+      //       switch (data) {
+      //         case PanelType.emoji:
+      //           _currentPanelType = PanelType.emoji;
+      //           break;
+      //         default:
+      //           _currentPanelType = PanelType.none;
+      //           break;
+      //       }
+      //       break;
+      //   }
+      // },
       panelBgColor: Theme.of(context).colorScheme.surface,
     );
   }

@@ -13,7 +13,6 @@ import 'package:PiliPalaX/models/dynamics/result.dart';
 import 'package:PiliPalaX/pages/dynamics/detail/index.dart';
 import 'package:PiliPalaX/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/index.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -297,37 +296,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   heroTag: null,
                   onPressed: () {
                     feedBack();
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return VideoReplyNewDialog(
-                          oid: _dynamicDetailController.oid ??
-                              IdUtils.bv2av(Get.parameters['bvid']!),
-                          root: 0,
-                          parent: 0,
-                          replyType: ReplyType.values[replyType],
-                        );
-                      },
-                    ).then(
-                      (value) {
-                        // 完成评论，数据添加
-                        if (value != null && value['data'] != null) {
-                          _dynamicDetailController.count.value++;
-                          if (value != null && value['data'] != null) {
-                            List list = _dynamicDetailController
-                                    .loadingState.value is Success
-                                ? (_dynamicDetailController.loadingState.value
-                                        as Success)
-                                    .response
-                                : [];
-                            list.insert(0, value['data']);
-                            _dynamicDetailController.loadingState.value =
-                                LoadingState.success(list);
-                          }
-                        }
-                      },
-                    );
+                    dynamic oid = _dynamicDetailController.oid ??
+                        IdUtils.bv2av(Get.parameters['bvid']!);
+                    _dynamicDetailController.onReply(context, oid: oid);
                   },
                   tooltip: '评论动态',
                   child: const Icon(Icons.reply),
@@ -365,7 +336,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Text(
-                    '${_dynamicDetailController.count.value}条回复',
+                    '${_dynamicDetailController.count.value != -1 ? _dynamicDetailController.count.value : 0}条回复',
                     key: ValueKey<int>(_dynamicDetailController.count.value),
                   ),
                 ),
@@ -419,9 +390,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     replyLevel: '1',
                     replyReply: replyReply,
                     replyType: ReplyType.values[replyType],
-                    addReply: (replyItem) {
-                      // loadingState.response[index].replies!.add(replyItem);
+                    onReply: () {
+                      _dynamicDetailController.onReply(
+                        context,
+                        replyItem: loadingState.response[index],
+                        index: index,
+                      );
                     },
+                    onDelete: _dynamicDetailController.onMDelete,
                   );
                 }
               },

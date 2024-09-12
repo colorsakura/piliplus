@@ -1,11 +1,15 @@
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/models/common/reply_sort_type.dart';
 import 'package:PiliPalaX/models/video/reply/item.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 abstract class ReplyController extends CommonController {
   String nextOffset = "";
@@ -18,6 +22,8 @@ abstract class ReplyController extends CommonController {
   ReplySortType sortType = ReplySortType.time;
   RxString sortTypeTitle = ReplySortType.time.titles.obs;
   RxString sortTypeLabel = ReplySortType.time.labels.obs;
+
+  late final savedReplies = {};
 
   @override
   void onInit() {
@@ -104,5 +110,78 @@ abstract class ReplyController extends CommonController {
       loadingState.value = LoadingState.loading();
       onRefresh();
     });
+  }
+
+  void onReply(
+    BuildContext context, {
+    dynamic oid,
+    dynamic replyItem,
+    int index = 0,
+  }) {
+    dynamic key = oid ?? replyItem.oid + replyItem.rpid + replyItem.rpid;
+    Navigator.of(context)
+        .push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return ReplyPage(
+            oid: oid ?? replyItem.oid,
+            root: oid != null ? 0 : replyItem.rpid,
+            parent: oid != null ? 0 : replyItem.rpid,
+            replyType: ReplyType.video,
+            replyItem: replyItem,
+            savedReply: savedReplies[key],
+            onSaveReply: (reply) {
+              savedReplies[key] = reply;
+            },
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.linear;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    )
+        .then(
+      (value) {
+        if (value != null && value['data'] != null) {
+          savedReplies[key] = null;
+          List list = loadingState.value is Success
+              ? (loadingState.value as Success).response
+              : [];
+          if (index == 0) {
+            list.insert(0, value['data']);
+          } else {
+            list[index].replies.add(value['data']);
+          }
+          loadingState.value = LoadingState.success(list);
+        }
+      },
+    );
+  }
+
+  onMDelete(rpid, frpid) {
+    List list = (loadingState.value as Success).response;
+    list = frpid == null
+        ? list.where((item) => item.rpid != rpid).toList()
+        : list.map((item) {
+            if (item.rpid == frpid) {
+              return item
+                ..replies =
+                    item.replies?.where((reply) => reply.rpid != rpid).toList();
+            } else {
+              return item;
+            }
+          }).toList();
+    loadingState.value = LoadingState.success(list);
   }
 }

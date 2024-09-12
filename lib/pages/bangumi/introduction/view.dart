@@ -38,7 +38,6 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     with AutomaticKeepAliveClientMixin {
   late BangumiIntroController bangumiIntroController;
   late VideoDetailController videoDetailCtr;
-  late Future _futureBuilderFuture;
   late int cid;
   late String heroTag;
 

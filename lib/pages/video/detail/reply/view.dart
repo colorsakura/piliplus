@@ -1,6 +1,5 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:PiliPalaX/common/skeleton/video_reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'controller.dart';
 import 'widgets/reply_item.dart';
 
@@ -38,8 +36,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   late VideoReplyController _videoReplyController;
   late AnimationController fabAnimationCtr;
-
-  late final _savedReplies = {};
 
   bool _isFabVisible = true;
   String replyLevel = '1';
@@ -204,78 +200,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   feedBack();
                   dynamic oid = _videoReplyController.aid ??
                       IdUtils.bv2av(Get.parameters['bvid']!);
-                  Navigator.of(context)
-                      .push(
-                    GetDialogRoute(
-                      pageBuilder:
-                          (buildContext, animation, secondaryAnimation) {
-                        return ReplyPage(
-                          oid: oid,
-                          root: 0,
-                          parent: 0,
-                          replyType: ReplyType.video,
-                          savedReply: _savedReplies[oid],
-                          onSaveReply: (reply) {
-                            _savedReplies[oid] = reply;
-                          },
-                        );
-                      },
-                      transitionDuration: const Duration(milliseconds: 500),
-                      transitionBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(0.0, 1.0);
-                        const end = Offset.zero;
-                        const curve = Curves.linear;
-
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  )
-                      .then(
-                    (value) {
-                      // 完成评论，数据添加
-                      if (value != null && value['data'] != null) {
-                        _savedReplies[oid] = null;
-                        List list =
-                            _videoReplyController.loadingState.value is Success
-                                ? (_videoReplyController.loadingState.value
-                                        as Success)
-                                    .response
-                                : [];
-                        list.insert(0, value['data']);
-                        _videoReplyController.loadingState.value =
-                            LoadingState.success(list);
-                      }
-                    },
-                  );
-                  // showModalBottomSheet(
-                  //   context: context,
-                  //   isScrollControlled: true,
-                  //   builder: (BuildContext context) {
-                  //     return VideoReplyNewDialog(
-                  //       oid: _videoReplyController.aid ??
-                  //           IdUtils.bv2av(Get.parameters['bvid']!),
-                  //       root: 0,
-                  //       parent: 0,
-                  //       replyType: ReplyType.video,
-                  //     );
-                  //   },
-                  // ).then(
-                  //   (value) => {
-                  //     // 完成评论，数据添加
-                  //     if (value != null && value['data'] != null)
-                  //       {
-                  //         _videoReplyController.replyList
-                  //             .insert(0, value['data'])
-                  //       }
-                  //   },
-                  // );
+                  _videoReplyController.onReply(context, oid: oid);
                 },
                 tooltip: '发表评论',
                 child: const Icon(Icons.reply),
@@ -317,70 +242,13 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     replyReply: replyReply,
                     replyType: ReplyType.video,
                     onReply: () {
-                      dynamic oid = loadingState.response[index].oid;
-                      dynamic root = loadingState.response[index].rpid;
-                      dynamic parent = loadingState.response[index].rpid;
-                      dynamic key = oid + root + parent;
-                      Navigator.of(context)
-                          .push(
-                        GetDialogRoute(
-                          pageBuilder:
-                              (buildContext, animation, secondaryAnimation) {
-                            return ReplyPage(
-                              oid: oid,
-                              root: root,
-                              parent: parent,
-                              replyType: ReplyType.video,
-                              replyItem: loadingState.response[index],
-                              savedReply: _savedReplies[key],
-                              onSaveReply: (reply) {
-                                _savedReplies[key] = reply;
-                              },
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 500),
-                          transitionBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(0.0, 1.0);
-                            const end = Offset.zero;
-                            const curve = Curves.linear;
-
-                            var tween = Tween(begin: begin, end: end)
-                                .chain(CurveTween(curve: curve));
-
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      )
-                          .then((value) {
-                        // 完成评论，数据添加
-                        if (value != null && value['data'] != null) {
-                          _savedReplies[key] = null;
-                        }
-                      });
+                      _videoReplyController.onReply(
+                        context,
+                        replyItem: loadingState.response[index],
+                        index: index,
+                      );
                     },
-                    onDelete: (rpid, frpid) {
-                      List list =
-                          (_videoReplyController.loadingState.value as Success)
-                              .response;
-                      list = frpid == null
-                          ? list.where((item) => item.rpid != rpid).toList()
-                          : list.map((item) {
-                              if (item.rpid == frpid) {
-                                return item
-                                  ..replies = item.replies
-                                      ?.where((reply) => reply.rpid != rpid)
-                                      .toList();
-                              } else {
-                                return item;
-                              }
-                            }).toList();
-                      _videoReplyController.loadingState.value =
-                          LoadingState.success(list);
-                    },
+                    onDelete: _videoReplyController.onMDelete,
                   );
                 }
               },

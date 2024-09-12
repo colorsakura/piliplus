@@ -348,31 +348,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 heroTag: null,
                 onPressed: () {
                   feedBack();
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return VideoReplyNewDialog(
-                        oid: _htmlRenderCtr.oid.value,
-                        root: 0,
-                        parent: 0,
-                        replyType: ReplyType.values[type],
-                      );
-                    },
-                  ).then(
-                    (value) {
-                      // 完成评论，数据添加
-                      if (value != null && value['data'] != null) {
-                        _htmlRenderCtr.count.value++;
-                        List list = _htmlRenderCtr.loadingState.value is Success
-                            ? (_htmlRenderCtr.loadingState.value as Success)
-                                .response
-                            : [];
-                        list.insert(0, value['data']);
-                        _htmlRenderCtr.loadingState.value =
-                            LoadingState.success(list);
-                      }
-                    },
+                  _htmlRenderCtr.onReply(
+                    context,
+                    oid: _htmlRenderCtr.oid.value,
                   );
                 },
                 tooltip: '评论动态',
@@ -414,11 +392,16 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   replyItem: loadingState.response[index],
                   showReplyRow: true,
                   replyLevel: '1',
-                  replyReply: (replyItem) => replyReply(replyItem),
+                  replyReply: replyReply,
                   replyType: ReplyType.values[type],
-                  addReply: (replyItem) {
-                    loadingState.response[index].replies!.add(replyItem);
+                  onReply: () {
+                    _htmlRenderCtr.onReply(
+                      context,
+                      replyItem: loadingState.response[index],
+                      index: index,
+                    );
                   },
+                  onDelete: _htmlRenderCtr.onMDelete,
                 );
               }
             },

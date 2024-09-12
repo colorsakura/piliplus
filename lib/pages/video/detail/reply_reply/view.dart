@@ -114,9 +114,6 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         replyItem: widget.firstFloor,
                         replyLevel: '2',
                         showReplyRow: false,
-                        addReply: (replyItem) {
-                          // _videoReplyReplyController.replyList.add(replyItem);
-                        },
                         replyType: widget.replyType,
                         replyReply: () {},
                         needDivider: false,
@@ -185,6 +182,13 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
       // 完成评论，数据添加
       if (value != null && value['data'] != null) {
         _savedReplies[key] = null;
+        List list = _videoReplyReplyController.loadingState.value is Success
+            ? (_videoReplyReplyController.loadingState.value as Success)
+                .response
+            : [];
+        list.add(value['data']);
+        _videoReplyReplyController.loadingState.value =
+            LoadingState.success(list);
       }
     });
   }
@@ -200,9 +204,6 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                     replyItem: _videoReplyReplyController.root,
                     replyLevel: '2',
                     showReplyRow: false,
-                    addReply: (replyItem) {
-                      // _videoReplyReplyController.replyList.add(replyItem);
-                    },
                     replyType: widget.replyType,
                     replyReply: () {},
                     needDivider: false,
@@ -244,18 +245,18 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         replyItem: loadingState.response[index],
                         replyLevel: '2',
                         showReplyRow: false,
-                        addReply: (replyItem) {
-                          // _videoReplyReplyController.replyList.add(replyItem);
-                        },
                         replyType: widget.replyType,
                         onReply: () {
                           _onReply(loadingState.response[index]);
                         },
                         onDelete: (rpid, frpid) {
-                          // _videoReplyReplyController.replyList.value =
-                          //     _videoReplyReplyController.replyList
-                          //         .where((item) => item.rpid != rpid)
-                          //         .toList();
+                          List list = (_videoReplyReplyController
+                                  .loadingState.value as Success)
+                              .response;
+                          list =
+                              list.where((item) => item.rpid != rpid).toList();
+                          _videoReplyReplyController.loadingState.value =
+                              LoadingState.success(list);
                         },
                       );
                     }
