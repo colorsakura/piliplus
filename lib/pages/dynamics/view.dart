@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
 import 'package:PiliPalaX/models/common/up_panel_position.dart';
+import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -128,32 +129,30 @@ class _DynamicsPageState extends State<DynamicsPage>
                     : Brightness.light,
           ),
           title: SizedBox(
-              height: 50,
-              child: TabBar(
-                  controller: _dynamicsController.tabController,
-                  isScrollable: true,
-                  dividerColor: Colors.transparent,
-                  dividerHeight: 0,
-                  tabAlignment: TabAlignment.center,
-                  indicatorColor: Theme.of(context).colorScheme.primary,
-                  labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
-                  labelStyle: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  ),
-                  tabs: DynamicsType.values
-                      .map((e) => Tab(text: e.labels))
-                      .toList(),
-                  onTap: (index) {
-                    print('index: $index');
-                    feedBack();
-                    tabsConfig[_dynamicsController.tabController.index]['ctr']
-                        .animateToTop();
-                    // _dynamicsController.tabController
-                    // _dynamicsController.tabController.index = index;
-                    // _dynamicsController.onSelectType(index);
-                    // _
-                  })),
+            height: 50,
+            child: TabBar(
+              controller: _dynamicsController.tabController,
+              isScrollable: true,
+              dividerColor: Colors.transparent,
+              dividerHeight: 0,
+              tabAlignment: TabAlignment.center,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              labelColor: Theme.of(context).colorScheme.primary,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+              labelStyle: TextStyle(
+                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              ),
+              tabs:
+                  DynamicsType.values.map((e) => Tab(text: e.labels)).toList(),
+              onTap: (index) {
+                if (!_dynamicsController.tabController.indexIsChanging) {
+                  feedBack();
+                  Get.find<DynamicsTabController>(tag: tabsConfig[index]['tag'])
+                      .animateToTop();
+                }
+              },
+            ),
+          ),
         ),
         drawer: upPanelPosition == UpPanelPosition.leftDrawer
             ? SafeArea(child: upPanelPart())
