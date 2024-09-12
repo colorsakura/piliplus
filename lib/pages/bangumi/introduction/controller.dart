@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -17,7 +19,7 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BangumiIntroController extends GetxController {
+class BangumiIntroController extends CommonController {
   // 视频bvid
   String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
@@ -33,15 +35,6 @@ class BangumiIntroController extends GetxController {
   // 视频详情 上个页面传入
   Map? videoItem = {};
   BangumiInfoModel? bangumiItem;
-
-  // 请求状态
-  RxBool isLoading = false.obs;
-
-  // 视频详情 请求返回
-  Rx<BangumiInfoModel> bangumiDetail = BangumiInfoModel().obs;
-
-  // 请求返回的信息
-  String responseMsg = '请求异常';
 
   // up主粉丝数
   Map userStat = {'follower': '-'};
@@ -88,10 +81,7 @@ class BangumiIntroController extends GetxController {
     }
     userInfo = userInfoCache.get('userInfoCache');
     userLogin = userInfo != null;
-  }
 
-  // 获取番剧简介&选集
-  Future queryBangumiIntro() async {
     if (userLogin) {
       // 获取点赞状态
       queryHasLikeVideo();
@@ -100,15 +90,20 @@ class BangumiIntroController extends GetxController {
       // 获取收藏状态
       queryHasFavVideo();
     }
-    var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
-    if (result['status']) {
-      bangumiDetail.value = result['data'];
-      epId = bangumiDetail.value.episodes!.first.id;
-    } else {
-      SmartDialog.showToast(result['msg']);
-    }
-    return result;
+
+    queryData();
   }
+
+  @override
+  bool customHandleResponse(Success response) {
+    epId = response.response.episodes!.first.id;
+    loadingState.value = response;
+    return true;
+  }
+
+  @override
+  Future<LoadingState> customGetData() =>
+      SearchHttp.bangumiInfoNew(seasonId: seasonId, epId: epId);
 
   // 获取点赞状态
   Future queryHasLikeVideo() async {
@@ -139,8 +134,10 @@ class BangumiIntroController extends GetxController {
     if (result['status']) {
       SmartDialog.showToast(!hasLike.value ? result['data']['toast'] : '取消赞');
       hasLike.value = !hasLike.value;
-      bangumiDetail.value.stat!['likes'] =
-          bangumiDetail.value.stat!['likes'] + (!hasLike.value ? 1 : -1);
+      dynamic bangumiDetail = (loadingState.value as Success).response;
+      bangumiDetail.stat!['likes'] =
+          bangumiDetail.stat!['likes'] + (!hasLike.value ? 1 : -1);
+      loadingState.value = LoadingState.success(bangumiDetail);
       hasLike.refresh();
     } else {
       SmartDialog.showToast(result['msg']);
@@ -193,8 +190,11 @@ class BangumiIntroController extends GetxController {
                     if (res['status']) {
                       SmartDialog.showToast('投币成功');
                       hasCoin.value = true;
-                      bangumiDetail.value.stat!['coins'] =
-                          bangumiDetail.value.stat!['coins'] + _tempThemeValue;
+                      dynamic bangumiDetail =
+                          (loadingState.value as Success).response;
+                      bangumiDetail.stat!['coins'] =
+                          bangumiDetail.stat!['coins'] + _tempThemeValue;
+                      loadingState.value = LoadingState.success(bangumiDetail);
                     } else {
                       SmartDialog.showToast(res['msg']);
                     }
@@ -300,15 +300,15 @@ class BangumiIntroController extends GetxController {
 
   // 追番
   Future bangumiAdd() async {
-    var result =
-        await VideoHttp.bangumiAdd(seasonId: bangumiDetail.value.seasonId);
+    var result = await VideoHttp.bangumiAdd(
+        seasonId: (loadingState.value as Success).response.seasonId);
     SmartDialog.showToast(result['msg']);
   }
 
   // 取消追番
   Future bangumiDel() async {
-    var result =
-        await VideoHttp.bangumiDel(seasonId: bangumiDetail.value.seasonId);
+    var result = await VideoHttp.bangumiDel(
+        seasonId: (loadingState.value as Success).response.seasonId);
     SmartDialog.showToast(result['msg']);
   }
 
@@ -323,8 +323,8 @@ class BangumiIntroController extends GetxController {
 
   bool prevPlay() {
     late List episodes;
-    if (bangumiDetail.value.episodes != null) {
-      episodes = bangumiDetail.value.episodes!;
+    if ((loadingState.value as Success).response.episodes != null) {
+      episodes = (loadingState.value as Success).response.episodes!;
     }
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
@@ -353,8 +353,8 @@ class BangumiIntroController extends GetxController {
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
     PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
-    if (bangumiDetail.value.episodes != null) {
-      episodes = bangumiDetail.value.episodes!;
+    if ((loadingState.value as Success).response.episodes != null) {
+      episodes = (loadingState.value as Success).response.episodes!;
     } else {
       if (platRepeat == PlayRepeat.autoPlayRelated) {
         return playRelated();

@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -36,7 +38,6 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     with AutomaticKeepAliveClientMixin {
   late BangumiIntroController bangumiIntroController;
   late VideoDetailController videoDetailCtr;
-  BangumiInfoModel? bangumiDetail;
   late Future _futureBuilderFuture;
   late int cid;
   late String heroTag;
@@ -53,10 +54,6 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     cid = widget.cid!;
     bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
-    bangumiIntroController.bangumiDetail.listen((BangumiInfoModel value) {
-      bangumiDetail = value;
-    });
-    _futureBuilderFuture = bangumiIntroController.queryBangumiIntro();
     videoDetailCtr.cid.listen((int p0) {
       cid = p0;
       if (!mounted) return;
@@ -67,35 +64,26 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return FutureBuilder(
-      future: _futureBuilderFuture,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data['status']) {
-            // 请求成功
+    return Obx(() => _buildBody(bangumiIntroController.loadingState.value));
+  }
 
-            return BangumiInfo(
-              loadingStatus: false,
-              bangumiDetail: bangumiDetail,
-              cid: cid,
-            );
-          } else {
-            // 请求错误
-            // return HttpError(
-            //   errMsg: snapshot.data['msg'],
-            //   fn: () => Get.back(),
-            // );
-            return const SizedBox();
-          }
-        } else {
-          return BangumiInfo(
-            loadingStatus: true,
-            bangumiDetail: bangumiDetail,
+  _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? BangumiInfo(
+            loadingStatus: false,
+            bangumiDetail: loadingState.response,
             cid: cid,
-          );
-        }
-      },
-    );
+          )
+        : loadingState is Error
+            ? HttpError(
+                errMsg: loadingState.errMsg,
+                fn: bangumiIntroController.onReload,
+              )
+            : BangumiInfo(
+                loadingStatus: true,
+                bangumiDetail: null,
+                cid: cid,
+              );
   }
 }
 
@@ -218,7 +206,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: InkWell(
-                          onTap: () => showIntroDetail(),
+                          onTap: showIntroDetail,
                           child: SizedBox(
                             height: isLandscape ? 103 : 158,
                             child: Column(

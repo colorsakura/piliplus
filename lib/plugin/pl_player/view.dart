@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -226,7 +227,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     bool isSeason = videoIntroController?.videoDetail.value.ugcSeason != null;
     bool isPage = videoIntroController?.videoDetail.value.pages != null &&
         videoIntroController!.videoDetail.value.pages!.length > 1;
-    bool isBangumi = bangumiIntroController?.bangumiDetail.value != null;
+    bool isBangumi = bangumiIntroController?.loadingState.value is Success;
     bool anySeason = isSeason || isPage || isBangumi;
     Map<BottomControlType, Widget> videoProgressWidgets = {
       /// 上一集
@@ -357,7 +358,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               changeFucCall = videoIntroController!.changeSeasonOrbangu;
             } else if (isBangumi) {
               episodes.addAll(
-                  bangumiIntroController!.bangumiDetail.value.episodes!);
+                  (bangumiIntroController!.loadingState.value as Success)
+                      .response
+                      .episodes!);
               changeFucCall = bangumiIntroController!.changeSeasonOrbangu;
             }
             ListSheet(
@@ -1241,7 +1244,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   Duration.zero,
                                   player.state.duration,
                                 );
-                                widget.controller.seekTo(result, type: 'slider');
+                                widget.controller
+                                    .seekTo(result, type: 'slider');
                                 widget.controller.play();
                               },
                             ),
@@ -1286,7 +1290,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   Duration.zero,
                                   player.state.duration,
                                 );
-                                widget.controller.seekTo(result, type: 'slider');
+                                widget.controller
+                                    .seekTo(result, type: 'slider');
                                 widget.controller.play();
                               },
                             ),

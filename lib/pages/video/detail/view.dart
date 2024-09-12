@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:floating/floating.dart';
@@ -90,15 +91,21 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           value, videoDetailController.cid.value);
     });
     bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
-    bangumiIntroController.bangumiDetail.listen((value) {
+    bangumiIntroController.loadingState.listen((value) {
       if (!context.mounted) return;
-      videoPlayerServiceHandler.onVideoDetailChange(
-          value, videoDetailController.cid.value);
+      if (value is Success) {
+        videoPlayerServiceHandler.onVideoDetailChange(
+          value.response,
+          videoDetailController.cid.value,
+        );
+      }
     });
     videoDetailController.cid.listen((p0) {
       if (!context.mounted) return;
       videoPlayerServiceHandler.onVideoDetailChange(
-          bangumiIntroController.bangumiDetail.value, p0);
+        (bangumiIntroController.loadingState.value as Success).response,
+        p0,
+      );
     });
     autoExitFullscreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
@@ -272,7 +279,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     floating.dispose();
     videoDetailController.floating?.dispose();
     videoIntroController.videoDetail.close();
-    bangumiIntroController.bangumiDetail.close();
     videoDetailController.cid.close();
     if (!horizontalScreen) {
       AutoOrientation.portraitUpMode();
@@ -650,7 +656,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 (horizontalScreen ||
                                     MediaQuery.of(context).orientation ==
                                         Orientation.portrait),
-                            onPopInvokedWithResult: (bool didPop, Object? result) {
+                            onPopInvokedWithResult:
+                                (bool didPop, Object? result) {
                               if (isFullScreen.value == true) {
                                 plPlayerController!
                                     .triggerFullScreen(status: false);

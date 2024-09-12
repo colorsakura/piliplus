@@ -146,6 +146,22 @@ class SearchHttp {
     }
   }
 
+  static Future<LoadingState> bangumiInfoNew({int? seasonId, int? epId}) async {
+    final dynamic res = await Request().get(
+      Api.bangumiInfo,
+      data: {
+        if (seasonId != null) 'season_id': seasonId,
+        if (epId != null) 'ep_id': epId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(
+          BangumiInfoModel.fromJson(res.data['result']));
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
   static Future<Map<String, dynamic>> bangumiInfo(
       {int? seasonId, int? epId}) async {
     final Map<String, dynamic> data = {};

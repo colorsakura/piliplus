@@ -111,7 +111,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     if (!PlPlayerController.instanceExists()) return;
     if (data == null) return;
 
-    late MediaItem? mediaItem;
+    MediaItem? mediaItem;
     if (data is VideoDetailData) {
       if ((data.pages?.length ?? 0) > 1) {
         final current = data.pages?.firstWhere((element) => element.cid == cid);

@@ -325,7 +325,7 @@ class VideoContent extends StatelessWidget {
               videoItem.title,
               textAlign: TextAlign.start,
               style: const TextStyle(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
                 letterSpacing: 0.3,
               ),
               maxLines: videoItem.videos > 1 ? 1 : 2,
