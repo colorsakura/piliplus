@@ -13,7 +13,6 @@ import 'package:PiliPalaX/common/widgets/html_render.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/index.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 
@@ -407,11 +406,14 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             },
           )
         : loadingState is Error
-            ? HttpError(
-                errMsg: _htmlRenderCtr.loadingState.value is Error
-                    ? (_htmlRenderCtr.loadingState.value as Error).errMsg
-                    : '没有相关数据',
-                fn: _htmlRenderCtr.onReload,
+            ? CustomScrollView(
+                shrinkWrap: true,
+                slivers: [
+                  HttpError(
+                    errMsg: loadingState.errMsg,
+                    fn: _htmlRenderCtr.onReload,
+                  ),
+                ],
               )
             : ListView.builder(
                 itemCount: 5,
