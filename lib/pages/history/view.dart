@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -80,7 +81,9 @@ class _HistoryPageState extends State<HistoryPage> {
           actions: [
             IconButton(
               tooltip: '搜索',
-              onPressed: () => Get.toNamed('/historySearch'),
+              onPressed: () => Get.toNamed('/favSearch', arguments: {
+                'searchType': SearchType.history,
+              }),
               icon: const Icon(Icons.search_outlined),
             ),
             PopupMenuButton<String>(

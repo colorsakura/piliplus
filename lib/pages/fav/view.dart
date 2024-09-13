@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/fav_search/view.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,8 +56,14 @@ class _FavPageState extends State<FavPage> {
           IconButton(
             onPressed: () {
               if (_favController.loadingState.value is Success) {
-                Get.toNamed(
-                    '/favSearch?searchType=1&mediaId=${(_favController.loadingState.value as Success).response.first.id}');
+                Get.toNamed('/favSearch', arguments: {
+                  'type': 1,
+                  'mediaId': (_favController.loadingState.value as Success)
+                      .response
+                      .first
+                      .id,
+                  'searchType': SearchType.fav,
+                });
               }
             },
             icon: const Icon(Icons.search_outlined),

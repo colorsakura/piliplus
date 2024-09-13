@@ -1,5 +1,7 @@
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -11,19 +13,24 @@ class FavSearchController extends CommonController {
   Rx<TextEditingController> controller = TextEditingController().obs;
   final FocusNode searchFocusNode = FocusNode();
   RxString searchKeyWord = ''.obs; // 搜索词
-  String hintText = '请输入已收藏视频名称'; // 默认
+  String hintText = '搜索'; // 默认
   RxString loadingText = '加载中...'.obs; // 加载提示
   bool hasMore = false;
-  late int searchType;
-  late int mediaId;
+  int? type;
+  int? mediaId;
+  int? mid;
+  late SearchType searchType;
+  RxBool enableMultiple = false.obs;
 
   int count = 0; // 总数
 
   @override
   void onInit() {
     super.onInit();
-    searchType = int.parse(Get.parameters['searchType']!);
-    mediaId = int.parse(Get.parameters['mediaId']!);
+    type = Get.arguments['type'];
+    mediaId = Get.arguments['mediaId'];
+    mid = Get.arguments['mid'];
+    searchType = Get.arguments['searchType'];
   }
 
   // 清空搜索
@@ -38,6 +45,9 @@ class FavSearchController extends CommonController {
 
   @override
   Future onRefresh() {
+    if (controller.value.text.isEmpty) {
+      return Future.value();
+    }
     hasMore = true;
     return super.onRefresh();
   }
@@ -59,11 +69,17 @@ class FavSearchController extends CommonController {
     List currentList = loadingState.value is Success
         ? (loadingState.value as Success).response
         : [];
-    List dataList = currentPage == 1
-        ? response.response.medias
-        : currentList + response.response.medias;
+    List dataList = searchType == SearchType.fav
+        ? (currentPage == 1
+            ? response.response.medias
+            : currentList + response.response.medias)
+        : (currentPage == 1
+            ? response.response.list
+            : currentList + response.response.list);
     loadingState.value = LoadingState.success(dataList);
-    hasMore = response.response.hasMore;
+    hasMore = searchType == SearchType.fav
+        ? response.response.hasMore
+        : response.response.list.isNotEmpty;
     return true;
   }
 
@@ -79,17 +95,46 @@ class FavSearchController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.userFavFolderDetail(
-        pn: currentPage,
-        ps: 20,
-        mediaId: mediaId,
-        keyword: searchKeyWord.value,
-        type: searchType,
-      );
+  Future<LoadingState> customGetData() => searchType == SearchType.fav
+      ? UserHttp.userFavFolderDetail(
+          pn: currentPage,
+          ps: 20,
+          mediaId: mediaId!,
+          keyword: searchKeyWord.value,
+          type: type!,
+        )
+      : searchType == SearchType.follow
+          ? MemberHttp.getfollowSearch(
+              mid: mid!,
+              ps: 20,
+              pn: currentPage,
+              name: controller.value.text,
+            )
+          : UserHttp.searchHistory(
+              pn: currentPage,
+              keyword: controller.value.text,
+            );
 
   @override
   void onClose() {
     searchFocusNode.dispose();
     super.onClose();
+  }
+
+  Future delHistory(kid, business) async {
+    String resKid = 'archive_$kid';
+    if (business == 'live') {
+      resKid = 'live_$kid';
+    } else if (business.contains('article')) {
+      resKid = 'article_$kid';
+    }
+
+    var res = await UserHttp.delHistory(resKid);
+    if (res['status']) {
+      List historyList = (loadingState.value as Success).response;
+      historyList.removeWhere((e) => e.kid == kid);
+      loadingState.value = LoadingState.success(historyList);
+      SmartDialog.showToast(res['msg']);
+    }
   }
 }

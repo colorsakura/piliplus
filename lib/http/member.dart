@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+
 import '../models/dynamics/result.dart';
 import '../models/follow/result.dart';
 import '../models/member/archive.dart';
@@ -386,7 +388,7 @@ class MemberHttp {
   }
 
   // 搜索follow
-  static Future getfollowSearch({
+  static Future<LoadingState> getfollowSearch({
     required int mid,
     required int ps,
     required int pn,
@@ -409,16 +411,9 @@ class MemberHttp {
       'wts': params['wts'],
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': FollowDataModel.fromJson(res.data['data'])
-      };
+      return LoadingState.success(FollowDataModel.fromJson(res.data['data']));
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 }

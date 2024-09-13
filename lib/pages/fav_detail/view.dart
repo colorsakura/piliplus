@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -99,8 +100,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
             actions: [
               IconButton(
                 tooltip: '搜索',
-                onPressed: () =>
-                    Get.toNamed('/favSearch?searchType=0&mediaId=$mediaId'),
+                onPressed: () => Get.toNamed('/favSearch', arguments: {
+                  'type': 0,
+                  'mediaId': int.parse(mediaId),
+                  'searchType': SearchType.fav,
+                }),
                 icon: const Icon(Icons.search_outlined),
               ),
               //   IconButton(

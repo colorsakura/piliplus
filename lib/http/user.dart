@@ -286,7 +286,7 @@ class UserHttp {
   // }
 
   // 搜索历史记录
-  static Future searchHistory(
+  static Future<LoadingState> searchHistory(
       {required int pn, required String keyword}) async {
     var res = await Request().get(
       Api.searchHistory,
@@ -297,9 +297,9 @@ class UserHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': HistoryData.fromJson(res.data['data'])};
+      return LoadingState.success(HistoryData.fromJson(res.data['data']));
     } else {
-      return {'status': false, 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

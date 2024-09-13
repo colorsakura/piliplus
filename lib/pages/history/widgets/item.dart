@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/fav_search/controller.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -12,7 +13,6 @@ import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/business_type.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/models/live/item.dart';
-import 'package:PiliPalaX/pages/history_search/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
@@ -145,7 +145,7 @@ class HistoryItem extends StatelessWidget {
         }
       },
       onLongPress: () {
-        if (ctr is HistorySearchController) {
+        if (ctr is FavSearchController) {
           return;
         }
         if (!ctr!.enableMultiple.value) {

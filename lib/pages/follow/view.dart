@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
@@ -38,7 +39,10 @@ class _FollowPageState extends State<FollowPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () => Get.toNamed('/followSearch?mid=$mid'),
+              onPressed: () => Get.toNamed('/favSearch', arguments: {
+                    'mid': int.parse(mid),
+                    'searchType': SearchType.follow,
+                  }),
               icon: const Icon(Icons.search_outlined),
               tooltip: '搜索'),
           PopupMenuButton(

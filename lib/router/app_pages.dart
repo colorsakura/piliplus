@@ -7,7 +7,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/pages/msg_feed_top/at_me/view.dart';
 import 'package:PiliPalaX/pages/msg_feed_top/reply_me/view.dart';
 import 'package:PiliPalaX/pages/msg_feed_top/like_me/view.dart';
-import 'package:PiliPalaX/pages/follow_search/view.dart';
 import 'package:PiliPalaX/pages/setting/pages/logs.dart';
 
 import '../pages/about/index.dart';
@@ -21,7 +20,6 @@ import '../pages/fav_detail/index.dart';
 import '../pages/fav_search/index.dart';
 import '../pages/follow/index.dart';
 import '../pages/history/index.dart';
-import '../pages/history_search/index.dart';
 import '../pages/home/index.dart';
 import '../pages/hot/index.dart';
 import '../pages/html/index.dart';
@@ -145,8 +143,6 @@ class Routes {
     //
     CustomGetPage(name: '/htmlRender', page: () => const HtmlRenderPage()),
     // 历史记录搜索
-    CustomGetPage(
-        name: '/historySearch', page: () => const HistorySearchPage()),
 
     CustomGetPage(name: '/playSpeedSet', page: () => const PlaySpeedPage()),
     // 收藏搜索
@@ -181,8 +177,6 @@ class Routes {
         name: '/memberSeasons', page: () => const MemberSeasonsPage()),
     // 日志
     CustomGetPage(name: '/logs', page: () => const LogsPage()),
-    // 搜索关注
-    CustomGetPage(name: '/followSearch', page: () => const FollowSearchPage()),
     // 订阅
     CustomGetPage(name: '/subscription', page: () => const SubPage()),
     // 订阅详情
