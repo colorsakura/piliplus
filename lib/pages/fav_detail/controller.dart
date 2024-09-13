@@ -1,20 +1,15 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/http/user.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/user/fav_detail.dart';
 import 'package:PiliPalaX/models/user/fav_folder.dart';
 
-class FavDetailController extends GetxController {
+class FavDetailController extends CommonController {
   FavFolderItemData? item;
-  Rx<FavDetailData> favDetailData = FavDetailData().obs;
-
   int? mediaId;
   late String heroTag;
-  int currentPage = 1;
-  bool isLoadingMore = false;
-  RxMap favInfo = {}.obs;
-  RxList favList = [].obs;
   RxString loadingText = '加载中...'.obs;
   int mediaCount = 0;
 
@@ -26,52 +21,60 @@ class FavDetailController extends GetxController {
       heroTag = Get.parameters['heroTag']!;
     }
     super.onInit();
+
+    queryData();
   }
 
-  Future<dynamic> queryUserFavFolderDetail({type = 'init'}) async {
-    if (type == 'onLoad' && favList.length >= mediaCount) {
+  @override
+  Future onRefresh() {
+    loadingText.value = '加载中...';
+    return super.onRefresh();
+  }
+
+  @override
+  Future queryData([bool isRefresh = true]) {
+    if (loadingText.value == '没有更多了') {
+      return Future.value();
+    }
+    return super.queryData(isRefresh);
+  }
+
+  @override
+  bool customHandleResponse(Success response) {
+    if (currentPage == 1) {
+      mediaCount = response.response.info['media_count'];
+    }
+    List currentList = loadingState.value is Success
+        ? (loadingState.value as Success).response
+        : [];
+    List dataList = currentPage == 1
+        ? response.response.medias
+        : currentList + response.response.medias;
+    loadingState.value = LoadingState.success(dataList);
+    if (dataList.length >= mediaCount) {
       loadingText.value = '没有更多了';
-      return;
     }
-    isLoadingMore = true;
-    var res = await UserHttp.userFavFolderDetail(
-      pn: currentPage,
-      ps: 20,
-      mediaId: mediaId!,
-    );
-    if (res['status']) {
-      favInfo.value = res['data'].info;
-      if (currentPage == 1 && type == 'init') {
-        favList.value = res['data'].medias;
-        mediaCount = res['data'].info['media_count'];
-      } else if (type == 'onLoad') {
-        favList.addAll(res['data'].medias);
-      }
-      if (favList.length >= mediaCount) {
-        loadingText.value = '没有更多了';
-      }
-    }
-    currentPage += 1;
-    isLoadingMore = false;
-    return res;
+    return true;
   }
 
   onCancelFav(int id) async {
     var result = await VideoHttp.favVideo(
-        aid: id, addIds: '', delIds: mediaId.toString());
+      aid: id,
+      addIds: '',
+      delIds: mediaId.toString(),
+    );
     if (result['status']) {
-      List dataList = favList;
-      for (var i in dataList) {
-        if (i.id == id) {
-          dataList.remove(i);
-          break;
-        }
-      }
+      List dataList = (loadingState.value as Success).response;
+      dataList = dataList.where((item) => item.id != id).toList();
+      loadingState.value = LoadingState.success(dataList);
       SmartDialog.showToast('取消收藏');
     }
   }
 
-  onLoad() {
-    queryUserFavFolderDetail(type: 'onLoad');
-  }
+  @override
+  Future<LoadingState> customGetData() => UserHttp.userFavFolderDetailNew(
+        pn: currentPage,
+        ps: 20,
+        mediaId: mediaId!,
+      );
 }
