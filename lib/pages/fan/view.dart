@@ -1,9 +1,9 @@
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/no_data.dart';
-import 'package:PiliPalaX/models/fans/result.dart';
 
 import '../../common/constants.dart';
 import '../../utils/grid.dart';
@@ -20,21 +20,18 @@ class FansPage extends StatefulWidget {
 class _FansPageState extends State<FansPage> {
   late String mid;
   late FansController _fansController;
-  final ScrollController scrollController = ScrollController();
-  Future? _futureBuilderFuture;
 
   @override
   void initState() {
     super.initState();
     mid = Get.parameters['mid']!;
     _fansController = Get.put(FansController(), tag: mid);
-    _futureBuilderFuture = _fansController.queryFans('init');
-    scrollController.addListener(
+    _fansController.scrollController.addListener(
       () async {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (_fansController.scrollController.position.pixels >=
+            _fansController.scrollController.position.maxScrollExtent - 200) {
           EasyThrottle.throttle('follow', const Duration(seconds: 1), () {
-            _fansController.queryFans('onLoad');
+            _fansController.onLoadMore();
           });
         }
       },
@@ -43,8 +40,7 @@ class _FansPageState extends State<FansPage> {
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _fansController.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -62,58 +58,46 @@ class _FansPageState extends State<FansPage> {
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: () async => await _fansController.queryFans('init'),
+        onRefresh: () async => await _fansController.onRefresh(),
         child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: scrollController,
-            slivers: [
-              FutureBuilder(
-                future: _futureBuilderFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.data != null) {
-                    var data = snapshot.data;
-                    if (data['status']) {
-                      return Obx(() {
-                        List<FansItemModel> list = _fansController.fansList;
-                        return list.isNotEmpty
-                            ? SliverGrid(
-                                gridDelegate:
-                                    SliverGridDelegateWithMaxCrossAxisExtent(
-                                        mainAxisSpacing: StyleString.cardSpace,
-                                        crossAxisSpacing: StyleString.safeSpace,
-                                        maxCrossAxisExtent:
-                                            Grid.maxRowWidth * 2,
-                                        mainAxisExtent: 56),
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return fanItem(item: list[index]);
-                                  },
-                                  childCount: list.length,
-                                ))
-                            : const NoData();
-                      });
-                    } else {
-                      return HttpError(
-                        errMsg: data['msg'],
-                        fn: () => _fansController.queryFans('init'),
-                      );
-                    }
-                  } else {
-                    // 骨架屏
-                    return const SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ]),
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _fansController.scrollController,
+          slivers: [
+            Obx(() => _buildBody(_fansController.loadingState.value)),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? loadingState.response.isNotEmpty
+            ? SliverGrid(
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    mainAxisSpacing: StyleString.cardSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    mainAxisExtent: 56),
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return fanItem(item: loadingState.response[index]);
+                  },
+                  childCount: loadingState.response.length,
+                ))
+            : const NoData()
+        : loadingState is Error
+            ? HttpError(
+                errMsg: loadingState.errMsg,
+                fn: _fansController.onReload,
+              )
+            : const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              );
   }
 }
