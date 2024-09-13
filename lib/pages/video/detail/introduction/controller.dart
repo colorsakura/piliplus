@@ -64,7 +64,7 @@ class VideoIntroController extends GetxController {
   RxMap followStatus = {}.obs;
 
   RxInt lastPlayCid = 0.obs;
-  var userInfo;
+  dynamic userInfo;
 
   // 同时观看
   bool isShowOnlineTotal = false;

@@ -18,7 +18,6 @@ class DynamicsTabController extends CommonController {
   @override
   Future onRefresh() async {
     offset = '';
-    print('11111111111111111111111111111111 $dynamicsType,,$mid');
     await queryData();
   }
 

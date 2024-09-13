@@ -1,20 +1,29 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../http/reply.dart';
-import '../../models/video/reply/emote.dart';
 
-class EmotePanelController extends GetxController
+class EmotePanelController extends CommonController
     with GetTickerProviderStateMixin {
-  late List<Packages> emotePackage;
   late TabController tabController;
 
-  Future getEmote() async {
-    var res = await ReplyHttp.getEmoteList(business: 'reply');
-    if (res['status']) {
-      emotePackage = res['data'].packages;
-      tabController = TabController(length: emotePackage.length, vsync: this);
-    }
-    return res;
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
   }
+
+  @override
+  bool customHandleResponse(Success response) {
+    tabController =
+        TabController(length: response.response.length, vsync: this);
+    loadingState.value = response;
+    return true;
+  }
+
+  @override
+  Future<LoadingState> customGetData() =>
+      ReplyHttp.getEmoteList(business: 'reply');
 }

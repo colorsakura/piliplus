@@ -13,7 +13,7 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userInfo = userInfoCache.get('userInfoCache');
+    dynamic userInfo = userInfoCache.get('userInfoCache');
     return SliverAppBar(
       // forceElevated: true,
       scrolledUnderElevation: 0,

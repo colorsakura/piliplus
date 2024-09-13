@@ -96,22 +96,16 @@ class ReplyHttp {
     }
   }
 
-  static Future getEmoteList({String? business}) async {
+  static Future<LoadingState> getEmoteList({String? business}) async {
     var res = await Request().get(Api.myEmote, data: {
       'business': business ?? 'reply',
       'web_location': '333.1245',
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': EmoteModelData.fromJson(res.data['data']),
-      };
+      return LoadingState.success(
+          EmoteModelData.fromJson(res.data['data']).packages);
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 }

@@ -44,7 +44,7 @@ class MainController extends GetxController {
         setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;
     selectedIndex = defaultNavigationBars
         .indexWhere((item) => item['id'] == defaultHomePage);
-    var userInfo = userInfoCache.get('userInfoCache');
+    dynamic userInfo = userInfoCache.get('userInfoCache');
     userLogin.value = userInfo != null;
     dynamicBadgeType = DynamicBadgeMode.values[setting.get(
         SettingBoxKey.dynamicBadgeMode,

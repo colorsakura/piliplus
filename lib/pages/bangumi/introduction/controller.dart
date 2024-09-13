@@ -53,7 +53,7 @@ class BangumiIntroController extends CommonController {
   // 关注状态 默认未关注
   RxMap followStatus = {}.obs;
   int _tempThemeValue = -1;
-  var userInfo;
+  dynamic userInfo;
 
   @override
   void onInit() {

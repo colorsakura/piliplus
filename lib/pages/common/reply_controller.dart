@@ -118,7 +118,7 @@ abstract class ReplyController extends CommonController {
     dynamic replyItem,
     int index = 0,
   }) {
-    dynamic key = oid ?? replyItem.oid + replyItem.rpid + replyItem.rpid;
+    dynamic key = oid ?? replyItem.oid + replyItem.rpid;
     Navigator.of(context)
         .push(
       GetDialogRoute(
