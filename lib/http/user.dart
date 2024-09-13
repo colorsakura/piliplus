@@ -114,25 +114,20 @@ class UserHttp {
   }
 
   // 稍后再看
-  static Future<dynamic> seeYouLater() async {
+  static Future<LoadingState> seeYouLater() async {
     var res = await Request().get(Api.seeYouLater);
     if (res.data['code'] == 0) {
       if (res.data['data']['count'] == 0) {
-        return {
-          'status': true,
-          'data': {'list': [], 'count': 0}
-        };
+        return LoadingState.empty();
       }
       List<HotVideoItemModel> list = [];
       for (var i in res.data['data']['list']) {
         list.add(HotVideoItemModel.fromJson(i));
       }
-      return {
-        'status': true,
-        'data': {'list': list, 'count': res.data['data']['count']}
-      };
+      return LoadingState.success(
+          {'list': list, 'count': res.data['data']['count']});
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

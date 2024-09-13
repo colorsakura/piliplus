@@ -1,26 +1,31 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/models/model_hot_video_item.dart';
 
-class LaterController extends GetxController {
-  final ScrollController scrollController = ScrollController();
-  RxList<HotVideoItemModel> laterList = <HotVideoItemModel>[].obs;
-  int count = 0;
-  RxBool isLoading = false.obs;
+class LaterController extends CommonController {
+  RxInt count = (-1).obs;
 
-  Future queryLaterList() async {
-    isLoading.value = true;
-    var res = await UserHttp.seeYouLater();
-    if (res['status']) {
-      count = res['data']['count'];
-      if (count > 0) {
-        laterList.value = res['data']['list'];
-      }
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
+  }
+
+  @override
+  bool customHandleResponse(Success response) {
+    if (currentPage == 1) {
+      count.value = response.response['count'];
     }
-    isLoading.value = false;
-    return res;
+    List currentList = loadingState.value is Success
+        ? (loadingState.value as Success).response
+        : [];
+    loadingState.value = currentPage == 1
+        ? LoadingState.success(response.response['list'])
+        : LoadingState.success(currentList + response.response['list']);
+    return true;
   }
 
   Future toViewDel(BuildContext context, {int? aid}) async {
@@ -44,10 +49,12 @@ class LaterController extends GetxController {
                 var res = await UserHttp.toViewDel(aid: aid);
                 if (res['status']) {
                   if (aid != null) {
-                    laterList.removeWhere((e) => e.aid == aid);
+                    List list = (loadingState.value as Success).response;
+                    list.removeWhere((e) => e.aid == aid);
+                    loadingState.value = LoadingState.success(list);
                   } else {
-                    laterList.clear();
-                    queryLaterList();
+                    loadingState.value = LoadingState.loading();
+                    onRefresh();
                   }
                 }
                 Get.back();
@@ -81,7 +88,7 @@ class LaterController extends GetxController {
               onPressed: () async {
                 var res = await UserHttp.toViewClear();
                 if (res['status']) {
-                  laterList.clear();
+                  loadingState.value = LoadingState.empty();
                 }
                 Get.back();
                 SmartDialog.showToast(res['msg']);
@@ -93,4 +100,7 @@ class LaterController extends GetxController {
       },
     );
   }
+
+  @override
+  Future<LoadingState> customGetData() => UserHttp.seeYouLater();
 }
