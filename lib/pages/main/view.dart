@@ -91,7 +91,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
     }
 
     if (currentPage is MediaPage) {
-      _mediaController.queryFavFolder();
+      _mediaController.queryData();
     }
   }
 

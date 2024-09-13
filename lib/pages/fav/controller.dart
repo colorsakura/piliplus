@@ -42,7 +42,7 @@ class FavController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.userfavFolderNew(
+  Future<LoadingState> customGetData() => UserHttp.userfavFolder(
         pn: currentPage,
         ps: pageSize,
         mid: userInfo!.mid!,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,6 @@ class MediaPage extends StatefulWidget {
 class _MediaPageState extends State<MediaPage>
     with AutomaticKeepAliveClientMixin {
   late MediaController mediaController;
-  late Future _futureBuilderFuture;
 
   @override
   bool get wantKeepAlive => true;
@@ -29,20 +29,16 @@ class _MediaPageState extends State<MediaPage>
   void initState() {
     super.initState();
     mediaController = Get.put(MediaController());
-    _futureBuilderFuture = mediaController.queryFavFolder();
-    ScrollController scrollController = mediaController.scrollController;
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
 
     mediaController.userLogin.listen((status) {
-      setState(() {
-        _futureBuilderFuture = mediaController.queryFavFolder();
-      });
+      mediaController.onReload();
     });
-    scrollController.addListener(
+    mediaController.scrollController.addListener(
       () {
         final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+            mediaController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           mainStream.add(true);
         } else if (direction == ScrollDirection.reverse) {
@@ -55,7 +51,6 @@ class _MediaPageState extends State<MediaPage>
   @override
   void dispose() {
     mediaController.scrollController.removeListener(() {});
-    mediaController.scrollController.dispose();
     super.dispose();
   }
 
@@ -155,9 +150,9 @@ class _MediaPageState extends State<MediaPage>
                               Theme.of(context).textTheme.titleMedium!.fontSize,
                           fontWeight: FontWeight.bold),
                     ),
-                    if (mediaController.favFolderData.value.count != null)
+                    if (mediaController.count.value != -1)
                       TextSpan(
-                        text: "${mediaController.favFolderData.value.count}  ",
+                        text: "${mediaController.count.value}  ",
                         style: TextStyle(
                           fontSize:
                               Theme.of(context).textTheme.titleSmall!.fontSize,
@@ -177,11 +172,7 @@ class _MediaPageState extends State<MediaPage>
           ),
           trailing: IconButton(
             tooltip: '刷新',
-            onPressed: () {
-              setState(() {
-                _futureBuilderFuture = mediaController.queryFavFolder();
-              });
-            },
+            onPressed: mediaController.onReload,
             icon: const Icon(
               Icons.refresh,
               size: 20,
@@ -192,77 +183,61 @@ class _MediaPageState extends State<MediaPage>
         SizedBox(
           width: double.infinity,
           height: MediaQuery.textScalerOf(context).scale(200),
-          child: FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data == null) {
-                    return const SizedBox();
-                  }
-                  Map data = snapshot.data as Map;
-                  if (data['status']) {
-                    List favFolderList =
-                        mediaController.favFolderData.value.list!;
-                    int favFolderCount =
-                        mediaController.favFolderData.value.count!;
-                    bool flag = favFolderCount > favFolderList.length;
-                    return Obx(() => ListView.builder(
-                          itemCount:
-                              mediaController.favFolderData.value.list!.length +
-                                  (flag ? 1 : 0),
-                          itemBuilder: (context, index) {
-                            if (flag && index == favFolderList.length) {
-                              return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 14, bottom: 35),
-                                  child: Center(
-                                    child: IconButton(
-                                      tooltip: '查看更多',
-                                      style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.zero),
-                                        backgroundColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (states) {
-                                          return Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer
-                                              .withOpacity(0.5);
-                                        }),
-                                      ),
-                                      onPressed: () => Get.toNamed('/fav'),
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 18,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ));
-                            } else {
-                              return FavFolderItem(
-                                  item: mediaController
-                                      .favFolderData.value.list![index],
-                                  index: index);
-                            }
-                          },
-                          scrollDirection: Axis.horizontal,
-                        ));
-                  } else {
-                    return SizedBox(
-                      height: 160,
-                      child: Center(child: Text(data['msg'])),
-                    );
-                  }
-                } else {
-                  // 骨架屏
-                  return const SizedBox();
-                }
-              }),
+          child: Obx(() => _buildBody(mediaController.loadingState.value)),
         ),
       ],
     );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    if (loadingState is Success) {
+      List favFolderList = loadingState.response.list;
+      int favFolderCount = loadingState.response.count;
+      bool flag = favFolderCount > favFolderList.length;
+      return ListView.builder(
+        itemCount: loadingState.response.list.length + (flag ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (flag && index == favFolderList.length) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 14, bottom: 35),
+              child: Center(
+                child: IconButton(
+                  tooltip: '查看更多',
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      return Theme.of(context)
+                          .colorScheme
+                          .primaryContainer
+                          .withOpacity(0.5);
+                    }),
+                  ),
+                  onPressed: () => Get.toNamed('/fav'),
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return FavFolderItem(
+              item: loadingState.response.list[index],
+              index: index,
+            );
+          }
+        },
+        scrollDirection: Axis.horizontal,
+      );
+    }
+    if (loadingState is Error) {
+      return SizedBox(
+        height: 160,
+        child: Center(child: Text(loadingState.errMsg)),
+      );
+    }
+    return const SizedBox();
   }
 }
 

@@ -1,13 +1,13 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class MediaController extends GetxController {
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+class MediaController extends CommonController {
   Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
   List list = [
@@ -45,25 +45,32 @@ class MediaController extends GetxController {
   ];
   dynamic userInfo;
   int? mid;
-  final ScrollController scrollController = ScrollController();
+  RxInt count = (-1).obs;
 
   @override
   void onInit() {
     super.onInit();
     userInfo = userInfoCache.get('userInfoCache');
     userLogin.value = userInfo != null;
+
+    if (userLogin.value) {
+      queryData();
+    }
   }
 
-  Future<dynamic> queryFavFolder() async {
-    if (!userLogin.value) {
-      return {'status': false, 'data': [], 'msg': '未登录'};
+  @override
+  bool customHandleResponse(Success response) {
+    if (currentPage == 1) {
+      count.value = response.response.count;
     }
-    var res = await await UserHttp.userfavFolder(
-      pn: 1,
-      ps: 5,
-      mid: mid ?? GStorage.userInfo.get('userInfoCache').mid,
-    );
-    favFolderData.value = res['data'];
-    return res;
+    loadingState.value = response;
+    return true;
   }
+
+  @override
+  Future<LoadingState> customGetData() => UserHttp.userfavFolder(
+        pn: 1,
+        ps: 5,
+        mid: mid ?? GStorage.userInfo.get('userInfoCache').mid,
+      );
 }
