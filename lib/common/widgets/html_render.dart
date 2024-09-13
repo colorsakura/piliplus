@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:get/get.dart';
 import '../../utils/storage.dart';
 import 'network_img_layer.dart';
 
@@ -62,7 +59,7 @@ class HtmlRender extends StatelessWidget {
               //   height: isEmote ? 22 : null,
               // );
               return NetworkImgLayer(
-                width: isEmote ? 22 : (constrainedWidth - 23) / textScale,
+                width: isEmote ? 22 : constrainedWidth / textScale,
                 height: isEmote ? 22 : 200,
                 src: imgUrl,
                 ignoreHeight: !isEmote,
