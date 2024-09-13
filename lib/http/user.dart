@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../common/constants.dart';
 import '../models/model_hot_video_item.dart';
@@ -42,6 +43,27 @@ class UserHttp {
   }
 
   // 收藏夹
+  static Future<LoadingState> userfavFolderNew({
+    required int pn,
+    required int ps,
+    required int mid,
+  }) async {
+    var res = await Request().get(Api.userFavFolder, data: {
+      'pn': pn,
+      'ps': ps,
+      'up_mid': mid,
+    });
+    if (res.data['code'] == 0) {
+      if (res.data['data'] != null) {
+        return LoadingState.success(FavFolderData.fromJson(res.data['data']));
+      } else {
+        return LoadingState.empty();
+      }
+    } else {
+      return LoadingState.error(res.data['message'] ?? '账号未登录');
+    }
+  }
+
   static Future<dynamic> userfavFolder({
     required int pn,
     required int ps,

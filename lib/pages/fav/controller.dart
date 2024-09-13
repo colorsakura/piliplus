@@ -1,55 +1,50 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/models/user/info.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class FavController extends GetxController {
-  final ScrollController scrollController = ScrollController();
-  Rx<FavFolderData> favFolderData = FavFolderData().obs;
+class FavController extends CommonController {
   Box userInfoCache = GStorage.userInfo;
-  UserInfoData? userInfo;
-  int currentPage = 1;
+  late final UserInfoData? userInfo = userInfoCache.get('userInfoCache');
   int pageSize = 10;
-  RxBool hasMore = true.obs;
+  bool hasMore = true;
 
-  Future<dynamic> queryFavFolder({type = 'init'}) async {
-    userInfo = userInfoCache.get('userInfoCache');
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
+  }
+
+  @override
+  Future queryData([bool isRefresh = true]) {
     if (userInfo == null) {
-      return {'status': false, 'msg': '账号未登录'};
+      loadingState.value = LoadingState.error('账号未登录');
+      return Future.value();
     }
-    if (!hasMore.value) {
-      return;
+    if (!hasMore) {
+      return Future.value();
     }
-    var res = await UserHttp.userfavFolder(
-      pn: currentPage,
-      ps: pageSize,
-      mid: userInfo!.mid!,
-    );
-    if (res['status']) {
-      if (type == 'init') {
-        favFolderData.value = res['data'];
-      } else {
-        if (res['data'].list.isNotEmpty) {
-          favFolderData.value.list!.addAll(res['data'].list);
-          favFolderData.update((val) {});
-        }
-      }
-      hasMore.value = res['data'].hasMore;
-      currentPage++;
-      if (hasMore.value && type == 'init') {
-        queryFavFolder(type: 'onload');
-      }
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
-    return res;
+    return super.queryData(isRefresh);
   }
 
-  Future onLoad() async {
-    queryFavFolder(type: 'onload');
+  @override
+  bool customHandleResponse(Success response) {
+    hasMore = response.response.hasMore;
+    List currentList = loadingState.value is Success
+        ? (loadingState.value as Success).response
+        : [];
+    loadingState.value = currentPage == 1
+        ? LoadingState.success(response.response.list)
+        : LoadingState.success(currentList + response.response.list);
+    return true;
   }
+
+  @override
+  Future<LoadingState> customGetData() => UserHttp.userfavFolderNew(
+        pn: currentPage,
+        ps: pageSize,
+        mid: userInfo!.mid!,
+      );
 }

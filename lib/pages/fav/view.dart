@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,20 +19,16 @@ class FavPage extends StatefulWidget {
 
 class _FavPageState extends State<FavPage> {
   final FavController _favController = Get.put(FavController());
-  late Future _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _favController.queryFavFolder();
-    scrollController = _favController.scrollController;
-    scrollController.addListener(
+    _favController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_favController.scrollController.position.pixels >=
+            _favController.scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('history', const Duration(seconds: 1), () {
-            _favController.onLoad();
+            _favController.onLoadMore();
           });
         }
       },
@@ -40,8 +37,7 @@ class _FavPageState extends State<FavPage> {
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _favController.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -57,77 +53,64 @@ class _FavPageState extends State<FavPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => Get.toNamed(
-                '/favSearch?searchType=1&mediaId=${_favController.favFolderData.value.list!.first.id}'),
+            onPressed: () {
+              if (_favController.loadingState.value is Success) {
+                Get.toNamed(
+                    '/favSearch?searchType=1&mediaId=${(_favController.loadingState.value as Success).response.first.id}');
+              }
+            },
             icon: const Icon(Icons.search_outlined),
             tooltip: '搜索',
           ),
           const SizedBox(width: 6),
         ],
       ),
-      body: FutureBuilder(
-        future: _futureBuilderFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map data = snapshot.data as Map;
-            if (data['status']) {
-              return Obx(() => CustomScrollView(
-                      controller: scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        SliverGrid(
-                          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                              mainAxisSpacing: StyleString.cardSpace,
-                              crossAxisSpacing: StyleString.safeSpace,
-                              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                              childAspectRatio: StyleString.aspectRatio * 2.4,
-                              mainAxisExtent: 0),
-                          delegate: SliverChildBuilderDelegate(
-                            childCount:
-                                _favController.favFolderData.value.list!.length,
-                            (BuildContext context, int index) {
-                              return FavItem(
-                                  favFolderItem: _favController
-                                      .favFolderData.value.list![index]);
-                            },
-                          ),
-                        )
-                      ]));
-            } else {
-              return CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                slivers: [
-                  HttpError(
-                    errMsg: data['msg'],
-                    fn: () => setState(() {}),
-                  ),
-                ],
-              );
-            }
-          } else {
-            // 骨架屏
-            return CustomScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              slivers: [
-                SliverGrid(
-                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                      mainAxisSpacing: StyleString.cardSpace,
-                      crossAxisSpacing: StyleString.safeSpace,
-                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                      childAspectRatio: StyleString.aspectRatio * 2.4,
-                      mainAxisExtent: 0),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return const VideoCardHSkeleton();
-                    },
-                    childCount: 10,
-                  ),
-                ),
-              ],
-            );
-          }
-        },
+      body: CustomScrollView(
+        controller: _favController.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          Obx(
+            () => _buildBody(_favController.loadingState.value),
+          ),
+        ],
       ),
     );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? SliverGrid(
+            gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.4,
+                mainAxisExtent: 0),
+            delegate: SliverChildBuilderDelegate(
+              childCount: loadingState.response.length,
+              (BuildContext context, int index) {
+                return FavItem(favFolderItem: loadingState.response[index]);
+              },
+            ),
+          )
+        : loadingState is Error
+            ? HttpError(
+                errMsg: loadingState.errMsg,
+                fn: _favController.onReload,
+              )
+            : SliverGrid(
+                gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: StyleString.cardSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.4,
+                    mainAxisExtent: 0),
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return const VideoCardHSkeleton();
+                  },
+                  childCount: 10,
+                ),
+              );
   }
 }
