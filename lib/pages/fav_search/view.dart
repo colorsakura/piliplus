@@ -1,7 +1,8 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/pages/fav_detail/widget/fav_video_card.dart';
 
@@ -27,7 +28,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
         if (_favSearchCtr.scrollController.position.pixels >=
             _favSearchCtr.scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('fav', const Duration(seconds: 1), () {
-            _favSearchCtr.onLoad();
+            _favSearchCtr.onLoadMore();
           });
         }
       },
@@ -36,9 +37,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
 
   @override
   void dispose() {
-    _favSearchCtr.searchFocusNode.dispose();
     _favSearchCtr.scrollController.removeListener(() {});
-    _favSearchCtr.scrollController.dispose();
     super.dispose();
   }
 
@@ -50,7 +49,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
         actions: [
           IconButton(
               tooltip: '搜索',
-              onPressed: () => _favSearchCtr.submit(),
+              onPressed: _favSearchCtr.onRefresh,
               icon: const Icon(Icons.search_outlined, size: 22)),
           const SizedBox(width: 10)
         ],
@@ -71,47 +70,61 @@ class _FavSearchPageState extends State<FavSearchPage> {
                 onPressed: () => _favSearchCtr.onClear(),
               ),
             ),
-            onSubmitted: (String value) => _favSearchCtr.submit(),
+            onSubmitted: (String value) => _favSearchCtr.onRefresh(),
           ),
         ),
       ),
-      body: Obx(
-        () => _favSearchCtr.loadingStatus.value && _favSearchCtr.favList.isEmpty
-            ? ListView.builder(
-                itemCount: 10,
+      body: Obx(() => _buildBody(_favSearchCtr.loadingState.value)),
+    );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? loadingState.response.isEmpty
+            ? CustomScrollView(
+                slivers: <Widget>[
+                  HttpError(
+                    errMsg: '没有数据',
+                    fn: _favSearchCtr.onReload,
+                  ),
+                ],
+              )
+            : ListView.builder(
+                controller: _favSearchCtr.scrollController,
+                itemCount: loadingState.response.length + 1,
                 itemBuilder: (context, index) {
-                  return const VideoCardHSkeleton();
+                  if (index == loadingState.response.length) {
+                    return Container(
+                      height: MediaQuery.of(context).padding.bottom + 60,
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom,
+                      ),
+                    );
+                  } else {
+                    return FavVideoCardH(
+                      videoItem: loadingState.response[index],
+                      searchType: searchType,
+                      callFn: () => searchType != 1
+                          ? _favSearchCtr
+                              .onCancelFav(loadingState.response[index].id!)
+                          : {},
+                    );
+                  }
                 },
               )
-            : _favSearchCtr.favList.isNotEmpty
-                ? ListView.builder(
-                    controller: _favSearchCtr.scrollController,
-                    itemCount: _favSearchCtr.favList.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == _favSearchCtr.favList.length) {
-                        return Container(
-                          height: MediaQuery.of(context).padding.bottom + 60,
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).padding.bottom),
-                        );
-                      } else {
-                        return FavVideoCardH(
-                          videoItem: _favSearchCtr.favList[index],
-                          searchType: searchType,
-                          callFn: () => searchType != 1
-                              ? _favSearchCtr
-                                  .onCancelFav(_favSearchCtr.favList[index].id!)
-                              : {},
-                        );
-                      }
-                    },
-                  )
-                : const CustomScrollView(
-                    slivers: <Widget>[
-                      NoData(),
-                    ],
+        : loadingState is Error
+            ? CustomScrollView(
+                slivers: <Widget>[
+                  HttpError(
+                    errMsg: loadingState.errMsg,
+                    fn: _favSearchCtr.onReload,
                   ),
-      ),
-    );
+                ],
+              )
+            : const CustomScrollView(
+                slivers: <Widget>[
+                  NoData(),
+                ],
+              );
   }
 }

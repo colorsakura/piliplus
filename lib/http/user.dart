@@ -89,7 +89,7 @@ class UserHttp {
     }
   }
 
-  static Future<LoadingState> userFavFolderDetailNew(
+  static Future<LoadingState> userFavFolderDetail(
       {required int mediaId,
       required int pn,
       required int ps,
@@ -110,31 +110,6 @@ class UserHttp {
       return LoadingState.success(FavDetailData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
-    }
-  }
-
-  static Future<dynamic> userFavFolderDetail(
-      {required int mediaId,
-      required int pn,
-      required int ps,
-      String keyword = '',
-      String order = 'mtime',
-      int type = 0}) async {
-    var res = await Request().get(Api.userFavFolderDetail, data: {
-      'media_id': mediaId,
-      'pn': pn,
-      'ps': ps,
-      'keyword': keyword,
-      'order': order,
-      'type': type,
-      'tid': 0,
-      'platform': 'web'
-    });
-    if (res.data['code'] == 0) {
-      FavDetailData data = FavDetailData.fromJson(res.data['data']);
-      return {'status': true, 'data': data};
-    } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
     }
   }
 

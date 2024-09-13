@@ -72,7 +72,7 @@ class FavDetailController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.userFavFolderDetailNew(
+  Future<LoadingState> customGetData() => UserHttp.userFavFolderDetail(
         pn: currentPage,
         ps: 20,
         mediaId: mediaId!,
