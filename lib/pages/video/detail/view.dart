@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/services.dart';
@@ -557,18 +558,38 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   elevation: 0,
                   scrolledUnderElevation: 0,
                   backgroundColor: Colors.transparent,
-                  actions: [
-                    IconButton(
-                      tooltip: '稍后再看',
-                      onPressed: () async {
-                        var res = await UserHttp.toViewLater(
-                            bvid: videoDetailController.bvid);
-                        SmartDialog.showToast(res['msg']);
-                      },
-                      icon: const Icon(Icons.history_outlined),
-                    ),
-                    const SizedBox(width: 14)
-                  ],
+                  actions: (videoDetailController.userInfo == null)
+                      ? null
+                      : [
+                          PopupMenuButton<String>(
+                            onSelected: (String type) async {
+                              switch (type) {
+                                case 'later':
+                                  var res = await UserHttp.toViewLater(
+                                      bvid: videoDetailController.bvid);
+                                  SmartDialog.showToast(res['msg']);
+                                  break;
+                                case 'report':
+                                  Get.toNamed('/webviewnew', parameters: {
+                                    'url':
+                                        'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
+                                  });
+                                  break;
+                              }
+                            },
+                            itemBuilder: (BuildContext context) =>
+                                <PopupMenuEntry<String>>[
+                              const PopupMenuItem<String>(
+                                value: 'later',
+                                child: Text('稍后再看'),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: 'report',
+                                child: Text('举报'),
+                              ),
+                            ],
+                          ),
+                        ],
                 ),
               ),
               Positioned(
