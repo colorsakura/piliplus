@@ -15,6 +15,7 @@ import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../utils/grid.dart';
 import 'controller.dart';
@@ -115,7 +116,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           titleSpacing: 0,
           centerTitle: false,
           title: Text(
-            '评论详情',
+            '评论详情${replyItem.rcount > 0 ? '（${replyItem.rcount}）' : ''}',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
@@ -201,7 +202,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 ),
               ),
               PopupMenuItem(
-                onTap: () => {},
+                onTap: () => Share.share(url),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
