@@ -14,7 +14,6 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:PiliPalaX/utils/video_utils.dart';
-import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../utils/id_utils.dart';
 import 'widgets/header_control.dart';
@@ -235,13 +234,6 @@ class VideoDetailController extends GetxController
     duration,
     bool autoplay = true,
   }) async {
-    /// 设置/恢复 屏幕亮度
-    if (brightness != null) {
-      ScreenBrightness().setScreenBrightness(brightness!);
-    } else if (setting.get(SettingBoxKey.enableAutoBrightness,
-        defaultValue: false) as bool) {
-      ScreenBrightness().resetScreenBrightness();
-    }
     await plPlayerController.setDataSource(
       DataSource(
         videoSource: video ?? videoUrl,

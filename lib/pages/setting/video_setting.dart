@@ -76,7 +76,7 @@ class _VideoSettingState extends State<VideoSetting> {
             subTitle: '返回时自动调整视频亮度',
             leading: Icon(Icons.brightness_6_outlined),
             setKey: SettingBoxKey.enableAutoBrightness,
-            defaultVal: false,
+            defaultVal: true,
           ),
           const SetSwitchItem(
             title: '免登录1080P',

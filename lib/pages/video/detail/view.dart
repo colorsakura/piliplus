@@ -26,6 +26,7 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPalaX/services/service_locator.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../services/shutdown_timer_service.dart';
 import 'widgets/header_control.dart';
@@ -277,6 +278,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
+    ScreenBrightness().resetScreenBrightness();
     appbarStream.close();
     floating.dispose();
     videoDetailController.floating?.dispose();
@@ -305,8 +307,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void didPushNext() async {
     // _bufferedListener?.cancel();
 
+    ScreenBrightness().resetScreenBrightness();
+
     /// 开启
-    if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+    if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
         as bool) {
       videoDetailController.brightness = plPlayerController!.brightness.value;
     }
@@ -318,9 +322,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController!.pause();
     }
     isShowing = false;
-    if (mounted) {
-      setState(() => {});
-    }
     super.didPushNext();
   }
 
@@ -328,15 +329,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 返回当前页面时
   void didPopNext() async {
     isShowing = true;
-    if (mounted) {
-      setState(() => {});
-    }
     super.didPopNext();
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     await videoDetailController.playerInit(autoplay: autoplay);
+    if (mounted && videoDetailController.brightness != null) {
+      ScreenBrightness().setScreenBrightness(videoDetailController.brightness!);
+    }
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
     videoIntroController.isPaused = false;

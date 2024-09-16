@@ -904,7 +904,7 @@ class PlPlayerController {
 
     // Future.delayed(const Duration(milliseconds: 100), () {
     //   getCurrentVolume();
-    //   if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+    //   if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
     //       as bool) {
     //     getCurrentBrightness();
     //   }
@@ -1321,7 +1321,7 @@ class PlPlayerController {
       }
       _instance = null;
       // 关闭所有视频页面恢复亮度
-      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: false)
+      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
           as bool) {
         resetBrightness();
       }

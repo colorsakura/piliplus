@@ -1453,10 +1453,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     onPressed: () async {
                       // 销毁播放器实例
                       // await widget.controller!.dispose(type: 'all');
-                      if (mounted) {
-                        Navigator.popUntil(
-                            context, (Route<dynamic> route) => route.isFirst);
-                      }
+                      Get.until((route) => route.isFirst);
                     },
                   )),
             if ((videoIntroController.videoDetail.value.title != null) &&
