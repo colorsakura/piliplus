@@ -335,7 +335,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     await videoDetailController.playerInit(autoplay: autoplay);
-    if (mounted && videoDetailController.brightness != null) {
+    if (mounted &&
+        videoDetailController.brightness != null &&
+        videoDetailController.brightness != -1.0) {
       ScreenBrightness().setScreenBrightness(videoDetailController.brightness!);
     }
 

@@ -68,7 +68,7 @@ class PlPlayerController {
   final Rx<double> _playbackSpeed = 1.0.obs;
   final Rx<double> _longPressSpeed = 2.0.obs;
   final Rx<double> _currentVolume = 1.0.obs;
-  final Rx<double> _currentBrightness = 0.0.obs;
+  final Rx<double> _currentBrightness = (-1.0).obs;
 
   final Rx<bool> _mute = false.obs;
   final Rx<bool> _showControls = false.obs;
