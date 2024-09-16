@@ -238,27 +238,44 @@ class BangumiIntroController extends CommonController {
         builder: (context) {
           String videoUrl = '${HttpString.baseUrl}/video/$bvid';
           return AlertDialog(
-            title: const Text('请选择'),
-            actions: [
-              TextButton(
-                  onPressed: () {
+            clipBehavior: Clip.hardEdge,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: const Text(
+                    '复制链接',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
                     Clipboard.setData(ClipboardData(text: videoUrl));
                     SmartDialog.showToast('已复制');
                   },
-                  child: const Text('复制链接到剪贴板')),
-              TextButton(
-                  onPressed: () {
+                ),
+                ListTile(
+                  title: const Text(
+                    '其它app打开',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
                     launchUrl(Uri.parse(videoUrl));
                   },
-                  child: const Text('其它app打开')),
-              TextButton(
-                  onPressed: () async {
-                    var result =
-                        await Share.share(videoUrl).whenComplete(() {});
-                    return result;
+                ),
+                ListTile(
+                  title: const Text(
+                    '分享视频',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    Share.share(videoUrl).whenComplete(() {});
                   },
-                  child: const Text('分享视频')),
-            ],
+                ),
+              ],
+            ),
           );
         });
   }
@@ -280,7 +297,7 @@ class BangumiIntroController extends CommonController {
   }
 
   // 修改分P或番剧分集
-  Future changeSeasonOrbangu(bvid, cid, aid) async {
+  Future changeSeasonOrbangu(bvid, cid, aid, cover) async {
     // 重新获取视频资源
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
@@ -288,6 +305,9 @@ class BangumiIntroController extends CommonController {
     videoDetailCtr.cid.value = cid;
     videoDetailCtr.danmakuCid.value = cid;
     videoDetailCtr.queryVideoUrl();
+    if (cover is String && cover.isNotEmpty) {
+      videoDetailCtr.videoItem['pic'] = cover;
+    }
     // 重新请求评论
     try {
       /// 未渲染回复组件时可能异常
@@ -342,7 +362,8 @@ class BangumiIntroController extends CommonController {
     int cid = episodes[prevIndex].cid!;
     String bvid = episodes[prevIndex].bvid!;
     int aid = episodes[prevIndex].aid!;
-    changeSeasonOrbangu(bvid, cid, aid);
+    dynamic cover = episodes[prevIndex].cover;
+    changeSeasonOrbangu(bvid, cid, aid, cover);
     return true;
   }
 
@@ -376,7 +397,8 @@ class BangumiIntroController extends CommonController {
     int cid = episodes[nextIndex].cid!;
     String bvid = episodes[nextIndex].bvid!;
     int aid = episodes[nextIndex].aid!;
-    changeSeasonOrbangu(bvid, cid, aid);
+    dynamic cover = episodes[nextIndex].cover;
+    changeSeasonOrbangu(bvid, cid, aid, cover);
     return true;
   }
 

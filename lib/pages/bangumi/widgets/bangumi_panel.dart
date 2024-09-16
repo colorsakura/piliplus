@@ -161,6 +161,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                         widget.pages[i].bvid,
                         widget.pages[i].cid,
                         widget.pages[i].aid,
+                        widget.pages[i].cover,
                       );
                       // currentIndex = i;
                       // setState(() {});

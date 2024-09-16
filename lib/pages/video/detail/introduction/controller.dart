@@ -379,9 +379,9 @@ class VideoIntroController extends GetxController {
                     style: TextStyle(fontSize: 14),
                   ),
                   onTap: () {
+                    Get.back();
                     Clipboard.setData(ClipboardData(text: videoUrl));
                     SmartDialog.showToast('已复制');
-                    Get.back();
                   },
                 ),
                 ListTile(
@@ -390,8 +390,8 @@ class VideoIntroController extends GetxController {
                     style: TextStyle(fontSize: 14),
                   ),
                   onTap: () {
-                    launchUrl(Uri.parse(videoUrl));
                     Get.back();
+                    launchUrl(Uri.parse(videoUrl));
                   },
                 ),
                 ListTile(
@@ -399,11 +399,11 @@ class VideoIntroController extends GetxController {
                     '分享视频',
                     style: TextStyle(fontSize: 14),
                   ),
-                  onTap: () async {
-                    await Share.share('${videoDetail.value.title} '
+                  onTap: () {
+                    Get.back();
+                    Share.share('${videoDetail.value.title} '
                         'UP主: ${videoDetail.value.owner!.name!}'
                         ' - $videoUrl');
-                    Get.back();
                   },
                 ),
               ],
