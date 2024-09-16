@@ -312,7 +312,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     /// 开启
     if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
         as bool) {
-      videoDetailController.brightness = plPlayerController!.brightness.value;
+      videoDetailController.brightness = plPlayerController?.brightness.value;
     }
     if (plPlayerController != null) {
       videoDetailController.defaultST = plPlayerController!.position.value;
