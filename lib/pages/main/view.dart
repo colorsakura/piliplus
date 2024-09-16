@@ -89,10 +89,6 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
     } else {
       _dynamicController.flag = false;
     }
-
-    if (currentPage is MediaPage) {
-      _mediaController.queryData();
-    }
   }
 
   @override
@@ -110,6 +106,9 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
         _mainController.onBackPressed(context);
         if (_dynamicController.flag) {
           _dynamicController.flag = false;
+        }
+        if (!_homeController.flag) {
+          _homeController.flag = true;
         }
       },
       child: Scaffold(
