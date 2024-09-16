@@ -41,7 +41,6 @@ abstract class ReplyController extends CommonController {
 
   @override
   Future onRefresh() {
-    nextOffset = '';
     noMore.value = '';
     return super.onRefresh();
   }
@@ -55,7 +54,6 @@ abstract class ReplyController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     List<ReplyItemModel> replies = response.response.replies;
-    nextOffset = response.response.cursor.paginationReply.nextOffset ?? "";
     if (replies.isNotEmpty) {
       noMore.value = '加载中...';
 
@@ -78,7 +76,7 @@ abstract class ReplyController extends CommonController {
         }
       }
       replies.insertAll(0, response.response.topReplies);
-      count.value = response.response.cursor.allCount ?? 0;
+      count.value = response.response.page.count ?? 0;
     } else {
       replies.insertAll(
           0,
