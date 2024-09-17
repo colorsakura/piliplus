@@ -12,7 +12,6 @@ import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
 import 'package:PiliPalaX/common/widgets/stat/view.dart';
 import 'package:PiliPalaX/models/video_detail_res.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
-import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
@@ -26,8 +25,15 @@ import 'widgets/page.dart';
 import 'widgets/season.dart';
 
 class VideoIntroPanel extends StatefulWidget {
-  const VideoIntroPanel({required this.heroTag, super.key});
+  const VideoIntroPanel({
+    super.key,
+    required this.heroTag,
+    required this.showAiBottomSheet,
+    required this.showIntroDetail,
+  });
   final String heroTag;
+  final Function showAiBottomSheet;
+  final Function showIntroDetail;
 
   @override
   State<VideoIntroPanel> createState() => _VideoIntroPanelState();
@@ -74,6 +80,8 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             loadingStatus: true,
             videoDetail: videoDetail,
             heroTag: heroTag,
+            showAiBottomSheet: widget.showAiBottomSheet,
+            showIntroDetail: widget.showIntroDetail,
           )
         : VideoInfo(
             //key:herotag
@@ -81,6 +89,8 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             loadingStatus: false,
             videoDetail: videoIntroController.videoDetail.value,
             heroTag: heroTag,
+            showAiBottomSheet: widget.showAiBottomSheet,
+            showIntroDetail: widget.showIntroDetail,
           ));
   }
 }
@@ -89,10 +99,17 @@ class VideoInfo extends StatefulWidget {
   final bool loadingStatus;
   final VideoDetailData? videoDetail;
   final String? heroTag;
+  final Function showAiBottomSheet;
+  final Function showIntroDetail;
 
-  const VideoInfo(
-      {Key? key, this.loadingStatus = false, this.videoDetail, this.heroTag})
-      : super(key: key);
+  const VideoInfo({
+    Key? key,
+    this.loadingStatus = false,
+    this.videoDetail,
+    this.heroTag,
+    required this.showAiBottomSheet,
+    required this.showIntroDetail,
+  }) : super(key: key);
 
   @override
   State<VideoInfo> createState() => _VideoInfoState();
@@ -177,13 +194,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       return;
     }
     feedBack();
-    showBottomSheet(
-      context: context,
-      enableDrag: true,
-      builder: (BuildContext context) {
-        return IntroDetail(videoDetail: widget.videoDetail!);
-      },
-    );
+    widget.showIntroDetail(widget.videoDetail);
   }
 
   // 用户主页
@@ -198,17 +209,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
         : videoItem['owner'].face;
     Get.toNamed('/member?mid=$mid',
         arguments: {'face': face, 'heroTag': memberHeroTag});
-  }
-
-  // ai总结
-  showAiBottomSheet() {
-    showBottomSheet(
-      context: context,
-      enableDrag: true,
-      builder: (BuildContext context) {
-        return AiDetail(modelResult: videoIntroController.modelResult);
-      },
-    );
   }
 
   @override
@@ -384,7 +384,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                               final res =
                                   await videoIntroController.aiConclusion();
                               if (res['status']) {
-                                showAiBottomSheet();
+                                widget.showAiBottomSheet();
                               }
                             },
                             child:

@@ -1,6 +1,5 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,6 +17,7 @@ class VideoReplyPanel extends StatefulWidget {
   final int rpid;
   final String? replyLevel;
   final String heroTag;
+  final Function replyReply;
 
   const VideoReplyPanel({
     this.bvid,
@@ -25,6 +25,7 @@ class VideoReplyPanel extends StatefulWidget {
     this.rpid = 0,
     this.replyLevel,
     required this.heroTag,
+    required this.replyReply,
     super.key,
   });
 
@@ -113,21 +114,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
       _isFabVisible = false;
       fabAnimationCtr.reverse();
     }
-  }
-
-  // 展示二级回复
-  void replyReply(replyItem) {
-    showBottomSheet(
-      context: context,
-      builder: (context) => VideoReplyReplyPanel(
-        rcount: replyItem.rcount,
-        oid: replyItem.oid,
-        rpid: replyItem.rpid,
-        firstFloor: replyItem,
-        replyType: ReplyType.video,
-        source: 'videoDetail',
-      ),
-    );
   }
 
   @override
@@ -239,7 +225,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     replyItem: loadingState.response[index],
                     showReplyRow: true,
                     replyLevel: replyLevel,
-                    replyReply: replyReply,
+                    replyReply: widget.replyReply,
                     replyType: ReplyType.video,
                     onReply: () {
                       _videoReplyController.onReply(
