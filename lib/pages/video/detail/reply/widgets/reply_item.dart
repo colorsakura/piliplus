@@ -340,7 +340,7 @@ class ReplyItem extends StatelessWidget {
         const SizedBox(width: 2),
         if (replyItem!.upAction!.like!) ...[
           Text(
-            'up主觉得很赞',
+            'UP主觉得很赞',
             style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize),
