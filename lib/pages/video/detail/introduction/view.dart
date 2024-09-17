@@ -20,7 +20,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'widgets/action_item.dart';
 import 'widgets/action_row_item.dart';
 import 'widgets/fav_panel.dart';
-import 'widgets/intro_detail.dart';
 import 'widgets/page.dart';
 import 'widgets/season.dart';
 
@@ -30,10 +29,12 @@ class VideoIntroPanel extends StatefulWidget {
     required this.heroTag,
     required this.showAiBottomSheet,
     required this.showIntroDetail,
+    required this.showEpisodes,
   });
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showIntroDetail;
+  final Function showEpisodes;
 
   @override
   State<VideoIntroPanel> createState() => _VideoIntroPanelState();
@@ -82,6 +83,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             heroTag: heroTag,
             showAiBottomSheet: widget.showAiBottomSheet,
             showIntroDetail: widget.showIntroDetail,
+            showEpisodes: widget.showEpisodes,
           )
         : VideoInfo(
             //key:herotag
@@ -91,6 +93,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             heroTag: heroTag,
             showAiBottomSheet: widget.showAiBottomSheet,
             showIntroDetail: widget.showIntroDetail,
+            showEpisodes: widget.showEpisodes,
           ));
   }
 }
@@ -101,6 +104,7 @@ class VideoInfo extends StatefulWidget {
   final String? heroTag;
   final Function showAiBottomSheet;
   final Function showIntroDetail;
+  final Function showEpisodes;
 
   const VideoInfo({
     Key? key,
@@ -109,6 +113,7 @@ class VideoInfo extends StatefulWidget {
     this.heroTag,
     required this.showAiBottomSheet,
     required this.showIntroDetail,
+    required this.showEpisodes,
   }) : super(key: key);
 
   @override
@@ -433,6 +438,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         ? videoIntroController.lastPlayCid.value
                         : widget.videoDetail!.pages!.first.cid,
                     changeFuc: videoIntroController.changeSeasonOrbangu,
+                    showEpisodes: widget.showEpisodes,
                   ),
                 )
               ],
@@ -445,6 +451,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       cid: videoIntroController.lastPlayCid.value,
                       bvid: videoIntroController.bvid,
                       changeFuc: videoIntroController.changeSeasonOrbangu,
+                      showEpisodes: widget.showEpisodes,
                     ))
               ],
             ],

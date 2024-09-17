@@ -467,13 +467,16 @@ class VideoIntroController extends GetxController {
   }
 
   // 修改分P或番剧分集
-  Future changeSeasonOrbangu(bvid, cid, aid) async {
+  Future changeSeasonOrbangu(bvid, cid, aid, cover) async {
     // 重新获取视频资源
     final VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: heroTag);
     videoDetailCtr.bvid = bvid;
     videoDetailCtr.oid.value = aid ?? IdUtils.bv2av(bvid);
     videoDetailCtr.cid.value = cid;
+    if (cover is String && cover.isNotEmpty) {
+      videoItem!['pic'] = cover;
+    }
     videoDetailCtr.danmakuCid.value = cid;
     videoDetailCtr.queryVideoUrl();
     // 重新请求相关视频
@@ -559,7 +562,7 @@ class VideoIntroController extends GetxController {
     final int cid = episodes[prevIndex].cid!;
     final String rBvid = isPages ? bvid : episodes[prevIndex].bvid;
     final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[prevIndex].aid!;
-    changeSeasonOrbangu(rBvid, cid, rAid);
+    changeSeasonOrbangu(rBvid, cid, rAid, null);
     return true;
   }
 
@@ -607,7 +610,7 @@ class VideoIntroController extends GetxController {
     final int cid = episodes[nextIndex].cid!;
     final String rBvid = isPages ? bvid : episodes[nextIndex].bvid;
     final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[nextIndex].aid!;
-    changeSeasonOrbangu(rBvid, cid, rAid);
+    changeSeasonOrbangu(rBvid, cid, rAid, null);
     return true;
   }
 

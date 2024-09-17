@@ -24,10 +24,13 @@ import 'widgets/intro_detail.dart';
 class BangumiIntroPanel extends StatefulWidget {
   final int? cid;
   final String heroTag;
+  final Function showEpisodes;
+
   const BangumiIntroPanel({
     Key? key,
     this.cid,
     required this.heroTag,
+    required this.showEpisodes,
   }) : super(key: key);
 
   @override
@@ -72,6 +75,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
             loadingStatus: false,
             bangumiDetail: loadingState.response,
             cid: cid,
+            showEpisodes: widget.showEpisodes,
           )
         : loadingState is Error
             ? HttpError(
@@ -82,6 +86,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                 loadingStatus: true,
                 bangumiDetail: null,
                 cid: cid,
+                showEpisodes: widget.showEpisodes,
               );
   }
 }
@@ -92,11 +97,13 @@ class BangumiInfo extends StatefulWidget {
     this.loadingStatus = false,
     this.bangumiDetail,
     this.cid,
+    required this.showEpisodes,
   });
 
   final bool loadingStatus;
   final BangumiInfoModel? bangumiDetail;
   final int? cid;
+  final Function showEpisodes;
 
   @override
   State<BangumiInfo> createState() => _BangumiInfoState();
@@ -342,6 +349,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                               ? bangumiItem!.episodes!.first.cid
                               : widget.bangumiDetail!.episodes!.first.cid),
                       changeFuc: bangumiIntroController.changeSeasonOrbangu,
+                      showEpisodes: widget.showEpisodes,
                     )
                   ],
                 ],

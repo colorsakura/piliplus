@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:PiliPalaX/common/widgets/list_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/models/video_detail_res.dart';
@@ -16,12 +15,14 @@ class PagesPanel extends StatefulWidget {
     required this.bvid,
     required this.changeFuc,
     required this.heroTag,
+    required this.showEpisodes,
   });
   final List<Part> pages;
   final int? cid;
   final String bvid;
   final Function changeFuc;
   final String heroTag;
+  final Function showEpisodes;
 
   @override
   State<PagesPanel> createState() => _PagesPanelState();
@@ -94,16 +95,8 @@ class _PagesPanelState extends State<PagesPanel> {
                   style: ButtonStyle(
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
-                  onPressed: () {
-                    ListSheet(
-                      episodes: episodes,
-                      bvid: widget.bvid,
-                      aid: IdUtils.bv2av(widget.bvid),
-                      currentCid: cid,
-                      changeFucCall: widget.changeFuc,
-                      context: context,
-                    ).buildShowBottomSheet();
-                  },
+                  onPressed: () => widget.showEpisodes(
+                      episodes, widget.bvid, IdUtils.bv2av(widget.bvid), cid),
                   child: Text(
                     '共${widget.pages.length}集',
                     style: const TextStyle(fontSize: 13),

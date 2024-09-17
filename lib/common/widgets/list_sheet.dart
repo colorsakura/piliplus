@@ -18,6 +18,7 @@ class ListSheet {
     required this.currentCid,
     required this.changeFucCall,
     required this.context,
+    this.scaffoldState,
   });
 
   final dynamic episodes;
@@ -26,20 +27,27 @@ class ListSheet {
   final int currentCid;
   final Function changeFucCall;
   final BuildContext context;
+  final ScaffoldState? scaffoldState;
 
   late PersistentBottomSheetController bottomSheetController;
 
+  Widget get listSheetContent => ListSheetContent(
+        episodes: episodes,
+        bvid: bvid,
+        aid: aid,
+        currentCid: currentCid,
+        changeFucCall: changeFucCall,
+        onClose: bottomSheetController.close,
+      );
+
   void buildShowBottomSheet() {
-    bottomSheetController = showBottomSheet(
-        context: context,
-        builder: (context) => ListSheetContent(
-              episodes: episodes,
-              bvid: bvid,
-              aid: aid,
-              currentCid: currentCid,
-              changeFucCall: changeFucCall,
-              onClose: bottomSheetController.close,
-            ));
+    bottomSheetController = scaffoldState?.showBottomSheet(
+          (context) => listSheetContent,
+        ) ??
+        showBottomSheet(
+          context: context,
+          builder: (context) => listSheetContent,
+        );
   }
 }
 
@@ -118,9 +126,9 @@ class _ListSheetContentState extends State<ListSheetContent> {
           widget.changeFucCall(
               episode.bvid, episode.cid, episode.aid, episode.cover);
         } else if (episode.runtimeType.toString() == "EpisodeItem") {
-          widget.changeFucCall(episode.bvid, episode.cid, episode.aid);
+          widget.changeFucCall(episode.bvid, episode.cid, episode.aid, null);
         } else {
-          widget.changeFucCall(widget.bvid!, episode.cid, widget.aid!);
+          widget.changeFucCall(widget.bvid!, episode.cid, widget.aid!, null);
         }
       },
       dense: false,

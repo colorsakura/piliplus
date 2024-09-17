@@ -6,7 +6,6 @@ import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:PiliPalaX/common/widgets/list_sheet.dart';
 
 class BangumiPanel extends StatefulWidget {
   const BangumiPanel({
@@ -14,11 +13,13 @@ class BangumiPanel extends StatefulWidget {
     required this.pages,
     this.cid,
     required this.changeFuc,
+    required this.showEpisodes,
   });
 
   final List<EpisodeItem> pages;
   final int? cid;
   final Function changeFuc;
+  final Function showEpisodes;
 
   @override
   State<BangumiPanel> createState() => _BangumiPanelState();
@@ -113,18 +114,13 @@ class _BangumiPanelState extends State<BangumiPanel> {
                 height: 34,
                 child: TextButton(
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
-                  onPressed: () {
-                    ListSheet(
-                            episodes: widget.pages,
-                            bvid: widget.pages[currentIndex].bvid!,
-                            aid: widget.pages[currentIndex].aid!,
-                            currentCid: cid,
-                            changeFucCall: widget.changeFuc,
-                            context: context)
-                        .buildShowBottomSheet();
-                  },
+                  onPressed: () => widget.showEpisodes(
+                      widget.pages,
+                      widget.pages[currentIndex].bvid,
+                      widget.pages[currentIndex].aid,
+                      cid),
                   child: Text(
                     '全${widget.pages.length}话',
                     style: const TextStyle(fontSize: 13),

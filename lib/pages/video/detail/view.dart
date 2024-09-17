@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/list_sheet.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.dart';
@@ -420,6 +421,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     Widget tabbarBuild([
       bool needIndicator = true,
       String introText = '简介',
+      bool isSingle = false,
     ]) {
       return Container(
         width: double.infinity,
@@ -439,6 +441,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 flex: 1,
                 child: Obx(
                   () => TabBar(
+                    labelColor: needIndicator
+                        ? null
+                        : Theme.of(context).colorScheme.onSurface,
                     indicatorColor: needIndicator ? null : Colors.transparent,
                     padding: EdgeInsets.zero,
                     controller: videoDetailController.tabCtr,
@@ -447,7 +452,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         horizontal: 10.0), // 设置每个标签的宽度
                     dividerColor: Colors.transparent,
                     onTap: (value) {
-                      if (!needIndicator ||
+                      if (isSingle) {
+                        _videoReplyController.animateToTop();
+                      } else if (!needIndicator ||
                           !videoDetailController.tabCtr.indexIsChanging) {
                         if (value == 0) {
                           _introController.animToTop();
@@ -457,7 +464,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       }
                     },
                     tabs: [
-                      Tab(text: introText),
+                      if (!isSingle) Tab(text: introText),
                       Tab(
                         text:
                             '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
@@ -718,14 +725,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                         heroTag: heroTag,
                                         showAiBottomSheet: showAiBottomSheet,
                                         showIntroDetail: showIntroDetail,
+                                        showEpisodes: showEpisodes,
                                       ),
                                     ] else if (videoDetailController
                                             .videoType ==
                                         SearchType.media_bangumi) ...[
                                       Obx(() => BangumiIntroPanel(
-                                          heroTag: heroTag,
-                                          cid:
-                                              videoDetailController.cid.value)),
+                                            heroTag: heroTag,
+                                            cid:
+                                                videoDetailController.cid.value,
+                                            showEpisodes: showEpisodes,
+                                          )),
                                     ],
                                     SliverToBoxAdapter(
                                       child: Padding(
@@ -837,12 +847,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 heroTag: heroTag,
                                 showAiBottomSheet: showAiBottomSheet,
                                 showIntroDetail: showIntroDetail,
+                                showEpisodes: showEpisodes,
                               ),
                             ] else if (videoDetailController.videoType ==
                                 SearchType.media_bangumi) ...[
                               Obx(() => BangumiIntroPanel(
-                                  heroTag: heroTag,
-                                  cid: videoDetailController.cid.value)),
+                                    heroTag: heroTag,
+                                    cid: videoDetailController.cid.value,
+                                    showEpisodes: showEpisodes,
+                                  )),
                             ],
                             SliverToBoxAdapter(
                               child: Padding(
@@ -948,13 +961,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 heroTag: heroTag,
                                 showAiBottomSheet: showAiBottomSheet,
                                 showIntroDetail: showIntroDetail,
+                                showEpisodes: showEpisodes,
                               ),
                               RelatedVideoPanel(heroTag: heroTag),
                             ] else if (videoDetailController.videoType ==
                                 SearchType.media_bangumi) ...[
                               Obx(() => BangumiIntroPanel(
-                                  heroTag: heroTag,
-                                  cid: videoDetailController.cid.value)),
+                                    heroTag: heroTag,
+                                    cid: videoDetailController.cid.value,
+                                    showEpisodes: showEpisodes,
+                                  )),
                             ]
                           ],
                         )),
@@ -988,12 +1004,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     heroTag: heroTag,
                     showAiBottomSheet: showAiBottomSheet,
                     showIntroDetail: showIntroDetail,
+                    showEpisodes: showEpisodes,
                   ),
                   RelatedVideoPanel(heroTag: heroTag),
                 ] else if (videoDetailController.videoType ==
                     SearchType.media_bangumi) ...[
                   Obx(() => BangumiIntroPanel(
-                      heroTag: heroTag, cid: videoDetailController.cid.value)),
+                        heroTag: heroTag,
+                        cid: videoDetailController.cid.value,
+                        showEpisodes: showEpisodes,
+                      )),
                 ]
               ],
             )),
@@ -1046,9 +1066,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               ),
             ),
             Expanded(
-              child: Scaffold(
-                key: scaffoldKey,
-                body: videoReplyPanel,
+              child: Expanded(
+                child: Scaffold(
+                  key: scaffoldKey,
+                  body: Column(
+                    children: [
+                      tabbarBuild(false, '', true),
+                      Expanded(child: videoReplyPanel),
+                    ],
+                  ),
+                ),
               ),
             ),
             // Expanded(
@@ -1164,13 +1191,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           heroTag: heroTag,
                           showAiBottomSheet: showAiBottomSheet,
                           showIntroDetail: showIntroDetail,
+                          showEpisodes: showEpisodes,
                         ),
                         // RelatedVideoPanel(heroTag: heroTag),
                       ] else if (videoDetailController.videoType ==
                           SearchType.media_bangumi) ...[
                         Obx(() => BangumiIntroPanel(
-                            heroTag: heroTag,
-                            cid: videoDetailController.cid.value)),
+                              heroTag: heroTag,
+                              cid: videoDetailController.cid.value,
+                              showEpisodes: showEpisodes,
+                            )),
                       ]
                     ],
                   ),
@@ -1193,7 +1223,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 key: scaffoldKey,
                 body: Column(
                   children: [
-                    tabbarBuild(true, '相关视频'),
+                    tabbarBuild(
+                      videoDetailController.videoType !=
+                          SearchType.media_bangumi,
+                      '相关视频',
+                      videoDetailController.videoType ==
+                          SearchType.media_bangumi,
+                    ),
                     Expanded(
                       child: TabBarView(
                         physics: const BouncingScrollPhysics(),
@@ -1407,5 +1443,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   showIntroDetail(videoDetail) {
     scaffoldKey.currentState?.showBottomSheet(
         enableDrag: true, (context) => IntroDetail(videoDetail: videoDetail));
+  }
+
+  showEpisodes(episodes, bvid, aid, cid) {
+    ListSheet(
+      episodes: episodes,
+      bvid: bvid,
+      aid: aid,
+      currentCid: cid,
+      changeFucCall: videoIntroController.changeSeasonOrbangu,
+      context: context,
+      scaffoldState: scaffoldKey.currentState,
+    ).buildShowBottomSheet();
   }
 }

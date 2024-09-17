@@ -1,4 +1,3 @@
-import 'package:PiliPalaX/common/widgets/list_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/models/video_detail_res.dart';
@@ -11,11 +10,13 @@ class SeasonPanel extends StatefulWidget {
     this.cid,
     required this.changeFuc,
     required this.heroTag,
+    required this.showEpisodes,
   });
   final UgcSeason ugcSeason;
   final int? cid;
   final Function changeFuc;
   final String heroTag;
+  final Function showEpisodes;
 
   @override
   State<SeasonPanel> createState() => _SeasonPanelState();
@@ -102,16 +103,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
           borderRadius: BorderRadius.circular(6),
           clipBehavior: Clip.hardEdge,
           child: InkWell(
-            onTap: () {
-              ListSheet(
-                      episodes: episodes,
-                      // bvid: IdUtils.av2bv(episodes!.first.aid!),
-                      // aid: episodes!.first.aid!,
-                      currentCid: cid,
-                      changeFucCall: widget.changeFuc,
-                      context: context)
-                  .buildShowBottomSheet();
-            },
+            onTap: () => widget.showEpisodes(episodes, null, null, cid),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
               child: Row(
