@@ -34,9 +34,11 @@ class DynamicDetailController extends ReplyController {
 
   @override
   Future<LoadingState> customGetData() => ReplyHttp.replyList(
+        isLogin: isLogin,
         oid: oid!,
         nextOffset: nextOffset,
         type: type!,
         sort: sortType.index,
+        page: currentPage,
       );
 }

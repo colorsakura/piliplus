@@ -18,9 +18,11 @@ class VideoReplyController extends ReplyController {
 
   @override
   Future<LoadingState> customGetData() => ReplyHttp.replyList(
+        isLogin: isLogin,
         oid: aid!,
         nextOffset: nextOffset,
         type: ReplyType.video.index,
         sort: sortType.index,
+        page: currentPage,
       );
 }

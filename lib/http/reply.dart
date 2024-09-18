@@ -12,25 +12,40 @@ import 'init.dart';
 
 class ReplyHttp {
   static Future<LoadingState> replyList({
+    required bool isLogin,
     required int oid,
     required String nextOffset,
     required int type,
+    required int page,
     int sort = 1,
   }) async {
-    Options? options = GStorage.userInfo.get('userInfoCache') == null
+    Options? options = !isLogin
         ? Options(
             headers: {HttpHeaders.cookieHeader: "buvid3= ; b_nut= ; sid= "})
         : null;
-    var res = await Request().get(
-      '${HttpString.apiBaseUrl}${Api.replyList}',
-      data: {
-        'oid': oid,
-        'type': type,
-        'pagination_str': '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
-        'mode': sort + 2, //2:按时间排序；3：按热度排序
-      },
-      options: options,
-    );
+    var res = !isLogin
+        ? await Request().get(
+            '${HttpString.apiBaseUrl}${Api.replyList}/main',
+            data: {
+              'oid': oid,
+              'type': type,
+              'pagination_str':
+                  '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
+              'mode': sort + 2, //2:按时间排序；3：按热度排序
+            },
+            options: options,
+          )
+        : await Request().get(
+            '${HttpString.apiBaseUrl}${Api.replyList}',
+            data: {
+              'oid': oid,
+              'type': type,
+              'sort': sort,
+              'pn': page,
+              'ps': 20,
+            },
+            options: options,
+          );
     if (res.data['code'] == 0) {
       return LoadingState.success(ReplyData.fromJson(res.data['data']));
     } else {

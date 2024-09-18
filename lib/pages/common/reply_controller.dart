@@ -25,6 +25,8 @@ abstract class ReplyController extends CommonController {
 
   late final savedReplies = {};
 
+  bool isLogin = GStorage.userInfo.get('userInfoCache') != null;
+
   @override
   void onInit() {
     super.onInit();
@@ -55,7 +57,9 @@ abstract class ReplyController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     List<ReplyItemModel> replies = response.response.replies;
-    nextOffset = response.response.cursor.paginationReply.nextOffset ?? "";
+    if (!isLogin) {
+      nextOffset = response.response.cursor.paginationReply.nextOffset ?? "";
+    }
     if (replies.isNotEmpty) {
       noMore.value = '加载中...';
 
@@ -78,7 +82,9 @@ abstract class ReplyController extends CommonController {
         }
       }
       replies.insertAll(0, response.response.topReplies);
-      count.value = response.response.cursor.allCount ?? 0;
+      count.value = !isLogin
+          ? response.response.cursor.allCount
+          : response.response.page.count ?? 0;
     } else {
       replies.insertAll(
           0,
