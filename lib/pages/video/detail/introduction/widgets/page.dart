@@ -125,8 +125,12 @@ class _PagesPanelState extends State<PagesPanel> {
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
                     onTap: () => {
-                      widget.changeFuc(widget.bvid, widget.pages[i].cid,
-                          IdUtils.bv2av(widget.bvid))
+                      widget.changeFuc(
+                        widget.bvid,
+                        widget.pages[i].cid,
+                        IdUtils.bv2av(widget.bvid),
+                        null,
+                      )
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
