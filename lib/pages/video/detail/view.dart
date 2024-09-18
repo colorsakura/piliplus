@@ -1360,9 +1360,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      if (!isShowing) {
-        return ColoredBox(color: Theme.of(context).colorScheme.surface);
-      }
+      // if (!isShowing) {
+      //   return ColoredBox(color: Theme.of(context).colorScheme.surface);
+      // }
       if (constraints.maxWidth > constraints.maxHeight * 1.25) {
 //             hideStatusBar();
 //             videoDetailController.hiddenReplyReplyPanel();

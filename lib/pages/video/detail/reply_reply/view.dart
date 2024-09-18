@@ -115,7 +115,6 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         replyLevel: '2',
                         showReplyRow: false,
                         replyType: widget.replyType,
-                        replyReply: () {},
                         needDivider: false,
                         onReply: () {
                           _onReply(widget.firstFloor);
@@ -205,7 +204,6 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                     replyLevel: '2',
                     showReplyRow: false,
                     replyType: widget.replyType,
-                    replyReply: () {},
                     needDivider: false,
                     onReply: () {
                       _onReply(_videoReplyReplyController.root);
