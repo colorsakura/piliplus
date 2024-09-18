@@ -169,7 +169,7 @@ class MorePanel extends StatelessWidget {
             onTap: () async {
               Get.back();
               var result = await Share.share(
-                      '${HttpString.baseUrl}/dynamic/${item.idStr} UP主: ${item.modules.moduleAuthor.name}')
+                      '${HttpString.dynamicShareBaseUrl}/${item.idStr}')
                   .whenComplete(() {});
               return result;
             },
