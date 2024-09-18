@@ -248,17 +248,17 @@ class _ImagePreviewState extends State<ImagePreview>
                     left: 20,
                     right: 20,
                     bottom: MediaQuery.of(context).padding.bottom + 30),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      Colors.transparent,
-                      Colors.black87,
-                    ],
-                    tileMode: TileMode.mirror,
-                  ),
-                ),
+                // decoration: const BoxDecoration(
+                //   gradient: LinearGradient(
+                //     begin: Alignment.topCenter,
+                //     end: Alignment.bottomCenter,
+                //     colors: <Color>[
+                //       Colors.transparent,
+                //       Colors.black87,
+                //     ],
+                //     tileMode: TileMode.mirror,
+                //   ),
+                // ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
