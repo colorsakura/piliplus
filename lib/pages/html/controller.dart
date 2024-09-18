@@ -43,8 +43,8 @@ class HtmlRenderController extends ReplyController {
   @override
   Future<LoadingState> customGetData() => ReplyHttp.replyList(
         oid: oid.value,
+        nextOffset: nextOffset,
         type: type,
         sort: sortType.index,
-        page: currentPage,
       );
 }

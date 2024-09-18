@@ -13,9 +13,9 @@ import 'init.dart';
 class ReplyHttp {
   static Future<LoadingState> replyList({
     required int oid,
+    required String nextOffset,
     required int type,
     int sort = 1,
-    required int page,
   }) async {
     Options? options = GStorage.userInfo.get('userInfoCache') == null
         ? Options(
@@ -26,9 +26,8 @@ class ReplyHttp {
       data: {
         'oid': oid,
         'type': type,
-        'sort': sort,
-        'pn': page,
-        'ps': 20,
+        'pagination_str': '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
+        'mode': sort + 2, //2:按时间排序；3：按热度排序
       },
       options: options,
     );
