@@ -19,18 +19,19 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 
 import '../../../utils/utils.dart';
 import 'controller.dart';
-import 'widgets/intro_detail.dart';
 
 class BangumiIntroPanel extends StatefulWidget {
   final int? cid;
   final String heroTag;
   final Function showEpisodes;
+  final Function showIntroDetail;
 
   const BangumiIntroPanel({
     Key? key,
     this.cid,
     required this.heroTag,
     required this.showEpisodes,
+    required this.showIntroDetail,
   }) : super(key: key);
 
   @override
@@ -76,6 +77,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
             bangumiDetail: loadingState.response,
             cid: cid,
             showEpisodes: widget.showEpisodes,
+            showIntroDetail: widget.showIntroDetail,
           )
         : loadingState is Error
             ? HttpError(
@@ -87,6 +89,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                 bangumiDetail: null,
                 cid: cid,
                 showEpisodes: widget.showEpisodes,
+                showIntroDetail: widget.showIntroDetail,
               );
   }
 }
@@ -98,12 +101,14 @@ class BangumiInfo extends StatefulWidget {
     this.bangumiDetail,
     this.cid,
     required this.showEpisodes,
+    required this.showIntroDetail,
   });
 
   final bool loadingStatus;
   final BangumiInfoModel? bangumiDetail;
   final int? cid;
   final Function showEpisodes;
+  final Function showIntroDetail;
 
   @override
   State<BangumiInfo> createState() => _BangumiInfoState();
@@ -143,7 +148,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
 
   // 收藏
   showFavBottomSheet() {
-    if (bangumiIntroController.userInfo.mid == null) {
+    if (bangumiIntroController.userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -160,13 +165,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
   // 视频介绍
   showIntroDetail() {
     feedBack();
-    showBottomSheet(
-      context: context,
-      enableDrag: true,
-      builder: (BuildContext context) {
-        return IntroDetail(bangumiDetail: widget.bangumiDetail!);
-      },
-    );
+    widget.showIntroDetail(widget.bangumiDetail);
   }
 
   @override

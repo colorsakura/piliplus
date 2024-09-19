@@ -75,7 +75,7 @@ class IntroDetail extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
                       child: SelectableRegion(
@@ -86,9 +86,12 @@ class IntroDetail extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               videoDetail!.bvid!,
-                              style: const TextStyle(fontSize: 13),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 10),
                             Text.rich(
                               style: const TextStyle(
                                 height: 1.4,

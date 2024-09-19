@@ -5,8 +5,12 @@ import 'dart:math';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/list_sheet.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.dart';
+import 'package:PiliPalaX/pages/bangumi/introduction/widgets/intro_detail.dart'
+    as bangumi;
+import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.dart'
+    as video;
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/extension.dart';
@@ -423,6 +427,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       String introText = '简介',
       bool isSingle = false,
     ]) {
+      if (videoDetailController.tabCtr.length != (isSingle ? 1 : 2)) {
+        videoDetailController.tabCtr =
+            TabController(length: isSingle ? 1 : 2, vsync: this);
+      }
       return Container(
         width: double.infinity,
         height: 45,
@@ -735,6 +743,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                             cid:
                                                 videoDetailController.cid.value,
                                             showEpisodes: showEpisodes,
+                                            showIntroDetail: showIntroDetail,
                                           )),
                                     ],
                                     SliverToBoxAdapter(
@@ -855,6 +864,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                     heroTag: heroTag,
                                     cid: videoDetailController.cid.value,
                                     showEpisodes: showEpisodes,
+                                    showIntroDetail: showIntroDetail,
                                   )),
                             ],
                             SliverToBoxAdapter(
@@ -970,6 +980,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                     heroTag: heroTag,
                                     cid: videoDetailController.cid.value,
                                     showEpisodes: showEpisodes,
+                                    showIntroDetail: showIntroDetail,
                                   )),
                             ]
                           ],
@@ -1013,6 +1024,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         heroTag: heroTag,
                         cid: videoDetailController.cid.value,
                         showEpisodes: showEpisodes,
+                        showIntroDetail: showIntroDetail,
                       )),
                 ]
               ],
@@ -1200,6 +1212,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               heroTag: heroTag,
                               cid: videoDetailController.cid.value,
                               showEpisodes: showEpisodes,
+                              showIntroDetail: showIntroDetail,
                             )),
                       ]
                     ],
@@ -1442,7 +1455,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   showIntroDetail(videoDetail) {
     scaffoldKey.currentState?.showBottomSheet(
-        enableDrag: true, (context) => IntroDetail(videoDetail: videoDetail));
+        enableDrag: true,
+        (context) => videoDetail is BangumiInfoModel
+            ? bangumi.IntroDetail(bangumiDetail: videoDetail)
+            : video.IntroDetail(videoDetail: videoDetail));
   }
 
   showEpisodes(episodes, bvid, aid, cid) {

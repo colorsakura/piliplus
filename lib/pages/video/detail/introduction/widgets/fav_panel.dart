@@ -26,7 +26,7 @@ class _FavPanelState extends State<FavPanel> {
   Widget build(BuildContext context) {
     return Container(
       height: Utils.getSheetHeight(context),
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
           AppBar(

@@ -29,6 +29,7 @@ class ActionItem extends StatelessWidget {
         child: Semantics(
             label: (text ?? "") + (selectStatus ? "已" : "") + semanticsLabel,
             child: InkWell(
+              borderRadius: BorderRadius.circular(6),
               onTap: () => {
                 feedBack(),
                 onTap!(),
