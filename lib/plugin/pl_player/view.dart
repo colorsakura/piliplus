@@ -48,6 +48,7 @@ class PLVideoPlayer extends StatefulWidget {
     this.bottomList,
     this.customWidget,
     this.customWidgets,
+    this.showEpisodes,
     super.key,
   });
 
@@ -62,6 +63,7 @@ class PLVideoPlayer extends StatefulWidget {
 
   final Widget? customWidget;
   final List<Widget>? customWidgets;
+  final Function? showEpisodes;
 
   @override
   State<PLVideoPlayer> createState() => _PLVideoPlayerState();
@@ -363,14 +365,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       .episodes!);
               changeFucCall = bangumiIntroController!.changeSeasonOrbangu;
             }
-            ListSheet(
-              episodes: episodes,
-              bvid: bvid,
-              aid: IdUtils.bv2av(bvid),
-              currentCid: currentCid,
-              changeFucCall: changeFucCall,
-              context: context,
-            ).buildShowBottomSheet();
+            if (widget.showEpisodes != null) {
+              widget.showEpisodes!(
+                episodes,
+                bvid,
+                IdUtils.bv2av(bvid),
+                currentCid,
+              );
+            }
           },
         ),
       ),

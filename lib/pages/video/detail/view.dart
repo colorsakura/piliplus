@@ -526,6 +526,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           playerController: plPlayerController!,
                         ),
                       ),
+                      showEpisodes: showEpisodes,
                     ),
             );
           } else {
@@ -1365,6 +1366,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         playerController: plPlayerController!,
                       ),
                     ),
+              showEpisodes: showEpisodes,
             ),
     );
     Widget autoChoose(Widget childWhenDisabled) {
@@ -1480,7 +1482,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       currentCid: cid,
       changeFucCall: videoIntroController.changeSeasonOrbangu,
       context: context,
-      scaffoldState: scaffoldKey.currentState,
+      scaffoldState: isFullScreen.value
+          ? videoDetailController.scaffoldKey.currentState
+          : scaffoldKey.currentState,
     ).buildShowBottomSheet();
   }
 }
