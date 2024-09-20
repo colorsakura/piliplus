@@ -12,7 +12,7 @@ enum DynamicsType {
 
 extension BusinessTypeExtension on DynamicsType {
   String get values => ['all', 'video', 'pgc', 'article', 'up'][index];
-  String get labels => ['全部', '投稿', '番剧', '专栏', 'Up'][index];
+  String get labels => ['全部', '投稿', '番剧', '专栏', 'UP'][index];
 }
 
 List tabsConfig = [
@@ -43,7 +43,7 @@ List tabsConfig = [
   {
     'tag': 'up',
     'value': DynamicsType.up,
-    'label': 'Up',
+    'label': 'UP',
     'enabled': true,
   },
 ];

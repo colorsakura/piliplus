@@ -511,7 +511,7 @@ class ReplyItemRow extends StatelessWidget {
                       children: [
                         if (replyControl!.upReply!)
                           TextSpan(
-                              text: 'up主等人 ',
+                              text: 'UP主等人 ',
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
