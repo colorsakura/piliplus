@@ -290,7 +290,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
-    ScreenBrightness().resetScreenBrightness();
+    if (!Get.previousRoute.startsWith('/video')) {
+      ScreenBrightness().resetScreenBrightness();
+    }
     appbarStream.close();
     floating.dispose();
     videoDetailController.floating?.dispose();
@@ -341,17 +343,26 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 返回当前页面时
   void didPopNext() async {
     isShowing = true;
+    if (mounted) {
+      if (videoDetailController.brightness != null) {
+        plPlayerController
+            ?.setCurrBrightness(videoDetailController.brightness!);
+        if (videoDetailController.brightness != -1.0) {
+          ScreenBrightness()
+              .setScreenBrightness(videoDetailController.brightness!);
+        } else {
+          ScreenBrightness().resetScreenBrightness();
+        }
+      } else {
+        ScreenBrightness().resetScreenBrightness();
+      }
+    }
     super.didPopNext();
     videoDetailController.isFirstTime = false;
     final bool autoplay = autoPlayEnable;
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     await videoDetailController.playerInit(autoplay: autoplay);
-    if (mounted &&
-        videoDetailController.brightness != null &&
-        videoDetailController.brightness != -1.0) {
-      ScreenBrightness().setScreenBrightness(videoDetailController.brightness!);
-    }
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
     videoIntroController.isPaused = false;

@@ -1014,6 +1014,10 @@ class PlPlayerController {
     }
   }
 
+  void setCurrBrightness(double brightness) {
+    _currentBrightness.value = brightness;
+  }
+
   Future<void> setBrightness(double brightness) async {
     try {
       this.brightness.value = brightness;
