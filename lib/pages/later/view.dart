@@ -95,6 +95,15 @@ class _LaterPageState extends State<LaterPage> {
               ],
             ),
           ),
+          floatingActionButton: Obx(
+            () => _laterController.loadingState.value is Success
+                ? FloatingActionButton.extended(
+                    onPressed: _laterController.toViewPlayAll,
+                    label: const Text('播放全部'),
+                    icon: const Icon(Icons.playlist_play),
+                  )
+                : const SizedBox(),
+          ),
           body: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _laterController.scrollController,

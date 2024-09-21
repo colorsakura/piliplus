@@ -4,6 +4,7 @@ import 'package:PiliPalaX/models/user/fav_detail.dart';
 import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -122,5 +123,26 @@ class FavDetailController extends MultiSelectController {
         );
       },
     );
+  }
+
+  Future toViewPlayAll() async {
+    if (loadingState.value is Success) {
+      final FavDetailItemData firstItem =
+          (loadingState.value as Success).response.first;
+      final String heroTag = Utils.makeHeroTag(firstItem.bvid);
+      Get.toNamed(
+        '/video?bvid=${firstItem.bvid}&cid=${firstItem.cid}',
+        arguments: {
+          'videoItem': firstItem,
+          'heroTag': heroTag,
+          'sourceType': 'fav',
+          'mediaId': item.value.id,
+          'oid': firstItem.id,
+          'favTitle': item.value.title,
+          // 'favInfo': favInfo,
+          'count': item.value.mediaCount,
+        },
+      );
+    }
   }
 }

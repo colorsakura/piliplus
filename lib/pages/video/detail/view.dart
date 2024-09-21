@@ -1286,46 +1286,102 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   Widget videoIntro([bool needRelated = true]) {
-    return CustomScrollView(
-      controller: _introController,
-      slivers: [
-        if (videoDetailController.videoType == SearchType.video) ...[
-          VideoIntroPanel(
-            heroTag: heroTag,
-            showAiBottomSheet: showAiBottomSheet,
-            showIntroDetail: showIntroDetail,
-            showEpisodes: showEpisodes,
-          ),
-          if (needRelated) ...[
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: StyleString.safeSpace,
+    Widget introPanel() => CustomScrollView(
+          controller: _introController,
+          slivers: [
+            if (videoDetailController.videoType == SearchType.video) ...[
+              VideoIntroPanel(
+                heroTag: heroTag,
+                showAiBottomSheet: showAiBottomSheet,
+                showIntroDetail: showIntroDetail,
+                showEpisodes: showEpisodes,
+              ),
+              if (needRelated) ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: StyleString.safeSpace,
+                    ),
+                    child: Divider(
+                      height: 1,
+                      indent: 12,
+                      endIndent: 12,
+                      color: Theme.of(context).dividerColor.withOpacity(0.06),
+                    ),
+                  ),
                 ),
-                child: Divider(
-                  height: 1,
-                  indent: 12,
-                  endIndent: 12,
-                  color: Theme.of(context).dividerColor.withOpacity(0.06),
+                RelatedVideoPanel(heroTag: heroTag),
+              ],
+            ] else if (videoDetailController.videoType ==
+                SearchType.media_bangumi)
+              Obx(
+                () => BangumiIntroPanel(
+                  heroTag: heroTag,
+                  cid: videoDetailController.cid.value,
+                  showEpisodes: showEpisodes,
+                  showIntroDetail: showIntroDetail,
+                ),
+              ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
+            )
+          ],
+        );
+    if (videoDetailController.sourceType.value == 'watchLater' ||
+        videoDetailController.sourceType.value == 'fav') {
+      return Stack(
+        children: [
+          introPanel(),
+          Obx(
+            () => AnimatedPositioned(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+              left: 12,
+              right: 12,
+              bottom: MediaQuery.of(context).padding.bottom + 12,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: videoDetailController.showMediaListPanel,
+                  borderRadius: const BorderRadius.all(Radius.circular(14)),
+                  child: Container(
+                    height: 54,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondaryContainer
+                          .withOpacity(0.95),
+                      borderRadius: const BorderRadius.all(Radius.circular(14)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.playlist_play, size: 24),
+                        const SizedBox(width: 10),
+                        Text(
+                          videoDetailController.watchLaterTitle.value,
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.keyboard_arrow_up_rounded, size: 26),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-            RelatedVideoPanel(heroTag: heroTag),
-          ],
-        ] else if (videoDetailController.videoType == SearchType.media_bangumi)
-          Obx(
-            () => BangumiIntroPanel(
-              heroTag: heroTag,
-              cid: videoDetailController.cid.value,
-              showEpisodes: showEpisodes,
-              showIntroDetail: showIntroDetail,
-            ),
           ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
-        )
-      ],
-    );
+        ],
+      );
+    } else {
+      return introPanel();
+    }
   }
 
   Widget get videoReplyPanel => Obx(

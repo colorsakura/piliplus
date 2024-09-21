@@ -463,9 +463,10 @@ class PlPlayerController {
           dataSource, _looping, enableHA, hwdec, width, height);
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
-      _position.value = _sliderPosition.value = seekTo;
+      _position.value = _sliderPosition.value = _buffered.value = seekTo;
       updateDurationSecond();
       updatePositionSecond();
+      updateBufferedSecond();
       updateSliderPositionSecond();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;

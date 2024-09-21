@@ -60,6 +60,15 @@ class _FavDetailPageState extends State<FavDetailPage> {
           }
         },
         child: Scaffold(
+          floatingActionButton: Obx(
+            () => (_favDetailController.item.value.mediaCount ?? -1) > 0
+                ? FloatingActionButton.extended(
+                    onPressed: _favDetailController.toViewPlayAll,
+                    label: const Text('播放全部'),
+                    icon: const Icon(Icons.playlist_play),
+                  )
+                : const SizedBox.shrink(),
+          ),
           body: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _favDetailController.scrollController,

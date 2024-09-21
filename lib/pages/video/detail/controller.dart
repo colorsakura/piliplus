@@ -6,9 +6,15 @@ import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPalaX/common/widgets/watch_later_list.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
+import 'package:PiliPalaX/http/user.dart';
+import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/models/video/play/subtitle.dart';
+import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:dio/dio.dart';
@@ -226,6 +232,11 @@ class VideoDetailController extends GetxController
     imageStatus = false;
   }
 
+  // 页面来源 稍后再看 收藏夹
+  RxString sourceType = 'normal'.obs;
+  List<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[];
+  RxString watchLaterTitle = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -243,6 +254,17 @@ class VideoDetailController extends GetxController
         videoItem['pic'] = argMap['pic'];
       }
     }
+
+    sourceType.value = argMap['sourceType'] ?? 'normal';
+
+    if (sourceType.value == 'watchLater') {
+      watchLaterTitle.value = '稍后再看';
+      fetchMediaList();
+    } else if (sourceType.value == 'fav') {
+      watchLaterTitle.value = argMap['favTitle'];
+      queryFavVideoList();
+    }
+
     bool defaultShowComment =
         setting.get(SettingBoxKey.defaultShowComment, defaultValue: false);
     tabCtr = TabController(
@@ -269,6 +291,7 @@ class VideoDetailController extends GetxController
       floating: floating,
       heroTag: heroTag,
     );
+
     // CDN优化
     // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
 
@@ -289,6 +312,78 @@ class VideoDetailController extends GetxController
       _blockLimit = GStorage.blockLimit;
       _blockSettings = GStorage.blockSettings;
       _blockColor = GStorage.blockColor;
+    }
+  }
+
+  // 获取稍后再看列表
+  Future fetchMediaList() async {
+    final Map argMap = Get.arguments;
+    var count = argMap['count'];
+    var res = await UserHttp.getMediaList(
+      type: 2,
+      bizId: userInfo.mid,
+      ps: count,
+    );
+    if (res['status']) {
+      mediaList = res['data'].reversed.toList();
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  // 稍后再看面板展开
+  showMediaListPanel() {
+    if (mediaList.isNotEmpty) {
+      childKey.currentState?.showBottomSheet(
+        (context) => MediaListPanel(
+          mediaList: mediaList,
+          changeMediaList: changeMediaList,
+          panelTitle: watchLaterTitle.value,
+          bvid: bvid,
+          mediaId: Get.arguments['mediaId'],
+          hasMore: mediaList.length != Get.arguments['count'],
+        ),
+      );
+    }
+  }
+
+  // 切换稍后再看
+  Future changeMediaList(bvid, cid, aid, cover) async {
+    try {
+      this.bvid = bvid;
+      oid.value = aid ?? IdUtils.bv2av(bvid);
+      this.cid.value = cid;
+      danmakuCid.value = cid;
+      videoItem['pic'] = cover;
+      queryVideoUrl();
+
+      Get.find<VideoReplyController>(tag: heroTag)
+        ..aid = aid
+        ..onRefresh();
+
+      Get.find<VideoIntroController>(tag: heroTag)
+        ..lastPlayCid.value = cid
+        ..bvid = bvid
+        ..queryVideoIntro();
+
+      Get.find<RelatedController>(tag: heroTag)
+        ..bvid = bvid
+        ..onRefresh();
+    } catch (_) {}
+  }
+
+  // 获取收藏夹视频列表
+  Future queryFavVideoList() async {
+    final Map argMap = Get.arguments;
+    var mediaId = argMap['mediaId'];
+    var oid = argMap['oid'];
+    var res = await UserHttp.parseFavVideo(
+      mediaId: mediaId,
+      oid: oid,
+      bvid: bvid,
+    );
+    if (res['status']) {
+      mediaList = res['data'];
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/model_hot_video_item.dart';
 import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -161,5 +162,23 @@ class LaterController extends MultiSelectController {
     }
     SmartDialog.dismiss();
     SmartDialog.showToast(res['msg']);
+  }
+
+  // 稍后再看播放全部
+  Future toViewPlayAll() async {
+    if (loadingState.value is Success) {
+      final HotVideoItemModel firstItem =
+          (loadingState.value as Success).response.first;
+      final String heroTag = Utils.makeHeroTag(firstItem.bvid);
+      Get.toNamed(
+        '/video?bvid=${firstItem.bvid}&cid=${firstItem.cid}',
+        arguments: {
+          'videoItem': firstItem,
+          'heroTag': heroTag,
+          'sourceType': 'watchLater',
+          'count': (loadingState.value as Success).response.length,
+        },
+      );
+    }
   }
 }
