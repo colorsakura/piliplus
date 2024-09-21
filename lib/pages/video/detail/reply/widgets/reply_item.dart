@@ -262,7 +262,7 @@ class ReplyItem extends StatelessWidget {
                   children: [
                     if (replyItem!.isTop!) ...[
                       const WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
+                        alignment: PlaceholderAlignment.top,
                         child: PBadge(
                           text: 'TOP',
                           size: 'small',
@@ -467,7 +467,7 @@ class ReplyItemRow extends StatelessWidget {
                               if (replies![i].isUp!) ...[
                                 const TextSpan(text: ' '),
                                 const WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
+                                  alignment: PlaceholderAlignment.top,
                                   child: PBadge(
                                     text: 'UP',
                                     size: 'small',
@@ -1160,7 +1160,7 @@ class MorePanel extends StatelessWidget {
             ),
           ),
           // 已登录用户才显示删除
-          if (GStorage.userInfo.get('userInfoCache') != null)
+          if (GStorage.userInfo.get('userInfoCache') != null) ...[
             ListTile(
               onTap: () async => await menuActionHandler('delete'),
               minLeadingWidth: 0,
@@ -1171,7 +1171,6 @@ class MorePanel extends StatelessWidget {
                       .titleSmall!
                       .copyWith(color: errorColor)),
             ),
-          if (GStorage.userInfo.get('userInfoCache') != null)
             ListTile(
               onTap: () async => await menuActionHandler('report'),
               minLeadingWidth: 0,
@@ -1182,6 +1181,7 @@ class MorePanel extends StatelessWidget {
                       .titleSmall!
                       .copyWith(color: errorColor)),
             ),
+          ],
           ListTile(
             onTap: () async => await menuActionHandler('copyAll'),
             minLeadingWidth: 0,
