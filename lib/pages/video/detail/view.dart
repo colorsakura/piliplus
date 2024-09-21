@@ -90,6 +90,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   void initState() {
     super.initState();
+    PlPlayerController.setPlayCallBack(playCallBack);
     if (Get.arguments != null && Get.arguments['heroTag'] != null) {
       heroTag = Get.arguments['heroTag'];
     }
@@ -179,6 +180,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
   }
 
+  void playCallBack() {
+    plPlayerController?.play();
+  }
+
   // 流
   appbarStreamListen() {
     appbarStream = StreamController<double>();
@@ -236,9 +241,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       SmartDialog.showToast('not initialized');
       return;
     }
+    plPlayerController = videoDetailController.plPlayerController;
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit();
-    plPlayerController = videoDetailController.plPlayerController;
     plPlayerController!.addStatusLister(playerListener);
     listenFullScreenStatus();
     await plPlayerController!.autoEnterFullscreen();
@@ -292,6 +297,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void dispose() {
     if (!Get.previousRoute.startsWith('/video')) {
       ScreenBrightness().resetScreenBrightness();
+      PlPlayerController.setPlayCallBack(null);
     }
     appbarStream.close();
     floating.dispose();
@@ -307,6 +313,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController!.removeStatusLister(playerListener);
       fullScreenStatusListener.cancel();
       plPlayerController!.dispose();
+    } else {
+      PlPlayerController.updatePlayCount();
     }
     videoPlayerServiceHandler.onVideoDetailDispose();
     VideoDetailPage.routeObserver.unsubscribe(this);
@@ -343,6 +351,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 返回当前页面时
   void didPopNext() async {
     isShowing = true;
+    PlPlayerController.setPlayCallBack(playCallBack);
     if (mounted) {
       if (videoDetailController.brightness != null) {
         plPlayerController

@@ -290,9 +290,18 @@ class PlPlayerController {
     return _instance != null;
   }
 
+  static void setPlayCallBack(Function? playCallBack) {
+    _playCallBack = playCallBack;
+  }
+
+  static Function? _playCallBack;
+
   static Future<void> playIfExists(
       {bool repeat = false, bool hideControls = true}) async {
-    await _instance?.play(repeat: repeat, hideControls: hideControls);
+    // await _instance?.play(repeat: repeat, hideControls: hideControls);
+    if (_playCallBack != null) {
+      _playCallBack!();
+    }
   }
 
   // try to get PlayerStatus
@@ -1369,5 +1378,9 @@ class PlPlayerController {
       language: s['language']!,
     ));
     _vttSubtitlesIndex.value = index;
+  }
+
+  static void updatePlayCount() {
+    _instance?._playerCount.value -= 1;
   }
 }
