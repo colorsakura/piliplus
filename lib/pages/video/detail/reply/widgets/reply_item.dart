@@ -1048,13 +1048,16 @@ class MorePanel extends StatelessWidget {
     switch (type) {
       case 'report':
         Get.back();
-        Get.toNamed(
+        dynamic result = await Get.toNamed(
           '/webviewnew',
           parameters: {
             'url':
                 'https://www.bilibili.com/h5/comment/report?mid=${item.mid}&oid=${item.oid}&pageType=1&rpid=${item.rpid}&platform=android',
           },
         );
+        if (result == true && onDelete != null) {
+          onDelete!(item.rpid!);
+        }
         break;
       case 'copyAll':
         await Clipboard.setData(ClipboardData(text: message));
