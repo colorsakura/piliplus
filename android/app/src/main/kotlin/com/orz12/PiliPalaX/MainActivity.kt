@@ -5,6 +5,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import com.ryanheise.audioservice.AudioServiceActivity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager.LayoutParams
@@ -47,5 +48,10 @@ class MainActivity : AudioServiceActivity() {
 
     companion object {
         private const val CHANNEL = "onUserLeaveHint"
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        methodChannel.invokeMethod("onPipChanged", isInPictureInPictureMode)
     }
 }

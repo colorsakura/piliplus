@@ -570,10 +570,11 @@ packages:
   floating:
     dependency: "direct main"
     description:
-      name: floating
-      sha256: ddcd7f28247746dbb62997c48c89d1824118676796df47fdc6f864f8d02849bc
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: version-3
+      resolved-ref: "1aa5d241e4c50ddd1b8a3bc117a99280e64f5b9c"
+      url: "https://github.com/bggRGjQaUbCoE/floating.git"
+    source: git
     version: "3.0.0"
   flutter:
     dependency: "direct main"

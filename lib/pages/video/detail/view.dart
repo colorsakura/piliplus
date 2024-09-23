@@ -1040,9 +1040,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   Widget autoChoose(Widget childWhenDisabled) {
-    return childWhenDisabled;
     if (Platform.isAndroid) {
-      // temporarily remove it
       return PiPSwitcher(
         childWhenDisabled: childWhenDisabled,
         childWhenEnabled: childWhenEnabled,
