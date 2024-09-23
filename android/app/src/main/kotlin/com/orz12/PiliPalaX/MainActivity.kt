@@ -52,6 +52,9 @@ class MainActivity : AudioServiceActivity() {
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        methodChannel.invokeMethod("onPipChanged", isInPictureInPictureMode)
+        MethodChannel(
+            flutterEngine!!.getDartExecutor()!!.getBinaryMessenger(),
+            "floating"
+        ).invokeMethod("onPipChanged", isInPictureInPictureMode)
     }
 }
