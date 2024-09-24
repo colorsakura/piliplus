@@ -430,12 +430,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             videoDetailController.data.dash!.video!.first.width!,
             videoDetailController.data.dash!.video!.first.height!,
           ),
-          sourceRectHint: Rectangle<int>(
-            0,
-            0,
-            context.width.toInt(),
-            context.height.toInt(),
-          ),
         ),
       );
     }

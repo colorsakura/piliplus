@@ -1653,12 +1653,6 @@ class _HeaderControlState extends State<HeaderControl> {
                       if (!context.mounted) return;
                       await widget.floating!.enable(EnableManual(
                         aspectRatio: aspectRatio,
-                        sourceRectHint: Rectangle<int>(
-                          0,
-                          0,
-                          context.width.toInt(),
-                          context.height.toInt(),
-                        ),
                       ));
                     } else {}
                   },
