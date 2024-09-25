@@ -1186,12 +1186,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       child: Obx(
                         () => IconButton(
                           onPressed: () {
-                            if (plPlayerController != null) {
-                              videoDetailController
-                                      .plPlayerController.isOpenDanmu.value =
-                                  !videoDetailController
-                                      .plPlayerController.isOpenDanmu.value;
-                            }
+                            videoDetailController
+                                    .plPlayerController.isOpenDanmu.value =
+                                !videoDetailController
+                                    .plPlayerController.isOpenDanmu.value;
+                            setting.put(
+                                SettingBoxKey.enableShowDanmaku,
+                                videoDetailController
+                                    .plPlayerController.isOpenDanmu.value);
                           },
                           icon: SvgPicture.asset(
                             videoDetailController
@@ -1199,7 +1201,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 ? 'assets/images/video/danmu_open.svg'
                                 : 'assets/images/video/danmu_close.svg',
                             // ignore: deprecated_member_use
-                            color: Theme.of(context).colorScheme.outline,
+                            color: videoDetailController
+                                    .plPlayerController.isOpenDanmu.value
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.outline,
                           ),
                         ),
                       ),
