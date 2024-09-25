@@ -19,6 +19,7 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -1158,6 +1159,52 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       text:
                           '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
                     ),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 32,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        ),
+                        onPressed: videoDetailController.showShootDanmakuSheet,
+                        child:
+                            const Text('发弹幕', style: TextStyle(fontSize: 12)),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 38,
+                      height: 38,
+                      child: Obx(
+                        () => IconButton(
+                          onPressed: () {
+                            if (plPlayerController != null) {
+                              videoDetailController
+                                      .plPlayerController.isOpenDanmu.value =
+                                  !videoDetailController
+                                      .plPlayerController.isOpenDanmu.value;
+                            }
+                          },
+                          icon: SvgPicture.asset(
+                            videoDetailController
+                                    .plPlayerController.isOpenDanmu.value
+                                ? 'assets/images/video/danmu_open.svg'
+                                : 'assets/images/video/danmu_close.svg',
+                            // ignore: deprecated_member_use
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
                   ],
                 ),
               ),

@@ -20,7 +20,6 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/menu_row.dart'
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/services/shutdown_timer_service.dart';
 import '../../../../models/video/play/CDN.dart';
 import '../../../../models/video_detail_res.dart';
@@ -117,7 +116,7 @@ class _HeaderControlState extends State<HeaderControl> {
           height: 500,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           margin: const EdgeInsets.all(12),
@@ -154,7 +153,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     //   trailing: Transform.scale(
                     //     scale: 0.75,
                     //     child: Switch(
-                    //       thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
+                    //       thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
                     //           (Set<MaterialState> states) {
                     //         if (states.isNotEmpty &&
                     //             states.first == MaterialState.selected) {
@@ -461,88 +460,6 @@ class _HeaderControlState extends State<HeaderControl> {
     );
   }
 
-  /// 发送弹幕
-  void showShootDanmakuSheet() {
-    final TextEditingController textController = TextEditingController();
-    bool isSending = false; // 追踪是否正在发送
-    showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        // TODO: 支持更多类型和颜色的弹幕
-        return AlertDialog(
-          title: const Text('发送弹幕'),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return TextField(
-              controller: textController,
-            );
-          }),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              return TextButton(
-                onPressed: isSending
-                    ? null
-                    : () async {
-                        final String msg = textController.text;
-                        if (msg.isEmpty) {
-                          SmartDialog.showToast('弹幕内容不能为空');
-                          return;
-                        } else if (msg.length > 100) {
-                          SmartDialog.showToast('弹幕内容不能超过100个字符');
-                          return;
-                        }
-                        setState(() {
-                          isSending = true; // 开始发送，更新状态
-                        });
-                        //修改按钮文字
-                        // SmartDialog.showToast('弹幕发送中,\n$msg');
-                        final dynamic res = await DanmakaHttp.shootDanmaku(
-                          oid: widget.videoDetailCtr!.cid.value,
-                          msg: textController.text,
-                          bvid: widget.videoDetailCtr!.bvid,
-                          progress:
-                              widget.controller!.position.value.inMilliseconds,
-                          type: 1,
-                        );
-                        setState(() {
-                          isSending = false; // 发送结束，更新状态
-                        });
-                        if (res['status']) {
-                          SmartDialog.showToast('发送成功');
-                          // 发送成功，自动预览该弹幕，避免重新请求
-                          // TODO: 暂停状态下预览弹幕仍会移动与计时，可考虑添加到dmSegList或其他方式实现
-                          widget.controller!.danmakuController!.addItems([
-                            DanmakuItem(
-                              msg,
-                              color: Colors.white,
-                              time: widget
-                                  .controller!.position.value.inMilliseconds,
-                              type: DanmakuItemType.scroll,
-                              isSend: true,
-                            )
-                          ]);
-                          Get.back();
-                        } else {
-                          SmartDialog.showToast('发送失败，错误信息为${res['msg']}');
-                        }
-                      },
-                child: Text(isSending ? '发送中...' : '发送'),
-              );
-            })
-          ],
-        );
-      },
-    );
-  }
-
   /// 定时关闭
   void scheduleExit() async {
     const List<int> scheduleTimeChoices = [
@@ -564,7 +481,7 @@ class _HeaderControlState extends State<HeaderControl> {
             height: 500,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             margin: const EdgeInsets.all(12),
@@ -624,7 +541,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           inactiveThumbColor:
                               Theme.of(context).colorScheme.primaryContainer,
                           inactiveTrackColor:
-                              Theme.of(context).colorScheme.background,
+                              Theme.of(context).colorScheme.surface,
                           splashRadius: 10.0,
                           // boolean variable value
                           value: shutdownTimerService.waitForPlayingCompleted,
@@ -704,7 +621,7 @@ class _HeaderControlState extends State<HeaderControl> {
           height: 310,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           margin: const EdgeInsets.all(12),
@@ -803,7 +720,7 @@ class _HeaderControlState extends State<HeaderControl> {
           height: 250,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           margin: const EdgeInsets.all(12),
@@ -889,7 +806,7 @@ class _HeaderControlState extends State<HeaderControl> {
           height: 250,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           margin: const EdgeInsets.all(12),
@@ -985,7 +902,7 @@ class _HeaderControlState extends State<HeaderControl> {
             height: 580,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             margin: const EdgeInsets.all(12),
@@ -1345,7 +1262,7 @@ class _HeaderControlState extends State<HeaderControl> {
           height: 300,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           margin: const EdgeInsets.all(12),
@@ -1529,11 +1446,11 @@ class _HeaderControlState extends State<HeaderControl> {
               child: IconButton(
                 tooltip: '发弹幕',
                 style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),
-                onPressed: () => showShootDanmakuSheet(),
+                onPressed: widget.videoDetailCtr?.showShootDanmakuSheet,
                 icon: const Icon(
-                  Icons.add_comment_outlined,
+                  Icons.comment_outlined,
                   size: 19,
                   color: Colors.white,
                 ),
@@ -1558,8 +1475,8 @@ class _HeaderControlState extends State<HeaderControl> {
                   },
                   icon: Icon(
                     _.isOpenDanmu.value
-                        ? Icons.comment_outlined
-                        : Icons.comments_disabled_outlined,
+                        ? Icons.subtitles_outlined
+                        : Icons.subtitles_off_outlined,
                     size: 19,
                     color: Colors.white,
                   ),
@@ -1612,7 +1529,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 TextButton(
                                     style: ButtonStyle(
                                       foregroundColor:
-                                          MaterialStateProperty.resolveWith(
+                                          WidgetStateProperty.resolveWith(
                                               (states) {
                                         return Theme.of(context)
                                             .snackBarTheme
@@ -1629,7 +1546,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 TextButton(
                                     style: ButtonStyle(
                                       foregroundColor:
-                                          MaterialStateProperty.resolveWith(
+                                          WidgetStateProperty.resolveWith(
                                               (states) {
                                         return Theme.of(context)
                                             .snackBarTheme
@@ -1669,7 +1586,7 @@ class _HeaderControlState extends State<HeaderControl> {
               child: IconButton(
                 tooltip: "更多设置",
                 style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),
                 onPressed: () => showSettingSheet(),
                 icon: const Icon(
