@@ -122,14 +122,18 @@ class _ListSheetContentState extends State<ListSheetContent> {
         }
         SmartDialog.showToast('切换到：$title');
         widget.onClose();
-        if (episode is bangumi.EpisodeItem && episode.cover != null) {
-          widget.changeFucCall(
-              episode.bvid, episode.cid, episode.aid, episode.cover);
-        } else if (episode.runtimeType.toString() == "EpisodeItem") {
-          widget.changeFucCall(episode.bvid, episode.cid, episode.aid, null);
-        } else {
-          widget.changeFucCall(widget.bvid!, episode.cid, widget.aid!, null);
-        }
+        widget.changeFucCall(
+          episode.runtimeType.toString() == "EpisodeItem"
+              ? episode.bvid
+              : widget.bvid,
+          episode.cid,
+          episode.aid,
+          episode is video.EpisodeItem
+              ? episode.arc?.pic
+              : episode is bangumi.EpisodeItem
+                  ? episode.cover
+                  : null,
+        );
       },
       dense: false,
       leading: (episode is video.EpisodeItem && episode.arc?.pic != null) ||

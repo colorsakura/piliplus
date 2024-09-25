@@ -254,7 +254,6 @@ class VideoHttp {
       return {
         'status': true,
         'data': result.data!,
-        'pic': result.data?.pic ?? '',
       };
     } else {
       // Map errMap = {

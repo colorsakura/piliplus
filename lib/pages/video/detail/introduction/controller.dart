@@ -123,7 +123,14 @@ class VideoIntroController extends GetxController {
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
       videoDetail.value = result['data']!;
-      videoDetailController.videoItem['pic'] = result['pic']!;
+      if (videoDetailController.videoItem['pic'] == null ||
+          videoDetailController.videoItem['pic'] == '') {
+        try {
+          videoDetailController.videoItem['pic'] = result['data'].pic;
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
       if (videoDetail.value.pages != null &&
           videoDetail.value.pages!.isNotEmpty &&
           lastPlayCid.value == 0) {
@@ -475,7 +482,7 @@ class VideoIntroController extends GetxController {
     videoDetailCtr.oid.value = aid ?? IdUtils.bv2av(bvid);
     videoDetailCtr.cid.value = cid;
     if (cover is String && cover.isNotEmpty) {
-      videoItem!['pic'] = cover;
+      videoDetailCtr.videoItem['pic'] = cover;
     }
     videoDetailCtr.danmakuCid.value = cid;
     videoDetailCtr.queryVideoUrl();
