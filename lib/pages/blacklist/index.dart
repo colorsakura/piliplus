@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -5,7 +7,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/black.dart';
-import 'package:PiliPalaX/models/user/black.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
@@ -17,26 +18,18 @@ class BlackListPage extends StatefulWidget {
 }
 
 class _BlackListPageState extends State<BlackListPage> {
-  final BlackListController _blackListController =
-      Get.put(BlackListController());
-  final ScrollController scrollController = ScrollController();
-  Future? _futureBuilderFuture;
-  bool _isLoadingMore = false;
+  final _blackListController = Get.put(BlackListController());
   Box localCache = GStorage.localCache;
 
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _blackListController.queryBlacklist();
-    scrollController.addListener(
+    _blackListController.scrollController.addListener(
       () async {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
-          if (!_isLoadingMore) {
-            _isLoadingMore = true;
-            await _blackListController.queryBlacklist(type: 'onLoad');
-            _isLoadingMore = false;
-          }
+        if (_blackListController.scrollController.position.pixels >=
+            _blackListController.scrollController.position.maxScrollExtent -
+                200) {
+          await _blackListController.onLoadMore();
         }
       },
     );
@@ -44,11 +37,12 @@ class _BlackListPageState extends State<BlackListPage> {
 
   @override
   void dispose() {
-    List<int> blackMidsList =
-        _blackListController.blackList.map<int>((e) => e.mid!).toList();
-    localCache.put(LocalCacheKey.blackMidsList, blackMidsList);
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    List list = _blackListController.loadingState.value is Success
+        ? (_blackListController.loadingState.value as Success).response
+        : <int>[];
+    localCache.put(LocalCacheKey.blackMidsList,
+        list.isNotEmpty ? list.map<int>((e) => e.mid!).toList() : list);
+    _blackListController.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -62,110 +56,104 @@ class _BlackListPageState extends State<BlackListPage> {
         centerTitle: false,
         title: Obx(
           () => Text(
-            '黑名单管理 - ${_blackListController.total.value}',
+            '黑名单管理: ${_blackListController.total.value}',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: () async => await _blackListController.queryBlacklist(),
-        child: FutureBuilder(
-          future: _futureBuilderFuture,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              var data = snapshot.data;
-              if (data['status']) {
-                List<BlackListItem> list = _blackListController.blackList;
-                return Obx(
-                  () => list.length == 1
-                      ? const SizedBox()
-                      : ListView.builder(
-                          controller: scrollController,
-                          itemCount: list.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              onTap: () {},
-                              leading: NetworkImgLayer(
-                                width: 45,
-                                height: 45,
-                                type: 'avatar',
-                                src: list[index].face,
-                              ),
-                              title: Text(
-                                list[index].uname!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              subtitle: Text(
-                                Utils.dateFormat(list[index].mtime),
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              dense: true,
-                              trailing: TextButton(
-                                onPressed: () => _blackListController
-                                    .removeBlack(list[index].mid),
-                                child: const Text('移除'),
-                              ),
-                            );
-                          },
-                        ),
-                );
-              } else {
-                return CustomScrollView(
-                  slivers: [
-                    HttpError(
-                      errMsg: data['msg'],
-                      fn: () => _blackListController.queryBlacklist(),
-                    )
-                  ],
-                );
-              }
-            } else {
-              // 骨架屏
-              return const SizedBox();
-            }
-          },
-        ),
+        onRefresh: () async => await _blackListController.onRefresh(),
+        child: Obx(() => _buildBody(_blackListController.loadingState.value)),
       ),
     );
   }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return loadingState is Success
+        ? ListView.builder(
+            controller: _blackListController.scrollController,
+            itemCount: loadingState.response.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                onTap: () {},
+                leading: NetworkImgLayer(
+                  width: 45,
+                  height: 45,
+                  type: 'avatar',
+                  src: loadingState.response[index].face,
+                ),
+                title: Text(
+                  loadingState.response[index].uname!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                subtitle: Text(
+                  Utils.dateFormat(loadingState.response[index].mtime),
+                  maxLines: 1,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.outline),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                dense: true,
+                trailing: TextButton(
+                  onPressed: () => _blackListController
+                      .removeBlack(loadingState.response[index].mid),
+                  child: const Text('移除'),
+                ),
+              );
+            },
+          )
+        : loadingState is Error
+            ? CustomScrollView(
+                slivers: [
+                  HttpError(
+                    errMsg: loadingState.errMsg,
+                    fn: _blackListController.onReload,
+                  )
+                ],
+              )
+            : const SizedBox();
+  }
 }
 
-class BlackListController extends GetxController {
-  int currentPage = 1;
+class BlackListController extends CommonController {
   int pageSize = 50;
   RxInt total = 0.obs;
-  RxList<BlackListItem> blackList = <BlackListItem>[].obs;
 
-  Future queryBlacklist({type = 'init'}) async {
-    if (type == 'init') {
-      currentPage = 1;
-    }
-    var result = await BlackHttp.blackList(pn: currentPage, ps: pageSize);
-    if (result['status']) {
-      if (type == 'init') {
-        blackList.value = result['data'].list;
-        total.value = result['data'].total;
-      } else {
-        blackList.addAll(result['data'].list);
-      }
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
+  }
 
-      currentPage += 1;
-    }
-    return result;
+  @override
+  bool customHandleResponse(Success response) {
+    total.value = response.response.total;
+    List currentList = loadingState.value is Success
+        ? (loadingState.value as Success).response
+        : [];
+    List dataList = currentPage == 1
+        ? response.response.list
+        : currentList + response.response.list;
+    loadingState.value = dataList.isNotEmpty
+        ? LoadingState.success(dataList)
+        : LoadingState.empty();
+    return true;
   }
 
   Future removeBlack(mid) async {
     var result = await BlackHttp.removeBlack(fid: mid);
     if (result['status']) {
-      blackList.removeWhere((e) => e.mid == mid);
+      List list = (loadingState.value as Success).response;
+      list.removeWhere((e) => e.mid == mid);
       total.value = total.value - 1;
+      loadingState.value = LoadingState.success(list);
       SmartDialog.showToast(result['msg']);
     }
   }
+
+  @override
+  Future<LoadingState> customGetData() =>
+      BlackHttp.blackList(pn: currentPage, ps: pageSize);
 }

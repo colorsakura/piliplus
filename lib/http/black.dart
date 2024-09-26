@@ -1,8 +1,11 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
+
 import '../models/user/black.dart';
 import 'index.dart';
 
 class BlackHttp {
-  static Future blackList({required int pn, int? ps}) async {
+  static Future<LoadingState> blackList({required int pn, int? ps}) async {
     var res = await Request().get(Api.blackLst, data: {
       'pn': pn,
       'ps': ps ?? 50,
@@ -11,16 +14,14 @@ class BlackHttp {
       'csrf': await Request.getCsrf(),
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': BlackListDataModel.fromJson(res.data['data'])
-      };
+      BlackListDataModel data = BlackListDataModel.fromJson(res.data['data']);
+      if (!data.list.isNullOrEmpty) {
+        return LoadingState.success(data);
+      } else {
+        return LoadingState.empty();
+      }
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 
