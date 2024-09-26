@@ -727,7 +727,7 @@ InlineSpan buildContent(
                         Get.toNamed('/htmlRender', parameters: {
                           'url': 'https://www.bilibili.com/read/$matchStr',
                           'title': title,
-                          'id': matchStr.substring(2),
+                          'id': matchStr,
                           'dynamicType': 'read'
                         });
                       } else {
