@@ -85,7 +85,7 @@ class ItemModulesModel {
   ModuleDynamicModel? moduleDynamic;
   // ModuleInterModel? moduleInter;
   ModuleStatModel? moduleStat;
-  Map? moduleTag;
+  ModuleTag? moduleTag;
 
   ItemModulesModel.fromJson(Map<String, dynamic> json) {
     moduleAuthor = json['module_author'] != null
@@ -98,7 +98,9 @@ class ItemModulesModel {
     moduleStat = json['module_stat'] != null
         ? ModuleStatModel.fromJson(json['module_stat'])
         : null;
-    moduleTag = json['module_tag'];
+    moduleTag = json['module_tag'] != null
+        ? ModuleTag.fromJson(json['module_tag'])
+        : null;
   }
 }
 
@@ -756,6 +758,18 @@ class DynamicLive2Model {
     liveState = json['liv_state'];
     reserveType = json['reserve_type'];
     title = json['title'];
+  }
+}
+
+class ModuleTag {
+  ModuleTag({
+    this.text,
+  });
+
+  String? text;
+
+  ModuleTag.fromJson(Map<String, dynamic> json) {
+    text = json['text'];
   }
 }
 

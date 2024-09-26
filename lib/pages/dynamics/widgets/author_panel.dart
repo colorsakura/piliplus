@@ -13,7 +13,13 @@ import '../controller.dart';
 class AuthorPanel extends StatelessWidget {
   final dynamic item;
   final Function? addBannedList;
-  const AuthorPanel({super.key, required this.item, this.addBannedList});
+  final String? source;
+  const AuthorPanel({
+    super.key,
+    required this.item,
+    this.addBannedList,
+    this.source,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +88,31 @@ class AuthorPanel extends StatelessWidget {
           ],
         ),
         const Spacer(),
+        if (source != 'detail' && item.modules?.moduleTag?.text != null)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              border: Border.all(
+                width: 1.25,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            child: Text(
+              item.modules.moduleTag.text,
+              style: TextStyle(
+                height: 1,
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              strutStyle: const StrutStyle(
+                leading: 0,
+                height: 1,
+                fontSize: 12,
+              ),
+            ),
+          ),
         SizedBox(
           width: 32,
           height: 32,

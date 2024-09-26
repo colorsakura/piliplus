@@ -42,7 +42,7 @@ class DynamicPanel extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-                child: AuthorPanel(item: item),
+                child: AuthorPanel(item: item, source: source),
               ),
               if (item!.modules!.moduleDynamic!.desc != null ||
                   item!.modules!.moduleDynamic!.major != null)
