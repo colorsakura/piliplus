@@ -81,10 +81,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 生命周期监听
   // late final AppLifecycleListener _lifecycleListener;
   bool isShowing = true;
-  RxBool isFullScreen = false.obs;
-  late StreamSubscription<bool> fullScreenStatusListener;
   late final MethodChannel onUserLeaveHintListener;
   // StreamSubscription<Duration>? _bufferedListener;
+  bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -176,7 +175,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
-      listenFullScreenStatus();
       await plPlayerController!.autoEnterFullscreen();
     }
   }
@@ -246,7 +244,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit();
     plPlayerController!.addStatusLister(playerListener);
-    listenFullScreenStatus();
     await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
   }
@@ -272,28 +269,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   //   );
   // }
 
-  void listenFullScreenStatus() {
-    fullScreenStatusListener =
-        plPlayerController!.isFullScreen.listen((bool status) {
-      if (status) {
-        videoDetailController.hiddenReplyReplyPanel();
-        // hideStatusBar();
-      }
-      isFullScreen.value = status;
-      if (mounted) {
-        setState(() {});
-      }
-      // if (!status) {
-      // showStatusBar();
-      // if (horizontalScreen) {
-      //   autoScreen();
-      // } else {
-      //   verticalScreenForTwoSeconds();
-      // }
-      // }
-    });
-  }
-
   @override
   void dispose() {
     if (!Get.previousRoute.startsWith('/video')) {
@@ -312,7 +287,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     // _bufferedListener?.cancel();
     if (plPlayerController != null) {
       plPlayerController!.removeStatusLister(playerListener);
-      fullScreenStatusListener.cancel();
       plPlayerController!.dispose();
     } else {
       PlPlayerController.updatePlayCount();
@@ -341,7 +315,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoDetailController.defaultST = plPlayerController!.position.value;
       videoIntroController.isPaused = true;
       plPlayerController!.removeStatusLister(playerListener);
-      fullScreenStatusListener.cancel();
       plPlayerController!.pause();
     }
     isShowing = false;
@@ -398,9 +371,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       AutoOrientation.fullAutoMode();
     });
     plPlayerController?.addStatusLister(playerListener);
-    if (plPlayerController != null) {
-      listenFullScreenStatus();
-    }
   }
 
   @override
@@ -439,12 +409,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Widget get childWhenDisabled => SafeArea(
         top: !removeSafeArea &&
             MediaQuery.of(context).orientation == Orientation.portrait &&
-            isFullScreen.value == true,
+            isFullScreen,
         bottom: !removeSafeArea &&
             MediaQuery.of(context).orientation == Orientation.portrait &&
-            isFullScreen.value == true,
-        left: false, //isFullScreen != true,
-        right: false, //isFullScreen != true,
+            isFullScreen,
+        left: false, //!isFullScreen,
+        right: false, //!isFullScreen,
         child: Stack(
           children: [
             Scaffold(
@@ -480,24 +450,24 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       if (MediaQuery.of(context).orientation ==
                               Orientation.landscape &&
                           !horizontalScreen &&
-                          !isFullScreen.value &&
+                          !isFullScreen &&
                           isShowing &&
                           mounted) {
                         hideStatusBar();
                       }
-                      if (MediaQuery.of(context).orientation ==
-                              Orientation.portrait &&
-                          !isFullScreen.value &&
-                          isShowing &&
-                          mounted) {
-                        if (!removeSafeArea) showStatusBar();
-                      }
+                      // if (MediaQuery.of(context).orientation ==
+                      //         Orientation.portrait &&
+                      //     !isFullScreen &&
+                      //     isShowing &&
+                      //     mounted) {
+                      //   if (!removeSafeArea) showStatusBar();
+                      // }
                       return Container(
                         color:
                             showStatusBarBackgroundColor ? null : Colors.black,
                         height: MediaQuery.of(context).orientation ==
                                     Orientation.landscape ||
-                                isFullScreen.value == true
+                                isFullScreen
                             ? MediaQuery.sizeOf(context).height -
                                 (MediaQuery.of(context).orientation ==
                                             Orientation.landscape ||
@@ -507,13 +477,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             : videoHeight,
                         width: context.width,
                         child: PopScope(
-                          canPop: isFullScreen.value != true &&
+                          canPop: !isFullScreen &&
                               (horizontalScreen ||
                                   MediaQuery.of(context).orientation ==
                                       Orientation.portrait),
                           onPopInvokedWithResult:
                               (bool didPop, Object? result) {
-                            if (isFullScreen.value == true) {
+                            if (isFullScreen) {
                               plPlayerController!
                                   .triggerFullScreen(status: false);
                             }
@@ -569,12 +539,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               children: [
                 SizedBox(
                   height: videoHeight,
-                  width:
-                      isFullScreen.value == true ? context.width : videoWidth,
+                  width: isFullScreen ? context.width : videoWidth,
                   child: PopScope(
-                    canPop: isFullScreen.value != true,
+                    canPop: !isFullScreen,
                     onPopInvokedWithResult: (bool didPop, Object? result) {
-                      if (isFullScreen.value == true) {
+                      if (isFullScreen) {
                         plPlayerController!.triggerFullScreen(status: false);
                       }
                       if (MediaQuery.of(context).orientation ==
@@ -615,7 +584,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             children: [
               SizedBox(
                 width: videoWidth,
-                height: isFullScreen.value == true
+                height: isFullScreen
                     ? context.height -
                         (removeSafeArea
                             ? 0
@@ -623,9 +592,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 MediaQuery.of(context).padding.bottom))
                     : videoHeight,
                 child: PopScope(
-                  canPop: isFullScreen.value != true,
+                  canPop: !isFullScreen,
                   onPopInvokedWithResult: (bool didPop, Object? result) {
-                    if (isFullScreen.value == true) {
+                    if (isFullScreen) {
                       plPlayerController!.triggerFullScreen(status: false);
                     }
                     if (MediaQuery.of(context).orientation ==
@@ -674,12 +643,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 Expanded(child: videoIntro()),
                 SizedBox(
                   height: videoHeight,
-                  width:
-                      isFullScreen.value == true ? context.width : videoWidth,
+                  width: isFullScreen ? context.width : videoWidth,
                   child: PopScope(
-                    canPop: isFullScreen.value != true,
+                    canPop: !isFullScreen,
                     onPopInvokedWithResult: (bool didPop, Object? result) {
-                      if (isFullScreen.value == true) {
+                      if (isFullScreen) {
                         plPlayerController!.triggerFullScreen(status: false);
                       }
                       if (MediaQuery.of(context).orientation ==
@@ -750,15 +718,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               Column(
                 children: [
                   SizedBox(
-                    width:
-                        isFullScreen.value == true ? context.width : videoWidth,
-                    height: isFullScreen.value == true
-                        ? context.height
-                        : videoHeight,
+                    width: isFullScreen ? context.width : videoWidth,
+                    height: isFullScreen ? context.height : videoHeight,
                     child: PopScope(
-                      canPop: isFullScreen.value != true,
+                      canPop: !isFullScreen,
                       onPopInvokedWithResult: (bool didPop, Object? result) {
-                        if (isFullScreen.value == true) {
+                        if (isFullScreen) {
                           plPlayerController!.triggerFullScreen(status: false);
                         }
                         if (MediaQuery.of(context).orientation ==
@@ -771,7 +736,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     ),
                   ),
                   Offstage(
-                    offstage: isFullScreen.value == true,
+                    offstage: isFullScreen,
                     child: SizedBox(
                       width: videoWidth,
                       height: context.height -
@@ -785,7 +750,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 ],
               ),
               Offstage(
-                offstage: isFullScreen.value == true,
+                offstage: isFullScreen,
                 child: SizedBox(
                   width: (context.width -
                       videoWidth -
@@ -857,8 +822,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             body: Container(
               color: Theme.of(context).colorScheme.surface,
               child: SafeArea(
-                  left: !removeSafeArea && isFullScreen.value != true,
-                  right: !removeSafeArea && isFullScreen.value != true,
+                  left: !removeSafeArea && !isFullScreen,
+                  right: !removeSafeArea && !isFullScreen,
                   top: !removeSafeArea,
                   bottom: false, //!removeSafeArea,
                   child: childWhenDisabledLandscapeInner),
@@ -890,8 +855,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             body: Container(
                 color: Theme.of(context).colorScheme.surface,
                 child: SafeArea(
-                    left: !removeSafeArea && isFullScreen.value != true,
-                    right: !removeSafeArea && isFullScreen.value != true,
+                    left: !removeSafeArea && !isFullScreen,
+                    right: !removeSafeArea && !isFullScreen,
                     top: !removeSafeArea,
                     bottom: false, //!removeSafeArea,
                     child: childWhenDisabledAlmostSquareInner)))
@@ -1062,14 +1027,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           return autoChoose(childWhenDisabledLandscape);
         } else if (constraints.maxWidth * (9 / 16) <
             (2 / 5) * constraints.maxHeight) {
-          if (!isFullScreen.value) {
-            if (!removeSafeArea) showStatusBar();
-          }
+          // if (!isFullScreen) {
+          //   if (!removeSafeArea) showStatusBar();
+          // }
           return autoChoose(childWhenDisabled);
         } else {
-          if (!isFullScreen.value) {
-            if (!removeSafeArea) showStatusBar();
-          }
+          // if (!isFullScreen) {
+          //   if (!removeSafeArea) showStatusBar();
+          // }
           return autoChoose(childWhenDisabledAlmostSquare);
         }
         //
@@ -1083,7 +1048,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         //     videoDetailController.hiddenReplyReplyPanel();
         //   }
         // } else {
-        //   if (!isFullScreen.value) {
+        //   if (!isFullScreen) {
         //     showStatusBar();
         //   }
         // }
@@ -1341,7 +1306,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       currentCid: cid,
       changeFucCall: videoIntroController.changeSeasonOrbangu,
       context: context,
-      scaffoldState: isFullScreen.value
+      scaffoldState: isFullScreen
           ? videoDetailController.scaffoldKey.currentState
           : scaffoldKey.currentState,
     ).buildShowBottomSheet();

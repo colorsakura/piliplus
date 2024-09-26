@@ -88,8 +88,6 @@ class VideoDetailController extends GetxController
   late String cacheSecondDecode;
   late int cacheAudioQa;
 
-  PersistentBottomSheetController? replyReplyBottomSheetCtr;
-
   @override
   void onInit() {
     super.onInit();
@@ -493,12 +491,5 @@ class VideoDetailController extends GetxController
       }
     }
     return result;
-  }
-
-  // mob端全屏状态关闭二级回复
-  hiddenReplyReplyPanel() {
-    replyReplyBottomSheetCtr != null
-        ? replyReplyBottomSheetCtr!.close()
-        : print('replyReplyBottomSheetCtr is null');
   }
 }
