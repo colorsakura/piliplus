@@ -1037,14 +1037,6 @@ class PlPlayerController {
     }
   }
 
-  Future<void> resetBrightness() async {
-    try {
-      await ScreenBrightness().resetScreenBrightness();
-    } catch (e) {
-      throw 'Failed to reset brightness';
-    }
-  }
-
   /// Toggle Change the videofit accordingly
   void toggleVideoFit() {
     showDialog(
@@ -1333,11 +1325,6 @@ class PlPlayerController {
         _videoPlayerController = null;
       }
       _instance = null;
-      // 关闭所有视频页面恢复亮度
-      if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
-          as bool) {
-        resetBrightness();
-      }
       videoPlayerServiceHandler.clear();
     } catch (err) {
       print(err);
