@@ -127,7 +127,9 @@ class _ListSheetContentState extends State<ListSheetContent> {
               ? episode.bvid
               : widget.bvid,
           episode.cid,
-          episode.aid,
+          episode.runtimeType.toString() == "EpisodeItem"
+              ? episode.aid
+              : widget.aid,
           episode is video.EpisodeItem
               ? episode.arc?.pic
               : episode is bangumi.EpisodeItem

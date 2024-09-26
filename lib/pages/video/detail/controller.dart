@@ -88,6 +88,8 @@ class VideoDetailController extends GetxController
   late String cacheSecondDecode;
   late int cacheAudioQa;
 
+  PlayerStatus? playerStatus;
+
   @override
   void onInit() {
     super.onInit();

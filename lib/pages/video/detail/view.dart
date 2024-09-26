@@ -306,6 +306,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
     ScreenBrightness().resetScreenBrightness();
 
+    videoDetailController.playerStatus =
+        plPlayerController?.playerStatus.status.value;
+
     /// 开启
     if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
         as bool) {
@@ -346,6 +349,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     await videoDetailController.playerInit(autoplay: autoplay);
+
+    if (videoDetailController.playerStatus == PlayerStatus.playing) {
+      plPlayerController?.play();
+    }
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
     videoIntroController.isPaused = false;
