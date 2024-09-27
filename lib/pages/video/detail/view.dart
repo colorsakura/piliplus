@@ -1296,12 +1296,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  showIntroDetail(videoDetail) {
+  showIntroDetail(videoDetail, videoTags) {
     scaffoldKey.currentState?.showBottomSheet(
       enableDrag: true,
       (context) => videoDetail is BangumiInfoModel
-          ? bangumi.IntroDetail(bangumiDetail: videoDetail)
-          : video.IntroDetail(videoDetail: videoDetail),
+          ? bangumi.IntroDetail(
+              bangumiDetail: videoDetail,
+              videoTags: videoTags,
+            )
+          : video.IntroDetail(
+              videoDetail: videoDetail,
+              videoTags: videoTags,
+            ),
     );
   }
 

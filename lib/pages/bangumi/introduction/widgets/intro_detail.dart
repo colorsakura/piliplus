@@ -1,16 +1,19 @@
+import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
 import 'package:PiliPalaX/common/widgets/stat/view.dart';
+import 'package:get/get.dart';
 
 import '../../../../utils/utils.dart';
 
-
 class IntroDetail extends StatelessWidget {
   final dynamic bangumiDetail;
+  final dynamic videoTags;
 
   const IntroDetail({
     Key? key,
     this.bangumiDetail,
+    this.videoTags,
   }) : super(key: key);
 
   @override
@@ -108,6 +111,23 @@ class IntroDetail extends StatelessWidget {
                     bangumiDetail.actors,
                     style: smallTitle.copyWith(fontSize: 13),
                   ),
+                  if (videoTags is List && videoTags.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: (videoTags as List)
+                          .map(
+                            (item) => SearchText(
+                              fontSize: 13,
+                              searchText: item['tag_name'],
+                              onSelect: (_) => Get.toNamed('/searchResult',
+                                  parameters: {'keyword': item['tag_name']}),
+                            ),
+                          )
+                          .toList(),
+                    )
+                  ],
                   SizedBox(height: MediaQuery.of(context).padding.bottom + 20)
                 ],
               ),

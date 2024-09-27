@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,6 +46,7 @@ class BangumiIntroController extends CommonController {
   RxBool hasCoin = false.obs;
   // 是否收藏
   RxBool hasFav = false.obs;
+  dynamic videoTags;
   Box userInfoCache = GStorage.userInfo;
   bool userLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
@@ -58,6 +60,7 @@ class BangumiIntroController extends CommonController {
   @override
   void onInit() {
     super.onInit();
+    queryVideoTags();
     if (Get.arguments.isNotEmpty as bool) {
       if (Get.arguments.containsKey('bangumiItem') as bool) {
         preRender = true;
@@ -92,6 +95,14 @@ class BangumiIntroController extends CommonController {
     }
 
     queryData();
+  }
+
+  Future queryVideoTags() async {
+    var result = await UserHttp.videoTags(bvid: bvid);
+    if (result['status']) {
+      videoTags = result['data'];
+      debugPrint('tags: ${result['data']}');
+    }
   }
 
   @override

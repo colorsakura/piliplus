@@ -82,7 +82,10 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             videoDetail: videoDetail,
             heroTag: heroTag,
             showAiBottomSheet: widget.showAiBottomSheet,
-            showIntroDetail: widget.showIntroDetail,
+            showIntroDetail: () => widget.showIntroDetail(
+              videoDetail,
+              videoIntroController.videoTags,
+            ),
             showEpisodes: widget.showEpisodes,
           )
         : VideoInfo(
@@ -92,7 +95,10 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             videoDetail: videoIntroController.videoDetail.value,
             heroTag: heroTag,
             showAiBottomSheet: widget.showAiBottomSheet,
-            showIntroDetail: widget.showIntroDetail,
+            showIntroDetail: () => widget.showIntroDetail(
+              videoIntroController.videoDetail.value,
+              videoIntroController.videoTags,
+            ),
             showEpisodes: widget.showEpisodes,
           ));
   }
@@ -199,7 +205,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       return;
     }
     feedBack();
-    widget.showIntroDetail(widget.videoDetail);
+    widget.showIntroDetail();
   }
 
   // 用户主页

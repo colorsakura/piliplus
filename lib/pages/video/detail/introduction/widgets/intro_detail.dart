@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -10,8 +11,10 @@ class IntroDetail extends StatelessWidget {
   const IntroDetail({
     super.key,
     this.videoDetail,
+    this.videoTags,
   });
   final dynamic videoDetail;
+  final dynamic videoTags;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +78,23 @@ class IntroDetail extends StatelessWidget {
                         ),
                       ],
                     ),
+                    if (videoTags is List && videoTags.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: (videoTags as List)
+                            .map(
+                              (item) => SearchText(
+                                fontSize: 13,
+                                searchText: item['tag_name'],
+                                onSelect: (_) => Get.toNamed('/searchResult',
+                                    parameters: {'keyword': item['tag_name']}),
+                              ),
+                            )
+                            .toList(),
+                      )
+                    ],
                     const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,

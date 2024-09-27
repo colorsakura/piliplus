@@ -392,4 +392,13 @@ class UserHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
+
+  static videoTags({required String bvid}) async {
+    var res = await Request().get(Api.videoTags, data: {'bvid': bvid});
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false};
+    }
+  }
 }

@@ -47,6 +47,8 @@ class VideoIntroController extends GetxController {
   Rx<Map<String, dynamic>> userStat =
       Rx<Map<String, dynamic>>({'follower': '-'});
 
+  dynamic videoTags;
+
   // 是否点赞
   RxBool hasLike = false.obs;
   // 是否点踩
@@ -120,6 +122,7 @@ class VideoIntroController extends GetxController {
 
   // 获取视频简介&分p
   void queryVideoIntro() async {
+    queryVideoTags();
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
       videoDetail.value = result['data']!;
@@ -156,6 +159,14 @@ class VideoIntroController extends GetxController {
       queryHasFavVideo();
       //
       queryFollowStatus();
+    }
+  }
+
+  Future queryVideoTags() async {
+    var result = await UserHttp.videoTags(bvid: bvid);
+    if (result['status']) {
+      videoTags = result['data'];
+      debugPrint('tags: ${result['data']}');
     }
   }
 

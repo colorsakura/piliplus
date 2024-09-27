@@ -77,7 +77,10 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
             bangumiDetail: loadingState.response,
             cid: cid,
             showEpisodes: widget.showEpisodes,
-            showIntroDetail: widget.showIntroDetail,
+            showIntroDetail: () => widget.showIntroDetail(
+              loadingState.response,
+              bangumiIntroController.videoTags,
+            ),
           )
         : loadingState is Error
             ? HttpError(
@@ -165,7 +168,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
   // 视频介绍
   showIntroDetail() {
     feedBack();
-    widget.showIntroDetail(widget.bangumiDetail);
+    widget.showIntroDetail();
   }
 
   @override
