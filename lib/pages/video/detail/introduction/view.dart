@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/self_sized_horizontal_list.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -238,65 +239,120 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(children: [
-                Expanded(
-                    child: GestureDetector(
-                  onTap: onPushMember,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 1, horizontal: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        NetworkImgLayer(
-                          type: 'avatar',
-                          src: loadingStatus
-                              ? videoItem['owner']?.face ?? ""
-                              : widget.videoDetail!.owner!.face,
-                          width: 30,
-                          height: 30,
-                          fadeInDuration: Duration.zero,
-                          fadeOutDuration: Duration.zero,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              loadingStatus
-                                  ? videoItem['owner']?.name ?? ""
-                                  : widget.videoDetail!.owner!.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 12, color: t.colorScheme.primary),
-                              // semanticsLabel: "Up主：${owner.name}",
+              Row(
+                children: [
+                  Expanded(
+                    child: videoItem['staff'] == null
+                        ? GestureDetector(
+                            onTap: onPushMember,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 1, horizontal: 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  NetworkImgLayer(
+                                    type: 'avatar',
+                                    src: loadingStatus
+                                        ? videoItem['owner']?.face ?? ""
+                                        : widget.videoDetail!.owner!.face,
+                                    width: 30,
+                                    height: 30,
+                                    fadeInDuration: Duration.zero,
+                                    fadeOutDuration: Duration.zero,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          loadingStatus
+                                              ? videoItem['owner']?.name ?? ""
+                                              : widget.videoDetail!.owner!.name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: t.colorScheme.primary),
+                                          // semanticsLabel: "Up主：${owner.name}",
+                                        ),
+                                        const SizedBox(height: 0),
+                                        Obx(
+                                          () => Text(
+                                            Utils.numFormat(videoIntroController
+                                                .userStat.value['follower']),
+                                            semanticsLabel:
+                                                "${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: t.colorScheme.outline,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  followButton(context, t),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 0),
-                            Obx(() => Text(
-                                  Utils.numFormat(videoIntroController
-                                      .userStat.value['follower']),
-                                  semanticsLabel:
-                                      "${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝",
+                          )
+                        : SelfSizedHorizontalList(
+                            gapSize: 10,
+                            itemCount: videoItem['staff'].length,
+                            childBuilder: (index) => Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => Get.toNamed(
+                                      '/member?mid=${videoItem['staff'][index].mid}',
+                                      arguments: {
+                                        'face': videoItem['staff'][index].face,
+                                        heroTag: Utils.makeHeroTag(
+                                            videoItem['staff'][index].mid),
+                                      }),
+                                  child: NetworkImgLayer(
+                                    type: 'avatar',
+                                    src: videoItem['staff'][index].face,
+                                    width: 40,
+                                    height: 40,
+                                    fadeInDuration: Duration.zero,
+                                    fadeOutDuration: Duration.zero,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  videoItem['staff'][index].name.length > 5
+                                      ? '${videoItem['staff'][index].name.toString().substring(0, 5)}...'
+                                      : videoItem['staff'][index].name,
+                                  style: TextStyle(
+                                    color:
+                                        videoItem['staff'][index].vip.type == 2
+                                            ? Utils.vipColor
+                                            : null,
+                                  ),
+                                ),
+                                Text(
+                                  videoItem['staff'][index].title,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: t.colorScheme.outline,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
                                   ),
-                                )),
-                          ],
-                        )),
-                        followButton(context, t),
-                      ],
-                    ),
+                                ),
+                              ],
+                            ),
+                          ),
                   ),
-                )),
-                if (isHorizontal) ...[
-                  const SizedBox(width: 10),
-                  Expanded(child: actionGrid(context, videoIntroController)),
-                ]
-              ]),
+                  if (isHorizontal) ...[
+                    const SizedBox(width: 10),
+                    Expanded(child: actionGrid(context, videoIntroController)),
+                  ]
+                ],
+              ),
               const SizedBox(height: 8),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,

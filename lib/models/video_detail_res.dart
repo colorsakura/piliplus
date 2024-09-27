@@ -67,6 +67,7 @@ class VideoDetailData {
   String? likeIcon;
   bool? needJumpBv;
   String? epId;
+  List<Staff>? staff;
 
   VideoDetailData({
     this.bvid,
@@ -103,6 +104,7 @@ class VideoDetailData {
     this.likeIcon,
     this.needJumpBv,
     this.epId,
+    this.staff,
   });
 
   VideoDetailData.fromJson(Map<String, dynamic> json) {
@@ -152,6 +154,9 @@ class VideoDetailData {
         : HonorReply.fromJson(json["honor_reply"]);
     likeIcon = json["like_icon"];
     needJumpBv = json["need_jump_bv"];
+    staff = json["staff"] == null
+        ? null
+        : (json["staff"] as List).map((item) => Staff.fromJson(item)).toList();
     if (json['redirect_url'] != null) {
       epId = resolveEpId(json['redirect_url']);
     }
@@ -273,6 +278,42 @@ class Dimension {
     data["data"] = data;
 
     return data;
+  }
+}
+
+class Staff {
+  dynamic mid;
+  String? title;
+  String? name;
+  String? face;
+  Vip? vip;
+
+  Staff({
+    this.mid,
+    this.title,
+    this.name,
+    this.face,
+    this.vip,
+  });
+
+  Staff.fromJson(Map<String, dynamic> json) {
+    mid = json["mid"];
+    title = json["title"];
+    name = json["name"];
+    face = json["face"];
+    vip = json["vip"] == null ? null : Vip.fromJson(json["vip"]);
+  }
+}
+
+class Vip {
+  dynamic type;
+
+  Vip({
+    this.type,
+  });
+
+  Vip.fromJson(Map<String, dynamic> json) {
+    type = json["type"];
   }
 }
 

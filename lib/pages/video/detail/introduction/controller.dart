@@ -126,6 +126,7 @@ class VideoIntroController extends GetxController {
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
       videoDetail.value = result['data']!;
+      videoItem!['staff'] = result['data'].staff;
       if (videoDetailController.videoItem['pic'] == null ||
           videoDetailController.videoItem['pic'] == '') {
         try {
