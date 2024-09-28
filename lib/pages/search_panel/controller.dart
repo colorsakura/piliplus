@@ -17,6 +17,7 @@ class SearchPanelController extends CommonController {
   int? tids;
   int? orderSort;
   int? userType;
+  int? categoryId;
 
   @override
   void onInit() {
@@ -75,5 +76,6 @@ class SearchPanelController extends CommonController {
         tids: tids,
         orderSort: orderSort,
         userType: userType,
+        categoryId: categoryId,
       );
 }
