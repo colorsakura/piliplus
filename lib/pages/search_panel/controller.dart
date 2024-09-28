@@ -14,6 +14,7 @@ class SearchPanelController extends CommonController {
   RxString order = ''.obs;
   // 视频时长筛选 仅用于搜索视频
   RxInt duration = 0.obs;
+  int? tids;
 
   @override
   void onInit() {
@@ -69,5 +70,6 @@ class SearchPanelController extends CommonController {
         page: currentPage,
         order: searchType!.type != 'video' ? null : order.value,
         duration: searchType!.type != 'video' ? null : duration.value,
+        tids: tids,
       );
 }

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -157,14 +158,39 @@ class CustomFilterChip extends StatelessWidget {
 class VideoPanelController extends GetxController {
   RxList<Map> filterList = [{}].obs;
   Rx<ArchiveFilterType> selectedType = ArchiveFilterType.values.first.obs;
-  List<Map<String, dynamic>> timeFiltersList = [
+  List timeFiltersList = [
     {'label': '全部时长', 'value': 0},
     {'label': '0-10分钟', 'value': 1},
     {'label': '10-30分钟', 'value': 2},
     {'label': '30-60分钟', 'value': 3},
     {'label': '60分钟+', 'value': 4},
   ];
-  RxInt currentTimeFilterval = 0.obs;
+  List zoneFiltersList = [
+    {'label': '全部', 'value': 0},
+    {'label': '动画', 'value': 1, 'tids': 1},
+    {'label': '番剧', 'value': 2, 'tids': 13},
+    {'label': '国创', 'value': 3, 'tids': 167},
+    {'label': '音乐', 'value': 4, 'tids': 3},
+    {'label': '舞蹈', 'value': 5, 'tids': 129},
+    {'label': '游戏', 'value': 6, 'tids': 4},
+    {'label': '知识', 'value': 7, 'tids': 36},
+    {'label': '科技', 'value': 8, 'tids': 188},
+    {'label': '运动', 'value': 9, 'tids': 234},
+    {'label': '汽车', 'value': 10, 'tids': 223},
+    {'label': '生活', 'value': 11, 'tids': 160},
+    {'label': '美食', 'value': 12, 'tids': 221},
+    {'label': '动物', 'value': 13, 'tids': 217},
+    {'label': '鬼畜', 'value': 14, 'tids': 119},
+    {'label': '时尚', 'value': 15, 'tids': 155},
+    {'label': '资讯', 'value': 16, 'tids': 202},
+    {'label': '娱乐', 'value': 17, 'tids': 5},
+    {'label': '影视', 'value': 18, 'tids': 181},
+    {'label': '记录', 'value': 19, 'tids': 177},
+    {'label': '电影', 'value': 20, 'tids': 23},
+    {'label': '电视', 'value': 21, 'tids': 11},
+  ];
+  int currentTimeFilterval = 0;
+  int currentZoneFilterval = 0;
 
   @override
   void onInit() {
@@ -179,45 +205,97 @@ class VideoPanelController extends GetxController {
   }
 
   onShowFilterDialog(
-      BuildContext context, SearchPanelController searchPanelCtr) {
-    showDialog(
+    BuildContext context,
+    SearchPanelController searchPanelCtr,
+  ) {
+    showModalBottomSheet(
       context: context,
-      builder: (context) {
-        TextStyle textStyle = Theme.of(context).textTheme.titleMedium!;
-        return AlertDialog(
-          title: const Text('时长筛选'),
-          contentPadding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
-          content: StatefulBuilder(builder: (context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var i in timeFiltersList) ...[
-                  RadioListTile(
-                    value: i['value'],
-                    autofocus: true,
-                    title: Text(i['label'], style: textStyle),
-                    groupValue: currentTimeFilterval.value,
-                    onChanged: (value) async {
-                      Get.back();
-                      currentTimeFilterval.value = value!;
-                      setState(() {});
-                      SmartDialog.dismiss();
-                      SmartDialog.showToast("「${i['label']}」的筛选结果");
-                      SearchPanelController ctr =
-                          Get.find<SearchPanelController>(
-                              tag: 'video${searchPanelCtr.keyword!}');
-                      ctr.duration.value = i['value'];
-                      SmartDialog.showLoading(msg: 'loading');
-                      await ctr.onRefresh();
-                      SmartDialog.dismiss();
-                    },
-                  ),
-                ],
-              ],
-            );
-          }),
-        );
-      },
+      isScrollControlled: true,
+      builder: (_) => SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 16,
+            right: 16,
+            bottom: 80 + MediaQuery.of(context).padding.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              const Text('时长', style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: timeFiltersList
+                    .map(
+                      (item) => SearchText(
+                        searchText: item['label'],
+                        onSelect: (text) async {
+                          Get.back();
+                          currentTimeFilterval = item['value'];
+                          SmartDialog.dismiss();
+                          SmartDialog.showToast("「${item['label']}」的筛选结果");
+                          SearchPanelController ctr =
+                              Get.find<SearchPanelController>(
+                                  tag: 'video${searchPanelCtr.keyword!}');
+                          ctr.duration.value = item['value'];
+                          SmartDialog.showLoading(msg: 'loading');
+                          await ctr.onRefresh();
+                          SmartDialog.dismiss();
+                        },
+                        onLongSelect: (_) {},
+                        bgColor: item['value'] == currentTimeFilterval
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : null,
+                        textColor: item['value'] == currentTimeFilterval
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : null,
+                      ),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(height: 20),
+              const Text('分区', style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: zoneFiltersList
+                    .map(
+                      (item) => SearchText(
+                        searchText: item['label'],
+                        onSelect: (text) async {
+                          Get.back();
+                          currentZoneFilterval = item['value'];
+                          SmartDialog.dismiss();
+                          SmartDialog.showToast("「${item['label']}」的筛选结果");
+                          SearchPanelController ctr =
+                              Get.find<SearchPanelController>(
+                                  tag: 'video${searchPanelCtr.keyword!}');
+                          ctr.tids = item['tids'];
+                          SmartDialog.showLoading(msg: 'loading');
+                          await ctr.onRefresh();
+                          SmartDialog.dismiss();
+                        },
+                        onLongSelect: (_) {},
+                        bgColor: item['value'] == currentZoneFilterval
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : null,
+                        textColor: item['value'] == currentZoneFilterval
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : null,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
