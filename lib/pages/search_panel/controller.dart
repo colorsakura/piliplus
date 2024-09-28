@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/pages/search_result/controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
@@ -7,7 +8,7 @@ import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
 class SearchPanelController extends CommonController {
-  SearchPanelController({this.keyword, this.searchType});
+  SearchPanelController({this.keyword, this.searchType, this.tag});
   String? keyword;
   SearchType? searchType;
   // 结果排序方式 搜索类型为视频、专栏及相簿时
@@ -18,6 +19,9 @@ class SearchPanelController extends CommonController {
   int? orderSort;
   int? userType;
   int? categoryId;
+  String? tag;
+  late final searchResultController =
+      Get.find<SearchResultController>(tag: tag);
 
   @override
   void onInit() {
@@ -26,8 +30,30 @@ class SearchPanelController extends CommonController {
   }
 
   @override
-  void handleSuccess(List currentList, List dataList) {
-    onPushDetail(dataList);
+  bool customHandleResponse(Success response) {
+    searchResultController.count[SearchType.values.indexOf(searchType!)] =
+        response.response.numResults;
+    if (response.response.list != null) {
+      List currentList = currentPage != 1 && loadingState.value is Success
+          ? (loadingState.value as Success).response
+          : [];
+      List dataList = currentPage == 1
+          ? response.response.list
+          : currentList + response.response.list;
+      if (dataList.isNotEmpty) {
+        loadingState.value = LoadingState.success(dataList);
+      } else {
+        loadingState.value = LoadingState.empty();
+      }
+      if (currentPage == 1) {
+        onPushDetail(response.response.list);
+      }
+    } else {
+      if (currentPage == 1) {
+        loadingState.value = LoadingState.empty();
+      }
+    }
+    return true;
   }
 
   void onPushDetail(resultList) async {

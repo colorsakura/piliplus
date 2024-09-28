@@ -2,12 +2,19 @@ import 'package:PiliPalaX/utils/em.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
 class SearchVideoModel {
-  SearchVideoModel({this.list});
+  SearchVideoModel({
+    this.numResults,
+    this.list,
+  });
+
+  int? numResults;
   List<SearchVideoItemModel>? list;
+
   SearchVideoModel.fromJson(Map<String, dynamic> json) {
+    numResults = (json['numResults'] as num?)?.toInt();
     list = json['result']
-        .where((e) => e['available'] == true)
-        .map<SearchVideoItemModel>((e) => SearchVideoItemModel.fromJson(e))
+        ?.where((e) => e['available'] == true)
+        ?.map<SearchVideoItemModel>((e) => SearchVideoItemModel.fromJson(e))
         .toList();
   }
 }
@@ -144,11 +151,18 @@ class Owner {
 }
 
 class SearchUserModel {
-  SearchUserModel({this.list});
+  SearchUserModel({
+    this.numResults,
+    this.list,
+  });
+
+  int? numResults;
   List<SearchUserItemModel>? list;
+
   SearchUserModel.fromJson(Map<String, dynamic> json) {
+    numResults = (json['numResults'] as num?)?.toInt();
     list = json['result']
-        .map<SearchUserItemModel>((e) => SearchUserItemModel.fromJson(e))
+        ?.map<SearchUserItemModel>((e) => SearchUserItemModel.fromJson(e))
         .toList();
   }
 }
@@ -211,11 +225,18 @@ class SearchUserItemModel {
 }
 
 class SearchLiveModel {
-  SearchLiveModel({this.list});
+  SearchLiveModel({
+    this.numResults,
+    this.list,
+  });
+
+  int? numResults;
   List<SearchLiveItemModel>? list;
+
   SearchLiveModel.fromJson(Map<String, dynamic> json) {
+    numResults = (json['numResults'] as num?)?.toInt();
     list = json['result']
-        .map<SearchLiveItemModel>((e) => SearchLiveItemModel.fromJson(e))
+        ?.map<SearchLiveItemModel>((e) => SearchLiveItemModel.fromJson(e))
         .toList();
   }
 }
@@ -285,9 +306,16 @@ class SearchLiveItemModel {
 }
 
 class SearchMBangumiModel {
-  SearchMBangumiModel({this.list});
+  SearchMBangumiModel({
+    this.numResults,
+    this.list,
+  });
+
+  int? numResults;
   List<SearchMBangumiItemModel>? list;
+
   SearchMBangumiModel.fromJson(Map<String, dynamic> json) {
+    numResults = (json['numResults'] as num?)?.toInt();
     list = json['result'] != null
         ? json['result']
             .map<SearchMBangumiItemModel>(
@@ -382,11 +410,16 @@ class SearchMBangumiItemModel {
 }
 
 class SearchArticleModel {
-  SearchArticleModel({this.list});
+  SearchArticleModel({
+    this.numResults,
+    this.list,
+  });
 
+  int? numResults;
   List<SearchArticleItemModel>? list;
 
   SearchArticleModel.fromJson(Map<String, dynamic> json) {
+    numResults = (json['numResults'] as num?)?.toInt();
     list = json['result'] != null
         ? json['result']
             .map<SearchArticleItemModel>(

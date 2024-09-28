@@ -42,6 +42,7 @@ class _SearchPanelState extends State<SearchPanel>
       SearchPanelController(
         keyword: widget.keyword,
         searchType: widget.searchType,
+        tag: widget.tag,
       ),
       tag: widget.searchType!.type + widget.keyword!,
     );

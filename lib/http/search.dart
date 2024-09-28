@@ -94,16 +94,18 @@ class SearchHttp {
       if (categoryId != null) 'category_id': categoryId,
     };
     var res = await Request().get(Api.searchByType, data: reqData);
-    if (res.data['code'] == 0 && res.data['data']['numPages'] > 0) {
+    if (res.data['code'] == 0) {
       dynamic data;
       try {
         switch (searchType) {
           case SearchType.video:
             List<int> blackMidsList = localCache
                 .get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
-            for (var i in res.data['data']['result']) {
-              // 屏蔽推广和拉黑用户
-              i['available'] = !blackMidsList.contains(i['mid']);
+            if (res.data['data']['result'] != null) {
+              for (var i in res.data['data']['result']) {
+                // 屏蔽推广和拉黑用户
+                i['available'] = !blackMidsList.contains(i['mid']);
+              }
             }
             data = SearchVideoModel.fromJson(res.data['data']);
             break;
@@ -120,11 +122,7 @@ class SearchHttp {
             data = SearchArticleModel.fromJson(res.data['data']);
             break;
         }
-        if (data.list.isNotEmpty) {
-          return LoadingState.success(data.list);
-        } else {
-          return LoadingState.empty();
-        }
+        return LoadingState.success(data);
       } catch (err) {
         print(err);
         return LoadingState.error(err.toString());
