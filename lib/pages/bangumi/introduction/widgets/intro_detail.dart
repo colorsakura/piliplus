@@ -123,6 +123,8 @@ class IntroDetail extends StatelessWidget {
                               searchText: item['tag_name'],
                               onSelect: (_) => Get.toNamed('/searchResult',
                                   parameters: {'keyword': item['tag_name']}),
+                              onLongSelect: (_) =>
+                                  Utils.copyText(item['tag_name']),
                             ),
                           )
                           .toList(),
