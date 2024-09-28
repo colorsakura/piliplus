@@ -27,7 +27,7 @@ Widget searchUserPanel(BuildContext context, searchPanelCtr, list) {
           child: Container(
             height: 40,
             color: Theme.of(context).colorScheme.surface,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.only(left: 25, right: 12),
             child: Row(
               children: [
                 Obx(
