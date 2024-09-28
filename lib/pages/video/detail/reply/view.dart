@@ -133,7 +133,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               SliverPersistentHeader(
                 pinned: false,
                 floating: true,
-                delegate: _MySliverPersistentHeaderDelegate(
+                delegate: MySliverPersistentHeaderDelegate(
                   child: Container(
                     height: 40,
                     padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
@@ -257,8 +257,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   }
 }
 
-class _MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  _MySliverPersistentHeaderDelegate({required this.child});
+class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  MySliverPersistentHeaderDelegate({required this.child});
   final double _minExtent = 45;
   final double _maxExtent = 45;
   final Widget child;
@@ -281,7 +281,7 @@ class _MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => _minExtent;
 
   @override
-  bool shouldRebuild(covariant _MySliverPersistentHeaderDelegate oldDelegate) {
+  bool shouldRebuild(covariant MySliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
 }
