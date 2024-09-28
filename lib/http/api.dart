@@ -611,4 +611,6 @@ class Api {
   static const String unfavFolder = '/x/v3/fav/folder/unfav';
 
   static const String videoTags = '/x/tag/archive/tags';
+
+  static const String reportMember = '/ajax/report/add';
 }

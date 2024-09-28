@@ -7,6 +7,7 @@ class HttpString {
   static const String passBaseUrl = 'https://passport.bilibili.com';
   static const String messageBaseUrl = 'https://message.bilibili.com';
   static const String dynamicShareBaseUrl = 'https://t.bilibili.com';
+  static const String spaceBaseUrl = 'https://space.bilibili.com';
   static const List<int> validateStatusCodes = [
     302,
     304,

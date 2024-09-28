@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/member.dart';
+import 'package:PiliPalaX/http/user.dart';
+import 'package:PiliPalaX/models/member/info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -144,6 +147,36 @@ class _MemberPageState extends State<MemberPage>
                       ],
                     ),
                   ),
+                  if (_memberController.userInfo != null) ...[
+                    const PopupMenuDivider(),
+                    PopupMenuItem(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => Dialog(
+                              child: ReportPanel(
+                            memberInfo: _memberController.memberInfo.value,
+                          )),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 19,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            '举报',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(width: 4),
@@ -488,4 +521,145 @@ class _MemberPageState extends State<MemberPage>
       ),
     );
   }
+}
+
+class ReportPanel extends StatefulWidget {
+  const ReportPanel({super.key, required this.memberInfo});
+
+  final MemberInfoModel memberInfo;
+
+  @override
+  State<ReportPanel> createState() => _ReportPanelState();
+}
+
+class _ReportPanelState extends State<ReportPanel> {
+  final List<bool> _reasonList = List.generate(3, (_) => false).toList();
+  final Set<int> _reason = {};
+  int? _reasonV2;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '举报: ${widget.memberInfo.name}',
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 4),
+            Text('uid: ${widget.memberInfo.mid}'),
+            const SizedBox(height: 10),
+            const Text('举报内容（必选，可多选）'),
+            ...List.generate(
+              3,
+              (index) => _checkBoxWidget(
+                _reasonList[index],
+                (value) {
+                  setState(() => _reasonList[index] = value);
+                  if (value) {
+                    _reason.add(index + 1);
+                  } else {
+                    _reason.remove(index + 1);
+                  }
+                },
+                ['头像违规', '昵称违规', '签名违规'][index],
+              ),
+            ).toList(),
+            const Text('举报理由（单选，非必选）'),
+            ...List.generate(
+              5,
+              (index) => _radioWidget(
+                index,
+                _reasonV2,
+                (value) {
+                  setState(() => _reasonV2 = value);
+                },
+                ['色情低俗', '不实信息', '违禁', '人身攻击', '赌博诈骗'][index],
+              ),
+            ).toList(),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: Get.back,
+                  child: Text(
+                    '取消',
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    if (_reason.isEmpty) {
+                      SmartDialog.showToast('至少选择一项作为举报内容');
+                    } else {
+                      Get.back();
+                      dynamic result = await MemberHttp.reportMember(
+                        widget.memberInfo.mid,
+                        reason: _reason.join(','),
+                        reasonV2: _reasonV2 != null ? _reasonV2! + 1 : null,
+                      );
+                      if (result['msg'] is String && result['msg'].isNotEmpty) {
+                        SmartDialog.showToast(result['msg']);
+                      } else {
+                        SmartDialog.showToast('举报失败');
+                      }
+                    }
+                  },
+                  child: const Text('确定'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget _checkBoxWidget(
+  bool defValue,
+  ValueChanged onChanged,
+  String title,
+) {
+  return InkWell(
+    onTap: () => onChanged(!defValue),
+    child: Row(
+      children: [
+        Checkbox(
+          value: defValue,
+          onChanged: onChanged,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        Text(title),
+      ],
+    ),
+  );
+}
+
+Widget _radioWidget(
+  int value,
+  int? groupValue,
+  ValueChanged onChanged,
+  String title,
+) {
+  return InkWell(
+    onTap: () => onChanged(value),
+    child: Row(
+      children: [
+        Radio(
+          value: value,
+          groupValue: groupValue,
+          onChanged: onChanged,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        Text(title),
+      ],
+    ),
+  );
 }

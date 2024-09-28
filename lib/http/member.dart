@@ -1,4 +1,8 @@
+import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide FormData;
 
 import '../models/dynamics/result.dart';
 import '../models/follow/result.dart';
@@ -12,6 +16,29 @@ import '../utils/wbi_sign.dart';
 import 'index.dart';
 
 class MemberHttp {
+  static Future reportMember(
+    dynamic mid, {
+    String? reason,
+    int? reasonV2,
+  }) async {
+    var res = await Request().post(
+      HttpString.spaceBaseUrl + Api.reportMember,
+      data: FormData.fromMap(
+        {
+          'mid': mid,
+          'reason': reason,
+          if (reasonV2 != null) 'reason_v2': reasonV2,
+          'csrf': await Request.getCsrf(),
+        },
+      ),
+    );
+    debugPrint('report: ${res.data}');
+    return {
+      'status': res.data['status'],
+      'msg': res.data['message'] ?? res.data['data'],
+    };
+  }
+
   static Future memberInfo({
     int? mid,
     String token = '',
