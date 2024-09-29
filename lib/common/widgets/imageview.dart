@@ -6,15 +6,27 @@ import 'package:PiliPalaX/common/widgets/nine_grid_view.dart';
 import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:flutter/material.dart';
 
+class ImageModel {
+  ImageModel({
+    required this.width,
+    required this.height,
+    required this.url,
+  });
+
+  dynamic width;
+  dynamic height;
+  String url;
+}
+
 Widget image(
   double maxWidth,
-  List<dynamic> picArr,
+  List<ImageModel> picArr,
 ) {
   double imageWidth = (maxWidth - 2 * 5) / 3;
   double imageHeight = imageWidth;
   if (picArr.length == 1) {
-    dynamic width = picArr[0]['img_width'];
-    dynamic height = picArr[0]['img_height'];
+    dynamic width = picArr[0].width;
+    dynamic height = picArr[0].height;
     double ratioWH = width / height;
     double ratioHW = height / width;
     double maxRatio = 22 / 9;
@@ -44,7 +56,7 @@ Widget image(
           builder: (context) {
             return ImagePreview(
               initialPage: index,
-              imgList: picArr.map((item) => item['img_src'] as String).toList(),
+              imgList: picArr.map((item) => item.url).toList(),
             );
           },
         );
@@ -54,14 +66,13 @@ Widget image(
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: NetworkImgLayer(
-              src: picArr[index]['img_src'],
+              src: picArr[index].url,
               width: imageWidth,
               height: imageHeight,
-              origAspectRatio:
-                  picArr[index]['img_width'] / picArr[index]['img_height'],
+              origAspectRatio: picArr[index].width / picArr[index].height,
             ),
           ),
-          if (picArr[index]['img_height'] / picArr[index]['img_width'] > 22 / 9)
+          if (picArr[index].height / picArr[index].width > 22 / 9)
             const PBadge(
               text: '长图',
               right: 8,
