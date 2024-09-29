@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -6,26 +8,36 @@ import 'package:PiliPalaX/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchLivePanel(BuildContext context, ctr, list) {
-  return Padding(
-    padding: const EdgeInsets.only(
-        left: StyleString.safeSpace, right: StyleString.safeSpace),
-    child: GridView.builder(
-      primary: false,
-      controller: ctr!.scrollController,
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        maxCrossAxisExtent: Grid.maxRowWidth,
-        crossAxisSpacing: StyleString.safeSpace,
-        mainAxisSpacing: StyleString.safeSpace,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: MediaQuery.textScalerOf(context).scale(80),
-      ),
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        return LiveItem(liveItem: list![index]);
-      },
-    ),
-  );
+Widget searchLivePanel(BuildContext context, ctr, loadingState) {
+  return loadingState is Success
+      ? GridView.builder(
+          padding: const EdgeInsets.only(
+            left: StyleString.safeSpace,
+            right: StyleString.safeSpace,
+            bottom: StyleString.safeSpace,
+          ),
+          primary: false,
+          controller: ctr!.scrollController,
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            maxCrossAxisExtent: Grid.maxRowWidth,
+            crossAxisSpacing: StyleString.safeSpace,
+            mainAxisSpacing: StyleString.safeSpace,
+            childAspectRatio: StyleString.aspectRatio,
+            mainAxisExtent: MediaQuery.textScalerOf(context).scale(80),
+          ),
+          itemCount: loadingState.response.length,
+          itemBuilder: (context, index) {
+            return LiveItem(liveItem: loadingState.response[index]);
+          },
+        )
+      : CustomScrollView(
+          slivers: [
+            HttpError(
+              errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
+              fn: ctr.onReload,
+            ),
+          ],
+        );
 }
 
 class LiveItem extends StatelessWidget {

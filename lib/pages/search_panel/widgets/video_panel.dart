@@ -1,4 +1,8 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
+    show MySliverPersistentHeaderDelegate;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -12,99 +16,114 @@ import '../../../utils/grid.dart';
 class SearchVideoPanel extends StatelessWidget {
   SearchVideoPanel({
     required this.ctr,
-    required this.list,
+    required this.loadingState,
     Key? key,
   }) : super(key: key);
 
   final SearchPanelController ctr;
-  final List list;
+  final dynamic loadingState;
 
   final VideoPanelController controller = Get.put(VideoPanelController());
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // 分类筛选
-        Container(
-          width: context.width,
-          height: 34,
-          padding: const EdgeInsets.only(
-              left: StyleString.safeSpace, top: 0, right: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Obx(
-                    () => Wrap(
-                      // spacing: ,
-                      children: [
-                        for (var i in controller.filterList) ...[
-                          CustomFilterChip(
-                            label: i['label'],
-                            type: i['type'],
-                            selectedType: controller.selectedType.value,
-                            callFn: (bool selected) async {
-                              print('selected: $selected');
-                              controller.selectedType.value = i['type'];
-                              ctr.order.value =
-                                  i['type'].toString().split('.').last;
-                              SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onRefresh();
-                              SmartDialog.dismiss();
-                            },
-                          ),
-                        ]
-                      ],
+    return CustomScrollView(
+      controller: ctr.scrollController,
+      slivers: [
+        SliverPersistentHeader(
+          pinned: false,
+          floating: true,
+          delegate: MySliverPersistentHeaderDelegate(
+            child: Container(
+              width: context.width,
+              height: 34,
+              color: Theme.of(context).colorScheme.surface,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(
+                        () => Wrap(
+                          // spacing: ,
+                          children: [
+                            for (var i in controller.filterList) ...[
+                              CustomFilterChip(
+                                label: i['label'],
+                                type: i['type'],
+                                selectedType: controller.selectedType.value,
+                                callFn: (bool selected) async {
+                                  print('selected: $selected');
+                                  controller.selectedType.value = i['type'];
+                                  ctr.order.value =
+                                      i['type'].toString().split('.').last;
+                                  SmartDialog.showLoading(msg: 'loading');
+                                  await ctr.onRefresh();
+                                  SmartDialog.dismiss();
+                                },
+                              ),
+                            ]
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const VerticalDivider(indent: 7, endIndent: 8),
-              const SizedBox(width: 3),
-              SizedBox(
-                width: 32,
-                height: 32,
-                child: IconButton(
-                  tooltip: '筛选',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  const VerticalDivider(indent: 7, endIndent: 8),
+                  const SizedBox(width: 3),
+                  SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: IconButton(
+                      tooltip: '筛选',
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                      ),
+                      onPressed: () =>
+                          controller.onShowFilterDialog(context, ctr),
+                      icon: Icon(
+                        Icons.filter_list_outlined,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ),
-                  onPressed: () => controller.onShowFilterDialog(context, ctr),
-                  icon: Icon(
-                    Icons.filter_list_outlined,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-        Expanded(
-            child: CustomScrollView(
-          controller: ctr.scrollController,
-          slivers: [
-            SliverPadding(
-                padding: const EdgeInsets.all(StyleString.safeSpace),
+        loadingState is Success
+            ? SliverPadding(
+                padding: EdgeInsets.only(
+                  left: StyleString.safeSpace,
+                  right: StyleString.safeSpace,
+                  bottom: StyleString.safeSpace +
+                      MediaQuery.of(context).padding.bottom,
+                ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                      mainAxisSpacing: StyleString.safeSpace,
-                      crossAxisSpacing: StyleString.safeSpace,
-                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                      childAspectRatio: StyleString.aspectRatio * 2.4,
-                      mainAxisExtent: 0),
+                    mainAxisSpacing: StyleString.safeSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.4,
+                    mainAxisExtent: 0,
+                  ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return VideoCardH(
-                          videoItem: list[index], showPubdate: true);
+                        videoItem: loadingState.response[index],
+                        showPubdate: true,
+                      );
                     },
-                    childCount: list.length,
+                    childCount: loadingState.response.length,
                   ),
-                )),
-          ],
-        )),
+                ),
+              )
+            : HttpError(
+                errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
+                fn: ctr.onReload,
+              ),
       ],
     );
   }
