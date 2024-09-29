@@ -129,9 +129,8 @@ class NineGridView extends StatefulWidget {
 class _NineGridViewState extends State<NineGridView> {
   /// init view size.
   Rect _initSize(BuildContext context) {
-    int itemCount = math.min(9, widget.itemCount);
     EdgeInsets padding = widget.padding;
-    if (itemCount == 0) {
+    if (widget.itemCount == 0) {
       return Rect.fromLTRB(0, 0, padding.horizontal, padding.vertical);
     }
     double width = widget.width ??
@@ -140,15 +139,16 @@ class _NineGridViewState extends State<NineGridView> {
     double space = widget.space;
     double itemW;
     if (widget.type == NineGridType.weiBo &&
-        (itemCount == 1 || itemCount == 2)) {
+        (widget.itemCount == 1 || widget.itemCount == 2)) {
       // || itemCount == 4
       itemW = (width - space) / 2;
     } else {
       itemW = (width - space * 2) / 3;
     }
-    bool fourGrid = (itemCount == 4 && widget.type != NineGridType.normal);
-    int column = fourGrid ? 2 : math.min(3, itemCount);
-    int row = fourGrid ? 2 : (itemCount / 3).ceil();
+    bool fourGrid =
+        (widget.itemCount == 4 && widget.type != NineGridType.normal);
+    int column = fourGrid ? 2 : math.min(3, widget.itemCount);
+    int row = fourGrid ? 2 : (widget.itemCount / 3).ceil();
     double realWidth =
         itemW * column + space * (column - 1) + padding.horizontal;
     double realHeight = itemW * row + space * (row - 1) + padding.vertical;
@@ -157,11 +157,11 @@ class _NineGridViewState extends State<NineGridView> {
 
   /// build nine grid view.
   Widget _buildChild(BuildContext context, double itemW) {
-    int itemCount = math.min(9, widget.itemCount);
     double space = widget.space;
-    int column = (itemCount == 4 && widget.type != NineGridType.normal) ? 2 : 3;
+    int column =
+        (widget.itemCount == 4 && widget.type != NineGridType.normal) ? 2 : 3;
     List<Widget> list = [];
-    for (int i = 0; i < itemCount; i++) {
+    for (int i = 0; i < widget.itemCount; i++) {
       list.add(Positioned(
           top: (space + itemW) * (i ~/ column),
           left: (space + itemW) * (i % column),
@@ -212,20 +212,19 @@ class _NineGridViewState extends State<NineGridView> {
 
   /// build weChat group.
   Widget _buildWeChatGroup(BuildContext context) {
-    int itemCount = math.min(9, widget.itemCount);
     double width = widget.width! - widget.padding.horizontal;
     double space = widget.space;
     double itemW;
 
-    int column = itemCount < 5 ? 2 : 3;
+    int column = widget.itemCount < 5 ? 2 : 3;
     int row = 0;
-    if (itemCount == 1) {
+    if (widget.itemCount == 1) {
       row = 1;
       itemW = width;
-    } else if (itemCount < 5) {
-      row = itemCount == 2 ? 1 : 2;
+    } else if (widget.itemCount < 5) {
+      row = widget.itemCount == 2 ? 1 : 2;
       itemW = (width - space) / 2;
-    } else if (itemCount < 7) {
+    } else if (widget.itemCount < 7) {
       row = 2;
       itemW = (width - space * 2) / 3;
     } else {
@@ -233,9 +232,9 @@ class _NineGridViewState extends State<NineGridView> {
       itemW = (width - space * 2) / 3;
     }
 
-    int first = itemCount % column;
+    int first = widget.itemCount % column;
     List<Widget> list = [];
-    for (int i = 0; i < itemCount; i++) {
+    for (int i = 0; i < widget.itemCount; i++) {
       double left;
       if (first > 0 && i < first) {
         left = (width - itemW * first - space * (first - 1)) / 2 +
