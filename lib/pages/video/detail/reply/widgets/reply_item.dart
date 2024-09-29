@@ -259,53 +259,47 @@ class ReplyItem extends StatelessWidget {
                 textDirection: Directionality.of(context),
               )..layout(maxWidth: constraints.maxWidth);
               bool didExceedMaxLines = textPainter.didExceedMaxLines;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Semantics(
-                    label: text,
-                    child: Text.rich(
-                      style: TextStyle(
-                          height: 1.75,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize),
-                      TextSpan(
-                        children: [
-                          if (replyItem!.isTop!) ...[
-                            const WidgetSpan(
-                              alignment: PlaceholderAlignment.top,
-                              child: PBadge(
-                                text: 'TOP',
-                                size: 'small',
-                                stack: 'normal',
-                                type: 'line',
-                                fs: 9,
-                                semanticsLabel: '置顶',
-                              ),
-                            ),
-                            const TextSpan(text: ' '),
-                          ],
-                          buildContent(
-                            context,
-                            replyItem!,
-                            replyReply,
-                            null,
-                            textPainter,
-                            didExceedMaxLines,
+              return Semantics(
+                label: text,
+                child: Text.rich(
+                  style: TextStyle(
+                      height: 1.75,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize),
+                  TextSpan(
+                    children: [
+                      if (replyItem!.isTop!) ...[
+                        const WidgetSpan(
+                          alignment: PlaceholderAlignment.top,
+                          child: PBadge(
+                            text: 'TOP',
+                            size: 'small',
+                            stack: 'normal',
+                            type: 'line',
+                            fs: 9,
+                            semanticsLabel: '置顶',
                           ),
-                        ],
+                        ),
+                        const TextSpan(text: ' '),
+                      ],
+                      buildContent(
+                        context,
+                        replyItem!,
+                        replyReply,
+                        null,
+                        textPainter,
+                        didExceedMaxLines,
                       ),
-                    ),
+                      if (didExceedMaxLines)
+                        TextSpan(
+                          text: '\n查看更多',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                    ],
                   ),
-                  if (didExceedMaxLines)
-                    Text(
-                      '查看更多',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                ],
+                ),
               );
             },
           ),
