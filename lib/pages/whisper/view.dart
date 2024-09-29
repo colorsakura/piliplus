@@ -172,6 +172,57 @@ class _WhisperPageState extends State<WhisperPage> {
                                         content.toString();
                                   }
                                   return ListTile(
+                                    tileColor: sessionList[i].topTs == 0
+                                        ? null
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                    onLongPress: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            clipBehavior: Clip.hardEdge,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 12),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  dense: true,
+                                                  onTap: () {
+                                                    Get.back();
+                                                    _whisperController
+                                                        .onSetTop(i);
+                                                  },
+                                                  title: Text(
+                                                    sessionList[i].topTs == 0
+                                                        ? '置顶'
+                                                        : '移除置顶',
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
+                                                ListTile(
+                                                  dense: true,
+                                                  onTap: () {
+                                                    Get.back();
+                                                    _whisperController
+                                                        .onRemove(i);
+                                                  },
+                                                  title: const Text(
+                                                    '删除',
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
                                     onTap: () {
                                       setState(() {
                                         sessionList[i].unreadCount = 0;

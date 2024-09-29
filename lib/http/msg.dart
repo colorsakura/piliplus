@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:PiliPalaX/http/constants.dart';
 import 'package:dio/dio.dart';
 
 import '../models/msg/account.dart';
@@ -137,6 +138,56 @@ class MsgHttp {
       return {
         'status': false,
         'date': [],
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future removeMsg(
+    dynamic talkerId,
+  ) async {
+    String csrf = await Request.getCsrf();
+    Map<String, dynamic> data = await WbiSign().makSign({
+      'talker_id': talkerId,
+      'session_type': 1,
+      'build': 0,
+      'mobi_app': 'web',
+      'csrf_token': csrf,
+      'csrf': csrf
+    });
+    var res = await Request()
+        .post(HttpString.tUrl + Api.removeMsg, data: FormData.fromMap(data));
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future setTop(
+    dynamic talkerId,
+    int opType,
+  ) async {
+    String csrf = await Request.getCsrf();
+    Map<String, dynamic> data = await WbiSign().makSign({
+      'talker_id': talkerId,
+      'session_type': 1,
+      'op_type': opType,
+      'build': 0,
+      'mobi_app': 'web',
+      'csrf_token': csrf,
+      'csrf': csrf
+    });
+    var res = await Request()
+        .post(HttpString.tUrl + Api.setTop, data: FormData.fromMap(data));
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
         'msg': res.data['message'],
       };
     }

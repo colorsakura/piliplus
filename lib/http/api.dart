@@ -613,4 +613,8 @@ class Api {
   static const String videoTags = '/x/tag/archive/tags';
 
   static const String reportMember = '/ajax/report/add';
+
+  static const String removeMsg = '/session_svr/v1/session_svr/remove_session';
+
+  static const String setTop = '/session_svr/v1/session_svr/set_top';
 }

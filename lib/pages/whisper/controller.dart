@@ -15,29 +15,29 @@ class WhisperController extends GetxController {
   Rx<MsgFeedUnread> msgFeedUnread = MsgFeedUnread().obs;
   RxList msgFeedTop = [
     {
-      "name":"回复我的",
-      "icon":Icons.message_outlined,
+      "name": "回复我的",
+      "icon": Icons.message_outlined,
       "route": "/replyMe",
       "enabled": true,
       "value": 0
     },
     {
-      "name":"@我",
-      "icon":Icons.alternate_email_outlined,
+      "name": "@我",
+      "icon": Icons.alternate_email_outlined,
       "route": "/atMe",
       "enabled": true,
       "value": 0
     },
     {
-      "name":"收到的赞",
-      "icon":Icons.favorite_border_outlined,
+      "name": "收到的赞",
+      "icon": Icons.favorite_border_outlined,
       "route": "/likeMe",
       "enabled": true,
       "value": 0
     },
     {
-      "name":"系统通知",
-      "icon":Icons.notifications_none_outlined,
+      "name": "系统通知",
+      "icon": Icons.notifications_none_outlined,
       "route": "/sysMsg",
       "enabled": true,
       "value": 0
@@ -52,12 +52,48 @@ class WhisperController extends GetxController {
       msgFeedTop[1]["value"] = msgFeedUnread.value.at;
       msgFeedTop[2]["value"] = msgFeedUnread.value.like;
       msgFeedTop[3]["value"] = msgFeedUnread.value.sys_msg;
-      if (GStorage.setting.get(SettingBoxKey.disableLikeMsg, defaultValue: false)) {
+      if (GStorage.setting
+          .get(SettingBoxKey.disableLikeMsg, defaultValue: false)) {
         msgFeedTop[2]["value"] = -1;
         msgFeedTop[2]["enabled"] = false;
       }
       // 触发更新
       msgFeedTop.refresh();
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  Future onRemove(int index) async {
+    var res = await MsgHttp.removeMsg(sessionList[index].talkerId);
+    if (res['status']) {
+      sessionList.removeAt(index);
+      SmartDialog.showToast('删除成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  Future onSetTop(int index) async {
+    bool isTop = sessionList[index].topTs != 0;
+    var res = await MsgHttp.setTop(
+      sessionList[index].talkerId,
+      isTop ? 1 : 0,
+    );
+    if (res['status']) {
+      List<SessionList> list = sessionList.map((item) {
+        if (item.talkerId == sessionList[index].talkerId) {
+          return item..topTs = isTop ? 0 : 1;
+        } else {
+          return item;
+        }
+      }).toList();
+      if (!isTop) {
+        SessionList item = list.removeAt(index);
+        list.insert(0, item);
+      }
+      sessionList.value = list;
+      SmartDialog.showToast('${isTop ? '移除' : ''}置顶成功');
     } else {
       SmartDialog.showToast(res['msg']);
     }

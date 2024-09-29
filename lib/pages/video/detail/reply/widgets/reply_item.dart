@@ -264,41 +264,40 @@ class ReplyItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Semantics(
-                      label: text,
-                      child: Text.rich(
-                        style: TextStyle(
-                            height: 1.75,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize),
-                        TextSpan(
-                          children: [
-                            if (replyItem!.isTop!) ...[
-                              const WidgetSpan(
-                                alignment: PlaceholderAlignment.top,
-                                child: PBadge(
-                                  text: 'TOP',
-                                  size: 'small',
-                                  stack: 'normal',
-                                  type: 'line',
-                                  fs: 9,
-                                  semanticsLabel: '置顶',
-                                ),
+                    label: text,
+                    child: Text.rich(
+                      style: TextStyle(
+                          height: 1.75,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize),
+                      TextSpan(
+                        children: [
+                          if (replyItem!.isTop!) ...[
+                            const WidgetSpan(
+                              alignment: PlaceholderAlignment.top,
+                              child: PBadge(
+                                text: 'TOP',
+                                size: 'small',
+                                stack: 'normal',
+                                type: 'line',
+                                fs: 9,
+                                semanticsLabel: '置顶',
                               ),
-                              const TextSpan(text: ' '),
-                            ],
-                            buildContent(
-                              context,
-                              replyItem!,
-                              replyReply,
-                              null,
-                              textPainter,
-                              didExceedMaxLines,
                             ),
+                            const TextSpan(text: ' '),
                           ],
-                        ),
-                      )),
+                          buildContent(
+                            context,
+                            replyItem!,
+                            replyReply,
+                            null,
+                            textPainter,
+                            didExceedMaxLines,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   if (didExceedMaxLines)
                     Text(
                       '查看更多',
