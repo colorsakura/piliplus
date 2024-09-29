@@ -246,38 +246,70 @@ class ReplyItem extends StatelessWidget {
           ),
         ),
         // title
-        Container(
-          margin: const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
-          child: Semantics(
-              label: replyItem?.content?.message ?? "",
-              // excludeSemantics: true,
-              child: Text.rich(
-                style: TextStyle(
-                    height: 1.75,
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
+        Padding(
+          padding:
+              const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              String text = replyItem?.content?.message ?? '';
+              var textPainter = TextPainter(
+                text: TextSpan(text: text),
                 maxLines:
                     replyItem!.content!.isText! && replyLevel == '1' ? 6 : 999,
-                overflow: TextOverflow.ellipsis,
-                TextSpan(
-                  children: [
-                    if (replyItem!.isTop!) ...[
-                      const WidgetSpan(
-                        alignment: PlaceholderAlignment.top,
-                        child: PBadge(
-                          text: 'TOP',
-                          size: 'small',
-                          stack: 'normal',
-                          type: 'line',
-                          fs: 9,
-                          semanticsLabel: '置顶',
+                textDirection: Directionality.of(context),
+              )..layout(maxWidth: constraints.maxWidth);
+              bool didExceedMaxLines = textPainter.didExceedMaxLines;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Semantics(
+                      label: text,
+                      child: Text.rich(
+                        style: TextStyle(
+                            height: 1.75,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize),
+                        TextSpan(
+                          children: [
+                            if (replyItem!.isTop!) ...[
+                              const WidgetSpan(
+                                alignment: PlaceholderAlignment.top,
+                                child: PBadge(
+                                  text: 'TOP',
+                                  size: 'small',
+                                  stack: 'normal',
+                                  type: 'line',
+                                  fs: 9,
+                                  semanticsLabel: '置顶',
+                                ),
+                              ),
+                              const TextSpan(text: ' '),
+                            ],
+                            buildContent(
+                              context,
+                              replyItem!,
+                              replyReply,
+                              null,
+                              textPainter,
+                              didExceedMaxLines,
+                            ),
+                          ],
                         ),
+                      )),
+                  if (didExceedMaxLines)
+                    Text(
+                      '查看更多',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      const TextSpan(text: ' '),
-                    ],
-                    buildContent(context, replyItem!, replyReply, null),
-                  ],
-                ),
-              )),
+                    ),
+                ],
+              );
+            },
+          ),
         ),
         // 操作区域
         buttonAction(context, replyItem!.replyControl),
@@ -425,73 +457,76 @@ class ReplyItemRow extends StatelessWidget {
                       i == 0 && (extraRow == 1 || replies!.length > 1) ? 4 : 6,
                     ),
                     child: Semantics(
-                        label:
-                            '${replies![i].member!.uname} ${replies![i].content!.message}',
-                        excludeSemantics: true,
-                        child: Text.rich(
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.85),
-                              height: 1.6),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${replies![i].member!.uname}',
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.85),
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    feedBack();
-                                    final String heroTag = Utils.makeHeroTag(
-                                        replies![i].member!.mid);
-                                    Get.toNamed(
-                                        '/member?mid=${replies![i].member!.mid}',
-                                        arguments: {
-                                          'face': replies![i].member!.avatar,
-                                          'heroTag': heroTag
-                                        });
-                                  },
+                      label:
+                          '${replies![i].member!.uname} ${replies![i].content!.message}',
+                      excludeSemantics: true,
+                      child: Text.rich(
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.85),
+                            height: 1.6),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${replies![i].member!.uname}',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.85),
                               ),
-                              if (replies![i].isUp!) ...[
-                                const TextSpan(text: ' '),
-                                const WidgetSpan(
-                                  alignment: PlaceholderAlignment.top,
-                                  child: PBadge(
-                                    text: 'UP',
-                                    size: 'small',
-                                    stack: 'normal',
-                                    fs: 9,
-                                  ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  feedBack();
+                                  final String heroTag = Utils.makeHeroTag(
+                                      replies![i].member!.mid);
+                                  Get.toNamed(
+                                      '/member?mid=${replies![i].member!.mid}',
+                                      arguments: {
+                                        'face': replies![i].member!.avatar,
+                                        'heroTag': heroTag
+                                      });
+                                },
+                            ),
+                            if (replies![i].isUp!) ...[
+                              const TextSpan(text: ' '),
+                              const WidgetSpan(
+                                alignment: PlaceholderAlignment.top,
+                                child: PBadge(
+                                  text: 'UP',
+                                  size: 'small',
+                                  stack: 'normal',
+                                  fs: 9,
                                 ),
-                                const TextSpan(text: ' '),
-                              ],
-                              TextSpan(
-                                  text: replies![i].root == replies![i].parent
-                                      ? ': '
-                                      : replies![i].isUp!
-                                          ? ''
-                                          : ' '),
-                              buildContent(
-                                context,
-                                replies![i],
-                                replyReply,
-                                replyItem,
                               ),
+                              const TextSpan(text: ' '),
                             ],
-                          ),
-                        )),
+                            TextSpan(
+                                text: replies![i].root == replies![i].parent
+                                    ? ': '
+                                    : replies![i].isUp!
+                                        ? ''
+                                        : ' '),
+                            buildContent(
+                              context,
+                              replies![i],
+                              replyReply,
+                              replyItem,
+                              null,
+                              null,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 )
               ],
@@ -539,7 +574,13 @@ class ReplyItemRow extends StatelessWidget {
 }
 
 InlineSpan buildContent(
-    BuildContext context, replyItem, replyReply, fReplyItem) {
+  BuildContext context,
+  replyItem,
+  replyReply,
+  fReplyItem,
+  textPainter,
+  didExceedMaxLines,
+) {
   final String routePath = Get.currentRoute;
   bool isVideoPage = routePath.startsWith('/video');
 
@@ -547,12 +588,24 @@ InlineSpan buildContent(
   // replyReply 查看二楼回复（回复详情）回调
   // fReplyItem 父级回复内容，用作二楼回复（回复详情）展示
   final content = replyItem.content;
+  String message = content.message ?? '';
   final List<InlineSpan> spanChildren = <InlineSpan>[];
+
+  if (didExceedMaxLines == true) {
+    final textSize = textPainter.size;
+    var position = textPainter.getPositionForOffset(
+      Offset(
+        textSize.width,
+        textSize.height,
+      ),
+    );
+    final endOffset = textPainter.getOffsetBefore(position.offset);
+    message = message.substring(0, endOffset);
+  }
 
   // 投票
   if (content.vote.isNotEmpty) {
-    content.message.splitMapJoin(RegExp(r"\{vote:\d+?\}"),
-        onMatch: (Match match) {
+    message.splitMapJoin(RegExp(r"\{vote:\d+?\}"), onMatch: (Match match) {
       // String matchStr = match[0]!;
       spanChildren.add(
         TextSpan(
@@ -575,9 +628,9 @@ InlineSpan buildContent(
     }, onNonMatch: (String str) {
       return str;
     });
-    content.message = content.message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
+    message = message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
   }
-  content.message = content.message
+  message = message
       .replaceAll('&amp;', '&')
       .replaceAll('&lt;', '<')
       .replaceAll('&gt;', '>')
@@ -618,7 +671,7 @@ InlineSpan buildContent(
   }
 
   // 分割文本并处理每个部分
-  content.message.splitMapJoin(
+  message.splitMapJoin(
     pattern,
     onMatch: (Match match) {
       String matchStr = match[0]!;
@@ -835,7 +888,7 @@ InlineSpan buildContent(
   if (content.jumpUrl.keys.isNotEmpty) {
     List<String> unmatchedItems = content.jumpUrl.keys
         .toList()
-        .where((item) => !content.message.contains(item))
+        .where((item) => !message.contains(item))
         .toList();
     if (unmatchedItems.isNotEmpty) {
       for (int i = 0; i < unmatchedItems.length; i++) {
