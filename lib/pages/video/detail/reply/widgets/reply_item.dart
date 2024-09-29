@@ -887,7 +887,7 @@ InlineSpan buildContent(
   if (content.jumpUrl.keys.isNotEmpty) {
     List<String> unmatchedItems = content.jumpUrl.keys
         .toList()
-        .where((item) => !message.contains(item))
+        .where((item) => !content.message.contains(item))
         .toList();
     if (unmatchedItems.isNotEmpty) {
       for (int i = 0; i < unmatchedItems.length; i++) {
