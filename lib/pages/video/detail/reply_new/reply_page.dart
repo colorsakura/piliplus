@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPalaX/http/msg.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,6 +16,7 @@ import 'package:PiliPalaX/pages/emote/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/pages/emote/view.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/toolbar_icon_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 enum PanelType { none, keyboard, emoji }
 
@@ -55,6 +58,9 @@ class _ReplyPageState extends State<ReplyPage>
   final _publishStream = StreamController<bool>();
   bool _selectKeyboard = true;
   final _keyboardStream = StreamController<bool>.broadcast();
+  late final _imagePicker = ImagePicker();
+  late final _pathStream = StreamController<List<String>>();
+  late final _pathList = <String>[];
 
   @override
   void initState() {
@@ -74,6 +80,8 @@ class _ReplyPageState extends State<ReplyPage>
 
   @override
   void dispose() async {
+    _keyboardStream.close();
+    _pathStream.close();
     _publishStream.close();
     _readOnlyStream.close();
     _enableSend.close();
@@ -105,6 +113,7 @@ class _ReplyPageState extends State<ReplyPage>
                 ),
               ),
               _buildInputView(),
+              _buildImagePreview(),
               _buildPanelContainer(),
             ],
           ),
@@ -162,6 +171,45 @@ class _ReplyPageState extends State<ReplyPage>
     );
   }
 
+  Widget _buildImagePreview() {
+    return StreamBuilder(
+      initialData: const [],
+      stream: _pathStream.stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          return Container(
+            height: 85,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              itemCount: _pathList.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  _pathList.removeAt(index);
+                  _pathStream.add(_pathList);
+                },
+                child: Image(
+                  height: 75,
+                  fit: BoxFit.fitHeight,
+                  filterQuality: FilterQuality.low,
+                  image: FileImage(File(_pathList[index])),
+                ),
+              ),
+              separatorBuilder: (_, index) => const SizedBox(width: 10),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
   Widget _buildInputView() {
     return Container(
       clipBehavior: Clip.hardEdge,
@@ -200,10 +248,11 @@ class _ReplyPageState extends State<ReplyPage>
                     autofocus: false,
                     readOnly: snapshot.data ?? false,
                     onChanged: (value) {
-                      if (value.isNotEmpty && !_enablePublish) {
+                      bool isEmpty = value.replaceAll('\n', '').isEmpty;
+                      if (!isEmpty && !_enablePublish) {
                         _enablePublish = true;
                         _publishStream.add(true);
-                      } else if (value.isEmpty && _enablePublish) {
+                      } else if (isEmpty && _enablePublish) {
                         _enablePublish = false;
                         _publishStream.add(false);
                       }
@@ -264,6 +313,35 @@ class _ReplyPageState extends State<ReplyPage>
                     icon: const Icon(Icons.emoji_emotions, size: 22),
                     selected: !snapshot.data!,
                   ),
+                ),
+                const SizedBox(width: 20),
+                ToolbarIconButton(
+                  tooltip: '图片',
+                  selected: false,
+                  icon: const Icon(Icons.image, size: 22),
+                  onPressed: () async {
+                    List<XFile> pickedFiles = await _imagePicker.pickMultiImage(
+                      limit: 9,
+                      imageQuality: 100,
+                    );
+                    if (pickedFiles.isNotEmpty) {
+                      for (int i = 0; i < pickedFiles.length; i++) {
+                        if (_pathList.length == 9) {
+                          SmartDialog.showToast('最多选择9张图片');
+                          if (i != 0) {
+                            _pathStream.add(_pathList);
+                          }
+                          break;
+                        } else {
+                          _pathList.add(pickedFiles[i].path);
+                          if (i == pickedFiles.length - 1) {
+                            SmartDialog.dismiss();
+                            _pathStream.add(_pathList);
+                          }
+                        }
+                      }
+                    }
+                  },
                 ),
                 const Spacer(),
                 StreamBuilder(
@@ -350,6 +428,30 @@ class _ReplyPageState extends State<ReplyPage>
 
   Future submitReplyAdd() async {
     feedBack();
+    List? pictures;
+    if (_pathList.isNotEmpty) {
+      pictures = [];
+      for (int i = 0; i < _pathList.length; i++) {
+        SmartDialog.showLoading(msg: '正在上传图片: ${i + 1}/${_pathList.length}');
+        dynamic result = await MsgHttp.uploadBfs(_pathList[i]);
+        if (result['status']) {
+          int imageSize = await File(_pathList[i]).length();
+          pictures.add({
+            'img_width': result['data']['image_width'],
+            'img_height': result['data']['image_height'],
+            'img_size': imageSize / 1024,
+            'img_src': result['data']['image_url'],
+          });
+        } else {
+          SmartDialog.dismiss();
+          SmartDialog.showToast(result['msg']);
+          return;
+        }
+        if (i == _pathList.length - 1) {
+          SmartDialog.dismiss();
+        }
+      }
+    }
     String message = _replyContentController.text;
     var result = await VideoHttp.replyAdd(
       type: widget.replyType ?? ReplyType.video,
@@ -359,6 +461,7 @@ class _ReplyPageState extends State<ReplyPage>
       message: widget.replyItem != null && widget.replyItem!.root != 0
           ? ' 回复 @${widget.replyItem!.member!.uname!} : $message'
           : message,
+      pictures: pictures,
     );
     if (result['status']) {
       SmartDialog.showToast(result['data']['success_toast']);

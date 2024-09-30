@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:dio/dio.dart';
@@ -515,18 +516,29 @@ class VideoHttp {
     required String message,
     int? root,
     int? parent,
+    List? pictures,
   }) async {
     if (message == '') {
       return {'status': false, 'data': [], 'msg': '请输入评论内容'};
     }
-    var res = await Request().post(Api.replyAdd, queryParameters: {
+    Map<String, dynamic> data = {
       'type': type.index,
       'oid': oid,
       'root': root == null || root == 0 ? '' : root,
       'parent': parent == null || parent == 0 ? '' : parent,
       'message': message,
+      if (pictures != null) 'pictures': jsonEncode(pictures),
       'csrf': await Request.getCsrf(),
-    });
+    };
+    var res = await Request().post(
+      Api.replyAdd,
+      data: FormData.fromMap(data),
+      options: Options(
+        headers: {
+          'Content-Type': Headers.formUrlEncodedContentType,
+        },
+      ),
+    );
     log(res.toString());
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};

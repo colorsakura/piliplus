@@ -222,7 +222,6 @@ class _CreatePanelState extends State<CreatePanel> {
   bool _isEnable = false;
   final _isEnableStream = StreamController<bool>();
   late final _imagePicker = ImagePicker();
-  late final _pics = [];
   late final _pathList = <String>[];
   late final _pathStream = StreamController<List<String>>();
 
@@ -244,12 +243,13 @@ class _CreatePanelState extends State<CreatePanel> {
         SmartDialog.showToast(result['msg']);
       }
     } else {
+      final pics = [];
       for (int i = 0; i < _pathList.length; i++) {
         SmartDialog.showLoading(msg: '正在上传图片: ${i + 1}/${_pathList.length}');
         dynamic result = await MsgHttp.uploadBfs(_pathList[i]);
         if (result['status']) {
           int imageSize = await File(_pathList[i]).length();
-          _pics.add({
+          pics.add({
             'img_width': result['data']['image_width'],
             'img_height': result['data']['image_height'],
             'img_size': imageSize / 1024,
@@ -267,7 +267,7 @@ class _CreatePanelState extends State<CreatePanel> {
       dynamic result = await MsgHttp.createDynamic(
         mid: GStorage.userInfo.get('userInfoCache').mid,
         rawText: _ctr.text,
-        pics: _pics,
+        pics: pics,
       );
       if (result['status']) {
         Get.back();
@@ -343,7 +343,8 @@ class _CreatePanelState extends State<CreatePanel> {
             maxLines: 8,
             autofocus: true,
             onChanged: (value) {
-              bool isEmpty = value.replaceAll('\n', '').isEmpty;
+              bool isEmpty =
+                  value.replaceAll('\n', '').isEmpty && _pathList.isEmpty;
               if (!isEmpty && !_isEnable) {
                 _isEnable = true;
                 _isEnableStream.add(true);
@@ -372,7 +373,7 @@ class _CreatePanelState extends State<CreatePanel> {
               physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics(),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _pathList.length == 9 ? 9 : _pathList.length + 1,
               itemBuilder: (context, index) {
                 if (_pathList.length != 9 && index == _pathList.length) {
@@ -418,7 +419,6 @@ class _CreatePanelState extends State<CreatePanel> {
                 } else {
                   return GestureDetector(
                     onTap: () {
-                      _pics.clear();
                       _pathList.removeAt(index);
                       _pathStream.add(_pathList);
                       if (_pathList.isEmpty &&
