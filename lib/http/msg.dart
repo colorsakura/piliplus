@@ -143,6 +143,49 @@ class MsgHttp {
     }
   }
 
+  static Future createDynamic({
+    dynamic mid,
+    dynamic dynIdStr,
+    dynamic rawText,
+  }) async {
+    String csrf = await Request.getCsrf();
+    var res = await Request().post(
+      Api.createDynamic,
+      queryParameters: {
+        'platform': 'web',
+        'csrf': csrf,
+        'x-bili-device-req-json[platform]': 'web',
+        'x-bili-device-req-json[device]': 'pc',
+        'x-bili-web-req-json[spm_id]': 333.999,
+      },
+      data: {
+        "dyn_req": {
+          "content": {
+            "contents": [
+              {"raw_text": rawText, "type": 1, "biz_id": ""}
+            ]
+          },
+          "scene": 4,
+          "attach_card": null,
+          "upload_id":
+              "${mid}_${DateTime.now().millisecondsSinceEpoch ~/ 1000}_${Random().nextInt(9000) + 1000}",
+          "meta": {
+            "app_meta": {"from": "create.dynamic.web", "mobi_app": "web"}
+          }
+        },
+        "web_repost_src": {"dyn_id_str": dynIdStr}
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   static Future removeMsg(
     dynamic talkerId,
   ) async {

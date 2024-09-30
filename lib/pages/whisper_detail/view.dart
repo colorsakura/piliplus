@@ -117,20 +117,16 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
                 child: IconButton(
                   tooltip: '返回',
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (Set<MaterialState> states) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primaryContainer
-                          .withOpacity(0.6);
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      return Theme.of(context).colorScheme.secondaryContainer;
                     }),
                   ),
-                  onPressed: () => Get.back(),
+                  onPressed: Get.back,
                   icon: Icon(
                     Icons.arrow_back_outlined,
                     size: 18,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                 ),
               ),

@@ -619,4 +619,8 @@ class Api {
   static const String removeSysMsg = '/x/sys-msg/del_notify_list';
 
   static const String setTop = '/session_svr/v1/session_svr/set_top';
+
+  static const String createDynamic = '/x/dynamic/feed/create/dyn';
+
+  static const String removeDynamic = '/dynamic_svr/v1/dynamic_svr/rm_dynamic';
 }

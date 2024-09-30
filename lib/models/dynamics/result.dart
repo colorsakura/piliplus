@@ -556,11 +556,9 @@ class DynamicOpusModel {
   String? title;
   DynamicOpusModel.fromJson(Map<String, dynamic> json) {
     jumpUrl = json['jump_url'];
-    pics = json['pics'] != null
-        ? json['pics']
-            .map<OpusPicsModel>((e) => OpusPicsModel.fromJson(e))
-            .toList()
-        : [];
+    pics = json['pics']
+        ?.map<OpusPicsModel>((e) => OpusPicsModel.fromJson(e))
+        .toList();
     summary =
         json['summary'] != null ? SummaryModel.fromJson(json['summary']) : null;
     title = json['title'];
