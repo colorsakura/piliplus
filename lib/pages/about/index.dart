@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -13,6 +11,10 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../utils/cache_manage.dart';
+
+const String _sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPalaX';
+const String _originSourceCodeUrl = 'https://github.com/guozhigq/pilipala';
+const String _upstreamUrl = 'https://github.com/orz12/PiliPalaX';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -86,26 +88,26 @@ class _AboutPageState extends State<AboutPage> {
                   style: subTitleStyle),
             ),
           ),
-          Obx(
-            () => ListTile(
-              onTap: () => _aboutController.onUpdate(),
-              title: const Text('最新版本'),
-              leading: const Icon(Icons.flag_outlined),
-              trailing: Text(
-                _aboutController.isLoading.value
-                    ? '正在获取'
-                    : _aboutController.isUpdate.value
-                        ? '有新版本  ❤️${_aboutController.remoteVersion.value}'
-                        : '当前已是最新版',
-                style: subTitleStyle,
-              ),
-            ),
-          ),
+          // Obx(
+          //   () => ListTile(
+          //     onTap: () => _aboutController.onUpdate(),
+          //     title: const Text('最新版本'),
+          //     leading: const Icon(Icons.flag_outlined),
+          //     trailing: Text(
+          //       _aboutController.isLoading.value
+          //           ? '正在获取'
+          //           : _aboutController.isUpdate.value
+          //               ? '有新版本  ❤️${_aboutController.remoteVersion.value}'
+          //               : '当前已是最新版',
+          //       style: subTitleStyle,
+          //     ),
+          //   ),
+          // ),
           // ListTile(
           //   onTap: () {},
           //   title: const Text('更新日志'),
           //   trailing: const Icon(
-          //     Icons.arrow_forward_ios,
+          //     Icons.arrow_forward,
           //     size: 16,
           //   ),
           // ),
@@ -115,11 +117,26 @@ class _AboutPageState extends State<AboutPage> {
             color: Theme.of(context).colorScheme.outlineVariant,
           ),
           ListTile(
-            onTap: () => _aboutController.githubUrl(),
-            leading: const Icon(Icons.star_outline_outlined),
-            title: const Text('Github开源仓库'),
-            trailing: Text(
-              'github.com/orz12/PiliPalaX',
+            onTap: () => _aboutController.githubUrl(_sourceCodeUrl),
+            leading: const Icon(Icons.code),
+            title: const Text('Source Code'),
+            subtitle: Text(_sourceCodeUrl, style: subTitleStyle),
+          ),
+          ListTile(
+            onTap: () => _aboutController.githubUrl(_originSourceCodeUrl),
+            leading: const Icon(Icons.code),
+            title: const Text('Origin'),
+            subtitle: Text(
+              _originSourceCodeUrl,
+              style: subTitleStyle,
+            ),
+          ),
+          ListTile(
+            onTap: () => _aboutController.githubUrl(_upstreamUrl),
+            leading: const Icon(Icons.code),
+            title: const Text('Upstream'),
+            subtitle: Text(
+              _upstreamUrl,
               style: subTitleStyle,
             ),
           ),
@@ -128,37 +145,16 @@ class _AboutPageState extends State<AboutPage> {
             leading: const Icon(Icons.feedback_outlined),
             title: const Text('问题反馈'),
             trailing: Icon(
-              Icons.arrow_forward_ios,
+              Icons.arrow_forward,
               size: 16,
               color: outline,
             ),
           ),
           ListTile(
-            onTap: () => _aboutController.qqGroup(),
-            leading: const Icon(Icons.group_add_outlined),
-            title: const Text('QQ群'),
-            trailing: Text(
-              '392176105',
-              style: subTitleStyle,
-            ),
-          ),
-          ListTile(
-            onTap: () => _aboutController.tgChannel(),
-            leading: const Icon(Icons.group_add_outlined),
-            title: const Text('TG频道'),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
-          ),
-          ListTile(
-            onTap: () => _aboutController.aPay(),
-            leading: const Icon(Icons.wallet_giftcard_outlined),
-            title: const Text('赞赏'),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
-          ),
-          ListTile(
             onTap: () => _aboutController.logs(),
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('错误日志'),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: outline),
+            trailing: Icon(Icons.arrow_forward, size: 16, color: outline),
           ),
           ListTile(
             onTap: () async {
@@ -314,7 +310,7 @@ class AboutController extends GetxController {
     // 获取当前版本
     getCurrentApp();
     // 获取最新的版本
-    getRemoteApp();
+    // getRemoteApp();
   }
 
   // 获取设备信息
@@ -333,10 +329,6 @@ class AboutController extends GetxController {
   Future getCurrentApp() async {
     var currentInfo = await PackageInfo.fromPlatform();
     String buildNumber = currentInfo.buildNumber;
-    //if is android
-    if (Platform.isAndroid) {
-      buildNumber = buildNumber.substring(0, buildNumber.length - 1);
-    }
     currentVersion.value = "${currentInfo.version}+$buildNumber";
   }
 
@@ -366,33 +358,17 @@ class AboutController extends GetxController {
   }
 
   // 跳转github
-  githubUrl() {
+  githubUrl(String url) {
     launchUrl(
-      Uri.parse('https://github.com/orz12/pilipala'),
+      Uri.parse(url),
       mode: LaunchMode.externalApplication,
     );
   }
 
   githubRelease() {
     launchUrl(
-      Uri.parse('https://github.com/guozhigq/pilipala/release'),
+      Uri.parse('$_sourceCodeUrl/release'),
       mode: LaunchMode.externalApplication,
-    );
-  }
-
-  // 从网盘下载
-  panDownload() {
-    Clipboard.setData(
-      const ClipboardData(text: 'pili'),
-    );
-    SmartDialog.showToast(
-      '已复制提取码：pili',
-      displayTime: const Duration(milliseconds: 500),
-    ).then(
-      (value) => launchUrl(
-        Uri.parse('https://www.123pan.com/s/9sVqVv-flu0A.html'),
-        mode: LaunchMode.externalApplication,
-      ),
     );
   }
 
@@ -403,12 +379,12 @@ class AboutController extends GetxController {
       builder: (context) {
         return SimpleDialog(
           clipBehavior: Clip.hardEdge,
-          title: const Text('问题反馈（建议直接加群反馈）'),
+          title: const Text('问题反馈'),
           children: [
             ListTile(
               title: const Text('GitHub Issue'),
               onTap: () => launchUrl(
-                Uri.parse('https://github.com/orz12/pilipala/issues'),
+                Uri.parse('$_sourceCodeUrl/issues'),
                 // 系统自带浏览器打开
                 mode: LaunchMode.externalApplication,
               ),
@@ -425,61 +401,6 @@ class AboutController extends GetxController {
         );
       },
     );
-  }
-
-  // qq群
-  qqGroup() {
-    Clipboard.setData(
-      const ClipboardData(text: '392176105'),
-    );
-    SmartDialog.showToast('已复制QQ群号');
-    try {
-      launchUrl(
-        Uri.parse(
-            'mqqapi://card/show_pslcard?src_type=internal&version=1&uin=392176105&card_type=group&source=qrcode'),
-        mode: LaunchMode.externalApplication,
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // tg频道
-  tgChannel() {
-    Clipboard.setData(
-      const ClipboardData(text: 'https://t.me/+162zlPtZlT9hNWVl'),
-    );
-    SmartDialog.showToast(
-      '已复制，即将在浏览器打开',
-      displayTime: const Duration(milliseconds: 500),
-    ).then(
-      (value) => launchUrl(
-        Uri.parse('https://t.me/+162zlPtZlT9hNWVl'),
-        mode: LaunchMode.externalApplication,
-      ),
-    );
-  }
-
-  // 官网
-  // webSiteUrl() {
-  //   launchUrl(
-  //     Uri.parse('https://pilipalanet.mysxl.cn/pilipala-x'),
-  //     mode: LaunchMode.externalApplication,
-  //   );
-  // }
-
-  // aPay() {
-  //   try {
-  //     launchUrl(
-  //       Uri.parse('https://pilipalanet.mysxl.cn/pilipalaxadmire'),
-  //       mode: LaunchMode.externalApplication,
-  //     );
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-  aPay() {
-    SmartDialog.showToast('新接口来不及写了，直接来群里找作者吧');
   }
 
   // 日志

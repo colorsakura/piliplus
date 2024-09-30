@@ -378,7 +378,7 @@ class Utils {
                         onPressed: () {
                           launchUrl(
                             Uri.parse(
-                                "https://github.com/orz12/pilipala/commits/main/"),
+                                "https://github.com/bggRGjQaUbCoE/PiliPalaX/commits/main/"),
                             mode: LaunchMode.externalApplication,
                           );
                         },
