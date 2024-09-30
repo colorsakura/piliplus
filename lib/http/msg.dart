@@ -186,6 +186,29 @@ class MsgHttp {
     }
   }
 
+  static Future removeDynamic(
+    dynamic dynamicId,
+  ) async {
+    String csrf = await Request.getCsrf();
+    Map<String, dynamic> data = await WbiSign().makSign({
+      'dynamic_id': dynamicId,
+      'csrf_token': csrf,
+      'csrf': csrf,
+    });
+    var res = await Request().post(
+      HttpString.tUrl + Api.removeDynamic,
+      data: FormData.fromMap(data),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   static Future removeMsg(
     dynamic talkerId,
   ) async {

@@ -166,7 +166,10 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                     for (var i in loadingState.response)
                       if (!dynamicsController.tempBannedList
                           .contains(i.modules?.moduleAuthor?.mid))
-                        DynamicPanel(item: i),
+                        DynamicPanel(
+                          item: i,
+                          onRemove: _dynamicsTabController.onRemove,
+                        ),
                   ]
                 ],
               )

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -14,11 +15,13 @@ class AuthorPanel extends StatelessWidget {
   final dynamic item;
   final Function? addBannedList;
   final String? source;
+  final Function? onRemove;
   const AuthorPanel({
     super.key,
     required this.item,
     this.addBannedList,
     this.source,
+    this.onRemove,
   });
 
   @override
@@ -127,7 +130,10 @@ class AuthorPanel extends StatelessWidget {
                 useRootNavigator: true,
                 isScrollControlled: true,
                 builder: (context) {
-                  return MorePanel(item: item);
+                  return MorePanel(
+                    item: item,
+                    onRemove: onRemove,
+                  );
                 },
               );
             },
@@ -141,7 +147,12 @@ class AuthorPanel extends StatelessWidget {
 
 class MorePanel extends StatelessWidget {
   final dynamic item;
-  const MorePanel({super.key, required this.item});
+  final Function? onRemove;
+  const MorePanel({
+    super.key,
+    required this.item,
+    this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -223,6 +234,46 @@ class MorePanel extends StatelessWidget {
             },
             minLeadingWidth: 0,
           ),
+          if (item.modules.moduleAuthor.mid ==
+              GStorage.userInfo.get('userInfoCache').mid)
+            ListTile(
+              onTap: () async {
+                Get.back();
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          title: const Text('确定删除该动态?'),
+                          actions: [
+                            TextButton(
+                              onPressed: Get.back,
+                              child: Text(
+                                '取消',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                                if (onRemove != null) {
+                                  onRemove!(item.idStr);
+                                }
+                              },
+                              child: const Text('确定'),
+                            ),
+                          ],
+                        ));
+              },
+              minLeadingWidth: 0,
+              leading: Icon(Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.error, size: 19),
+              title: Text('删除',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: Theme.of(context).colorScheme.error)),
+            ),
           const Divider(thickness: 0.1, height: 1),
           ListTile(
             onTap: () => Get.back(),

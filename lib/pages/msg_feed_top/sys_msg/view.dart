@@ -87,7 +87,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                         showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                                  title: const Text('确定删除该消息?'),
+                                  title: const Text('确定删除该通知?'),
                                   actions: [
                                     TextButton(
                                       onPressed: Get.back,

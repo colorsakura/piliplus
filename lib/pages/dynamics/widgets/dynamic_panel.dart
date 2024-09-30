@@ -9,7 +9,15 @@ import 'forward_panel.dart';
 class DynamicPanel extends StatelessWidget {
   final dynamic item;
   final String? source;
-  DynamicPanel({required this.item, this.source, Key? key}) : super(key: key);
+  final Function? onRemove;
+
+  DynamicPanel({
+    required this.item,
+    this.source,
+    this.onRemove,
+    Key? key,
+  }) : super(key: key);
+
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
 
   @override
@@ -42,7 +50,11 @@ class DynamicPanel extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-                child: AuthorPanel(item: item, source: source),
+                child: AuthorPanel(
+                  item: item,
+                  source: source,
+                  onRemove: onRemove,
+                ),
               ),
               if (item!.modules!.moduleDynamic!.desc != null ||
                   item!.modules!.moduleDynamic!.major != null)

@@ -1,5 +1,7 @@
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../../../http/dynamics.dart';
 
@@ -39,4 +41,16 @@ class DynamicsTabController extends CommonController {
         offset: offset,
         mid: dynamicsType == "up" ? mid : -1,
       );
+
+  Future onRemove(dynamic dynamicId) async {
+    var res = await MsgHttp.removeDynamic(dynamicId);
+    if (res['status']) {
+      List list = (loadingState.value as Success).response;
+      list.removeWhere((item) => item.idStr == dynamicId);
+      loadingState.value = LoadingState.success(list);
+      SmartDialog.showToast('删除成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
 }
