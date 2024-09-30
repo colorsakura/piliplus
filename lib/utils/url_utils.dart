@@ -50,6 +50,7 @@ class UrlUtils {
           'pic': '',
           'heroTag': heroTag,
         },
+        preventDuplicates: false,
       );
     } else {
       await Get.toNamed(
