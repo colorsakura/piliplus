@@ -176,7 +176,7 @@ class _WhisperPageState extends State<WhisperPage> {
                                         ? null
                                         : Theme.of(context)
                                             .colorScheme
-                                            .primaryContainer,
+                                            .surfaceContainerHigh,
                                     onLongPress: () {
                                       showDialog(
                                         context: context,
