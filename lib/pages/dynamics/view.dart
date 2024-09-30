@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'controller.dart';
 import 'widgets/up_panel.dart';
@@ -219,20 +221,60 @@ class _CreatePanelState extends State<CreatePanel> {
   final _ctr = TextEditingController();
   bool _isEnable = false;
   final _isEnableStream = StreamController<bool>();
+  late final _imagePicker = ImagePicker();
+  late final _pics = [];
+  late final _pathList = <String>[];
+  late final _pathStream = StreamController<List<String>>();
 
   @override
   void dispose() {
+    _isEnableStream.close();
+    _pathStream.close();
     _ctr.dispose();
     super.dispose();
   }
 
   Future _onCreate() async {
-    dynamic result = await MsgHttp.createTextDynamic(_ctr.text);
-    if (result['status']) {
-      Get.back();
-      SmartDialog.showToast('发布成功');
+    if (_pathList.isEmpty) {
+      dynamic result = await MsgHttp.createTextDynamic(_ctr.text);
+      if (result['status']) {
+        Get.back();
+        SmartDialog.showToast('发布成功');
+      } else {
+        SmartDialog.showToast(result['msg']);
+      }
     } else {
-      SmartDialog.showToast(result['msg']);
+      for (int i = 0; i < _pathList.length; i++) {
+        SmartDialog.showLoading(msg: '正在上传图片: ${i + 1}/${_pathList.length}');
+        dynamic result = await MsgHttp.uploadBfs(_pathList[i]);
+        if (result['status']) {
+          int imageSize = await File(_pathList[i]).length();
+          _pics.add({
+            'img_width': result['data']['image_width'],
+            'img_height': result['data']['image_height'],
+            'img_size': imageSize / 1024,
+            'img_src': result['data']['image_url'],
+          });
+        } else {
+          SmartDialog.dismiss();
+          SmartDialog.showToast(result['msg']);
+          return;
+        }
+        if (i == _pathList.length - 1) {
+          SmartDialog.dismiss();
+        }
+      }
+      dynamic result = await MsgHttp.createDynamic(
+        mid: GStorage.userInfo.get('userInfoCache').mid,
+        rawText: _ctr.text,
+        pics: _pics,
+      );
+      if (result['status']) {
+        Get.back();
+        SmartDialog.showToast('发布成功');
+      } else {
+        SmartDialog.showToast(result['msg']);
+      }
     }
   }
 
@@ -317,6 +359,84 @@ class _CreatePanelState extends State<CreatePanel> {
                 gapPadding: 0,
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 10),
+            ),
+          ),
+        ),
+        StreamBuilder(
+          initialData: const [],
+          stream: _pathStream.stream,
+          builder: (_, snapshot) => SizedBox(
+            height: 75,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              itemCount: _pathList.length == 9 ? 9 : _pathList.length + 1,
+              itemBuilder: (context, index) {
+                if (_pathList.length != 9 && index == _pathList.length) {
+                  return Ink(
+                    width: 75,
+                    height: 75,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                    ),
+                    child: InkWell(
+                      onTap: () async {
+                        List<XFile> pickedFiles =
+                            await _imagePicker.pickMultiImage(
+                          limit: 9,
+                          imageQuality: 100,
+                        );
+                        if (pickedFiles.isNotEmpty) {
+                          for (int i = 0; i < pickedFiles.length; i++) {
+                            if (_pathList.length == 9) {
+                              SmartDialog.showToast('最多选择9张图片');
+                              if (i != 0) {
+                                _pathStream.add(_pathList);
+                              }
+                              break;
+                            } else {
+                              _pathList.add(pickedFiles[i].path);
+                              if (i == pickedFiles.length - 1) {
+                                _pathStream.add(_pathList);
+                              }
+                            }
+                          }
+                          if (_pathList.isNotEmpty && !_isEnable) {
+                            _isEnable = true;
+                            _isEnableStream.add(true);
+                          }
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: const Center(child: Icon(Icons.add)),
+                    ),
+                  );
+                } else {
+                  return GestureDetector(
+                    onTap: () {
+                      _pics.clear();
+                      _pathList.removeAt(index);
+                      _pathStream.add(_pathList);
+                      if (_pathList.isEmpty &&
+                          _ctr.text.replaceAll('\n', '').isEmpty) {
+                        _isEnable = false;
+                        _isEnableStream.add(false);
+                      }
+                    },
+                    child: Image(
+                      height: 75,
+                      fit: BoxFit.fitHeight,
+                      filterQuality: FilterQuality.low,
+                      image: FileImage(File(_pathList[index])),
+                    ),
+                  );
+                }
+              },
+              separatorBuilder: (_, index) => const SizedBox(width: 10),
             ),
           ),
         ),

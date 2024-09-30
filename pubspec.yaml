@@ -159,6 +159,8 @@ dependencies:
   #富文本
   extended_text: ^14.0.1
   chat_bottom_container: ^0.2.0
+  image_picker: ^1.1.2
+
 dependency_overrides:
   mime:
     git: https://github.com/orz12/mime.git

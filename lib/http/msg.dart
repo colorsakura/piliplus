@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:dio/dio.dart';
@@ -145,8 +146,9 @@ class MsgHttp {
 
   static Future createDynamic({
     dynamic mid,
-    dynamic dynIdStr,
+    dynamic dynIdStr, // repost
     dynamic rawText,
+    List? pics,
   }) async {
     String csrf = await Request.getCsrf();
     var res = await Request().post(
@@ -165,7 +167,12 @@ class MsgHttp {
               {"raw_text": rawText, "type": 1, "biz_id": ""}
             ]
           },
-          "scene": 4,
+          "scene": dynIdStr != null
+              ? 4
+              : pics != null
+                  ? 2
+                  : 1,
+          if (pics != null) 'pics': pics,
           "attach_card": null,
           "upload_id":
               "${mid}_${DateTime.now().millisecondsSinceEpoch ~/ 1000}_${Random().nextInt(9000) + 1000}",
@@ -173,11 +180,37 @@ class MsgHttp {
             "app_meta": {"from": "create.dynamic.web", "mobi_app": "web"}
           }
         },
-        "web_repost_src": {"dyn_id_str": dynIdStr}
+        if (dynIdStr != null) "web_repost_src": {"dyn_id_str": dynIdStr}
       },
     );
     if (res.data['code'] == 0) {
       return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future uploadBfs(
+    dynamic path,
+  ) async {
+    String csrf = await Request.getCsrf();
+    Map<String, dynamic> data = await WbiSign().makSign({
+      'file_up': await MultipartFile.fromFile(path),
+      'category': 'daily',
+      'csrf': csrf,
+    });
+    var res = await Request().post(
+      Api.uploadBfs,
+      data: FormData.fromMap(data),
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': res.data['data'],
+      };
     } else {
       return {
         'status': false,
