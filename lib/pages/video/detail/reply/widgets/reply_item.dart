@@ -998,8 +998,12 @@ class MorePanel extends StatelessWidget {
         showDialog(
           context: Get.context!,
           builder: (context) {
-            return AlertDialog(
-              content: SelectableText(message),
+            return Dialog(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: SelectableText(message),
+              ),
             );
           },
         );
