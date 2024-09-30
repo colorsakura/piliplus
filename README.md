@@ -39,11 +39,33 @@
 <br/>
 
 
-## 技术交流
+## feat
 
-Telegram: https://t.me/+162zlPtZlT9hNWVl
-QQ频道: https://pd.qq.com/s/3n0b3m5dm
+- [x] 视频TAG
+- [x] 筛选搜索
+- [x] 转发动态
+- [x] 合集图片
+- [x] 删除/置顶私信
+- [x] 举报用户/评论/视频
+- [x] 删除/发布文本/图片动态
+- [x] 其他
 
+## opt
+
+- [x] PIP
+- [x] 视频封面
+- [x] 回复界面
+- [x] 系统通知
+- [x] 评论显示
+- [x] 亮度调节
+- [x] 视频播放
+- [x] 视频staff
+- [x] 防止bottomsheet遮挡全屏视频
+- [x] 其他
+
+## fix
+
+- [x] bugs
 
 <br/>
 
