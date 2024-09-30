@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
 import 'package:PiliPalaX/models/common/up_panel_position.dart';
 import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
@@ -153,6 +155,37 @@ class _DynamicsPageState extends State<DynamicsPage>
               },
             ),
           ),
+          actions: [
+            Container(
+              width: 34,
+              height: 34,
+              margin: const EdgeInsets.only(right: 16),
+              child: IconButton(
+                tooltip: '发布动态',
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  backgroundColor: WidgetStateProperty.resolveWith((states) {
+                    return Theme.of(context).colorScheme.secondaryContainer;
+                  }),
+                ),
+                onPressed: () {
+                  if (GStorage.userInfo.get('userInfoCache') != null) {
+                    showModalBottomSheet(
+                      context: context,
+                      useSafeArea: true,
+                      isScrollControlled: true,
+                      builder: (_) => const CreatePanel(),
+                    );
+                  }
+                },
+                icon: Icon(
+                  Icons.add,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+              ),
+            ),
+          ],
         ),
         drawer: upPanelPosition == UpPanelPosition.leftDrawer
             ? SafeArea(child: upPanelPart())
@@ -172,5 +205,122 @@ class _DynamicsPageState extends State<DynamicsPage>
           )),
           if (upPanelPosition == UpPanelPosition.rightFixed) upPanelPart(),
         ]));
+  }
+}
+
+class CreatePanel extends StatefulWidget {
+  const CreatePanel({super.key});
+
+  @override
+  State<CreatePanel> createState() => _CreatePanelState();
+}
+
+class _CreatePanelState extends State<CreatePanel> {
+  final _ctr = TextEditingController();
+  bool _isEnable = false;
+  final _isEnableStream = StreamController<bool>();
+
+  @override
+  void dispose() {
+    _ctr.dispose();
+    super.dispose();
+  }
+
+  Future _onCreate() async {
+    dynamic result = await MsgHttp.createTextDynamic(_ctr.text);
+    if (result['status']) {
+      Get.back();
+      SmartDialog.showToast('发布成功');
+    } else {
+      SmartDialog.showToast(result['msg']);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            const SizedBox(width: 16),
+            SizedBox(
+              width: 34,
+              height: 34,
+              child: IconButton(
+                tooltip: '返回',
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  backgroundColor: WidgetStateProperty.resolveWith(
+                    (states) {
+                      return Theme.of(context).colorScheme.secondaryContainer;
+                    },
+                  ),
+                ),
+                onPressed: Get.back,
+                icon: Icon(
+                  Icons.arrow_back_outlined,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+              ),
+            ),
+            const Spacer(),
+            const Text(
+              '发布动态',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const Spacer(),
+            StreamBuilder(
+              initialData: false,
+              stream: _isEnableStream.stream,
+              builder: (_, snapshot) => FilledButton.tonal(
+                onPressed: snapshot.data == true ? _onCreate : null,
+                style: FilledButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  visualDensity: const VisualDensity(
+                    horizontal: -2,
+                    vertical: -2,
+                  ),
+                ),
+                child: const Text('发布'),
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        const SizedBox(width: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TextField(
+            controller: _ctr,
+            minLines: 4,
+            maxLines: 8,
+            autofocus: true,
+            onChanged: (value) {
+              bool isEmpty = value.replaceAll('\n', '').isEmpty;
+              if (!isEmpty && !_isEnable) {
+                _isEnable = true;
+                _isEnableStream.add(true);
+              } else if (isEmpty && _isEnable) {
+                _isEnable = false;
+                _isEnableStream.add(false);
+              }
+            },
+            decoration: const InputDecoration(
+              hintText: '说点什么吧',
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                gapPadding: 0,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 10),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

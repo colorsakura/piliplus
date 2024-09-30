@@ -622,5 +622,7 @@ class Api {
 
   static const String createDynamic = '/x/dynamic/feed/create/dyn';
 
+  static const String createTextDynamic = '/dynamic_svr/v1/dynamic_svr/create';
+
   static const String removeDynamic = '/dynamic_svr/v1/dynamic_svr/rm_dynamic';
 }

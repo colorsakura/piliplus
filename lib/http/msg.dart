@@ -186,6 +186,32 @@ class MsgHttp {
     }
   }
 
+  static Future createTextDynamic(
+    dynamic content,
+  ) async {
+    String csrf = await Request.getCsrf();
+    Map<String, dynamic> data = await WbiSign().makSign({
+      'dynamic_id': 0,
+      'type': 4,
+      'rid': 0,
+      'content': content,
+      'csrf_token': csrf,
+      'csrf': csrf,
+    });
+    var res = await Request().post(
+      HttpString.tUrl + Api.createTextDynamic,
+      data: FormData.fromMap(data),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   static Future removeDynamic(
     dynamic dynamicId,
   ) async {
