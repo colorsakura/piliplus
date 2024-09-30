@@ -167,6 +167,34 @@ class MsgHttp {
     }
   }
 
+  static Future removeSysMsg(
+    dynamic id,
+  ) async {
+    String csrf = await Request.getCsrf();
+    var res = await Request().post(
+      HttpString.messageBaseUrl + Api.removeSysMsg,
+      queryParameters: {
+        'mobi_app': 'android',
+        'csrf': csrf,
+      },
+      data: {
+        'csrf': csrf,
+        'ids': [id],
+        'station_ids': [],
+        'type': 4,
+        'mobi_app': 'android',
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   static Future setTop(
     dynamic talkerId,
     int opType,

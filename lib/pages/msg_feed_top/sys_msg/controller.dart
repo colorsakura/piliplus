@@ -50,6 +50,7 @@ class SysMsgController extends GetxController {
       return false;
     }
   }
+
   Future onLoad() async {
     if (isEnd) return;
     queryMsgFeedSysMsg();
@@ -59,5 +60,15 @@ class SysMsgController extends GetxController {
     cursor = -1;
     cursorTime = -1;
     queryMsgFeedSysMsg();
+  }
+
+  Future onRemove(int index) async {
+    var res = await MsgHttp.removeSysMsg(msgFeedSysMsgList[index].id);
+    if (res['status']) {
+      msgFeedSysMsgList.removeAt(index);
+      SmartDialog.showToast('删除成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
   }
 }

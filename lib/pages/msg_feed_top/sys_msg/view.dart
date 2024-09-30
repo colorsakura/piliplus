@@ -83,6 +83,33 @@ class _SysMsgPageState extends State<SysMsgPage> {
                     }
                     return ListTile(
                       onTap: () {},
+                      onLongPress: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: const Text('确定删除该消息?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: Get.back,
+                                      child: Text(
+                                        '取消',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        _sysMsgController.onRemove(i);
+                                      },
+                                      child: const Text('确定'),
+                                    ),
+                                  ],
+                                ));
+                      },
                       title: Text(
                         "${_sysMsgController.msgFeedSysMsgList[i].title}",
                         style: Theme.of(context).textTheme.titleMedium,
