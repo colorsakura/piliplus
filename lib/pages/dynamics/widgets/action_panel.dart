@@ -216,7 +216,7 @@ class _RepostPanelState extends State<RepostPanel> {
             ?.url;
     return AnimatedSize(
       alignment: Alignment.topCenter,
-      curve: Curves.linearToEaseOut,
+      curve: Curves.ease,
       duration: const Duration(milliseconds: 300),
       child: Column(
         mainAxisSize: _isMax ? MainAxisSize.max : MainAxisSize.min,
@@ -345,7 +345,10 @@ class _RepostPanelState extends State<RepostPanel> {
             padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onInverseSurface,
+              color: Theme.of(context).colorScheme.surfaceContainerHigh ==
+                      Theme.of(context).colorScheme.surface
+                  ? Theme.of(context).colorScheme.onInverseSurface
+                  : Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(

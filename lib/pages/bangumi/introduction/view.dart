@@ -117,7 +117,8 @@ class BangumiInfo extends StatefulWidget {
   State<BangumiInfo> createState() => _BangumiInfoState();
 }
 
-class _BangumiInfoState extends State<BangumiInfo> {
+class _BangumiInfoState extends State<BangumiInfo>
+    with SingleTickerProviderStateMixin {
   String heroTag = Get.arguments['heroTag'];
   late final BangumiIntroController bangumiIntroController;
   late final VideoDetailController videoDetailCtr;
@@ -157,10 +158,28 @@ class _BangumiInfoState extends State<BangumiInfo> {
     }
     showModalBottomSheet(
       context: context,
-      useRootNavigator: true,
+      useSafeArea: true,
       isScrollControlled: true,
+      transitionAnimationController: AnimationController(
+        duration: const Duration(milliseconds: 200),
+        vsync: this,
+      ),
+      sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
       builder: (BuildContext context) {
-        return FavPanel(ctr: bangumiIntroController);
+        return DraggableScrollableSheet(
+          minChildSize: 0,
+          maxChildSize: 1,
+          initialChildSize: 0.6,
+          snap: true,
+          expand: false,
+          snapSizes: const [0.6],
+          builder: (BuildContext context, ScrollController scrollController) {
+            return FavPanel(
+              ctr: bangumiIntroController,
+              scrollController: scrollController,
+            );
+          },
+        );
       },
     );
   }

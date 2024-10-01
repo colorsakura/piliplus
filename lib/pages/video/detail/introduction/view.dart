@@ -42,7 +42,7 @@ class VideoIntroPanel extends StatefulWidget {
 }
 
 class _VideoIntroPanelState extends State<VideoIntroPanel>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   late String heroTag;
   late VideoIntroController videoIntroController;
   VideoDetailData? videoDetail;
@@ -164,6 +164,33 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     enableAi = setting.get(SettingBoxKey.enableAi, defaultValue: true);
   }
 
+  void _showFavBottomSheet() => showModalBottomSheet(
+        context: context,
+        useSafeArea: true,
+        isScrollControlled: true,
+        transitionAnimationController: AnimationController(
+          duration: const Duration(milliseconds: 200),
+          vsync: this,
+        ),
+        sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+        builder: (BuildContext context) {
+          return DraggableScrollableSheet(
+            minChildSize: 0,
+            maxChildSize: 1,
+            initialChildSize: 0.6,
+            snap: true,
+            expand: false,
+            snapSizes: const [0.6],
+            builder: (BuildContext context, ScrollController scrollController) {
+              return FavPanel(
+                ctr: videoIntroController,
+                scrollController: scrollController,
+              );
+            },
+          );
+        },
+      );
+
   // 收藏
   showFavBottomSheet({type = 'tap'}) {
     if (videoIntroController.userInfo == null) {
@@ -179,24 +206,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       if (type == 'tap') {
         videoIntroController.actionFavVideo(type: 'default');
       } else {
-        showModalBottomSheet(
-          context: context,
-          useRootNavigator: true,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return FavPanel(ctr: videoIntroController);
-          },
-        );
+        _showFavBottomSheet();
       }
     } else if (type != 'longPress') {
-      showModalBottomSheet(
-        context: context,
-        useRootNavigator: true,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return FavPanel(ctr: videoIntroController);
-        },
-      );
+      _showFavBottomSheet();
     }
   }
 
