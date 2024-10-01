@@ -108,6 +108,8 @@ class Api {
   // csrf	str	CSRF Token（位于cookie）	必要
   static const String oneThree = '/x/web-interface/archive/like/triple';
 
+  static const String triple = '/pgc/season/episode/like/triple';
+
   // 获取指定用户创建的所有收藏夹信息
   // 该接口也能查询目标内容id存在于那些收藏夹中
   // up_mid	num	目标用户mid	必要

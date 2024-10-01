@@ -430,11 +430,11 @@ class BangumiIntroController extends CommonController {
       SmartDialog.showToast('已三连');
       return false;
     }
-    var result = await VideoHttp.oneThree(bvid: bvid);
+    var result = await VideoHttp.triple(epId: epId);
     if (result['status']) {
-      hasLike.value = result["data"]["like"];
-      hasCoin.value = result["data"]["coin"];
-      hasFav.value = result["data"]["fav"];
+      hasLike.value = result["data"]["like"] == 1;
+      hasCoin.value = result["data"]["coin"] == 1;
+      hasFav.value = result["data"]["favorite"] == 1;
       SmartDialog.showToast('三连成功');
     } else {
       SmartDialog.showToast(result['msg']);

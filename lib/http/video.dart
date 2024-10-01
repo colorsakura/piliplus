@@ -348,6 +348,27 @@ class VideoHttp {
     }
   }
 
+  // 一键三连 bangumi
+  static Future triple({dynamic epId}) async {
+    var res = await Request().post(
+      Api.triple,
+      data: {
+        'ep_id': epId,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        headers: {
+          'Content-Type': Headers.formUrlEncodedContentType,
+        },
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'data': [], 'msg': res.data['message']};
+    }
+  }
+
   // 一键三连
   static Future oneThree({required String bvid}) async {
     var res = await Request().post(
@@ -533,11 +554,6 @@ class VideoHttp {
     var res = await Request().post(
       Api.replyAdd,
       data: FormData.fromMap(data),
-      options: Options(
-        headers: {
-          'Content-Type': Headers.formUrlEncodedContentType,
-        },
-      ),
     );
     log(res.toString());
     if (res.data['code'] == 0) {
