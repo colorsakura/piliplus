@@ -102,7 +102,7 @@ class BangumiIntroController extends CommonController {
     var result = await UserHttp.videoTags(bvid: bvid);
     if (result['status']) {
       videoTags = result['data'];
-      debugPrint('tags: ${result['data']}');
+      // debugPrint('tags: ${result['data']}');
     }
   }
 

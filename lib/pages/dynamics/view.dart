@@ -35,6 +35,39 @@ class _DynamicsPageState extends State<DynamicsPage>
   @override
   bool get wantKeepAlive => true;
 
+  Widget _createDynamicBtn([bool isRight = true]) => Center(
+        child: Container(
+          width: 34,
+          height: 34,
+          margin:
+              EdgeInsets.only(left: !isRight ? 16 : 0, right: isRight ? 16 : 0),
+          child: IconButton(
+            tooltip: '发布动态',
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all(EdgeInsets.zero),
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                return Theme.of(context).colorScheme.secondaryContainer;
+              }),
+            ),
+            onPressed: () {
+              if (GStorage.userInfo.get('userInfoCache') != null) {
+                showModalBottomSheet(
+                  context: context,
+                  useSafeArea: true,
+                  isScrollControlled: true,
+                  builder: (_) => const CreatePanel(),
+                );
+              }
+            },
+            icon: Icon(
+              Icons.add,
+              size: 18,
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
+          ),
+        ),
+      );
+
   @override
   void initState() {
     super.initState();
@@ -123,6 +156,10 @@ class _DynamicsPageState extends State<DynamicsPage>
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          leading: upPanelPosition == UpPanelPosition.rightDrawer
+              ? _createDynamicBtn(false)
+              : null,
+          leadingWidth: 50,
           toolbarHeight: 50,
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -157,37 +194,9 @@ class _DynamicsPageState extends State<DynamicsPage>
               },
             ),
           ),
-          actions: [
-            Container(
-              width: 34,
-              height: 34,
-              margin: const EdgeInsets.only(right: 16),
-              child: IconButton(
-                tooltip: '发布动态',
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  backgroundColor: WidgetStateProperty.resolveWith((states) {
-                    return Theme.of(context).colorScheme.secondaryContainer;
-                  }),
-                ),
-                onPressed: () {
-                  if (GStorage.userInfo.get('userInfoCache') != null) {
-                    showModalBottomSheet(
-                      context: context,
-                      useSafeArea: true,
-                      isScrollControlled: true,
-                      builder: (_) => const CreatePanel(),
-                    );
-                  }
-                },
-                icon: Icon(
-                  Icons.add,
-                  size: 18,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                ),
-              ),
-            ),
-          ],
+          actions: upPanelPosition == UpPanelPosition.rightDrawer
+              ? null
+              : [_createDynamicBtn()],
         ),
         drawer: upPanelPosition == UpPanelPosition.leftDrawer
             ? SafeArea(child: upPanelPart())
