@@ -126,6 +126,7 @@ class _PagesPanelState extends State<PagesPanel> {
                   child: InkWell(
                     onTap: () => {
                       widget.changeFuc(
+                        null,
                         widget.bvid,
                         widget.pages[i].cid,
                         IdUtils.bv2av(widget.bvid),

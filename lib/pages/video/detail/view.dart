@@ -104,25 +104,27 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoPlayerServiceHandler.onVideoDetailChange(
           value, videoDetailController.cid.value);
     });
-    bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
-    bangumiIntroController.loadingState.listen((value) {
-      if (!context.mounted) return;
-      if (value is Success) {
-        videoPlayerServiceHandler.onVideoDetailChange(
-          value.response,
-          videoDetailController.cid.value,
-        );
-      }
-    });
-    videoDetailController.cid.listen((p0) {
-      if (!context.mounted) return;
-      if (bangumiIntroController.loadingState.value is Success) {
-        videoPlayerServiceHandler.onVideoDetailChange(
-          (bangumiIntroController.loadingState.value as Success).response,
-          p0,
-        );
-      }
-    });
+    if (videoDetailController.videoType == SearchType.media_bangumi) {
+      bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
+      bangumiIntroController.loadingState.listen((value) {
+        if (!context.mounted) return;
+        if (value is Success) {
+          videoPlayerServiceHandler.onVideoDetailChange(
+            value.response,
+            videoDetailController.cid.value,
+          );
+        }
+      });
+      videoDetailController.cid.listen((p0) {
+        if (!context.mounted) return;
+        if (bangumiIntroController.loadingState.value is Success) {
+          videoPlayerServiceHandler.onVideoDetailChange(
+            (bangumiIntroController.loadingState.value as Success).response,
+            p0,
+          );
+        }
+      });
+    }
     autoExitFullscreen =
         setting.get(SettingBoxKey.enableAutoExit, defaultValue: true);
     horizontalScreen =
@@ -200,8 +202,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           plPlayerController!.playRepeat != PlayRepeat.singleCycle) {
         if (videoDetailController.videoType == SearchType.video) {
           notExitFlag = videoIntroController.nextPlay();
-        }
-        if (videoDetailController.videoType == SearchType.media_bangumi) {
+        } else if (videoDetailController.videoType ==
+            SearchType.media_bangumi) {
           notExitFlag = bangumiIntroController.nextPlay();
         }
       }
@@ -1317,7 +1319,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       bvid: bvid,
       aid: aid,
       currentCid: cid,
-      changeFucCall: videoIntroController.changeSeasonOrbangu,
+      changeFucCall: videoDetailController.videoType == SearchType.media_bangumi
+          ? bangumiIntroController.changeSeasonOrbangu
+          : videoIntroController.changeSeasonOrbangu,
       context: context,
       scaffoldState: isFullScreen
           ? videoDetailController.scaffoldKey.currentState

@@ -51,6 +51,8 @@ class Api {
   // https://api.bilibili.com/x/web-interface/archive/has/like
   static const String hasLikeVideo = '/x/web-interface/archive/has/like';
 
+  static const String bangumiLikeCoinFav = '/pgc/season/episode/community';
+
   // 视频点踩 web端不支持
 
   // 点踩 Post(app端)

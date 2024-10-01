@@ -123,6 +123,7 @@ class _ListSheetContentState extends State<ListSheetContent> {
         SmartDialog.showToast('切换到：$title');
         widget.onClose();
         widget.changeFucCall(
+          episode is bangumi.EpisodeItem ? episode.epId : null,
           episode.runtimeType.toString() == "EpisodeItem"
               ? episode.bvid
               : widget.bvid,

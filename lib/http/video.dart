@@ -295,6 +295,19 @@ class VideoHttp {
     }
   }
 
+  // 获取点赞/投币/收藏状态 bangumi
+  static Future bangumiLikeCoinFav({dynamic epId}) async {
+    var res = await Request().get(
+      Api.bangumiLikeCoinFav,
+      data: {'ep_id': epId},
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'data': []};
+    }
+  }
+
   // 获取点赞状态
   static Future hasLikeVideo({required String bvid}) async {
     var res = await Request().get(Api.hasLikeVideo, data: {'bvid': bvid});

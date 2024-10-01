@@ -37,8 +37,8 @@ class ActionItem extends StatefulWidget {
 
 class ActionItemState extends State<ActionItem>
     with SingleTickerProviderStateMixin {
-  late AnimationController? controller;
-  late Animation<double>? _animation;
+  AnimationController? controller;
+  Animation<double>? _animation;
 
   bool get _isThumbUp => widget.semanticsLabel == '点赞';
   late int _lastTime;

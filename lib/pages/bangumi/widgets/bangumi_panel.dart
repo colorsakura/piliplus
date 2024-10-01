@@ -154,6 +154,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                         return;
                       }
                       widget.changeFuc(
+                        widget.pages[i].epId,
                         widget.pages[i].bvid,
                         widget.pages[i].cid,
                         widget.pages[i].aid,

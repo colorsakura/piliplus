@@ -86,12 +86,13 @@ class BangumiIntroController extends CommonController {
     userLogin = userInfo != null;
 
     if (userLogin) {
-      // 获取点赞状态
-      queryHasLikeVideo();
-      // 获取投币状态
-      queryHasCoinVideo();
-      // 获取收藏状态
-      queryHasFavVideo();
+      // // 获取点赞状态
+      // queryHasLikeVideo();
+      // // 获取投币状态
+      // queryHasCoinVideo();
+      // // 获取收藏状态
+      // queryHasFavVideo();
+      queryBangumiLikeCoinFav();
     }
 
     queryData();
@@ -115,6 +116,14 @@ class BangumiIntroController extends CommonController {
   @override
   Future<LoadingState> customGetData() =>
       SearchHttp.bangumiInfoNew(seasonId: seasonId, epId: epId);
+
+  // 获取点赞/投币/收藏状态
+  Future queryBangumiLikeCoinFav() async {
+    var result = await VideoHttp.bangumiLikeCoinFav(epId: epId);
+    hasLike.value = result["data"]['like'] == 1;
+    hasCoin.value = result["data"]['coin_number'] != 0;
+    hasFav.value = result["data"]['favorite'] == 1;
+  }
 
   // 获取点赞状态
   Future queryHasLikeVideo() async {
@@ -308,10 +317,11 @@ class BangumiIntroController extends CommonController {
   }
 
   // 修改分P或番剧分集
-  Future changeSeasonOrbangu(bvid, cid, aid, cover) async {
+  Future changeSeasonOrbangu(epId, bvid, cid, aid, cover) async {
     // 重新获取视频资源
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
+    this.epId = epId;
     videoDetailCtr.bvid = bvid;
     videoDetailCtr.cid.value = cid;
     videoDetailCtr.danmakuCid.value = cid;
@@ -327,6 +337,9 @@ class BangumiIntroController extends CommonController {
       videoReplyCtr.aid = aid;
       videoReplyCtr.onRefresh();
     } catch (_) {}
+    if (userLogin) {
+      queryBangumiLikeCoinFav();
+    }
   }
 
   // 追番
@@ -370,11 +383,12 @@ class BangumiIntroController extends CommonController {
         return false;
       }
     }
+    int epid = episodes[prevIndex].epid!;
     int cid = episodes[prevIndex].cid!;
     String bvid = episodes[prevIndex].bvid!;
     int aid = episodes[prevIndex].aid!;
     dynamic cover = episodes[prevIndex].cover;
-    changeSeasonOrbangu(bvid, cid, aid, cover);
+    changeSeasonOrbangu(epid, bvid, cid, aid, cover);
     return true;
   }
 
@@ -405,11 +419,12 @@ class BangumiIntroController extends CommonController {
         return false;
       }
     }
+    int epid = episodes[nextIndex].epid!;
     int cid = episodes[nextIndex].cid!;
     String bvid = episodes[nextIndex].bvid!;
     int aid = episodes[nextIndex].aid!;
     dynamic cover = episodes[nextIndex].cover;
-    changeSeasonOrbangu(bvid, cid, aid, cover);
+    changeSeasonOrbangu(epid, bvid, cid, aid, cover);
     return true;
   }
 
