@@ -524,10 +524,47 @@ class VideoHttp {
     }
   }
 
+  // （取消）收藏 bangumi
+  static Future favBangumi({
+    required dynamic epId,
+    String? addIds,
+    String? delIds,
+  }) async {
+    var res = await Request().post(
+      Api.favBangumi,
+      data: {
+        'resources': '$epId:24',
+        'add_media_ids': addIds ?? '',
+        'del_media_ids': delIds ?? '',
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        headers: {
+          'Content-Type': Headers.formUrlEncodedContentType,
+        },
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   // 查看视频被收藏在哪个文件夹
-  static Future videoInFolder({required int mid, required int rid}) async {
-    var res = await Request()
-        .get(Api.videoInFolder, data: {'up_mid': mid, 'rid': rid});
+  static Future videoInFolder({
+    dynamic mid,
+    dynamic rid,
+    dynamic type,
+  }) async {
+    var res = await Request().get(
+      Api.videoInFolder,
+      data: {
+        'up_mid': mid,
+        'rid': rid,
+        if (type != null) 'type': type,
+      },
+    );
     if (res.data['code'] == 0) {
       FavFolderData data = FavFolderData.fromJson(res.data['data']);
       return {'status': true, 'data': data};

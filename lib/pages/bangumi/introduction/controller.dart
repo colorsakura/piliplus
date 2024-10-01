@@ -226,7 +226,7 @@ class BangumiIntroController extends CommonController {
         });
   }
 
-  // （取消）收藏
+  // （取消）收藏 bangumi
   Future actionFavVideo() async {
     try {
       for (var i in favFolderData.value.list!.toList()) {
@@ -237,10 +237,11 @@ class BangumiIntroController extends CommonController {
         }
       }
     } catch (_) {}
-    var result = await VideoHttp.favVideo(
-        aid: IdUtils.bv2av(bvid),
-        addIds: addMediaIdsNew.join(','),
-        delIds: delMediaIdsNew.join(','));
+    var result = await VideoHttp.favBangumi(
+      epId: epId,
+      addIds: addMediaIdsNew.join(','),
+      delIds: delMediaIdsNew.join(','),
+    );
     if (result['status']) {
       addMediaIdsNew = [];
       delMediaIdsNew = [];
@@ -248,6 +249,8 @@ class BangumiIntroController extends CommonController {
       queryHasFavVideo();
       SmartDialog.showToast('操作成功');
       Get.back();
+    } else {
+      SmartDialog.showToast(result['msg']);
     }
   }
 
@@ -322,6 +325,7 @@ class BangumiIntroController extends CommonController {
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
     this.epId = epId;
+    this.bvid = bvid;
     videoDetailCtr.bvid = bvid;
     videoDetailCtr.cid.value = cid;
     videoDetailCtr.danmakuCid.value = cid;
@@ -358,7 +362,10 @@ class BangumiIntroController extends CommonController {
 
   Future queryVideoInFolder() async {
     var result = await VideoHttp.videoInFolder(
-        mid: userInfo.mid, rid: IdUtils.bv2av(bvid));
+      mid: userInfo.mid,
+      rid: epId, // bangumi
+      type: 24, // bangumi
+    );
     if (result['status']) {
       favFolderData.value = result['data'];
     }
