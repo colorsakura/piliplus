@@ -454,14 +454,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           plPlayerController?.direction.value == 'vertical') {
                         videoHeight = context.width;
                       }
-                      if (MediaQuery.of(context).orientation ==
-                              Orientation.landscape &&
-                          !horizontalScreen &&
-                          !isFullScreen &&
-                          isShowing &&
-                          mounted) {
-                        hideStatusBar();
-                      }
+                      // if (MediaQuery.of(context).orientation ==
+                      //         Orientation.landscape &&
+                      //     !horizontalScreen &&
+                      //     !isFullScreen &&
+                      //     isShowing &&
+                      //     mounted) {
+                      //   hideStatusBar();
+                      // }
                       // if (MediaQuery.of(context).orientation ==
                       //         Orientation.portrait &&
                       //     !isFullScreen &&
