@@ -161,7 +161,11 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                 children: [
                   if (dynamicsController.tabController.index == 4 &&
                       dynamicsController.mid.value != -1) ...[
-                    for (var i in loadingState.response) DynamicPanel(item: i),
+                    for (var i in loadingState.response)
+                      DynamicPanel(
+                        item: i,
+                        onRemove: _dynamicsTabController.onRemove,
+                      ),
                   ] else ...[
                     for (var i in loadingState.response)
                       if (!dynamicsController.tempBannedList
@@ -187,7 +191,9 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                                   loadingState.response[index].modules
                                       ?.moduleAuthor?.mid)) {
                             return DynamicPanel(
-                                item: loadingState.response[index]);
+                              item: loadingState.response[index],
+                              onRemove: _dynamicsTabController.onRemove,
+                            );
                           }
                           return const SizedBox();
                         },

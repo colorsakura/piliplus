@@ -25,13 +25,13 @@ class DynamicsTabController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    offset = response.response.offset;
     List currentList = loadingState.value is Success
         ? (loadingState.value as Success).response
         : [];
     loadingState.value = offset == ''
         ? LoadingState.success(response.response.items)
         : LoadingState.success(currentList + response.response.items);
+    offset = response.response.offset;
     return true;
   }
 
@@ -47,7 +47,11 @@ class DynamicsTabController extends CommonController {
     if (res['status']) {
       List list = (loadingState.value as Success).response;
       list.removeWhere((item) => item.idStr == dynamicId);
-      loadingState.value = LoadingState.success(list);
+      if (list.isNotEmpty) {
+        loadingState.value = LoadingState.success(list);
+      } else {
+        loadingState.value = LoadingState.empty();
+      }
       SmartDialog.showToast('删除成功');
     } else {
       SmartDialog.showToast(res['msg']);
