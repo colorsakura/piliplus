@@ -47,7 +47,7 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
-		<key>NSPhotoLibraryAddUsageDescription</key>
+		<key>NSPhotoLibraryUsageDescription</key>
 		<string>请允许APP保存图片到相册</string>
 		<key>NSCameraUsageDescription</key>
 		<string>App需要您的同意,才能访问相册</string>
