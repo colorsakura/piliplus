@@ -152,6 +152,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           };
   }
 
+  late final _coinKey = GlobalKey<ActionItemState>();
+  late final _favKey = GlobalKey<ActionItemState>();
+
   @override
   void initState() {
     super.initState();
@@ -572,16 +575,30 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           children: <Widget>[
             Obx(
               () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.thumbsUp),
-                  selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                  onTap: handleState(videoIntroController.actionLikeVideo),
-                  onLongPress: handleState(videoIntroController.actionOneThree),
-                  selectStatus: videoIntroController.hasLike.value,
-                  loadingStatus: loadingStatus,
-                  semanticsLabel: '点赞',
-                  text: !loadingStatus
-                      ? Utils.numFormat(widget.videoDetail!.stat!.like!)
-                      : '-'),
+                icon: const Icon(FontAwesomeIcons.thumbsUp),
+                selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
+                onTap: handleState(videoIntroController.actionLikeVideo),
+                onLongPress: handleState(videoIntroController.actionOneThree),
+                selectStatus: videoIntroController.hasLike.value,
+                loadingStatus: loadingStatus,
+                semanticsLabel: '点赞',
+                text: !loadingStatus
+                    ? Utils.numFormat(widget.videoDetail!.stat!.like!)
+                    : '-',
+                needAnim: true,
+                hasOneThree: videoIntroController.hasLike.value &&
+                    videoIntroController.hasCoin.value &&
+                    videoIntroController.hasFav.value,
+                callBack: (start) {
+                  if (start) {
+                    _coinKey.currentState?.controller?.forward();
+                    _favKey.currentState?.controller?.forward();
+                  } else {
+                    _coinKey.currentState?.controller?.reverse();
+                    _favKey.currentState?.controller?.reverse();
+                  }
+                },
+              ),
             ),
             Obx(
               () => ActionItem(
@@ -601,28 +618,34 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
             //     text: '稍后再看'),
             Obx(
               () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.b),
-                  selectIcon: const Icon(FontAwesomeIcons.b),
-                  onTap: handleState(videoIntroController.actionCoinVideo),
-                  selectStatus: videoIntroController.hasCoin.value,
-                  loadingStatus: loadingStatus,
-                  semanticsLabel: '投币',
-                  text: !loadingStatus
-                      ? Utils.numFormat(widget.videoDetail!.stat!.coin!)
-                      : '-'),
+                key: _coinKey,
+                icon: const Icon(FontAwesomeIcons.b),
+                selectIcon: const Icon(FontAwesomeIcons.b),
+                onTap: handleState(videoIntroController.actionCoinVideo),
+                selectStatus: videoIntroController.hasCoin.value,
+                loadingStatus: loadingStatus,
+                semanticsLabel: '投币',
+                text: !loadingStatus
+                    ? Utils.numFormat(widget.videoDetail!.stat!.coin!)
+                    : '-',
+                needAnim: true,
+              ),
             ),
             Obx(
               () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.star),
-                  selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                  onTap: () => showFavBottomSheet(),
-                  onLongPress: () => showFavBottomSheet(type: 'longPress'),
-                  selectStatus: videoIntroController.hasFav.value,
-                  loadingStatus: loadingStatus,
-                  semanticsLabel: '收藏',
-                  text: !loadingStatus
-                      ? Utils.numFormat(widget.videoDetail!.stat!.favorite!)
-                      : '-'),
+                key: _favKey,
+                icon: const Icon(FontAwesomeIcons.star),
+                selectIcon: const Icon(FontAwesomeIcons.solidStar),
+                onTap: () => showFavBottomSheet(),
+                onLongPress: () => showFavBottomSheet(type: 'longPress'),
+                selectStatus: videoIntroController.hasFav.value,
+                loadingStatus: loadingStatus,
+                semanticsLabel: '收藏',
+                text: !loadingStatus
+                    ? Utils.numFormat(widget.videoDetail!.stat!.favorite!)
+                    : '-',
+                needAnim: true,
+              ),
             ),
             ActionItem(
                 icon: const Icon(FontAwesomeIcons.comment),

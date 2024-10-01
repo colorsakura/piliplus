@@ -135,6 +135,9 @@ class _BangumiInfoState extends State<BangumiInfo>
           };
   }
 
+  late final _coinKey = GlobalKey<ActionItemState>();
+  late final _favKey = GlobalKey<ActionItemState>();
+
   @override
   void initState() {
     super.initState();
@@ -396,45 +399,69 @@ class _BangumiInfoState extends State<BangumiInfo>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Obx(() => ActionItem(
-                      icon: const Icon(FontAwesomeIcons.thumbsUp),
-                      selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                      onTap:
-                          handleState(bangumiIntroController.actionLikeVideo),
-                      selectStatus: bangumiIntroController.hasLike.value,
-                      loadingStatus: false,
-                      semanticsLabel: '点赞',
-                      text: !widget.loadingStatus
-                          ? Utils.numFormat(
-                              widget.bangumiDetail!.stat!['likes']!)
-                          : Utils.numFormat(bangumiItem!.stat!['likes']!),
-                    )),
                 Obx(
                   () => ActionItem(
-                      icon: const Icon(FontAwesomeIcons.b),
-                      selectIcon: const Icon(FontAwesomeIcons.b),
-                      onTap:
-                          handleState(bangumiIntroController.actionCoinVideo),
-                      selectStatus: bangumiIntroController.hasCoin.value,
-                      loadingStatus: false,
-                      semanticsLabel: '投币',
-                      text: !widget.loadingStatus
-                          ? Utils.numFormat(
-                              widget.bangumiDetail!.stat!['coins']!)
-                          : Utils.numFormat(bangumiItem!.stat!['coins']!)),
+                    icon: const Icon(FontAwesomeIcons.thumbsUp),
+                    selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
+                    onTap: handleState(bangumiIntroController.actionLikeVideo),
+                    onLongPress: bangumiIntroController.actionOneThree,
+                    selectStatus: bangumiIntroController.hasLike.value,
+                    loadingStatus: false,
+                    semanticsLabel: '点赞',
+                    text: !widget.loadingStatus
+                        ? Utils.numFormat(widget.bangumiDetail!.stat!['likes']!)
+                        : Utils.numFormat(
+                            bangumiItem!.stat!['likes']!,
+                          ),
+                    needAnim: true,
+                    hasOneThree: bangumiIntroController.hasLike.value &&
+                        bangumiIntroController.hasCoin.value &&
+                        bangumiIntroController.hasFav.value,
+                    callBack: (start) {
+                      if (start) {
+                        _coinKey.currentState?.controller?.forward();
+                        _favKey.currentState?.controller?.forward();
+                      } else {
+                        _coinKey.currentState?.controller?.reverse();
+                        _favKey.currentState?.controller?.reverse();
+                      }
+                    },
+                  ),
                 ),
                 Obx(
                   () => ActionItem(
-                      icon: const Icon(FontAwesomeIcons.star),
-                      selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                      onTap: () => showFavBottomSheet(),
-                      selectStatus: bangumiIntroController.hasFav.value,
-                      loadingStatus: false,
-                      semanticsLabel: '收藏',
-                      text: !widget.loadingStatus
-                          ? Utils.numFormat(
-                              widget.bangumiDetail!.stat!['favorite']!)
-                          : Utils.numFormat(bangumiItem!.stat!['favorite']!)),
+                    key: _coinKey,
+                    icon: const Icon(FontAwesomeIcons.b),
+                    selectIcon: const Icon(FontAwesomeIcons.b),
+                    onTap: handleState(bangumiIntroController.actionCoinVideo),
+                    selectStatus: bangumiIntroController.hasCoin.value,
+                    loadingStatus: false,
+                    semanticsLabel: '投币',
+                    text: !widget.loadingStatus
+                        ? Utils.numFormat(widget.bangumiDetail!.stat!['coins']!)
+                        : Utils.numFormat(
+                            bangumiItem!.stat!['coins']!,
+                          ),
+                    needAnim: true,
+                  ),
+                ),
+                Obx(
+                  () => ActionItem(
+                    key: _favKey,
+                    icon: const Icon(FontAwesomeIcons.star),
+                    selectIcon: const Icon(FontAwesomeIcons.solidStar),
+                    onTap: () => showFavBottomSheet(),
+                    selectStatus: bangumiIntroController.hasFav.value,
+                    loadingStatus: false,
+                    semanticsLabel: '收藏',
+                    text: !widget.loadingStatus
+                        ? Utils.numFormat(
+                            widget.bangumiDetail!.stat!['favorite']!)
+                        : Utils.numFormat(
+                            bangumiItem!.stat!['favorite']!,
+                          ),
+                    needAnim: true,
+                  ),
                 ),
                 ActionItem(
                   icon: const Icon(FontAwesomeIcons.comment),

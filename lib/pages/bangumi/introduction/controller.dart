@@ -417,4 +417,27 @@ class BangumiIntroController extends CommonController {
     SmartDialog.showToast('番剧暂无相关视频');
     return false;
   }
+
+  // 一键三连
+  Future actionOneThree() async {
+    feedBack();
+    if (userInfo == null) {
+      SmartDialog.showToast('账号未登录');
+      return;
+    }
+    if (hasLike.value && hasCoin.value && hasFav.value) {
+      // 已点赞、投币、收藏
+      SmartDialog.showToast('已三连');
+      return false;
+    }
+    var result = await VideoHttp.oneThree(bvid: bvid);
+    if (result['status']) {
+      hasLike.value = result["data"]["like"];
+      hasCoin.value = result["data"]["coin"];
+      hasFav.value = result["data"]["fav"];
+      SmartDialog.showToast('三连成功');
+    } else {
+      SmartDialog.showToast(result['msg']);
+    }
+  }
 }
