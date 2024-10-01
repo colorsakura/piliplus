@@ -217,7 +217,7 @@ class _RepostPanelState extends State<RepostPanel> {
     return AnimatedSize(
       alignment: Alignment.topCenter,
       curve: Curves.linearToEaseOut,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       child: Column(
         mainAxisSize: _isMax ? MainAxisSize.max : MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +310,7 @@ class _RepostPanelState extends State<RepostPanel> {
                   ? GestureDetector(
                       onTap: () async {
                         setState(() => _isMax = true);
-                        await Future.delayed(const Duration(milliseconds: 500));
+                        await Future.delayed(const Duration(milliseconds: 300));
                         if (mounted && context.mounted) {
                           _focusNode.requestFocus();
                         }
@@ -345,7 +345,7 @@ class _RepostPanelState extends State<RepostPanel> {
             padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondaryContainer,
+              color: Theme.of(context).colorScheme.onInverseSurface,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
