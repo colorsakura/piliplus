@@ -164,7 +164,7 @@ abstract class ReplyController extends CommonController {
           List list = loadingState.value is Success
               ? (loadingState.value as Success).response
               : [];
-          if (index == 0) {
+          if (oid != null) {
             list.insert(0, value['data']);
           } else {
             list[index].replies.add(value['data']);
