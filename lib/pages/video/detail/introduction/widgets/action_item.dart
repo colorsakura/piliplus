@@ -52,13 +52,13 @@ class ActionItemState extends State<ActionItem>
     }
   }
 
-  void _cancelLongPress() {
+  void _cancelLongPress([bool isCancel = false]) {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
     if (duration < 1500) {
       controller?.reverse();
       widget.callBack!(false);
     }
-    if (duration <= 500) {
+    if (duration <= 500 && !isCancel) {
       feedBack();
       widget.onTap!();
     }
@@ -120,7 +120,7 @@ class ActionItemState extends State<ActionItem>
                 },
           onTapDown: (details) => _isThumbUp ? _startLongPress() : null,
           onTapUp: (details) => _isThumbUp ? _cancelLongPress() : null,
-          onTapCancel: () => _isThumbUp ? _cancelLongPress() : null,
+          onTapCancel: () => _isThumbUp ? _cancelLongPress(true) : null,
           // borderRadius: StyleString.mdRadius,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
