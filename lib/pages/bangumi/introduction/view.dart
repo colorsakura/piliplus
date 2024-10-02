@@ -43,7 +43,6 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   late BangumiIntroController bangumiIntroController;
   late VideoDetailController videoDetailCtr;
   late int cid;
-  late String heroTag;
 
 // 添加页面缓存
   @override
@@ -52,11 +51,10 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   @override
   void initState() {
     super.initState();
-    // heroTag = Get.arguments['heroTag'];
-    heroTag = widget.heroTag;
     cid = widget.cid!;
-    bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
-    videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+    bangumiIntroController =
+        Get.put(BangumiIntroController(), tag: widget.heroTag);
+    videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
     videoDetailCtr.cid.listen((int p0) {
       cid = p0;
       if (!mounted) return;
@@ -73,6 +71,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   _buildBody(LoadingState loadingState) {
     return loadingState is Success
         ? BangumiInfo(
+            heroTag: widget.heroTag,
             loadingStatus: false,
             bangumiDetail: loadingState.response,
             cid: cid,
@@ -88,6 +87,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
                 fn: bangumiIntroController.onReload,
               )
             : BangumiInfo(
+                heroTag: widget.heroTag,
                 loadingStatus: true,
                 bangumiDetail: null,
                 cid: cid,
@@ -105,6 +105,7 @@ class BangumiInfo extends StatefulWidget {
     this.cid,
     required this.showEpisodes,
     required this.showIntroDetail,
+    required this.heroTag,
   });
 
   final bool loadingStatus;
@@ -112,14 +113,14 @@ class BangumiInfo extends StatefulWidget {
   final int? cid;
   final Function showEpisodes;
   final Function showIntroDetail;
+  final String heroTag;
 
   @override
   State<BangumiInfo> createState() => _BangumiInfoState();
 }
 
 class _BangumiInfoState extends State<BangumiInfo>
-    with SingleTickerProviderStateMixin {
-  String heroTag = Get.arguments['heroTag'];
+    with TickerProviderStateMixin {
   late final BangumiIntroController bangumiIntroController;
   late final VideoDetailController videoDetailCtr;
   late final BangumiInfoModel? bangumiItem;
@@ -141,8 +142,9 @@ class _BangumiInfoState extends State<BangumiInfo>
   @override
   void initState() {
     super.initState();
-    bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
-    videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+    bangumiIntroController =
+        Get.put(BangumiIntroController(), tag: widget.heroTag);
+    videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
     bangumiItem = bangumiIntroController.bangumiItem;
     cid = widget.cid!;
     print('cid:  $cid');
@@ -365,6 +367,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                       bangumiItem != null &&
                           bangumiItem!.episodes!.isNotEmpty) ...[
                     BangumiPanel(
+                      heroTag: widget.heroTag,
                       pages: bangumiItem != null
                           ? bangumiItem!.episodes!
                           : widget.bangumiDetail!.episodes!,

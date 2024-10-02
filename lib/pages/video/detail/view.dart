@@ -1229,7 +1229,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Widget videoIntro([bool needRelated = true]) {
     return CustomScrollView(
       controller: _introController,
-      key: PageStorageKey<String>('简介${videoDetailController.bvid}'),
       slivers: [
         if (videoDetailController.videoType == SearchType.video) ...[
           VideoIntroPanel(

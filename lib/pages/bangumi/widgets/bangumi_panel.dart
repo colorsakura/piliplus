@@ -14,12 +14,14 @@ class BangumiPanel extends StatefulWidget {
     this.cid,
     required this.changeFuc,
     required this.showEpisodes,
+    required this.heroTag,
   });
 
   final List<EpisodeItem> pages;
   final int? cid;
   final Function changeFuc;
   final Function showEpisodes;
+  final String heroTag;
 
   @override
   State<BangumiPanel> createState() => _BangumiPanelState();
@@ -34,7 +36,6 @@ class _BangumiPanelState extends State<BangumiPanel> {
   // 默认未开通
   int vipStatus = 0;
   late int cid;
-  String heroTag = Get.arguments['heroTag'];
   late final VideoDetailController videoDetailCtr;
   final ItemScrollController itemScrollController = ItemScrollController();
 
@@ -48,7 +49,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
     if (userInfo != null) {
       vipStatus = userInfo.vipStatus;
     }
-    videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+    videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
 
     videoDetailCtr.cid.listen((int p0) {
       cid = p0;

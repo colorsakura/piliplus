@@ -35,8 +35,7 @@ class ActionItem extends StatefulWidget {
   State<ActionItem> createState() => ActionItemState();
 }
 
-class ActionItemState extends State<ActionItem>
-    with SingleTickerProviderStateMixin {
+class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
   AnimationController? controller;
   Animation<double>? _animation;
 
@@ -58,7 +57,7 @@ class ActionItemState extends State<ActionItem>
       controller?.reverse();
       widget.callBack!(false);
     }
-    if (duration <= 500 && !isCancel) {
+    if (duration <= 50 && !isCancel) {
       feedBack();
       widget.onTap!();
     }
