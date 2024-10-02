@@ -26,9 +26,14 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   bool isPlay = true;
   Floating? floating;
 
+  void playCallBack() {
+    plPlayerController?.play();
+  }
+
   @override
   void initState() {
     super.initState();
+    PlPlayerController.setPlayCallBack(playCallBack);
     if (Platform.isAndroid) {
       floating = Floating();
     }
@@ -44,6 +49,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
 
   @override
   void dispose() {
+    PlPlayerController.setPlayCallBack(null);
     floating?.dispose();
     plPlayerController?.dispose();
     super.dispose();
