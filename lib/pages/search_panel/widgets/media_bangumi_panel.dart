@@ -165,7 +165,7 @@ Widget searchBangumiPanel(BuildContext context, ctr, loadingState) {
                                             String heroTag =
                                                 Utils.makeHeroTag(cid);
                                             Get.toNamed(
-                                              '/video?bvid=$bvid&cid=$cid&seasonId=${i.seasonId}&epid=$epId',
+                                              '/video?bvid=$bvid&cid=$cid&seasonId=${i.seasonId}&epId=$epId',
                                               arguments: {
                                                 'pic': pic,
                                                 'heroTag': heroTag,

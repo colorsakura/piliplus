@@ -192,24 +192,23 @@ class DynamicsController extends GetxController
           var res = await SearchHttp.bangumiInfo(epId: pgc.epid);
           SmartDialog.dismiss();
           if (res['status']) {
-            EpisodeItem episode = res['data'].episodes.first;
-            int? epId = res['data'].userStatus?.progress?.lastEpId;
-            if (epId == null) {
-              epId = episode.epId;
-            } else {
-              for (var item in res['data'].episodes) {
-                if (item.epId == epId) {
-                  episode = item;
-                  break;
-                }
-              }
-            }
-            String bvid = episode.bvid!;
-            int cid = episode.cid!;
-            String pic = episode.cover!;
-            String heroTag = Utils.makeHeroTag(cid);
+            // dynamic episode -> progress episode -> first episode
+            EpisodeItem episode = (res['data'].episodes as List)
+                    .firstWhereOrNull(
+                  (item) => item.epId == pgc.epid,
+                ) ??
+                (res['data'].episodes as List).firstWhereOrNull(
+                  (item) =>
+                      item.epId == res['data'].userStatus?.progress?.lastEpId,
+                ) ??
+                res['data'].episodes.first;
+            dynamic epId = episode.epId;
+            dynamic bvid = episode.bvid;
+            dynamic cid = episode.cid;
+            dynamic pic = episode.cover;
+            dynamic heroTag = Utils.makeHeroTag(cid);
             toDupNamed(
-              '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epid=$epId',
+              '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=$epId',
               arguments: {
                 'pic': pic,
                 'heroTag': heroTag,

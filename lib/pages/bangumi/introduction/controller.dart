@@ -85,7 +85,7 @@ class BangumiIntroController extends CommonController {
     userInfo = userInfoCache.get('userInfoCache');
     userLogin = userInfo != null;
 
-    if (userLogin) {
+    if (userLogin && epId != null) {
       // // 获取点赞状态
       // queryHasLikeVideo();
       // // 获取投币状态
@@ -120,9 +120,13 @@ class BangumiIntroController extends CommonController {
   // 获取点赞/投币/收藏状态
   Future queryBangumiLikeCoinFav() async {
     var result = await VideoHttp.bangumiLikeCoinFav(epId: epId);
-    hasLike.value = result["data"]['like'] == 1;
-    hasCoin.value = result["data"]['coin_number'] != 0;
-    hasFav.value = result["data"]['favorite'] == 1;
+    if (result['status']) {
+      hasLike.value = result["data"]['like'] == 1;
+      hasCoin.value = result["data"]['coin_number'] != 0;
+      hasFav.value = result["data"]['favorite'] == 1;
+    } else {
+      SmartDialog.showToast(result['msg']);
+    }
   }
 
   // 获取点赞状态

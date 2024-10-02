@@ -123,7 +123,7 @@ class HistoryItem extends StatelessWidget {
                 String pic = episode.cover!;
                 String heroTag = Utils.makeHeroTag(cid);
                 Get.toNamed(
-                  '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epid=${episode.epId}',
+                  '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=${episode.epId}',
                   arguments: {
                     'pic': pic,
                     'heroTag': heroTag,
