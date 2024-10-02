@@ -135,7 +135,9 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
                         color: Theme.of(context).colorScheme.primary,
                         sweepAngle: _animation!.value,
                       ),
-                    ),
+                    )
+                  else
+                    const SizedBox(width: 28, height: 28),
                   Icon(
                     widget.selectStatus
                         ? widget.selectIcon!.icon!
@@ -147,7 +149,6 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              const SizedBox(height: 3),
               AnimatedOpacity(
                 opacity: widget.loadingStatus! ? 0 : 1,
                 duration: const Duration(milliseconds: 200),
