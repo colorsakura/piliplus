@@ -1,16 +1,11 @@
 // 内容
 import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/badge.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/models/dynamics/result.dart';
-import 'package:PiliPalaX/pages/preview/index.dart';
 
 import 'rich_node_panel.dart';
 
 // ignore: must_be_immutable
-class Content extends StatefulWidget {
+class Content extends StatelessWidget {
   dynamic item;
   String? source;
   Content({
@@ -19,31 +14,12 @@ class Content extends StatefulWidget {
     this.source,
   });
 
-  @override
-  State<Content> createState() => _ContentState();
-}
-
-class _ContentState extends State<Content> {
-  late bool hasPics;
-  List<OpusPicsModel> pics = [];
-
-  @override
-  void initState() {
-    super.initState();
-    hasPics = widget.item.modules.moduleDynamic.major != null &&
-        widget.item.modules.moduleDynamic.major.opus != null &&
-        widget.item.modules.moduleDynamic.major.opus.pics.isNotEmpty;
-    if (hasPics) {
-      pics = widget.item.modules.moduleDynamic.major.opus.pics;
-    }
-  }
-
   InlineSpan picsNodes() {
     return WidgetSpan(
       child: LayoutBuilder(
         builder: (_, constraints) => image(
           constraints.maxWidth,
-          pics
+          (item.modules.moduleDynamic.major.opus.pics as List)
               .map(
                 (item) => ImageModel(
                   width: item.width,
@@ -68,17 +44,17 @@ class _ContentState extends State<Content> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.item.modules.moduleDynamic.topic != null) ...[
+          if (item.modules.moduleDynamic.topic != null) ...[
             GestureDetector(
               child: Text(
-                '#${widget.item.modules.moduleDynamic.topic.name}',
+                '#${item.modules.moduleDynamic.topic.name}',
                 style: authorStyle,
               ),
             ),
           ],
           IgnorePointer(
             // 禁用SelectableRegion的触摸交互功能
-            ignoring: widget.source == 'detail' ? false : true,
+            ignoring: source == 'detail' ? false : true,
             child: SelectableRegion(
               magnifierConfiguration: const TextMagnifierConfiguration(),
               focusNode: FocusNode(),
@@ -86,18 +62,19 @@ class _ContentState extends State<Content> {
               child: Text.rich(
                 /// fix 默认20px高度
                 style: const TextStyle(height: 0),
-                richNode(widget.item, context),
-                maxLines: widget.source == 'detail' ? 999 : 6,
+                richNode(item, context),
+                maxLines: source == 'detail' ? 999 : 6,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
-          if (hasPics) ...[
+          if (item.modules.moduleDynamic.major != null &&
+              item.modules.moduleDynamic.major.opus != null &&
+              item.modules.moduleDynamic.major.opus.pics.isNotEmpty)
             Text.rich(
               picsNodes(),
               // semanticsLabel: '动态图片',
             ),
-          ]
         ],
       ),
     );

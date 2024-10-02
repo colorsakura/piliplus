@@ -5,10 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
-import '../../../common/widgets/badge.dart';
-import '../../../common/widgets/network_img_layer.dart';
 import '../../../models/dynamics/result.dart';
-import '../../preview/view.dart';
 import 'additional_panel.dart';
 import 'article_panel.dart';
 import 'live_panel.dart';
