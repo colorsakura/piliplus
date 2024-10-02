@@ -523,14 +523,16 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               if (!loadingStatus &&
                   widget.videoDetail?.pages != null &&
                   widget.videoDetail!.pages!.length > 1) ...[
-                Obx(() => PagesPanel(
-                      heroTag: heroTag,
-                      pages: widget.videoDetail!.pages!,
-                      cid: videoIntroController.lastPlayCid.value,
-                      bvid: videoIntroController.bvid,
-                      changeFuc: videoIntroController.changeSeasonOrbangu,
-                      showEpisodes: widget.showEpisodes,
-                    ))
+                Obx(
+                  () => PagesPanel(
+                    heroTag: heroTag,
+                    pages: widget.videoDetail!.pages!,
+                    cid: videoIntroController.lastPlayCid.value,
+                    bvid: videoIntroController.bvid,
+                    changeFuc: videoIntroController.changeSeasonOrbangu,
+                    showEpisodes: widget.showEpisodes,
+                  ),
+                ),
               ],
             ],
           )),

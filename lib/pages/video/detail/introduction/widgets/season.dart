@@ -25,32 +25,20 @@ class SeasonPanel extends StatefulWidget {
 class _SeasonPanelState extends State<SeasonPanel> {
   List<EpisodeItem>? episodes;
   late int cid;
+  int? _index;
   int currentIndex = 0;
-  // final String heroTag = Get.arguments['heroTag'];
-  late final String heroTag;
   late VideoDetailController _videoDetailController;
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     cid = widget.cid!;
-    heroTag = widget.heroTag;
-    _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
+    _videoDetailController =
+        Get.find<VideoDetailController>(tag: widget.heroTag);
 
     /// 根据 cid 找到对应集，找到对应 episodes
     /// 有多个episodes时，只显示其中一个
-    /// TODO 同时显示多个合集
-    final List<SectionItem> sections = widget.ugcSeason.sections!;
-    for (int i = 0; i < sections.length; i++) {
-      final List<EpisodeItem> episodesList = sections[i].episodes!;
-      for (int j = 0; j < episodesList.length; j++) {
-        if (episodesList[j].cid == cid) {
-          episodes = episodesList;
-          continue;
-        }
-      }
-    }
+    _findEpisode();
     if (episodes == null) {
       return;
     }
@@ -62,6 +50,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
     currentIndex = episodes!.indexWhere((EpisodeItem e) => e.cid == cid);
     _videoDetailController.cid.listen((int p0) {
       cid = p0;
+      _findEpisode();
       currentIndex = episodes!.indexWhere((EpisodeItem e) => e.cid == cid);
       if (!mounted) return;
       setState(() {});
@@ -78,12 +67,6 @@ class _SeasonPanelState extends State<SeasonPanel> {
   //   Get.back();
   //   setState(() {});
   // }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +86,14 @@ class _SeasonPanelState extends State<SeasonPanel> {
           borderRadius: BorderRadius.circular(6),
           clipBehavior: Clip.hardEdge,
           child: InkWell(
-            onTap: () => widget.showEpisodes(episodes, null, null, cid),
+            onTap: () => widget.showEpisodes(
+              _index,
+              widget.ugcSeason.sections,
+              episodes,
+              null,
+              null,
+              cid,
+            ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
               child: Row(
@@ -142,5 +132,19 @@ class _SeasonPanelState extends State<SeasonPanel> {
         ),
       );
     });
+  }
+
+  void _findEpisode() {
+    final List<SectionItem> sections = widget.ugcSeason.sections!;
+    for (int i = 0; i < sections.length; i++) {
+      final List<EpisodeItem> episodesList = sections[i].episodes!;
+      for (int j = 0; j < episodesList.length; j++) {
+        if (episodesList[j].cid == cid) {
+          _index = i;
+          episodes = episodesList;
+          break;
+        }
+      }
+    }
   }
 }

@@ -118,10 +118,13 @@ class _BangumiPanelState extends State<BangumiPanel> {
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () => widget.showEpisodes(
-                      widget.pages,
-                      widget.pages[currentIndex].bvid,
-                      widget.pages[currentIndex].aid,
-                      cid),
+                    null,
+                    null,
+                    widget.pages,
+                    widget.pages[currentIndex].bvid,
+                    widget.pages[currentIndex].aid,
+                    cid,
+                  ),
                   child: Text(
                     '全${widget.pages.length}话',
                     style: const TextStyle(fontSize: 13),

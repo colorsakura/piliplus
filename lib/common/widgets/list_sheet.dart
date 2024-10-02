@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
@@ -12,6 +14,8 @@ import '../../utils/utils.dart';
 
 class ListSheet {
   ListSheet({
+    this.index,
+    this.sections,
     required this.episodes,
     this.bvid,
     this.aid,
@@ -21,6 +25,8 @@ class ListSheet {
     this.scaffoldState,
   });
 
+  final dynamic index;
+  final dynamic sections;
   final dynamic episodes;
   final String? bvid;
   final int? aid;
@@ -32,6 +38,8 @@ class ListSheet {
   late PersistentBottomSheetController bottomSheetController;
 
   Widget get listSheetContent => ListSheetContent(
+        index: index,
+        sections: sections,
         episodes: episodes,
         bvid: bvid,
         aid: aid,
@@ -54,6 +62,8 @@ class ListSheet {
 class ListSheetContent extends StatefulWidget {
   const ListSheetContent({
     super.key,
+    this.index = 0,
+    this.sections,
     required this.episodes,
     this.bvid,
     this.aid,
@@ -62,6 +72,8 @@ class ListSheetContent extends StatefulWidget {
     required this.onClose,
   });
 
+  final int index;
+  final dynamic sections;
   final dynamic episodes;
   final String? bvid;
   final int? aid;
@@ -73,24 +85,53 @@ class ListSheetContent extends StatefulWidget {
   State<ListSheetContent> createState() => _ListSheetContentState();
 }
 
-class _ListSheetContentState extends State<ListSheetContent> {
-  final ItemScrollController itemScrollController = ItemScrollController();
+class _ListSheetContentState extends State<ListSheetContent>
+    with TickerProviderStateMixin {
+  late List<ItemScrollController> itemScrollController = [];
   late final int currentIndex =
       widget.episodes!.indexWhere((dynamic e) => e.cid == widget.currentCid) ??
           0;
-  bool reverse = false;
+  late List<bool> reverse;
+
+  bool get _isList => widget.sections is List && widget.sections.length > 1;
+  TabController? _ctr;
+  StreamController? _indexStream;
 
   @override
   void initState() {
     super.initState();
+    if (_isList) {
+      _indexStream = StreamController<int>();
+      _ctr = TabController(
+        vsync: this,
+        length: widget.sections.length,
+        initialIndex: widget.index,
+      )..addListener(() {
+          _indexStream?.add(_ctr?.index);
+        });
+    }
+    itemScrollController = _isList
+        ? List.generate(widget.sections.length, (_) => ItemScrollController())
+        : [ItemScrollController()];
+    reverse =
+        _isList ? List.generate(widget.sections.length, (_) => false) : [false];
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      itemScrollController.jumpTo(index: currentIndex);
+      itemScrollController[widget.index].jumpTo(index: currentIndex);
     });
+  }
+
+  @override
+  void dispose() {
+    _indexStream?.close();
+    _ctr?.removeListener(() {});
+    _ctr?.dispose();
+    super.dispose();
   }
 
   Widget buildEpisodeListItem(
     dynamic episode,
     int index,
+    int length,
     bool isCurrentIndex,
   ) {
     Color primary = Theme.of(context).colorScheme.primary;
@@ -200,7 +241,7 @@ class _ListSheetContentState extends State<ListSheetContent> {
           ],
           if (!(episode.runtimeType.toString() == 'EpisodeItem' &&
               (episode.longTitle != null && episode.longTitle != '')))
-            Text('${index + 1}/${widget.episodes!.length}'),
+            Text('${index + 1}/$length'),
         ],
       ),
     );
@@ -219,15 +260,19 @@ class _ListSheetContentState extends State<ListSheetContent> {
             child: Row(
               children: [
                 Text(
-                  '合集（${widget.episodes!.length}）',
+                  '合集（${_isList ? List.generate(widget.sections.length, (index) => widget.sections[index].episodes.length).reduce((value, element) => value + element) : widget.episodes!.length}）',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 IconButton(
                   tooltip: '跳至顶部',
                   icon: const Icon(Icons.vertical_align_top),
                   onPressed: () {
-                    itemScrollController.scrollTo(
-                      index: !reverse ? 0 : widget.episodes!.length - 1,
+                    itemScrollController[_ctr?.index ?? 0].scrollTo(
+                      index: !reverse[_ctr?.index ?? 0]
+                          ? 0
+                          : _isList
+                              ? widget.sections[_ctr?.index].episodes.length - 1
+                              : widget.episodes.length - 1,
                       duration: const Duration(milliseconds: 200),
                     );
                   },
@@ -236,32 +281,47 @@ class _ListSheetContentState extends State<ListSheetContent> {
                   tooltip: '跳至底部',
                   icon: const Icon(Icons.vertical_align_bottom),
                   onPressed: () {
-                    itemScrollController.scrollTo(
-                      index: !reverse ? widget.episodes!.length - 1 : 0,
+                    itemScrollController[_ctr?.index ?? 0].scrollTo(
+                      index: !reverse[_ctr?.index ?? 0]
+                          ? _isList
+                              ? widget.sections[_ctr?.index].episodes.length - 1
+                              : widget.episodes.length - 1
+                          : 0,
                       duration: const Duration(milliseconds: 200),
                     );
                   },
                 ),
                 IconButton(
+                  tooltip: '跳至当前',
                   icon: const Icon(Icons.my_location),
-                  onPressed: () {
-                    itemScrollController.scrollTo(
+                  onPressed: () async {
+                    if (_ctr != null && _ctr?.index != widget.index) {
+                      _ctr?.animateTo(widget.index);
+                      await Future.delayed(const Duration(milliseconds: 225));
+                    }
+                    itemScrollController[_ctr?.index ?? 0].scrollTo(
                       index: currentIndex,
                       duration: const Duration(milliseconds: 200),
                     );
                   },
                 ),
                 const Spacer(),
-                IconButton(
-                  tooltip: '反序',
-                  icon: Icon(!reverse
-                      ? MdiIcons.sortAscending
-                      : MdiIcons.sortDescending),
-                  onPressed: () {
-                    setState(() {
-                      reverse = !reverse;
-                    });
-                  },
+                StreamBuilder(
+                  stream: _indexStream?.stream,
+                  initialData: 0,
+                  builder: (_, snapshot) => IconButton(
+                    tooltip: reverse[snapshot.data] ? '正序' : '反序',
+                    icon: Icon(
+                      !reverse[snapshot.data]
+                          ? MdiIcons.sortAscending
+                          : MdiIcons.sortDescending,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        reverse[_ctr?.index ?? 0] = !reverse[_ctr?.index ?? 0];
+                      });
+                    },
+                  ),
                 ),
                 IconButton(
                   tooltip: '关闭',
@@ -275,30 +335,55 @@ class _ListSheetContentState extends State<ListSheetContent> {
             height: 1,
             color: Theme.of(context).dividerColor.withOpacity(0.1),
           ),
-          Expanded(
-            child: Material(
-              child: ScrollablePositionedList.separated(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom + 20),
-                reverse: reverse,
-                itemCount: widget.episodes!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return buildEpisodeListItem(
-                    widget.episodes![index],
-                    index,
-                    currentIndex == index,
-                  );
-                },
-                itemScrollController: itemScrollController,
-                separatorBuilder: (_, index) => Divider(
-                  height: 1,
-                  color: Theme.of(context).dividerColor.withOpacity(0.1),
-                ),
-              ),
+          if (_isList)
+            TabBar(
+              controller: _ctr,
+              isScrollable: true,
+              tabs: (widget.sections as List)
+                  .map((item) => Tab(text: item.title))
+                  .toList(),
+              dividerHeight: 1,
+              dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
             ),
+          Expanded(
+            child: _isList
+                ? TabBarView(
+                    controller: _ctr,
+                    children: List.generate(
+                      widget.sections.length,
+                      (index) =>
+                          _buildBody(index, widget.sections[index].episodes),
+                    ),
+                  )
+                : _buildBody(null, widget.episodes),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildBody(i, episodes) => ScrollablePositionedList.separated(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom + 20,
+        ),
+        reverse: reverse[i ?? 0],
+        itemCount: episodes.length,
+        itemBuilder: (BuildContext context, int index) {
+          return buildEpisodeListItem(
+            episodes[index],
+            index,
+            episodes.length,
+            i != null
+                ? i == widget.index
+                    ? currentIndex == index
+                    : false
+                : currentIndex == index,
+          );
+        },
+        itemScrollController: itemScrollController[i ?? 0],
+        separatorBuilder: (_, index) => Divider(
+          height: 1,
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+        ),
+      );
 }

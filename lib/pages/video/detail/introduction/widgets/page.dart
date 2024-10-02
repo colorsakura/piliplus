@@ -96,7 +96,13 @@ class _PagesPanelState extends State<PagesPanel> {
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () => widget.showEpisodes(
-                      episodes, widget.bvid, IdUtils.bv2av(widget.bvid), cid),
+                    null,
+                    null,
+                    episodes,
+                    widget.bvid,
+                    IdUtils.bv2av(widget.bvid),
+                    cid,
+                  ),
                   child: Text(
                     '共${widget.pages.length}集',
                     style: const TextStyle(fontSize: 13),
