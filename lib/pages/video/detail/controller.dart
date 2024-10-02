@@ -204,7 +204,7 @@ class VideoDetailController extends GetxController
                           SmartDialog.showToast('发送成功');
                           // 发送成功，自动预览该弹幕，避免重新请求
                           // TODO: 暂停状态下预览弹幕仍会移动与计时，可考虑添加到dmSegList或其他方式实现
-                          plPlayerController.danmakuController!.addItems([
+                          plPlayerController.danmakuController?.addItems([
                             DanmakuItem(
                               msg,
                               color: Colors.white,
