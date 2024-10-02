@@ -341,32 +341,40 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           fuc: () {
+            int? index;
             int currentCid = widget.controller.cid;
             String bvid = widget.controller.bvid;
-            final List episodes = [];
+            List episodes = [];
             late Function changeFucCall;
             if (isSeason) {
               final List<SectionItem> sections =
                   videoIntroController!.videoDetail.value.ugcSeason!.sections!;
               for (int i = 0; i < sections.length; i++) {
                 final List<EpisodeItem> episodesList = sections[i].episodes!;
-                episodes.addAll(episodesList);
+                for (int j = 0; j < episodesList.length; j++) {
+                  if (episodesList[j].cid == widget.controller.cid) {
+                    index = i;
+                    episodes = episodesList;
+                    break;
+                  }
+                }
               }
               changeFucCall = videoIntroController!.changeSeasonOrbangu;
             } else if (isPage) {
               final List<Part> pages =
                   videoIntroController!.videoDetail.value.pages!;
-              episodes.addAll(pages);
+              episodes = pages;
               changeFucCall = videoIntroController!.changeSeasonOrbangu;
             } else if (isBangumi) {
-              episodes.addAll(
-                  (bangumiIntroController!.loadingState.value as Success)
-                      .response
-                      .episodes!);
+              episodes = (bangumiIntroController!.loadingState.value as Success)
+                  .response
+                  .episodes!;
               changeFucCall = bangumiIntroController!.changeSeasonOrbangu;
             }
             if (widget.showEpisodes != null) {
               widget.showEpisodes!(
+                index,
+                videoIntroController?.videoDetail.value.ugcSeason?.sections,
                 episodes,
                 bvid,
                 IdUtils.bv2av(bvid),

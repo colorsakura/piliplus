@@ -72,7 +72,7 @@ class ListSheetContent extends StatefulWidget {
     required this.onClose,
   });
 
-  final int index;
+  final dynamic index;
   final dynamic sections;
   final dynamic episodes;
   final String? bvid;
@@ -93,6 +93,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           0;
   late List<bool> reverse;
 
+  int get _index => widget.index ?? 0;
   bool get _isList => widget.sections is List && widget.sections.length > 1;
   TabController? _ctr;
   StreamController? _indexStream;
@@ -105,7 +106,7 @@ class _ListSheetContentState extends State<ListSheetContent>
       _ctr = TabController(
         vsync: this,
         length: widget.sections.length,
-        initialIndex: widget.index,
+        initialIndex: _index,
       )..addListener(() {
           _indexStream?.add(_ctr?.index);
         });
@@ -116,7 +117,7 @@ class _ListSheetContentState extends State<ListSheetContent>
     reverse =
         _isList ? List.generate(widget.sections.length, (_) => false) : [false];
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      itemScrollController[widget.index].jumpTo(index: currentIndex);
+      itemScrollController[_index].jumpTo(index: currentIndex);
     });
   }
 
@@ -295,8 +296,8 @@ class _ListSheetContentState extends State<ListSheetContent>
                   tooltip: '跳至当前',
                   icon: const Icon(Icons.my_location),
                   onPressed: () async {
-                    if (_ctr != null && _ctr?.index != widget.index) {
-                      _ctr?.animateTo(widget.index);
+                    if (_ctr != null && _ctr?.index != (_index)) {
+                      _ctr?.animateTo(_index);
                       await Future.delayed(const Duration(milliseconds: 225));
                     }
                     itemScrollController[_ctr?.index ?? 0].scrollTo(
@@ -362,28 +363,30 @@ class _ListSheetContentState extends State<ListSheetContent>
     );
   }
 
-  Widget _buildBody(i, episodes) => ScrollablePositionedList.separated(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom + 20,
-        ),
-        reverse: reverse[i ?? 0],
-        itemCount: episodes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildEpisodeListItem(
-            episodes[index],
-            index,
-            episodes.length,
-            i != null
-                ? i == widget.index
-                    ? currentIndex == index
-                    : false
-                : currentIndex == index,
-          );
-        },
-        itemScrollController: itemScrollController[i ?? 0],
-        separatorBuilder: (_, index) => Divider(
-          height: 1,
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+  Widget _buildBody(i, episodes) => Material(
+        child: ScrollablePositionedList.separated(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom + 20,
+          ),
+          reverse: reverse[i ?? 0],
+          itemCount: episodes.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildEpisodeListItem(
+              episodes[index],
+              index,
+              episodes.length,
+              i != null
+                  ? i == (_index)
+                      ? currentIndex == index
+                      : false
+                  : currentIndex == index,
+            );
+          },
+          itemScrollController: itemScrollController[i ?? 0],
+          separatorBuilder: (_, index) => Divider(
+            height: 1,
+            color: Theme.of(context).dividerColor.withOpacity(0.1),
+          ),
         ),
       );
 }
