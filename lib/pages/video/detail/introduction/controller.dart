@@ -949,8 +949,8 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                         height: 140,
                         child: Image.asset(
                           _index == 0
-                              ? 'assets/images/paycoins/ic_22_gun_sister.png'
-                              : 'assets/images/paycoins/ic_22_mario.png',
+                              ? 'assets/images/paycoins/ic_22_mario.png'
+                              : 'assets/images/paycoins/ic_22_gun_sister.png',
                         ),
                       ),
                     ),
