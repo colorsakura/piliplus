@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
@@ -19,6 +22,8 @@ import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:html/parser.dart' as html_parser;
+import 'package:html/dom.dart' as dom;
 
 class BangumiIntroController extends CommonController {
   // 视频bvid
@@ -52,8 +57,6 @@ class BangumiIntroController extends CommonController {
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
   List addMediaIdsNew = [];
   List delMediaIdsNew = [];
-  // 关注状态 默认未关注
-  RxMap followStatus = {}.obs;
   int _tempThemeValue = -1;
   dynamic userInfo;
 
@@ -96,6 +99,10 @@ class BangumiIntroController extends CommonController {
     }
 
     queryData();
+
+    if (userLogin) {
+      queryIsFollowed();
+    }
   }
 
   Future queryVideoTags() async {
@@ -354,6 +361,10 @@ class BangumiIntroController extends CommonController {
   Future bangumiAdd() async {
     var result = await VideoHttp.bangumiAdd(
         seasonId: (loadingState.value as Success).response.seasonId);
+    if (result['status']) {
+      isFollowed.value = true;
+      followStatus.value = 2;
+    }
     SmartDialog.showToast(result['msg']);
   }
 
@@ -361,6 +372,20 @@ class BangumiIntroController extends CommonController {
   Future bangumiDel() async {
     var result = await VideoHttp.bangumiDel(
         seasonId: (loadingState.value as Success).response.seasonId);
+    if (result['status']) {
+      isFollowed.value = false;
+    }
+    SmartDialog.showToast(result['msg']);
+  }
+
+  Future bangumiUpdate(status) async {
+    var result = await VideoHttp.bangumiUpdate(
+      seasonId: (loadingState.value as Success).response.seasonId,
+      status: status,
+    );
+    if (result['status']) {
+      followStatus.value = status;
+    }
     SmartDialog.showToast(result['msg']);
   }
 
@@ -464,6 +489,24 @@ class BangumiIntroController extends CommonController {
       SmartDialog.showToast('三连成功');
     } else {
       SmartDialog.showToast(result['msg']);
+    }
+  }
+
+  RxBool isFollowed = false.obs;
+  RxInt followStatus = (-1).obs;
+
+  Future queryIsFollowed() async {
+    dynamic result = await Request().get(
+      'https://www.bilibili.com/bangumi/play/ss$seasonId',
+    );
+    dom.Document document = html_parser.parse(result.data);
+    dom.Element? scriptElement = document.querySelector('script#__NEXT_DATA__');
+    if (scriptElement != null) {
+      dynamic scriptContent = jsonDecode(scriptElement.text);
+      isFollowed.value =
+          scriptContent['props']['pageProps']['followState']['isFollowed'];
+      followStatus.value =
+          scriptContent['props']['pageProps']['followState']['followStatus'];
     }
   }
 }

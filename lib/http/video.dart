@@ -766,6 +766,27 @@ class VideoHttp {
     }
   }
 
+  static Future bangumiUpdate({
+    dynamic seasonId,
+    dynamic status,
+  }) async {
+    var res = await Request().post(
+      Api.bangumiUpdate,
+      data: {
+        'season_id': seasonId,
+        'status': status,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    return {
+      'status': res.data['code'] == 0,
+      'msg': res.data['result'] == null ? 'failed' : res.data['result']['toast']
+    };
+  }
+
   // 查看视频同时在看人数
   static Future onlineTotal({int? aid, String? bvid, int? cid}) async {
     var res = await Request().get(Api.onlineTotal, data: {

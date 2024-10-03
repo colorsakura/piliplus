@@ -320,6 +320,8 @@ class Api {
   // 取消追番
   static const String bangumiDel = '/pgc/web/follow/del';
 
+  static const String bangumiUpdate = '/pgc/web/follow/status/update';
+
   // 番剧列表
   // https://api.bilibili.com/pgc/season/index/result?
   // st=1&

@@ -261,28 +261,49 @@ class _BangumiInfoState extends State<BangumiInfo>
                                       ),
                                     ),
                                     const SizedBox(width: 20),
-                                    SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: IconButton(
-                                        tooltip: '收藏',
-                                        style: ButtonStyle(
-                                          padding: MaterialStateProperty.all(
-                                              EdgeInsets.zero),
+                                    Obx(
+                                      () => FilledButton.tonal(
+                                        style: FilledButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          visualDensity: const VisualDensity(
+                                            horizontal: -2,
+                                            vertical: -2,
+                                          ),
+                                          foregroundColor:
+                                              bangumiIntroController
+                                                      .isFollowed.value
+                                                  ? t.colorScheme.onSurface
+                                                  : null,
                                           backgroundColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (Set<MaterialState> states) {
-                                            return t
-                                                .colorScheme.primaryContainer
-                                                .withOpacity(0.7);
-                                          }),
+                                              bangumiIntroController
+                                                      .isFollowed.value
+                                                  ? t.colorScheme
+                                                      .onInverseSurface
+                                                  : null,
                                         ),
-                                        onPressed: () =>
-                                            bangumiIntroController.bangumiAdd(),
-                                        icon: Icon(
-                                          Icons.favorite_border_rounded,
-                                          color: t.colorScheme.primary,
-                                          size: 22,
+                                        onPressed: bangumiIntroController
+                                                    .followStatus.value ==
+                                                -1
+                                            ? null
+                                            : () {
+                                                if (bangumiIntroController
+                                                    .isFollowed.value) {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        _followDialog(),
+                                                  );
+                                                } else {
+                                                  bangumiIntroController
+                                                      .bangumiAdd();
+                                                }
+                                              },
+                                        child: Text(
+                                          bangumiIntroController
+                                                  .isFollowed.value
+                                              ? '已追番'
+                                              : '追番',
                                         ),
                                       ),
                                     ),
@@ -551,6 +572,61 @@ class _BangumiInfoState extends State<BangumiInfo>
           loadingStatus: widget.loadingStatus,
           text: '转发'),
     ]);
+  }
+
+  Widget _followDialog() {
+    return Dialog(
+      clipBehavior: Clip.hardEdge,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _followDialogItem(3, '看过'),
+            _followDialogItem(2, '在看'),
+            _followDialogItem(1, '想看'),
+            ListTile(
+              dense: true,
+              title: const Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  '取消追番',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                bangumiIntroController.bangumiDel();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _followDialogItem(
+    int followStatus,
+    String text,
+  ) {
+    return ListTile(
+      dense: true,
+      enabled: bangumiIntroController.followStatus.value != followStatus,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Text(
+          '标记为 $text',
+          style: const TextStyle(fontSize: 14),
+        ),
+      ),
+      trailing: bangumiIntroController.followStatus.value == followStatus
+          ? const Icon(size: 22, Icons.check)
+          : null,
+      onTap: () {
+        Get.back();
+        bangumiIntroController.bangumiUpdate(followStatus);
+      },
+    );
   }
 }
 
