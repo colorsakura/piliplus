@@ -633,4 +633,8 @@ class Api {
   static const String removeDynamic = '/dynamic_svr/v1/dynamic_svr/rm_dynamic';
 
   static const String uploadBfs = '/x/dynamic/feed/draw/upload_bfs';
+
+  static const String videoRelation = '/x/web-interface/archive/relation';
+
+  static const String seasonFav = '/x/v3/fav/season/'; // + fav unfav
 }

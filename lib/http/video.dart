@@ -274,6 +274,54 @@ class VideoHttp {
     }
   }
 
+  static Future seasonFav({
+    required bool isFav,
+    required dynamic seasonId,
+  }) async {
+    var res = await Request().post(
+      Api.seasonFav + (isFav ? 'unfav' : 'fav'),
+      data: {
+        'platform': 'web',
+        'season_id': seasonId,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+      };
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future videoRelation({required dynamic bvid}) async {
+    var res = await Request().get(
+      Api.videoRelation,
+      data: {
+        'aid': IdUtils.bv2av(bvid),
+        'bvid': bvid,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': res.data['data'],
+      };
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   // 相关视频
   static Future<LoadingState> relatedVideoList({required String bvid}) async {
     var res = await Request().get(Api.relatedList, data: {'bvid': bvid});

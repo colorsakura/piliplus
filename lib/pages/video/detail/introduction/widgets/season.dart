@@ -88,9 +88,9 @@ class _SeasonPanelState extends State<SeasonPanel> {
           child: InkWell(
             onTap: () => widget.showEpisodes(
               _index,
-              widget.ugcSeason.sections,
+              widget.ugcSeason,
               episodes,
-              null,
+              _videoDetailController.bvid,
               null,
               cid,
             ),

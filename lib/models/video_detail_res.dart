@@ -659,6 +659,7 @@ class SectionItem {
     this.episodes,
   });
 
+  int? epCount;
   int? seasonId;
   int? id;
   String? title;
@@ -666,6 +667,7 @@ class SectionItem {
   List<EpisodeItem>? episodes;
 
   SectionItem.fromJson(Map<String, dynamic> json) {
+    epCount = json['ep_count'];
     seasonId = json['season_id'];
     id = json['id'];
     title = json['title'];

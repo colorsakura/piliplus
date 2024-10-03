@@ -1315,10 +1315,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  showEpisodes(index, sections, episodes, bvid, aid, cid) {
+  showEpisodes(index, season, episodes, bvid, aid, cid) {
     ListSheet(
       index: index,
-      sections: sections,
+      season: season,
       episodes: episodes,
       bvid: bvid,
       aid: aid,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
+import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPalaX/models/video_detail_res.dart' as video;
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ import '../../utils/utils.dart';
 class ListSheet {
   ListSheet({
     this.index,
-    this.sections,
+    this.season,
     required this.episodes,
     this.bvid,
     this.aid,
@@ -26,7 +27,7 @@ class ListSheet {
   });
 
   final dynamic index;
-  final dynamic sections;
+  final dynamic season;
   final dynamic episodes;
   final String? bvid;
   final int? aid;
@@ -39,7 +40,7 @@ class ListSheet {
 
   Widget get listSheetContent => ListSheetContent(
         index: index,
-        sections: sections,
+        season: season,
         episodes: episodes,
         bvid: bvid,
         aid: aid,
@@ -62,8 +63,8 @@ class ListSheet {
 class ListSheetContent extends StatefulWidget {
   const ListSheetContent({
     super.key,
-    this.index = 0,
-    this.sections,
+    this.index,
+    this.season,
     required this.episodes,
     this.bvid,
     this.aid,
@@ -73,7 +74,7 @@ class ListSheetContent extends StatefulWidget {
   });
 
   final dynamic index;
-  final dynamic sections;
+  final dynamic season;
   final dynamic episodes;
   final String? bvid;
   final int? aid;
@@ -94,9 +95,14 @@ class _ListSheetContentState extends State<ListSheetContent>
   late List<bool> reverse;
 
   int get _index => widget.index ?? 0;
-  bool get _isList => widget.sections is List && widget.sections.length > 1;
+  bool get _isList =>
+      widget.season != null &&
+      widget.season?.sections is List &&
+      widget.season.sections.length > 1;
   TabController? _ctr;
   StreamController? _indexStream;
+  int? _seasonFav;
+  StreamController? _favStream;
 
   @override
   void initState() {
@@ -105,24 +111,37 @@ class _ListSheetContentState extends State<ListSheetContent>
       _indexStream = StreamController<int>();
       _ctr = TabController(
         vsync: this,
-        length: widget.sections.length,
+        length: widget.season.sections.length,
         initialIndex: _index,
       )..addListener(() {
           _indexStream?.add(_ctr?.index);
         });
     }
     itemScrollController = _isList
-        ? List.generate(widget.sections.length, (_) => ItemScrollController())
+        ? List.generate(
+            widget.season.sections.length, (_) => ItemScrollController())
         : [ItemScrollController()];
-    reverse =
-        _isList ? List.generate(widget.sections.length, (_) => false) : [false];
+    reverse = _isList
+        ? List.generate(widget.season.sections.length, (_) => false)
+        : [false];
     WidgetsBinding.instance.addPostFrameCallback((_) {
       itemScrollController[_index].jumpTo(index: currentIndex);
     });
+    if (widget.bvid != null && widget.season != null) {
+      _favStream = StreamController<int>();
+      () async {
+        dynamic result = await VideoHttp.videoRelation(bvid: widget.bvid);
+        if (result['status']) {
+          _seasonFav = result['data']['season_fav'] ? 1 : 0;
+          _favStream?.add(_seasonFav);
+        }
+      }();
+    }
   }
 
   @override
   void dispose() {
+    _favStream?.close();
     _indexStream?.close();
     _ctr?.removeListener(() {});
     _ctr?.dispose();
@@ -261,40 +280,67 @@ class _ListSheetContentState extends State<ListSheetContent>
             child: Row(
               children: [
                 Text(
-                  '合集（${_isList ? List.generate(widget.sections.length, (index) => widget.sections[index].episodes.length).reduce((value, element) => value + element) : widget.episodes!.length}）',
+                  '合集（${_isList ? widget.season.epCount : widget.episodes!.length}）',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                IconButton(
+                StreamBuilder(
+                  stream: _favStream?.stream,
+                  builder: (_, snapshot) => snapshot.hasData
+                      ? _mediumButton(
+                          tooltip: _seasonFav == 1 ? '取消订阅' : '订阅',
+                          icon: _seasonFav == 1 ? Icons.alarm_off : Icons.alarm,
+                          onPressed: () async {
+                            dynamic result = await VideoHttp.seasonFav(
+                              isFav: _seasonFav == 1,
+                              seasonId: widget.season.id,
+                            );
+                            if (result['status']) {
+                              SmartDialog.showToast(
+                                  '${_seasonFav == 1 ? '取消' : ''}订阅成功');
+                              _seasonFav = _seasonFav == 1 ? 0 : 1;
+                              _favStream?.add(_seasonFav);
+                            } else {
+                              SmartDialog.showToast(result['msg']);
+                            }
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                _mediumButton(
                   tooltip: '跳至顶部',
-                  icon: const Icon(Icons.vertical_align_top),
+                  icon: Icons.vertical_align_top,
                   onPressed: () {
                     itemScrollController[_ctr?.index ?? 0].scrollTo(
                       index: !reverse[_ctr?.index ?? 0]
                           ? 0
                           : _isList
-                              ? widget.sections[_ctr?.index].episodes.length - 1
+                              ? widget.season.sections[_ctr?.index].episodes
+                                      .length -
+                                  1
                               : widget.episodes.length - 1,
                       duration: const Duration(milliseconds: 200),
                     );
                   },
                 ),
-                IconButton(
+                _mediumButton(
                   tooltip: '跳至底部',
-                  icon: const Icon(Icons.vertical_align_bottom),
+                  icon: Icons.vertical_align_bottom,
                   onPressed: () {
                     itemScrollController[_ctr?.index ?? 0].scrollTo(
                       index: !reverse[_ctr?.index ?? 0]
                           ? _isList
-                              ? widget.sections[_ctr?.index].episodes.length - 1
+                              ? widget.season.sections[_ctr?.index].episodes
+                                      .length -
+                                  1
                               : widget.episodes.length - 1
                           : 0,
                       duration: const Duration(milliseconds: 200),
                     );
                   },
                 ),
-                IconButton(
+                _mediumButton(
                   tooltip: '跳至当前',
-                  icon: const Icon(Icons.my_location),
+                  icon: Icons.my_location,
                   onPressed: () async {
                     if (_ctr != null && _ctr?.index != (_index)) {
                       _ctr?.animateTo(_index);
@@ -310,13 +356,11 @@ class _ListSheetContentState extends State<ListSheetContent>
                 StreamBuilder(
                   stream: _indexStream?.stream,
                   initialData: 0,
-                  builder: (_, snapshot) => IconButton(
+                  builder: (_, snapshot) => _mediumButton(
                     tooltip: reverse[snapshot.data] ? '正序' : '反序',
-                    icon: Icon(
-                      !reverse[snapshot.data]
-                          ? MdiIcons.sortAscending
-                          : MdiIcons.sortDescending,
-                    ),
+                    icon: !reverse[snapshot.data]
+                        ? MdiIcons.sortAscending
+                        : MdiIcons.sortDescending,
                     onPressed: () {
                       setState(() {
                         reverse[_ctr?.index ?? 0] = !reverse[_ctr?.index ?? 0];
@@ -324,9 +368,9 @@ class _ListSheetContentState extends State<ListSheetContent>
                     },
                   ),
                 ),
-                IconButton(
+                _mediumButton(
                   tooltip: '关闭',
-                  icon: const Icon(Icons.close),
+                  icon: Icons.close,
                   onPressed: widget.onClose,
                 ),
               ],
@@ -340,7 +384,7 @@ class _ListSheetContentState extends State<ListSheetContent>
             TabBar(
               controller: _ctr,
               isScrollable: true,
-              tabs: (widget.sections as List)
+              tabs: (widget.season.sections as List)
                   .map((item) => Tab(text: item.title))
                   .toList(),
               dividerHeight: 1,
@@ -351,14 +395,33 @@ class _ListSheetContentState extends State<ListSheetContent>
                 ? TabBarView(
                     controller: _ctr,
                     children: List.generate(
-                      widget.sections.length,
-                      (index) =>
-                          _buildBody(index, widget.sections[index].episodes),
+                      widget.season.sections.length,
+                      (index) => _buildBody(
+                          index, widget.season.sections[index].episodes),
                     ),
                   )
                 : _buildBody(null, widget.episodes),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _mediumButton({
+    String? tooltip,
+    IconData? icon,
+    VoidCallback? onPressed,
+  }) {
+    return SizedBox(
+      width: 34,
+      height: 34,
+      child: IconButton(
+        tooltip: tooltip,
+        icon: Icon(icon),
+        style: ButtonStyle(
+          padding: WidgetStateProperty.all(EdgeInsets.zero),
+        ),
+        onPressed: onPressed,
       ),
     );
   }

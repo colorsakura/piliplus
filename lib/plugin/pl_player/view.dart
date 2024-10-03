@@ -374,7 +374,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             if (widget.showEpisodes != null) {
               widget.showEpisodes!(
                 index,
-                videoIntroController?.videoDetail.value.ugcSeason?.sections,
+                videoIntroController?.videoDetail.value.ugcSeason,
                 episodes,
                 bvid,
                 IdUtils.bv2av(bvid),
