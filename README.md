@@ -41,6 +41,7 @@
 
 ## feat
 
+- [x] SponsorBlock
 - [x] 显示视频完整合集
 - [x] 三连动画
 - [x] 番剧三连

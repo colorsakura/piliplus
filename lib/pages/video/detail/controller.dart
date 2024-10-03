@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:PiliPalaX/http/danmaku.dart';
+import 'package:PiliPalaX/http/init.dart';
+import 'package:dio/dio.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -90,6 +92,8 @@ class VideoDetailController extends GetxController
 
   PlayerStatus? playerStatus;
 
+  StreamSubscription<Duration>? positionSubscription;
+
   @override
   void onInit() {
     super.onInit();
@@ -147,6 +151,57 @@ class VideoDetailController extends GetxController
     cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
         defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
+    _sponsorBlock();
+  }
+
+  List? _segmentList;
+
+  Future _sponsorBlock() async {
+    dynamic result = await Request().get(
+      'https://www.bsbsb.top/api/skipSegments',
+      data: {'videoID': bvid},
+      options: Options(
+        headers: {
+          'env': '',
+          'app-key': '',
+          'x-bili-mid': '',
+          'x-bili-aurora-eid': '',
+          'x-bili-aurora-zone': '',
+          HttpHeaders.cookieHeader:
+              'buvid3= ; SESSDATA= ; bili_jct= ; DedeUserID= ; DedeUserID__ckMd5= ; sid= ',
+        },
+      ),
+    );
+    if (result.data is List && result.data.isNotEmpty) {
+      _segmentList = (result.data as List)
+          .where((item) => item['category'] == 'sponsor')
+          .toList()
+          .map((item) => item['segment'])
+          .toList();
+    }
+  }
+
+  void _initSkip() {
+    if (_segmentList != null && _segmentList!.isNotEmpty) {
+      positionSubscription = plPlayerController
+          .videoPlayerController?.stream.position
+          .listen((position) async {
+        for (List item in _segmentList!) {
+          // debugPrint(
+          //     '${position.inSeconds},,${(item.first as double).round()}');
+          if ((item.first as double).round() == position.inSeconds) {
+            try {
+              await plPlayerController
+                  .seekTo(Duration(seconds: (item[1] as double).round()));
+              SmartDialog.showToast('已跳过赞助商广告');
+            } catch (e) {
+              debugPrint('failed to skip: $e');
+              SmartDialog.showToast('广告跳过失败');
+            }
+          }
+        }
+      });
+    }
   }
 
   /// 发送弹幕
@@ -345,6 +400,8 @@ class VideoDetailController extends GetxController
       enableHeart: enableHeart,
       autoplay: autoplay,
     );
+
+    _initSkip();
 
     /// 开启自动全屏时，在player初始化完成后立即传入headerControl
     plPlayerController.headerControl = headerControl;

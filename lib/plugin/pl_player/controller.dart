@@ -1321,6 +1321,7 @@ class PlPlayerController {
         var pp = _videoPlayerController!.platform as NativePlayer;
         await pp.setProperty('audio-files', '');
         removeListeners();
+        await _videoPlayerController?.stop();
         await _videoPlayerController?.dispose();
         _videoPlayerController = null;
       }

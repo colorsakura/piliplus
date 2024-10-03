@@ -277,6 +277,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       ScreenBrightness().resetScreenBrightness();
       PlPlayerController.setPlayCallBack(null);
     }
+    videoDetailController.positionSubscription?.cancel();
     appbarStream.close();
     floating.dispose();
     videoDetailController.floating?.dispose();
@@ -307,6 +308,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     // _bufferedListener?.cancel();
 
     ScreenBrightness().resetScreenBrightness();
+
+    videoDetailController.positionSubscription?.cancel();
 
     videoDetailController.playerStatus =
         plPlayerController?.playerStatus.status.value;
