@@ -252,6 +252,7 @@ flutter:
     - assets/images/logo/
     - assets/images/live/
     - assets/images/video/
+    - assets/images/paycoins/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

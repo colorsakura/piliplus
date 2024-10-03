@@ -7,6 +7,7 @@ class SelfSizedHorizontalList extends StatefulWidget {
   final int itemCount;
   final double gapSize;
   final EdgeInsetsGeometry? padding;
+
   const SelfSizedHorizontalList({
     super.key,
     required this.childBuilder,

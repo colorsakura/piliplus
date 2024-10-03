@@ -4,10 +4,12 @@ import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/search.dart';
@@ -175,66 +177,103 @@ class BangumiIntroController extends CommonController {
     }
   }
 
+  void coinVideo(int coin) async {
+    var res = await VideoHttp.coinVideo(bvid: bvid, multiply: _tempThemeValue);
+    if (res['status']) {
+      SmartDialog.showToast('投币成功');
+      hasCoin.value = true;
+      dynamic bangumiDetail = (loadingState.value as Success).response;
+      bangumiDetail.stat!['coins'] =
+          bangumiDetail.stat!['coins'] + _tempThemeValue;
+      loadingState.value = LoadingState.success(bangumiDetail);
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
   // 投币
   Future actionCoinVideo() async {
     if (userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    showDialog(
-        context: Get.context!,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('选择投币个数'),
-            contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-            content: StatefulBuilder(builder: (context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RadioListTile(
-                    value: 1,
-                    title: const Text('1枚'),
-                    groupValue: _tempThemeValue,
-                    onChanged: (value) {
-                      _tempThemeValue = value!;
-                      Get.appUpdate();
-                    },
-                  ),
-                  RadioListTile(
-                    value: 2,
-                    title: const Text('2枚'),
-                    groupValue: _tempThemeValue,
-                    onChanged: (value) {
-                      _tempThemeValue = value!;
-                      Get.appUpdate();
-                    },
-                  ),
-                ],
-              );
-            }),
-            actions: [
-              TextButton(onPressed: () => Get.back(), child: const Text('取消')),
-              TextButton(
-                  onPressed: () async {
-                    var res = await VideoHttp.coinVideo(
-                        bvid: bvid, multiply: _tempThemeValue);
-                    if (res['status']) {
-                      SmartDialog.showToast('投币成功');
-                      hasCoin.value = true;
-                      dynamic bangumiDetail =
-                          (loadingState.value as Success).response;
-                      bangumiDetail.stat!['coins'] =
-                          bangumiDetail.stat!['coins'] + _tempThemeValue;
-                      loadingState.value = LoadingState.success(bangumiDetail);
-                    } else {
-                      SmartDialog.showToast(res['msg']);
-                    }
-                    Get.back();
-                  },
-                  child: const Text('确定'))
-            ],
+    Navigator.of(Get.context!).push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return PayCoinsPage(
+            callback: coinVideo,
           );
-        });
+        },
+        transitionDuration: const Duration(milliseconds: 225),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = 0.0;
+          const end = 1.0;
+          const curve = Curves.linear;
+
+          var tween = Tween<double>(begin: begin, end: end)
+              .chain(CurveTween(curve: curve));
+
+          return FadeTransition(
+            opacity: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+    // showDialog(
+    //     context: Get.context!,
+    //     builder: (context) {
+    //       return AlertDialog(
+    //         title: const Text('选择投币个数'),
+    //         contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+    //         content: StatefulBuilder(builder: (context, StateSetter setState) {
+    //           return Column(
+    //             mainAxisSize: MainAxisSize.min,
+    //             children: [
+    //               RadioListTile(
+    //                 value: 1,
+    //                 title: const Text('1枚'),
+    //                 groupValue: _tempThemeValue,
+    //                 onChanged: (value) {
+    //                   _tempThemeValue = value!;
+    //                   Get.appUpdate();
+    //                 },
+    //               ),
+    //               RadioListTile(
+    //                 value: 2,
+    //                 title: const Text('2枚'),
+    //                 groupValue: _tempThemeValue,
+    //                 onChanged: (value) {
+    //                   _tempThemeValue = value!;
+    //                   Get.appUpdate();
+    //                 },
+    //               ),
+    //             ],
+    //           );
+    //         }),
+    //         actions: [
+    //           TextButton(onPressed: () => Get.back(), child: const Text('取消')),
+    //           TextButton(
+    //               onPressed: () async {
+    //                 var res = await VideoHttp.coinVideo(
+    //                     bvid: bvid, multiply: _tempThemeValue);
+    //                 if (res['status']) {
+    //                   SmartDialog.showToast('投币成功');
+    //                   hasCoin.value = true;
+    //                   dynamic bangumiDetail =
+    //                       (loadingState.value as Success).response;
+    //                   bangumiDetail.stat!['coins'] =
+    //                       bangumiDetail.stat!['coins'] + _tempThemeValue;
+    //                   loadingState.value = LoadingState.success(bangumiDetail);
+    //                 } else {
+    //                   SmartDialog.showToast(res['msg']);
+    //                 }
+    //                 Get.back();
+    //               },
+    //               child: const Text('确定'))
+    //         ],
+    //       );
+    //     });
   }
 
   // （取消）收藏 bangumi
