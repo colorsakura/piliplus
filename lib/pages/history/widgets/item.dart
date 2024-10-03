@@ -87,7 +87,7 @@ class HistoryItem extends StatelessWidget {
               var epid = result['data'].epId;
               if (epid != null) {
                 Get.toNamed(
-                  '/video?bvid=$bvid&cid=$cid&epId=${result['data'].epId}',
+                  '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${result['data'].epId}',
                   arguments: {
                     'pic': pic,
                     'heroTag': heroTag,

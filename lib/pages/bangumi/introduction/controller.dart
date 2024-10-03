@@ -100,7 +100,7 @@ class BangumiIntroController extends CommonController {
 
     queryData();
 
-    if (userLogin) {
+    if (userLogin && seasonId != null) {
       queryIsFollowed();
     }
   }

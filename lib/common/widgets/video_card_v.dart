@@ -50,8 +50,9 @@ class VideoCardV extends StatelessWidget {
           var bangumiDetail = result['data'];
           int cid = bangumiDetail.episodes!.first.cid;
           String bvid = IdUtils.av2bv(bangumiDetail.episodes!.first.aid);
+          String seasonId = bangumiDetail.seasonId;
           Get.toNamed(
-            '/video?bvid=$bvid&cid=$cid&epId=$epId',
+            '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
             arguments: {
               'pic': videoItem.pic,
               'heroTag': heroTag,
@@ -351,7 +352,8 @@ class VideoStat extends StatelessWidget {
                           .outline
                           .withOpacity(0.8),
                     ),
-                    text: Utils.shortenChineseDateString(videoItem.desc.split(' · ').last)),
+                    text: Utils.shortenChineseDateString(
+                        videoItem.desc.split(' · ').last)),
               )),
           const SizedBox(width: 2),
         ]

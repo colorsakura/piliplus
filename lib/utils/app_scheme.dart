@@ -270,7 +270,7 @@ class PiliScheme {
         var epId = bangumiDetail.episodes!.first.id;
         SmartDialog.dismiss().then(
           (e) => Get.toNamed(
-            '/video?bvid=$bvid&cid=$cid&epId=$epId',
+            '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
             arguments: <String, dynamic>{
               'pic': bangumiDetail.cover,
               'heroTag': heroTag,
