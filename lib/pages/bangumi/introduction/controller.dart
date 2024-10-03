@@ -59,7 +59,6 @@ class BangumiIntroController extends CommonController {
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
   List addMediaIdsNew = [];
   List delMediaIdsNew = [];
-  int _tempThemeValue = -1;
   dynamic userInfo;
 
   @override
@@ -139,27 +138,27 @@ class BangumiIntroController extends CommonController {
   }
 
   // 获取点赞状态
-  Future queryHasLikeVideo() async {
-    var result = await VideoHttp.hasLikeVideo(bvid: bvid);
-    // data	num	被点赞标志	0：未点赞  1：已点赞
-    hasLike.value = result["data"] == 1 ? true : false;
-  }
+  // Future queryHasLikeVideo() async {
+  //   var result = await VideoHttp.hasLikeVideo(bvid: bvid);
+  //   // data	num	被点赞标志	0：未点赞  1：已点赞
+  //   hasLike.value = result["data"] == 1 ? true : false;
+  // }
 
   // 获取投币状态
-  Future queryHasCoinVideo() async {
-    var result = await VideoHttp.hasCoinVideo(bvid: bvid);
-    hasCoin.value = result["data"]['multiply'] == 0 ? false : true;
-  }
+  // Future queryHasCoinVideo() async {
+  //   var result = await VideoHttp.hasCoinVideo(bvid: bvid);
+  //   hasCoin.value = result["data"]['multiply'] == 0 ? false : true;
+  // }
 
   // 获取收藏状态
-  Future queryHasFavVideo() async {
-    var result = await VideoHttp.hasFavVideo(aid: IdUtils.bv2av(bvid));
-    if (result['status']) {
-      hasFav.value = result["data"]['favoured'];
-    } else {
-      hasFav.value = false;
-    }
-  }
+  // Future queryHasFavVideo() async {
+  //   var result = await VideoHttp.hasFavVideo(aid: IdUtils.bv2av(bvid));
+  //   if (result['status']) {
+  //     hasFav.value = result["data"]['favoured'];
+  //   } else {
+  //     hasFav.value = false;
+  //   }
+  // }
 
   // （取消）点赞
   Future actionLikeVideo() async {
@@ -178,13 +177,12 @@ class BangumiIntroController extends CommonController {
   }
 
   void coinVideo(int coin) async {
-    var res = await VideoHttp.coinVideo(bvid: bvid, multiply: _tempThemeValue);
+    var res = await VideoHttp.coinVideo(bvid: bvid, multiply: coin);
     if (res['status']) {
       SmartDialog.showToast('投币成功');
       hasCoin.value = true;
       dynamic bangumiDetail = (loadingState.value as Success).response;
-      bangumiDetail.stat!['coins'] =
-          bangumiDetail.stat!['coins'] + _tempThemeValue;
+      bangumiDetail.stat!['coins'] = bangumiDetail.stat!['coins'] + coin;
       loadingState.value = LoadingState.success(bangumiDetail);
     } else {
       SmartDialog.showToast(res['msg']);
@@ -296,7 +294,7 @@ class BangumiIntroController extends CommonController {
       addMediaIdsNew = [];
       delMediaIdsNew = [];
       // 重新获取收藏状态
-      queryHasFavVideo();
+      queryBangumiLikeCoinFav();
       SmartDialog.showToast('操作成功');
       Get.back();
     } else {
