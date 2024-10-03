@@ -744,6 +744,15 @@ class _PayCoinsPageState extends State<PayCoinsPage>
   late AnimationController _coinFadeController;
   late AnimationController _boxAnimController;
 
+  final List _images = [
+    'assets/images/paycoins/ic_thunder_1.png',
+    'assets/images/paycoins/ic_thunder_2.png',
+    'assets/images/paycoins/ic_thunder_3.png',
+  ];
+  late int _imageIndex = -1;
+  Timer? _timer;
+  bool get _showThunder => _imageIndex != -1 && _imageIndex != _images.length;
+
   @override
   void initState() {
     super.initState();
@@ -772,6 +781,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
 
   @override
   void dispose() {
+    _timer?.cancel();
     _slide22Controller.dispose();
     _scale22Controller.dispose();
     _coinSlideController.dispose();
@@ -803,186 +813,186 @@ class _PayCoinsPageState extends State<PayCoinsPage>
     });
   }
 
-  Widget _buildBody(isV) => Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+  Widget _buildBody(isV) => Stack(
+        alignment: Alignment.center,
         children: [
-          Row(
+          Visibility(
+            visible: _showThunder,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: Image.asset(_images[_showThunder ? _imageIndex : 0]),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Visibility(
-                visible: !_isPaying,
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                child: GestureDetector(
-                  onTap: _index == 0
-                      ? null
-                      : () {
-                          _onScroll(0);
-                        },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Image.asset(
-                      width: 16,
-                      height: 28,
-                      _index == 0
-                          ? 'assets/images/paycoins/ic_left_disable.png'
-                          : 'assets/images/paycoins/ic_left.png',
+              Row(
+                children: [
+                  Visibility(
+                    visible: !_isPaying,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: GestureDetector(
+                      onTap: _index == 0
+                          ? null
+                          : () {
+                              _onScroll(0);
+                            },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Image.asset(
+                          width: 16,
+                          height: 28,
+                          _index == 0
+                              ? 'assets/images/paycoins/ic_left_disable.png'
+                              : 'assets/images/paycoins/ic_left.png',
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: SizedBox(
-                  height: 100,
-                  child: PageView.builder(
-                    itemCount: 2,
-                    controller: _controller,
-                    onPageChanged: (index) => setState(() {
-                      _scale();
-                    }),
-                    itemBuilder: (context, index) {
-                      return ListenableBuilder(
-                        listenable: _controller,
-                        builder: (context, child) {
-                          double factor = index == 0 ? 1 : 0;
-                          if (_controller.position.hasContentDimensions) {
-                            factor = 1 - (_controller.page! - index).abs();
-                          }
-                          return Visibility(
-                            visible: !_isPaying || _index == index,
-                            child: Center(
-                              child: SizedBox(
-                                height: 70 + (factor * 30),
-                                width: 70 + (factor * 30),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SlideTransition(
-                                      position: _boxAnimController.drive(
-                                        Tween(
-                                          begin: const Offset(0.0, 0.0),
-                                          end: const Offset(0.0, -0.2),
+                  Expanded(
+                    child: SizedBox(
+                      height: 100,
+                      child: PageView.builder(
+                        itemCount: 2,
+                        controller: _controller,
+                        onPageChanged: (index) => setState(() {
+                          _scale();
+                        }),
+                        itemBuilder: (context, index) {
+                          return ListenableBuilder(
+                            listenable: _controller,
+                            builder: (context, child) {
+                              double factor = index == 0 ? 1 : 0;
+                              if (_controller.position.hasContentDimensions) {
+                                factor = 1 - (_controller.page! - index).abs();
+                              }
+                              return Visibility(
+                                visible: !_isPaying || _index == index,
+                                child: Center(
+                                  child: SizedBox(
+                                    height: 70 + (factor * 30),
+                                    width: 70 + (factor * 30),
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SlideTransition(
+                                          position: _boxAnimController.drive(
+                                            Tween(
+                                              begin: const Offset(0.0, 0.0),
+                                              end: const Offset(0.0, -0.2),
+                                            ),
+                                          ),
+                                          child: Image.asset(
+                                            'assets/images/paycoins/ic_pay_coins_box.png',
+                                          ),
                                         ),
-                                      ),
-                                      child: Image.asset(
-                                        'assets/images/paycoins/ic_pay_coins_box.png',
-                                      ),
+                                        SlideTransition(
+                                          position: _coinSlideController.drive(
+                                            Tween(
+                                              begin: const Offset(0.0, 0.0),
+                                              end: const Offset(0.0, -2),
+                                            ),
+                                          ),
+                                          child: FadeTransition(
+                                            opacity: Tween<double>(
+                                                    begin: 1, end: 0)
+                                                .animate(_coinFadeController),
+                                            child: Image.asset(
+                                              height: 35 + (factor * 15),
+                                              width: 35 + (factor * 15),
+                                              index == 0
+                                                  ? 'assets/images/paycoins/ic_coins_one.png'
+                                                  : 'assets/images/paycoins/ic_coins_two.png',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SlideTransition(
-                                      position: _coinSlideController.drive(
-                                        Tween(
-                                          begin: const Offset(0.0, 0.0),
-                                          end: const Offset(0.0, -2),
-                                        ),
-                                      ),
-                                      child: FadeTransition(
-                                        opacity: Tween<double>(begin: 1, end: 0)
-                                            .animate(_coinFadeController),
-                                        child: Image.asset(
-                                          height: 35 + (factor * 15),
-                                          width: 35 + (factor * 15),
-                                          index == 0
-                                              ? 'assets/images/paycoins/ic_coins_one.png'
-                                              : 'assets/images/paycoins/ic_coins_two.png',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
+                  Visibility(
+                    visible: !_isPaying,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: GestureDetector(
+                      onTap: _index == 1
+                          ? null
+                          : () {
+                              _onScroll(1);
+                            },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Image.asset(
+                          width: 16,
+                          height: 28,
+                          _index == 1
+                              ? 'assets/images/paycoins/ic_right_disable.png'
+                              : 'assets/images/paycoins/ic_right.png',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: !_isPaying,
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                child: GestureDetector(
-                  onTap: _index == 1
-                      ? null
-                      : () {
-                          _onScroll(1);
-                        },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: Image.asset(
-                      width: 16,
-                      height: 28,
-                      _index == 1
-                          ? 'assets/images/paycoins/ic_right_disable.png'
-                          : 'assets/images/paycoins/ic_right.png',
+              const SizedBox(height: 25),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onPanUpdate: _handlePanUpdate,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 140,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: _onPayCoin,
+                      onPanUpdate: (e) => _handlePanUpdate(e, true),
+                      child: ScaleTransition(
+                        scale: _scale22Controller.drive(
+                          Tween(begin: 1, end: 1.2),
+                        ),
+                        child: SlideTransition(
+                          position: _slide22Controller.drive(
+                            Tween(
+                              begin: const Offset(0.0, 0.0),
+                              end: const Offset(0.0, -0.2),
+                            ),
+                          ),
+                          child: SizedBox(
+                            width: 100,
+                            height: 140,
+                            child: Image.asset(
+                              _index == 0
+                                  ? 'assets/images/paycoins/ic_22_mario.png'
+                                  : 'assets/images/paycoins/ic_22_gun_sister.png',
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
+              SizedBox(
+                  height:
+                      (isV ? 50 : 0) + MediaQuery.of(context).padding.bottom),
             ],
           ),
-          const SizedBox(height: 25),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onPanUpdate: _handlePanUpdate,
-            child: SizedBox(
-              width: double.infinity,
-              height: 140,
-              child: Center(
-                child: GestureDetector(
-                  onPanUpdate: (e) => _handlePanUpdate(e, true),
-                  child: ScaleTransition(
-                    scale: _scale22Controller.drive(
-                      Tween(begin: 1, end: 1.2),
-                    ),
-                    child: SlideTransition(
-                      position: _slide22Controller.drive(
-                        Tween(
-                          begin: const Offset(0.0, 0.0),
-                          end: const Offset(0.0, -0.2),
-                        ),
-                      ),
-                      child: SizedBox(
-                        width: 100,
-                        height: 140,
-                        child: Image.asset(
-                          _index == 0
-                              ? 'assets/images/paycoins/ic_22_mario.png'
-                              : 'assets/images/paycoins/ic_22_gun_sister.png',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-              height: (isV ? 50 : 0) + MediaQuery.of(context).padding.bottom),
         ],
       );
 
   void _handlePanUpdate(DragUpdateDetails e, [bool needV = false]) {
     if (needV && e.delta.dy.abs() > max(2, e.delta.dx.abs())) {
       if (e.delta.dy < 0) {
-        setState(() {
-          _isPaying = true;
-        });
-        _slide22Controller.forward().whenComplete(() {
-          _slide22Controller.reverse().whenComplete(() {
-            _boxAnimController.forward().whenComplete(() {
-              _boxAnimController.reverse();
-            });
-            _coinSlideController.forward().whenComplete(() {
-              _coinFadeController.forward().whenComplete(() {
-                Get.back();
-                widget.callback(_index + 1);
-              });
-            });
-          });
-        });
+        _onPayCoin();
       }
     } else if (e.delta.dx.abs() > max(2, e.delta.dy.abs())) {
       if (e.delta.dx > 0) {
@@ -997,5 +1007,36 @@ class _PayCoinsPageState extends State<PayCoinsPage>
         }
       }
     }
+  }
+
+  void _onPayCoin() {
+    if (_isPaying) return;
+    setState(() {
+      _isPaying = true;
+    });
+    _slide22Controller.forward().whenComplete(() {
+      _slide22Controller.reverse().whenComplete(() {
+        if (_index == 1) {
+          _timer ??= Timer.periodic(const Duration(milliseconds: 50 ~/ 3), (_) {
+            if (_imageIndex != _images.length) {
+              setState(() {
+                _imageIndex = _imageIndex + 1;
+              });
+            } else {
+              _timer?.cancel();
+            }
+          });
+        }
+        _boxAnimController.forward().whenComplete(() {
+          _boxAnimController.reverse();
+        });
+        _coinSlideController.forward().whenComplete(() {
+          _coinFadeController.forward().whenComplete(() {
+            Get.back();
+            widget.callback(_index + 1);
+          });
+        });
+      });
+    });
   }
 }
