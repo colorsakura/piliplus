@@ -188,6 +188,7 @@ class SettingBoxKey {
       enableAi = 'enableAi',
       disableLikeMsg = 'disableLikeMsg',
       defaultHomePage = 'defaultHomePage',
+      enableSponsorBlock = 'enableSponsorBlock',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',

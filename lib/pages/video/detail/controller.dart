@@ -151,7 +151,9 @@ class VideoDetailController extends GetxController
     cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
         defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
-    _sponsorBlock();
+    if (setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false)) {
+      _sponsorBlock();
+    }
   }
 
   List? _segmentList;
