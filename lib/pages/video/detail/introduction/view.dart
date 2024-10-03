@@ -138,7 +138,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final bool loadingStatus; // 加载状态
 
-  late int mid;
   late String memberHeroTag;
   late bool enableAi;
   bool isProcessing = false;
@@ -228,15 +227,17 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   // 用户主页
   onPushMember() {
     feedBack();
-    mid = !loadingStatus
-        ? widget.videoDetail!.owner!.mid
-        : videoItem['owner'].mid;
-    memberHeroTag = Utils.makeHeroTag(mid);
-    String face = !loadingStatus
-        ? widget.videoDetail!.owner!.face
-        : videoItem['owner'].face;
-    Get.toNamed('/member?mid=$mid',
-        arguments: {'face': face, 'heroTag': memberHeroTag});
+    int? mid = !loadingStatus
+        ? widget.videoDetail?.owner?.mid
+        : videoItem['owner']?.mid;
+    if (mid != null) {
+      memberHeroTag = Utils.makeHeroTag(mid);
+      String face = !loadingStatus
+          ? widget.videoDetail!.owner!.face
+          : videoItem['owner'].face;
+      Get.toNamed('/member?mid=$mid',
+          arguments: {'face': face, 'heroTag': memberHeroTag});
+    }
   }
 
   @override
