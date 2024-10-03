@@ -22,6 +22,19 @@ import '../models/github/latest.dart';
 class Utils {
   static final Random random = Random();
 
+  static void toDupNamed(
+    String page, {
+    dynamic arguments,
+    Map<String, String>? parameters,
+  }) {
+    Get.toNamed(
+      page,
+      arguments: arguments,
+      parameters: parameters,
+      preventDuplicates: false,
+    );
+  }
+
   static void copyText(String text) {
     Clipboard.setData(ClipboardData(text: text));
     SmartDialog.showToast('已复制');

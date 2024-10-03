@@ -70,44 +70,33 @@ class DynamicsController extends GetxController
     initialValue.value = value;
   }
 
-  toDupNamed(
-    String page, {
-    dynamic arguments,
-    Map<String, String>? parameters,
-  }) {
-    Get.toNamed(
-      page,
-      arguments: arguments,
-      parameters: parameters,
-      preventDuplicates: false,
-    );
-  }
-
   pushDetail(item, floor, {action = 'all'}) async {
     feedBack();
 
     /// 点击评论action 直接查看评论
     if (action == 'comment') {
-      toDupNamed('/dynamicDetail',
+      Utils.toDupNamed('/dynamicDetail',
           arguments: {'item': item, 'floor': floor, 'action': action});
       return false;
     }
     switch (item!.type) {
       /// 转发的动态
       case 'DYNAMIC_TYPE_FORWARD':
-        toDupNamed('/dynamicDetail', arguments: {'item': item, 'floor': floor});
+        Utils.toDupNamed('/dynamicDetail',
+            arguments: {'item': item, 'floor': floor});
         break;
 
       /// 图文动态查看
       case 'DYNAMIC_TYPE_DRAW':
-        toDupNamed('/dynamicDetail', arguments: {'item': item, 'floor': floor});
+        Utils.toDupNamed('/dynamicDetail',
+            arguments: {'item': item, 'floor': floor});
         break;
       case 'DYNAMIC_TYPE_AV':
         String bvid = item.modules.moduleDynamic.major.archive.bvid;
         String cover = item.modules.moduleDynamic.major.archive.cover;
         try {
           int cid = await SearchHttp.ab2c(bvid: bvid);
-          toDupNamed('/video?bvid=$bvid&cid=$cid',
+          Utils.toDupNamed('/video?bvid=$bvid&cid=$cid',
               arguments: {'pic': cover, 'heroTag': bvid});
         } catch (err) {
           SmartDialog.showToast(err.toString());
@@ -125,14 +114,14 @@ class DynamicsController extends GetxController
           if (url.contains('read')) {
             number = 'cv$number';
           }
-          toDupNamed('/htmlRender', parameters: {
+          Utils.toDupNamed('/htmlRender', parameters: {
             'url': url.startsWith('//') ? url.split('//').last : url,
             'title': title,
             'id': number,
             'dynamicType': url.split('//').last.split('/')[1]
           });
         } else {
-          toDupNamed(
+          Utils.toDupNamed(
             '/webviewnew',
             parameters: {
               'url': 'https:$url',
@@ -151,7 +140,8 @@ class DynamicsController extends GetxController
       /// 纯文字动态查看
       case 'DYNAMIC_TYPE_WORD':
         print('纯文本');
-        toDupNamed('/dynamicDetail', arguments: {'item': item, 'floor': floor});
+        Utils.toDupNamed('/dynamicDetail',
+            arguments: {'item': item, 'floor': floor});
         break;
       case 'DYNAMIC_TYPE_LIVE_RCMD':
         DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
@@ -165,7 +155,7 @@ class DynamicsController extends GetxController
           'roomid': liveRcmd.roomId,
           'watched_show': liveRcmd.watchedShow,
         });
-        toDupNamed('/liveRoom?roomid=${liveItem.roomId}', arguments: {
+        Utils.toDupNamed('/liveRoom?roomid=${liveItem.roomId}', arguments: {
           'liveItem': liveItem,
           'heroTag': liveItem.roomId.toString()
         });
@@ -179,7 +169,7 @@ class DynamicsController extends GetxController
         String bvid = IdUtils.av2bv(aid);
         String cover = ugcSeason.cover!;
         int cid = await SearchHttp.ab2c(bvid: bvid);
-        toDupNamed('/video?bvid=$bvid&cid=$cid',
+        Utils.toDupNamed('/video?bvid=$bvid&cid=$cid',
             arguments: {'pic': cover, 'heroTag': bvid});
         break;
 
@@ -207,7 +197,7 @@ class DynamicsController extends GetxController
             dynamic cid = episode.cid;
             dynamic pic = episode.cover;
             dynamic heroTag = Utils.makeHeroTag(cid);
-            toDupNamed(
+            Utils.toDupNamed(
               '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=$epId',
               arguments: {
                 'pic': pic,

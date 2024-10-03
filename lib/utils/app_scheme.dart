@@ -40,7 +40,7 @@ class PiliScheme {
             Get.context!, (Route<dynamic> route) => route.isFirst);
       } else if (host == 'space') {
         final String mid = path.split('/').last;
-        Get.toNamed<dynamic>(
+        Utils.toDupNamed(
           '/member?mid=$mid',
           arguments: <String, dynamic>{'face': null},
         );
@@ -92,7 +92,7 @@ class PiliScheme {
         }
       } else if (host == 'live') {
         final String roomId = path.split('/').last;
-        Get.toNamed<dynamic>('/liveRoom?roomid=$roomId',
+        Utils.toDupNamed('/liveRoom?roomid=$roomId',
             arguments: <String, String?>{'liveItem': null, 'heroTag': roomId});
       } else if (host == 'bangumi') {
         if (path.startsWith('/season')) {
@@ -102,7 +102,7 @@ class PiliScheme {
       } else if (host == 'opus') {
         if (path.startsWith('/detail')) {
           var opusId = path.split('/').last;
-          Get.toNamed(
+          Utils.toDupNamed(
             '/webviewnew',
             parameters: {
               'url': 'https://www.bilibili.com/opus/$opusId',
@@ -112,10 +112,10 @@ class PiliScheme {
           );
         }
       } else if (host == 'search') {
-        Get.toNamed('/searchResult', parameters: {'keyword': ''});
+        Utils.toDupNamed('/searchResult', parameters: {'keyword': ''});
       } else if (host == 'article') {
         final String id = path.split('/').last.split('?').first;
-        Get.toNamed(
+        Utils.toDupNamed(
           '/htmlRender',
           parameters: {
             'url': 'www.bilibili.com/read/cv$id',
@@ -169,7 +169,7 @@ class PiliScheme {
       } else if (host == 'following' && path.startsWith("/detail/")) {
         void getToOpusWeb() {
           var opusId = path.split('/').last;
-          Get.toNamed(
+          Utils.toDupNamed(
             '/webviewnew',
             parameters: {
               'url': 'https://m.bilibili.com/dynamic/$opusId',
@@ -213,7 +213,7 @@ class PiliScheme {
       } else {
         print(value);
         SmartDialog.showToast('未知路径:$value，请截图反馈给开发者');
-        // Get.toNamed(
+        //Utils.toDupNamed(
         //   '/webviewnew',
         //   parameters: {
         //     'url': value.dataString ?? "",
@@ -224,6 +224,18 @@ class PiliScheme {
       }
     } else if (scheme == 'https') {
       fullPathPush(value);
+    } else if (path.toLowerCase().startsWith('av')) {
+      try {
+        videoPush(int.parse(path.substring(2)), null);
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    } else if (path.toLowerCase().startsWith('bv')) {
+      try {
+        videoPush(null, path);
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     }
   }
 
@@ -242,13 +254,12 @@ class PiliScheme {
       final int cid = await SearchHttp.ab2c(bvid: bvidVal, aid: aidVal);
       SmartDialog.dismiss();
       final String heroTag = Utils.makeHeroTag(aid);
-      Get.toNamed<dynamic>(
+      Utils.toDupNamed(
         '/video?bvid=$bvid&cid=$cid',
         arguments: <String, String?>{
           'pic': null,
           'heroTag': heroTag,
         },
-        preventDuplicates: false,
       );
     } catch (e) {
       SmartDialog.dismiss();
@@ -269,7 +280,7 @@ class PiliScheme {
         final String heroTag = Utils.makeHeroTag(cid);
         var epId = bangumiDetail.episodes!.first.id;
         SmartDialog.dismiss().then(
-          (e) => Get.toNamed(
+          (e) => Utils.toDupNamed(
             '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
             arguments: <String, dynamic>{
               'pic': bangumiDetail.cover,
@@ -298,14 +309,14 @@ class PiliScheme {
       print('bilibili.com');
     } else if (host.contains('live')) {
       int roomId = int.parse(path!.split('/').last);
-      Get.toNamed(
+      Utils.toDupNamed(
         '/liveRoom?roomid=$roomId',
         arguments: {'liveItem': null, 'heroTag': roomId.toString()},
       );
       return;
     } else if (host.contains('space')) {
       var mid = path!.split('/').last;
-      Get.toNamed('/member?mid=$mid', arguments: {'face': ''});
+      Utils.toDupNamed('/member?mid=$mid', arguments: {'face': ''});
       return;
     } else if (host == 'b23.tv') {
       final String fullPath = 'https://$host$path';
@@ -334,7 +345,7 @@ class PiliScheme {
           redirectUrl,
         );
       } else {
-        Get.toNamed(
+        Utils.toDupNamed(
           '/webviewnew',
           parameters: {'url': redirectUrl, 'type': 'url', 'pageTitle': ''},
         );
@@ -344,6 +355,13 @@ class PiliScheme {
 
     if (path != null) {
       List<String> pathPart = path.split('/');
+      if (pathPart.length < 3) {
+        Utils.toDupNamed(
+          '/webviewnew',
+          parameters: {'url': value.toString()},
+        );
+        return;
+      }
       final String area = pathPart[1] == 'mobile' ? pathPart[2] : pathPart[1];
       switch (area) {
         case 'bangumi':
@@ -379,7 +397,7 @@ class PiliScheme {
           } else {
             id = 'cv${matchNum(path).first}';
           }
-          Get.toNamed('/htmlRender', parameters: {
+          Utils.toDupNamed('/htmlRender', parameters: {
             'url': value.toString(),
             'title': '',
             'id': id,
@@ -388,7 +406,7 @@ class PiliScheme {
           break;
         case 'space':
           print('个人空间');
-          Get.toNamed('/member?mid=$area', arguments: {'face': ''});
+          Utils.toDupNamed('/member?mid=$area', arguments: {'face': ''});
           break;
         default:
           var res = IdUtils.matchAvorBv(input: area.split('?').first);
@@ -398,7 +416,7 @@ class PiliScheme {
             videoPush(null, res['BV'] as String);
           } else {
             SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
-            Get.toNamed(
+            Utils.toDupNamed(
               '/webviewnew',
               parameters: {
                 'url': value.toString(),
