@@ -1,13 +1,18 @@
 import 'dart:async';
+import 'dart:math';
+import 'package:PiliPalaX/pages/emote/view.dart';
+import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
+import 'package:chat_bottom_container/panel_container.dart';
+import 'package:chat_bottom_container/typedef.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/pages/emote/index.dart';
 import 'package:PiliPalaX/pages/whisper_detail/controller.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/models/video/reply/emote.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../utils/storage.dart';
 import 'widget/chat_item.dart';
 
@@ -18,68 +23,29 @@ class WhisperDetailPage extends StatefulWidget {
   State<WhisperDetailPage> createState() => _WhisperDetailPageState();
 }
 
-class _WhisperDetailPageState extends State<WhisperDetailPage>
-    with WidgetsBindingObserver {
-  final WhisperDetailController _whisperDetailController =
-      Get.put(WhisperDetailController());
-  final FocusNode replyContentFocusNode = FocusNode();
-  final _debouncer = Debouncer(milliseconds: 200); // 设置延迟时间
-  late double emoteHeight = 0.0;
-  double keyboardHeight = 0.0; // 键盘高度
-  String toolbarType = 'none';
+class _WhisperDetailPageState extends State<WhisperDetailPage> {
+  final _whisperDetailController = Get.put(WhisperDetailController());
   Box userInfoCache = GStorage.userInfo;
+  late final _controller = ChatBottomPanelContainerController<PanelType>();
+  late final _focusNode = FocusNode();
+  PanelType _currentPanelType = PanelType.none;
+  bool _readOnly = false;
+  final _readOnlyStream = StreamController<bool>();
+  late final _enableSend = StreamController<bool>();
+  late bool _visibleSend = false;
+  late final _imagePicker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _whisperDetailController.querySessionMsg();
-    _focusListener();
-  }
-
-  _focusListener() {
-    replyContentFocusNode.addListener(() {
-      if (replyContentFocusNode.hasFocus) {
-        setState(() {
-          toolbarType = 'input';
-        });
-      } else if (toolbarType == 'input') {
-        setState(() {
-          toolbarType = 'none';
-        });
-      }
-    });
-  }
-
-  @override
-  void didChangeMetrics() {
-    super.didChangeMetrics();
-    if (!mounted) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      // 键盘高度
-      final viewInsets = EdgeInsets.fromViewPadding(
-          View.of(context).viewInsets, View.of(context).devicePixelRatio);
-      _debouncer.run(() {
-        if (!mounted) return;
-        if (keyboardHeight == 0) {
-          emoteHeight = keyboardHeight =
-              keyboardHeight == 0.0 ? viewInsets.bottom : keyboardHeight;
-          if (emoteHeight == 0 || emoteHeight < keyboardHeight) {
-            emoteHeight = keyboardHeight;
-          }
-          if (emoteHeight < 200) emoteHeight = 200;
-          setState(() {});
-        }
-      });
-    });
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    replyContentFocusNode.removeListener(() {});
-    replyContentFocusNode.dispose();
+    _readOnlyStream.close();
+    _enableSend.close();
+    _focusNode.dispose();
     _whisperDetailController.replyContentController.dispose();
     super.dispose();
   }
@@ -103,33 +69,35 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: Center(
+          child: SizedBox(
+            width: 34,
+            height: 34,
+            child: IconButton(
+              tooltip: '返回',
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+                backgroundColor: WidgetStateProperty.resolveWith((states) {
+                  return Theme.of(context).colorScheme.secondaryContainer;
+                }),
+              ),
+              onPressed: Get.back,
+              icon: Icon(
+                Icons.arrow_back_outlined,
+                size: 18,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            ),
+          ),
+        ),
         title: SizedBox(
           width: double.infinity,
           height: 50,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 34,
-                height: 34,
-                child: IconButton(
-                  tooltip: '返回',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return Theme.of(context).colorScheme.secondaryContainer;
-                    }),
-                  ),
-                  onPressed: Get.back,
-                  icon: Icon(
-                    Icons.arrow_back_outlined,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
-                ),
-              ),
               GestureDetector(
                 onTap: () {
                   feedBack();
@@ -162,157 +130,250 @@ class _WhisperDetailPageState extends State<WhisperDetailPage>
           ),
         ),
       ),
-      body: GestureDetector(
-        onTap: () {
-          setState(() {
-            toolbarType = 'none';
-          });
-          FocusScope.of(context).unfocus();
-        },
-        child: Obx(() {
-          List messageList = _whisperDetailController.messageList;
-          if (messageList.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return RefreshIndicator(
-              onRefresh: _whisperDetailController.querySessionMsg,
-              child: ListView.builder(
-                itemCount: messageList.length,
-                shrinkWrap: true,
-                reverse: true,
-                itemBuilder: (_, int i) {
-                  return ChatItem(
-                      item: messageList[i],
-                      e_infos: _whisperDetailController.eInfos);
-                },
-                padding: const EdgeInsets.only(bottom: 20),
-              ));
-        }),
-      ),
-      // resizeToAvoidBottomInset: true,
-      bottomNavigationBar: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).padding.bottom +
-            70 +
-            (toolbarType == 'none'
-                ? 0
-                : (toolbarType == 'input' ? keyboardHeight : emoteHeight)),
-        padding: EdgeInsets.only(
-          left: 8,
-          right: 12,
-          top: 10,
-          bottom: MediaQuery.of(context).padding.bottom,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              width: 4,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            ),
-          ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // IconButton(
-                //   onPressed: () {},
-                //   icon: Icon(
-                //     Icons.add_circle_outline,
-                //     color: Theme.of(context).colorScheme.outline,
-                //   ),
-                // ),
-                IconButton(
-                  tooltip: '表情',
-                  onPressed: () {
-                    if (emoteHeight < 200) emoteHeight = 200;
-                    if (toolbarType != 'emote') {
-                      setState(() {
-                        toolbarType = 'emote';
-                      });
-                    }
-                    FocusScope.of(context).unfocus();
-                  },
-                  icon: Icon(
-                    Icons.emoji_emotions,
-                    color: toolbarType == 'emote'
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                    child: Semantics(
-                        label: '私信输入框',
-                        child: TextField(
-                          style: Theme.of(context).textTheme.titleMedium,
-                          controller:
-                              _whisperDetailController.replyContentController,
-                          autofocus: false,
-                          focusNode: replyContentFocusNode,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none, // 移除默认边框
-                            hintText: '发个消息聊聊呗~', // 提示文本
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 12.0), // 内边距
-                          ),
-                        )),
-                  ),
-                ),
-                IconButton(
-                  tooltip: '发送',
-                  onPressed: _whisperDetailController.sendMsg,
-                  icon: Icon(
-                    Icons.send,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                // const SizedBox(width: 16),
-              ],
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: toolbarType == 'none'
-                  ? 0
-                  : (toolbarType == 'input' ? keyboardHeight : emoteHeight),
-              child: EmotePanel(
-                onChoose: onChooseEmote,
-              ),
-            ),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(child: _buildList()),
+          _buildInputView(),
+          _buildPanelContainer(),
+        ],
       ),
     );
   }
-}
 
-typedef DebounceCallback = void Function();
+  Widget _buildList() {
+    Widget resultWidget = Obx(
+      () {
+        List messageList = _whisperDetailController.messageList;
+        if (messageList.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return RefreshIndicator(
+          onRefresh: _whisperDetailController.querySessionMsg,
+          child: ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            reverse: true,
+            itemCount: messageList.length,
+            itemBuilder: (_, int i) {
+              return ChatItem(
+                item: messageList[i],
+                e_infos: _whisperDetailController.eInfos,
+              );
+            },
+          ),
+        );
+      },
+    );
+    resultWidget = Listener(
+      child: resultWidget,
+      onPointerDown: (event) {
+        // Hide panel when touch ListView.
+        hidePanel();
+      },
+    );
+    return resultWidget;
+  }
 
-class Debouncer {
-  DebounceCallback? callback;
-  final int? milliseconds;
-  Timer? _timer;
-
-  Debouncer({this.milliseconds});
-
-  run(DebounceCallback callback) {
-    if (_timer != null) {
-      _timer!.cancel();
+  hidePanel() async {
+    if (_focusNode.hasFocus) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      _focusNode.unfocus();
     }
-    _timer = Timer(Duration(milliseconds: milliseconds!), () {
-      callback();
-    });
+    updateInputView(isReadOnly: false);
+    if (ChatBottomPanelType.none == _controller.currentPanelType) return;
+    _controller.updatePanelType(ChatBottomPanelType.none);
+  }
+
+  bool updateInputView({
+    required bool isReadOnly,
+  }) {
+    if (_readOnly != isReadOnly) {
+      _readOnly = isReadOnly;
+      _readOnlyStream.add(_readOnly);
+      return true;
+    }
+    return false;
+  }
+
+  updatePanelType(PanelType type) async {
+    final isSwitchToKeyboard = PanelType.keyboard == type;
+    final isSwitchToEmojiPanel = PanelType.emoji == type;
+    bool isUpdated = false;
+    switch (type) {
+      case PanelType.keyboard:
+        updateInputView(isReadOnly: false);
+        break;
+      case PanelType.emoji:
+        isUpdated = updateInputView(isReadOnly: true);
+        break;
+      default:
+        break;
+    }
+
+    updatePanelTypeFunc() {
+      _controller.updatePanelType(
+        isSwitchToKeyboard
+            ? ChatBottomPanelType.keyboard
+            : ChatBottomPanelType.other,
+        data: type,
+        forceHandleFocus: isSwitchToEmojiPanel
+            ? ChatBottomHandleFocus.requestFocus
+            : ChatBottomHandleFocus.none,
+      );
+    }
+
+    if (isUpdated) {
+      // Waiting for the input view to update.
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        updatePanelTypeFunc();
+      });
+    } else {
+      updatePanelTypeFunc();
+    }
+  }
+
+  Widget _buildInputView() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      color: Theme.of(context).colorScheme.onInverseSurface,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () async {
+              updatePanelType(
+                PanelType.emoji == _currentPanelType
+                    ? PanelType.keyboard
+                    : PanelType.emoji,
+              );
+            },
+            icon: const Icon(Icons.emoji_emotions),
+            tooltip: '表情',
+          ),
+          Expanded(
+            child: Listener(
+              onPointerUp: (event) {
+                // Currently it may be emojiPanel.
+                if (_readOnly) {
+                  updatePanelType(PanelType.keyboard);
+                }
+              },
+              child: StreamBuilder(
+                initialData: false,
+                stream: _readOnlyStream.stream,
+                builder: (context, snapshot) => TextField(
+                  readOnly: snapshot.data ?? false,
+                  focusNode: _focusNode,
+                  controller: _whisperDetailController.replyContentController,
+                  minLines: 1,
+                  maxLines: 4,
+                  onChanged: (value) {
+                    bool isNotEmpty = value.replaceAll('\n', '').isNotEmpty;
+                    if (isNotEmpty && !_visibleSend) {
+                      _visibleSend = true;
+                      _enableSend.add(true);
+                    } else if (!isNotEmpty && _visibleSend) {
+                      _visibleSend = false;
+                      _enableSend.add(false);
+                    }
+                  },
+                  textInputAction: TextInputAction.newline,
+                  decoration: InputDecoration(
+                    filled: true,
+                    hintText: '发个消息聊聊呗~',
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(4),
+                      gapPadding: 0,
+                    ),
+                    contentPadding: const EdgeInsets.all(10),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          StreamBuilder(
+              stream: _enableSend.stream,
+              builder: (context, snapshot) {
+                return IconButton(
+                  onPressed: () async {
+                    if (snapshot.data == true) {
+                      _whisperDetailController.sendMsg();
+                    } else {
+                      XFile? pickedFile = await _imagePicker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 100,
+                      );
+                      if (pickedFile != null) {}
+                    }
+                  },
+                  icon: Icon(snapshot.data == true
+                      ? Icons.send
+                      : Icons.add_photo_alternate_outlined),
+                  tooltip: snapshot.data == true ? '发送' : '图片',
+                );
+              }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmojiPickerPanel() {
+    double height = 300;
+    final keyboardHeight = _controller.keyboardHeight;
+    if (keyboardHeight != 0) {
+      height = max(200, keyboardHeight);
+    }
+
+    return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      height: height,
+      child: EmotePanel(
+        onChoose: onChooseEmote,
+      ),
+    );
+  }
+
+  Widget _buildPanelContainer() {
+    return ChatBottomPanelContainer<PanelType>(
+      controller: _controller,
+      inputFocusNode: _focusNode,
+      otherPanelWidget: (type) {
+        if (type == null) return const SizedBox.shrink();
+        switch (type) {
+          case PanelType.emoji:
+            return _buildEmojiPickerPanel();
+          default:
+            return const SizedBox.shrink();
+        }
+      },
+      onPanelTypeChange: (panelType, data) {
+        // debugPrint('panelType: $panelType');
+        switch (panelType) {
+          case ChatBottomPanelType.none:
+            _currentPanelType = PanelType.none;
+            break;
+          case ChatBottomPanelType.keyboard:
+            _currentPanelType = PanelType.keyboard;
+            break;
+          case ChatBottomPanelType.other:
+            if (data == null) return;
+            switch (data) {
+              case PanelType.emoji:
+                _currentPanelType = PanelType.emoji;
+                break;
+              default:
+                _currentPanelType = PanelType.none;
+                break;
+            }
+            break;
+        }
+      },
+      panelBgColor: Theme.of(context).colorScheme.onInverseSurface,
+    );
   }
 }
