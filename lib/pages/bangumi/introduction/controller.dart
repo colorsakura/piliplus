@@ -116,7 +116,7 @@ class BangumiIntroController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    epId = response.response.episodes!.first.id;
+    epId ??= response.response.episodes!.first.id;
     loadingState.value = response;
     return true;
   }
