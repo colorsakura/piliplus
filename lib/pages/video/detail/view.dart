@@ -353,7 +353,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     final bool autoplay = autoPlayEnable;
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
-    await videoDetailController.playerInit(autoplay: autoplay);
+    if (videoDetailController.videoUrl != null) {
+      await videoDetailController.playerInit(autoplay: autoplay);
+    }
 
     if (videoDetailController.playerStatus == PlayerStatus.playing) {
       plPlayerController?.play();
