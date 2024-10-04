@@ -81,7 +81,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           Obx(
             () => ListTile(
-              onTap: () => _aboutController.tapOnVersion(),
+              // onTap: () => _aboutController.tapOnVersion(),
               title: const Text('当前版本'),
               leading: const Icon(Icons.commit_outlined),
               trailing: Text(_aboutController.currentVersion.value,
@@ -300,7 +300,7 @@ class AboutController extends GetxController {
   RxBool isUpdate = true.obs;
   RxBool isLoading = true.obs;
   LatestDataModel? data;
-  RxInt count = 0.obs;
+  // RxInt count = 0.obs;
   RxString cacheSize = ''.obs;
 
   @override
@@ -408,15 +408,15 @@ class AboutController extends GetxController {
     Get.toNamed('/logs');
   }
 
-  tapOnVersion() {
-    if (settingController.hiddenSettingUnlocked.value) {
-      SmartDialog.showToast('您已解锁开发人员选项, 无需再次操作');
-      return;
-    }
-    count.value++;
-    if (count.value == 5) {
-      setting.put(SettingBoxKey.hiddenSettingUnlocked, true);
-      SmartDialog.showToast('恭喜您发现了开发人员选项!');
-    }
-  }
+  // tapOnVersion() {
+  //   if (settingController.hiddenSettingUnlocked.value) {
+  //     SmartDialog.showToast('您已解锁开发人员选项, 无需再次操作');
+  //     return;
+  //   }
+  //   count.value++;
+  //   if (count.value == 5) {
+  //     setting.put(SettingBoxKey.hiddenSettingUnlocked, true);
+  //     SmartDialog.showToast('恭喜您发现了开发人员选项!');
+  //   }
+  // }
 }
