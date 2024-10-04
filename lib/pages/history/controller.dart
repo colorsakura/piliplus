@@ -60,9 +60,7 @@ class HistoryController extends GetxController {
           content:
               Text(!pauseStatus.value ? '啊叻？你要暂停历史记录功能吗？' : '啊叻？要恢复历史记录功能吗？'),
           actions: [
-            TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('取消')),
+            TextButton(onPressed: () => Get.back(), child: const Text('取消')),
             TextButton(
               onPressed: () async {
                 SmartDialog.showLoading(msg: '请求中');
@@ -104,9 +102,7 @@ class HistoryController extends GetxController {
           title: const Text('提示'),
           content: const Text('啊叻？你要清空历史记录功能吗？'),
           actions: [
-            TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('取消')),
+            TextButton(onPressed: () => Get.back(), child: const Text('取消')),
             TextButton(
               onPressed: () async {
                 SmartDialog.showLoading(msg: '请求中');
@@ -127,32 +123,49 @@ class HistoryController extends GetxController {
   }
 
   // 删除某条历史记录
-  Future delHistory(kid, business) async {
-    String resKid = 'archive_$kid';
-    if (business == 'live') {
-      resKid = 'live_$kid';
-    } else if (business.contains('article')) {
-      resKid = 'article_$kid';
-    }
+  // Future delHistory(kid, business) async {
+  //   String resKid = 'archive_$kid';
+  //   if (business == 'live') {
+  //     resKid = 'live_$kid';
+  //   } else if (business.contains('article')) {
+  //     resKid = 'article_$kid';
+  //   }
 
-    var res = await UserHttp.delHistory(resKid);
-    if (res['status']) {
-      historyList.removeWhere((e) => e.kid == kid);
-      SmartDialog.showToast(res['msg']);
-    }
-  }
+  //   var res = await UserHttp.delHistory(resKid);
+  //   if (res['status']) {
+  //     historyList.removeWhere((e) => e.kid == kid);
+  //     SmartDialog.showToast(res['msg']);
+  //   }
+  // }
 
   // 删除已看历史记录
-  Future onDelHistory() async {
-    /// TODO 优化
-    List<HisListItem> result =
-        historyList.where((e) => e.progress == -1).toList();
-    for (HisListItem i in result) {
-      String resKid = 'archive_${i.kid}';
-      await UserHttp.delHistory(resKid);
-      historyList.removeWhere((e) => e.kid == i.kid);
+  void onDelHistory() {
+    _onDelete(historyList.where((e) => e.progress == -1).toList());
+  }
+
+  void _onDelete(List<HisListItem> result) async {
+    SmartDialog.showLoading(msg: '请求中');
+    List kidList = result.map((item) {
+      String tag = 'archive';
+      if (item.history?.business == 'live') {
+        tag = 'live';
+      } else if (item.history?.business?.contains('article') == true) {
+        tag = 'article';
+      }
+      return '${tag}_${item.kid}';
+    }).toList();
+    dynamic response = await UserHttp.delHistory(kidList);
+    if (response['status']) {
+      Set<HisListItem> remainList =
+          historyList.toSet().difference(result.toSet());
+      historyList.value = remainList.toList();
+      if (enableMultiple.value) {
+        checkedCount.value = 0;
+        enableMultiple.value = false;
+      }
     }
-    SmartDialog.showToast('操作完成');
+    SmartDialog.dismiss();
+    SmartDialog.showToast(response['msg']);
   }
 
   // 删除选中的记录
@@ -175,23 +188,8 @@ class HistoryController extends GetxController {
             ),
             TextButton(
               onPressed: () async {
-                /// TODO 优化
                 Get.back();
-                SmartDialog.showLoading(msg: '请求中');
-                List<HisListItem> result =
-                    historyList.where((e) => e.checked!).toList();
-                for (HisListItem i in result) {
-                  String str = 'archive';
-                  try {
-                    str = i.history!.business!;
-                  } catch (_) {}
-                  String resKid = '${str}_${i.kid}';
-                  await UserHttp.delHistory(resKid);
-                  historyList.removeWhere((e) => e.kid == i.kid);
-                }
-                checkedCount.value = 0;
-                SmartDialog.dismiss();
-                enableMultiple.value = false;
+                _onDelete(historyList.where((e) => e.checked!).toList());
               },
               child: const Text('确认'),
             )

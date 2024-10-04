@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../common/constants.dart';
 import '../models/model_hot_video_item.dart';
@@ -231,14 +232,17 @@ class UserHttp {
   }
 
   // 删除历史记录
-  static Future delHistory(kid) async {
+  static Future delHistory(List kidList) async {
     var res = await Request().post(
       Api.delHistory,
-      queryParameters: {
-        'kid': kid,
+      data: {
+        'kid': kidList.join(','),
         'jsonp': 'jsonp',
         'csrf': await Request.getCsrf(),
       },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'msg': '已删除'};

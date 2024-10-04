@@ -129,7 +129,7 @@ class FavSearchController extends CommonController {
       resKid = 'article_$kid';
     }
 
-    var res = await UserHttp.delHistory(resKid);
+    var res = await UserHttp.delHistory([resKid]);
     if (res['status']) {
       List historyList = (loadingState.value as Success).response;
       historyList.removeWhere((e) => e.kid == kid);
