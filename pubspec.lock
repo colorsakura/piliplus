@@ -1221,12 +1221,11 @@ packages:
   mime:
     dependency: "direct overridden"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "922e1f3d0b68291c42a2ec3a83542a886ea9b041"
-      url: "https://github.com/orz12/mime.git"
-    source: git
-    version: "1.0.5"
+      name: mime
+      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   nil:
     dependency: "direct main"
     description:

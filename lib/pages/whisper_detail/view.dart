@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
+import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/pages/emote/view.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:chat_bottom_container/panel_container.dart';
 import 'package:chat_bottom_container/typedef.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:mime/mime.dart';
 
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -36,12 +41,6 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
   late final _imagePicker = ImagePicker();
 
   @override
-  void initState() {
-    super.initState();
-    _whisperDetailController.querySessionMsg();
-  }
-
-  @override
   void dispose() {
     _readOnlyStream.close();
     _enableSend.close();
@@ -51,6 +50,10 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
   }
 
   void onChooseEmote(Packages package, Emote emote) {
+    if (!_visibleSend) {
+      _visibleSend = true;
+      _enableSend.add(true);
+    }
     int cursorPosition =
         _whisperDetailController.replyContentController.selection.baseOffset;
     if (cursorPosition == -1) cursorPosition = 0;
@@ -227,9 +230,11 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
 
     if (isUpdated) {
       // Waiting for the input view to update.
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        updatePanelTypeFunc();
-      });
+      WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          updatePanelTypeFunc();
+        },
+      );
     } else {
       updatePanelTypeFunc();
     }
@@ -297,26 +302,51 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
             ),
           ),
           StreamBuilder(
-              stream: _enableSend.stream,
-              builder: (context, snapshot) {
-                return IconButton(
-                  onPressed: () async {
-                    if (snapshot.data == true) {
-                      _whisperDetailController.sendMsg();
-                    } else {
-                      XFile? pickedFile = await _imagePicker.pickImage(
-                        source: ImageSource.gallery,
-                        imageQuality: 100,
-                      );
-                      if (pickedFile != null) {}
+            stream: _enableSend.stream,
+            builder: (context, snapshot) {
+              return IconButton(
+                onPressed: () async {
+                  if (snapshot.data == true) {
+                    _whisperDetailController.sendMsg();
+                  } else {
+                    XFile? pickedFile = await _imagePicker.pickImage(
+                      source: ImageSource.gallery,
+                      imageQuality: 100,
+                    );
+                    if (pickedFile != null) {
+                      SmartDialog.showLoading(msg: '正在上传图片');
+                      dynamic result = await MsgHttp.uploadBfs(pickedFile.path);
+                      if (result['status']) {
+                        int imageSize = await File(pickedFile.path).length();
+                        String mimeType = lookupMimeType(pickedFile.path)
+                                ?.split('/')
+                                .getOrNull(1) ??
+                            'png';
+                        dynamic picMsg = {
+                          'url': result['data']['image_url'],
+                          'height': result['data']['image_height'],
+                          'width': result['data']['image_width'],
+                          'imageType': mimeType,
+                          'original': 1,
+                          'size': imageSize / 1024,
+                        };
+                        SmartDialog.showLoading(msg: '正在发送');
+                        await _whisperDetailController.sendMsg(picMsg: picMsg);
+                      } else {
+                        SmartDialog.dismiss();
+                        SmartDialog.showToast(result['msg']);
+                        return;
+                      }
                     }
-                  },
-                  icon: Icon(snapshot.data == true
-                      ? Icons.send
-                      : Icons.add_photo_alternate_outlined),
-                  tooltip: snapshot.data == true ? '发送' : '图片',
-                );
-              }),
+                  }
+                },
+                icon: Icon(snapshot.data == true
+                    ? Icons.send
+                    : Icons.add_photo_alternate_outlined),
+                tooltip: snapshot.data == true ? '发送' : '图片',
+              );
+            },
+          ),
         ],
       ),
     );

@@ -161,9 +161,11 @@ dependencies:
   chat_bottom_container: ^0.2.0
   image_picker: ^1.1.2
 
+
 dependency_overrides:
-  mime:
-    git: https://github.com/orz12/mime.git
+  # mime:
+  #   git: https://github.com/orz12/mime.git
+  mime: ^2.0.0
   fading_edge_scrollview: ^4.1.1
   rxdart: ^0.28.0
   webview_flutter_android: 3.16.1

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -11,7 +13,7 @@ class WhisperDetailController extends GetxController {
   late int talkerId;
   late String name;
   late String face;
-  late String mid;
+  String? mid;
   RxList<MessageItem> messageList = <MessageItem>[].obs;
   //表情转换图片规则
   List<dynamic>? eInfos;
@@ -25,6 +27,8 @@ class WhisperDetailController extends GetxController {
     name = Get.parameters['name']!;
     face = Get.parameters['face']!;
     mid = Get.parameters['mid']!;
+
+    querySessionMsg();
   }
 
   Future querySessionMsg() async {
@@ -64,34 +68,41 @@ class WhisperDetailController extends GetxController {
     }
   }
 
-  Future sendMsg() async {
+  Future sendMsg({
+    dynamic picMsg,
+  }) async {
     feedBack();
     String message = replyContentController.text;
     final userInfo = userInfoCache.get('userInfoCache');
     if (userInfo == null) {
+      SmartDialog.dismiss();
       SmartDialog.showToast('请先登录');
       return;
     }
-    if (message == '') {
+    if (picMsg == null && message == '') {
+      SmartDialog.dismiss();
       SmartDialog.showToast('请输入内容');
       return;
     }
     if (mid == null) {
+      SmartDialog.dismiss();
       SmartDialog.showToast('这里不能发');
       return;
     }
     var result = await MsgHttp.sendMsg(
       senderUid: userInfo.mid,
-      receiverId: int.parse(mid),
-      content: '{"content":"$message"}',
-      msgType: 1,
+      receiverId: int.parse(mid!),
+      content: picMsg != null ? jsonEncode(picMsg) : '{"content":"$message"}',
+      msgType: picMsg != null ? 2 : 1,
     );
     if (result['status']) {
       // print(result['data']);
       querySessionMsg();
       replyContentController.text = "";
+      SmartDialog.dismiss();
       SmartDialog.showToast('发送成功');
     } else {
+      SmartDialog.dismiss();
       SmartDialog.showToast(result['msg']);
     }
   }
