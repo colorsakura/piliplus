@@ -153,10 +153,16 @@ class _MemberPageState extends State<MemberPage>
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (_) => Dialog(
-                              child: ReportPanel(
-                            memberInfo: _memberController.memberInfo.value,
-                          )),
+                          builder: (_) => AlertDialog(
+                            clipBehavior: Clip.hardEdge,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 16,
+                            ),
+                            content: ReportPanel(
+                              memberInfo: _memberController.memberInfo.value,
+                            ),
+                          ),
                         );
                       },
                       child: Row(
@@ -539,84 +545,81 @@ class _ReportPanelState extends State<ReportPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '举报: ${widget.memberInfo.name}',
-              style: const TextStyle(fontSize: 18),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '举报: ${widget.memberInfo.name}',
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(height: 4),
+          Text('uid: ${widget.memberInfo.mid}'),
+          const SizedBox(height: 10),
+          const Text('举报内容（必选，可多选）'),
+          ...List.generate(
+            3,
+            (index) => _checkBoxWidget(
+              _reasonList[index],
+              (value) {
+                setState(() => _reasonList[index] = value);
+                if (value) {
+                  _reason.add(index + 1);
+                } else {
+                  _reason.remove(index + 1);
+                }
+              },
+              ['头像违规', '昵称违规', '签名违规'][index],
             ),
-            const SizedBox(height: 4),
-            Text('uid: ${widget.memberInfo.mid}'),
-            const SizedBox(height: 10),
-            const Text('举报内容（必选，可多选）'),
-            ...List.generate(
-              3,
-              (index) => _checkBoxWidget(
-                _reasonList[index],
-                (value) {
-                  setState(() => _reasonList[index] = value);
-                  if (value) {
-                    _reason.add(index + 1);
+          ).toList(),
+          const Text('举报理由（单选，非必选）'),
+          ...List.generate(
+            5,
+            (index) => _radioWidget(
+              index,
+              _reasonV2,
+              (value) {
+                setState(() => _reasonV2 = value);
+              },
+              ['色情低俗', '不实信息', '违禁', '人身攻击', '赌博诈骗'][index],
+            ),
+          ).toList(),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: Get.back,
+                child: Text(
+                  '取消',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.outline),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  if (_reason.isEmpty) {
+                    SmartDialog.showToast('至少选择一项作为举报内容');
                   } else {
-                    _reason.remove(index + 1);
+                    Get.back();
+                    dynamic result = await MemberHttp.reportMember(
+                      widget.memberInfo.mid,
+                      reason: _reason.join(','),
+                      reasonV2: _reasonV2 != null ? _reasonV2! + 1 : null,
+                    );
+                    if (result['msg'] is String && result['msg'].isNotEmpty) {
+                      SmartDialog.showToast(result['msg']);
+                    } else {
+                      SmartDialog.showToast('举报失败');
+                    }
                   }
                 },
-                ['头像违规', '昵称违规', '签名违规'][index],
+                child: const Text('确定'),
               ),
-            ).toList(),
-            const Text('举报理由（单选，非必选）'),
-            ...List.generate(
-              5,
-              (index) => _radioWidget(
-                index,
-                _reasonV2,
-                (value) {
-                  setState(() => _reasonV2 = value);
-                },
-                ['色情低俗', '不实信息', '违禁', '人身攻击', '赌博诈骗'][index],
-              ),
-            ).toList(),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: Get.back,
-                  child: Text(
-                    '取消',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.outline),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    if (_reason.isEmpty) {
-                      SmartDialog.showToast('至少选择一项作为举报内容');
-                    } else {
-                      Get.back();
-                      dynamic result = await MemberHttp.reportMember(
-                        widget.memberInfo.mid,
-                        reason: _reason.join(','),
-                        reasonV2: _reasonV2 != null ? _reasonV2! + 1 : null,
-                      );
-                      if (result['msg'] is String && result['msg'].isNotEmpty) {
-                        SmartDialog.showToast(result['msg']);
-                      } else {
-                        SmartDialog.showToast('举报失败');
-                      }
-                    }
-                  },
-                  child: const Text('确定'),
-                ),
-              ],
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }

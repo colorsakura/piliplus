@@ -273,7 +273,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                                           foregroundColor:
                                               bangumiIntroController
                                                       .isFollowed.value
-                                                  ? t.colorScheme.onSurface
+                                                  ? t.colorScheme.outline
                                                   : null,
                                           backgroundColor:
                                               bangumiIntroController
@@ -575,32 +575,30 @@ class _BangumiInfoState extends State<BangumiInfo>
   }
 
   Widget _followDialog() {
-    return Dialog(
+    return AlertDialog(
       clipBehavior: Clip.hardEdge,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _followDialogItem(3, '看过'),
-            _followDialogItem(2, '在看'),
-            _followDialogItem(1, '想看'),
-            ListTile(
-              dense: true,
-              title: const Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  '取消追番',
-                  style: TextStyle(fontSize: 14),
-                ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _followDialogItem(3, '看过'),
+          _followDialogItem(2, '在看'),
+          _followDialogItem(1, '想看'),
+          ListTile(
+            dense: true,
+            title: const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                '取消追番',
+                style: TextStyle(fontSize: 14),
               ),
-              onTap: () {
-                Get.back();
-                bangumiIntroController.bangumiDel();
-              },
-            )
-          ],
-        ),
+            ),
+            onTap: () {
+              Get.back();
+              bangumiIntroController.bangumiDel();
+            },
+          )
+        ],
       ),
     );
   }
