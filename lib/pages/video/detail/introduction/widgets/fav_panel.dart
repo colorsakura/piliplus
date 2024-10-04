@@ -102,14 +102,24 @@ class _FavPanelState extends State<FavPanel> {
                           ),
                         );
                       } else {
-                        return HttpError(
-                          errMsg: data['msg'],
-                          fn: () => setState(() {}),
+                        return CustomScrollView(
+                          controller: widget.scrollController,
+                          slivers: [
+                            HttpError(
+                              errMsg: data['msg'],
+                              fn: () => setState(() {
+                                _futureBuilderFuture =
+                                    widget.ctr!.queryVideoInFolder();
+                              }),
+                            )
+                          ],
                         );
                       }
                     } else {
                       // 骨架屏
-                      return const Text('请求中');
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   },
                 ),
