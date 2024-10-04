@@ -146,13 +146,13 @@ class HistoryController extends GetxController {
   void _onDelete(List<HisListItem> result) async {
     SmartDialog.showLoading(msg: '请求中');
     List kidList = result.map((item) {
-      String tag = 'archive';
-      if (item.history?.business == 'live') {
-        tag = 'live';
-      } else if (item.history?.business?.contains('article') == true) {
-        tag = 'article';
-      }
-      return '${tag}_${item.kid}';
+      // String tag = 'archive';
+      // if (item.history?.business == 'live') {
+      //   tag = 'live';
+      // } else if (item.history?.business?.contains('article') == true) {
+      //   tag = 'article-list';
+      // }
+      return '${item.history?.business}_${item.kid}';
     }).toList();
     dynamic response = await UserHttp.delHistory(kidList);
     if (response['status']) {

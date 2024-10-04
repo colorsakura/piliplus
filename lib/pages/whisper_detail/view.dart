@@ -157,7 +157,6 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
           onRefresh: _whisperDetailController.querySessionMsg,
           child: ListView.builder(
             shrinkWrap: true,
-            padding: EdgeInsets.zero,
             reverse: true,
             itemCount: messageList.length,
             itemBuilder: (_, int i) {
@@ -166,6 +165,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
                 e_infos: _whisperDetailController.eInfos,
               );
             },
+            padding: const EdgeInsets.only(bottom: 20),
           ),
         );
       },
