@@ -11,7 +11,9 @@ class HtmlHttp {
       "https://www.bilibili.com/opus/$id",
       extra: {'ua': 'pc'},
     );
-
+    if (response.data is! String && response.data is! List<int>) {
+      return;
+    }
     if (response.data.contains('Redirecting to')) {
       RegExp regex = RegExp(r'//([\w\.]+)/(\w+)/(\w+)');
       Match match = regex.firstMatch(response.data)!;
@@ -73,6 +75,9 @@ class HtmlHttp {
       "https://www.bilibili.com/$dynamicType/$id/",
       extra: {'ua': 'pc'},
     );
+    if (response.data is! String && response.data is! List<int>) {
+      return;
+    }
     Document rootTree = parse(response.data);
     Element body = rootTree.body!;
     Element appDom = body.querySelector('#app')!;

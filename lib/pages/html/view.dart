@@ -444,7 +444,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
         sliver: Obx(
           () => _htmlRenderCtr.loaded.value
-              ? _htmlRenderCtr.response['isJsonContent']
+              ? _htmlRenderCtr.response['isJsonContent'] == true
                   ? ArticleContent(
                       htmlContent: _htmlRenderCtr.response['content'],
                     )

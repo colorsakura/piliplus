@@ -32,11 +32,13 @@ class HtmlRenderController extends ReplyController {
     } else {
       res = await HtmlHttp.reqReadHtml(id, dynamicType);
     }
-    response = res;
-    oid.value = res['commentId'];
-    queryData();
-    if (res['status'] == true) {
-      loaded.value = true;
+    if (res != null) {
+      response = res;
+      oid.value = res['commentId'];
+      queryData();
+      if (res['status'] == true) {
+        loaded.value = true;
+      }
     }
   }
 
