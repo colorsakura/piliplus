@@ -82,9 +82,9 @@ class ApiInterceptor extends Interceptor {
   }
 
   static Future<String> checkConnect() async {
-    final ConnectivityResult connectivityResult =
+    final List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
-    switch (connectivityResult) {
+    switch (connectivityResult.first) {
       case ConnectivityResult.mobile:
         return '流量';
       case ConnectivityResult.wifi:

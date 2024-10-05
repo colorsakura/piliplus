@@ -208,12 +208,9 @@ class MorePanel extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
             leading: const Icon(Icons.share_outlined, size: 19),
-            onTap: () async {
+            onTap: () {
               Get.back();
-              var result = await Share.share(
-                      '${HttpString.dynamicShareBaseUrl}/${item.idStr}')
-                  .whenComplete(() {});
-              return result;
+              Share.share('${HttpString.dynamicShareBaseUrl}/${item.idStr}');
             },
             minLeadingWidth: 0,
           ),
