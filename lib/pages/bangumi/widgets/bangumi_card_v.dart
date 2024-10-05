@@ -42,45 +42,46 @@ class BangumiCardV extends StatelessWidget {
         child: InkWell(
           onTap: () async {
             final int seasonId = bangumiItem.seasonId;
-            SmartDialog.showLoading(msg: '获取中...');
-            final res = await SearchHttp.bangumiInfo(seasonId: seasonId);
-            SmartDialog.dismiss().then((value) {
-              if (res['status']) {
-                if (res['data'].episodes.isEmpty) {
-                  SmartDialog.showToast('资源加载失败');
-                  return;
-                }
-                EpisodeItem episode = res['data'].episodes.first;
-                int? epId = res['data'].userStatus?.progress?.lastEpId;
-                if (epId == null) {
-                  epId = episode.epId;
-                } else {
-                  for (var item in res['data'].episodes) {
-                    if (item.epId == epId) {
-                      episode = item;
-                      break;
-                    }
-                  }
-                }
-                String bvid = episode.bvid!;
-                int cid = episode.cid!;
-                String pic = episode.cover!;
-                print('epId');
-                print(epId);
-                String heroTag = Utils.makeHeroTag(cid);
-                Get.toNamed(
-                  '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
-                  arguments: {
-                    'pic': pic,
-                    'heroTag': heroTag,
-                    'videoType': SearchType.media_bangumi,
-                    'bangumiItem': res['data'],
-                  },
-                );
-              } else {
-                SmartDialog.showToast(res['msg']);
-              }
-            });
+            Utils.viewBangumi(seasonId: seasonId);
+            // SmartDialog.showLoading(msg: '获取中...');
+            // final res = await SearchHttp.bangumiInfo(seasonId: seasonId);
+            // SmartDialog.dismiss().then((value) {
+            //   if (res['status']) {
+            //     if (res['data'].episodes.isEmpty) {
+            //       SmartDialog.showToast('资源加载失败');
+            //       return;
+            //     }
+            //     EpisodeItem episode = res['data'].episodes.first;
+            //     int? epId = res['data'].userStatus?.progress?.lastEpId;
+            //     if (epId == null) {
+            //       epId = episode.epId;
+            //     } else {
+            //       for (var item in res['data'].episodes) {
+            //         if (item.epId == epId) {
+            //           episode = item;
+            //           break;
+            //         }
+            //       }
+            //     }
+            //     String bvid = episode.bvid!;
+            //     int cid = episode.cid!;
+            //     String pic = episode.cover!;
+            //     // print('epId');
+            //     // print(epId);
+            //     String heroTag = Utils.makeHeroTag(cid);
+            //     Get.toNamed(
+            //       '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
+            //       arguments: {
+            //         'pic': pic,
+            //         'heroTag': heroTag,
+            //         'videoType': SearchType.media_bangumi,
+            //         'bangumiItem': res['data'],
+            //       },
+            //     );
+            //   } else {
+            //     SmartDialog.showToast(res['msg']);
+            //   }
+            // });
           },
           child: Column(
             children: [

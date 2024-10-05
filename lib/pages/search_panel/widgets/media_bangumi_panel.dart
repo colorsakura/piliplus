@@ -137,47 +137,48 @@ Widget searchBangumiPanel(BuildContext context, ctr, loadingState) {
                                     height: 32,
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        SmartDialog.showLoading(msg: '获取中...');
-                                        var res = await SearchHttp.bangumiInfo(
-                                            seasonId: i.seasonId);
-                                        SmartDialog.dismiss().then((value) {
-                                          if (res['status']) {
-                                            EpisodeItem episode =
-                                                res['data'].episodes.first;
-                                            int? epId = res['data']
-                                                .userStatus
-                                                ?.progress
-                                                ?.lastEpId;
-                                            if (epId == null) {
-                                              epId = episode.epId;
-                                            } else {
-                                              for (var item
-                                                  in res['data'].episodes) {
-                                                if (item.epId == epId) {
-                                                  episode = item;
-                                                  break;
-                                                }
-                                              }
-                                            }
-                                            String bvid = episode.bvid!;
-                                            int cid = episode.cid!;
-                                            String pic = episode.cover!;
-                                            String heroTag =
-                                                Utils.makeHeroTag(cid);
-                                            Get.toNamed(
-                                              '/video?bvid=$bvid&cid=$cid&seasonId=${i.seasonId}&epId=$epId',
-                                              arguments: {
-                                                'pic': pic,
-                                                'heroTag': heroTag,
-                                                'videoType':
-                                                    SearchType.media_bangumi,
-                                                'bangumiItem': res['data'],
-                                              },
-                                            );
-                                          } else {
-                                            SmartDialog.showToast(res['msg']);
-                                          }
-                                        });
+                                        Utils.viewBangumi(seasonId: i.seasonId);
+                                        // SmartDialog.showLoading(msg: '获取中...');
+                                        // var res = await SearchHttp.bangumiInfo(
+                                        //     seasonId: i.seasonId);
+                                        // SmartDialog.dismiss().then((value) {
+                                        //   if (res['status']) {
+                                        //     EpisodeItem episode =
+                                        //         res['data'].episodes.first;
+                                        //     int? epId = res['data']
+                                        //         .userStatus
+                                        //         ?.progress
+                                        //         ?.lastEpId;
+                                        //     if (epId == null) {
+                                        //       epId = episode.epId;
+                                        //     } else {
+                                        //       for (var item
+                                        //           in res['data'].episodes) {
+                                        //         if (item.epId == epId) {
+                                        //           episode = item;
+                                        //           break;
+                                        //         }
+                                        //       }
+                                        //     }
+                                        //     String bvid = episode.bvid!;
+                                        //     int cid = episode.cid!;
+                                        //     String pic = episode.cover!;
+                                        //     String heroTag =
+                                        //         Utils.makeHeroTag(cid);
+                                        //     Get.toNamed(
+                                        //       '/video?bvid=$bvid&cid=$cid&seasonId=${i.seasonId}&epId=$epId',
+                                        //       arguments: {
+                                        //         'pic': pic,
+                                        //         'heroTag': heroTag,
+                                        //         'videoType':
+                                        //             SearchType.media_bangumi,
+                                        //         'bangumiItem': res['data'],
+                                        //       },
+                                        //     );
+                                        //   } else {
+                                        //     SmartDialog.showToast(res['msg']);
+                                        //   }
+                                        // });
                                       },
                                       child: const Text('观看'),
                                     ),

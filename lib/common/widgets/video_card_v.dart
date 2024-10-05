@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -43,25 +44,40 @@ class VideoCardV extends StatelessWidget {
           return;
         }
         int epId = videoItem.param;
-        SmartDialog.showLoading(msg: '资源获取中');
-        var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);
-        SmartDialog.dismiss();
-        if (result['status']) {
-          var bangumiDetail = result['data'];
-          int cid = bangumiDetail.episodes!.first.cid;
-          String bvid = IdUtils.av2bv(bangumiDetail.episodes!.first.aid);
-          String seasonId = bangumiDetail.seasonId;
-          Get.toNamed(
-            '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
-            arguments: {
-              'pic': videoItem.pic,
-              'heroTag': heroTag,
-              'videoType': SearchType.media_bangumi,
-            },
-          );
-        } else {
-          SmartDialog.showToast(result['msg']);
-        }
+        Utils.viewBangumi(epId: epId);
+        // SmartDialog.showLoading(msg: '资源获取中');
+        // var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);
+        // SmartDialog.dismiss();
+        // if (result['status']) {
+        //   var bangumiDetail = result['data'];
+        //   EpisodeItem episode = result['data'].episodes.first;
+        //   int? epId = result['data'].userStatus?.progress?.lastEpId;
+        //   if (epId == null) {
+        //     epId = episode.epId;
+        //   } else {
+        //     for (var item in result['data'].episodes) {
+        //       if (item.epId == epId) {
+        //         episode = item;
+        //         break;
+        //       }
+        //     }
+        //   }
+        //   String bvid = episode.bvid!;
+        //   int cid = episode.cid!;
+        //   String pic = episode.cover!;
+        //   String seasonId = bangumiDetail.seasonId;
+        //   dynamic heroTag = Utils.makeHeroTag(cid);
+        //   Get.toNamed(
+        //     '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
+        //     arguments: {
+        //       'pic': pic,
+        //       'heroTag': heroTag,
+        //       'videoType': SearchType.media_bangumi,
+        //     },
+        //   );
+        // } else {
+        //   SmartDialog.showToast(result['msg']);
+        // }
         break;
       case 'av':
         String bvid = videoItem.bvid ?? IdUtils.av2bv(videoItem.aid);

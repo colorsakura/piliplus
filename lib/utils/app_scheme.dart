@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:app_links/app_links.dart';
@@ -270,28 +271,41 @@ class PiliScheme {
   // 番剧跳转
   static Future<void> bangumiPush(int? seasonId, int? epId) async {
     print('seasonId: $seasonId, epId: $epId');
-    SmartDialog.showLoading<dynamic>(msg: '获取中...');
+    // SmartDialog.showLoading<dynamic>(msg: '获取中...');
     try {
-      var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
-      if (result['status']) {
-        var bangumiDetail = result['data'];
-        final int cid = bangumiDetail.episodes!.first.cid;
-        final String bvid = IdUtils.av2bv(bangumiDetail.episodes!.first.aid);
-        final String heroTag = Utils.makeHeroTag(cid);
-        var epId = bangumiDetail.episodes!.first.id;
-        SmartDialog.dismiss().then(
-          (e) => Utils.toDupNamed(
-            '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
-            arguments: <String, dynamic>{
-              'pic': bangumiDetail.cover,
-              'heroTag': heroTag,
-              'videoType': SearchType.media_bangumi,
-            },
-          ),
-        );
-      } else {
-        SmartDialog.showToast(result['msg']);
-      }
+      Utils.viewBangumi(seasonId: seasonId, epId: epId);
+      // var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
+      // if (result['status']) {
+      //   var bangumiDetail = result['data'];
+      //   EpisodeItem episode = result['data'].episodes.first;
+      //   int? epId = result['data'].userStatus?.progress?.lastEpId;
+      //   if (epId == null) {
+      //     epId = episode.epId;
+      //   } else {
+      //     for (var item in result['data'].episodes) {
+      //       if (item.epId == epId) {
+      //         episode = item;
+      //         break;
+      //       }
+      //     }
+      //   }
+      //   String bvid = episode.bvid!;
+      //   int cid = episode.cid!;
+      //   dynamic pic = episode.cover;
+      //   final String heroTag = Utils.makeHeroTag(cid);
+      //   SmartDialog.dismiss().then(
+      //     (e) => Utils.toDupNamed(
+      //       '/video?bvid=$bvid&cid=$cid&seasonId=${bangumiDetail.seasonId}&epId=$epId',
+      //       arguments: <String, dynamic>{
+      //         'pic': pic,
+      //         'heroTag': heroTag,
+      //         'videoType': SearchType.media_bangumi,
+      //       },
+      //     ),
+      //   );
+      // } else {
+      //   SmartDialog.showToast(result['msg']);
+      // }
     } catch (e) {
       SmartDialog.showToast('番剧获取失败：$e');
     }

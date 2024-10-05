@@ -178,37 +178,38 @@ class DynamicsController extends GetxController
         print('DYNAMIC_TYPE_PGC_UNION 番剧');
         DynamicArchiveModel pgc = item.modules.moduleDynamic.major.pgc;
         if (pgc.epid != null) {
-          SmartDialog.showLoading(msg: '获取中...');
-          var res = await SearchHttp.bangumiInfo(epId: pgc.epid);
-          SmartDialog.dismiss();
-          if (res['status']) {
-            // dynamic episode -> progress episode -> first episode
-            EpisodeItem episode = (res['data'].episodes as List)
-                    .firstWhereOrNull(
-                  (item) => item.epId == pgc.epid,
-                ) ??
-                (res['data'].episodes as List).firstWhereOrNull(
-                  (item) =>
-                      item.epId == res['data'].userStatus?.progress?.lastEpId,
-                ) ??
-                res['data'].episodes.first;
-            dynamic epId = episode.epId;
-            dynamic bvid = episode.bvid;
-            dynamic cid = episode.cid;
-            dynamic pic = episode.cover;
-            dynamic heroTag = Utils.makeHeroTag(cid);
-            Utils.toDupNamed(
-              '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=$epId',
-              arguments: {
-                'pic': pic,
-                'heroTag': heroTag,
-                'videoType': SearchType.media_bangumi,
-                'bangumiItem': res['data'],
-              },
-            );
-          } else {
-            SmartDialog.showToast(res['msg']);
-          }
+          Utils.viewBangumi(epId: pgc.epid);
+          // SmartDialog.showLoading(msg: '获取中...');
+          // var res = await SearchHttp.bangumiInfo(epId: pgc.epid);
+          // SmartDialog.dismiss();
+          // if (res['status']) {
+          //   // dynamic episode -> progress episode -> first episode
+          //   EpisodeItem episode = (res['data'].episodes as List)
+          //           .firstWhereOrNull(
+          //         (item) => item.epId == pgc.epid,
+          //       ) ??
+          //       (res['data'].episodes as List).firstWhereOrNull(
+          //         (item) =>
+          //             item.epId == res['data'].userStatus?.progress?.lastEpId,
+          //       ) ??
+          //       res['data'].episodes.first;
+          //   dynamic epId = episode.epId;
+          //   dynamic bvid = episode.bvid;
+          //   dynamic cid = episode.cid;
+          //   dynamic pic = episode.cover;
+          //   dynamic heroTag = Utils.makeHeroTag(cid);
+          //   Utils.toDupNamed(
+          //     '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=$epId',
+          //     arguments: {
+          //       'pic': pic,
+          //       'heroTag': heroTag,
+          //       'videoType': SearchType.media_bangumi,
+          //       'bangumiItem': res['data'],
+          //     },
+          //   );
+          // } else {
+          //   SmartDialog.showToast(res['msg']);
+          // }
         }
         break;
     }

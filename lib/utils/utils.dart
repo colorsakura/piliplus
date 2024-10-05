@@ -5,6 +5,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:PiliPalaX/http/search.dart';
+import 'package:PiliPalaX/models/bangumi/info.dart';
+import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -21,6 +24,51 @@ import '../models/github/latest.dart';
 
 class Utils {
   static final Random random = Random();
+
+  static void viewBangumi({
+    dynamic seasonId,
+    dynamic epId,
+  }) async {
+    SmartDialog.showLoading(msg: '资源获取中');
+    var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
+    SmartDialog.dismiss();
+    if (result['status']) {
+      if (result['data'].episodes.isEmpty) {
+        SmartDialog.showToast('资源加载失败');
+        return;
+      }
+      // epId episode -> progress episode -> first episode
+      EpisodeItem? episode;
+      if (epId != null) {
+        EpisodeItem? e = (result['data'].episodes as List).firstWhereOrNull(
+          (item) => item.epId == epId,
+        );
+        if (e != null) {
+          episode = e;
+        }
+      }
+      episode ??= (result['data'].episodes as List).firstWhereOrNull(
+            (item) =>
+                item.epId == result['data'].userStatus?.progress?.lastEpId,
+          ) ??
+          result['data'].episodes.first;
+      dynamic bvid = episode?.bvid;
+      dynamic cid = episode?.cid;
+      dynamic pic = episode?.cover;
+      dynamic heroTag = Utils.makeHeroTag(cid);
+      Utils.toDupNamed(
+        '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${episode?.epId}',
+        arguments: {
+          'pic': pic,
+          'heroTag': heroTag,
+          'videoType': SearchType.media_bangumi,
+          'bangumiItem': result['data'],
+        },
+      );
+    } else {
+      SmartDialog.showToast(result['msg']);
+    }
+  }
 
   static void toDupNamed(
     String page, {

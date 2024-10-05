@@ -31,7 +31,7 @@ class BangumiIntroController extends CommonController {
   // 视频bvid
   String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
-      ? int.parse(Get.parameters['seasonId']!)
+      ? int.tryParse(Get.parameters['seasonId']!)
       : null;
   var epId = Get.parameters['epId'] != null
       ? int.tryParse(Get.parameters['epId']!)
