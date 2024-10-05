@@ -59,7 +59,7 @@ class HtmlRender extends StatelessWidget {
               //   height: isEmote ? 22 : null,
               // );
               return NetworkImgLayer(
-                width: isEmote ? 22 : constrainedWidth / textScale,
+                width: isEmote ? 22 : constrainedWidth,
                 height: isEmote ? 22 : 200,
                 src: imgUrl,
                 ignoreHeight: !isEmote,

@@ -446,7 +446,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           () => _htmlRenderCtr.loaded.value
               ? _htmlRenderCtr.response['isJsonContent'] == true
                   ? ArticleContent(
-                      htmlContent: _htmlRenderCtr.response['content'],
+                      list: _htmlRenderCtr.response['content'],
                     )
                   : SliverToBoxAdapter(
                       child: LayoutBuilder(

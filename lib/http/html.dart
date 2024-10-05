@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:PiliPalaX/common/widgets/article_content.dart';
+import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'index.dart';
@@ -114,7 +116,9 @@ class HtmlHttp {
           try {
             opusContent = jsonDecode(jsonString)['readInfo']['content'];
             try {
-              opusContent = jsonDecode(opusContent);
+              opusContent = (jsonDecode(opusContent)['ops'] as List)
+                  .map((item) => ArticleContentModel.fromJson(item))
+                  .toList();
               isJsonContent = true;
             } catch (e) {
               print('second: $e');
