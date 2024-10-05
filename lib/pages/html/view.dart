@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/article_content.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -219,120 +220,83 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       ),
       body: Stack(
         children: [
-          OrientationBuilder(builder: (context, orientation) {
-            double padding = max(context.width / 2 - Grid.maxRowWidth, 0);
-            return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: orientation == Orientation.portrait
-                      ? _htmlRenderCtr.scrollController
-                      : ScrollController(),
-                  child: Padding(
-                    padding: orientation == Orientation.portrait
-                        ? EdgeInsets.symmetric(horizontal: padding)
-                        : EdgeInsets.only(left: padding / 2),
-                    child: Obx(
-                      () => _htmlRenderCtr.loaded.value
-                          ? Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                                  child: Row(
-                                    children: [
-                                      NetworkImgLayer(
-                                        width: 40,
-                                        height: 40,
-                                        type: 'avatar',
-                                        src: _htmlRenderCtr.response['avatar']!,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(_htmlRenderCtr.response['uname'],
-                                              style: TextStyle(
-                                                fontSize: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall!
-                                                    .fontSize,
-                                              )),
-                                          Text(
-                                            _htmlRenderCtr
-                                                .response['updateTime'],
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
-                                              fontSize: Theme.of(context)
-                                                  .textTheme
-                                                  .labelSmall!
-                                                  .fontSize,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                                  child: LayoutBuilder(
-                                    builder: (context, boxConstraints) {
-                                      return HtmlRender(
-                                        htmlContent:
-                                            _htmlRenderCtr.response['content'],
-                                        constrainedWidth:
-                                            boxConstraints.maxWidth,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                if (orientation == Orientation.portrait) ...[
-                                  Divider(
-                                      thickness: 8,
-                                      color: Theme.of(context)
-                                          .dividerColor
-                                          .withOpacity(0.05)),
-                                  replyHeader(),
-                                  Obx(
-                                    () => replyList(
-                                        _htmlRenderCtr.loadingState.value),
-                                  ),
-                                ]
-                              ],
-                            )
-                          : const SizedBox(),
-                    ),
-                  ),
-                ),
-              ),
-              if (orientation == Orientation.landscape) ...[
-                VerticalDivider(
-                    thickness: 8,
-                    color: Theme.of(context).dividerColor.withOpacity(0.05)),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _htmlRenderCtr.scrollController,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: padding / 2),
-                      child: Column(
-                        children: [
-                          replyHeader(),
+          OrientationBuilder(
+            builder: (context, orientation) {
+              double padding = max(context.width / 2 - Grid.maxRowWidth, 0);
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomScrollView(
+                      controller: orientation == Orientation.portrait
+                          ? _htmlRenderCtr.scrollController
+                          : ScrollController(),
+                      slivers: [
+                        SliverPadding(
+                          padding: orientation == Orientation.portrait
+                              ? EdgeInsets.symmetric(horizontal: padding)
+                              : EdgeInsets.only(left: padding / 2),
+                          sliver: SliverToBoxAdapter(
+                            child: Obx(
+                              () => _htmlRenderCtr.loaded.value
+                                  ? _buildHeader
+                                  : const SizedBox(),
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: orientation == Orientation.portrait
+                              ? EdgeInsets.symmetric(horizontal: padding)
+                              : EdgeInsets.only(left: padding / 2),
+                          sliver: _buildContent,
+                        ),
+                        if (orientation == Orientation.portrait) ...[
+                          SliverToBoxAdapter(
+                            child: Divider(
+                              thickness: 8,
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withOpacity(0.05),
+                            ),
+                          ),
+                          SliverToBoxAdapter(child: replyHeader()),
                           Obx(
                             () => replyList(_htmlRenderCtr.loadingState.value),
                           ),
                         ],
-                      ),
+                      ],
                     ),
                   ),
-                ),
-              ]
-            ]);
-          }),
+                  if (orientation == Orientation.landscape) ...[
+                    VerticalDivider(
+                        thickness: 8,
+                        color:
+                            Theme.of(context).dividerColor.withOpacity(0.05)),
+                    Expanded(
+                      child: CustomScrollView(
+                        controller: _htmlRenderCtr.scrollController,
+                        slivers: [
+                          SliverPadding(
+                            padding: EdgeInsets.only(right: padding / 2),
+                            sliver: SliverToBoxAdapter(
+                              child: replyHeader(),
+                            ),
+                          ),
+                          SliverPadding(
+                            padding: EdgeInsets.only(right: padding / 2),
+                            sliver: Obx(
+                              () =>
+                                  replyList(_htmlRenderCtr.loadingState.value),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            },
+          ),
           Positioned(
             bottom: MediaQuery.of(context).padding.bottom + 14,
             right: 14,
@@ -365,9 +329,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
   Widget replyList(LoadingState loadingState) {
     return loadingState is Success
-        ? ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+        ? SliverList.builder(
             itemCount: loadingState.response.length + 1,
             itemBuilder: (context, index) {
               if (index == loadingState.response.length) {
@@ -407,19 +369,12 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             },
           )
         : loadingState is Error
-            ? CustomScrollView(
-                shrinkWrap: true,
-                slivers: [
-                  HttpError(
-                    errMsg: loadingState.errMsg,
-                    fn: _htmlRenderCtr.onReload,
-                  ),
-                ],
+            ? HttpError(
+                errMsg: loadingState.errMsg,
+                fn: _htmlRenderCtr.onReload,
               )
-            : ListView.builder(
+            : SliverList.builder(
                 itemCount: 5,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return const VideoReplySkeleton();
                 },
@@ -451,4 +406,59 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       ),
     );
   }
+
+  Widget get _buildHeader => Padding(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+        child: Row(
+          children: [
+            NetworkImgLayer(
+              width: 40,
+              height: 40,
+              type: 'avatar',
+              src: _htmlRenderCtr.response['avatar']!,
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_htmlRenderCtr.response['uname'],
+                    style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
+                    )),
+                Text(
+                  _htmlRenderCtr.response['updateTime'],
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+          ],
+        ),
+      );
+
+  Widget get _buildContent => SliverPadding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+        sliver: Obx(
+          () => _htmlRenderCtr.loaded.value
+              ? _htmlRenderCtr.response['isJsonContent']
+                  ? ArticleContent(
+                      htmlContent: _htmlRenderCtr.response['content'],
+                    )
+                  : SliverToBoxAdapter(
+                      child: LayoutBuilder(
+                        builder: (_, constraints) => HtmlRender(
+                          htmlContent: _htmlRenderCtr.response['content'],
+                          constrainedWidth: constraints.maxWidth,
+                        ),
+                      ),
+                    )
+              : SliverToBoxAdapter(
+                  child: const SizedBox(),
+                ),
+        ),
+      );
 }

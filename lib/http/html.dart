@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'index.dart';
@@ -94,8 +96,31 @@ class HtmlHttp {
     // print(updateTime);
 
     //
-    String opusContent =
+    dynamic opusContent =
         opusDetail.querySelector('#read-article-holder')?.innerHtml ?? '';
+
+    bool isJsonContent = false;
+    if (opusContent.isEmpty) {
+      final regex = RegExp(r'window\.__INITIAL_STATE__\s*=\s*(\{.*?\});');
+      final match = regex.firstMatch(response.data);
+      if (match != null) {
+        final jsonString = match.group(1);
+        if (jsonString != null) {
+          try {
+            opusContent = jsonDecode(jsonString)['readInfo']['content'];
+            try {
+              opusContent = jsonDecode(opusContent);
+              isJsonContent = true;
+            } catch (e) {
+              print('second: $e');
+            }
+          } catch (e) {
+            print('first: $e');
+          }
+        }
+      }
+    }
+
     RegExp digitRegExp = RegExp(r'\d+');
     Iterable<Match> matches = digitRegExp.allMatches(id);
     String number = matches.first.group(0)!;
@@ -105,7 +130,8 @@ class HtmlHttp {
       'uname': uname,
       'updateTime': '',
       'content': opusContent,
-      'commentId': int.parse(number)
+      'isJsonContent': isJsonContent,
+      'commentId': int.parse(number),
     };
   }
 }
