@@ -1,7 +1,9 @@
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
+import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 
 class ArticleContent extends StatelessWidget {
   const ArticleContent({
@@ -30,12 +32,26 @@ class ArticleContent extends StatelessWidget {
           );
         } else if (item.attributes?.clazz == 'normal-img') {
           return LayoutBuilder(
-            builder: (_, constraints) => NetworkImgLayer(
-              width: constraints.maxWidth,
-              height: constraints.maxWidth *
-                  item.insert.nativeImage?.height /
-                  item.insert.nativeImage?.width,
-              src: item.insert.nativeImage?.url,
+            builder: (_, constraints) => GestureDetector(
+              onTap: () {
+                showDialog(
+                  useSafeArea: false,
+                  context: context,
+                  builder: (context) {
+                    return ImagePreview(
+                      initialPage: 0,
+                      imgList: [item.insert.nativeImage?.url],
+                    );
+                  },
+                );
+              },
+              child: NetworkImgLayer(
+                width: constraints.maxWidth,
+                height: constraints.maxWidth *
+                    item.insert.nativeImage?.height /
+                    item.insert.nativeImage?.width,
+                src: item.insert.nativeImage?.url,
+              ),
             ),
           );
           // return image(

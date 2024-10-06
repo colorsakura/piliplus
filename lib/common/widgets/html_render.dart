@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../utils/storage.dart';
@@ -58,11 +59,25 @@ class HtmlRender extends StatelessWidget {
               //   width: isEmote ? 22 : null,
               //   height: isEmote ? 22 : null,
               // );
-              return NetworkImgLayer(
-                width: isEmote ? 22 : constrainedWidth,
-                height: isEmote ? 22 : 200,
-                src: imgUrl,
-                ignoreHeight: !isEmote,
+              return GestureDetector(
+                onTap: () {
+                  showDialog(
+                    useSafeArea: false,
+                    context: context,
+                    builder: (context) {
+                      return ImagePreview(
+                        initialPage: 0,
+                        imgList: [imgUrl],
+                      );
+                    },
+                  );
+                },
+                child: NetworkImgLayer(
+                  width: isEmote ? 22 : constrainedWidth,
+                  height: isEmote ? 22 : 200,
+                  src: imgUrl,
+                  ignoreHeight: !isEmote,
+                ),
               );
             } catch (err) {
               return const SizedBox();
