@@ -150,7 +150,7 @@ class LoginPageController extends GetxController
     final result = await UserHttp.userInfo();
     if (result['status'] && result['data'].isLogin) {
       SmartDialog.showToast('登录成功，当前采用「'
-          '${GStorage.setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'web')}'
+          '${GStorage.setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'app')}'
           '端」推荐');
       Box userInfoCache = GStorage.userInfo;
       await userInfoCache.put('userInfoCache', result['data']);

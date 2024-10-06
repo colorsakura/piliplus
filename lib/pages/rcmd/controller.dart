@@ -14,7 +14,7 @@ class RcmdController extends PopupController {
     enableSaveLastData = GStorage.setting
         .get(SettingBoxKey.enableSaveLastData, defaultValue: false);
     defaultRcmdType = GStorage.setting
-        .get(SettingBoxKey.defaultRcmdType, defaultValue: 'web');
+        .get(SettingBoxKey.defaultRcmdType, defaultValue: 'app');
 
     currentPage = 0;
     queryData();

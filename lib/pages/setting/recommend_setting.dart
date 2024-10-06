@@ -35,7 +35,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
     super.initState();
     // 首页默认推荐类型
     defaultRcmdType =
-        setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'web');
+        setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'app');
     userInfo = userInfoCache.get('userInfoCache');
     userLogin = userInfo != null;
     accessKeyInfo = localCache.get(LocalCacheKey.accessKey, defaultValue: null);
