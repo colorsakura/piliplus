@@ -26,7 +26,7 @@ class ActionPanel extends StatefulWidget {
 
 class _ActionPanelState extends State<ActionPanel> {
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
-  late ModuleStatModel stat;
+  // late ModuleStatModel stat;
   bool isProcessing = false;
   void Function()? handleState(Future Function() action) {
     return isProcessing
@@ -38,11 +38,11 @@ class _ActionPanelState extends State<ActionPanel> {
           };
   }
 
-  @override
-  void initState() {
-    super.initState();
-    stat = widget.item!.modules.moduleStat;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   stat = widget.item!.modules.moduleStat;
+  // }
 
   // 动态点赞
   Future onLikeDynamic() async {
@@ -89,7 +89,18 @@ class _ActionPanelState extends State<ActionPanel> {
                 context: context,
                 isScrollControlled: true,
                 useSafeArea: true,
-                builder: (_) => RepostPanel(item: widget.item),
+                builder: (_) => RepostPanel(
+                  item: widget.item,
+                  callback: () {
+                    int count = int.tryParse(
+                            widget.item!.modules.moduleStat.forward?.count ??
+                                '0') ??
+                        0;
+                    widget.item!.modules.moduleStat.forward!.count =
+                        (count + 1).toString();
+                    setState(() {});
+                  },
+                ),
               );
             },
             icon: const Icon(
@@ -101,7 +112,7 @@ class _ActionPanelState extends State<ActionPanel> {
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               foregroundColor: Theme.of(context).colorScheme.outline,
             ),
-            label: Text(stat.forward!.count ?? ''),
+            label: Text(widget.item!.modules.moduleStat.forward!.count ?? '转发'),
           ),
         ),
         Expanded(
@@ -118,7 +129,7 @@ class _ActionPanelState extends State<ActionPanel> {
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               foregroundColor: Theme.of(context).colorScheme.outline,
             ),
-            label: Text(stat.comment!.count ?? ''),
+            label: Text(widget.item!.modules.moduleStat.comment!.count ?? '评论'),
           ),
         ),
         Expanded(
@@ -126,12 +137,15 @@ class _ActionPanelState extends State<ActionPanel> {
           child: TextButton.icon(
             onPressed: handleState(onLikeDynamic),
             icon: Icon(
-              stat.like!.status!
+              widget.item!.modules.moduleStat.like!.status!
                   ? FontAwesomeIcons.solidThumbsUp
                   : FontAwesomeIcons.thumbsUp,
               size: 16,
-              color: stat.like!.status! ? primary : color,
-              semanticLabel: stat.like!.status! ? "已赞" : "点赞",
+              color: widget.item!.modules.moduleStat.like!.status!
+                  ? primary
+                  : color,
+              semanticLabel:
+                  widget.item!.modules.moduleStat.like!.status! ? "已赞" : "点赞",
             ),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -143,10 +157,13 @@ class _ActionPanelState extends State<ActionPanel> {
                 return ScaleTransition(scale: animation, child: child);
               },
               child: Text(
-                stat.like!.count ?? '',
-                key: ValueKey<String>(stat.like!.count ?? '点赞'),
+                widget.item!.modules.moduleStat.like!.count ?? '点赞',
+                key: ValueKey<String>(
+                    widget.item!.modules.moduleStat.like!.count ?? '点赞'),
                 style: TextStyle(
-                  color: stat.like!.status! ? primary : color,
+                  color: widget.item!.modules.moduleStat.like!.status!
+                      ? primary
+                      : color,
                 ),
               ),
             ),
@@ -158,9 +175,15 @@ class _ActionPanelState extends State<ActionPanel> {
 }
 
 class RepostPanel extends StatefulWidget {
-  const RepostPanel({super.key, required this.item});
+  const RepostPanel({
+    super.key,
+    required this.item,
+    required this.callback,
+  });
 
   final dynamic item;
+  final Function callback;
+
   @override
   State<RepostPanel> createState() => _RepostPanelState();
 }
@@ -180,6 +203,7 @@ class _RepostPanelState extends State<RepostPanel> {
     if (result['status']) {
       Get.back();
       SmartDialog.showToast('转发成功');
+      widget.callback();
     } else {
       SmartDialog.showToast(result['msg']);
     }
