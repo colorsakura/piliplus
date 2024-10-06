@@ -86,14 +86,15 @@ class HistoryItem extends StatelessWidget {
               String heroTag = Utils.makeHeroTag(cid);
               var epid = result['data'].epId;
               if (epid != null) {
-                Get.toNamed(
-                  '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${result['data'].epId}',
-                  arguments: {
-                    'pic': pic,
-                    'heroTag': heroTag,
-                    'videoType': SearchType.media_bangumi,
-                  },
-                );
+                Utils.viewBangumi(epId: epid);
+                // Get.toNamed(
+                //   '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${result['data'].epId}',
+                //   arguments: {
+                //     'pic': pic,
+                //     'heroTag': heroTag,
+                //     'videoType': SearchType.media_bangumi,
+                //   },
+                // );
               } else {
                 int cid = videoItem.history.cid ??
                     // videoItem.history.oid ??

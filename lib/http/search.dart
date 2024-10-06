@@ -168,8 +168,10 @@ class SearchHttp {
     }
   }
 
-  static Future<Map<String, dynamic>> bangumiInfo(
-      {int? seasonId, int? epId}) async {
+  static Future<Map<String, dynamic>> bangumiInfo({
+    dynamic seasonId,
+    dynamic epId,
+  }) async {
     final Map<String, dynamic> data = {};
     if (seasonId != null) {
       data['season_id'] = seasonId;
