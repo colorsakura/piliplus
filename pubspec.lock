@@ -1576,10 +1576,11 @@ packages:
   share_plus:
     dependency: "direct main"
     description:
-      name: share_plus
-      sha256: "468c43f285207c84bcabf5737f33b914ceb8eb38398b91e5e3ad1698d1b72a52"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/share_plus/share_plus"
+      ref: main
+      resolved-ref: b798deabfb1e7133d11eee8ac82a71fe19b24211
+      url: "https://github.com/bggRGjQaUbCoE/plus_plugins.git"
+    source: git
     version: "10.0.2"
   share_plus_platform_interface:
     dependency: transitive

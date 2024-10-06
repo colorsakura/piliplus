@@ -65,7 +65,12 @@ dependencies:
   # 权限
   permission_handler: ^11.0.1
   # 分享
-  share_plus: ^10.0.2
+  # share_plus: ^10.0.2
+  share_plus:
+    git:
+      url: https://github.com/bggRGjQaUbCoE/plus_plugins.git
+      ref: main
+      path: packages/share_plus/share_plus
   # cookie 管理
   webview_cookie_manager: ^2.0.6
   # 浏览器

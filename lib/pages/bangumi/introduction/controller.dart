@@ -343,7 +343,7 @@ class BangumiIntroController extends CommonController {
                   ),
                   onTap: () {
                     Get.back();
-                    Share.share(videoUrl).whenComplete(() {});
+                    Share.share(videoUrl);
                   },
                 ),
               ],
