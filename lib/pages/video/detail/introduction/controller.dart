@@ -306,6 +306,9 @@ class VideoIntroController extends GetxController {
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return PayCoinsPage(
             callback: coinVideo,
+            copyright: (queryVideoIntroData.value['data'] as VideoDetailData?)
+                    ?.copyright ??
+                1,
           );
         },
         transitionDuration: const Duration(milliseconds: 225),
@@ -723,9 +726,14 @@ class VideoIntroController extends GetxController {
 }
 
 class PayCoinsPage extends StatefulWidget {
-  const PayCoinsPage({super.key, required this.callback});
+  const PayCoinsPage({
+    super.key,
+    required this.callback,
+    this.copyright = 1,
+  });
 
   final Function callback;
+  final int copyright;
 
   @override
   State<PayCoinsPage> createState() => _PayCoinsPageState();
@@ -829,7 +837,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
               Row(
                 children: [
                   Visibility(
-                    visible: !_isPaying,
+                    visible: !_isPaying && widget.copyright == 1,
                     maintainSize: true,
                     maintainAnimation: true,
                     maintainState: true,
@@ -855,7 +863,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                     child: SizedBox(
                       height: 100,
                       child: PageView.builder(
-                        itemCount: 2,
+                        itemCount: widget.copyright == 1 ? 2 : 1,
                         controller: _controller,
                         onPageChanged: (index) => setState(() {
                           _scale();
@@ -920,7 +928,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                     ),
                   ),
                   Visibility(
-                    visible: !_isPaying,
+                    visible: !_isPaying && widget.copyright == 1,
                     maintainSize: true,
                     maintainAnimation: true,
                     maintainState: true,
@@ -994,7 +1002,8 @@ class _PayCoinsPageState extends State<PayCoinsPage>
       if (e.delta.dy < 0) {
         _onPayCoin();
       }
-    } else if (e.delta.dx.abs() > max(2, e.delta.dy.abs())) {
+    } else if (widget.copyright == 1 &&
+        e.delta.dx.abs() > max(2, e.delta.dy.abs())) {
       if (e.delta.dx > 0) {
         if (_index == 1) {
           _onScroll(0);
