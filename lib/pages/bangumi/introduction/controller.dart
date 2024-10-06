@@ -5,6 +5,7 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -332,7 +333,7 @@ class BangumiIntroController extends CommonController {
                   ),
                   onTap: () {
                     Get.back();
-                    launchUrl(Uri.parse(videoUrl));
+                    Utils.launchURL(videoUrl);
                   },
                 ),
                 ListTile(

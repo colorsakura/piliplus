@@ -91,7 +91,10 @@ class Utils {
   static launchURL(String url) async {
     try {
       final Uri uri = Uri.parse(url);
-      if (!await launchUrl(uri)) {
+      if (!await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      )) {
         SmartDialog.showToast('Could not launch $url');
       }
     } catch (e) {

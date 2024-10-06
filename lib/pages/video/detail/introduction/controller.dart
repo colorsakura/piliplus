@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -440,7 +441,7 @@ class VideoIntroController extends GetxController {
                   ),
                   onTap: () {
                     Get.back();
-                    launchUrl(Uri.parse(videoUrl));
+                    Utils.launchURL(videoUrl);
                   },
                 ),
                 ListTile(

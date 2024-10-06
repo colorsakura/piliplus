@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _WebviewPageState extends State<WebviewPage> {
             IconButton(
               tooltip: '用外部浏览器打开',
               onPressed: () {
-                launchUrl(Uri.parse(_webviewController.url));
+                Utils.launchURL(_webviewController.url);
               },
               icon: Icon(Icons.open_in_browser_outlined,
                   color: Theme.of(context).colorScheme.primary),
