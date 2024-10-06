@@ -123,20 +123,21 @@ class HistoryController extends GetxController {
   }
 
   // 删除某条历史记录
-  // Future delHistory(kid, business) async {
-  //   String resKid = 'archive_$kid';
-  //   if (business == 'live') {
-  //     resKid = 'live_$kid';
-  //   } else if (business.contains('article')) {
-  //     resKid = 'article_$kid';
-  //   }
+  Future delHistory(kid, business) async {
+    // String resKid = 'archive_$kid';
+    // if (business == 'live') {
+    //   resKid = 'live_$kid';
+    // } else if (business.contains('article')) {
+    //   resKid = 'article_$kid';
+    // }
 
-  //   var res = await UserHttp.delHistory(resKid);
-  //   if (res['status']) {
-  //     historyList.removeWhere((e) => e.kid == kid);
-  //     SmartDialog.showToast(res['msg']);
-  //   }
-  // }
+    // var res = await UserHttp.delHistory(resKid);
+    // if (res['status']) {
+    //   historyList.removeWhere((e) => e.kid == kid);
+    //   SmartDialog.showToast(res['msg']);
+    // }
+    _onDelete(historyList.where((e) => e.kid == kid).toList());
+  }
 
   // 删除已看历史记录
   void onDelHistory() {
