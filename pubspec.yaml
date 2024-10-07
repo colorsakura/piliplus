@@ -158,7 +158,12 @@ dependencies:
   marquee: ^2.2.3
   #富文本
   extended_text: ^14.0.1
-  chat_bottom_container: ^0.2.0
+  # chat_bottom_container: ^0.2.0
+  chat_bottom_container:
+    git:
+      url: https://github.com/pye52/flutter_chat_packages.git
+      ref: main
+      path: packages/chat_bottom_container
   image_picker: ^1.1.2
 
 

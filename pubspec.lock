@@ -258,10 +258,11 @@ packages:
   chat_bottom_container:
     dependency: "direct main"
     description:
-      name: chat_bottom_container
-      sha256: fc2e690892699604524bf4a4c7ba9b3281ae060c90154b55b38116ce7812c3d8
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/chat_bottom_container"
+      ref: main
+      resolved-ref: "5bd612a5ee2f0025460ec50090044209b3d43cb2"
+      url: "https://github.com/pye52/flutter_chat_packages.git"
+    source: git
     version: "0.2.0"
   checked_yaml:
     dependency: transitive

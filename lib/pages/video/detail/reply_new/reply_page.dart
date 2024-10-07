@@ -7,7 +7,6 @@ import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/no_splash_factory.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/models/video/reply/emote.dart';
@@ -45,7 +44,7 @@ class ReplyPage extends StatefulWidget {
 }
 
 class _ReplyPageState extends State<ReplyPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final _focusNode = FocusNode();
   late final _controller = ChatBottomPanelContainerController<PanelType>();
   late final TextEditingController _replyContentController =
@@ -65,6 +64,7 @@ class _ReplyPageState extends State<ReplyPage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     if (widget.savedReply != null && widget.savedReply!.isNotEmpty) {
       _enablePublish = true;
@@ -87,37 +87,69 @@ class _ReplyPageState extends State<ReplyPage>
     _enableSend.close();
     _focusNode.dispose();
     _replyContentController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  void _requestFocus() async {
+    await Future.delayed(const Duration(microseconds: 200));
+    _focusNode.requestFocus();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (mounted && _selectKeyboard) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+          if (_focusNode.hasFocus) {
+            _focusNode.unfocus();
+            _requestFocus();
+          } else {
+            _requestFocus();
+          }
+        });
+      }
+    } else if (state == AppLifecycleState.paused) {
+      _controller.keepChatPanel();
+      if (_focusNode.hasFocus) {
+        _focusNode.unfocus();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
-        removeTop: true,
-        context: context,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.transparent,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: InkWell(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  splashFactory: NoSplashFactory(),
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                    Get.back();
-                  },
+      removeTop: true,
+      context: context,
+      child: GestureDetector(
+        onTap: Get.back,
+        child: LayoutBuilder(
+          builder: (_, constraints) {
+            bool isH = constraints.maxWidth > constraints.maxHeight;
+            late double padding = constraints.maxWidth * 0.12;
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
+              child: Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.transparent,
+                body: GestureDetector(
+                  onTap: () {},
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _buildInputView(),
+                      _buildImagePreview(),
+                      _buildPanelContainer(),
+                    ],
+                  ),
                 ),
               ),
-              _buildInputView(),
-              _buildImagePreview(),
-              _buildPanelContainer(),
-            ],
-          ),
-        ));
+            );
+          },
+        ),
+      ),
+    );
   }
 
   Widget _buildPanelContainer() {
@@ -160,7 +192,7 @@ class _ReplyPageState extends State<ReplyPage>
   }
 
   Widget _buildEmojiPickerPanel() {
-    double height = 200;
+    double height = 170;
     final keyboardHeight = _controller.keyboardHeight;
     if (keyboardHeight != 0) {
       height = max(height, keyboardHeight);
@@ -213,6 +245,7 @@ class _ReplyPageState extends State<ReplyPage>
   Widget _buildInputView() {
     return Container(
       clipBehavior: Clip.hardEdge,
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
