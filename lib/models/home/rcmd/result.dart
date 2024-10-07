@@ -56,9 +56,10 @@ class RecVideoItemAppModel {
         ? json['player_args']['aid']
         : int.parse(json['param'] ?? '-1');
     aid = json['player_args'] != null ? json['player_args']['aid'] : -1;
-    bvid = json['player_args'] != null
-        ? IdUtils.av2bv(json['player_args']['aid'])
-        : '';
+    bvid = json['bvid'] ??
+        (json['player_args'] != null
+            ? IdUtils.av2bv(json['player_args']['aid'])
+            : '');
     cid = json['player_args'] != null ? json['player_args']['cid'] : -1;
     pic = json['cover'];
     stat = RcmdStat.fromJson(json);
