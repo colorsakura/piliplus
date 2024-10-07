@@ -86,7 +86,9 @@ class VideoIntroController extends GetxController {
     super.onInit();
     userInfo = userInfoCache.get('userInfoCache');
     try {
-      heroTag = Get.arguments['heroTag'];
+      if (heroTag.isEmpty) {
+        heroTag = Get.arguments['heroTag'];
+      }
       bvid = Get.parameters['bvid']!;
     } catch (_) {}
     if (Get.arguments.isNotEmpty) {
