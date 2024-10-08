@@ -409,7 +409,7 @@ class PiliScheme {
           if (query != null && query['id'] != null) {
             id = 'cv${matchNum(query['id']!).first}';
           } else {
-            id = 'cv${matchNum(path).first}';
+            id = 'cv${matchNum(path).firstOrNull}';
           }
           Utils.toDupNamed('/htmlRender', parameters: {
             'url': value.toString(),
