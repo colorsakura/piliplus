@@ -898,8 +898,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     ? null
                     : Obx(
                         () => PlDanmaku(
-                          key: Key(videoDetailController.danmakuCid.value
-                              .toString()),
+                          // key: Key(videoDetailController.danmakuCid.value
+                          //     .toString()),
                           cid: videoDetailController.danmakuCid.value,
                           playerController: plPlayerController!,
                         ),
@@ -998,8 +998,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       headerControl: videoDetailController.headerControl,
                       danmuWidget: Obx(
                         () => PlDanmaku(
-                          key: Key(videoDetailController.danmakuCid.value
-                              .toString()),
+                          // key: Key(videoDetailController.danmakuCid.value
+                          //     .toString()),
                           cid: videoDetailController.danmakuCid.value,
                           playerController: plPlayerController!,
                         ),

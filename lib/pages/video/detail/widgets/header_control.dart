@@ -56,21 +56,23 @@ class _HeaderControlState extends State<HeaderControl> {
   final Box<dynamic> localCache = GStorage.localCache;
   final Box<dynamic> videoStorage = GStorage.video;
   double buttonSpace = 8;
-  bool isFullScreen = false;
+  // bool isFullScreen = false;
   late String heroTag;
   late VideoIntroController videoIntroController;
   late VideoDetailData videoDetail;
-  late StreamSubscription<bool> fullScreenStatusListener;
+  // late StreamSubscription<bool> fullScreenStatusListener;
   late bool horizontalScreen;
   RxString now = ''.obs;
   late Timer clock;
   late String defaultCDNService;
 
+  bool get isFullScreen => widget.controller!.isFullScreen.value;
+
   @override
   void initState() {
     super.initState();
     videoInfo = widget.videoDetailCtr!.data;
-    listenFullScreenStatus();
+    // listenFullScreenStatus();
     heroTag = widget.heroTag;
     // if (Get.arguments != null && Get.arguments['heroTag'] != null) {
     //   heroTag = Get.arguments['heroTag'];
@@ -83,23 +85,23 @@ class _HeaderControlState extends State<HeaderControl> {
     startClock();
   }
 
-  void listenFullScreenStatus() {
-    fullScreenStatusListener = widget
-        .videoDetailCtr!.plPlayerController.isFullScreen
-        .listen((bool status) {
-      isFullScreen = status;
+  // void listenFullScreenStatus() {
+  //   fullScreenStatusListener = widget
+  //       .videoDetailCtr!.plPlayerController.isFullScreen
+  //       .listen((bool status) {
+  //     isFullScreen = status;
 
-      /// TODO setState() called after dispose()
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
+  //     /// TODO setState() called after dispose()
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
     widget.floating?.dispose();
-    fullScreenStatusListener.cancel();
+    // fullScreenStatusListener.cancel();
     clock.cancel();
     super.dispose();
   }
@@ -1318,6 +1320,7 @@ class _HeaderControlState extends State<HeaderControl> {
     final _ = widget.controller!;
     // final bool isLandscape =
     //     MediaQuery.of(context).orientation == Orientation.landscape;
+
     bool equivalentFullScreen = !isFullScreen &&
         !horizontalScreen &&
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -1344,7 +1347,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    if (widget.controller!.isFullScreen.value) {
+                    if (isFullScreen) {
                       widget.controller!.triggerFullScreen(status: false);
                     } else if (MediaQuery.of(context).orientation ==
                             Orientation.landscape &&
