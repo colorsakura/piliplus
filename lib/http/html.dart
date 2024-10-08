@@ -16,16 +16,16 @@ class HtmlHttp {
     if (response.data is! String && response.data is! List<int>) {
       return;
     }
-    if (response.data.contains('Redirecting to')) {
-      RegExp regex = RegExp(r'//([\w\.]+)/(\w+)/(\w+)');
-      Match match = regex.firstMatch(response.data)!;
-      String matchedString = match.group(0)!;
-      response = await Request().get(
-        'https:$matchedString/',
-        extra: {'ua': 'pc'},
-      );
-    }
     try {
+      if (response.data.contains('Redirecting to')) {
+        RegExp regex = RegExp(r'//([\w\.]+)/(\w+)/(\w+)');
+        Match match = regex.firstMatch(response.data)!;
+        String matchedString = match.group(0)!;
+        response = await Request().get(
+          'https:$matchedString/',
+          extra: {'ua': 'pc'},
+        );
+      }
       Document rootTree = parse(response.data);
       // log(response.data.body.toString());
       Element body = rootTree.body!;
@@ -80,67 +80,72 @@ class HtmlHttp {
     if (response.data is! String && response.data is! List<int>) {
       return;
     }
-    Document rootTree = parse(response.data);
-    Element body = rootTree.body!;
-    Element appDom = body.querySelector('#app')!;
-    Element authorHeader = appDom.querySelector('.up-left')!;
-    // 头像
-    // String avatar =
-    //     authorHeader.querySelector('.bili-avatar-img')!.attributes['data-src']!;
-    // 正则寻找形如"author":{"mid":\d+,"name":".*","face":"xxxx"的匹配项
-    String avatar = RegExp(r'"author":\{"mid":\d+?,"name":".+?","face":"(.+?)"')
-        .firstMatch(response.data)!
-        .group(1)!
-        .replaceAll(r'\u002F', '/')
-        .split('@')[0];
-    // print(avatar);
-    String uname = authorHeader.querySelector('.up-name')!.text.trim();
-    // 动态详情
-    Element opusDetail = appDom.querySelector('.article-content')!;
-    // 发布时间
-    // String updateTime =
-    //     opusDetail.querySelector('.opus-module-author__pub__text')!.text;
-    // print(updateTime);
+    try {
+      Document rootTree = parse(response.data);
+      Element body = rootTree.body!;
+      Element appDom = body.querySelector('#app')!;
+      Element authorHeader = appDom.querySelector('.up-left')!;
+      // 头像
+      // String avatar =
+      //     authorHeader.querySelector('.bili-avatar-img')!.attributes['data-src']!;
+      // 正则寻找形如"author":{"mid":\d+,"name":".*","face":"xxxx"的匹配项
+      String avatar =
+          RegExp(r'"author":\{"mid":\d+?,"name":".+?","face":"(.+?)"')
+              .firstMatch(response.data)!
+              .group(1)!
+              .replaceAll(r'\u002F', '/')
+              .split('@')[0];
+      // print(avatar);
+      String uname = authorHeader.querySelector('.up-name')!.text.trim();
+      // 动态详情
+      Element opusDetail = appDom.querySelector('.article-content')!;
+      // 发布时间
+      // String updateTime =
+      //     opusDetail.querySelector('.opus-module-author__pub__text')!.text;
+      // print(updateTime);
 
-    //
-    dynamic opusContent =
-        opusDetail.querySelector('#read-article-holder')?.innerHtml ?? '';
+      //
+      dynamic opusContent =
+          opusDetail.querySelector('#read-article-holder')?.innerHtml ?? '';
 
-    bool isJsonContent = false;
-    if (opusContent.isEmpty) {
-      final regex = RegExp(r'window\.__INITIAL_STATE__\s*=\s*(\{.*?\});');
-      final match = regex.firstMatch(response.data);
-      if (match != null) {
-        final jsonString = match.group(1);
-        if (jsonString != null) {
-          try {
-            opusContent = jsonDecode(jsonString)['readInfo']['content'];
+      bool isJsonContent = false;
+      if (opusContent.isEmpty) {
+        final regex = RegExp(r'window\.__INITIAL_STATE__\s*=\s*(\{.*?\});');
+        final match = regex.firstMatch(response.data);
+        if (match != null) {
+          final jsonString = match.group(1);
+          if (jsonString != null) {
             try {
-              opusContent = (jsonDecode(opusContent)['ops'] as List)
-                  .map((item) => ArticleContentModel.fromJson(item))
-                  .toList();
-              isJsonContent = true;
+              opusContent = jsonDecode(jsonString)['readInfo']['content'];
+              try {
+                opusContent = (jsonDecode(opusContent)['ops'] as List)
+                    .map((item) => ArticleContentModel.fromJson(item))
+                    .toList();
+                isJsonContent = true;
+              } catch (e) {
+                print('second: $e');
+              }
             } catch (e) {
-              print('second: $e');
+              print('first: $e');
             }
-          } catch (e) {
-            print('first: $e');
           }
         }
       }
-    }
 
-    RegExp digitRegExp = RegExp(r'\d+');
-    Iterable<Match> matches = digitRegExp.allMatches(id);
-    String number = matches.first.group(0)!;
-    return {
-      'status': true,
-      'avatar': avatar,
-      'uname': uname,
-      'updateTime': '',
-      'content': opusContent,
-      'isJsonContent': isJsonContent,
-      'commentId': int.parse(number),
-    };
+      RegExp digitRegExp = RegExp(r'\d+');
+      Iterable<Match> matches = digitRegExp.allMatches(id);
+      String number = matches.first.group(0)!;
+      return {
+        'status': true,
+        'avatar': avatar,
+        'uname': uname,
+        'updateTime': '',
+        'content': opusContent,
+        'isJsonContent': isJsonContent,
+        'commentId': int.parse(number),
+      };
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
