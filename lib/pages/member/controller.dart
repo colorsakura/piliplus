@@ -36,8 +36,10 @@ class MemberController extends GetxController {
     mid = mid ?? int.parse(Get.parameters['mid']!);
     userInfo = userInfoCache.get('userInfoCache');
     ownerMid = userInfo != null ? userInfo.mid : -1;
-    face.value = Get.arguments['face'] ?? '';
-    heroTag = Get.arguments['heroTag'] ?? '';
+    try {
+      face.value = Get.arguments['face'] ?? '';
+      heroTag = Get.arguments['heroTag'] ?? '';
+    } catch (_) {}
     relationSearch();
   }
 

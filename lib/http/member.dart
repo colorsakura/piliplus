@@ -210,15 +210,44 @@ class MemberHttp {
     }
   }
 
+  static Future specialAction({
+    int? fid,
+    bool isAdd = true,
+  }) async {
+    var res = await Request().post(
+      isAdd ? Api.addSpecial : Api.delSpecial,
+      data: {
+        'fid': fid,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   // 设置分组
   static Future addUsers(int? fids, String? tagids) async {
-    var res = await Request().post(Api.addUsers, queryParameters: {
-      'fids': fids,
-      'tagids': tagids ?? '0',
-      'csrf': await Request.getCsrf(),
-    }, data: {
-      'cross_domain': true
-    });
+    var res = await Request().post(
+      Api.addUsers,
+      data: {
+        'fids': fids,
+        'tagids': tagids ?? '0',
+        'csrf': await Request.getCsrf(),
+        // 'cross_domain': true
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': [], 'msg': '操作成功'};
     } else {

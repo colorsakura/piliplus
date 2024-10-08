@@ -390,6 +390,10 @@ class Api {
   // 0 添加至默认分组  否则使用,分割tagid
   static const String addUsers = '/x/relation/tags/addUsers';
 
+  static const String addSpecial = '/x/relation/tag/special/add';
+
+  static const String delSpecial = '/x/relation/tag/special/del';
+
   // 获取指定分组下的up
   static const String followUpGroup = '/x/relation/tag';
 

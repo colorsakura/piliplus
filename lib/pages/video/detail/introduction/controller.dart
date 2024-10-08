@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,7 +31,8 @@ import '../../../../models/model_hot_video_item.dart';
 import '../related/index.dart';
 import 'widgets/group_panel.dart';
 
-class VideoIntroController extends GetxController {
+class VideoIntroController extends GetxController
+    with GetTickerProviderStateMixin {
   // 视频bvid
   late String bvid;
 
@@ -507,15 +509,140 @@ class VideoIntroController extends GetxController {
       SmartDialog.showToast('账号未登录');
       return;
     }
+    if (videoDetail.value.owner?.mid == null) {
+      return;
+    }
     feedBack();
     int mid = videoDetail.value.owner!.mid!;
-    MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
-        tag: mid.toString());
-    await _.getInfo();
-    if (context.mounted) await _.actionRelationMod(context);
-    followStatus['attribute'] = _.attribute.value;
-    followStatus.refresh();
-    Get.delete<MemberController>(tag: mid.toString());
+    if ((followStatus['attribute'] ?? 0) == 0) {
+      var res = await VideoHttp.relationMod(
+        mid: mid,
+        act: 1,
+        reSrc: 11,
+      );
+      SmartDialog.showToast(res['status'] ? "关注成功" : res['msg']);
+      if (res['status']) {
+        followStatus['attribute'] = 2;
+        followStatus.refresh();
+      }
+    } else {
+      /// TODO
+      showDialog(
+        context: context,
+        builder: (_) {
+          bool isSpecialFollowed = followStatus['special'] == 1;
+          String text = isSpecialFollowed ? '移除特别关注' : '加入特别关注';
+          return AlertDialog(
+            clipBehavior: Clip.hardEdge,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  dense: true,
+                  onTap: () async {
+                    Get.back();
+                    final res = await MemberHttp.specialAction(
+                      fid: mid,
+                      isAdd: !isSpecialFollowed,
+                    );
+                    if (res['status']) {
+                      followStatus['special'] = isSpecialFollowed ? 0 : 1;
+                      List tags = followStatus['tag'] ?? [];
+                      if (isSpecialFollowed) {
+                        tags.remove(-10);
+                      } else {
+                        tags.add(-10);
+                      }
+                      followStatus['tag'] = tags;
+                      followStatus.refresh();
+                      SmartDialog.showToast('$text成功');
+                    } else {
+                      SmartDialog.showToast(res['msg']);
+                    }
+                  },
+                  title: Text(
+                    text,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  onTap: () async {
+                    Get.back();
+                    dynamic result = await showModalBottomSheet(
+                      context: context,
+                      useSafeArea: true,
+                      isScrollControlled: true,
+                      transitionAnimationController: AnimationController(
+                        duration: const Duration(milliseconds: 200),
+                        vsync: this,
+                      ),
+                      sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+                      builder: (BuildContext context) {
+                        return DraggableScrollableSheet(
+                          minChildSize: 0,
+                          maxChildSize: 1,
+                          initialChildSize: 0.6,
+                          snap: true,
+                          expand: false,
+                          snapSizes: const [0.6],
+                          builder: (BuildContext context,
+                              ScrollController scrollController) {
+                            return GroupPanel(
+                              mid: mid,
+                              tags: followStatus['tag'],
+                              scrollController: scrollController,
+                            );
+                          },
+                        );
+                      },
+                    );
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    if (result == true) {
+                      queryFollowStatus();
+                    }
+                  },
+                  title: const Text(
+                    '设置分组',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  onTap: () async {
+                    Get.back();
+                    var res = await VideoHttp.relationMod(
+                      mid: mid,
+                      act: 2,
+                      reSrc: 11,
+                    );
+                    SmartDialog.showToast(
+                        res['status'] ? "取消关注成功" : res['msg']);
+                    if (res['status']) {
+                      followStatus['attribute'] = 0;
+                      followStatus.refresh();
+                    }
+                  },
+                  title: const Text(
+                    '取消关注',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    // MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
+    //     tag: mid.toString());
+    // await _.getInfo();
+    // if (context.mounted) await _.actionRelationMod(context);
+    // followStatus['attribute'] = _.attribute.value;
+    // followStatus.refresh();
+    // Get.delete<MemberController>(tag: mid.toString());
   }
 
   // 修改分P或番剧分集
