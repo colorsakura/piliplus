@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -56,6 +58,13 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     ));
     await PlPlayerController.seekToIfExists(position, type: 'slider');
     // await player.seekTo(position);
+  }
+
+  @override
+  Future<void> onTaskRemoved() async {
+    if (Platform.isAndroid) {
+      exit(0);
+    }
   }
 
   Future<void> setMediaItem(MediaItem newMediaItem) async {
