@@ -83,6 +83,36 @@ class ReplyHttp {
     }
   }
 
+  static Future hateReply({
+    required int type,
+    required int action,
+    required int oid,
+    required int rpid,
+  }) async {
+    var res = await Request().post(
+      Api.hateReply,
+      data: {
+        'type': type,
+        'oid': oid,
+        'rpid': rpid,
+        'action': action,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {
+        'status': false,
+        'date': [],
+        'msg': res.data['message'],
+      };
+    }
+  }
+
   // 评论点赞
   static Future likeReply({
     required int type,

@@ -143,6 +143,8 @@ class Api {
   // 评论点赞
   static const String likeReply = '/x/v2/reply/action';
 
+  static const String hateReply = '/x/v2/reply/hate';
+
   // 发表评论
   // https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/comment/action.md
   static const String replyAdd = '/x/v2/reply/add';
