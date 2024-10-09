@@ -63,7 +63,7 @@ class _HeaderControlState extends State<HeaderControl> {
   // late StreamSubscription<bool> fullScreenStatusListener;
   late bool horizontalScreen;
   RxString now = ''.obs;
-  late Timer clock;
+  Timer? clock;
   late String defaultCDNService;
 
   bool get isFullScreen => widget.controller!.isFullScreen.value;
@@ -82,7 +82,6 @@ class _HeaderControlState extends State<HeaderControl> {
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
     defaultCDNService = setting.get(SettingBoxKey.CDNService,
         defaultValue: CDNService.backupUrl.code);
-    startClock();
   }
 
   // void listenFullScreenStatus() {
@@ -102,8 +101,20 @@ class _HeaderControlState extends State<HeaderControl> {
   void dispose() {
     widget.floating?.dispose();
     // fullScreenStatusListener.cancel();
-    clock.cancel();
+    clock?.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.of(context).orientation == Orientation.landscape &&
+        (isFullScreen || !horizontalScreen)) {
+      startClock();
+    } else {
+      clock?.cancel();
+      clock = null;
+    }
   }
 
   /// 设置面板
@@ -1307,7 +1318,7 @@ class _HeaderControlState extends State<HeaderControl> {
   }
 
   startClock() {
-    clock = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    clock ??= Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (!mounted) {
         return;
       }
