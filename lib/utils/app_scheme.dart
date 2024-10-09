@@ -223,7 +223,7 @@ class PiliScheme {
         //   },
         // );
       }
-    } else if (scheme == 'https') {
+    } else if (['http', 'https'].contains(scheme)) {
       fullPathPush(value);
     } else if (path.toLowerCase().startsWith('av')) {
       try {
