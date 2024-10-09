@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/http/constants.dart';
+import 'package:PiliPalaX/pages/dynamics/view.dart' show ReplyOption;
 import 'package:dio/dio.dart';
 
 import '../models/msg/account.dart';
@@ -149,6 +150,8 @@ class MsgHttp {
     dynamic dynIdStr, // repost
     dynamic rawText,
     List? pics,
+    int? publishTime,
+    ReplyOption replyOption = ReplyOption.allow,
   }) async {
     String csrf = await Request.getCsrf();
     var res = await Request().post(
@@ -156,17 +159,26 @@ class MsgHttp {
       queryParameters: {
         'platform': 'web',
         'csrf': csrf,
-        'x-bili-device-req-json[platform]': 'web',
-        'x-bili-device-req-json[device]': 'pc',
-        'x-bili-web-req-json[spm_id]': 333.999,
+        'x-bili-device-req-json': {"platform": "web", "device": "pc"},
+        'x-bili-web-req-json': {"spm_id": "333.999"},
       },
       data: {
         "dyn_req": {
           "content": {
             "contents": [
-              {"raw_text": rawText, "type": 1, "biz_id": ""}
+              {
+                "raw_text": rawText,
+                "type": 1,
+                "biz_id": "",
+              }
             ]
           },
+          if (dynIdStr == null)
+            "option": {
+              if (publishTime != null) "timer_pub_time": publishTime,
+              if (replyOption == ReplyOption.close) "close_comment": 1,
+              if (replyOption == ReplyOption.choose) "up_choose_comment": 1,
+            },
           "scene": dynIdStr != null
               ? 4
               : pics != null

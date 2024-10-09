@@ -14,9 +14,16 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'controller.dart';
 import 'widgets/up_panel.dart';
+
+enum ReplyOption { allow, close, choose }
+
+extension ReplyOptionExtension on ReplyOption {
+  String get title => ['允许评论', '关闭评论', '精选评论'][index];
+}
 
 class DynamicsPage extends StatefulWidget {
   const DynamicsPage({super.key});
@@ -234,6 +241,9 @@ class _CreatePanelState extends State<CreatePanel> {
   late final _pathList = <String>[];
   late final _pathStream = StreamController<List<String>>();
 
+  DateTime? _publishTime;
+  ReplyOption _replyOption = ReplyOption.allow;
+
   @override
   void dispose() {
     _isEnableStream.close();
@@ -243,16 +253,18 @@ class _CreatePanelState extends State<CreatePanel> {
   }
 
   Future _onCreate() async {
-    if (_pathList.isEmpty) {
-      dynamic result = await MsgHttp.createTextDynamic(_ctr.text);
-      if (result['status']) {
-        Get.back();
-        SmartDialog.showToast('发布成功');
-      } else {
-        SmartDialog.showToast(result['msg']);
-      }
-    } else {
-      final pics = [];
+    // if (_pathList.isEmpty) {
+    //   dynamic result = await MsgHttp.createTextDynamic(_ctr.text);
+    //   if (result['status']) {
+    //     Get.back();
+    //     SmartDialog.showToast('发布成功');
+    //   } else {
+    //     SmartDialog.showToast(result['msg']);
+    //   }
+    // } else {
+    List? pics;
+    if (_pathList.isNotEmpty) {
+      pics = [];
       for (int i = 0; i < _pathList.length; i++) {
         SmartDialog.showLoading(msg: '正在上传图片: ${i + 1}/${_pathList.length}');
         dynamic result = await MsgHttp.uploadBfs(_pathList[i]);
@@ -273,18 +285,23 @@ class _CreatePanelState extends State<CreatePanel> {
           SmartDialog.dismiss();
         }
       }
-      dynamic result = await MsgHttp.createDynamic(
-        mid: GStorage.userInfo.get('userInfoCache').mid,
-        rawText: _ctr.text,
-        pics: pics,
-      );
-      if (result['status']) {
-        Get.back();
-        SmartDialog.showToast('发布成功');
-      } else {
-        SmartDialog.showToast(result['msg']);
-      }
     }
+    dynamic result = await MsgHttp.createDynamic(
+      mid: GStorage.userInfo.get('userInfoCache').mid,
+      rawText: _ctr.text,
+      pics: pics,
+      publishTime: _publishTime != null
+          ? _publishTime!.millisecondsSinceEpoch ~/ 1000
+          : null,
+      replyOption: _replyOption,
+    );
+    if (result['status']) {
+      Get.back();
+      SmartDialog.showToast('发布成功');
+    } else {
+      SmartDialog.showToast(result['msg']);
+    }
+    // }
   }
 
   @override
@@ -372,6 +389,136 @@ class _CreatePanelState extends State<CreatePanel> {
             ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _publishTime == null
+                  ? FilledButton.tonal(
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        visualDensity: const VisualDensity(
+                          horizontal: -2,
+                          vertical: -2,
+                        ),
+                      ),
+                      onPressed: () {
+                        DateTime nowDate = DateTime.now();
+                        showDatePicker(
+                          context: context,
+                          initialDate: nowDate,
+                          firstDate: nowDate,
+                          lastDate: DateTime(
+                            nowDate.year,
+                            nowDate.month,
+                            nowDate.day + 7,
+                          ),
+                        ).then(
+                          (selectedDate) {
+                            if (selectedDate != null && context.mounted) {
+                              if (selectedDate.day == nowDate.day) {
+                                SmartDialog.showToast('至少选择10分钟之后');
+                              }
+                              TimeOfDay nowTime = TimeOfDay.now();
+                              showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay(
+                                  hour: nowTime.hour,
+                                  minute: nowTime.minute + 10,
+                                ),
+                              ).then((selectedTime) {
+                                if (selectedTime != null) {
+                                  if (selectedDate.day == nowDate.day) {
+                                    if (selectedTime.hour < nowTime.hour) {
+                                      SmartDialog.showToast('时间设置错误');
+                                      return;
+                                    } else if (selectedTime.hour ==
+                                        nowTime.hour) {
+                                      if (selectedTime.minute <
+                                          nowTime.minute + 10) {
+                                        SmartDialog.showToast('时间设置错误');
+                                        return;
+                                      }
+                                    }
+                                  }
+                                  setState(() {
+                                    _publishTime = DateTime(
+                                      selectedDate.year,
+                                      selectedDate.month,
+                                      selectedDate.day,
+                                      selectedTime.hour,
+                                      selectedTime.minute,
+                                    );
+                                  });
+                                }
+                              });
+                            }
+                          },
+                        );
+                      },
+                      child: const Text('定时发布'),
+                    )
+                  : OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        visualDensity: const VisualDensity(
+                          horizontal: -2,
+                          vertical: -2,
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _publishTime = null;
+                        });
+                      },
+                      label: Text(
+                          DateFormat('yyyy-MM-dd HH:mm').format(_publishTime!)),
+                      icon: Icon(Icons.clear, size: 20),
+                      iconAlignment: IconAlignment.end,
+                    ),
+              PopupMenuButton(
+                initialValue: _replyOption,
+                onSelected: (item) {
+                  setState(() {
+                    _replyOption = item;
+                  });
+                },
+                itemBuilder: (context) => ReplyOption.values
+                    .map((item) => PopupMenuItem<ReplyOption>(
+                          value: item,
+                          child: Text(item.title),
+                        ))
+                    .toList(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _replyOption.title,
+                      style: TextStyle(
+                        height: 1,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      strutStyle: StrutStyle(leading: 0, height: 1),
+                    ),
+                    Icon(
+                      size: 20,
+                      Icons.keyboard_arrow_right,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
         StreamBuilder(
           initialData: const [],
           stream: _pathStream.stream,
@@ -386,43 +533,45 @@ class _CreatePanelState extends State<CreatePanel> {
               itemCount: _pathList.length == 9 ? 9 : _pathList.length + 1,
               itemBuilder: (context, index) {
                 if (_pathList.length != 9 && index == _pathList.length) {
-                  return Ink(
-                    width: 75,
-                    height: 75,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                    ),
-                    child: InkWell(
-                      onTap: () async {
-                        List<XFile> pickedFiles =
-                            await _imagePicker.pickMultiImage(
-                          limit: 9,
-                          imageQuality: 100,
-                        );
-                        if (pickedFiles.isNotEmpty) {
-                          for (int i = 0; i < pickedFiles.length; i++) {
-                            if (_pathList.length == 9) {
-                              SmartDialog.showToast('最多选择9张图片');
-                              if (i != 0) {
-                                _pathStream.add(_pathList);
-                              }
-                              break;
-                            } else {
-                              _pathList.add(pickedFiles[i].path);
-                              if (i == pickedFiles.length - 1) {
-                                _pathStream.add(_pathList);
+                  return Material(
+                    child: Ink(
+                      width: 75,
+                      height: 75,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
+                      child: InkWell(
+                        onTap: () async {
+                          List<XFile> pickedFiles =
+                              await _imagePicker.pickMultiImage(
+                            limit: 9,
+                            imageQuality: 100,
+                          );
+                          if (pickedFiles.isNotEmpty) {
+                            for (int i = 0; i < pickedFiles.length; i++) {
+                              if (_pathList.length == 9) {
+                                SmartDialog.showToast('最多选择9张图片');
+                                if (i != 0) {
+                                  _pathStream.add(_pathList);
+                                }
+                                break;
+                              } else {
+                                _pathList.add(pickedFiles[i].path);
+                                if (i == pickedFiles.length - 1) {
+                                  _pathStream.add(_pathList);
+                                }
                               }
                             }
+                            if (_pathList.isNotEmpty && !_isEnable) {
+                              _isEnable = true;
+                              _isEnableStream.add(true);
+                            }
                           }
-                          if (_pathList.isNotEmpty && !_isEnable) {
-                            _isEnable = true;
-                            _isEnableStream.add(true);
-                          }
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(12),
-                      child: const Center(child: Icon(Icons.add)),
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: const Center(child: Icon(Icons.add)),
+                      ),
                     ),
                   );
                 } else {
