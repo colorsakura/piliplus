@@ -426,9 +426,11 @@ class _CreatePanelState extends State<CreatePanel> {
                               TimeOfDay nowTime = TimeOfDay.now();
                               showTimePicker(
                                 context: context,
-                                initialTime: TimeOfDay(
-                                  hour: nowTime.hour,
-                                  minute: nowTime.minute + 10,
+                                initialTime: nowTime.replacing(
+                                  hour: nowTime.minute + 10 >= 60
+                                      ? (nowTime.hour + 1) % 24
+                                      : nowTime.hour,
+                                  minute: (nowTime.minute + 10) % 60,
                                 ),
                               ).then((selectedTime) {
                                 if (selectedTime != null) {
