@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart';
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -193,6 +195,27 @@ class VideoHttp {
       }
     } else {
       return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState> hotVideoListGrpc({required int idx}) async {
+    dynamic res = await GrpcRepo.popular(idx);
+    if (res['status']) {
+      List<Card> list = [];
+      List<int> blackMidsList =
+          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+      for (Card item in res['data']) {
+        if (!blackMidsList.contains(item.smallCoverV5.up.id.toInt())) {
+          list.add(item);
+        }
+      }
+      if (list.isNotEmpty) {
+        return LoadingState.success(list);
+      } else {
+        return LoadingState.empty();
+      }
+    } else {
+      return LoadingState.error(res['msg']);
     }
   }
 

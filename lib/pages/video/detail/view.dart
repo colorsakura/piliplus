@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/list_sheet.dart';
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
@@ -13,7 +14,6 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.d
     as video;
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
-import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
@@ -88,8 +88,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final onlineClient = OnlineClient();
-
   @override
   void initState() {
     super.initState();
@@ -99,11 +97,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       heroTag = Get.arguments['heroTag'];
     }
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
-
-    onlineClient.playerOnline(
-      aid: IdUtils.bv2av(videoDetailController.bvid),
-      cid: videoDetailController.cid.value,
-    );
 
     _videoReplyController = Get.put(
         VideoReplyController(videoDetailController.oid.value, '0', '1'),
@@ -288,6 +281,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       PlPlayerController.setPlayCallBack(null);
     }
     videoDetailController.positionSubscription?.cancel();
+    videoIntroController.canelTimer();
     appbarStream.close();
     floating.dispose();
     videoDetailController.floating?.dispose();
@@ -320,6 +314,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     ScreenBrightness().resetScreenBrightness();
 
     videoDetailController.positionSubscription?.cancel();
+    videoIntroController.canelTimer();
 
     videoDetailController.playerStatus =
         plPlayerController?.playerStatus.status.value;
@@ -344,6 +339,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void didPopNext() async {
     isShowing = true;
     PlPlayerController.setPlayCallBack(playCallBack);
+    videoIntroController.startTimer();
     if (mounted) {
       if (videoDetailController.brightness != null) {
         plPlayerController

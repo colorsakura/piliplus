@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/utils/utils.dart';
@@ -117,10 +118,7 @@ class VideoIntroController extends GetxController
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
     isShowOnlineTotal =
         setting.get(SettingBoxKey.enableOnlineTotal, defaultValue: true);
-    if (isShowOnlineTotal) {
-      queryOnlineTotal();
-      startTimer(); // 在页面加载时启动定时器
-    }
+    startTimer();
     queryVideoIntro();
   }
 
@@ -678,23 +676,35 @@ class VideoIntroController extends GetxController
   }
 
   void startTimer() {
-    const duration = Duration(seconds: 10); // 设置定时器间隔为10秒
-    timer = Timer.periodic(duration, (Timer timer) {
-      if (!isPaused) {
-        queryOnlineTotal(); // 定时器回调函数，发起请求
-      }
-    });
+    if (isShowOnlineTotal) {
+      queryOnlineTotal();
+      const duration = Duration(seconds: 10); // 设置定时器间隔为10秒
+      timer ??= Timer.periodic(duration, (Timer timer) {
+        if (!isPaused) {
+          queryOnlineTotal(); // 定时器回调函数，发起请求
+        }
+      });
+    }
+  }
+
+  void canelTimer() {
+    timer?.cancel();
+    timer = null;
   }
 
   // 查看同时在看人数
   Future queryOnlineTotal() async {
-    var result = await VideoHttp.onlineTotal(
+    // var result = await VideoHttp.onlineTotal(
+    //   aid: IdUtils.bv2av(bvid),
+    //   bvid: bvid,
+    //   cid: lastPlayCid.value,
+    // );
+    dynamic result = await GrpcRepo.playerOnline(
       aid: IdUtils.bv2av(bvid),
-      bvid: bvid,
       cid: lastPlayCid.value,
     );
     if (result['status']) {
-      total.value = result['data']['total'];
+      total.value = result['data'];
     }
   }
 

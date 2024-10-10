@@ -25,6 +25,14 @@ import '../models/github/latest.dart';
 class Utils {
   static final Random random = Random();
 
+  static String generateRandomString(int length) {
+    const characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+    Random random = Random();
+
+    return String.fromCharCodes(Iterable.generate(length,
+        (_) => characters.codeUnitAt(random.nextInt(characters.length))));
+  }
+
   static String genAuroraEid(int uid) {
     if (uid == 0) {
       return ''; // Return null for a UID of 0

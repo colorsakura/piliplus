@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/grpc/grpc_client.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -93,6 +94,7 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() async {
+    await GrpcClient.instance.shutdown();
     await GStorage.close();
     EventBus().off(EventName.loginEvent);
     super.dispose();
