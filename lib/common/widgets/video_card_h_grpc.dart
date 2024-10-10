@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
+import 'package:PiliPalaX/utils/app_scheme.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -68,11 +69,12 @@ class VideoCardHGrpc extends StatelessWidget {
               return;
             }
             try {
-              final int cid =
-                  videoItem.smallCoverV5.base.playerArgs.cid.toInt() ??
-                      await SearchHttp.ab2c(aid: aid, bvid: bvid);
-              Get.toNamed('/video?bvid=$bvid&cid=$cid',
-                  arguments: {'heroTag': heroTag});
+              PiliScheme.routePush(Uri.parse(videoItem.smallCoverV5.base.uri));
+              // final int cid =
+              //     videoItem.smallCoverV5.base.playerArgs.cid.toInt() ??
+              //         await SearchHttp.ab2c(aid: aid, bvid: bvid);
+              // Get.toNamed('/video?bvid=$bvid&cid=$cid',
+              //     arguments: {'heroTag': heroTag});
               // Get.toNamed('/video?bvid=$bvid&cid=$cid',
               //     arguments: {'videoItem': videoItem, 'heroTag': heroTag});
             } catch (err) {

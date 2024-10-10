@@ -23,7 +23,7 @@ class GrpcRepo {
       .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
   static const _build = 1462100;
   static const _biliChannel = 'bili';
-  static const _mobiApp = 'android';
+  static const _mobiApp = 'android_hd';
   static const _phone = 'phone';
 
   static final _eId = _isLogin ? Utils.genAuroraEid(_mid!) : '';
