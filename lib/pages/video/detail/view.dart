@@ -13,6 +13,7 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.d
     as video;
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
+import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
@@ -87,14 +88,23 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final onlineClient = OnlineClient();
+
   @override
   void initState() {
     super.initState();
+
     PlPlayerController.setPlayCallBack(playCallBack);
     if (Get.arguments != null && Get.arguments['heroTag'] != null) {
       heroTag = Get.arguments['heroTag'];
     }
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
+
+    onlineClient.playerOnline(
+      aid: IdUtils.bv2av(videoDetailController.bvid),
+      cid: videoDetailController.cid.value,
+    );
+
     _videoReplyController = Get.put(
         VideoReplyController(videoDetailController.oid.value, '0', '1'),
         tag: heroTag);
