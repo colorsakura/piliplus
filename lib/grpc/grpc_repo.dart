@@ -31,71 +31,71 @@ class GrpcRepo {
   static final _traceId = Utils.genTraceId();
   static final _sessionId = Utils.generateRandomString(8);
 
-  static Map<String, String> get metadata => {
-        'user-agent': '${Constants.userAgent} grpc-java-cronet/1.36.1',
-        'x-bili-gaia-vtoken': '',
-        'x-bili-aurora-eid': _isLogin ? _eId : '',
-        'x-bili-mid': _isLogin ? _mid.toString() : '0',
-        'x-bili-aurora-zone': '',
-        'x-bili-trace-id': _traceId,
-        if (_isLogin) 'authorization': 'identify_v1 $_accessKey',
-        'buvid': _buvid,
-        'bili-http-engine': 'cronet',
-        'te': 'trailers',
-        'x-bili-fawkes-req-bin': base64Encode((FawkesReq()
-              ..appkey = _mobiApp
-              ..env = 'prod'
-              ..sessionId = _sessionId)
-            .writeToBuffer()),
-        'x-bili-metadata-bin': base64Encode((Metadata()
-              ..accessKey = _accessKey ?? ''
-              ..mobiApp = _mobiApp
-              ..device = _phone
-              ..build = _build
-              ..channel = _biliChannel
-              ..buvid = _buvid
-              ..platform = _mobiApp)
-            .writeToBuffer()),
-        'x-bili-device-bin': base64Encode((Device()
-              ..appId = 1
-              ..build = _build
-              ..buvid = _buvid
-              ..mobiApp = _mobiApp
-              ..platform = _mobiApp
-              ..device = _phone
-              ..channel = _biliChannel
-              ..brand = _phone
-              ..model = _phone
-              ..osver = '14'
-              ..fpLocal = ''
-              ..fpRemote = ''
-              ..versionName = _build.toString()
-              ..fp = ''
-              ..fts = Int64())
-            .writeToBuffer()),
-        'x-bili-network-bin': base64Encode((Network()
-              ..type = NetworkType.WIFI
-              ..tf = TFType.TF_UNKNOWN
-              ..oid = '')
-            .writeToBuffer()),
-        'x-bili-restriction-bin': base64Encode((Restriction()
-              ..teenagersMode = false
-              ..lessonsMode = false
-              ..mode = ModeType.NORMAL
-              ..review = false
-              ..disableRcmd = false
-              ..basicMode = false)
-            .writeToBuffer()),
-        'x-bili-locale-bin': base64Encode((Locale()
-              ..cLocale = LocaleIds(language: 'zh', region: 'CN')
-              ..sLocale = LocaleIds(language: 'zh', region: 'CN')
-              ..simCode = ''
-              ..timezone = 'Asia/Shanghai')
-            .writeToBuffer()),
-        'x-bili-exps-bin': '',
-      };
+  static final Map<String, String> metadata = {
+    'user-agent': '${Constants.userAgent} grpc-java-cronet/1.36.1',
+    'x-bili-gaia-vtoken': '',
+    'x-bili-aurora-eid': _isLogin ? _eId : '',
+    'x-bili-mid': _isLogin ? _mid.toString() : '0',
+    'x-bili-aurora-zone': '',
+    'x-bili-trace-id': _traceId,
+    if (_isLogin) 'authorization': 'identify_v1 $_accessKey',
+    'buvid': _buvid,
+    'bili-http-engine': 'cronet',
+    'te': 'trailers',
+    'x-bili-fawkes-req-bin': base64Encode((FawkesReq()
+          ..appkey = _mobiApp
+          ..env = 'prod'
+          ..sessionId = _sessionId)
+        .writeToBuffer()),
+    'x-bili-metadata-bin': base64Encode((Metadata()
+          ..accessKey = _accessKey ?? ''
+          ..mobiApp = _mobiApp
+          ..device = _phone
+          ..build = _build
+          ..channel = _biliChannel
+          ..buvid = _buvid
+          ..platform = _mobiApp)
+        .writeToBuffer()),
+    'x-bili-device-bin': base64Encode((Device()
+          ..appId = 1
+          ..build = _build
+          ..buvid = _buvid
+          ..mobiApp = _mobiApp
+          ..platform = _mobiApp
+          ..device = _phone
+          ..channel = _biliChannel
+          ..brand = _phone
+          ..model = _phone
+          ..osver = '14'
+          ..fpLocal = ''
+          ..fpRemote = ''
+          ..versionName = _build.toString()
+          ..fp = ''
+          ..fts = Int64())
+        .writeToBuffer()),
+    'x-bili-network-bin': base64Encode((Network()
+          ..type = NetworkType.WIFI
+          ..tf = TFType.TF_UNKNOWN
+          ..oid = '')
+        .writeToBuffer()),
+    'x-bili-restriction-bin': base64Encode((Restriction()
+          ..teenagersMode = false
+          ..lessonsMode = false
+          ..mode = ModeType.NORMAL
+          ..review = false
+          ..disableRcmd = false
+          ..basicMode = false)
+        .writeToBuffer()),
+    'x-bili-locale-bin': base64Encode((Locale()
+          ..cLocale = LocaleIds(language: 'zh', region: 'CN')
+          ..sLocale = LocaleIds(language: 'zh', region: 'CN')
+          ..simCode = ''
+          ..timezone = 'Asia/Shanghai')
+        .writeToBuffer()),
+    'x-bili-exps-bin': '',
+  };
 
-  static CallOptions get options => CallOptions(metadata: metadata);
+  static final CallOptions options = CallOptions(metadata: metadata);
 
   static Future _request(Function request) async {
     try {
