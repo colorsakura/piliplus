@@ -35,6 +35,7 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onReply,
     this.onDelete,
     this.upMid,
+    this.isTop = false,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -45,6 +46,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final Function()? onReply;
   final Function(dynamic rpid, dynamic frpid)? onDelete;
   final dynamic upMid;
+  final bool isTop;
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +62,12 @@ class ReplyItemGrpc extends StatelessWidget {
         onLongPress: () {
           feedBack();
           // showDialog(
-          //     context: Get.context!,
-          //     builder: (_) => AlertDialog(
-          //           content:
-          //               SelectableText(jsonEncode(replyItem.toProto3Json())),
-          //         ));
+          //   context: Get.context!,
+          //   builder: (_) => AlertDialog(
+          //     content: SelectableText(
+          //         jsonEncode(replyItem.replyControl.toProto3Json())),
+          //   ),
+          // );
           showModalBottomSheet(
             context: context,
             useRootNavigator: true,
@@ -259,7 +262,7 @@ class ReplyItemGrpc extends StatelessWidget {
               var textPainter = TextPainter(
                 text: TextSpan(text: text),
                 maxLines: 6,
-                // replyItem.content!.isText! && replyLevel == '1' ? 6 : 999,
+                // replyItem.content!.isText! && replyLevel == '1' ? 6 : null,
                 textDirection: Directionality.of(context),
               )..layout(maxWidth: constraints.maxWidth);
               bool didExceedMaxLines = textPainter.didExceedMaxLines;
@@ -272,20 +275,20 @@ class ReplyItemGrpc extends StatelessWidget {
                           Theme.of(context).textTheme.bodyMedium!.fontSize),
                   TextSpan(
                     children: [
-                      // if (replyItem.isTop!) ...[
-                      //   const WidgetSpan(
-                      //     alignment: PlaceholderAlignment.top,
-                      //     child: PBadge(
-                      //       text: 'TOP',
-                      //       size: 'small',
-                      //       stack: 'normal',
-                      //       type: 'line',
-                      //       fs: 9,
-                      //       semanticsLabel: '置顶',
-                      //     ),
-                      //   ),
-                      //   const TextSpan(text: ' '),
-                      // ],
+                      if (isTop) ...[
+                        const WidgetSpan(
+                          alignment: PlaceholderAlignment.top,
+                          child: PBadge(
+                            text: 'TOP',
+                            size: 'small',
+                            stack: 'normal',
+                            type: 'line',
+                            fs: 9,
+                            semanticsLabel: '置顶',
+                          ),
+                        ),
+                        const TextSpan(text: ' '),
+                      ],
                       buildContent(
                         context,
                         replyItem,
@@ -318,6 +321,7 @@ class ReplyItemGrpc extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: ReplyItemRow(
+              upMid: upMid,
               replies: replyItem.replies,
               replyControl: replyItem.replyControl,
               // f_rpid: replyItem.rpid,
@@ -424,8 +428,7 @@ class ReplyItemRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int extraRow = // replyControl?.isShow == true ||
-        (replyControl.subReplyEntryText.isNotEmpty && replies.isEmpty) ? 1 : 0;
+    final bool extraRow = replyControl.subReplyEntryText.isNotEmpty;
     return Container(
       margin: const EdgeInsets.only(left: 42, right: 4, top: 0),
       child: Material(
@@ -459,9 +462,9 @@ class ReplyItemRow extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(
                       8,
-                      i == 0 && (extraRow == 1 || replies.length > 1) ? 8 : 4,
+                      i == 0 && (extraRow || replies.length > 1) ? 8 : 4,
                       8,
-                      i == 0 && (extraRow == 1 || replies.length > 1) ? 4 : 6,
+                      i == 0 && (extraRow || replies.length > 1) ? 4 : 6,
                     ),
                     child: Semantics(
                       label:
@@ -538,7 +541,7 @@ class ReplyItemRow extends StatelessWidget {
                   ),
                 )
               ],
-            if (extraRow == 1)
+            if (extraRow)
               InkWell(
                 // 一楼点击【共xx条回复】展开评论详情
                 onTap: () => replyReply!(replyItem),
@@ -1012,18 +1015,18 @@ class MorePanel extends StatelessWidget {
         break;
       case 'copyFreedom':
         Get.back();
-        showDialog(
-          context: Get.context!,
-          builder: (context) {
-            return Dialog(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: SelectableText(message),
-              ),
-            );
-          },
-        );
+        // showDialog(
+        //   context: Get.context!,
+        //   builder: (context) {
+        //     return Dialog(
+        //       child: Padding(
+        //         padding:
+        //             const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        //         child: SelectableText(message),
+        //       ),
+        //     );
+        //   },
+        // );
         break;
       // case 'block':
       //   SmartDialog.showToast('加入黑名单');

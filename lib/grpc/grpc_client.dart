@@ -15,6 +15,7 @@ class GrpcClient {
       port: 443,
       options: const ChannelOptions(
         credentials: ChannelCredentials.secure(),
+        connectionTimeout: Duration(seconds: 10),
       ),
     );
   }

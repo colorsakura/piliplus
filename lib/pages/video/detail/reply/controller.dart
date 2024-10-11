@@ -29,6 +29,7 @@ class VideoReplyController extends ReplyController {
 
   CursorReply? cursor;
   Mode mode = Mode.MAIN_LIST_HOT;
+  bool hasUpTop = false;
 
   @override
   Future onRefresh() {
@@ -65,6 +66,10 @@ class VideoReplyController extends ReplyController {
     MainListReply replies = response.response;
     if (cursor == null) {
       count.value = replies.subjectControl.count.toInt();
+      hasUpTop = replies.hasUpTop();
+      if (replies.hasUpTop()) {
+        replies.replies.insert(0, replies.upTop);
+      }
     }
     cursor = replies.cursor;
     // replies.replies.clear();

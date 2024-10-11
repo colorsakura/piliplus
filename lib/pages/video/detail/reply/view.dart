@@ -225,6 +225,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   return ReplyItemGrpc(
                     replyItem: loadingState.response.replies[index],
                     showReplyRow: true,
+                    isTop: _videoReplyController.hasUpTop && index == 0,
                     replyLevel: replyLevel,
                     replyReply: widget.replyReply,
                     replyType: ReplyType.video,
