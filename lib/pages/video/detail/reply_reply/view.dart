@@ -199,16 +199,20 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               if (widget.firstFloor == null &&
                   _videoReplyReplyController.root != null) ...[
                 SliverToBoxAdapter(
-                  child: ReplyItem(
-                    replyItem: _videoReplyReplyController.root,
-                    replyLevel: '2',
-                    showReplyRow: false,
-                    replyType: widget.replyType,
-                    needDivider: false,
-                    onReply: () {
-                      _onReply(_videoReplyReplyController.root);
-                    },
+                  child: ListTile(
+                    title:
+                        Text(_videoReplyReplyController.root!.content.message),
                   ),
+                  // child: ReplyItem(
+                  //   replyItem: _videoReplyReplyController.root,
+                  //   replyLevel: '2',
+                  //   showReplyRow: false,
+                  //   replyType: widget.replyType,
+                  //   needDivider: false,
+                  //   onReply: () {
+                  //     _onReply(_videoReplyReplyController.root);
+                  //   },
+                  // ),
                 ),
                 SliverToBoxAdapter(
                   child: Divider(
@@ -239,24 +243,28 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         ),
                       );
                     } else {
-                      return ReplyItem(
-                        replyItem: loadingState.response[index],
-                        replyLevel: '2',
-                        showReplyRow: false,
-                        replyType: widget.replyType,
-                        onReply: () {
-                          _onReply(loadingState.response[index]);
-                        },
-                        onDelete: (rpid, frpid) {
-                          List list = (_videoReplyReplyController
-                                  .loadingState.value as Success)
-                              .response;
-                          list =
-                              list.where((item) => item.rpid != rpid).toList();
-                          _videoReplyReplyController.loadingState.value =
-                              LoadingState.success(list);
-                        },
+                      return ListTile(
+                        title:
+                            Text(loadingState.response[index].content.message),
                       );
+                      // return ReplyItem(
+                      //   replyItem: loadingState.response[index],
+                      //   replyLevel: '2',
+                      //   showReplyRow: false,
+                      //   replyType: widget.replyType,
+                      //   onReply: () {
+                      //     _onReply(loadingState.response[index]);
+                      //   },
+                      //   onDelete: (rpid, frpid) {
+                      //     List list = (_videoReplyReplyController
+                      //             .loadingState.value as Success)
+                      //         .response;
+                      //     list =
+                      //         list.where((item) => item.rpid != rpid).toList();
+                      //     _videoReplyReplyController.loadingState.value =
+                      //         LoadingState.success(list);
+                      //   },
+                      // );
                     }
                   },
                   childCount: loadingState.response.length + 1,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
 import 'package:PiliPalaX/grpc/app/show/popular/v1/popular.pb.dart';
 import 'package:PiliPalaX/grpc/device/device.pb.dart';
@@ -101,6 +102,7 @@ class GrpcRepo {
     try {
       return await request();
     } catch (e) {
+      print('111111111111111111111111111111111111111 $e');
       return {'status': false, 'msg': e.toString()};
     }
   }
@@ -127,6 +129,41 @@ class GrpcRepo {
           .index(request, options: options);
       response.items.retainWhere((item) => item.smallCoverV5.base.goto == 'av');
       return {'status': true, 'data': response.items};
+    });
+  }
+
+  static Future detailList({
+    required int oid,
+    required int root,
+    required CursorReq cursor,
+    DetailListScene scene = DetailListScene.REPLY,
+  }) async {
+    return await _request(() async {
+      final request = DetailListReq()
+        ..oid = Int64(oid)
+        ..type = Int64(1)
+        ..root = Int64(root)
+        ..cursor = cursor
+        ..scene = scene;
+      final response = await GrpcClient.instance.replyClient
+          .detailList(request, options: options);
+      return {'status': true, 'data': response};
+    });
+  }
+
+  static Future mainList({
+    required int oid,
+    required CursorReq cursor,
+  }) async {
+    return await _request(() async {
+      final request = MainListReq()
+        ..oid = Int64(oid)
+        ..type = Int64(1)
+        ..rpid = Int64(0)
+        ..cursor = cursor;
+      final response = await GrpcClient.instance.replyClient
+          .mainList(request, options: options);
+      return {'status': true, 'data': response};
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pbgrpc.dart';
 import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
 import 'package:PiliPalaX/grpc/app/show/popular/v1/popular.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
@@ -6,6 +7,7 @@ class GrpcClient {
   ClientChannel? _channel;
   PlayerOnlineClient? _playerOnlineClient;
   PopularClient? _popularClient;
+  ReplyClient? _replyClient;
 
   GrpcClient._internal() {
     _channel = ClientChannel(
@@ -28,6 +30,11 @@ class GrpcClient {
   PopularClient get popularClient {
     _popularClient ??= PopularClient(_channel!);
     return _popularClient!;
+  }
+
+  ReplyClient get replyClient {
+    _replyClient ??= ReplyClient(_channel!);
+    return _replyClient!;
   }
 
   Future<void> shutdown() async {

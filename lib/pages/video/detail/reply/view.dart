@@ -221,21 +221,24 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     ),
                   );
                 } else {
-                  return ReplyItem(
-                    replyItem: loadingState.response[index],
-                    showReplyRow: true,
-                    replyLevel: replyLevel,
-                    replyReply: widget.replyReply,
-                    replyType: ReplyType.video,
-                    onReply: () {
-                      _videoReplyController.onReply(
-                        context,
-                        replyItem: loadingState.response[index],
-                        index: index,
-                      );
-                    },
-                    onDelete: _videoReplyController.onMDelete,
+                  return ListTile(
+                    title: Text(loadingState.response[index].content.message),
                   );
+                  // return ReplyItem(
+                  //   replyItem: loadingState.response[index],
+                  //   showReplyRow: true,
+                  //   replyLevel: replyLevel,
+                  //   replyReply: widget.replyReply,
+                  //   replyType: ReplyType.video,
+                  //   onReply: () {
+                  //     _videoReplyController.onReply(
+                  //       context,
+                  //       replyItem: loadingState.response[index],
+                  //       index: index,
+                  //     );
+                  //   },
+                  //   onDelete: _videoReplyController.onMDelete,
+                  // );
                 }
               },
               childCount: loadingState.response.length + 1,

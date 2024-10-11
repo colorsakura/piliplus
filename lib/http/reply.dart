@@ -1,5 +1,8 @@
+import 'dart:ffi';
 import 'dart:io';
 
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:dio/dio.dart';
@@ -53,6 +56,18 @@ class ReplyHttp {
     }
   }
 
+  static Future<LoadingState> replyListGrpc({
+    required int oid,
+    required CursorReq cursor,
+  }) async {
+    dynamic res = await GrpcRepo.mainList(oid: oid, cursor: cursor);
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
+    }
+  }
+
   static Future<LoadingState> replyReplyList({
     required int oid,
     required String root,
@@ -80,6 +95,23 @@ class ReplyHttp {
       return LoadingState.success(ReplyReplyData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState> replyReplyListGrpc({
+    required int oid,
+    required int root,
+    required CursorReq cursor,
+  }) async {
+    dynamic res = await GrpcRepo.detailList(
+      oid: oid,
+      root: root,
+      cursor: cursor,
+    );
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
     }
   }
 
