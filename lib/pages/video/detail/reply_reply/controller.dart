@@ -20,6 +20,8 @@ class VideoReplyReplyController extends CommonController {
   ReplyInfo? root;
 
   CursorReply? cursor;
+  Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
+  RxInt count = (-1).obs;
 
   @override
   void onInit() {
@@ -79,6 +81,9 @@ class VideoReplyReplyController extends CommonController {
   bool customHandleResponse(Success response) {
     DetailListReply replies = response.response;
     root = replies.root;
+    if (cursor == null) {
+      count.value = replies.root.count.toInt();
+    }
     cursor = replies.cursor;
     if (replies.root.replies.isNotEmpty) {
       noMore.value = '加载中...';
@@ -105,7 +110,15 @@ class VideoReplyReplyController extends CommonController {
         root: int.parse(rpid!),
         cursor: CursorReq(
           next: cursor?.next,
-          mode: Mode.MAIN_LIST_HOT, // Mode.MAIN_LIST_TIME // Mode.MAIN_LIST_HOT
+          mode: mode.value,
         ),
       );
+
+  queryBySort() {
+    mode.value = mode.value == Mode.MAIN_LIST_HOT
+        ? Mode.MAIN_LIST_TIME
+        : Mode.MAIN_LIST_HOT;
+    loadingState.value = LoadingState.loading();
+    onRefresh();
+  }
 }

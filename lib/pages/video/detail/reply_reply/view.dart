@@ -1,4 +1,9 @@
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pbenum.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
+    show MySliverPersistentHeaderDelegate;
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +20,7 @@ import 'controller.dart';
 
 class VideoReplyReplyPanel extends StatefulWidget {
   const VideoReplyReplyPanel({
-    this.rcount,
+    // this.rcount,
     this.oid,
     this.rpid,
     this.firstFloor,
@@ -23,10 +28,10 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.replyType,
     super.key,
   });
-  final dynamic rcount;
+  // final dynamic rcount;
   final int? oid;
   final int? rpid;
-  final ReplyItemModel? firstFloor;
+  final ReplyInfo? firstFloor;
   final String? source;
   final ReplyType? replyType;
 
@@ -85,7 +90,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('评论详情${widget.rcount > 0 ? '（${widget.rcount}）' : ''}'),
+                  Text('评论详情'),
                   IconButton(
                     tooltip: '关闭',
                     icon: const Icon(Icons.close, size: 20),
@@ -110,14 +115,14 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                   if (widget.firstFloor != null) ...[
                     // const SliverToBoxAdapter(child: SizedBox(height: 10)),
                     SliverToBoxAdapter(
-                      child: ReplyItem(
-                        replyItem: widget.firstFloor,
+                      child: ReplyItemGrpc(
+                        replyItem: widget.firstFloor!,
                         replyLevel: '2',
                         showReplyRow: false,
                         replyType: widget.replyType,
                         needDivider: false,
                         onReply: () {
-                          _onReply(widget.firstFloor);
+                          // _onReply(widget.firstFloor!);
                         },
                       ),
                     ),
@@ -129,6 +134,47 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                       ),
                     ),
                   ],
+                  SliverPersistentHeader(
+                    pinned: false,
+                    floating: true,
+                    delegate: MySliverPersistentHeaderDelegate(
+                      child: Container(
+                        height: 40,
+                        padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
+                        color: Theme.of(context).colorScheme.surface,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Obx(
+                              () => _videoReplyReplyController.count.value != -1
+                                  ? Text(
+                                      '相关回复共${_videoReplyReplyController.count.value}条',
+                                      style: const TextStyle(fontSize: 13),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+                            SizedBox(
+                              height: 35,
+                              child: TextButton.icon(
+                                onPressed: () =>
+                                    _videoReplyReplyController.queryBySort(),
+                                icon: const Icon(Icons.sort, size: 16),
+                                label: Obx(
+                                  () => Text(
+                                    _videoReplyReplyController.mode.value ==
+                                            Mode.MAIN_LIST_HOT
+                                        ? '按热度'
+                                        : '按时间',
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   Obx(() => _buildBody(
                       _videoReplyReplyController.loadingState.value)),
                 ],
@@ -199,20 +245,16 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               if (widget.firstFloor == null &&
                   _videoReplyReplyController.root != null) ...[
                 SliverToBoxAdapter(
-                  child: ListTile(
-                    title:
-                        Text(_videoReplyReplyController.root!.content.message),
+                  child: ReplyItemGrpc(
+                    replyItem: _videoReplyReplyController.root!,
+                    replyLevel: '2',
+                    showReplyRow: false,
+                    replyType: widget.replyType,
+                    needDivider: false,
+                    onReply: () {
+                      // _onReply(_videoReplyReplyController.root);
+                    },
                   ),
-                  // child: ReplyItem(
-                  //   replyItem: _videoReplyReplyController.root,
-                  //   replyLevel: '2',
-                  //   showReplyRow: false,
-                  //   replyType: widget.replyType,
-                  //   needDivider: false,
-                  //   onReply: () {
-                  //     _onReply(_videoReplyReplyController.root);
-                  //   },
-                  // ),
                 ),
                 SliverToBoxAdapter(
                   child: Divider(
@@ -243,28 +285,24 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         ),
                       );
                     } else {
-                      return ListTile(
-                        title:
-                            Text(loadingState.response[index].content.message),
+                      return ReplyItemGrpc(
+                        replyItem: loadingState.response[index],
+                        replyLevel: '2',
+                        showReplyRow: false,
+                        replyType: widget.replyType,
+                        onReply: () {
+                          _onReply(loadingState.response[index]);
+                        },
+                        onDelete: (rpid, frpid) {
+                          List list = (_videoReplyReplyController
+                                  .loadingState.value as Success)
+                              .response;
+                          list =
+                              list.where((item) => item.rpid != rpid).toList();
+                          _videoReplyReplyController.loadingState.value =
+                              LoadingState.success(list);
+                        },
                       );
-                      // return ReplyItem(
-                      //   replyItem: loadingState.response[index],
-                      //   replyLevel: '2',
-                      //   showReplyRow: false,
-                      //   replyType: widget.replyType,
-                      //   onReply: () {
-                      //     _onReply(loadingState.response[index]);
-                      //   },
-                      //   onDelete: (rpid, frpid) {
-                      //     List list = (_videoReplyReplyController
-                      //             .loadingState.value as Success)
-                      //         .response;
-                      //     list =
-                      //         list.where((item) => item.rpid != rpid).toList();
-                      //     _videoReplyReplyController.loadingState.value =
-                      //         LoadingState.success(list);
-                      //   },
-                      // );
                     }
                   },
                   childCount: loadingState.response.length + 1,

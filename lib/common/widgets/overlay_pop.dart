@@ -32,8 +32,9 @@ class OverlayPop extends StatelessWidget {
               NetworkImgLayer(
                 width: imgWidth,
                 height: imgWidth / StyleString.aspectRatio,
-                src: (videoItem as card.Card?)?.smallCoverV5.base.cover ??
-                    videoItem.pic,
+                src: videoItem is card.Card
+                    ? (videoItem as card.Card).smallCoverV5.base.cover
+                    : videoItem.pic,
                 quality: 100,
               ),
               Positioned(
@@ -68,8 +69,9 @@ class OverlayPop extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      (videoItem as card.Card?)?.smallCoverV5.base.title ??
-                          videoItem.title,
+                      videoItem is card.Card
+                          ? (videoItem as card.Card).smallCoverV5.base.title
+                          : videoItem.title,
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -78,8 +80,9 @@ class OverlayPop extends StatelessWidget {
                     onPressed: () async {
                       await DownloadUtils.downloadImg(
                         context,
-                        (videoItem as card.Card?)?.smallCoverV5.base.cover ??
-                            (videoItem.pic != null
+                        videoItem is card.Card
+                            ? (videoItem as card.Card).smallCoverV5.base.cover
+                            : (videoItem.pic != null
                                 ? videoItem.pic as String
                                 : videoItem.cover as String),
                       );

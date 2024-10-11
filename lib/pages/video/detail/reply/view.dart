@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -128,7 +129,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
           CustomScrollView(
             controller: _videoReplyController.scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
-            key: const PageStorageKey<String>('评论'),
+            // key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
               SliverPersistentHeader(
                 pinned: false,
@@ -204,7 +205,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, index) {
                 double bottom = MediaQuery.of(context).padding.bottom;
-                if (index == loadingState.response.length) {
+                if (index == loadingState.response.replies.length) {
                   return Container(
                     padding: EdgeInsets.only(bottom: bottom),
                     height: bottom + 100,
@@ -221,27 +222,25 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                     ),
                   );
                 } else {
-                  return ListTile(
-                    title: Text(loadingState.response[index].content.message),
+                  return ReplyItemGrpc(
+                    replyItem: loadingState.response.replies[index],
+                    showReplyRow: true,
+                    replyLevel: replyLevel,
+                    replyReply: widget.replyReply,
+                    replyType: ReplyType.video,
+                    onReply: () {
+                      _videoReplyController.onReply(
+                        context,
+                        replyItem: loadingState.response.replies[index],
+                        index: index,
+                      );
+                    },
+                    onDelete: _videoReplyController.onMDelete,
+                    upMid: loadingState.response.subjectControl.upMid,
                   );
-                  // return ReplyItem(
-                  //   replyItem: loadingState.response[index],
-                  //   showReplyRow: true,
-                  //   replyLevel: replyLevel,
-                  //   replyReply: widget.replyReply,
-                  //   replyType: ReplyType.video,
-                  //   onReply: () {
-                  //     _videoReplyController.onReply(
-                  //       context,
-                  //       replyItem: loadingState.response[index],
-                  //       index: index,
-                  //     );
-                  //   },
-                  //   onDelete: _videoReplyController.onMDelete,
-                  // );
                 }
               },
-              childCount: loadingState.response.length + 1,
+              childCount: loadingState.response.replies.length + 1,
             ),
           )
         : loadingState is Error

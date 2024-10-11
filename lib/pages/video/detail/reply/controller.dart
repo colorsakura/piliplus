@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
@@ -9,6 +10,9 @@ import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 
 class VideoReplyController extends ReplyController {
   VideoReplyController(
@@ -59,7 +63,16 @@ class VideoReplyController extends ReplyController {
   @override
   bool customHandleResponse(Success response) {
     MainListReply replies = response.response;
+    if (cursor == null) {
+      count.value = replies.subjectControl.count.toInt();
+    }
     cursor = replies.cursor;
+    // replies.replies.clear();
+    // showDialog(
+    //     context: Get.context!,
+    //     builder: (_) => AlertDialog(
+    //           content: SelectableText(jsonEncode(replies.toProto3Json())),
+    //         ));
     if (replies.replies.isNotEmpty) {
       noMore.value = '加载中...';
       if (replies.cursor.isEnd) {
@@ -75,7 +88,7 @@ class VideoReplyController extends ReplyController {
           : <ReplyInfo>[];
       replies.replies.insertAll(0, list);
     }
-    loadingState.value = LoadingState.success(replies.replies);
+    loadingState.value = LoadingState.success(replies);
     return true;
   }
 

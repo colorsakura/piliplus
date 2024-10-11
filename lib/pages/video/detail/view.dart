@@ -1290,9 +1290,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void replyReply(replyItem) {
     scaffoldKey.currentState?.showBottomSheet(
       (context) => VideoReplyReplyPanel(
-        rcount: replyItem.rcount,
-        oid: replyItem.oid,
-        rpid: replyItem.rpid,
+        // rcount: replyItem.rcount,
+        oid: replyItem.oid.toInt(),
+        rpid: replyItem.id.toInt(),
         firstFloor: replyItem,
         replyType: ReplyType.video,
         source: 'videoDetail',
