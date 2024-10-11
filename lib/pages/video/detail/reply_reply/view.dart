@@ -1,5 +1,4 @@
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pbenum.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
     show MySliverPersistentHeaderDelegate;
@@ -11,8 +10,6 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 import '../../../../utils/utils.dart';
@@ -122,7 +119,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         replyType: widget.replyType,
                         needDivider: false,
                         onReply: () {
-                          // _onReply(widget.firstFloor!);
+                          _onReply(widget.firstFloor!);
                         },
                       ),
                     ),
@@ -186,10 +183,10 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     );
   }
 
-  void _onReply(ReplyItemModel? item) {
-    dynamic oid = item?.oid;
-    dynamic root = item?.rpid;
-    dynamic parent = item?.rpid;
+  void _onReply(ReplyInfo? item) {
+    dynamic oid = item?.oid.toInt();
+    dynamic root = item?.id.toInt();
+    dynamic parent = item?.id.toInt();
     dynamic key = oid + root + parent;
     Navigator.of(context)
         .push(
@@ -224,13 +221,14 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
       ),
     )
         .then((value) {
-      // 完成评论，数据添加
-      if (value != null && value['data'] != null) {
+      // 完成评论，数据添加              // TODO: data cast
+      if (value != null && value['data'] is ReplyInfo) {
         _savedReplies[key] = null;
-        List list = _videoReplyReplyController.loadingState.value is Success
-            ? (_videoReplyReplyController.loadingState.value as Success)
-                .response
-            : [];
+        List<ReplyInfo> list =
+            _videoReplyReplyController.loadingState.value is Success
+                ? (_videoReplyReplyController.loadingState.value as Success)
+                    .response
+                : <ReplyInfo>[];
         list.add(value['data']);
         _videoReplyReplyController.loadingState.value =
             LoadingState.success(list);
@@ -252,7 +250,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                     replyType: widget.replyType,
                     needDivider: false,
                     onReply: () {
-                      // _onReply(_videoReplyReplyController.root);
+                      _onReply(_videoReplyReplyController.root);
                     },
                   ),
                 ),
@@ -297,8 +295,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                           List list = (_videoReplyReplyController
                                   .loadingState.value as Success)
                               .response;
-                          list =
-                              list.where((item) => item.rpid != rpid).toList();
+                          list = list.where((item) => item.id != rpid).toList();
                           _videoReplyReplyController.loadingState.value =
                               LoadingState.success(list);
                         },

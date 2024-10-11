@@ -4,7 +4,6 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
 
 class VideoReplyReplyController extends CommonController {
   VideoReplyReplyController(this.aid, this.rpid, this.replyType);

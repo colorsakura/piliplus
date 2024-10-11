@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
@@ -124,15 +125,15 @@ abstract class ReplyController extends CommonController {
     dynamic replyItem,
     int index = 0,
   }) {
-    dynamic key = oid ?? replyItem.oid + replyItem.rpid;
+    dynamic key = oid ?? replyItem.oid + replyItem.id;
     Navigator.of(context)
         .push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return ReplyPage(
-            oid: oid ?? replyItem.oid,
-            root: oid != null ? 0 : replyItem.rpid,
-            parent: oid != null ? 0 : replyItem.rpid,
+            oid: oid ?? replyItem.oid.toInt(),
+            root: oid != null ? 0 : replyItem.id.toInt(),
+            parent: oid != null ? 0 : replyItem.id.toInt(),
             replyType: ReplyType.video,
             replyItem: replyItem,
             savedReply: savedReplies[key],
@@ -159,35 +160,37 @@ abstract class ReplyController extends CommonController {
     )
         .then(
       (value) {
-        if (value != null && value['data'] != null) {
+        // TODO: data cast
+        if (value != null && value['data'] is ReplyInfo) {
           savedReplies[key] = null;
-          List list = loadingState.value is Success
-              ? (loadingState.value as Success).response
-              : [];
+          MainListReply response =
+              (loadingState.value as Success?)?.response ?? MainListReply();
           if (oid != null) {
-            list.insert(0, value['data']);
+            response.replies.insert(0, value['data']);
           } else {
-            list[index].replies.add(value['data']);
+            response.replies[index].replies.add(value['data']);
           }
-          loadingState.value = LoadingState.success(list);
+          loadingState.value = LoadingState.success(response);
         }
       },
     );
   }
 
   onMDelete(rpid, frpid) {
-    List list = (loadingState.value as Success).response;
-    list = frpid == null
-        ? list.where((item) => item.rpid != rpid).toList()
-        : list.map((item) {
-            if (item.rpid == frpid) {
-              return item
-                ..replies =
-                    item.replies?.where((reply) => reply.rpid != rpid).toList();
-            } else {
-              return item;
-            }
-          }).toList();
-    loadingState.value = LoadingState.success(list);
+    MainListReply response = (loadingState.value as Success).response;
+    if (frpid == null) {
+      response.replies.removeWhere((item) {
+        return item.id.toInt() == rpid;
+      });
+    } else {
+      response.replies.map((item) {
+        if (item.id == frpid) {
+          return item..replies.removeWhere((reply) => reply.id.toInt() == rpid);
+        } else {
+          return item;
+        }
+      }).toList();
+    }
+    loadingState.value = LoadingState.success(response);
   }
 }

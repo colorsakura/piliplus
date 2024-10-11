@@ -10,7 +10,6 @@ import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'controller.dart';
-import 'widgets/reply_item.dart';
 
 class VideoReplyPanel extends StatefulWidget {
   final String? bvid;

@@ -1,18 +1,11 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/reply_sort_type.dart';
 import 'package:PiliPalaX/pages/common/reply_controller.dart';
 import 'package:PiliPalaX/http/reply.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
-import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 
 class VideoReplyController extends ReplyController {
   VideoReplyController(
