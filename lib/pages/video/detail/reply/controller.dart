@@ -89,7 +89,7 @@ class VideoReplyController extends ReplyController {
     }
     if (currentPage != 1) {
       List<ReplyInfo> list = loadingState.value is Success
-          ? (loadingState.value as Success).response
+          ? (loadingState.value as Success).response.replies
           : <ReplyInfo>[];
       replies.replies.insertAll(0, list);
     }
