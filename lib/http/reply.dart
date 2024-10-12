@@ -103,12 +103,14 @@ class ReplyHttp {
     int type = 1,
     required int oid,
     required int root,
+    required int rpid,
     required CursorReq cursor,
   }) async {
     dynamic res = await GrpcRepo.detailList(
       type: type,
       oid: oid,
       root: root,
+      rpid: rpid,
       cursor: cursor,
     );
     if (res['status']) {

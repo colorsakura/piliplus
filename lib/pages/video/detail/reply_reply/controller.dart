@@ -18,7 +18,7 @@ class VideoReplyReplyController extends CommonController
   );
   final itemScrollCtr = ItemScrollController();
   bool hasRoot = false;
-  dynamic id;
+  int? id;
   // 视频aid 请求时使用的oid
   int? aid;
   // rpid 请求楼中楼回复
@@ -30,7 +30,7 @@ class VideoReplyReplyController extends CommonController
   ReplyInfo? currentReplyItem;
 
   CursorReply? cursor;
-  Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
+  Rx<Mode> mode = Mode.MAIN_LIST_TIME.obs;
   RxInt count = (-1).obs;
   int? upMid;
 
@@ -101,7 +101,7 @@ class VideoReplyReplyController extends CommonController
         index = replies.root.replies
             .map((item) => item.id.toInt())
             .toList()
-            .indexOf(id);
+            .indexOf(id!);
         if (index != -1) {
           controller = AnimationController(
             duration: const Duration(milliseconds: 300),
@@ -151,6 +151,7 @@ class VideoReplyReplyController extends CommonController
         type: replyType.index,
         oid: aid!,
         root: int.parse(rpid!),
+        rpid: id ?? 0,
         cursor: CursorReq(
           next: cursor?.next,
           mode: mode.value,

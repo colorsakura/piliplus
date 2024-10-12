@@ -135,6 +135,7 @@ class GrpcRepo {
     int type = 1,
     required int oid,
     required int root,
+    required int rpid,
     required CursorReq cursor,
     DetailListScene scene = DetailListScene.REPLY,
   }) async {
@@ -143,6 +144,7 @@ class GrpcRepo {
         ..oid = Int64(oid)
         ..type = Int64(type)
         ..root = Int64(root)
+        ..rpid = Int64(rpid)
         ..cursor = cursor
         ..scene = scene;
       final response = await GrpcClient.instance.replyClient
