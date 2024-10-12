@@ -1,12 +1,14 @@
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class VideoReplyReplyController extends CommonController {
+class VideoReplyReplyController extends CommonController
+    with GetTickerProviderStateMixin {
   VideoReplyReplyController(
     this.hasRoot,
     this.id,
@@ -31,6 +33,10 @@ class VideoReplyReplyController extends CommonController {
   Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   RxInt count = (-1).obs;
   int? upMid;
+
+  int? index;
+  AnimationController? controller;
+  Animation<Color?>? colorAnimation;
 
   @override
   void onInit() {
@@ -92,17 +98,29 @@ class VideoReplyReplyController extends CommonController {
     if (cursor == null) {
       count.value = replies.root.count.toInt();
       if (id != null) {
-        int index = replies.root.replies
+        index = replies.root.replies
             .map((item) => item.id.toInt())
             .toList()
             .indexOf(id);
         if (index != -1) {
+          controller = AnimationController(
+            duration: const Duration(milliseconds: 300),
+            vsync: this,
+          );
+          colorAnimation = ColorTween(
+            begin: Theme.of(Get.context!).colorScheme.onInverseSurface,
+            end: Theme.of(Get.context!).colorScheme.surface,
+          ).animate(controller!);
           () async {
             await Future.delayed(const Duration(milliseconds: 200));
-            itemScrollCtr.scrollTo(
-              index: hasRoot ? index + 3 : index + 1,
+            await itemScrollCtr.scrollTo(
+              index: hasRoot ? index! + 3 : index! + 1,
               duration: const Duration(milliseconds: 200),
             );
+            await Future.delayed(const Duration(milliseconds: 800));
+            controller?.forward().whenComplete(() {
+              index = null;
+            });
           }();
         }
         id = null;

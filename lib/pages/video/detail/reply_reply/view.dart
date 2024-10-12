@@ -57,6 +57,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
 
   @override
   void dispose() {
+    _videoReplyReplyController.controller?.dispose();
     Get.delete<VideoReplyReplyController>(tag: widget.rpid.toString());
     super.dispose();
   }
@@ -256,24 +257,18 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
           ),
         );
       } else {
-        return ReplyItemGrpc(
-          replyItem: loadingState.response[index],
-          replyLevel: '2',
-          showReplyRow: false,
-          replyType: widget.replyType,
-          onReply: () {
-            _onReply(loadingState.response[index]);
-          },
-          onDelete: (rpid, frpid) {
-            List list =
-                (_videoReplyReplyController.loadingState.value as Success)
-                    .response;
-            list = list.where((item) => item.id != rpid).toList();
-            _videoReplyReplyController.loadingState.value =
-                LoadingState.success(list);
-          },
-          upMid: _videoReplyReplyController.upMid,
-        );
+        return _videoReplyReplyController.index == index
+            ? AnimatedBuilder(
+                animation: _videoReplyReplyController.colorAnimation!,
+                builder: (context, child) {
+                  return ColoredBox(
+                    color: _videoReplyReplyController.colorAnimation?.value ??
+                        Theme.of(Get.context!).colorScheme.onInverseSurface,
+                    child: _replyItem(loadingState.response[index]),
+                  );
+                },
+              )
+            : _replyItem(loadingState.response[index]);
       }
     } else if (loadingState is Error) {
       return CustomScrollView(
@@ -302,6 +297,26 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         ],
       );
     }
+  }
+
+  Widget _replyItem(replyItem) {
+    return ReplyItemGrpc(
+      replyItem: replyItem,
+      replyLevel: '2',
+      showReplyRow: false,
+      replyType: widget.replyType,
+      onReply: () {
+        _onReply(replyItem);
+      },
+      onDelete: (rpid, frpid) {
+        List list =
+            (_videoReplyReplyController.loadingState.value as Success).response;
+        list = list.where((item) => item.id != rpid).toList();
+        _videoReplyReplyController.loadingState.value =
+            LoadingState.success(list);
+      },
+      upMid: _videoReplyReplyController.upMid,
+    );
   }
 
   int _itemCount(LoadingState loadingState) {
