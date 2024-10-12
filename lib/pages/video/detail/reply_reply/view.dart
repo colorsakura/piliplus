@@ -57,7 +57,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
 
   @override
   void dispose() {
+    _videoReplyReplyController.controller?.stop();
     _videoReplyReplyController.controller?.dispose();
+    _videoReplyReplyController.controller = null;
     Get.delete<VideoReplyReplyController>(tag: widget.rpid.toString());
     super.dispose();
   }

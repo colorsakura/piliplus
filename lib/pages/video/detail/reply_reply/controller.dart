@@ -118,9 +118,8 @@ class VideoReplyReplyController extends CommonController
               duration: const Duration(milliseconds: 200),
             );
             await Future.delayed(const Duration(milliseconds: 800));
-            controller?.forward().whenComplete(() {
-              index = null;
-            });
+            await controller?.forward();
+            index = null;
           }();
         }
         id = null;
