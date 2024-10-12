@@ -28,6 +28,10 @@ abstract class ReplyController extends CommonController {
 
   bool isLogin = GStorage.userInfo.get('userInfoCache') != null;
 
+  CursorReply? cursor;
+  Mode mode = Mode.MAIN_LIST_HOT;
+  bool hasUpTop = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -44,6 +48,7 @@ abstract class ReplyController extends CommonController {
 
   @override
   Future onRefresh() {
+    cursor = null;
     nextOffset = '';
     noMore.value = '';
     return super.onRefresh();
@@ -57,41 +62,29 @@ abstract class ReplyController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    List<ReplyItemModel> replies = response.response.replies;
-    if (!isLogin) {
-      nextOffset = response.response.cursor.paginationReply.nextOffset ?? "";
+    MainListReply replies = response.response;
+    if (cursor == null) {
+      count.value = replies.subjectControl.count.toInt();
+      hasUpTop = replies.hasUpTop();
+      if (replies.hasUpTop()) {
+        replies.replies.insert(0, replies.upTop);
+      }
     }
-    if (replies.isNotEmpty) {
+    cursor = replies.cursor;
+    if (replies.replies.isNotEmpty) {
       noMore.value = '加载中...';
-
-      /// 第一页回复数小于20
-      if (currentPage == 1 && replies.length < 18) {
+      if (replies.cursor.isEnd) {
         noMore.value = '没有更多了';
       }
     } else {
       // 未登录状态replies可能返回null
-      noMore.value = nextOffset == "" && currentPage == 1 ? '还没有评论' : '没有更多了';
+      noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
     }
-    if (currentPage == 1) {
-      // 添加置顶回复
-      if (response.response.upper.top != null) {
-        final bool flag = response.response.topReplies.any(
-            (ReplyItemModel reply) =>
-                reply.rpid == response.response.upper.top.rpid) as bool;
-        if (!flag) {
-          replies.insert(0, response.response.upper.top);
-        }
-      }
-      replies.insertAll(0, response.response.topReplies);
-      count.value = !isLogin
-          ? response.response.cursor.allCount
-          : response.response.page.count ?? 0;
-    } else {
-      replies.insertAll(
-          0,
-          loadingState.value is Success
-              ? (loadingState.value as Success).response
-              : <ReplyItemModel>[]);
+    if (currentPage != 1) {
+      List<ReplyInfo> list = loadingState.value is Success
+          ? (loadingState.value as Success).response.replies
+          : <ReplyInfo>[];
+      replies.replies.insertAll(0, list);
     }
     loadingState.value = LoadingState.success(replies);
     return true;
@@ -104,9 +97,11 @@ abstract class ReplyController extends CommonController {
       switch (sortType) {
         case ReplySortType.time:
           sortType = ReplySortType.like;
+          mode = Mode.MAIN_LIST_HOT;
           break;
         case ReplySortType.like:
           sortType = ReplySortType.time;
+          mode = Mode.MAIN_LIST_TIME;
           break;
         default:
       }

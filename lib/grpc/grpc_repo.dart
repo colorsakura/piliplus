@@ -132,6 +132,7 @@ class GrpcRepo {
   }
 
   static Future detailList({
+    int type = 1,
     required int oid,
     required int root,
     required CursorReq cursor,
@@ -140,7 +141,7 @@ class GrpcRepo {
     return await _request(() async {
       final request = DetailListReq()
         ..oid = Int64(oid)
-        ..type = Int64(1)
+        ..type = Int64(type)
         ..root = Int64(root)
         ..cursor = cursor
         ..scene = scene;
@@ -151,13 +152,14 @@ class GrpcRepo {
   }
 
   static Future mainList({
+    int type = 1,
     required int oid,
     required CursorReq cursor,
   }) async {
     return await _request(() async {
       final request = MainListReq()
         ..oid = Int64(oid)
-        ..type = Int64(1)
+        ..type = Int64(type)
         ..rpid = Int64(0)
         ..cursor = cursor;
       final response = await GrpcClient.instance.replyClient

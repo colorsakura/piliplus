@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:PiliPalaX/common/widgets/article_content.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -108,20 +109,21 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     }
   }
 
-  void replyReply(replyItem) {
-    int oid = replyItem.oid;
-    int rpid = replyItem.rpid!;
+  void replyReply(replyItem, id) {
+    int oid = replyItem.oid.toInt();
+    int rpid = replyItem.id.toInt();
     Get.to(
       () => Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
           centerTitle: false,
           title: Text(
-            '评论详情${replyItem.rcount > 0 ? '（${replyItem.rcount}）' : ''}',
+            '评论详情',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         body: VideoReplyReplyPanel(
+          id: id,
           oid: oid,
           rpid: rpid,
           source: 'dynamic',
@@ -330,9 +332,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   Widget replyList(LoadingState loadingState) {
     return loadingState is Success
         ? SliverList.builder(
-            itemCount: loadingState.response.length + 1,
+            itemCount: loadingState.response.replies.length + 1,
             itemBuilder: (context, index) {
-              if (index == loadingState.response.length) {
+              if (index == loadingState.response.replies.length) {
                 return Container(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).padding.bottom),
@@ -350,8 +352,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   ),
                 );
               } else {
-                return ReplyItem(
-                  replyItem: loadingState.response[index],
+                return ReplyItemGrpc(
+                  replyItem: loadingState.response.replies[index],
                   showReplyRow: true,
                   replyLevel: '1',
                   replyReply: replyReply,
@@ -359,11 +361,13 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   onReply: () {
                     _htmlRenderCtr.onReply(
                       context,
-                      replyItem: loadingState.response[index],
+                      replyItem: loadingState.response.replies[index],
                       index: index,
                     );
                   },
                   onDelete: _htmlRenderCtr.onMDelete,
+                  isTop: _htmlRenderCtr.hasUpTop && index == 0,
+                  upMid: loadingState.response.subjectControl.upMid,
                 );
               }
             },

@@ -57,10 +57,11 @@ class ReplyHttp {
   }
 
   static Future<LoadingState> replyListGrpc({
+    int type = 1,
     required int oid,
     required CursorReq cursor,
   }) async {
-    dynamic res = await GrpcRepo.mainList(oid: oid, cursor: cursor);
+    dynamic res = await GrpcRepo.mainList(type: type, oid: oid, cursor: cursor);
     if (res['status']) {
       return LoadingState.success(res['data']);
     } else {
@@ -99,11 +100,13 @@ class ReplyHttp {
   }
 
   static Future<LoadingState> replyReplyListGrpc({
+    int type = 1,
     required int oid,
     required int root,
     required CursorReq cursor,
   }) async {
     dynamic res = await GrpcRepo.detailList(
+      type: type,
       oid: oid,
       root: root,
       cursor: cursor,

@@ -224,7 +224,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   return ReplyItemGrpc(
                     replyItem: loadingState.response.replies[index],
                     showReplyRow: true,
-                    isTop: _videoReplyController.hasUpTop && index == 0,
                     replyLevel: replyLevel,
                     replyReply: widget.replyReply,
                     replyType: ReplyType.video,
@@ -236,6 +235,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       );
                     },
                     onDelete: _videoReplyController.onMDelete,
+                    isTop: _videoReplyController.hasUpTop && index == 0,
                     upMid: loadingState.response.subjectControl.upMid,
                   );
                 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -105,20 +106,21 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   }
 
   // 查看二级评论
-  void replyReply(replyItem) {
-    int oid = replyItem.oid;
-    int rpid = replyItem.rpid!;
+  void replyReply(replyItem, id) {
+    int oid = replyItem.oid.toInt();
+    int rpid = replyItem.id.toInt()!;
     Get.to(
       () => Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
           centerTitle: false,
           title: Text(
-            '评论详情${replyItem.rcount > 0 ? '（${replyItem.rcount}）' : ''}',
+            '评论详情',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         body: VideoReplyReplyPanel(
+          id: id,
           oid: oid,
           rpid: rpid,
           source: 'dynamic',
@@ -369,7 +371,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         ? SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                if (index == loadingState.response.length) {
+                if (index == loadingState.response.replies.length) {
                   return Container(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).padding.bottom),
@@ -387,8 +389,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     ),
                   );
                 } else {
-                  return ReplyItem(
-                    replyItem: loadingState.response[index],
+                  return ReplyItemGrpc(
+                    replyItem: loadingState.response.replies[index],
                     showReplyRow: true,
                     replyLevel: '1',
                     replyReply: replyReply,
@@ -396,15 +398,17 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     onReply: () {
                       _dynamicDetailController.onReply(
                         context,
-                        replyItem: loadingState.response[index],
+                        replyItem: loadingState.response.replies[index],
                         index: index,
                       );
                     },
                     onDelete: _dynamicDetailController.onMDelete,
+                    isTop: _dynamicDetailController.hasUpTop && index == 0,
+                    upMid: loadingState.response.subjectControl.upMid,
                   );
                 }
               },
-              childCount: loadingState.response.length + 1,
+              childCount: loadingState.response.replies.length + 1,
             ),
           )
         : loadingState is Error

@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/list_sheet.dart';
-import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';

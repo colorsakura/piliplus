@@ -131,6 +131,7 @@ class VideoReplyReplyController extends CommonController {
 
   @override
   Future<LoadingState> customGetData() => ReplyHttp.replyReplyListGrpc(
+        type: replyType.index,
         oid: aid!,
         root: int.parse(rpid!),
         cursor: CursorReq(
