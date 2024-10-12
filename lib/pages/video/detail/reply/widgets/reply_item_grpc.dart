@@ -47,56 +47,59 @@ class ReplyItemGrpc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      // 点击整个评论区 评论详情/回复
-      onTap: () {
-        feedBack();
-        if (replyReply != null) {
-          replyReply!(replyItem, null);
-        }
-      },
-      onLongPress: () {
-        feedBack();
-        // showDialog(
-        //   context: Get.context!,
-        //   builder: (_) => AlertDialog(
-        //     content: SelectableText(
-        //         jsonEncode(replyItem.replyControl.toProto3Json())),
-        //   ),
-        // );
-        showModalBottomSheet(
-          context: context,
-          useRootNavigator: true,
-          isScrollControlled: true,
-          builder: (context) {
-            return MorePanel(
-              item: replyItem,
-              onDelete: (rpid) {
-                if (onDelete != null) {
-                  onDelete!(rpid, null);
-                }
-              },
-            );
-          },
-        );
-      },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
-            child: content(context),
-          ),
-          if (needDivider)
-            Divider(
-              indent: 55,
-              endIndent: 15,
-              height: 0.3,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onInverseSurface
-                  .withOpacity(0.5),
-            )
-        ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        // 点击整个评论区 评论详情/回复
+        onTap: () {
+          feedBack();
+          if (replyReply != null) {
+            replyReply!(replyItem, null);
+          }
+        },
+        onLongPress: () {
+          feedBack();
+          // showDialog(
+          //   context: Get.context!,
+          //   builder: (_) => AlertDialog(
+          //     content: SelectableText(
+          //         jsonEncode(replyItem.replyControl.toProto3Json())),
+          //   ),
+          // );
+          showModalBottomSheet(
+            context: context,
+            useRootNavigator: true,
+            isScrollControlled: true,
+            builder: (context) {
+              return MorePanel(
+                item: replyItem,
+                onDelete: (rpid) {
+                  if (onDelete != null) {
+                    onDelete!(rpid, null);
+                  }
+                },
+              );
+            },
+          );
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
+              child: content(context),
+            ),
+            if (needDivider)
+              Divider(
+                indent: 55,
+                endIndent: 15,
+                height: 0.3,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onInverseSurface
+                    .withOpacity(0.5),
+              )
+          ],
+        ),
       ),
     );
   }
