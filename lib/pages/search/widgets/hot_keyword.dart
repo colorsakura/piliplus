@@ -30,15 +30,16 @@ class HotKeyword extends StatelessWidget {
                 onTap: () => onClick!(i.keyword),
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: 2,
-                      right: hotSearchList!.indexOf(i) % 2 == 1 ? 10 : 0),
+                    left: 2,
+                    right: 10,
+                  ),
                   child: Tooltip(
                     message: i.keyword!,
                     child: Row(
                       children: [
-                        Flexible(
+                        Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(6, 5, 4, 5),
+                            padding: const EdgeInsets.fromLTRB(6, 5, 0, 5),
                             child: Text(
                               i.keyword!,
                               overflow: TextOverflow.ellipsis,
@@ -47,7 +48,8 @@ class HotKeyword extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (i.icon != null && i.icon != '')
+                        if (i.icon != null && i.icon != '') ...[
+                          const SizedBox(width: 4),
                           SizedBox(
                             height: 15,
                             child: CachedNetworkImage(
@@ -55,6 +57,7 @@ class HotKeyword extends StatelessWidget {
                               height: 15.0,
                             ),
                           ),
+                        ]
                       ],
                     ),
                   ),
