@@ -41,3 +41,7 @@ extension ListExt<T> on List<T>? {
 
   bool ne(List<T>? other) => !eq(other);
 }
+
+extension StringExt on String {
+  String get http2https => replaceFirst(RegExp("^http://"), "https://");
+}

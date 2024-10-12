@@ -1,6 +1,7 @@
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
 import 'package:PiliPalaX/pages/preview/view.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -55,7 +56,7 @@ class ArticleContent extends StatelessWidget {
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: CachedNetworkImage(
-              imageUrl: item.line?.pic?.url ?? '',
+              imageUrl: item.line?.pic?.url?.http2https ?? '',
               height: item.line?.pic?.height?.toDouble(),
             ),
           );

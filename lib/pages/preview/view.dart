@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -35,15 +36,18 @@ class _ImagePreviewState extends State<ImagePreview>
   late DoubleClickAnimationListener _doubleClickAnimationListener;
   List<double> doubleTapScales = <double>[1.0, 2.0];
   bool _dismissDisabled = false;
+  List<String>? imgList;
 
   @override
   void initState() {
     super.initState();
 
+    imgList = widget.imgList?.map((url) => url.http2https).toList();
+
     _previewController.initialPage.value = widget.initialPage!;
     _previewController.currentPage.value = widget.initialPage! + 1;
-    _previewController.imgList.value = widget.imgList!;
-    _previewController.currentImgUrl = widget.imgList![widget.initialPage!];
+    _previewController.imgList.value = imgList!;
+    _previewController.currentImgUrl = imgList![widget.initialPage!];
     // animationController = AnimationController(
     //     vsync: this, duration: const Duration(milliseconds: 400));
     setStatusBar();
@@ -149,10 +153,10 @@ class _ImagePreviewState extends State<ImagePreview>
                 canScrollPage: (GestureDetails? gestureDetails) =>
                     gestureDetails?.totalScale == null ||
                     gestureDetails!.totalScale! <= 1.0,
-                itemCount: widget.imgList!.length,
+                itemCount: imgList!.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ExtendedImage.network(
-                    widget.imgList![index],
+                    imgList![index],
                     fit: BoxFit.contain,
                     mode: ExtendedImageMode.gesture,
                     handleLoadingProgress: true,
@@ -262,7 +266,7 @@ class _ImagePreviewState extends State<ImagePreview>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    widget.imgList!.length > 1
+                    imgList!.length > 1
                         ? Obx(
                             () => Text.rich(
                               textAlign: TextAlign.center,
@@ -274,9 +278,7 @@ class _ImagePreviewState extends State<ImagePreview>
                                         text: _previewController.currentPage
                                             .toString()),
                                     const TextSpan(text: ' / '),
-                                    TextSpan(
-                                        text:
-                                            widget.imgList!.length.toString()),
+                                    TextSpan(text: imgList!.length.toString()),
                                   ]),
                             ),
                           )

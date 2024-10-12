@@ -68,7 +68,7 @@ class NetworkImgLayer extends StatelessWidget {
                           : StyleString.imgRadius.x,
             ),
             child: CachedNetworkImage(
-              imageUrl: imageUrl,
+              imageUrl: imageUrl.http2https,
               width: width,
               height:
                   ignoreHeight == null || ignoreHeight == false ? height : null,

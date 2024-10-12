@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,9 @@ class HotKeyword extends StatelessWidget {
                           SizedBox(
                             height: 15,
                             child: CachedNetworkImage(
-                                imageUrl: i.icon!, height: 15.0),
+                              imageUrl: (i.icon as String).http2https,
+                              height: 15.0,
+                            ),
                           ),
                       ],
                     ),
