@@ -4,9 +4,19 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class VideoReplyReplyController extends CommonController {
-  VideoReplyReplyController(this.aid, this.rpid, this.replyType);
+  VideoReplyReplyController(
+    this.hasRoot,
+    this.id,
+    this.aid,
+    this.rpid,
+    this.replyType,
+  );
+  final itemScrollCtr = ItemScrollController();
+  bool hasRoot = false;
+  dynamic id;
   // 视频aid 请求时使用的oid
   int? aid;
   // rpid 请求楼中楼回复
@@ -16,11 +26,11 @@ class VideoReplyReplyController extends CommonController {
   RxString noMore = ''.obs;
   // 当前回复的回复
   ReplyInfo? currentReplyItem;
-  ReplyInfo? root;
 
   CursorReply? cursor;
   Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   RxInt count = (-1).obs;
+  int? upMid;
 
   @override
   void onInit() {
@@ -79,10 +89,26 @@ class VideoReplyReplyController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     DetailListReply replies = response.response;
-    root = replies.root;
     if (cursor == null) {
       count.value = replies.root.count.toInt();
+      if (id != null) {
+        int index = replies.root.replies
+            .map((item) => item.id.toInt())
+            .toList()
+            .indexOf(id);
+        if (index != -1) {
+          () async {
+            await Future.delayed(const Duration(milliseconds: 200));
+            itemScrollCtr.scrollTo(
+              index: hasRoot ? index + 3 : index + 1,
+              duration: const Duration(milliseconds: 200),
+            );
+          }();
+        }
+        id = null;
+      }
     }
+    upMid ??= replies.subjectControl.upMid.toInt();
     cursor = replies.cursor;
     if (replies.root.replies.isNotEmpty) {
       noMore.value = '加载中...';

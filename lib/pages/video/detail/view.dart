@@ -1287,9 +1287,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   // 展示二级回复
-  void replyReply(replyItem) {
+  void replyReply(replyItem, id) {
     scaffoldKey.currentState?.showBottomSheet(
       (context) => VideoReplyReplyPanel(
+        id: id,
         // rcount: replyItem.rcount,
         oid: replyItem.oid.toInt(),
         rpid: replyItem.id.toInt(),

@@ -1,16 +1,14 @@
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
-    show MySliverPersistentHeaderDelegate;
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../../utils/utils.dart';
 import 'controller.dart';
@@ -18,6 +16,7 @@ import 'controller.dart';
 class VideoReplyReplyPanel extends StatefulWidget {
   const VideoReplyReplyPanel({
     // this.rcount,
+    this.id,
     this.oid,
     this.rpid,
     this.firstFloor,
@@ -26,6 +25,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
     super.key,
   });
   // final dynamic rcount;
+  final dynamic id;
   final int? oid;
   final int? rpid;
   final ReplyInfo? firstFloor;
@@ -45,29 +45,18 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     super.initState();
     _videoReplyReplyController = Get.put(
       VideoReplyReplyController(
-          widget.oid, widget.rpid.toString(), widget.replyType!),
+        widget.firstFloor != null,
+        widget.id,
+        widget.oid,
+        widget.rpid.toString(),
+        widget.replyType!,
+      ),
       tag: widget.rpid.toString(),
-    );
-
-    // 上拉加载更多
-    _videoReplyReplyController.scrollController.addListener(
-      () {
-        if (_videoReplyReplyController.scrollController.position.pixels >=
-            _videoReplyReplyController
-                    .scrollController.position.maxScrollExtent -
-                300) {
-          EasyThrottle.throttle('replylist', const Duration(milliseconds: 200),
-              () {
-            _videoReplyReplyController.onLoadMore();
-          });
-        }
-      },
     );
   }
 
   @override
   void dispose() {
-    _videoReplyReplyController.scrollController.removeListener(() {});
     Get.delete<VideoReplyReplyController>(tag: widget.rpid.toString());
     super.dispose();
   }
@@ -105,76 +94,52 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               onRefresh: () async {
                 await _videoReplyReplyController.onRefresh();
               },
-              child: CustomScrollView(
-                controller: _videoReplyReplyController.scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: <Widget>[
-                  if (widget.firstFloor != null) ...[
-                    // const SliverToBoxAdapter(child: SizedBox(height: 10)),
-                    SliverToBoxAdapter(
-                      child: ReplyItemGrpc(
-                        replyItem: widget.firstFloor!,
-                        replyLevel: '2',
-                        showReplyRow: false,
-                        replyType: widget.replyType,
-                        needDivider: false,
-                        onReply: () {
-                          _onReply(widget.firstFloor!);
-                        },
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Divider(
-                        height: 20,
-                        color: Theme.of(context).dividerColor.withOpacity(0.1),
-                        thickness: 6,
-                      ),
-                    ),
-                  ],
-                  SliverPersistentHeader(
-                    pinned: false,
-                    floating: true,
-                    delegate: MySliverPersistentHeaderDelegate(
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-                        color: Theme.of(context).colorScheme.surface,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Obx(
-                              () => _videoReplyReplyController.count.value != -1
-                                  ? Text(
-                                      '相关回复共${_videoReplyReplyController.count.value}条',
-                                      style: const TextStyle(fontSize: 13),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ),
-                            SizedBox(
-                              height: 35,
-                              child: TextButton.icon(
-                                onPressed: () =>
-                                    _videoReplyReplyController.queryBySort(),
-                                icon: const Icon(Icons.sort, size: 16),
-                                label: Obx(
-                                  () => Text(
-                                    _videoReplyReplyController.mode.value ==
-                                            Mode.MAIN_LIST_HOT
-                                        ? '按热度'
-                                        : '按时间',
-                                    style: const TextStyle(fontSize: 13),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Obx(() => _buildBody(
-                      _videoReplyReplyController.loadingState.value)),
-                ],
+              child: Obx(
+                () => ScrollablePositionedList.builder(
+                  itemCount:
+                      _itemCount(_videoReplyReplyController.loadingState.value),
+                  itemScrollController:
+                      _videoReplyReplyController.itemScrollCtr,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (_, index) {
+                    if (widget.firstFloor != null) {
+                      if (index == 0) {
+                        return ReplyItemGrpc(
+                          replyItem: widget.firstFloor!,
+                          replyLevel: '2',
+                          showReplyRow: false,
+                          replyType: widget.replyType,
+                          needDivider: false,
+                          onReply: () {
+                            _onReply(widget.firstFloor!);
+                          },
+                          upMid: _videoReplyReplyController.upMid,
+                        );
+                      } else if (index == 1) {
+                        return Divider(
+                          height: 20,
+                          color:
+                              Theme.of(context).dividerColor.withOpacity(0.1),
+                          thickness: 6,
+                        );
+                      } else if (index == 2) {
+                        return _sortWidget;
+                      } else {
+                        return Obx(() => _buildBody(
+                            _videoReplyReplyController.loadingState.value,
+                            index - 3));
+                      }
+                    } else {
+                      if (index == 0) {
+                        return _sortWidget;
+                      } else {
+                        return Obx(() => _buildBody(
+                            _videoReplyReplyController.loadingState.value,
+                            index - 1));
+                      }
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -182,6 +147,40 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
       ),
     );
   }
+
+  Widget get _sortWidget => Container(
+        height: 40,
+        padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
+        color: Theme.of(context).colorScheme.surface,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Obx(
+              () => _videoReplyReplyController.count.value != -1
+                  ? Text(
+                      '相关回复共${_videoReplyReplyController.count.value}条',
+                      style: const TextStyle(fontSize: 13),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            SizedBox(
+              height: 35,
+              child: TextButton.icon(
+                onPressed: () => _videoReplyReplyController.queryBySort(),
+                icon: const Icon(Icons.sort, size: 16),
+                label: Obx(
+                  () => Text(
+                    _videoReplyReplyController.mode.value == Mode.MAIN_LIST_HOT
+                        ? '按热度'
+                        : '按时间',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
 
   void _onReply(ReplyInfo? item) {
     dynamic oid = item?.oid.toInt();
@@ -236,89 +235,84 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     });
   }
 
-  Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverMainAxisGroup(
-            slivers: <Widget>[
-              if (widget.firstFloor == null &&
-                  _videoReplyReplyController.root != null) ...[
-                SliverToBoxAdapter(
-                  child: ReplyItemGrpc(
-                    replyItem: _videoReplyReplyController.root!,
-                    replyLevel: '2',
-                    showReplyRow: false,
-                    replyType: widget.replyType,
-                    needDivider: false,
-                    onReply: () {
-                      _onReply(_videoReplyReplyController.root);
-                    },
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Divider(
-                    height: 20,
-                    color: Theme.of(context).dividerColor.withOpacity(0.1),
-                    thickness: 6,
-                  ),
-                ),
-              ],
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index == loadingState.response.length) {
-                      return Container(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).padding.bottom),
-                        height: MediaQuery.of(context).padding.bottom + 100,
-                        child: Center(
-                          child: Obx(
-                            () => Text(
-                              _videoReplyReplyController.noMore.value,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return ReplyItemGrpc(
-                        replyItem: loadingState.response[index],
-                        replyLevel: '2',
-                        showReplyRow: false,
-                        replyType: widget.replyType,
-                        onReply: () {
-                          _onReply(loadingState.response[index]);
-                        },
-                        onDelete: (rpid, frpid) {
-                          List list = (_videoReplyReplyController
-                                  .loadingState.value as Success)
-                              .response;
-                          list = list.where((item) => item.id != rpid).toList();
-                          _videoReplyReplyController.loadingState.value =
-                              LoadingState.success(list);
-                        },
-                      );
-                    }
-                  },
-                  childCount: loadingState.response.length + 1,
+  Widget _buildBody(LoadingState loadingState, int index) {
+    if (loadingState is Success) {
+      if (index == loadingState.response.length) {
+        _videoReplyReplyController.onLoadMore();
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+          height: MediaQuery.of(context).padding.bottom + 100,
+          child: Center(
+            child: Obx(
+              () => Text(
+                _videoReplyReplyController.noMore.value,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
               ),
-            ],
+            ),
+          ),
+        );
+      } else {
+        return ReplyItemGrpc(
+          replyItem: loadingState.response[index],
+          replyLevel: '2',
+          showReplyRow: false,
+          replyType: widget.replyType,
+          onReply: () {
+            _onReply(loadingState.response[index]);
+          },
+          onDelete: (rpid, frpid) {
+            List list =
+                (_videoReplyReplyController.loadingState.value as Success)
+                    .response;
+            list = list.where((item) => item.id != rpid).toList();
+            _videoReplyReplyController.loadingState.value =
+                LoadingState.success(list);
+          },
+          upMid: _videoReplyReplyController.upMid,
+        );
+      }
+    } else if (loadingState is Error) {
+      return CustomScrollView(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [
+          HttpError(
+            errMsg: loadingState.errMsg,
+            fn: _videoReplyReplyController.onReload,
           )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _videoReplyReplyController.onReload,
-              )
-            : SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return const VideoReplySkeleton();
-                  },
-                  childCount: 8,
-                ),
-              );
+        ],
+      );
+    } else {
+      return CustomScrollView(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return const VideoReplySkeleton();
+              },
+              childCount: 8,
+            ),
+          )
+        ],
+      );
+    }
+  }
+
+  int _itemCount(LoadingState loadingState) {
+    int itemCount = 0;
+    if (widget.firstFloor != null) {
+      itemCount = 2;
+    }
+    if (loadingState is Success) {
+      return loadingState.response.length + itemCount + 2;
+    } else {
+      return itemCount + 2;
+    }
   }
 }

@@ -102,7 +102,6 @@ class GrpcRepo {
     try {
       return await request();
     } catch (e) {
-      print('111111111111111111111111111111111111111 $e');
       return {'status': false, 'msg': e.toString()};
     }
   }

@@ -53,7 +53,7 @@ class ReplyItemGrpc extends StatelessWidget {
         onTap: () {
           feedBack();
           if (replyReply != null) {
-            replyReply!(replyItem);
+            replyReply!(replyItem, null);
           }
         },
         onLongPress: () {
@@ -442,7 +442,8 @@ class ReplyItemRow extends StatelessWidget {
               for (int i = 0; i < replies.length; i++) ...[
                 InkWell(
                   // 一楼点击评论展开评论详情
-                  onTap: () => replyReply!(replyItem),
+                  onTap: () =>
+                      replyReply?.call(replyItem, replies[i].id.toInt()),
                   onLongPress: () {
                     feedBack();
                     showModalBottomSheet(
@@ -543,7 +544,7 @@ class ReplyItemRow extends StatelessWidget {
             if (extraRow)
               InkWell(
                 // 一楼点击【共xx条回复】展开评论详情
-                onTap: () => replyReply!(replyItem),
+                onTap: () => replyReply!(replyItem, null),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(8, 5, 8, 8),
