@@ -141,7 +141,13 @@ class HistoryController extends GetxController {
 
   // 删除已看历史记录
   void onDelHistory() {
-    _onDelete(historyList.where((e) => e.progress == -1).toList());
+    List<HisListItem> list =
+        historyList.where((e) => e.progress == -1).toList();
+    if (list.isNotEmpty) {
+      _onDelete(list);
+    } else {
+      SmartDialog.showToast('无已看记录');
+    }
   }
 
   void _onDelete(List<HisListItem> result) async {
