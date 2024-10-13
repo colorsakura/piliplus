@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -66,6 +67,7 @@ class SettingController extends GetxController {
               onPressed: () async {
                 // 清空cookie
                 await Request.cookieManager.cookieJar.deleteAll();
+                await CookieManager().deleteAllCookies();
                 Request.dio.options.headers['cookie'] = '';
                 // 清空本地存储的用户标识
                 userInfoCache.put('userInfoCache', null);

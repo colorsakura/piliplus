@@ -11,6 +11,7 @@ import 'package:PiliPalaX/models/login/index.dart';
 import '../../utils/login.dart';
 import 'package:hive/hive.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 
 import '../../http/constants.dart';
 import '../../http/init.dart';
@@ -144,6 +145,17 @@ class LoginPageController extends GetxController
       Request.dio.options.headers['cookie'] = cookieStrings;
       print(Request.dio.options);
       await WebviewCookieManager().setCookies(cookies);
+      for (Cookie item in cookies) {
+        await web.CookieManager().setCookie(
+          url: web.WebUri(item.domain ?? ''),
+          name: item.name,
+          value: item.value,
+          path: item.path ?? '',
+          domain: item.domain,
+          isSecure: item.secure,
+          isHttpOnly: item.httpOnly,
+        );
+      }
     } catch (e) {
       SmartDialog.showToast('设置登录态失败，$e');
     }
