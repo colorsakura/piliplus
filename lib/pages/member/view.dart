@@ -160,7 +160,8 @@ class _MemberPageState extends State<MemberPage>
                               vertical: 16,
                             ),
                             content: ReportPanel(
-                              memberInfo: _memberController.memberInfo.value,
+                              name: _memberController.memberInfo.value.name,
+                              mid: mid,
                             ),
                           ),
                         );
@@ -530,9 +531,14 @@ class _MemberPageState extends State<MemberPage>
 }
 
 class ReportPanel extends StatefulWidget {
-  const ReportPanel({super.key, required this.memberInfo});
+  const ReportPanel({
+    super.key,
+    required this.name,
+    required this.mid,
+  });
 
-  final MemberInfoModel memberInfo;
+  final dynamic name;
+  final dynamic mid;
 
   @override
   State<ReportPanel> createState() => _ReportPanelState();
@@ -551,11 +557,11 @@ class _ReportPanelState extends State<ReportPanel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '举报: ${widget.memberInfo.name}',
+            '举报: ${widget.name}',
             style: const TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 4),
-          Text('uid: ${widget.memberInfo.mid}'),
+          Text('uid: ${widget.mid}'),
           const SizedBox(height: 10),
           const Text('举报内容（必选，可多选）'),
           ...List.generate(
@@ -604,7 +610,7 @@ class _ReportPanelState extends State<ReportPanel> {
                   } else {
                     Get.back();
                     dynamic result = await MemberHttp.reportMember(
-                      widget.memberInfo.mid,
+                      widget.mid,
                       reason: _reason.join(','),
                       reasonV2: _reasonV2 != null ? _reasonV2! + 1 : null,
                     );
