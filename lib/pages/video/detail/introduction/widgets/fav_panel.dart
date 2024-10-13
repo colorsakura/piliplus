@@ -53,11 +53,33 @@ class _FavPanelState extends State<FavPanel> {
               centerTitle: false,
               elevation: 0,
               leading: IconButton(
-                  tooltip: '关闭',
-                  onPressed: () => Get.back(),
-                  icon: const Icon(Icons.close_outlined)),
+                tooltip: '关闭',
+                onPressed: Get.back,
+                icon: const Icon(Icons.close_outlined),
+              ),
               title: Text('添加到收藏夹',
                   style: Theme.of(context).textTheme.titleMedium),
+              actions: [
+                TextButton.icon(
+                  onPressed: () {
+                    // TODO
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  label: const Text('新建收藏夹'),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 14),
+                    visualDensity: const VisualDensity(
+                      horizontal: -2,
+                      vertical: -2,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+              ],
             ),
             Expanded(
               child: Material(
@@ -80,12 +102,18 @@ class _FavPanelState extends State<FavPanel> {
                                         1,
                                     index),
                                 dense: true,
-                                leading: const Icon(Icons.folder_outlined),
+                                leading: [0, 22].contains(widget.ctr!
+                                        .favFolderData.value.list![index].attr)
+                                    ? const Icon(Icons.folder_outlined)
+                                    : const Icon(Icons.lock_outline),
                                 minLeadingWidth: 0,
                                 title: Text(widget.ctr!.favFolderData.value
                                     .list![index].title!),
                                 subtitle: Text(
-                                  '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容',
+                                  '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容 . ${[
+                                    0,
+                                    22
+                                  ].contains(widget.ctr!.favFolderData.value.list![index].attr) ? '公开' : '私密'}',
                                 ),
                                 trailing: Transform.scale(
                                   scale: 0.9,
