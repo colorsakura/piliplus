@@ -520,6 +520,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   Expanded(
                     child: Scaffold(
                       key: scaffoldKey,
+                      resizeToAvoidBottomInset: false,
                       body: Column(
                         children: [
                           tabbarBuild(),
@@ -577,6 +578,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 Expanded(
                   child: Scaffold(
                     key: scaffoldKey,
+                    resizeToAvoidBottomInset: false,
                     body: Column(
                       children: [
                         tabbarBuild(),
@@ -628,6 +630,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               Expanded(
                 child: Scaffold(
                   key: scaffoldKey,
+                  resizeToAvoidBottomInset: false,
                   body: Column(
                     children: [
                       tabbarBuild(false),
@@ -682,6 +685,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   child: Expanded(
                     child: Scaffold(
                       key: scaffoldKey,
+                      resizeToAvoidBottomInset: false,
                       body: Column(
                         children: [
                           tabbarBuild(false, '', true),
@@ -781,6 +785,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       (removeSafeArea ? 0 : MediaQuery.of(context).padding.top),
                   child: Scaffold(
                     key: scaffoldKey,
+                    resizeToAvoidBottomInset: false,
                     body: Column(
                       children: [
                         tabbarBuild(
