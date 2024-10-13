@@ -113,9 +113,9 @@ class VideoReplyReplyController extends CommonController
           ).animate(controller!);
           () async {
             await Future.delayed(const Duration(milliseconds: 200));
-            await itemScrollCtr.scrollTo(
-              index: hasRoot ? index! + 3 : index! + 1,
-              duration: const Duration(milliseconds: 200),
+            itemScrollCtr.jumpTo(
+              index: hasRoot ? index! + 3 : index! + 1, alignment: 0.25,
+              // duration: const Duration(milliseconds: 200),
             );
             await Future.delayed(const Duration(milliseconds: 800));
             await controller?.forward();
