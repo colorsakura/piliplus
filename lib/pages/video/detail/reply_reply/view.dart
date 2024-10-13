@@ -39,6 +39,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
 class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   late VideoReplyReplyController _videoReplyReplyController;
   late final _savedReplies = {};
+  final itemPositionsListener = ItemPositionsListener.create();
 
   @override
   void initState() {
@@ -63,6 +64,27 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     Get.delete<VideoReplyReplyController>(tag: widget.rpid.toString());
     super.dispose();
   }
+
+  Widget get _header => ValueListenableBuilder<Iterable<ItemPosition>>(
+        valueListenable: itemPositionsListener.itemPositions,
+        builder: (context, positions, child) {
+          int min = -1;
+          if (positions.isNotEmpty) {
+            min = positions
+                .where((ItemPosition position) => position.itemTrailingEdge > 0)
+                .reduce((ItemPosition min, ItemPosition position) =>
+                    position.itemTrailingEdge < min.itemTrailingEdge
+                        ? position
+                        : min)
+                .index;
+          }
+          return widget.firstFloor == null
+              ? _sortWidget
+              : min >= 2
+                  ? _sortWidget
+                  : const SizedBox.shrink();
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -98,50 +120,59 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                 await _videoReplyReplyController.onRefresh();
               },
               child: Obx(
-                () => ScrollablePositionedList.builder(
-                  itemCount:
-                      _itemCount(_videoReplyReplyController.loadingState.value),
-                  itemScrollController:
-                      _videoReplyReplyController.itemScrollCtr,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (_, index) {
-                    if (widget.firstFloor != null) {
-                      if (index == 0) {
-                        return ReplyItemGrpc(
-                          replyItem: widget.firstFloor!,
-                          replyLevel: '2',
-                          showReplyRow: false,
-                          replyType: widget.replyType,
-                          needDivider: false,
-                          onReply: () {
-                            _onReply(widget.firstFloor!);
-                          },
-                          upMid: _videoReplyReplyController.upMid,
-                        );
-                      } else if (index == 1) {
-                        return Divider(
-                          height: 20,
-                          color:
-                              Theme.of(context).dividerColor.withOpacity(0.1),
-                          thickness: 6,
-                        );
-                      } else if (index == 2) {
-                        return _sortWidget;
-                      } else {
-                        return Obx(() => _buildBody(
-                            _videoReplyReplyController.loadingState.value,
-                            index - 3));
-                      }
-                    } else {
-                      if (index == 0) {
-                        return _sortWidget;
-                      } else {
-                        return Obx(() => _buildBody(
-                            _videoReplyReplyController.loadingState.value,
-                            index - 1));
-                      }
-                    }
-                  },
+                () => Stack(
+                  children: [
+                    ScrollablePositionedList.builder(
+                      itemPositionsListener: itemPositionsListener,
+                      itemCount: _itemCount(
+                          _videoReplyReplyController.loadingState.value),
+                      itemScrollController:
+                          _videoReplyReplyController.itemScrollCtr,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (_, index) {
+                        if (widget.firstFloor != null) {
+                          if (index == 0) {
+                            return ReplyItemGrpc(
+                              replyItem: widget.firstFloor!,
+                              replyLevel: '2',
+                              showReplyRow: false,
+                              replyType: widget.replyType,
+                              needDivider: false,
+                              onReply: () {
+                                _onReply(widget.firstFloor!);
+                              },
+                              upMid: _videoReplyReplyController.upMid,
+                            );
+                          } else if (index == 1) {
+                            return Divider(
+                              height: 20,
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withOpacity(0.1),
+                              thickness: 6,
+                            );
+                          } else if (index == 2) {
+                            return _sortWidget;
+                          } else {
+                            return Obx(() => _buildBody(
+                                _videoReplyReplyController.loadingState.value,
+                                index - 3));
+                          }
+                        } else {
+                          if (index == 0) {
+                            return _sortWidget;
+                          } else {
+                            return Obx(() => _buildBody(
+                                _videoReplyReplyController.loadingState.value,
+                                index - 1));
+                          }
+                        }
+                      },
+                    ),
+                    if (_videoReplyReplyController.loadingState.value
+                        is Success)
+                      _header,
+                  ],
                 ),
               ),
             ),
