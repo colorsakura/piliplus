@@ -159,6 +159,7 @@ class VideoReplyReplyController extends CommonController
       );
 
   queryBySort() {
+    noMore.value = '';
     mode.value = mode.value == Mode.MAIN_LIST_HOT
         ? Mode.MAIN_LIST_TIME
         : Mode.MAIN_LIST_HOT;
