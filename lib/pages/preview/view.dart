@@ -94,11 +94,25 @@ class _ImagePreviewState extends State<ImagePreview>
                 onTap: () {
                   Get.back();
                   DownloadUtils.downloadImg(
-                      context, _previewController.currentImgUrl);
+                    context,
+                    [_previewController.currentImgUrl],
+                  );
                 },
                 dense: true,
                 title: const Text('保存到手机', style: TextStyle(fontSize: 14)),
               ),
+              if (imgList!.length > 1)
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    DownloadUtils.downloadImg(
+                      context,
+                      imgList!,
+                    );
+                  },
+                  dense: true,
+                  title: const Text('保存全部到手机', style: TextStyle(fontSize: 14)),
+                ),
             ],
           ),
         );

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:PiliPalaX/http/index.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,8 @@ class DownloadUtils {
     }
   }
 
-  static Future<bool> checkPermissionDependOnSdkInt(BuildContext context) async {
+  static Future<bool> checkPermissionDependOnSdkInt(
+      BuildContext context) async {
     if (Platform.isAndroid) {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       if (androidInfo.version.sdkInt <= 32) {
@@ -81,39 +83,52 @@ class DownloadUtils {
     }
     return await requestStoragePer(context);
   }
-  static Future<bool> downloadImg(BuildContext context, String imgUrl,
-      {String imgType = 'cover'}) async {
+
+  static Future downloadImg(
+    BuildContext context,
+    List<String> imgList, {
+    String imgType = 'cover',
+  }) async {
     try {
       if (!await checkPermissionDependOnSdkInt(context)) {
-      //   // return false;
+        return;
       }
-      SmartDialog.showLoading(msg: '正在下载原图');
-      var response = await Dio()
-          .get(imgUrl, options: Options(responseType: ResponseType.bytes));
-      SmartDialog.dismiss();
-      SmartDialog.showLoading(msg: '正在保存图片至图库');
-      String picName =
-          "${imgType}_${DateTime.now().toString().replaceAll(' ', '_').replaceAll(':', '-').split('.').first}";
-      final SaveResult result = await SaverGallery.saveImage(
-        Uint8List.fromList(response.data),
-        quality: 100,
-        name: picName,
-        fileExtension: 'jpg',
-        // 保存到 PiliPalaX文件夹
-        androidRelativePath: "Pictures/PiliPalaX",
-        androidExistNotSave: false,
-      );
-      SmartDialog.dismiss();
-      if (result.isSuccess) {
-        await SmartDialog.showToast('「$picName」已保存 ');
-      } else {
-        await SmartDialog.showToast('保存失败，${result.errorMessage}');
+      Dio dio = Dio()
+        ..options = BaseOptions(
+          connectTimeout: const Duration(milliseconds: 10000),
+          receiveTimeout: const Duration(milliseconds: 10000),
+        );
+      for (int i = 0; i < imgList.length; i++) {
+        SmartDialog.showLoading(
+            msg:
+                '正在下载原图${imgList.length > 1 ? '${i + 1}/${imgList.length}' : ''}');
+        var response = await dio.get(imgList[i],
+            options: Options(responseType: ResponseType.bytes));
+        String picName =
+            "${imgType}_${DateTime.now().toString().replaceAll(' ', '_').replaceAll(':', '-').split('.').first}";
+        final SaveResult result = await SaverGallery.saveImage(
+          Uint8List.fromList(response.data),
+          quality: 100,
+          name: picName,
+          fileExtension: 'jpg',
+          // 保存到 PiliPalaX文件夹
+          androidRelativePath: "Pictures/PiliPalaX",
+          androidExistNotSave: false,
+        );
+        // SmartDialog.dismiss();
+        // SmartDialog.showLoading(msg: '正在保存图片至图库');
+        if (i == imgList.length - 1) {
+          SmartDialog.dismiss();
+        }
+        if (result.isSuccess) {
+          await SmartDialog.showToast('「$picName」已保存 ');
+        } else {
+          await SmartDialog.showToast('保存失败，${result.errorMessage}');
+        }
       }
-      return true;
     } catch (err) {
       SmartDialog.dismiss();
       SmartDialog.showToast(err.toString());
-      return true;
     }
   }
 }

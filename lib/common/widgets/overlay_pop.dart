@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../utils/download.dart';
@@ -80,11 +81,17 @@ class OverlayPop extends StatelessWidget {
                     onPressed: () async {
                       await DownloadUtils.downloadImg(
                         context,
-                        videoItem is card.Card
-                            ? (videoItem as card.Card).smallCoverV5.base.cover
-                            : (videoItem.pic != null
-                                ? videoItem.pic as String
-                                : videoItem.cover as String),
+                        [
+                          videoItem is card.Card
+                              ? (videoItem as card.Card)
+                                  .smallCoverV5
+                                  .base
+                                  .cover
+                                  .http2https
+                              : (videoItem.pic != null
+                                  ? (videoItem.pic as String).http2https
+                                  : (videoItem.cover as String).http2https)
+                        ],
                       );
                       closeFn!();
                     },
