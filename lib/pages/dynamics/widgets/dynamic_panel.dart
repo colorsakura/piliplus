@@ -42,7 +42,7 @@ class DynamicPanel extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         child: InkWell(
-          onTap: source == 'detail'
+          onTap: source == 'detail' && item.type == 'DYNAMIC_TYPE_DRAW'
               ? null
               : () => _dynamicsController.pushDetail(item, 1),
           child: Column(
