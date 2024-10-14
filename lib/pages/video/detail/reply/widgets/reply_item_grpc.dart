@@ -295,13 +295,6 @@ class ReplyItemGrpc extends StatelessWidget {
                         textPainter,
                         didExceedMaxLines,
                       ),
-                      if (didExceedMaxLines)
-                        TextSpan(
-                          text: '\n查看更多',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
                     ],
                   ),
                 ),
@@ -940,6 +933,18 @@ InlineSpan buildContent(
       }
     }
   }
+
+  if (didExceedMaxLines == true) {
+    spanChildren.add(
+      TextSpan(
+        text: '\n查看更多',
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+    );
+  }
+
   // 图片渲染
   if (content.pictures.isNotEmpty) {
     spanChildren.add(const TextSpan(text: '\n'));
