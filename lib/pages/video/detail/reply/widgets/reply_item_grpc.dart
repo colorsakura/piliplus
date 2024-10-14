@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPalaX/common/widgets/badge.dart';
 import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
@@ -721,30 +723,53 @@ InlineSpan buildContent(
       } else if (RegExp(r'^\b(?:\d+[:：])?[0-5]?[0-9][:：][0-5]?[0-9]\b$')
           .hasMatch(matchStr)) {
         matchStr = matchStr.replaceAll('：', ':');
+        bool isValid = false;
+        try {
+          List<int> split = matchStr
+              .split(':')
+              .map((item) => int.parse(item))
+              .toList()
+              .reversed
+              .toList();
+          int seek = 0;
+          for (int i = 0; i < split.length; i++) {
+            seek += split[i] * pow(60, i).toInt();
+          }
+          int duration =
+              Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
+                      .data
+                      .timeLength ??
+                  0;
+          isValid = seek * 1000 <= duration;
+        } catch (e) {
+          print('failed to validate: $e');
+        }
         spanChildren.add(
           TextSpan(
-            text: ' $matchStr ',
-            style: isVideoPage
+            text: isValid ? ' $matchStr ' : matchStr,
+            style: isValid && isVideoPage
                 ? TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   )
                 : null,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                // 跳转到指定位置
-                if (isVideoPage) {
-                  try {
-                    SmartDialog.showToast('跳转至：$matchStr');
-                    Get.find<VideoDetailController>(
-                            tag: Get.arguments['heroTag'])
-                        .plPlayerController
-                        .seekTo(Duration(seconds: Utils.duration(matchStr)),
-                            type: 'slider');
-                  } catch (e) {
-                    SmartDialog.showToast('跳转失败: $e');
-                  }
-                }
-              },
+            recognizer: isValid
+                ? (TapGestureRecognizer()
+                  ..onTap = () {
+                    // 跳转到指定位置
+                    if (isVideoPage) {
+                      try {
+                        SmartDialog.showToast('跳转至：$matchStr');
+                        Get.find<VideoDetailController>(
+                                tag: Get.arguments['heroTag'])
+                            .plPlayerController
+                            .seekTo(Duration(seconds: Utils.duration(matchStr)),
+                                type: 'slider');
+                      } catch (e) {
+                        SmartDialog.showToast('跳转失败: $e');
+                      }
+                    }
+                  })
+                : null,
           ),
         );
       } else {
