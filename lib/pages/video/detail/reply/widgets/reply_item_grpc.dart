@@ -257,8 +257,12 @@ class ReplyItemGrpc extends StatelessWidget {
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               String text = replyItem.content.message;
+              TextStyle style = TextStyle(
+                height: 1.75,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              );
               var textPainter = TextPainter(
-                text: TextSpan(text: text),
+                text: TextSpan(text: text, style: style),
                 maxLines: replyLevel == '1' ? 6 : null,
                 textDirection: Directionality.of(context),
               )..layout(maxWidth: constraints.maxWidth);
@@ -266,10 +270,7 @@ class ReplyItemGrpc extends StatelessWidget {
               return Semantics(
                 label: text,
                 child: Text.rich(
-                  style: TextStyle(
-                      height: 1.75,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize),
+                  style: style,
                   TextSpan(
                     children: [
                       if (isTop) ...[
@@ -605,14 +606,15 @@ InlineSpan buildContent(
 
   if (didExceedMaxLines == true) {
     final textSize = textPainter.size;
+    final double maxHeight = textPainter.preferredLineHeight * 6;
     var position = textPainter.getPositionForOffset(
       Offset(
         textSize.width,
-        textSize.height,
+        maxHeight, // textSize.height,
       ),
     );
-    final endOffset = textPainter.getOffsetBefore(position.offset);
-    message = message.substring(0, endOffset);
+    // final endOffset = textPainter.getOffsetBefore(position.offset);
+    message = message.substring(0, position.offset);
   }
 
   // return TextSpan(text: message);
