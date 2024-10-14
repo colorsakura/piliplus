@@ -102,6 +102,11 @@ class GrpcRepo {
     try {
       return await request();
     } catch (e) {
+      if (e is GrpcError) {
+        if (e.message == '12061') {
+          return {'status': false, 'msg': 'UP主已关闭评论区'}; // to be comfirm
+        }
+      }
       return {'status': false, 'msg': e.toString()};
     }
   }

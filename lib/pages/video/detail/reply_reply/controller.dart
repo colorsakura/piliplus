@@ -74,7 +74,7 @@ class VideoReplyReplyController extends CommonController
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (noMore.value == '没有更多了') return Future.value();
+    if (['没有更多了', '还没有评论'].contains(noMore.value)) return Future.value();
     return super.queryData(isRefresh);
   }
 
