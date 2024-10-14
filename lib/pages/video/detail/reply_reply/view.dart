@@ -255,16 +255,18 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     )
         .then((value) {
       // 完成评论，数据添加              // TODO: data cast
-      if (value != null && value['data'] is ReplyInfo) {
+      if (value != null && value['data'] != null) {
         _savedReplies[key] = null;
-        List<ReplyInfo> list =
-            _videoReplyReplyController.loadingState.value is Success
-                ? (_videoReplyReplyController.loadingState.value as Success)
-                    .response
-                : <ReplyInfo>[];
-        list.add(value['data']);
-        _videoReplyReplyController.loadingState.value =
-            LoadingState.success(list);
+        if (value['data'] is ReplyInfo) {
+          List<ReplyInfo> list =
+              _videoReplyReplyController.loadingState.value is Success
+                  ? (_videoReplyReplyController.loadingState.value as Success)
+                      .response
+                  : <ReplyInfo>[];
+          list.add(value['data']);
+          _videoReplyReplyController.loadingState.value =
+              LoadingState.success(list);
+        }
       }
     });
   }

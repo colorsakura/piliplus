@@ -156,16 +156,18 @@ abstract class ReplyController extends CommonController {
         .then(
       (value) {
         // TODO: data cast
-        if (value != null && value['data'] is ReplyInfo) {
+        if (value != null && value['data'] != null) {
           savedReplies[key] = null;
-          MainListReply response =
-              (loadingState.value as Success?)?.response ?? MainListReply();
-          if (oid != null) {
-            response.replies.insert(0, value['data']);
-          } else {
-            response.replies[index].replies.add(value['data']);
+          if (value['data'] is ReplyInfo) {
+            MainListReply response =
+                (loadingState.value as Success?)?.response ?? MainListReply();
+            if (oid != null) {
+              response.replies.insert(0, value['data']);
+            } else {
+              response.replies[index].replies.add(value['data']);
+            }
+            loadingState.value = LoadingState.success(response);
           }
-          loadingState.value = LoadingState.success(response);
         }
       },
     );

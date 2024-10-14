@@ -349,35 +349,38 @@ class _ReplyPageState extends State<ReplyPage>
                     selected: !snapshot.data!,
                   ),
                 ),
-                const SizedBox(width: 20),
-                ToolbarIconButton(
-                  tooltip: '图片',
-                  selected: false,
-                  icon: const Icon(Icons.image, size: 22),
-                  onPressed: () async {
-                    List<XFile> pickedFiles = await _imagePicker.pickMultiImage(
-                      limit: 9,
-                      imageQuality: 100,
-                    );
-                    if (pickedFiles.isNotEmpty) {
-                      for (int i = 0; i < pickedFiles.length; i++) {
-                        if (_pathList.length == 9) {
-                          SmartDialog.showToast('最多选择9张图片');
-                          if (i != 0) {
-                            _pathStream.add(_pathList);
-                          }
-                          break;
-                        } else {
-                          _pathList.add(pickedFiles[i].path);
-                          if (i == pickedFiles.length - 1) {
-                            SmartDialog.dismiss();
-                            _pathStream.add(_pathList);
+                if (widget.root == 0) ...[
+                  const SizedBox(width: 20),
+                  ToolbarIconButton(
+                    tooltip: '图片',
+                    selected: false,
+                    icon: const Icon(Icons.image, size: 22),
+                    onPressed: () async {
+                      List<XFile> pickedFiles =
+                          await _imagePicker.pickMultiImage(
+                        limit: 9,
+                        imageQuality: 100,
+                      );
+                      if (pickedFiles.isNotEmpty) {
+                        for (int i = 0; i < pickedFiles.length; i++) {
+                          if (_pathList.length == 9) {
+                            SmartDialog.showToast('最多选择9张图片');
+                            if (i != 0) {
+                              _pathStream.add(_pathList);
+                            }
+                            break;
+                          } else {
+                            _pathList.add(pickedFiles[i].path);
+                            if (i == pickedFiles.length - 1) {
+                              SmartDialog.dismiss();
+                              _pathStream.add(_pathList);
+                            }
                           }
                         }
                       }
-                    }
-                  },
-                ),
+                    },
+                  ),
+                ],
                 const Spacer(),
                 StreamBuilder(
                   initialData: _enablePublish,
