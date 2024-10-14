@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:uuid/rng.dart';
 
 import 'controller.dart';
 
@@ -125,28 +126,25 @@ class _SysMsgPageState extends State<SysMsgPage> {
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.75),
+                                  .withOpacity(0.85),
                             ),
                           ),
                           const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "${_sysMsgController.msgFeedSysMsgList[i].timeAt}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outline
-                                          .withOpacity(0.8),
-                                    ),
-                              )
-                            ],
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              "${_sysMsgController.msgFeedSysMsgList[i].timeAt}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                              textAlign: TextAlign.end,
+                            ),
                           ),
                         ],
                       ),
@@ -171,82 +169,54 @@ class _SysMsgPageState extends State<SysMsgPage> {
 
   InlineSpan _buildContent(String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
-    RegExp urlRegExp = RegExp('#\\{([^}]*)\\}\\{"([^}]*)"\\}');
-    Iterable<Match> matches = urlRegExp.allMatches(content);
-    int previousEndIndex = 0;
-    if (matches.isNotEmpty) {
-      for (final Match match in matches) {
-        if (match.start > previousEndIndex) {
+    RegExp urlRegExp = RegExp(
+        '#\\{([^}]*)\\}\\{"([^}]*)"\\}|https?:\\/\\/[^\\s/\$.?#].[^\\s]*|www\\.[^\\s/\$.?#].[^\\s]*');
+    content.splitMapJoin(
+      urlRegExp,
+      onMatch: (Match match) {
+        if (match[0]!.startsWith('#')) {
           spanChildren.add(
             TextSpan(
-              text: content.substring(previousEndIndex, match.start),
-            ),
-          );
-        }
-        spanChildren.add(
-          TextSpan(
-            text: match.group(1),
-            style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                try {
-                  Uri uri = Uri.parse(match.group(2)!);
-                  PiliScheme.routePush(uri);
-                } catch (err) {
-                  SmartDialog.showToast(err.toString());
-                }
-              },
-          ),
-        );
-        previousEndIndex = match.end;
-      }
-    } else {
-      urlRegExp = RegExp(
-          'https?:\\/\\/[^\\s/\$.?#].[^\\s]*|www\\.[^\\s/\$.?#].[^\\s]*');
-      matches = urlRegExp.allMatches(content);
-      if (matches.isNotEmpty) {
-        for (final Match match in matches) {
-          if (match.start > previousEndIndex) {
-            spanChildren.add(
-              TextSpan(
-                text: content.substring(previousEndIndex, match.start),
-              ),
-            );
-          }
-          spanChildren.add(
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Icon(
-                size: MediaQuery.of(context).textScaler.scale(14),
-                Icons.link,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          );
-          spanChildren.add(
-            TextSpan(
-              text: '网页链接',
+              text: match[1],
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   try {
-                    Uri uri = Uri.parse(match.group(0)!);
+                    Uri uri = Uri.parse(match[2]!);
                     PiliScheme.routePush(uri);
                   } catch (err) {
                     SmartDialog.showToast(err.toString());
-                    Utils.copyText(match.group(0) ?? '');
                   }
                 },
             ),
           );
-          previousEndIndex = match.end;
+        } else {
+          spanChildren.add(
+            TextSpan(
+              text: '\u{1F517}网页链接',
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  try {
+                    Uri uri = Uri.parse(match[0]!);
+                    PiliScheme.routePush(uri);
+                  } catch (err) {
+                    SmartDialog.showToast(err.toString());
+                    Utils.copyText(match[0] ?? '');
+                  }
+                },
+            ),
+          );
         }
-      } else {
+        return '';
+      },
+      onNonMatch: (String nonMatchStr) {
         spanChildren.add(
-          TextSpan(text: content),
+          TextSpan(text: nonMatchStr),
         );
-      }
-    }
+        return '';
+      },
+    );
     return TextSpan(children: spanChildren);
   }
 }
