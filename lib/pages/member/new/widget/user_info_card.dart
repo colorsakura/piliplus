@@ -16,14 +16,14 @@ class UserInfoCard extends StatelessWidget {
     required this.images,
     required this.relation,
     required this.isFollow,
-    // required this.onFollow,
+    required this.onFollow,
   });
 
   final int relation;
   final bool isFollow;
   final space.Card card;
   final space.Images images;
-  // final Function(dynamic uid, dynamic isFollow) onFollow;
+  final VoidCallback onFollow;
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +154,10 @@ class UserInfoCard extends StatelessWidget {
                                 onTap: () {
                                   if (index == 0) {
                                     Get.toNamed(
-                                        '/follow?mid=${card.mid}&name=${card.name}');
+                                        '/fan?mid=${card.mid}&name=${card.name}');
                                   } else if (index == 2) {
                                     Get.toNamed(
-                                        '/fan?mid=${card.mid}&name=${card.name}');
+                                        '/follow?mid=${card.mid}&name=${card.name}');
                                   }
                                 },
                               ),
@@ -206,7 +206,7 @@ class UserInfoCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       FilledButton.tonal(
-                        onPressed: () {},
+                        onPressed: onFollow,
                         style: FilledButton.styleFrom(
                           backgroundColor: relation == -1 || isFollow
                               ? Theme.of(context).colorScheme.onInverseSurface

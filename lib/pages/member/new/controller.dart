@@ -88,15 +88,7 @@ class MemberControllerNew extends CommonController
             TextButton(
               onPressed: () async {
                 Get.back();
-                var res = await VideoHttp.relationMod(
-                  mid: mid ?? -1,
-                  act: relation.value != -1 ? 5 : 6,
-                  reSrc: 11,
-                );
-                if (res['status']) {
-                  relation.value = relation.value != -1 ? -1 : 1;
-                  isFollow.value = false;
-                }
+                _onBlock();
               },
               child: const Text('确认'),
             )
@@ -108,5 +100,27 @@ class MemberControllerNew extends CommonController
 
   void shareUser() {
     Share.share('https://space.bilibili.com/$mid');
+  }
+
+  void _onBlock() async {
+    dynamic res = await VideoHttp.relationMod(
+      mid: mid ?? -1,
+      act: relation.value != -1 ? 5 : 6,
+      reSrc: 11,
+    );
+    if (res['status']) {
+      relation.value = relation.value != -1 ? -1 : 1;
+      isFollow.value = false;
+    }
+  }
+
+  void onFollow() async {
+    if (relation.value == -1) {
+      _onBlock();
+    } else if (!isFollow.value) {
+      // TODO
+    } else {
+      // TODO
+    }
   }
 }

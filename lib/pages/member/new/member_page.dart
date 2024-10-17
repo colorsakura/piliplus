@@ -298,7 +298,7 @@ class _MemberPageNewState extends State<MemberPageNew>
             isFollow: _userController.isFollow.value,
             card: userState.response.card,
             images: userState.response.images,
-            // onFollow: _userController.onFollow,
+            onFollow: _userController.onFollow,
           ),
         );
     }
