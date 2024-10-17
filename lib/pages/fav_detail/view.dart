@@ -79,19 +79,21 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   duration: const Duration(milliseconds: 500),
                   child: Row(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _favDetailController.item!.title!,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            '共${_favDetailController.item!.mediaCount!}条视频',
-                            style: Theme.of(context).textTheme.labelMedium,
-                          )
-                        ],
-                      )
+                      Obx(
+                        () => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _favDetailController.title.value,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Text(
+                              '共${_favDetailController.mediaCount}条视频',
+                              style: Theme.of(context).textTheme.labelMedium,
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -134,52 +136,58 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     // mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Hero(
-                        tag: _favDetailController.heroTag,
-                        child: NetworkImgLayer(
-                          width: 180,
-                          height: 110,
-                          src: _favDetailController.item!.cover,
+                      Obx(
+                        () => Hero(
+                          tag: _favDetailController.heroTag,
+                          child: NetworkImgLayer(
+                            width: 180,
+                            height: 110,
+                            src: _favDetailController.cover.value,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text(
-                              _favDetailController.item!.title!,
-                              style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .fontSize,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _favDetailController.item!.upper!.name!,
-                              style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .fontSize,
-                                  color: Theme.of(context).colorScheme.outline),
-                            ),
-                            const Spacer(),
-                            Text(
-                              '共${_favDetailController.item!.mediaCount!}条视频',
-                              style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .fontSize,
-                                  color: Theme.of(context).colorScheme.outline),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                      Obx(
+                        () => Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 4),
+                              Text(
+                                _favDetailController.title.value,
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .fontSize,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _favDetailController.name.value,
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .fontSize,
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
+                              ),
+                              const Spacer(),
+                              Text(
+                                '共${_favDetailController.mediaCount}条视频',
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .fontSize,
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
                         ),
                       ),
                     ],

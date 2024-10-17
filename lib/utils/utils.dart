@@ -204,10 +204,14 @@ class Utils {
     }
     if (number >= 100000000) {
       return '${(number / 100000000).toStringAsFixed(1)}亿';
-    } else if (number >= 100000) {
-      return '${(number ~/ 10000).toString()}万';
     } else if (number > 10000) {
-      return '${(number / 10000).toStringAsFixed(1)}万';
+      double result = number / 10000;
+      String format = result.toStringAsFixed(1);
+      if (format.endsWith('.0')) {
+        return '${result.toInt()}万';
+      } else {
+        return '$format万';
+      }
     } else {
       return number.toString();
     }
@@ -618,7 +622,7 @@ class Utils {
   }
 
   static String appSign(
-      Map<String, dynamic> params, String appkey, String appsec) {
+      Map<String, String> params, String appkey, String appsec) {
     params['appkey'] = appkey;
     var searchParams = Uri(queryParameters: params).query;
     var sortedParams = searchParams.split('&')..sort();

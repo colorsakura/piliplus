@@ -114,6 +114,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     int rpid = replyItem.id.toInt();
     Get.to(
       () => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           titleSpacing: 0,
           centerTitle: false,

@@ -211,7 +211,7 @@ class LoginHttp {
     String passwordEncrypted =
         Encrypter(RSA(publicKey: publicKey)).encrypt(salt + password).base64;
 
-    Map<String, dynamic> data = {
+    Map<String, String> data = {
       'appkey': Constants.appKey,
       'bili_local_id': deviceId,
       'build': '1462100',
@@ -288,7 +288,7 @@ class LoginHttp {
     required String key,
   }) async {
     dynamic publicKey = RSAKeyParser().parse(key);
-    Map<String, dynamic> data = {
+    Map<String, String> data = {
       'appkey': Constants.appKey,
       'bili_local_id': deviceId,
       'build': '1462100',

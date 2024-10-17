@@ -34,7 +34,7 @@ class SubDetailController extends GetxController {
       return;
     }
     isLoadingMore = true;
-    late Map<String,dynamic> res;
+    late Map<String, dynamic> res;
     if (item.type! == 11) {
       res = await UserHttp.favResourceList(
         id: id,
@@ -42,7 +42,8 @@ class SubDetailController extends GetxController {
         pn: currentPage,
       );
     } else {
-      res = await UserHttp.favSeasonList(// item.type! == 21
+      res = await UserHttp.favSeasonList(
+        // item.type! == 21
         id: id,
         ps: 20,
         pn: currentPage,

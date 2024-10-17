@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart' as dyn;
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/member/info.dart';

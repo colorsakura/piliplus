@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
 import 'package:PiliPalaX/grpc/app/show/popular/v1/popular.pb.dart';
@@ -9,7 +10,7 @@ import 'package:PiliPalaX/grpc/fawkes/fawkes.pb.dart';
 import 'package:PiliPalaX/grpc/grpc_client.dart';
 import 'package:PiliPalaX/grpc/locale/locale.pb.dart';
 import 'package:PiliPalaX/grpc/metadata/metadata.pb.dart';
-import 'package:PiliPalaX/grpc/network/network.pb.dart';
+import 'package:PiliPalaX/grpc/network/network.pb.dart' as network;
 import 'package:PiliPalaX/grpc/restriction/restriction.pb.dart';
 import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -74,9 +75,9 @@ class GrpcRepo {
           ..fp = ''
           ..fts = Int64())
         .writeToBuffer()),
-    'x-bili-network-bin': base64Encode((Network()
-          ..type = NetworkType.WIFI
-          ..tf = TFType.TF_UNKNOWN
+    'x-bili-network-bin': base64Encode((network.Network()
+          ..type = network.NetworkType.WIFI
+          ..tf = network.TFType.TF_UNKNOWN
           ..oid = '')
         .writeToBuffer()),
     'x-bili-restriction-bin': base64Encode((Restriction()
@@ -171,6 +172,22 @@ class GrpcRepo {
         ..cursor = cursor;
       final response = await GrpcClient.instance.replyClient
           .mainList(request, options: options);
+      return {'status': true, 'data': response};
+    });
+  }
+
+  static Future dynSpace({
+    required int uid,
+    required int page,
+  }) async {
+    return await _request(() async {
+      final request = DynSpaceReq()
+        ..hostUid = Int64(uid)
+        ..localTime = 8
+        ..page = Int64(page)
+        ..from = 'space';
+      final DynSpaceRsp response = await GrpcClient.instance.dynamicClient
+          .dynSpace(request, options: options);
       return {'status': true, 'data': response};
     });
   }

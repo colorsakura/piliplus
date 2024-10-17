@@ -283,6 +283,25 @@ class Api {
   // https://api.bilibili.com/x/space/wbi/acc/info?mid=503427686&token=&platform=web&web_location=1550101&w_rid=d709892496ce93e3d94d6d37c95bde91&wts=1689301482
   static const String memberInfo = '/x/space/wbi/acc/info';
 
+  static const String space = '${HttpString.appBaseUrl}/x/v2/space';
+
+  static const String spaceArchive =
+      '${HttpString.appBaseUrl}/x/v2/space/archive/cursor';
+
+  static const String spaceChargingArchive =
+      '${HttpString.appBaseUrl}/x/v2/space/archive/charging';
+
+  static const String spaceSeason =
+      '${HttpString.appBaseUrl}/x/v2/space/season/videos';
+
+  static const String spaceSeries =
+      '${HttpString.appBaseUrl}/x/v2/space/series';
+
+  static const String spaceBangumi =
+      '${HttpString.appBaseUrl}/x/v2/space/bangumi';
+
+  static const String spaceFav = '/x/v3/fav/folder/space';
+
   // 用户名片信息
   static const String memberCardInfo = '/x/web-interface/card';
 

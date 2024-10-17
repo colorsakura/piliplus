@@ -24,6 +24,7 @@ class NetworkImgLayer extends StatelessWidget {
     this.semanticsLabel,
     this.ignoreHeight,
     this.radius,
+    this.imageBuilder,
   });
 
   final String? src;
@@ -37,6 +38,7 @@ class NetworkImgLayer extends StatelessWidget {
   final String? semanticsLabel;
   final bool? ignoreHeight;
   final double? radius;
+  final ImageWidgetBuilder? imageBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +86,7 @@ class NetworkImgLayer extends StatelessWidget {
                   placeholder(context),
               placeholder: (BuildContext context, String url) =>
                   placeholder(context),
+              imageBuilder: imageBuilder,
             ),
           )
         : placeholder(context);

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:PiliPalaX/pages/member/new/member_page.dart';
 import 'package:PiliPalaX/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -108,7 +109,7 @@ class Routes {
     // 直播详情
     CustomGetPage(name: '/liveRoom', page: () => const LiveRoomPage()),
     // 用户中心
-    CustomGetPage(name: '/member', page: () => const MemberPage()),
+    CustomGetPage(name: '/member', page: () => const MemberPageNew()),
     CustomGetPage(name: '/memberSearch', page: () => const MemberSearchPage()),
     // 二级回复
     CustomGetPage(

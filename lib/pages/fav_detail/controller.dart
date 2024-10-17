@@ -7,15 +7,18 @@ import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/user/fav_folder.dart';
 
 class FavDetailController extends CommonController {
-  FavFolderItemData? item;
+  // FavFolderItemData? item;
   int? mediaId;
   late String heroTag;
   RxString loadingText = '加载中...'.obs;
   int mediaCount = 0;
+  RxString title = ''.obs;
+  RxString cover = ''.obs;
+  RxString name = ''.obs;
 
   @override
   void onInit() {
-    item = Get.arguments;
+    // item = Get.arguments;
     if (Get.parameters.keys.isNotEmpty) {
       mediaId = int.parse(Get.parameters['mediaId']!);
       heroTag = Get.parameters['heroTag']!;
@@ -42,6 +45,9 @@ class FavDetailController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     if (currentPage == 1) {
+      title.value = response.response.info['title'];
+      cover.value = response.response.info['cover'];
+      name.value = response.response.info['upper']['name'];
       mediaCount = response.response.info['media_count'];
     }
     List currentList = loadingState.value is Success

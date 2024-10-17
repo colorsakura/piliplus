@@ -12,64 +12,75 @@ import '../dynamics/widgets/dynamic_panel.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class MemberDynamicsPage extends StatefulWidget {
-  const MemberDynamicsPage({super.key});
+  const MemberDynamicsPage({super.key, this.mid});
+
+  final int? mid;
 
   @override
   State<MemberDynamicsPage> createState() => _MemberDynamicsPageState();
 }
 
-class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
+class _MemberDynamicsPageState extends State<MemberDynamicsPage>
+    with AutomaticKeepAliveClientMixin {
   late MemberDynamicsController _memberDynamicController;
-  late Future _futureBuilderFuture;
   late int mid;
   late bool dynamicsWaterfallFlow;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
-    mid = int.parse(Get.parameters['mid']!);
+    mid = widget.mid ?? int.parse(Get.parameters['mid']!);
     final String heroTag = Utils.makeHeroTag(mid);
     _memberDynamicController =
-        Get.put(MemberDynamicsController(), tag: heroTag);
-    _futureBuilderFuture =
-        _memberDynamicController.getMemberDynamic('onRefresh');
-    _memberDynamicController.scrollController.addListener(
-      () {
-        if (_memberDynamicController.scrollController.position.pixels >=
-            _memberDynamicController.scrollController.position.maxScrollExtent -
-                200) {
-          EasyThrottle.throttle(
-              'member_dynamics', const Duration(milliseconds: 1000), () {
-            _memberDynamicController.onLoad();
-          });
-        }
-      },
-    );
+        Get.put(MemberDynamicsController(widget.mid), tag: heroTag);
+    // _memberDynamicController.scrollController.addListener(
+    //   () {
+    //     if (_memberDynamicController.scrollController.position.pixels >=
+    //         _memberDynamicController.scrollController.position.maxScrollExtent -
+    //             200) {
+    //       EasyThrottle.throttle(
+    //           'member_dynamics', const Duration(milliseconds: 1000), () {
+    //         _memberDynamicController.onLoad();
+    //       });
+    //     }
+    //   },
+    // );
     dynamicsWaterfallFlow = GStorage.setting
         .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   }
 
   @override
   void dispose() {
-    _memberDynamicController.scrollController.removeListener(() {});
+    // _memberDynamicController.scrollController.removeListener(() {});
     _memberDynamicController.scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        centerTitle: false,
-        title: Text('Ta的动态', style: Theme.of(context).textTheme.titleMedium),
-      ),
-      body: CustomScrollView(
+    super.build(context);
+    return widget.mid == null
+        ? Scaffold(
+            appBar: AppBar(
+              titleSpacing: 0,
+              centerTitle: false,
+              title:
+                  Text('Ta的动态', style: Theme.of(context).textTheme.titleMedium),
+            ),
+            body: _buildBody,
+          )
+        : _buildBody;
+  }
+
+  Widget get _buildBody => CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        controller: _memberDynamicController.scrollController,
+        // controller: _memberDynamicController.scrollController,
         slivers: [
           FutureBuilder(
-            future: _futureBuilderFuture,
+            future: _memberDynamicController.futureBuilderFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data != null) {
@@ -89,6 +100,13 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
                                 sliver: SliverList(
                                   delegate: SliverChildBuilderDelegate(
                                     (context, index) {
+                                      if (index == list.length - 1) {
+                                        EasyThrottle.throttle('member_dynamics',
+                                            const Duration(milliseconds: 1000),
+                                            () {
+                                          _memberDynamicController.onLoad();
+                                        });
+                                      }
                                       return DynamicPanel(item: list[index]);
                                     },
                                     childCount: list.length,
@@ -113,10 +131,17 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
                           /// show no more item at trailing when children are not full of viewport
                           /// if children is full of viewport, it's the same as fullCrossAxisExtend
                           //  LastChildLayoutType.foot,
-                          lastChildLayoutTypeBuilder: (index) =>
-                              index == list.length
-                                  ? LastChildLayoutType.foot
-                                  : LastChildLayoutType.none,
+                          lastChildLayoutTypeBuilder: (index) {
+                            if (index == list.length - 1) {
+                              EasyThrottle.throttle('member_dynamics',
+                                  const Duration(milliseconds: 1000), () {
+                                _memberDynamicController.onLoad();
+                              });
+                            }
+                            return index == list.length
+                                ? LastChildLayoutType.foot
+                                : LastChildLayoutType.none;
+                          },
                           children: [
                             for (var i in list) DynamicPanel(item: i),
                           ]);
@@ -139,7 +164,5 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage> {
             },
           ),
         ],
-      ),
-    );
-  }
+      );
 }

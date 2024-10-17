@@ -37,7 +37,7 @@ class HotKeyword extends StatelessWidget {
                     message: i.keyword!,
                     child: Row(
                       children: [
-                        Expanded(
+                        Flexible(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6, 5, 0, 5),
                             child: Text(

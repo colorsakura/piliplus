@@ -11,6 +11,7 @@ class PBadge extends StatelessWidget {
   final String? stack;
   final double? fs;
   final String? semanticsLabel;
+  final bool bold;
 
   const PBadge({
     super.key,
@@ -24,6 +25,7 @@ class PBadge extends StatelessWidget {
     this.stack = 'position',
     this.fs = 11,
     this.semanticsLabel,
+    this.bold = true,
   });
 
   @override
@@ -73,13 +75,13 @@ class PBadge extends StatelessWidget {
           height: 1,
           fontSize: fs ?? fontSize,
           color: color,
-          fontWeight: FontWeight.bold,
+          fontWeight: bold ? FontWeight.bold : null,
         ),
         strutStyle: StrutStyle(
           leading: 0,
           height: 1,
           fontSize: fs ?? fontSize,
-          fontWeight: FontWeight.bold,
+          fontWeight: bold ? FontWeight.bold : null,
         ),
         semanticsLabel: semanticsLabel,
       ),

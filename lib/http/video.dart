@@ -79,7 +79,7 @@ class VideoHttp {
   // 添加额外的loginState变量模拟未登录状态
   static Future<LoadingState> rcmdVideoListApp(
       {bool loginStatus = true, required int freshIdx}) async {
-    var data = {
+    Map<String, String> data = {
       'access_key': loginStatus
           ? (localCache
                   .get(LocalCacheKey.accessKey, defaultValue: {})['value'] ??

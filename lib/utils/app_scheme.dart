@@ -50,6 +50,7 @@ class PiliScheme {
         if (value.queryParameters['comment_root_id'] != null) {
           Get.to(
             () => Scaffold(
+              resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 titleSpacing: 0,
                 centerTitle: false,
@@ -139,6 +140,7 @@ class PiliScheme {
             int.parse(value.queryParameters['extraIntentId'] ?? '0');
         Get.to(
           () => Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               titleSpacing: 0,
               centerTitle: false,
@@ -183,6 +185,7 @@ class PiliScheme {
         if (value.queryParameters['comment_root_id'] != null) {
           Get.to(
             () => Scaffold(
+              resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 titleSpacing: 0,
                 centerTitle: false,
