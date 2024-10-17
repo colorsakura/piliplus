@@ -64,10 +64,10 @@ class Request {
       log("setCookie, ${e.toString()}");
     }
 
-    final String cookieString = cookie
-        .map((Cookie cookie) => '${cookie.name}=${cookie.value}')
-        .join('; ');
-    dio.options.headers['cookie'] = cookieString;
+    // final String cookieString = cookie
+    //     .map((Cookie cookie) => '${cookie.name}=${cookie.value}')
+    //     .join('; ');
+    // dio.options.headers['cookie'] = cookieString;
   }
 
   // 从cookie中获取 csrf token
