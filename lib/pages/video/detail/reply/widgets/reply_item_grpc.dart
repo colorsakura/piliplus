@@ -334,6 +334,12 @@ class ReplyItemGrpc extends StatelessWidget {
     );
   }
 
+  get _style => TextButton.styleFrom(
+        padding: const EdgeInsets.all(0),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+      );
+
   // 感谢、回复、复制
   Widget buttonAction(BuildContext context, replyControl) {
     return Row(
@@ -342,6 +348,7 @@ class ReplyItemGrpc extends StatelessWidget {
         SizedBox(
           height: 32,
           child: TextButton(
+            style: _style,
             onPressed: () {
               feedBack();
               if (onReply != null) {
@@ -371,6 +378,7 @@ class ReplyItemGrpc extends StatelessWidget {
             height: 32,
             child: TextButton(
               onPressed: null,
+              style: _style,
               child: Text(
                 'UP主觉得很赞',
                 style: TextStyle(
@@ -400,6 +408,7 @@ class ReplyItemGrpc extends StatelessWidget {
             height: 32,
             child: TextButton(
               onPressed: showDialogue,
+              style: _style,
               child: Text(
                 '查看对话',
                 style: TextStyle(

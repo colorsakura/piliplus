@@ -101,6 +101,12 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
           };
   }
 
+  get _style => TextButton.styleFrom(
+        padding: const EdgeInsets.all(0),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+      );
+
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
@@ -112,6 +118,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
         SizedBox(
           height: 32,
           child: TextButton(
+            style: _style,
             onPressed: handleState(onHateReply),
             child: Icon(
               widget.replyItem.replyControl.action.toInt() == 2
@@ -130,6 +137,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
         SizedBox(
           height: 32,
           child: TextButton(
+            style: _style,
             onPressed: handleState(onLikeReply),
             child: Row(
               children: [
