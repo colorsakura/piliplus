@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/constants.dart';
@@ -327,12 +329,23 @@ class MemberHttp {
 
   // 用户动态
   static Future memberDynamic({String? offset, int? mid}) async {
-    var res = await Request().get(Api.memberDynamic, data: {
+    String dmImgStr = Utils.base64EncodeRandomString(16, 64);
+    String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
+    Map params = await WbiSign().makSign({
       'offset': offset ?? '',
       'host_mid': mid,
       'timezone_offset': '-480',
       'features': 'itemOpusStyle',
+      'platform': 'web',
+      'web_location': '333.999',
+      'dm_img_list': '[]',
+      'dm_img_str': dmImgStr.substring(0, dmImgStr.length - 2),
+      'dm_cover_img_str': dmCoverImgStr.substring(0, dmCoverImgStr.length - 2),
+      'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
+      'x-bili-device-req-json': jsonEncode({"platform": "web", "device": "pc"}),
+      'x-bili-web-req-json': jsonEncode({"spm_id": "333.999"}),
     });
+    var res = await Request().get(Api.memberDynamic, data: params);
     if (res.data['code'] == 0) {
       return {
         'status': true,
