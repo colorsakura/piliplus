@@ -35,6 +35,7 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onDelete,
     this.upMid,
     this.isTop = false,
+    this.showDialogue,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -46,6 +47,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final Function(dynamic rpid, dynamic frpid)? onDelete;
   final dynamic upMid;
   final bool isTop;
+  final VoidCallback? showDialogue;
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +66,7 @@ class ReplyItemGrpc extends StatelessWidget {
           // showDialog(
           //   context: Get.context!,
           //   builder: (_) => AlertDialog(
-          //     content: SelectableText(
-          //         jsonEncode(replyItem.replyControl.toProto3Json())),
+          //     content: SelectableText(jsonEncode(replyItem.toProto3Json())),
           //   ),
           // );
           showModalBottomSheet(
@@ -391,6 +392,23 @@ class ReplyItemGrpc extends StatelessWidget {
             style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize),
+          ),
+        if (replyLevel == '2' &&
+            needDivider &&
+            replyItem.id != replyItem.dialog)
+          SizedBox(
+            height: 32,
+            child: TextButton(
+              onPressed: showDialogue,
+              child: Text(
+                '查看对话',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
           ),
         const Spacer(),
         ZanButtonGrpc(replyItem: replyItem, replyType: replyType),

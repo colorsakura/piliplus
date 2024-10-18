@@ -99,6 +99,27 @@ class ReplyHttp {
     }
   }
 
+  static Future<LoadingState> dialogListGrpc({
+    int type = 1,
+    required int oid,
+    required int root,
+    required int rpid,
+    required CursorReq cursor,
+  }) async {
+    dynamic res = await GrpcRepo.dialogList(
+      type: type,
+      oid: oid,
+      root: root,
+      rpid: rpid,
+      cursor: cursor,
+    );
+    if (res['status']) {
+      return LoadingState.success(res['data']);
+    } else {
+      return LoadingState.error(res['msg']);
+    }
+  }
+
   static Future<LoadingState> replyReplyListGrpc({
     int type = 1,
     required int oid,

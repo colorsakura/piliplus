@@ -9,20 +9,24 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class VideoReplyReplyController extends CommonController
     with GetTickerProviderStateMixin {
-  VideoReplyReplyController(
-    this.hasRoot,
-    this.id,
-    this.aid,
-    this.rpid,
-    this.replyType,
-  );
+  VideoReplyReplyController({
+    required this.hasRoot,
+    required this.id,
+    required this.oid,
+    required this.rpid,
+    required this.dialog,
+    required this.replyType,
+    required this.isDialogue,
+  });
+  final int? dialog;
+  final bool isDialogue;
   final itemScrollCtr = ItemScrollController();
   bool hasRoot = false;
   int? id;
   // 视频aid 请求时使用的oid
-  int? aid;
+  int? oid;
   // rpid 请求楼中楼回复
-  String? rpid;
+  int? rpid;
   ReplyType replyType; // = ReplyType.video;
   // 当前页
   RxString noMore = ''.obs;
@@ -94,8 +98,8 @@ class VideoReplyReplyController extends CommonController
 
   @override
   bool customHandleResponse(Success response) {
-    DetailListReply replies = response.response;
-    if (cursor == null) {
+    dynamic replies = response.response;
+    if (replies is DetailListReply && cursor == null) {
       count.value = replies.root.count.toInt();
       if (id != null) {
         index = replies.root.replies
@@ -127,36 +131,67 @@ class VideoReplyReplyController extends CommonController
     }
     upMid ??= replies.subjectControl.upMid.toInt();
     cursor = replies.cursor;
-    if (replies.root.replies.isNotEmpty) {
-      noMore.value = '加载中...';
-      if (replies.cursor.isEnd) {
-        noMore.value = '没有更多了';
+    if (isDialogue) {
+      if (replies.replies.isNotEmpty) {
+        noMore.value = '加载中...';
+        if (replies.cursor.isEnd) {
+          noMore.value = '没有更多了';
+        }
+      } else {
+        // 未登录状态replies可能返回null
+        noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
       }
     } else {
-      // 未登录状态replies可能返回null
-      noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
+      if (replies.root.replies.isNotEmpty) {
+        noMore.value = '加载中...';
+        if (replies.cursor.isEnd) {
+          noMore.value = '没有更多了';
+        }
+      } else {
+        // 未登录状态replies可能返回null
+        noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
+      }
     }
     if (currentPage != 1) {
       List<ReplyInfo> list = loadingState.value is Success
           ? (loadingState.value as Success).response
           : <ReplyInfo>[];
-      replies.root.replies.insertAll(0, list);
+      if (isDialogue) {
+        replies.replies.insertAll(0, list);
+      } else {
+        replies.root.replies.insertAll(0, list);
+      }
     }
-    loadingState.value = LoadingState.success(replies.root.replies);
+    if (isDialogue) {
+      loadingState.value = LoadingState.success(replies.replies);
+    } else {
+      loadingState.value = LoadingState.success(replies.root.replies);
+    }
     return true;
   }
 
   @override
-  Future<LoadingState> customGetData() => ReplyHttp.replyReplyListGrpc(
-        type: replyType.index,
-        oid: aid!,
-        root: int.parse(rpid!),
-        rpid: id ?? 0,
-        cursor: CursorReq(
-          next: cursor?.next,
-          mode: mode.value,
-        ),
-      );
+  Future<LoadingState> customGetData() => isDialogue
+      ? ReplyHttp.dialogListGrpc(
+          type: replyType.index,
+          oid: oid!,
+          root: rpid!,
+          rpid: dialog!,
+          cursor: CursorReq(
+            next: cursor?.next,
+            mode: mode.value,
+          ),
+        )
+      : ReplyHttp.replyReplyListGrpc(
+          type: replyType.index,
+          oid: oid!,
+          root: rpid!,
+          rpid: id ?? 0,
+          cursor: CursorReq(
+            next: cursor?.next,
+            mode: mode.value,
+          ),
+        );
 
   queryBySort() {
     noMore.value = '';

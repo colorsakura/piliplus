@@ -137,6 +137,27 @@ class GrpcRepo {
     });
   }
 
+  static Future dialogList({
+    int type = 1,
+    required int oid,
+    required int root,
+    required int rpid,
+    required CursorReq cursor,
+    DetailListScene scene = DetailListScene.REPLY,
+  }) async {
+    return await _request(() async {
+      final request = DialogListReq()
+        ..oid = Int64(oid)
+        ..type = Int64(type)
+        ..root = Int64(root)
+        ..rpid = Int64(rpid)
+        ..cursor = cursor;
+      final response = await GrpcClient.instance.replyClient
+          .dialogList(request, options: options);
+      return {'status': true, 'data': response};
+    });
+  }
+
   static Future detailList({
     int type = 1,
     required int oid,

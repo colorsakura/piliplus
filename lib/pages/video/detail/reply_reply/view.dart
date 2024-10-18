@@ -19,18 +19,22 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.id,
     this.oid,
     this.rpid,
+    this.dialog,
     this.firstFloor,
     this.source,
     this.replyType,
+    this.isDialogue = false,
     super.key,
   });
   // final dynamic rcount;
-  final dynamic id;
+  final int? id;
   final int? oid;
   final int? rpid;
+  final int? dialog;
   final ReplyInfo? firstFloor;
   final String? source;
   final ReplyType? replyType;
+  final bool isDialogue;
 
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
@@ -39,20 +43,23 @@ class VideoReplyReplyPanel extends StatefulWidget {
 class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   late VideoReplyReplyController _videoReplyReplyController;
   late final _savedReplies = {};
-  final itemPositionsListener = ItemPositionsListener.create();
+  late final itemPositionsListener = ItemPositionsListener.create();
+  late final _key = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _videoReplyReplyController = Get.put(
       VideoReplyReplyController(
-        widget.firstFloor != null,
-        widget.id,
-        widget.oid,
-        widget.rpid.toString(),
-        widget.replyType!,
+        hasRoot: widget.firstFloor != null,
+        id: widget.id,
+        oid: widget.oid,
+        rpid: widget.rpid,
+        dialog: widget.dialog,
+        replyType: widget.replyType!,
+        isDialogue: widget.isDialogue,
       ),
-      tag: widget.rpid.toString(),
+      tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
     );
   }
 
@@ -61,123 +68,134 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     _videoReplyReplyController.controller?.stop();
     _videoReplyReplyController.controller?.dispose();
     _videoReplyReplyController.controller = null;
-    Get.delete<VideoReplyReplyController>(tag: widget.rpid.toString());
+    Get.delete<VideoReplyReplyController>(
+      tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
+    );
     super.dispose();
   }
 
-  Widget get _header => ValueListenableBuilder<Iterable<ItemPosition>>(
-        valueListenable: itemPositionsListener.itemPositions,
-        builder: (context, positions, child) {
-          int min = -1;
-          if (positions.isNotEmpty) {
-            min = positions
-                .where((ItemPosition position) => position.itemTrailingEdge > 0)
-                .reduce((ItemPosition min, ItemPosition position) =>
-                    position.itemTrailingEdge < min.itemTrailingEdge
-                        ? position
-                        : min)
-                .index;
-          }
-          return widget.firstFloor == null
-              ? _sortWidget
-              : min >= 2
-                  ? _sortWidget
-                  : const SizedBox.shrink();
-        },
-      );
+  Widget get _header => widget.firstFloor == null
+      ? _sortWidget
+      : ValueListenableBuilder<Iterable<ItemPosition>>(
+          valueListenable: itemPositionsListener.itemPositions,
+          builder: (context, positions, child) {
+            int min = -1;
+            if (positions.isNotEmpty) {
+              min = positions
+                  .where(
+                      (ItemPosition position) => position.itemTrailingEdge > 0)
+                  .reduce((ItemPosition min, ItemPosition position) =>
+                      position.itemTrailingEdge < min.itemTrailingEdge
+                          ? position
+                          : min)
+                  .index;
+            }
+            return min >= 2 ? _sortWidget : const SizedBox.shrink();
+          },
+        );
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height:
-          widget.source == 'videoDetail' ? Utils.getSheetHeight(context) : null,
-      color: Theme.of(context).colorScheme.surface,
-      child: Column(
-        children: [
-          if (widget.source == 'videoDetail')
-            Container(
-              height: 45,
-              padding: const EdgeInsets.only(left: 12, right: 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('评论详情'),
-                  IconButton(
-                    tooltip: '关闭',
-                    icon: const Icon(Icons.close, size: 20),
-                    onPressed: Get.back,
-                  ),
-                ],
-              ),
-            ),
-          Divider(
-            height: 1,
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await _videoReplyReplyController.onRefresh();
-              },
-              child: Obx(
-                () => Stack(
-                  children: [
-                    ScrollablePositionedList.builder(
-                      itemPositionsListener: itemPositionsListener,
-                      itemCount: _itemCount(
-                          _videoReplyReplyController.loadingState.value),
-                      itemScrollController:
-                          _videoReplyReplyController.itemScrollCtr,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (_, index) {
-                        if (widget.firstFloor != null) {
-                          if (index == 0) {
-                            return ReplyItemGrpc(
-                              replyItem: widget.firstFloor!,
-                              replyLevel: '2',
-                              showReplyRow: false,
-                              replyType: widget.replyType,
-                              needDivider: false,
-                              onReply: () {
-                                _onReply(widget.firstFloor!);
-                              },
-                              upMid: _videoReplyReplyController.upMid,
-                            );
-                          } else if (index == 1) {
-                            return Divider(
-                              height: 20,
-                              color: Theme.of(context)
-                                  .dividerColor
-                                  .withOpacity(0.1),
-                              thickness: 6,
-                            );
-                          } else if (index == 2) {
-                            return _sortWidget;
-                          } else {
-                            return Obx(() => _buildBody(
-                                _videoReplyReplyController.loadingState.value,
-                                index - 3));
-                          }
-                        } else {
-                          if (index == 0) {
-                            return _sortWidget;
-                          } else {
-                            return Obx(() => _buildBody(
-                                _videoReplyReplyController.loadingState.value,
-                                index - 1));
-                          }
-                        }
-                      },
+    return Scaffold(
+      key: _key,
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        height: widget.source == 'videoDetail'
+            ? Utils.getSheetHeight(context)
+            : null,
+        color: Theme.of(context).colorScheme.surface,
+        child: Column(
+          children: [
+            if (widget.source == 'videoDetail')
+              Container(
+                height: 45,
+                padding: const EdgeInsets.only(left: 12, right: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(widget.isDialogue ? '对话列表' : '评论详情'),
+                    IconButton(
+                      tooltip: '关闭',
+                      icon: const Icon(Icons.close, size: 20),
+                      onPressed: Get.back,
                     ),
-                    if (_videoReplyReplyController.loadingState.value
-                        is Success)
-                      _header,
                   ],
                 ),
               ),
+            Divider(
+              height: 1,
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
             ),
-          ),
-        ],
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await _videoReplyReplyController.onRefresh();
+                },
+                child: Obx(
+                  () => Stack(
+                    children: [
+                      ScrollablePositionedList.builder(
+                        itemPositionsListener: itemPositionsListener,
+                        itemCount: _itemCount(
+                            _videoReplyReplyController.loadingState.value),
+                        itemScrollController:
+                            _videoReplyReplyController.itemScrollCtr,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (_, index) {
+                          if (widget.isDialogue) {
+                            return Obx(() => _buildBody(
+                                _videoReplyReplyController.loadingState.value,
+                                index));
+                          } else if (widget.firstFloor != null) {
+                            if (index == 0) {
+                              return ReplyItemGrpc(
+                                replyItem: widget.firstFloor!,
+                                replyLevel: '2',
+                                showReplyRow: false,
+                                replyType: widget.replyType,
+                                needDivider: false,
+                                onReply: () {
+                                  _onReply(widget.firstFloor!);
+                                },
+                                upMid: _videoReplyReplyController.upMid,
+                              );
+                            } else if (index == 1) {
+                              return Divider(
+                                height: 20,
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withOpacity(0.1),
+                                thickness: 6,
+                              );
+                            } else if (index == 2) {
+                              return _sortWidget;
+                            } else {
+                              return Obx(() => _buildBody(
+                                  _videoReplyReplyController.loadingState.value,
+                                  index - 3));
+                            }
+                          } else {
+                            if (index == 0) {
+                              return _sortWidget;
+                            } else {
+                              return Obx(() => _buildBody(
+                                  _videoReplyReplyController.loadingState.value,
+                                  index - 1));
+                            }
+                          }
+                        },
+                      ),
+                      if (!widget.isDialogue &&
+                          _videoReplyReplyController.loadingState.value
+                              is Success)
+                        _header,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -337,7 +355,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   Widget _replyItem(replyItem) {
     return ReplyItemGrpc(
       replyItem: replyItem,
-      replyLevel: '2',
+      replyLevel: widget.isDialogue ? '3' : '2',
       showReplyRow: false,
       replyType: widget.replyType,
       onReply: () {
@@ -351,10 +369,25 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
             LoadingState.success(list);
       },
       upMid: _videoReplyReplyController.upMid,
+      showDialogue: () {
+        _key.currentState?.showBottomSheet(
+          (context) => VideoReplyReplyPanel(
+            oid: replyItem.oid.toInt(),
+            rpid: replyItem.root.toInt(),
+            dialog: replyItem.dialog.toInt(),
+            replyType: ReplyType.video,
+            source: 'videoDetail',
+            isDialogue: true,
+          ),
+        );
+      },
     );
   }
 
   int _itemCount(LoadingState loadingState) {
+    if (widget.isDialogue) {
+      return (loadingState is Success ? loadingState.response.length : 0) + 1;
+    }
     int itemCount = 0;
     if (widget.firstFloor != null) {
       itemCount = 2;
