@@ -46,7 +46,7 @@ class Utils {
       );
       SmartDialog.showToast(res['status'] ? "关注成功" : res['msg']);
       if (res['status']) {
-        callback(2);
+        callback(1);
         // followStatus['attribute'] = 2;
         // followStatus.refresh();
       }
@@ -84,6 +84,11 @@ class Utils {
                         // followStatus['tag'] = tags;
                         // followStatus.refresh();
                         SmartDialog.showToast('$text成功');
+                        if (isSpecialFollowed) {
+                          callback(1);
+                        } else {
+                          callback(2);
+                        }
                       } else {
                         SmartDialog.showToast(res['msg']);
                       }
@@ -97,7 +102,7 @@ class Utils {
                     dense: true,
                     onTap: () async {
                       Get.back();
-                      await showModalBottomSheet(
+                      dynamic result = await showModalBottomSheet(
                         context: context,
                         useSafeArea: true,
                         isScrollControlled: true,
@@ -125,10 +130,11 @@ class Utils {
                           );
                         },
                       );
-                      // await Future.delayed(const Duration(milliseconds: 500));
-                      // if (result == true) {
-                      //   queryFollowStatus();
-                      // }
+                      if (result == true) {
+                        callback(2);
+                      } else if (result == false) {
+                        callback(1);
+                      }
                     },
                     title: const Text(
                       '设置分组',

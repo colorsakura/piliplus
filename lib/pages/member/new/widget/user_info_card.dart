@@ -238,9 +238,11 @@ class UserInfoCard extends StatelessWidget {
                               TextSpan(
                                 text: relation == -1
                                     ? '移除黑名单'
-                                    : isFollow
-                                        ? ' 已关注'
-                                        : '关注',
+                                    : relation == 2
+                                        ? ' 特别关注'
+                                        : isFollow
+                                            ? ' 已关注'
+                                            : '关注',
                               )
                             ],
                           ),

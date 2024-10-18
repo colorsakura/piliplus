@@ -53,11 +53,11 @@ class _GroupPanelState extends State<GroupPanel> {
     final bool anyHasChecked =
         tagsList.any((MemberTagItemModel e) => e.checked == true);
     late String tagids;
+    List<int>? tagidList;
     if (anyHasChecked) {
       final List<MemberTagItemModel> checkedList =
           tagsList.where((MemberTagItemModel e) => e.checked == true).toList();
-      final List<int> tagidList =
-          checkedList.map<int>((e) => e.tagid!).toList();
+      tagidList = checkedList.map<int>((e) => e.tagid!).toList();
       tagids = tagidList.join(',');
     } else {
       tagids = '0';
@@ -66,7 +66,7 @@ class _GroupPanelState extends State<GroupPanel> {
     final res = await MemberHttp.addUsers(widget.mid, tagids);
     SmartDialog.showToast(res['msg']);
     if (res['status']) {
-      Get.back(result: true);
+      Get.back(result: tagidList?.contains(-10) == true);
     }
   }
 

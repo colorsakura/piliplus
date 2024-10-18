@@ -8,6 +8,7 @@ part of 'data.dart';
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       relation: (json['relation'] as num?)?.toInt(),
+      relSpecial: (json['rel_special'] as num?)?.toInt(),
       guestRelation: (json['guest_relation'] as num?)?.toInt(),
       defaultTab: json['default_tab'] as String?,
       isParams: json['is_params'] as bool?,
@@ -64,6 +65,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'relation': instance.relation,
+      'rel_special': instance.relSpecial,
       'guest_relation': instance.guestRelation,
       'default_tab': instance.defaultTab,
       'is_params': instance.isParams,

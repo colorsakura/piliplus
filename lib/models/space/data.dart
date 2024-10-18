@@ -21,6 +21,8 @@ part 'data.g.dart';
 @JsonSerializable()
 class Data {
   int? relation;
+  @JsonKey(name: 'rel_special')
+  int? relSpecial;
   @JsonKey(name: 'guest_relation')
   int? guestRelation;
   @JsonKey(name: 'default_tab')
@@ -54,6 +56,7 @@ class Data {
 
   Data({
     this.relation,
+    this.relSpecial,
     this.guestRelation,
     this.defaultTab,
     this.isParams,

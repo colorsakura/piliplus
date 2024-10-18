@@ -36,7 +36,9 @@ class MemberControllerNew extends CommonController
   bool customHandleResponse(Success response) {
     username = response.response?.card?.name ?? '';
     isFollow.value = response.response?.card?.relation?.isFollow == 1;
-    relation.value = response.response?.relation ?? 1;
+    relation.value = response.response?.relSpecial == 1
+        ? 2
+        : response.response?.relation ?? 1;
     tab2 = response.response.tab2;
     if (tab2 != null && tab2!.isNotEmpty) {
       if (!response.response.tab.toJson().values.contains(true) &&
@@ -127,7 +129,7 @@ class MemberControllerNew extends CommonController
         mid: mid,
         isFollow: isFollow.value,
         callback: (attribute) {
-          relation.value = 1;
+          relation.value = attribute;
           isFollow.value = attribute != 0;
         },
       );

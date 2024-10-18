@@ -46,10 +46,12 @@ class FollowItem extends StatelessWidget {
           ? SizedBox(
               height: 34,
               child: TextButton(
-                onPressed: () async {
-                  await Get.bottomSheet(
-                    GroupPanel(mid: item.mid!),
-                    isScrollControlled: true,
+                onPressed: () {
+                  Utils.actionRelationMod(
+                    context: context,
+                    mid: item.mid,
+                    isFollow: true,
+                    callback: (attribute) {},
                   );
                 },
                 style: TextButton.styleFrom(
