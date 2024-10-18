@@ -53,7 +53,7 @@ class _MemberVideoState extends State<MemberVideo>
   }
 
   _buildBody(LoadingState loadingState) {
-    return loadingState is Success
+    return loadingState is Success && loadingState.response is List
         ? RefreshIndicator(
             onRefresh: () async {
               await _controller.onRefresh();
@@ -137,20 +137,22 @@ class _MemberVideoState extends State<MemberVideo>
               ],
             ),
           )
-        : loadingState is Error
+        : loadingState is Loading
             ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Center(
                 child: CustomScrollView(
                   shrinkWrap: true,
                   slivers: [
                     HttpError(
-                      errMsg: loadingState.errMsg,
+                      errMsg: loadingState is Error
+                          ? (loadingState as Error?)?.errMsg
+                          : 'EMPTY',
                       fn: _controller.onReload,
                     ),
                   ],
                 ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
               );
   }
 }

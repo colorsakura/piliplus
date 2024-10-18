@@ -16,7 +16,7 @@ Tab _$TabFromJson(Map<String, dynamic> json) => Tab(
       coin: json['coin'] as bool?,
       like: json['like'] as bool?,
       community: json['community'] as bool?,
-      dyn: json['dynamic'] as bool?,
+      dyn: false, //json['dynamic'] as bool?,
       audios: json['audios'] as bool?,
       shop: json['shop'] as bool?,
       mall: json['mall'] as bool?,

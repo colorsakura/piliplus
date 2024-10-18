@@ -39,26 +39,25 @@ class MemberControllerNew extends CommonController
     relation.value = response.response?.relation ?? 1;
     tab2 = response.response.tab2;
     if (tab2 != null && tab2!.isNotEmpty) {
-      int initialIndex = tab2!
-          .indexWhere((item) => item.param == response.response.defaultTab);
-      if (initialIndex == 0 &&
-          !response.response.tab.toJson().values.contains('true')) {
-        if (tab2!.length > 1) {
-          initialIndex = 1;
-        }
-        // TODO
-        // tab2!.removeAt(0);
+      if (!response.response.tab.toJson().values.contains(true) &&
+          tab2!.first.param == 'home') {
+        // remove empty home tab
+        tab2!.removeAt(0);
       }
-      tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
-      tabController = TabController(
-        vsync: this,
-        length: response.response.tab2.length,
-        initialIndex: initialIndex == -1
-            ? tab2!.length > 1
-                ? 1
-                : 0
-            : initialIndex,
-      );
+      if (tab2!.isNotEmpty) {
+        if (response.response.defaultTab == 'video') {
+          response.response.defaultTab = 'dynamic';
+        }
+        int initialIndex = tab2!.indexWhere((item) {
+          return item.param == response.response.defaultTab;
+        });
+        tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
+        tabController = TabController(
+          vsync: this,
+          length: response.response.tab2.length,
+          initialIndex: initialIndex == -1 ? 0 : initialIndex,
+        );
+      }
     }
     loadingState.value = response;
     return true;

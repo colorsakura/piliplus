@@ -10,6 +10,7 @@ import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_cont
 import 'package:PiliPalaX/pages/member/new/controller.dart';
 import 'package:PiliPalaX/utils/grid.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class MemberHome extends StatefulWidget {
@@ -69,6 +70,33 @@ class _MemberHomeState extends State<MemberHome>
                     ),
                   ),
                 ),
+              ],
+              if (loadingState.response?.favourite2?.item?.isNotEmpty ==
+                  true) ...[
+                _videoHeader(
+                  title: '收藏',
+                  param: 'favorite',
+                  count: loadingState.response.favourite2.count,
+                ),
+                // TODO
+              ],
+              if (loadingState.response?.coinArchive?.item?.isNotEmpty ==
+                  true) ...[
+                _videoHeader(
+                  title: '最近投币的视频',
+                  param: 'coinArchive',
+                  count: loadingState.response.coinArchive.count,
+                ),
+                // TODO
+              ],
+              if (loadingState.response?.likeArchive?.item?.isNotEmpty ==
+                  true) ...[
+                _videoHeader(
+                  title: '最近点赞的视频',
+                  param: 'coinArchive',
+                  count: loadingState.response.likeArchive.count,
+                ),
+                // TODO
               ],
               if (loadingState.response?.article?.item?.isNotEmpty == true) ...[
                 _videoHeader(
@@ -159,27 +187,30 @@ class _MemberHomeState extends State<MemberHome>
                 onTap: () {
                   int index =
                       _ctr.tab2!.indexWhere((item) => item.param == param);
-                  if (['video', 'article', 'audio'].contains(param1)) {
-                    List<Item> items = _ctr.tab2!
-                        .firstWhere((item) => item.param == param)
-                        .items!;
-                    int index1 =
-                        items.indexWhere((item) => item.param == param1);
-                    try {
-                      final contributeCtr =
-                          Get.find<MemberContributeCtr>(tag: widget.heroTag);
-                      // contributeCtr.tabController?.animateTo(index1);
-                      if (contributeCtr.tabController?.index != index1) {
-                        contributeCtr.tabController?.index = index1;
-                      }
-                      print('initialized');
-                    } catch (e) {
-                      _ctr.contributeInitialIndex.value = index1;
-                      print('not initialized');
-                    }
-                  }
                   if (index != -1) {
+                    if (['video', 'article', 'audio'].contains(param1)) {
+                      List<Item> items = _ctr.tab2!
+                          .firstWhere((item) => item.param == param)
+                          .items!;
+                      int index1 =
+                          items.indexWhere((item) => item.param == param1);
+                      try {
+                        final contributeCtr =
+                            Get.find<MemberContributeCtr>(tag: widget.heroTag);
+                        // contributeCtr.tabController?.animateTo(index1);
+                        if (contributeCtr.tabController?.index != index1) {
+                          contributeCtr.tabController?.index = index1;
+                        }
+                        print('initialized');
+                      } catch (e) {
+                        _ctr.contributeInitialIndex.value = index1;
+                        print('not initialized');
+                      }
+                    }
                     _ctr.tabController.animateTo(index);
+                  } else {
+                    // TODO
+                    SmartDialog.showToast('view $param');
                   }
                 },
                 child: Text.rich(

@@ -416,7 +416,7 @@ class UserInfoCard extends StatelessWidget {
         //           .toList(),
         //     ),
         //   ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 5),
       ],
     );
   }

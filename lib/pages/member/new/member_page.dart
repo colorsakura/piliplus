@@ -67,8 +67,7 @@ class _MemberPageNewState extends State<MemberPageNew>
                           ),
                         ];
                       },
-                      body: _userController.tab2 != null &&
-                              _userController.tab2!.isNotEmpty
+                      body: _userController.tab2?.isNotEmpty == true
                           ? LayoutBuilder(
                               builder: (context, _) {
                                 return Padding(
@@ -103,8 +102,16 @@ class _MemberPageNewState extends State<MemberPageNew>
                             child: Column(
                               children: [
                                 SizedBox(height: _userController.top),
-                                _buildTab,
-                                Expanded(child: _buildBody),
+                                if ((_userController.tab2?.length ?? -1) > 1)
+                                  _buildTab,
+                                Expanded(
+                                  child:
+                                      _userController.tab2?.isNotEmpty == true
+                                          ? _buildBody
+                                          : Center(
+                                              child: const Text('EMPTY'),
+                                            ),
+                                ),
                               ],
                             ),
                           ),
@@ -172,9 +179,7 @@ class _MemberPageNewState extends State<MemberPageNew>
           pinned: true,
           scrolledUnderElevation: 0,
           flexibleSpace: _buildUserInfo(_userController.loadingState.value),
-          bottom: needTab &&
-                  _userController.tab2 != null &&
-                  _userController.tab2!.isNotEmpty
+          bottom: needTab && (_userController.tab2?.length ?? -1) > 1
               ? PreferredSize(
                   preferredSize: Size.fromHeight(48),
                   child: Material(
@@ -293,12 +298,16 @@ class _MemberPageNewState extends State<MemberPageNew>
         return _errorWidget(userState.errMsg);
       case Success():
         return Obx(
-          () => UserInfoCard(
-            relation: _userController.relation.value,
-            isFollow: _userController.isFollow.value,
-            card: userState.response.card,
-            images: userState.response.images,
-            onFollow: () => _userController.onFollow(context),
+          () => Padding(
+            padding: EdgeInsets.only(
+                bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
+            child: UserInfoCard(
+              relation: _userController.relation.value,
+              isFollow: _userController.isFollow.value,
+              card: userState.response.card,
+              images: userState.response.images,
+              onFollow: () => _userController.onFollow(context),
+            ),
           ),
         );
     }
