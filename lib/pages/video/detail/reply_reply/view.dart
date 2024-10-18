@@ -375,7 +375,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
             oid: replyItem.oid.toInt(),
             rpid: replyItem.root.toInt(),
             dialog: replyItem.dialog.toInt(),
-            replyType: ReplyType.video,
+            replyType: widget.replyType,
             source: 'videoDetail',
             isDialogue: true,
           ),
