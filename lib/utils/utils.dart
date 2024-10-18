@@ -5,9 +5,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/http/search.dart';
+import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
+import 'package:PiliPalaX/pages/video/detail/introduction/widgets/group_panel.dart';
+import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -18,12 +22,157 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../common/widgets/custom_toast.dart';
 import '../http/index.dart';
 import '../models/github/latest.dart';
 
 class Utils {
   static final Random random = Random();
+
+  static Future actionRelationMod({
+    required BuildContext context,
+    required dynamic mid,
+    required bool isFollow,
+    required Function callback,
+  }) async {
+    if (mid == null) {
+      return;
+    }
+    feedBack();
+    if (!isFollow) {
+      var res = await VideoHttp.relationMod(
+        mid: mid,
+        act: 1,
+        reSrc: 11,
+      );
+      SmartDialog.showToast(res['status'] ? "关注成功" : res['msg']);
+      if (res['status']) {
+        callback(2);
+        // followStatus['attribute'] = 2;
+        // followStatus.refresh();
+      }
+    } else {
+      dynamic result = await VideoHttp.hasFollow(mid: mid);
+      if (result['status'] && context.mounted) {
+        Map followStatus = result['data'];
+        showDialog(
+          context: context,
+          builder: (_) {
+            bool isSpecialFollowed = followStatus['special'] == 1;
+            String text = isSpecialFollowed ? '移除特别关注' : '加入特别关注';
+            return AlertDialog(
+              clipBehavior: Clip.hardEdge,
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    dense: true,
+                    onTap: () async {
+                      Get.back();
+                      final res = await MemberHttp.specialAction(
+                        fid: mid,
+                        isAdd: !isSpecialFollowed,
+                      );
+                      if (res['status']) {
+                        // followStatus['special'] = isSpecialFollowed ? 0 : 1;
+                        // List tags = followStatus['tag'] ?? [];
+                        // if (isSpecialFollowed) {
+                        //   tags.remove(-10);
+                        // } else {
+                        //   tags.add(-10);
+                        // }
+                        // followStatus['tag'] = tags;
+                        // followStatus.refresh();
+                        SmartDialog.showToast('$text成功');
+                      } else {
+                        SmartDialog.showToast(res['msg']);
+                      }
+                    },
+                    title: Text(
+                      text,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                  ListTile(
+                    dense: true,
+                    onTap: () async {
+                      Get.back();
+                      await showModalBottomSheet(
+                        context: context,
+                        useSafeArea: true,
+                        isScrollControlled: true,
+                        // transitionAnimationController: AnimationController(
+                        //   duration: const Duration(milliseconds: 200),
+                        //   vsync: this,
+                        // ),
+                        sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+                        builder: (BuildContext context) {
+                          return DraggableScrollableSheet(
+                            minChildSize: 0,
+                            maxChildSize: 1,
+                            initialChildSize: 0.6,
+                            snap: true,
+                            expand: false,
+                            snapSizes: const [0.6],
+                            builder: (BuildContext context,
+                                ScrollController scrollController) {
+                              return GroupPanel(
+                                mid: mid,
+                                tags: followStatus['tag'],
+                                scrollController: scrollController,
+                              );
+                            },
+                          );
+                        },
+                      );
+                      // await Future.delayed(const Duration(milliseconds: 500));
+                      // if (result == true) {
+                      //   queryFollowStatus();
+                      // }
+                    },
+                    title: const Text(
+                      '设置分组',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                  ListTile(
+                    dense: true,
+                    onTap: () async {
+                      Get.back();
+                      var res = await VideoHttp.relationMod(
+                        mid: mid,
+                        act: 2,
+                        reSrc: 11,
+                      );
+                      SmartDialog.showToast(
+                          res['status'] ? "取消关注成功" : res['msg']);
+                      if (res['status']) {
+                        callback(0);
+                        // followStatus['attribute'] = 0;
+                        // followStatus.refresh();
+                      }
+                    },
+                    title: const Text(
+                      '取消关注',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      }
+    }
+
+    // MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
+    //     tag: mid.toString());
+    // await _.getInfo();
+    // if (context.mounted) await _.actionRelationMod(context);
+    // followStatus['attribute'] = _.attribute.value;
+    // followStatus.refresh();
+    // Get.delete<MemberController>(tag: mid.toString());
+  }
 
   static String generateRandomString(int length) {
     const characters = '0123456789abcdefghijklmnopqrstuvwxyz';
@@ -538,7 +687,7 @@ class Utils {
             actions: [
               TextButton(
                 onPressed: () {
-                  setting.put(SettingBoxKey.autoUpdate, false);
+                  GStorage.setting.put(SettingBoxKey.autoUpdate, false);
                   SmartDialog.dismiss();
                 },
                 child: Text(

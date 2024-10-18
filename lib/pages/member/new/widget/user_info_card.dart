@@ -217,16 +217,32 @@ class UserInfoCard extends StatelessWidget {
                             vertical: -2,
                           ),
                         ),
-                        child: Text(
-                          relation == -1
-                              ? '已拉黑'
-                              : isFollow
-                                  ? '取消关注'
-                                  : '关注',
+                        child: Text.rich(
                           style: TextStyle(
                             color: relation == -1 || isFollow
                                 ? Theme.of(context).colorScheme.outline
                                 : null,
+                          ),
+                          TextSpan(
+                            children: [
+                              if (isFollow)
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.top,
+                                  child: Icon(
+                                    Icons.sort,
+                                    size: 16,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              TextSpan(
+                                text: relation == -1
+                                    ? '移除黑名单'
+                                    : isFollow
+                                        ? ' 已关注'
+                                        : '关注',
+                              )
+                            ],
                           ),
                         ),
                       ),

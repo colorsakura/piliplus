@@ -210,11 +210,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
               ),
               subtitle: Text(
                 item1.type == 0
-                    ? '${item1.mediaCount}个内容 · ${[
-                        0,
-                        2,
-                        22
-                      ].contains(item1.attr) ? '公开' : '私密'}'
+                    ? '${item1.mediaCount}个内容'
                     : item1.type == 11
                         ? '${item1.mediaCount}个内容 · ${item1.upper?.name}'
                         : item1.type == 21

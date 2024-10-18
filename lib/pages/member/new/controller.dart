@@ -4,6 +4,7 @@ import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/space/tab2.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -114,13 +115,23 @@ class MemberControllerNew extends CommonController
     }
   }
 
-  void onFollow() async {
+  void onFollow(BuildContext context) async {
     if (relation.value == -1) {
       _onBlock();
-    } else if (!isFollow.value) {
-      // TODO
     } else {
-      // TODO
+      if (ownerMid == null) {
+        SmartDialog.showToast('账号未登录');
+        return;
+      }
+      Utils.actionRelationMod(
+        context: context,
+        mid: mid,
+        isFollow: isFollow.value,
+        callback: (attribute) {
+          relation.value = 1;
+          isFollow.value = attribute != 0;
+        },
+      );
     }
   }
 }
