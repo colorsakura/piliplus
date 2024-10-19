@@ -154,7 +154,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                   }
                 } else {
                   return HttpError(
-                    errMsg: snapshot.data['msg'],
+                    errMsg: 'NULL',
                     fn: () {},
                   );
                 }
