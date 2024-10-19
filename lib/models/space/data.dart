@@ -15,6 +15,7 @@ import 'series.dart';
 import 'setting.dart';
 import 'tab.dart';
 import 'tab2.dart';
+import 'package:PiliPalaX/models/space_article/data.dart' as space;
 
 part 'data.g.dart';
 
@@ -35,7 +36,7 @@ class Data {
   Images? images;
   Archive? archive;
   Series? series;
-  Article? article;
+  space.Data? article;
   Season? season;
   @JsonKey(name: 'coin_archive')
   CoinArchive? coinArchive;

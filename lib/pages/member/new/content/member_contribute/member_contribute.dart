@@ -89,7 +89,10 @@ class _MemberContributeState extends State<MemberContribute>
                               heroTag: widget.heroTag,
                               mid: widget.mid,
                             ),
-                          'article' => MemberArticle(heroTag: widget.heroTag),
+                          'article' => MemberArticle(
+                              heroTag: widget.heroTag,
+                              mid: widget.mid,
+                            ),
                           'audio' => MemberAudio(heroTag: widget.heroTag),
                           'season_video' => MemberVideo(
                               type: ContributeType.season,

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/common/widgets/video_card_v_member_home.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/space/data.dart';
@@ -12,6 +13,8 @@ import 'package:PiliPalaX/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+
+import '../../../../../utils/app_scheme.dart';
 
 class MemberHome extends StatefulWidget {
   const MemberHome({super.key, this.heroTag});
@@ -93,7 +96,7 @@ class _MemberHomeState extends State<MemberHome>
                   true) ...[
                 _videoHeader(
                   title: '最近点赞的视频',
-                  param: 'coinArchive',
+                  param: 'likeArchive',
                   count: loadingState.response.likeArchive.count,
                 ),
                 // TODO
@@ -105,7 +108,53 @@ class _MemberHomeState extends State<MemberHome>
                   param1: 'article',
                   count: loadingState.response.article.count,
                 ),
-                // TODO
+                SliverToBoxAdapter(
+                  child: ListTile(
+                    dense: true,
+                    onTap: () {
+                      PiliScheme.routePush(Uri.parse(
+                          loadingState.response.article.item.first.uri ?? ''));
+                    },
+                    leading: loadingState.response.article.item.first
+                                .originImageUrls?.isNotEmpty ==
+                            true
+                        ? Container(
+                            margin: const EdgeInsets.symmetric(vertical: 6),
+                            child: LayoutBuilder(
+                              builder: (_, constraints) {
+                                return NetworkImgLayer(
+                                  radius: 6,
+                                  src: loadingState.response.article.item.first
+                                      .originImageUrls!.first,
+                                  width: constraints.maxHeight *
+                                      StyleString.aspectRatio,
+                                  height: constraints.maxHeight,
+                                );
+                              },
+                            ),
+                          )
+                        : null,
+                    title: Text(
+                      loadingState.response.article.item.first.title ?? '',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    subtitle: loadingState.response.article.item.first.summary
+                                ?.isNotEmpty ==
+                            true
+                        ? Text(
+                            loadingState.response.article.item.first.summary!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          )
+                        : null,
+                  ),
+                ),
               ],
               if (loadingState.response?.audios?.item?.isNotEmpty == true) ...[
                 _videoHeader(

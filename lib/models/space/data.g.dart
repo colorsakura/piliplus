@@ -32,7 +32,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : Series.fromJson(json['series'] as Map<String, dynamic>),
       article: json['article'] == null
           ? null
-          : Article.fromJson(json['article'] as Map<String, dynamic>),
+          : space.Data.fromJson(json['article'] as Map<String, dynamic>),
       season: json['season'] == null
           ? null
           : Season.fromJson(json['season'] as Map<String, dynamic>),
