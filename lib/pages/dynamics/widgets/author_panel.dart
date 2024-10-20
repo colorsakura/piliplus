@@ -232,7 +232,7 @@ class MorePanel extends StatelessWidget {
             minLeadingWidth: 0,
           ),
           if (item.modules.moduleAuthor.mid ==
-              GStorage.userInfo.get('userInfoCache').mid)
+              GStorage.userInfo.get('userInfoCache')?.mid)
             ListTile(
               onTap: () async {
                 Get.back();

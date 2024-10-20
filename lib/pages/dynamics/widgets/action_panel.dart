@@ -196,7 +196,7 @@ class _RepostPanelState extends State<RepostPanel> {
 
   Future _onRepost() async {
     dynamic result = await MsgHttp.createDynamic(
-      mid: GStorage.userInfo.get('userInfoCache').mid,
+      mid: GStorage.userInfo.get('userInfoCache')?.mid,
       dynIdStr: widget.item.idStr,
       rawText: _ctr.text,
     );

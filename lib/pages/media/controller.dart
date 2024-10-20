@@ -71,6 +71,6 @@ class MediaController extends CommonController {
   Future<LoadingState> customGetData() => UserHttp.userfavFolder(
         pn: 1,
         ps: 5,
-        mid: mid ?? GStorage.userInfo.get('userInfoCache').mid,
+        mid: mid ?? GStorage.userInfo.get('userInfoCache')?.mid,
       );
 }

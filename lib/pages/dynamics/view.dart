@@ -287,7 +287,7 @@ class _CreatePanelState extends State<CreatePanel> {
       }
     }
     dynamic result = await MsgHttp.createDynamic(
-      mid: GStorage.userInfo.get('userInfoCache').mid,
+      mid: GStorage.userInfo.get('userInfoCache')?.mid,
       rawText: _ctr.text,
       pics: pics,
       publishTime: _publishTime != null
