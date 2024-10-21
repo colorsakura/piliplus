@@ -56,7 +56,7 @@ class MemberControllerNew extends CommonController
         tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
         tabController = TabController(
           vsync: this,
-          length: response.response.tab2.length,
+          length: tab2!.length,
           initialIndex: initialIndex == -1 ? 0 : initialIndex,
         );
       }

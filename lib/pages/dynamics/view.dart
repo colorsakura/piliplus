@@ -244,6 +244,8 @@ class _CreatePanelState extends State<CreatePanel> {
   DateTime? _publishTime;
   ReplyOption _replyOption = ReplyOption.allow;
 
+  late final int _limit = 18;
+
   @override
   void dispose() {
     _isEnableStream.close();
@@ -532,39 +534,44 @@ class _CreatePanelState extends State<CreatePanel> {
                 parent: BouncingScrollPhysics(),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: _pathList.length == 9 ? 9 : _pathList.length + 1,
+              itemCount:
+                  _pathList.length == _limit ? _limit : _pathList.length + 1,
               itemBuilder: (context, index) {
-                if (_pathList.length != 9 && index == _pathList.length) {
+                if (_pathList.length != _limit && index == _pathList.length) {
                   return Material(
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () async {
-                        List<XFile> pickedFiles =
-                            await _imagePicker.pickMultiImage(
-                          limit: 9,
-                          imageQuality: 100,
-                        );
-                        if (pickedFiles.isNotEmpty) {
-                          for (int i = 0; i < pickedFiles.length; i++) {
-                            if (_pathList.length == 9) {
-                              SmartDialog.showToast('最多选择9张图片');
-                              if (i != 0) {
-                                _pathStream.add(_pathList);
-                              }
-                              break;
-                            } else {
-                              _pathList.add(pickedFiles[i].path);
-                              if (i == pickedFiles.length - 1) {
-                                _pathStream.add(_pathList);
+                      onTap: () {
+                        EasyThrottle.throttle(
+                            'imagePicker', const Duration(milliseconds: 500),
+                            () async {
+                          List<XFile> pickedFiles =
+                              await _imagePicker.pickMultiImage(
+                            limit: _limit,
+                            imageQuality: 100,
+                          );
+                          if (pickedFiles.isNotEmpty) {
+                            for (int i = 0; i < pickedFiles.length; i++) {
+                              if (_pathList.length == _limit) {
+                                SmartDialog.showToast('最多选择$_limit张图片');
+                                if (i != 0) {
+                                  _pathStream.add(_pathList);
+                                }
+                                break;
+                              } else {
+                                _pathList.add(pickedFiles[i].path);
+                                if (i == pickedFiles.length - 1) {
+                                  _pathStream.add(_pathList);
+                                }
                               }
                             }
+                            if (_pathList.isNotEmpty && !_isEnable) {
+                              _isEnable = true;
+                              _isEnableStream.add(true);
+                            }
                           }
-                          if (_pathList.isNotEmpty && !_isEnable) {
-                            _isEnable = true;
-                            _isEnableStream.add(true);
-                          }
-                        }
+                        });
                       },
                       child: Ink(
                         width: 75,

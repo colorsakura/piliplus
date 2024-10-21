@@ -6,6 +6,7 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart'
     as reply;
 import 'package:PiliPalaX/http/msg.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -62,6 +63,7 @@ class _ReplyPageState extends State<ReplyPage>
   late final _imagePicker = ImagePicker();
   late final _pathStream = StreamController<List<String>>();
   late final _pathList = <String>[];
+  late final _limit = 9;
 
   @override
   void initState() {
@@ -355,29 +357,33 @@ class _ReplyPageState extends State<ReplyPage>
                     tooltip: '图片',
                     selected: false,
                     icon: const Icon(Icons.image, size: 22),
-                    onPressed: () async {
-                      List<XFile> pickedFiles =
-                          await _imagePicker.pickMultiImage(
-                        limit: 9,
-                        imageQuality: 100,
-                      );
-                      if (pickedFiles.isNotEmpty) {
-                        for (int i = 0; i < pickedFiles.length; i++) {
-                          if (_pathList.length == 9) {
-                            SmartDialog.showToast('最多选择9张图片');
-                            if (i != 0) {
-                              _pathStream.add(_pathList);
-                            }
-                            break;
-                          } else {
-                            _pathList.add(pickedFiles[i].path);
-                            if (i == pickedFiles.length - 1) {
-                              SmartDialog.dismiss();
-                              _pathStream.add(_pathList);
+                    onPressed: () {
+                      EasyThrottle.throttle(
+                          'imagePicker', const Duration(milliseconds: 500),
+                          () async {
+                        List<XFile> pickedFiles =
+                            await _imagePicker.pickMultiImage(
+                          limit: _limit,
+                          imageQuality: 100,
+                        );
+                        if (pickedFiles.isNotEmpty) {
+                          for (int i = 0; i < pickedFiles.length; i++) {
+                            if (_pathList.length == _limit) {
+                              SmartDialog.showToast('最多选择$_limit张图片');
+                              if (i != 0) {
+                                _pathStream.add(_pathList);
+                              }
+                              break;
+                            } else {
+                              _pathList.add(pickedFiles[i].path);
+                              if (i == pickedFiles.length - 1) {
+                                SmartDialog.dismiss();
+                                _pathStream.add(_pathList);
+                              }
                             }
                           }
                         }
-                      }
+                      });
                     },
                   ),
                 ],

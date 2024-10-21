@@ -47,7 +47,7 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
     _lastTime = DateTime.now().millisecondsSinceEpoch;
     if (!widget.hasOneThree) {
       controller?.forward();
-      widget.callBack!(true);
+      widget.callBack?.call(true);
     }
   }
 
@@ -55,11 +55,11 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
     if (duration < 1500) {
       controller?.reverse();
-      widget.callBack!(false);
+      widget.callBack?.call(false);
     }
     if (duration <= 50 && !isCancel) {
       feedBack();
-      widget.onTap!();
+      widget.onTap?.call();
     }
   }
 
@@ -80,7 +80,7 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
             if (_hideCircle) {
               controller?.reset();
               if (_isThumbUp) {
-                widget.onLongPress!();
+                widget.onLongPress?.call();
               }
             }
           });
@@ -108,14 +108,12 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
               ? null
               : () {
                   feedBack();
-                  widget.onTap!();
+                  widget.onTap?.call();
                 },
           onLongPress: _isThumbUp
               ? null
               : () {
-                  if (widget.onLongPress != null) {
-                    widget.onLongPress!();
-                  }
+                  widget.onLongPress?.call();
                 },
           onTapDown: (details) => _isThumbUp ? _startLongPress() : null,
           onTapUp: (details) => _isThumbUp ? _cancelLongPress() : null,
