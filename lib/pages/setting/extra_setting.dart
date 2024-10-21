@@ -139,12 +139,13 @@ class _ExtraSettingState extends State<ExtraSetting> {
       ),
       body: ListView(
         children: [
-          const SetSwitchItem(
+          SetSwitchItem(
             title: 'Sponsor Block',
-            subTitle: '跳过赞助商广告',
+            subTitle: '点击配置',
             leading: Icon(Icons.block),
             setKey: SettingBoxKey.enableSponsorBlock,
             defaultVal: false,
+            onTap: () => Get.toNamed('/sponsorBlock'),
           ),
           Obx(
             () => ListTile(

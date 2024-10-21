@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:PiliPalaX/pages/member/new/member_page.dart';
+import 'package:PiliPalaX/pages/setting/sponsor_block_page.dart';
 import 'package:PiliPalaX/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -184,6 +185,7 @@ class Routes {
     CustomGetPage(name: '/subDetail', page: () => const SubDetailPage()),
     // 弹幕屏蔽管理
     CustomGetPage(name: '/danmakuBlock', page: () => const DanmakuBlockPage()),
+    CustomGetPage(name: '/sponsorBlock', page: () => const SponsorBlockPage()),
   ];
 }
 

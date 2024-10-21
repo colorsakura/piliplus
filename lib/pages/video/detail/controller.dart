@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:PiliPalaX/common/widgets/pair.dart';
+import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:dio/dio.dart';
@@ -21,6 +23,55 @@ import 'package:ns_danmaku/models/danmaku_item.dart';
 
 import '../../../utils/id_utils.dart';
 import 'widgets/header_control.dart';
+
+enum SegmentType {
+  sponsor,
+  selfpromo,
+  interaction,
+  intro,
+  outro,
+  preview,
+  music_offtopic,
+  poi_highlight,
+  chapter,
+  filler,
+  exclusive_access
+}
+
+extension SegmentTypeExt on SegmentType {
+  Color get color => [
+        Colors.amber,
+        Colors.blue,
+        Colors.red,
+        Colors.indigo,
+        Colors.pink,
+        Colors.purple,
+        Colors.lightGreen,
+        Colors.teal,
+        Colors.cyan,
+        Colors.yellow,
+        Colors.orange
+      ][index];
+}
+
+enum SkipType { alwaysSkip, skipOnce, showOnly, disable }
+
+extension SkipTypeExt on SkipType {
+  String get title => ['总是跳过', '跳过一次', '仅显示', '禁用'][index];
+}
+
+class SegmentModel {
+  SegmentModel({
+    required this.segmentType,
+    required this.segment,
+    required this.skipType,
+    required this.hasSkipped,
+  });
+  SegmentType segmentType;
+  Pair<int, int> segment;
+  SkipType skipType;
+  bool hasSkipped;
+}
 
 class VideoDetailController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -90,8 +141,8 @@ class VideoDetailController extends GetxController
   late String cacheSecondDecode;
   late int cacheAudioQa;
 
+  late final bool _enableSponsorBlock;
   PlayerStatus? playerStatus;
-
   StreamSubscription<Duration>? positionSubscription;
 
   @override
@@ -151,12 +202,19 @@ class VideoDetailController extends GetxController
     cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
         defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
-    if (setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false)) {
-      _sponsorBlock();
+    _enableSponsorBlock =
+        setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false);
+    if (_enableSponsorBlock) {
+      _blockLimit = GStorage.blockLimit;
+      _blockSettings = GStorage.blockSettings;
     }
   }
 
-  List? _segmentList;
+  int? _lastPos;
+  double? _blockLimit;
+  List<Pair<SegmentType, SkipType>>? _blockSettings;
+  List<SegmentModel>? _segmentList;
+  List<Segment>? _segmentProgressList;
 
   Future _sponsorBlock() async {
     dynamic result = await Request().get(
@@ -175,12 +233,64 @@ class VideoDetailController extends GetxController
       ),
     );
     if (result.data is List && result.data.isNotEmpty) {
-      _segmentList = (result.data as List)
-          .where((item) => item['category'] == 'sponsor')
-          .toList()
-          .map((item) => item['segment'])
-          .toList();
+      try {
+        List<String> list =
+            SegmentType.values.map((item) => item.name).toList();
+        List<String> enableList = _blockSettings!
+            .where((item) => item.second != SkipType.disable)
+            .toList()
+            .map((item) => item.first.name)
+            .toList();
+        _segmentList = (result.data as List)
+            .where((item) =>
+                enableList.contains(item['category']) &&
+                item['segment'][1] > 0 &&
+                item['segment'][1] >= item['segment'][0])
+            .map(
+          (item) {
+            SegmentType segmentType =
+                SegmentType.values[list.indexOf(item['category'])];
+            SkipType skipType = _blockSettings![segmentType.index].second;
+            if (skipType != SkipType.showOnly) {
+              if (item['segment'][1] == item['segment'][0] ||
+                  item['segment'][1] - item['segment'][0] < _blockLimit) {
+                skipType = SkipType.showOnly;
+              }
+            }
+            return SegmentModel(
+              segmentType: segmentType,
+              segment: Pair(
+                first: _convert(item['segment'][0]),
+                second: _convert(item['segment'][1]),
+              ),
+              skipType: skipType,
+              hasSkipped: false,
+            );
+          },
+        ).toList();
+        _segmentProgressList = _segmentList?.map((item) {
+          double start = (item.segment.first / ((data.timeLength ?? 0) / 1000))
+              .clamp(0.0, 1.0);
+          double end = (item.segment.second / ((data.timeLength ?? 0) / 1000))
+              .clamp(0.0, 1.0);
+          return Segment(
+            start,
+            start == end ? (end + 0.01).clamp(0.0, 1.0) : end,
+            item.segmentType.color,
+          );
+        }).toList();
+      } catch (e) {
+        print(e.toString());
+      }
     }
+  }
+
+  int _convert(value) {
+    return value is double
+        ? value.round()
+        : value is int
+            ? value
+            : -1;
   }
 
   void _initSkip() {
@@ -188,17 +298,29 @@ class VideoDetailController extends GetxController
       positionSubscription = plPlayerController
           .videoPlayerController?.stream.position
           .listen((position) async {
-        for (List item in _segmentList!) {
-          // debugPrint(
-          //     '${position.inSeconds},,${(item.first as double).round()}');
-          if ((item.first as double).round() == position.inSeconds) {
-            try {
-              await plPlayerController
-                  .seekTo(Duration(seconds: (item[1] as double).round()));
-              SmartDialog.showToast('已跳过赞助商广告');
-            } catch (e) {
-              debugPrint('failed to skip: $e');
-              SmartDialog.showToast('广告跳过失败');
+        int currentPos = position.inSeconds;
+        if (currentPos != _lastPos) {
+          _lastPos = currentPos;
+          for (SegmentModel item in _segmentList!) {
+            // debugPrint(
+            //     '${position.inSeconds},,${item.segment.first},,${item.segment.second},,${item.skipType.name},,${item.hasSkipped}');
+            if (item.segment.first == position.inSeconds) {
+              if (item.skipType == SkipType.alwaysSkip ||
+                  (item.skipType == SkipType.skipOnce && !item.hasSkipped)) {
+                try {
+                  plPlayerController.danmakuController?.clear();
+                  await plPlayerController.videoPlayerController
+                      ?.seek(Duration(seconds: item.segment.second));
+                  // await plPlayerController
+                  //     .seekTo(Duration(seconds: item.segment.second));
+                  SmartDialog.showToast('已跳过${item.segmentType.name}');
+                  item.hasSkipped = true;
+                } catch (e) {
+                  debugPrint('failed to skip: $e');
+                  SmartDialog.showToast('${item.segmentType.name}跳过失败');
+                }
+              }
+              break;
             }
           }
         }
@@ -384,6 +506,7 @@ class VideoDetailController extends GetxController
           'referer': HttpString.baseUrl
         },
       ),
+      segmentList: _segmentProgressList,
       // 硬解
       enableHA: enableHA.value,
       hwdec: hwdec.value,
@@ -414,6 +537,9 @@ class VideoDetailController extends GetxController
     var result = await VideoHttp.videoUrl(cid: cid.value, bvid: bvid);
     if (result['status']) {
       data = result['data'];
+      if (_enableSponsorBlock) {
+        await _sponsorBlock();
+      }
       if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
         SmartDialog.showToast(
           '该视频为专属视频，仅提供试看',

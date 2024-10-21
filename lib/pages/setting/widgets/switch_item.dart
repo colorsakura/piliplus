@@ -12,6 +12,7 @@ class SetSwitchItem extends StatefulWidget {
   final Function? callFn;
   final bool? needReboot;
   final Widget? leading;
+  final GestureTapCallback? onTap;
 
   const SetSwitchItem({
     this.title,
@@ -21,6 +22,7 @@ class SetSwitchItem extends StatefulWidget {
     this.callFn,
     this.needReboot,
     this.leading,
+    this.onTap,
     Key? key,
   }) : super(key: key);
 
@@ -56,14 +58,19 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle titleStyle = Theme.of(context).textTheme.titleMedium!;
+    TextStyle titleStyle = Theme.of(context).textTheme.titleMedium!.copyWith(
+        color: widget.onTap != null && !val
+            ? Theme.of(context).colorScheme.outline
+            : null);
     TextStyle subTitleStyle = Theme.of(context)
         .textTheme
         .labelMedium!
         .copyWith(color: Theme.of(context).colorScheme.outline);
     return ListTile(
+      enabled: widget.onTap != null ? val : true,
       enableFeedback: true,
-      onTap: () => switchChange(null),
+      onTap: () =>
+          widget.onTap != null ? widget.onTap?.call() : switchChange(null),
       title: Text(widget.title!, style: titleStyle),
       subtitle: widget.subTitle != null
           ? Text(widget.subTitle!, style: subTitleStyle)
@@ -73,9 +80,9 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
         alignment: Alignment.centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
         scale: 0.8,
         child: Switch(
-          thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
-              (Set<MaterialState> states) {
-            if (states.isNotEmpty && states.first == MaterialState.selected) {
+          thumbIcon:
+              WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
+            if (states.isNotEmpty && states.first == WidgetState.selected) {
               return const Icon(Icons.done);
             }
             return null; // All other states will use the default thumbIcon.

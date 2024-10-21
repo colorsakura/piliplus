@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -970,6 +971,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       BottomControl(
                         controller: widget.controller,
                         buildBottomControl: buildBottomControl(),
+                        segmentList: _.segmentList,
                       ),
                 ),
               ),
@@ -1015,47 +1017,62 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   // label: '${(value / max * 100).round()}%',
                   value: '${(value / max * 100).round()}%',
                   // enabled: false,
-                  child: ProgressBar(
-                    progress: Duration(seconds: value),
-                    buffered: Duration(seconds: buffer),
-                    total: Duration(seconds: max),
-                    progressBarColor: colorTheme,
-                    baseBarColor: Colors.white.withOpacity(0.2),
-                    bufferedBarColor:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.4),
-                    timeLabelLocation: TimeLabelLocation.none,
-                    thumbColor: colorTheme,
-                    barHeight: 3.5,
-                    thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
-                    // onDragStart: (duration) {
-                    //   draggingFixedProgressBar.value = true;
-                    //   feedBack();
-                    //   _.onChangedSliderStart();
-                    // },
-                    // onDragUpdate: (duration) {
-                    //   double newProgress = duration.timeStamp.inSeconds / max;
-                    //   if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
-                    //     _accessibilityDebounce?.cancel();
-                    //     _accessibilityDebounce =
-                    //         Timer(const Duration(milliseconds: 200), () {
-                    //       SemanticsService.announce(
-                    //           "${(newProgress * 100).round()}%",
-                    //           TextDirection.ltr);
-                    //       _lastAnnouncedValue = newProgress;
-                    //     });
-                    //   }
-                    //   _.onUpdatedSliderProgress(duration.timeStamp);
-                    // },
-                    // onSeek: (duration) {
-                    //   draggingFixedProgressBar.value = false;
-                    //   _.onChangedSliderEnd();
-                    //   _.onChangedSlider(duration.inSeconds.toDouble());
-                    //   _.seekTo(Duration(seconds: duration.inSeconds),
-                    //       type: 'slider');
-                    //   SemanticsService.announce(
-                    //       "${(duration.inSeconds / max * 100).round()}%",
-                    //       TextDirection.ltr);
-                    // },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ProgressBar(
+                        progress: Duration(seconds: value),
+                        buffered: Duration(seconds: buffer),
+                        total: Duration(seconds: max),
+                        progressBarColor: colorTheme,
+                        baseBarColor: Colors.white.withOpacity(0.2),
+                        bufferedBarColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.4),
+                        timeLabelLocation: TimeLabelLocation.none,
+                        thumbColor: colorTheme,
+                        barHeight: 3.5,
+                        thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
+                        // onDragStart: (duration) {
+                        //   draggingFixedProgressBar.value = true;
+                        //   feedBack();
+                        //   _.onChangedSliderStart();
+                        // },
+                        // onDragUpdate: (duration) {
+                        //   double newProgress = duration.timeStamp.inSeconds / max;
+                        //   if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
+                        //     _accessibilityDebounce?.cancel();
+                        //     _accessibilityDebounce =
+                        //         Timer(const Duration(milliseconds: 200), () {
+                        //       SemanticsService.announce(
+                        //           "${(newProgress * 100).round()}%",
+                        //           TextDirection.ltr);
+                        //       _lastAnnouncedValue = newProgress;
+                        //     });
+                        //   }
+                        //   _.onUpdatedSliderProgress(duration.timeStamp);
+                        // },
+                        // onSeek: (duration) {
+                        //   draggingFixedProgressBar.value = false;
+                        //   _.onChangedSliderEnd();
+                        //   _.onChangedSlider(duration.inSeconds.toDouble());
+                        //   _.seekTo(Duration(seconds: duration.inSeconds),
+                        //       type: 'slider');
+                        //   SemanticsService.announce(
+                        //       "${(duration.inSeconds / max * 100).round()}%",
+                        //       TextDirection.ltr);
+                        // },
+                      ),
+                      if (_.segmentList.isNotEmpty)
+                        CustomPaint(
+                          size: Size(double.infinity, 3.5),
+                          painter: SegmentProgressBar(
+                            progress: 1,
+                            segmentColors: _.segmentList,
+                          ),
+                        ),
+                    ],
                   ),
                   // SlideTransition(
                   //     position: Tween<Offset>(

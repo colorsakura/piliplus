@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -12,9 +13,11 @@ import '../../../common/widgets/audio_video_progress_bar.dart';
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   final PlPlayerController? controller;
   final List<Widget>? buildBottomControl;
+  final List<Segment>? segmentList;
   const BottomControl({
     this.controller,
     this.buildBottomControl,
+    this.segmentList,
     Key? key,
   }) : super(key: key);
 
@@ -49,44 +52,59 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                     // label: '${(value / max * 100).round()}%',
                     value: '${(value / max * 100).round()}%',
                     // enabled: false,
-                    child: ProgressBar(
-                      progress: Duration(seconds: value),
-                      buffered: Duration(seconds: buffer),
-                      total: Duration(seconds: max),
-                      progressBarColor: colorTheme,
-                      baseBarColor: Colors.white.withOpacity(0.2),
-                      bufferedBarColor: colorTheme.withOpacity(0.4),
-                      timeLabelLocation: TimeLabelLocation.none,
-                      thumbColor: colorTheme,
-                      barHeight: 3.5,
-                      thumbRadius: 7,
-                      onDragStart: (duration) {
-                        feedBack();
-                        _.onChangedSliderStart();
-                      },
-                      onDragUpdate: (duration) {
-                        double newProgress = duration.timeStamp.inSeconds / max;
-                        if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
-                          _accessibilityDebounce?.cancel();
-                          _accessibilityDebounce =
-                              Timer(const Duration(milliseconds: 200), () {
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ProgressBar(
+                          progress: Duration(seconds: value),
+                          buffered: Duration(seconds: buffer),
+                          total: Duration(seconds: max),
+                          progressBarColor: colorTheme,
+                          baseBarColor: Colors.white.withOpacity(0.2),
+                          bufferedBarColor: colorTheme.withOpacity(0.4),
+                          timeLabelLocation: TimeLabelLocation.none,
+                          thumbColor: colorTheme,
+                          barHeight: 3.5,
+                          thumbRadius: 7,
+                          onDragStart: (duration) {
+                            feedBack();
+                            _.onChangedSliderStart();
+                          },
+                          onDragUpdate: (duration) {
+                            double newProgress =
+                                duration.timeStamp.inSeconds / max;
+                            if ((newProgress - _lastAnnouncedValue).abs() >
+                                0.02) {
+                              _accessibilityDebounce?.cancel();
+                              _accessibilityDebounce =
+                                  Timer(const Duration(milliseconds: 200), () {
+                                SemanticsService.announce(
+                                    "${(newProgress * 100).round()}%",
+                                    TextDirection.ltr);
+                                _lastAnnouncedValue = newProgress;
+                              });
+                            }
+                            _.onUpdatedSliderProgress(duration.timeStamp);
+                          },
+                          onSeek: (duration) {
+                            _.onChangedSliderEnd();
+                            _.onChangedSlider(duration.inSeconds.toDouble());
+                            _.seekTo(Duration(seconds: duration.inSeconds),
+                                type: 'slider');
                             SemanticsService.announce(
-                                "${(newProgress * 100).round()}%",
+                                "${(duration.inSeconds / max * 100).round()}%",
                                 TextDirection.ltr);
-                            _lastAnnouncedValue = newProgress;
-                          });
-                        }
-                        _.onUpdatedSliderProgress(duration.timeStamp);
-                      },
-                      onSeek: (duration) {
-                        _.onChangedSliderEnd();
-                        _.onChangedSlider(duration.inSeconds.toDouble());
-                        _.seekTo(Duration(seconds: duration.inSeconds),
-                            type: 'slider');
-                        SemanticsService.announce(
-                            "${(duration.inSeconds / max * 100).round()}%",
-                            TextDirection.ltr);
-                      },
+                          },
+                        ),
+                        if (segmentList?.isNotEmpty == true)
+                          CustomPaint(
+                            size: Size(double.infinity, 3.5),
+                            painter: SegmentProgressBar(
+                              progress: 1,
+                              segmentColors: segmentList!,
+                            ),
+                          ),
+                      ],
                     )),
               );
             },

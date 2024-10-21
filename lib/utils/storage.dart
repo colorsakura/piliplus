@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
+import 'package:PiliPalaX/pages/video/detail/controller.dart'
+    show SegmentType, SkipType;
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,6 +19,22 @@ class GStorage {
   static late final Box<dynamic> localCache;
   static late final Box<dynamic> setting;
   static late final Box<dynamic> video;
+
+  static List<Pair<SegmentType, SkipType>> get blockSettings {
+    List<int> list = setting.get(
+      SettingBoxKey.blockSettings,
+      defaultValue: List.generate(SegmentType.values.length, (_) => 1),
+    );
+    return SegmentType.values
+        .map((item) => Pair<SegmentType, SkipType>(
+              first: item,
+              second: SkipType.values[list[item.index]],
+            ))
+        .toList();
+  }
+
+  static double get blockLimit =>
+      setting.get(SettingBoxKey.blockLimit, defaultValue: 0.0);
 
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
@@ -189,6 +208,8 @@ class SettingBoxKey {
       disableLikeMsg = 'disableLikeMsg',
       defaultHomePage = 'defaultHomePage',
       enableSponsorBlock = 'enableSponsorBlock',
+      blockSettings = 'blockSettings',
+      blockLimit = 'blockLimit',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',
