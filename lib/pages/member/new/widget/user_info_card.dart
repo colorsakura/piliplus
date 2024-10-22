@@ -369,7 +369,7 @@ class UserInfoCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 6, right: 20),
             child: SelectableText(
-              card.sign!.replaceFirst(RegExp('^\n'), ''),
+              card.sign!.trim().replaceAll(RegExp(r'\n{2,}'), '\n'),
               style: const TextStyle(
                 fontSize: 14,
               ),
