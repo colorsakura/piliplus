@@ -1154,9 +1154,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   final SaveResult result =
                                       await SaverGallery.saveImage(
                                     value,
-                                    name: name,
+                                    fileName: name,
                                     androidRelativePath: "Pictures/Screenshots",
-                                    androidExistNotSave: false,
+                                    skipIfExists: false,
                                   );
 
                                   if (result.isSuccess) {

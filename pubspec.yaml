@@ -34,36 +34,36 @@ dependencies:
     sdk: flutter
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
+  cupertino_icons: ^1.0.8
   # 动态取色
-  dynamic_color: ^1.6.8
+  dynamic_color: ^1.7.0
 
-  get: ^4.6.5
+  get: ^4.6.6
 
   # 网络
-  dio: ^5.3.3
+  dio: ^5.7.0
   cookie_jar: ^4.0.8
   dio_cookie_manager: ^3.1.1
-  connectivity_plus: ^6.0.5
-  dio_http2_adapter: ^2.3.1+1
+  connectivity_plus: ^6.1.0
+  dio_http2_adapter: ^2.5.3
 
   # 图片
-  cached_network_image: ^3.3.0
-  extended_image: ^8.2.0
-  saver_gallery: ^3.0.1
+  cached_network_image: ^3.4.1
+  extended_image: ^9.0.4
+  saver_gallery: ^3.0.10
 
   # QRCode
   qr_flutter: ^4.1.0
 
   # 存储
-  path_provider: ^2.1.1
+  path_provider: ^2.1.4
   hive: ^2.2.3
   hive_flutter: ^1.1.0
 
   # 设备信息
-  device_info_plus: ^10.1.2
+  device_info_plus: ^11.1.0
   # 权限
-  permission_handler: ^11.0.1
+  permission_handler: ^11.3.1
   # 分享
   # share_plus: ^10.0.2
   share_plus:
@@ -74,57 +74,55 @@ dependencies:
   # cookie 管理
   webview_cookie_manager: ^2.0.6
   # 浏览器
-  webview_flutter: ^4.2.2
-  flutter_inappwebview: ^6.1.4
+  webview_flutter: ^4.10.0
+  flutter_inappwebview: ^6.1.5
   # 解决sliver滑动不同步
-  extended_nested_scroll_view: ^6.1.2
+  extended_nested_scroll_view: ^6.2.1
   # 上拉加载
   loading_more_list: ^7.1.0
   # 下拉刷新
-  pull_to_refresh_notification: ^3.0.1
+  pull_to_refresh_notification: ^3.1.0
   # 图标
-  font_awesome_flutter: ^10.4.0
+  font_awesome_flutter: ^10.7.0
   material_design_icons_flutter: ^7.0.7296
   # toast
-  flutter_smart_dialog: ^4.9.7+8
+  flutter_smart_dialog: ^4.9.8+3
   # 下滑关闭
   dismissible_page: ^1.0.2
-  custom_sliding_segmented_control: ^1.7.5
+  custom_sliding_segmented_control: ^1.8.3
   # 加密
-  crypto: ^3.0.3
+  crypto: ^3.0.6
   encrypt: ^5.0.3
 
   # 视频播放器
-  media_kit: ^1.1.10 # Primary package.
-  media_kit_video: ^1.2.4 # For video rendering.
-  media_kit_libs_video: ^1.0.4
+  media_kit: ^1.1.11 # Primary package.
+  media_kit_video: ^1.2.5 # For video rendering.
+  media_kit_libs_video: ^1.0.5
 
   # 媒体通知
   audio_service: ^0.18.15
   audio_session: ^0.1.21
 
   # 音量、亮度、屏幕控制
-  flutter_volume_controller: ^1.3.1
-  screen_brightness: ^0.2.2+1
+  flutter_volume_controller: ^1.3.2
   wakelock_plus: ^1.2.8
-  universal_platform: ^1.0.0+1
+  universal_platform: ^1.1.0
   auto_orientation:
     git:
       url: https://github.com/orz12/auto_orientation.git
       ref: master
   protobuf: ^3.1.0
-  animations: ^2.0.8
+  animations: ^2.0.11
 
   # 获取appx信息
-  package_info_plus: ^8.0.2
-  url_launcher: ^6.1.14
-  flutter_svg: ^2.0.7
+  package_info_plus: ^8.1.0
+  url_launcher: ^6.3.1
   # 防抖节流
   easy_debounce: ^2.0.3
   # 高帧率
   flutter_displaymode: ^0.6.0
   # scheme跳转
-  app_links: ^6.2.0
+  app_links: ^6.3.2
   # 弹幕
   ns_danmaku:
     git:
@@ -149,15 +147,14 @@ dependencies:
   uuid: ^4.5.1
   scrollable_positioned_list: ^0.3.8
   nil: ^1.1.1
-  catcher_2: ^2.0.0-alpha.2
-  logger: ^2.0.2+1
-  path: 1.9.0
+  catcher_2: ^2.0.1
+  logger: ^2.4.0
   #瀑布流
   waterfall_flow: ^3.0.3
   #跑马灯
-  marquee: ^2.2.3
+  marquee: ^2.3.0
   #富文本
-  extended_text: ^14.0.1
+  extended_text: ^14.1.0
   # chat_bottom_container: ^0.2.0
   chat_bottom_container:
     git:
@@ -167,8 +164,11 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.19.0
   grpc: ^4.0.1
+  flutter_svg: ^2.0.10+1
 
 dependency_overrides:
+  screen_brightness: ^2.0.0+2
+  path: 1.9.1
   # mime:
   #   git: https://github.com/orz12/mime.git
   mime: ^2.0.0
@@ -190,9 +190,9 @@ dev_dependencies:
   #   git:
   #     url: https://github.com/nvi9/flutter_launcher_icons.git
   #     ref: e045d40
-  hive_generator: ^2.0.0
-  build_runner: ^2.3.3
-  flutter_native_splash: ^2.4.1
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.13
+  flutter_native_splash: ^2.4.2
 
 flutter_launcher_icons:
   android: true
