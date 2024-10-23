@@ -103,12 +103,24 @@ class GrpcRepo {
     try {
       return await request();
     } catch (e) {
+      dynamic defMsg() => {'status': false, 'msg': e.toString()};
       if (e is GrpcError) {
-        if (e.message == '12061') {
-          return {'status': false, 'msg': 'UP主已关闭评论区'}; // to be comfirm
+        try {
+          String msg = utf8.decode(
+            e.details?.firstOrNull?.getFieldOrNull(2),
+            allowMalformed: true,
+          );
+          if (msg.isNotEmpty) {
+            return {'status': false, 'msg': msg};
+          } else {
+            return defMsg();
+          }
+        } catch (e1) {
+          print(e1.toString());
+          return defMsg();
         }
       }
-      return {'status': false, 'msg': e.toString()};
+      return defMsg();
     }
   }
 
