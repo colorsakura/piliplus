@@ -149,13 +149,25 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                   } else {
                     return HttpError(
                       errMsg: snapshot.data['msg'],
-                      fn: () {},
+                      fn: () {
+                        setState(() {
+                          _memberDynamicController.futureBuilderFuture =
+                              _memberDynamicController
+                                  .getMemberDynamic('onRefresh');
+                        });
+                      },
                     );
                   }
                 } else {
                   return HttpError(
                     errMsg: 'NULL',
-                    fn: () {},
+                    fn: () {
+                      setState(() {
+                        _memberDynamicController.futureBuilderFuture =
+                            _memberDynamicController
+                                .getMemberDynamic('onRefresh');
+                      });
+                    },
                   );
                 }
               } else {
