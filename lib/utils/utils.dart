@@ -28,6 +28,10 @@ import '../models/github/latest.dart';
 class Utils {
   static final Random random = Random();
 
+  static bool isPublic(int attr) {
+    return (attr & 1) == 0;
+  }
+
   static Future actionRelationMod({
     required BuildContext context,
     required dynamic mid,

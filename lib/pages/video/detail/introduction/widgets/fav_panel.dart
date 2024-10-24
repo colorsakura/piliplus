@@ -102,22 +102,16 @@ class _FavPanelState extends State<FavPanel> {
                                         1,
                                     index),
                                 dense: true,
-                                leading: const Icon(Icons.folder_outlined),
-                                // leading: [0, 22].contains(widget.ctr!
-                                //         .favFolderData.value.list![index].attr)
-                                //     ? const Icon(Icons.folder_outlined)
-                                //     : const Icon(Icons.lock_outline),
+                                leading: Utils.isPublic(widget.ctr!
+                                        .favFolderData.value.list![index].attr)
+                                    ? const Icon(Icons.folder_outlined)
+                                    : const Icon(Icons.lock_outline),
                                 minLeadingWidth: 0,
                                 title: Text(widget.ctr!.favFolderData.value
                                     .list![index].title!),
                                 subtitle: Text(
-                                    '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容'),
-                                // subtitle: Text(
-                                //   '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容 . ${[
-                                //     0,
-                                //     22
-                                //   ].contains(widget.ctr!.favFolderData.value.list![index].attr) ? '公开' : '私密'}',
-                                // ),
+                                  '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容 . ${Utils.isPublic(widget.ctr!.favFolderData.value.list![index].attr) ? '公开' : '私密'}',
+                                ),
                                 trailing: Transform.scale(
                                   scale: 0.9,
                                   child: Checkbox(
