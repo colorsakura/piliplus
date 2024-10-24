@@ -545,26 +545,28 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   Obx followButton(BuildContext context, ThemeData t) {
     return Obx(
-      () => TextButton(
-        onPressed: () => videoIntroController.actionRelationMod(context),
-        style: TextButton.styleFrom(
-          visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
-          foregroundColor:
-              (videoIntroController.followStatus['attribute'] ?? 0) != 0
-                  ? t.colorScheme.outline
-                  : t.colorScheme.onPrimary,
-          backgroundColor:
-              (videoIntroController.followStatus['attribute'] ?? 0) != 0
-                  ? t.colorScheme.onInverseSurface
-                  : t.colorScheme.primary, // 设置按钮背景色
-        ),
-        child: Text(
-          ((videoIntroController.followStatus['attribute'] ?? 0) != 0)
-              ? '已关注'
-              : '关注',
-          style: TextStyle(fontSize: t.textTheme.labelMedium!.fontSize),
-        ),
-      ),
+      () {
+        int attr = videoIntroController.followStatus['attribute'] ?? 0;
+        return TextButton(
+          onPressed: () => videoIntroController.actionRelationMod(context),
+          style: TextButton.styleFrom(
+            visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
+            foregroundColor:
+                attr != 0 ? t.colorScheme.outline : t.colorScheme.onPrimary,
+            backgroundColor: attr != 0
+                ? t.colorScheme.onInverseSurface
+                : t.colorScheme.primary, // 设置按钮背景色
+          ),
+          child: Text(
+            attr == 128
+                ? '已拉黑'
+                : attr != 0
+                    ? '已关注'
+                    : '关注',
+            style: TextStyle(fontSize: t.textTheme.labelMedium!.fontSize),
+          ),
+        );
+      },
     );
   }
 

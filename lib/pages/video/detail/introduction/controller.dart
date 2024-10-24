@@ -507,15 +507,30 @@ class VideoIntroController extends GetxController
       SmartDialog.showToast('账号未登录');
       return;
     }
-    Utils.actionRelationMod(
-      context: context,
-      mid: videoDetail.value.owner?.mid,
-      isFollow: (followStatus['attribute'] ?? 0) != 0,
-      callback: (attribute) {
-        followStatus['attribute'] = attribute;
+    int attr = followStatus['attribute'] ?? 0;
+    if (attr == 128) {
+      dynamic res = await VideoHttp.relationMod(
+        mid: videoDetail.value.owner?.mid ?? -1,
+        act: attr != 128 ? 5 : 6,
+        reSrc: 11,
+      );
+      if (res['status']) {
+        followStatus['attribute'] = 0;
         followStatus.refresh();
-      },
-    );
+      }
+      return;
+    }
+    if (context.mounted) {
+      Utils.actionRelationMod(
+        context: context,
+        mid: videoDetail.value.owner?.mid,
+        isFollow: (followStatus['attribute'] ?? 0) != 0,
+        callback: (attribute) {
+          followStatus['attribute'] = attribute;
+          followStatus.refresh();
+        },
+      );
+    }
 
     // MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
     //     tag: mid.toString());
