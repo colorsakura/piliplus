@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -423,7 +424,9 @@ class PiliScheme {
           break;
         case 'space':
           print('个人空间');
-          Utils.toDupNamed('/member?mid=$area', arguments: {'face': ''});
+          Utils.toDupNamed(
+              '/member?mid=${pathPart[1] == 'mobile' ? pathPart.getOrNull(3) : pathPart.getOrNull(2)}',
+              arguments: {'face': ''});
           break;
         default:
           var res = IdUtils.matchAvorBv(input: area.split('?').first);
