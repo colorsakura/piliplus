@@ -359,12 +359,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     if (videoDetailController.videoUrl != null) {
-      await videoDetailController.playerInit();
+      await videoDetailController.playerInit(
+        autoplay: videoDetailController.playerStatus == PlayerStatus.playing,
+      );
     }
 
-    if (videoDetailController.playerStatus == PlayerStatus.playing) {
-      plPlayerController?.play();
-    }
+    // if (videoDetailController.playerStatus == PlayerStatus.playing) {
+    //   plPlayerController?.play();
+    // }
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
     videoIntroController.isPaused = false;
