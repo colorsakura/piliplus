@@ -79,6 +79,8 @@ class SearchHttp {
     int? orderSort,
     int? userType,
     int? categoryId,
+    int? pubBegin,
+    int? pubEnd,
   }) async {
     var reqData = {
       'search_type': searchType.type,
@@ -92,6 +94,8 @@ class SearchHttp {
       if (orderSort != null) 'order_sort': orderSort,
       if (userType != null) 'user_type': userType,
       if (categoryId != null) 'category_id': categoryId,
+      if (pubBegin != null) 'pubtime_begin_s': pubBegin,
+      if (pubEnd != null) 'pubtime_end_s': pubEnd,
     };
     var res = await Request().get(Api.searchByType, data: reqData);
     if (res.data['code'] == 0) {

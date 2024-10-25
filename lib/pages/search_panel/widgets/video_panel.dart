@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/pages/search_panel/index.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
@@ -177,6 +178,12 @@ class CustomFilterChip extends StatelessWidget {
 class VideoPanelController extends GetxController {
   RxList<Map> filterList = [{}].obs;
   Rx<ArchiveFilterType> selectedType = ArchiveFilterType.values.first.obs;
+  List pubTimeFiltersList = [
+    {'label': '不限', 'value': 0},
+    {'label': '最近一天', 'value': 1},
+    {'label': '最近一周', 'value': 2},
+    {'label': '最近半年', 'value': 3},
+  ];
   List timeFiltersList = [
     {'label': '全部时长', 'value': 0},
     {'label': '0-10分钟', 'value': 1},
@@ -208,11 +215,33 @@ class VideoPanelController extends GetxController {
     {'label': '电影', 'value': 20, 'tids': 23},
     {'label': '电视', 'value': 21, 'tids': 11},
   ];
+  int currentPubTimeFilterval = 0;
+  late DateTime pubBegin;
+  late DateTime pubEnd;
+  bool customPubBegin = false;
+  bool customPubEnd = false;
   int currentTimeFilterval = 0;
   int currentZoneFilterval = 0;
 
   @override
   void onInit() {
+    DateTime now = DateTime.now();
+    pubBegin = DateTime(
+      now.year,
+      now.month,
+      1,
+      0,
+      0,
+      0,
+    );
+    pubEnd = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      23,
+      59,
+      59,
+    );
     List<Map<String, dynamic>> list = ArchiveFilterType.values
         .map((type) => {
               'label': type.description,
@@ -230,90 +259,237 @@ class VideoPanelController extends GetxController {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.only(
-            top: 20,
-            left: 16,
-            right: 16,
-            bottom: 80 + MediaQuery.of(context).padding.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const Text('时长', style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: timeFiltersList
-                    .map(
-                      (item) => SearchText(
-                        searchText: item['label'],
-                        onSelect: (text) async {
-                          Get.back();
-                          currentTimeFilterval = item['value'];
-                          SmartDialog.dismiss();
-                          SmartDialog.showToast("「${item['label']}」的筛选结果");
-                          SearchPanelController ctr =
-                              Get.find<SearchPanelController>(
-                                  tag: 'video${searchPanelCtr.keyword!}');
-                          ctr.duration.value = item['value'];
-                          SmartDialog.showLoading(msg: 'loading');
-                          await ctr.onRefresh();
-                          SmartDialog.dismiss();
-                        },
-                        onLongSelect: (_) {},
-                        bgColor: item['value'] == currentTimeFilterval
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : null,
-                        textColor: item['value'] == currentTimeFilterval
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
-                            : null,
-                      ),
-                    )
-                    .toList(),
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          Widget dateWidget([bool isFirst = true]) {
+            return SearchText(
+              searchText:
+                  DateFormat('yyyy-MM-dd').format(isFirst ? pubBegin : pubEnd),
+              textAlign: TextAlign.center,
+              onSelect: (text) {
+                showDatePicker(
+                  context: context,
+                  initialDate: isFirst ? pubBegin : pubEnd,
+                  firstDate: isFirst ? DateTime(2009, 6, 26) : pubBegin,
+                  lastDate: isFirst ? pubEnd : DateTime.now(),
+                ).then((selectedDate) async {
+                  if (selectedDate != null) {
+                    if (isFirst) {
+                      customPubBegin = true;
+                      pubBegin = selectedDate;
+                    } else {
+                      customPubEnd = true;
+                      pubEnd = selectedDate;
+                    }
+                    currentPubTimeFilterval = -1;
+                    SmartDialog.dismiss();
+                    // SmartDialog.showToast("「${item['label']}」的筛选结果");
+                    SearchPanelController ctr = Get.find<SearchPanelController>(
+                        tag: 'video${searchPanelCtr.keyword!}');
+                    ctr.pubBegin = DateTime(
+                          pubBegin.year,
+                          pubBegin.month,
+                          pubBegin.day,
+                          0,
+                          0,
+                          0,
+                        ).millisecondsSinceEpoch ~/
+                        1000;
+                    ctr.pubEnd = DateTime(
+                          pubEnd.year,
+                          pubEnd.month,
+                          pubEnd.day,
+                          23,
+                          59,
+                          59,
+                        ).millisecondsSinceEpoch ~/
+                        1000;
+                    setState(() {});
+                    SmartDialog.showLoading(msg: 'loading');
+                    await ctr.onRefresh();
+                    SmartDialog.dismiss();
+                  }
+                });
+              },
+              onLongSelect: (_) {},
+              bgColor: currentPubTimeFilterval == -1 &&
+                      (isFirst ? customPubBegin : customPubEnd)
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : null,
+              textColor: currentPubTimeFilterval == -1 &&
+                      (isFirst ? customPubBegin : customPubEnd)
+                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  : Theme.of(context).colorScheme.outline.withOpacity(0.8),
+            );
+          }
+
+          return SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(
+                top: 20,
+                left: 16,
+                right: 16,
+                bottom: 80 + MediaQuery.of(context).padding.bottom,
               ),
-              const SizedBox(height: 20),
-              const Text('分区', style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: zoneFiltersList
-                    .map(
-                      (item) => SearchText(
-                        searchText: item['label'],
-                        onSelect: (text) async {
-                          Get.back();
-                          currentZoneFilterval = item['value'];
-                          SmartDialog.dismiss();
-                          SmartDialog.showToast("「${item['label']}」的筛选结果");
-                          SearchPanelController ctr =
-                              Get.find<SearchPanelController>(
-                                  tag: 'video${searchPanelCtr.keyword!}');
-                          ctr.tids = item['tids'];
-                          SmartDialog.showLoading(msg: 'loading');
-                          await ctr.onRefresh();
-                          SmartDialog.dismiss();
-                        },
-                        onLongSelect: (_) {},
-                        bgColor: item['value'] == currentZoneFilterval
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : null,
-                        textColor: item['value'] == currentZoneFilterval
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
-                            : null,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  const Text('发布时间', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: pubTimeFiltersList
+                        .map(
+                          (item) => SearchText(
+                            searchText: item['label'],
+                            onSelect: (text) async {
+                              Get.back();
+                              currentPubTimeFilterval = item['value'];
+                              SmartDialog.dismiss();
+                              SmartDialog.showToast("「${item['label']}」的筛选结果");
+                              SearchPanelController ctr =
+                                  Get.find<SearchPanelController>(
+                                      tag: 'video${searchPanelCtr.keyword!}');
+                              DateTime now = DateTime.now();
+                              if (item['value'] == 0) {
+                                ctr.pubBegin = null;
+                                ctr.pubEnd = null;
+                              } else {
+                                ctr.pubBegin = DateTime(
+                                      now.year,
+                                      now.month,
+                                      now.day -
+                                          (item['value'] == 0
+                                              ? 0
+                                              : item['value'] == 1
+                                                  ? 6
+                                                  : 179),
+                                      0,
+                                      0,
+                                      0,
+                                    ).millisecondsSinceEpoch ~/
+                                    1000;
+                                ctr.pubEnd = DateTime(
+                                      now.year,
+                                      now.month,
+                                      now.day,
+                                      23,
+                                      59,
+                                      59,
+                                    ).millisecondsSinceEpoch ~/
+                                    1000;
+                              }
+                              SmartDialog.showLoading(msg: 'loading');
+                              await ctr.onRefresh();
+                              SmartDialog.dismiss();
+                            },
+                            onLongSelect: (_) {},
+                            bgColor: item['value'] == currentPubTimeFilterval
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : null,
+                            textColor: item['value'] == currentPubTimeFilterval
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer
+                                : null,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(child: dateWidget()),
+                      const SizedBox(width: 8),
+                      const Text(
+                        '至',
+                        style: TextStyle(fontSize: 13),
                       ),
-                    )
-                    .toList(),
+                      const SizedBox(width: 8),
+                      Expanded(child: dateWidget(false)),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('内容时长', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: timeFiltersList
+                        .map(
+                          (item) => SearchText(
+                            searchText: item['label'],
+                            onSelect: (text) async {
+                              Get.back();
+                              currentTimeFilterval = item['value'];
+                              SmartDialog.dismiss();
+                              SmartDialog.showToast("「${item['label']}」的筛选结果");
+                              SearchPanelController ctr =
+                                  Get.find<SearchPanelController>(
+                                      tag: 'video${searchPanelCtr.keyword!}');
+                              ctr.duration.value = item['value'];
+                              SmartDialog.showLoading(msg: 'loading');
+                              await ctr.onRefresh();
+                              SmartDialog.dismiss();
+                            },
+                            onLongSelect: (_) {},
+                            bgColor: item['value'] == currentTimeFilterval
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : null,
+                            textColor: item['value'] == currentTimeFilterval
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer
+                                : null,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('内容分区', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: zoneFiltersList
+                        .map(
+                          (item) => SearchText(
+                            searchText: item['label'],
+                            onSelect: (text) async {
+                              Get.back();
+                              currentZoneFilterval = item['value'];
+                              SmartDialog.dismiss();
+                              SmartDialog.showToast("「${item['label']}」的筛选结果");
+                              SearchPanelController ctr =
+                                  Get.find<SearchPanelController>(
+                                      tag: 'video${searchPanelCtr.keyword!}');
+                              ctr.tids = item['tids'];
+                              SmartDialog.showLoading(msg: 'loading');
+                              await ctr.onRefresh();
+                              SmartDialog.dismiss();
+                            },
+                            onLongSelect: (_) {},
+                            bgColor: item['value'] == currentZoneFilterval
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : null,
+                            textColor: item['value'] == currentZoneFilterval
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer
+                                : null,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -20,6 +20,8 @@ class SearchPanelController extends CommonController {
   int? userType;
   int? categoryId;
   String? tag;
+  int? pubBegin;
+  int? pubEnd;
   late final searchResultController =
       Get.find<SearchResultController>(tag: tag);
 
@@ -103,5 +105,7 @@ class SearchPanelController extends CommonController {
         orderSort: orderSort,
         userType: userType,
         categoryId: categoryId,
+        pubBegin: pubBegin,
+        pubEnd: pubEnd,
       );
 }

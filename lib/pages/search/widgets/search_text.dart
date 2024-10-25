@@ -8,6 +8,7 @@ class SearchText extends StatelessWidget {
   final double? fontSize;
   final Color? bgColor;
   final Color? textColor;
+  final TextAlign? textAlign;
   const SearchText({
     super.key,
     this.searchText,
@@ -17,6 +18,7 @@ class SearchText extends StatelessWidget {
     this.fontSize,
     this.bgColor,
     this.textColor,
+    this.textAlign,
   });
 
   @override
@@ -40,6 +42,7 @@ class SearchText extends StatelessWidget {
                 const EdgeInsets.only(top: 5, bottom: 5, left: 11, right: 11),
             child: Text(
               searchText!,
+              textAlign: textAlign,
               style: TextStyle(
                 fontSize: fontSize,
                 color:
