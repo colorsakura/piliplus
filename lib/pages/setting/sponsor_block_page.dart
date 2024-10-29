@@ -113,9 +113,41 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                           clipBehavior: Clip.hardEdge,
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 16),
-                          title: const Text(
-                            'Color Picker',
-                            style: TextStyle(fontSize: 18),
+                          title: Text.rich(
+                            style: TextStyle(height: 1),
+                            strutStyle: StrutStyle(height: 1, leading: 0),
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Color Picker\n',
+                                  style: TextStyle(fontSize: 18, height: 1.5),
+                                ),
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Container(
+                                    height: MediaQuery.textScalerOf(context)
+                                        .scale(16),
+                                    width: MediaQuery.textScalerOf(context)
+                                        .scale(16),
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      height: 10,
+                                      width: 10,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _blockColor[index - 1],
+                                      ),
+                                    ),
+                                  ),
+                                  style: TextStyle(fontSize: 16, height: 1),
+                                ),
+                                TextSpan(
+                                  text:
+                                      ' ${_blockSettings[index - 1].first.name}',
+                                  style: TextStyle(fontSize: 16, height: 1),
+                                ),
+                              ],
+                            ),
                           ),
                           content: SlideColorPicker(
                             color: _blockColor[index - 1],
