@@ -457,10 +457,10 @@ class BangumiIntroController extends CommonController {
         return false;
       }
     }
-    int epid = episodes[prevIndex].epid!;
-    int cid = episodes[prevIndex].cid!;
-    String bvid = episodes[prevIndex].bvid!;
-    int aid = episodes[prevIndex].aid!;
+    int epid = episodes[prevIndex].epId;
+    int cid = episodes[prevIndex].cid;
+    String bvid = episodes[prevIndex].bvid;
+    int aid = episodes[prevIndex].aid;
     dynamic cover = episodes[prevIndex].cover;
     changeSeasonOrbangu(epid, bvid, cid, aid, cover);
     return true;
@@ -493,10 +493,10 @@ class BangumiIntroController extends CommonController {
         return false;
       }
     }
-    int epid = episodes[nextIndex].epid!;
-    int cid = episodes[nextIndex].cid!;
-    String bvid = episodes[nextIndex].bvid!;
-    int aid = episodes[nextIndex].aid!;
+    int epid = episodes[nextIndex].epId;
+    int cid = episodes[nextIndex].cid;
+    String bvid = episodes[nextIndex].bvid;
+    int aid = episodes[nextIndex].aid;
     dynamic cover = episodes[nextIndex].cover;
     changeSeasonOrbangu(epid, bvid, cid, aid, cover);
     return true;
