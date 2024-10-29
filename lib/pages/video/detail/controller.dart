@@ -207,12 +207,14 @@ class VideoDetailController extends GetxController
     if (_enableSponsorBlock) {
       _blockLimit = GStorage.blockLimit;
       _blockSettings = GStorage.blockSettings;
+      _blockColor = GStorage.blockColor;
     }
   }
 
   int? _lastPos;
   double? _blockLimit;
   List<Pair<SegmentType, SkipType>>? _blockSettings;
+  List<Color>? _blockColor;
   List<SegmentModel>? _segmentList;
   List<Segment>? _segmentProgressList;
 
@@ -276,7 +278,7 @@ class VideoDetailController extends GetxController
           return Segment(
             start,
             start == end ? (end + 0.01).clamp(0.0, 1.0) : end,
-            item.segmentType.color,
+            _blockColor?[item.segmentType.index] ?? item.segmentType.color,
           );
         }).toList();
       } catch (e) {

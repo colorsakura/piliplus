@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:PiliPalaX/common/widgets/pair.dart';
+import 'package:PiliPalaX/main.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
-    show SegmentType, SkipType;
+    show SegmentType, SegmentTypeExt, SkipType;
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,6 +31,19 @@ class GStorage {
               first: item,
               second: SkipType.values[list[item.index]],
             ))
+        .toList();
+  }
+
+  static List<Color> get blockColor {
+    List<String> list = setting.get(
+      SettingBoxKey.blockColor,
+      defaultValue: List.generate(SegmentType.values.length, (_) => ''),
+    );
+    return SegmentType.values
+        .map((item) => list[item.index].isNotEmpty
+            ? Color(
+                int.tryParse('FF${list[item.index]}', radix: 16) ?? 0xFF000000)
+            : item.color)
         .toList();
   }
 
@@ -210,6 +224,7 @@ class SettingBoxKey {
       enableSponsorBlock = 'enableSponsorBlock',
       blockSettings = 'blockSettings',
       blockLimit = 'blockLimit',
+      blockColor = 'blockColor',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',
