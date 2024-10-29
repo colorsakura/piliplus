@@ -28,6 +28,10 @@ import '../models/github/latest.dart';
 class Utils {
   static final Random random = Random();
 
+  static bool isDefault(int attr) {
+    return (attr & 2) == 0;
+  }
+
   static bool isPublic(int attr) {
     return (attr & 1) == 0;
   }
@@ -119,10 +123,10 @@ class Utils {
                           return DraggableScrollableSheet(
                             minChildSize: 0,
                             maxChildSize: 1,
-                            initialChildSize: 0.6,
+                            initialChildSize: 0.7,
                             snap: true,
                             expand: false,
-                            snapSizes: const [0.6],
+                            snapSizes: const [0.7],
                             builder: (BuildContext context,
                                 ScrollController scrollController) {
                               return GroupPanel(

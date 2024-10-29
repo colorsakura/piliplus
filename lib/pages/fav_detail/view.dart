@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
@@ -113,6 +116,39 @@ class _FavDetailPageState extends State<FavDetailPage> {
               //     onPressed: () {},
               //     icon: const Icon(Icons.more_vert),
               //   ),
+              Obx(
+                () => _favDetailController.isOwner.value
+                    ? PopupMenuButton(
+                        icon: const Icon(Icons.more_vert),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: () {
+                              Get.toNamed(
+                                '/createFav',
+                                parameters: {'mediaId': mediaId},
+                              );
+                            },
+                            child: Text('编辑信息'),
+                          ),
+                          if (!Utils.isDefault(_favDetailController.attr))
+                            PopupMenuItem(
+                              onTap: () {
+                                UserHttp.deleteFolder(mediaIds: [mediaId])
+                                    .then((data) {
+                                  if (data['status']) {
+                                    SmartDialog.showToast('删除成功');
+                                    Get.back();
+                                  } else {
+                                    SmartDialog.showToast(data['msg']);
+                                  }
+                                });
+                              },
+                              child: Text('删除'),
+                            ),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+              ),
               const SizedBox(width: 6),
             ],
             flexibleSpace: FlexibleSpaceBar(

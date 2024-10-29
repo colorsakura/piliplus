@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/pages/dynamics/view.dart' show ReplyOption;
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 import '../models/msg/account.dart';
@@ -197,6 +198,33 @@ class MsgHttp {
     );
     if (res.data['code'] == 0) {
       return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future uploadImage({
+    required dynamic path,
+    required String bucket,
+    required String dir,
+  }) async {
+    var res = await Request().post(
+      Api.uploadImage,
+      data: FormData.fromMap({
+        'bucket': bucket,
+        'file': await MultipartFile.fromFile(path),
+        'dir': dir,
+        'csrf': await Request.getCsrf(),
+      }),
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': res.data['data'],
+      };
     } else {
       return {
         'status': false,

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:PiliPalaX/common/widgets/pair.dart';
-import 'package:PiliPalaX/main.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType;

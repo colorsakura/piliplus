@@ -165,6 +165,7 @@ dependencies:
   intl: ^0.19.0
   grpc: ^4.0.1
   flutter_svg: ^2.0.10+1
+  image_cropper: ^8.0.2
 
 dependency_overrides:
   screen_brightness: ^2.0.0+2

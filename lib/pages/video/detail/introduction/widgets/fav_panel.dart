@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
@@ -62,7 +63,22 @@ class _FavPanelState extends State<FavPanel> {
               actions: [
                 TextButton.icon(
                   onPressed: () {
-                    // TODO
+                    Get.toNamed('/createFav')?.then((data) {
+                      (widget.ctr?.favFolderData.value as FavFolderData?)
+                          ?.list
+                          ?.insert(
+                            1,
+                            FavFolderItemData(
+                              id: data['id'],
+                              fid: data['fid'],
+                              attr: data['attr'],
+                              title: data['title'],
+                              favState: data['fav_state'],
+                              mediaCount: data['media_count'],
+                            ),
+                          );
+                      widget.ctr?.favFolderData.refresh();
+                    });
                   },
                   icon: Icon(
                     Icons.add,

@@ -2,6 +2,7 @@
 
 import 'package:PiliPalaX/pages/member/new/member_page.dart';
 import 'package:PiliPalaX/pages/setting/sponsor_block_page.dart';
+import 'package:PiliPalaX/pages/video/detail/introduction/widgets/create_fav_page.dart';
 import 'package:PiliPalaX/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -186,6 +187,7 @@ class Routes {
     // 弹幕屏蔽管理
     CustomGetPage(name: '/danmakuBlock', page: () => const DanmakuBlockPage()),
     CustomGetPage(name: '/sponsorBlock', page: () => const SponsorBlockPage()),
+    CustomGetPage(name: '/createFav', page: () => const CreateFavPage()),
   ];
 }
 

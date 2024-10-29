@@ -172,6 +172,14 @@ class Api {
   // https://api.bilibili.com/x/v3/fav/folder/created/list?pn=1&ps=10&up_mid=17340771
   static const String userFavFolder = '/x/v3/fav/folder/created/list';
 
+  static const String folderInfo = '/x/v3/fav/folder/info';
+
+  static const String addFolder = '/x/v3/fav/folder/add';
+
+  static const String editFolder = '/x/v3/fav/folder/edit';
+
+  static const String deleteFolder = '/x/v3/fav/folder/del';
+
   /// 收藏夹 详情
   /// media_id  当前收藏夹id 搜索全部时为默认收藏夹id
   /// pn int 当前页
@@ -663,6 +671,8 @@ class Api {
   static const String removeDynamic = '/dynamic_svr/v1/dynamic_svr/rm_dynamic';
 
   static const String uploadBfs = '/x/dynamic/feed/draw/upload_bfs';
+
+  static const String uploadImage = '/x/upload/web/image';
 
   static const String videoRelation = '/x/web-interface/archive/relation';
 

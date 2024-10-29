@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../common/constants.dart';
@@ -62,6 +63,65 @@ class UserHttp {
       }
     } else {
       return LoadingState.error(res.data['message'] ?? '账号未登录');
+    }
+  }
+
+  static Future deleteFolder({
+    required List<dynamic> mediaIds,
+  }) async {
+    var res = await Request().post(Api.deleteFolder,
+        data: {
+          'media_ids': mediaIds.join(','),
+          'platform': 'web',
+          'csrf': await Request.getCsrf(),
+        },
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+        ));
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future addOrEditFolder({
+    required bool isAdd,
+    dynamic mediaId,
+    required String title,
+    required int privacy,
+    required String cover,
+    required String intro,
+  }) async {
+    var res = await Request().post(isAdd ? Api.addFolder : Api.editFolder,
+        data: {
+          'title': title,
+          'intro': intro,
+          'privacy': privacy,
+          'cover': cover.isNotEmpty ? Uri.encodeFull(cover) : cover,
+          'csrf': await Request.getCsrf(),
+          if (mediaId != null) 'media_id': mediaId,
+        },
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+        ));
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future folderInfo({
+    dynamic mediaId,
+  }) async {
+    var res = await Request().get(Api.folderInfo, data: {
+      'media_id': mediaId,
+    });
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

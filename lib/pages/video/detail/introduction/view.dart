@@ -180,10 +180,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           return DraggableScrollableSheet(
             minChildSize: 0,
             maxChildSize: 1,
-            initialChildSize: 0.6,
+            initialChildSize: 0.7,
             snap: true,
             expand: false,
-            snapSizes: const [0.6],
+            snapSizes: const [0.7],
             builder: (BuildContext context, ScrollController scrollController) {
               return FavPanel(
                 ctr: videoIntroController,
