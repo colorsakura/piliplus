@@ -90,12 +90,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget get _divider => Divider(
         height: 1,
-        color: Theme.of(context).dividerColor.withOpacity(0.15),
+        color: Theme.of(context).dividerColor.withOpacity(0.1),
       );
 
   Widget get _divider1 => Divider(
         thickness: 16,
-        color: Theme.of(context).dividerColor.withOpacity(0.25),
+        color: Theme.of(context).dividerColor.withOpacity(0.1),
       );
 
   Widget _buildBody(LoadingState loadingState) {
@@ -384,6 +384,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
         SmartDialog.showToast('修改成功');
         setState(() {});
+        if (type == ProfileType.uname || type == ProfileType.sign) {
+          Get.back();
+        }
       } else {
         SmartDialog.showToast(data.data['message']);
       }
@@ -422,6 +425,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           if (text != null)
             Text(
               text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
