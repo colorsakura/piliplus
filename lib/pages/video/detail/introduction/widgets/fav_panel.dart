@@ -64,20 +64,22 @@ class _FavPanelState extends State<FavPanel> {
                 TextButton.icon(
                   onPressed: () {
                     Get.toNamed('/createFav')?.then((data) {
-                      (widget.ctr?.favFolderData.value as FavFolderData?)
-                          ?.list
-                          ?.insert(
-                            1,
-                            FavFolderItemData(
-                              id: data['id'],
-                              fid: data['fid'],
-                              attr: data['attr'],
-                              title: data['title'],
-                              favState: data['fav_state'],
-                              mediaCount: data['media_count'],
-                            ),
-                          );
-                      widget.ctr?.favFolderData.refresh();
+                      if (data != null) {
+                        (widget.ctr?.favFolderData.value as FavFolderData?)
+                            ?.list
+                            ?.insert(
+                              1,
+                              FavFolderItemData(
+                                id: data['id'],
+                                fid: data['fid'],
+                                attr: data['attr'],
+                                title: data['title'],
+                                favState: data['fav_state'],
+                                mediaCount: data['media_count'],
+                              ),
+                            );
+                        widget.ctr?.favFolderData.refresh();
+                      }
                     });
                   },
                   icon: Icon(

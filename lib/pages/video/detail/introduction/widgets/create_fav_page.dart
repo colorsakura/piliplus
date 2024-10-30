@@ -315,7 +315,12 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         children: [
                           TextSpan(
                             text: '简介',
-                            style: leadingStyle,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
                           ),
                           TextSpan(
                             text: '*',
