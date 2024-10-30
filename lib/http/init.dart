@@ -188,7 +188,7 @@ class Request {
   /*
    * get请求
    */
-  get(url, {data, options, cancelToken, extra}) async {
+  Future get(url, {data, options, cancelToken, extra}) async {
     Response response;
     options ??= Options();
     ResponseType resType = ResponseType.json;

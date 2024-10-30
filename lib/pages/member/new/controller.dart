@@ -117,7 +117,9 @@ class MemberControllerNew extends CommonController
   }
 
   void onFollow(BuildContext context) async {
-    if (relation.value == -1) {
+    if (mid == ownerMid) {
+      Get.toNamed('/editProfile');
+    } else if (relation.value == -1) {
       _onBlock();
     } else {
       if (ownerMid == null) {

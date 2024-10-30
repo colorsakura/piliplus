@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 class UserInfoCard extends StatelessWidget {
   const UserInfoCard({
     super.key,
+    required this.isOwner,
     required this.card,
     required this.images,
     required this.relation,
@@ -19,6 +20,7 @@ class UserInfoCard extends StatelessWidget {
     required this.onFollow,
   });
 
+  final bool isOwner;
   final int relation;
   final bool isFollow;
   final space.Card card;
@@ -173,37 +175,39 @@ class UserInfoCard extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton.outlined(
-                        onPressed: () {
-                          if (GStorage.userInfo.get('userInfoCache') != null) {
-                            Get.toNamed(
-                              '/whisperDetail',
-                              parameters: {
-                                'talkerId': card.mid ?? '',
-                                'name': card.name ?? '',
-                                'face': card.face ?? '',
-                                'mid': card.mid ?? '',
-                              },
-                            );
-                          }
-                        },
-                        icon: const Icon(Icons.mail_outline, size: 21),
-                        style: IconButton.styleFrom(
-                          side: BorderSide(
-                            width: 1.0,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .outline
-                                .withOpacity(0.5),
-                          ),
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          visualDensity: const VisualDensity(
-                            horizontal: -2,
-                            vertical: -2,
+                      if (!isOwner)
+                        IconButton.outlined(
+                          onPressed: () {
+                            if (GStorage.userInfo.get('userInfoCache') !=
+                                null) {
+                              Get.toNamed(
+                                '/whisperDetail',
+                                parameters: {
+                                  'talkerId': card.mid ?? '',
+                                  'name': card.name ?? '',
+                                  'face': card.face ?? '',
+                                  'mid': card.mid ?? '',
+                                },
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.mail_outline, size: 21),
+                          style: IconButton.styleFrom(
+                            side: BorderSide(
+                              width: 1.0,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withOpacity(0.5),
+                            ),
+                            padding: EdgeInsets.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                              horizontal: -2,
+                              vertical: -2,
+                            ),
                           ),
                         ),
-                      ),
                       const SizedBox(width: 10),
                       FilledButton.tonal(
                         onPressed: onFollow,
@@ -236,13 +240,15 @@ class UserInfoCard extends StatelessWidget {
                                   ),
                                 ),
                               TextSpan(
-                                text: relation == -1
-                                    ? '移除黑名单'
-                                    : relation == 2
-                                        ? ' 特别关注'
-                                        : isFollow
-                                            ? ' 已关注'
-                                            : '关注',
+                                text: isOwner
+                                    ? '编辑资料'
+                                    : relation == -1
+                                        ? '移除黑名单'
+                                        : relation == 2
+                                            ? ' 特别关注'
+                                            : isFollow
+                                                ? ' 已关注'
+                                                : '关注',
                               )
                             ],
                           ),

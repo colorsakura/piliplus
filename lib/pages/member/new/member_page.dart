@@ -231,7 +231,8 @@ class _MemberPageNewState extends State<MemberPageNew>
                       ],
                     ),
                   ),
-                  if (_userController.ownerMid != null) ...[
+                  if (_userController.ownerMid != null &&
+                      _userController.mid != _userController.ownerMid) ...[
                     const PopupMenuDivider(),
                     PopupMenuItem(
                       onTap: () {
@@ -303,6 +304,7 @@ class _MemberPageNewState extends State<MemberPageNew>
             padding: EdgeInsets.only(
                 bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
             child: UserInfoCard(
+              isOwner: _userController.mid == _userController.ownerMid,
               relation: _userController.relation.value,
               isFollow: _userController.isFollow.value,
               card: userState.response.card,

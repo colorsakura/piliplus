@@ -286,7 +286,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                       : null,
                 ),
                 inputFormatters: [
-                  LengthLimitingTextInputFormatter(21),
+                  LengthLimitingTextInputFormatter(20),
                 ],
                 decoration: InputDecoration(
                   isDense: true,
@@ -332,11 +332,11 @@ class _CreateFavPageState extends State<CreateFavPage> {
                         controller: _introController,
                         style: TextStyle(fontSize: 14),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(201),
+                          LengthLimitingTextInputFormatter(200),
                         ],
                         decoration: InputDecoration(
                           isDense: true,
-                          hintText: '简介',
+                          hintText: '可填写简介',
                           hintStyle: TextStyle(
                             fontSize: 14,
                             color: Theme.of(context).colorScheme.outline,
