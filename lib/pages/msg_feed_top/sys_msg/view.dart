@@ -169,7 +169,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
   InlineSpan _buildContent(String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
     RegExp urlRegExp = RegExp(
-        '#\\{([^}]*)\\}\\{"([^}]*)"\\}|https?:\\/\\/[^\\s/\$.?#].[^\\s]*|www\\.[^\\s/\$.?#].[^\\s]*');
+        '#\\{([^}]*)\\}\\{"?([^}]*)"?\\}|https?:\\/\\/[^\\s/\$.?#].[^\\s]*|www\\.[^\\s/\$.?#].[^\\s]*');
     content.splitMapJoin(
       urlRegExp,
       onMatch: (Match match) {
