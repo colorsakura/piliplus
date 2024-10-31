@@ -233,13 +233,16 @@ class MsgHttp {
     }
   }
 
-  static Future uploadBfs(
+  static Future uploadBfs({
     dynamic path,
-  ) async {
+    String? category,
+    String? biz,
+  }) async {
     String csrf = await Request.getCsrf();
     Map<String, dynamic> data = await WbiSign().makSign({
       'file_up': await MultipartFile.fromFile(path),
-      'category': 'daily',
+      if (category != null) 'category': category,
+      if (biz != null) 'biz': biz,
       'csrf': csrf,
     });
     var res = await Request().post(

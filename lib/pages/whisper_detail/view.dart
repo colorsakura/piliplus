@@ -315,7 +315,10 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
                     );
                     if (pickedFile != null) {
                       SmartDialog.showLoading(msg: '正在上传图片');
-                      dynamic result = await MsgHttp.uploadBfs(pickedFile.path);
+                      dynamic result = await MsgHttp.uploadBfs(
+                        path: pickedFile.path,
+                        biz: 'im',
+                      );
                       if (result['status']) {
                         int imageSize = await File(pickedFile.path).length();
                         String mimeType = lookupMimeType(pickedFile.path)

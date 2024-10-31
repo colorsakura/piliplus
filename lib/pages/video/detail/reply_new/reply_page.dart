@@ -477,7 +477,10 @@ class _ReplyPageState extends State<ReplyPage>
       pictures = [];
       for (int i = 0; i < _pathList.length; i++) {
         SmartDialog.showLoading(msg: '正在上传图片: ${i + 1}/${_pathList.length}');
-        dynamic result = await MsgHttp.uploadBfs(_pathList[i]);
+        dynamic result = await MsgHttp.uploadBfs(
+          path: _pathList[i],
+          category: 'daily',
+        );
         if (result['status']) {
           int imageSize = await File(_pathList[i]).length();
           pictures.add({
