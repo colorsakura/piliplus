@@ -169,7 +169,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
   InlineSpan _buildContent(String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
     RegExp urlRegExp = RegExp(
-        '#\\{([^}]*)\\}\\{"?([^}]*)"?\\}|https?:\\/\\/[^\\s/\$.?#].[^\\s]*|www\\.[^\\s/\$.?#].[^\\s]*');
+        r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*');
     content.splitMapJoin(
       urlRegExp,
       onMatch: (Match match) {
@@ -181,7 +181,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   try {
-                    Uri uri = Uri.parse(match[2]!);
+                    Uri uri = Uri.parse(match[2]!.replaceAll('"', ''));
                     PiliScheme.routePush(uri);
                   } catch (err) {
                     SmartDialog.showToast(err.toString());

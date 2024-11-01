@@ -480,6 +480,7 @@ class _ReplyPageState extends State<ReplyPage>
         dynamic result = await MsgHttp.uploadBfs(
           path: _pathList[i],
           category: 'daily',
+          biz: 'new_dyn',
         );
         if (result['status']) {
           int imageSize = await File(_pathList[i]).length();

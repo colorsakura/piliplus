@@ -3,6 +3,7 @@ import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/index.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mime/mime.dart';
 
 enum ProfileType { uname, sign, sex, birthday }
 
@@ -451,6 +453,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
       imageQuality: 100,
     );
     if (pickedFile != null && mounted) {
+      String? mimeType =
+          lookupMimeType(pickedFile.path)?.split('/').getOrNull(1);
+      if (mimeType == 'gif') {
+        SmartDialog.showToast('不能选GIF');
+        return;
+      }
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
         uiSettings: [
