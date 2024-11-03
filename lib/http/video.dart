@@ -457,10 +457,17 @@ class VideoHttp {
   static Future oneThree({required String bvid}) async {
     var res = await Request().post(
       Api.oneThree,
-      queryParameters: {
-        'bvid': bvid,
+      data: {
+        'aid': IdUtils.bv2av(bvid),
+        'eab_x': 2,
+        'ramval': 0,
+        'source': 'web_normal',
+        'ga': 1,
         'csrf': await Request.getCsrf(),
       },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
