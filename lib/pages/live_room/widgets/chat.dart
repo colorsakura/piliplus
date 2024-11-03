@@ -18,7 +18,7 @@ class LiveRoomChat extends StatefulWidget {
 
 class _LiveRoomChatState extends State<LiveRoomChat> {
   final List<Widget> _items = [];
-  late LiveMessageStream msgStream;
+  LiveMessageStream? msgStream;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +47,11 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
         msgStream = LiveMessageStream(
           streamToken: info.data.token,
           roomId: widget.roomId,
-          uid: GStorage.userInfo.get('userInfoCache').mid ?? 0,
+          uid: GStorage.userInfo.get('userInfoCache')?.mid ?? 0,
           host: info.data.hostList[0].host,
           port: info.data.hostList[0].port,
         );
-        msgStream.addEventListener((obj) {
+        msgStream?.addEventListener((obj) {
           if (obj['cmd'] == 'DANMU_MSG') {
             // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
             setState(() {
@@ -97,7 +97,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
             });
           }
         });
-        msgStream.init();
+        msgStream?.init();
       }
     });
     super.initState();
@@ -105,7 +105,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
 
   @override
   void dispose() {
-    msgStream.close();
+    msgStream?.close();
     super.dispose();
   }
 

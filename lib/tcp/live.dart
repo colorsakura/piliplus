@@ -47,9 +47,10 @@ class PackageHeader {
     return bytes.buffer.asUint8List();
   }
 
-  static PackageHeader fromBytesData(Uint8List data) {
+  static PackageHeader? fromBytesData(Uint8List data) {
     if (data.length < 10) {
-      throw Exception("数据不足以解析PackageHeader");
+      getLogger().i('数据不足以解析PackageHeader');
+      return null;
     }
     final byteData = ByteData.sublistView(data);
 
@@ -191,30 +192,32 @@ class LiveMessageStream {
       socket.add(authPackage.marshal());
       logger.d('$logTag ===> 发送认证包');
       await for (var data in socket) {
-        PackageHeader header = PackageHeader.fromBytesData(data);
-        List<int> decompressedData = [];
-        //心跳包回复不用处理
-        if (header.operationCode == 3) continue;
-        if (header.operationCode == 8) {
-          _heartBeat();
-        }
-        try {
-          switch (header.protocolVer) {
-            case 0:
-            case 1:
-              _processingData(data);
-              continue;
-            case 2:
-              decompressedData = ZLibDecoder().convert(data.sublist(0x10));
-              break;
-            case 3:
-              decompressedData =
-                  const BrotliDecoder().convert(data.sublist(0x10));
-            //print('Body: ${utf8.decode()}');
+        PackageHeader? header = PackageHeader.fromBytesData(data);
+        if (header != null) {
+          List<int> decompressedData = [];
+          //心跳包回复不用处理
+          if (header.operationCode == 3) continue;
+          if (header.operationCode == 8) {
+            _heartBeat();
           }
-          _processingData(decompressedData);
-        } catch (e) {
-          logger.w(e);
+          try {
+            switch (header.protocolVer) {
+              case 0:
+              case 1:
+                _processingData(data);
+                continue;
+              case 2:
+                decompressedData = ZLibDecoder().convert(data.sublist(0x10));
+                break;
+              case 3:
+                decompressedData =
+                    const BrotliDecoder().convert(data.sublist(0x10));
+              //print('Body: ${utf8.decode()}');
+            }
+            _processingData(decompressedData);
+          } catch (e) {
+            logger.w(e);
+          }
         }
       }
       socket.close();
@@ -225,14 +228,17 @@ class LiveMessageStream {
 
   void _processingData(List<int> data) {
     try {
-      var subHeader = PackageHeader.fromBytesData(Uint8List.fromList(data));
-      var msgBody =
-          utf8.decode(data.sublist(subHeader.headerSize, subHeader.totalSize));
-      for (var f in eventListeners) {
-        f(jsonDecode(msgBody));
-      }
-      if (subHeader.totalSize < data.length) {
-        _processingData(data.sublist(subHeader.totalSize));
+      PackageHeader? subHeader =
+          PackageHeader.fromBytesData(Uint8List.fromList(data));
+      if (subHeader != null) {
+        var msgBody = utf8
+            .decode(data.sublist(subHeader.headerSize, subHeader.totalSize));
+        for (var f in eventListeners) {
+          f(jsonDecode(msgBody));
+        }
+        if (subHeader.totalSize < data.length) {
+          _processingData(data.sublist(subHeader.totalSize));
+        }
       }
     } catch (e) {
       logger.e('ParseHeader错误: $e');
