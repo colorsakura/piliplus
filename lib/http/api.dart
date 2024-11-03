@@ -283,6 +283,8 @@ class Api {
   static const String liveRoomInfo =
       '${HttpString.liveBaseUrl}/xlive/web-room/v2/index/getRoomPlayInfo';
 
+  static const String sendLiveMsg = '${HttpString.liveBaseUrl}/msg/send';
+
   // 直播间详情 H5
   static const String liveRoomInfoH5 =
       '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/getH5InfoByRoom';

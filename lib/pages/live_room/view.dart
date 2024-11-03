@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/pages/live_room/widgets/chat.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -27,6 +29,9 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   bool isShowCover = true;
   bool isPlay = true;
   Floating? floating;
+
+  late final _isLogin = GStorage.userInfo.get('userInfoCache') != null;
+  late final _ctr = TextEditingController();
 
   void playCallBack() {
     plPlayerController?.play();
@@ -54,6 +59,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     PlPlayerController.setPlayCallBack(null);
     floating?.dispose();
     plPlayerController?.dispose();
+    _ctr.dispose();
     super.dispose();
   }
 
@@ -232,8 +238,61 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                 ),
               ),
               Expanded(
-                  child: LiveRoomChat(
-                      roomId: int.parse(Get.parameters['roomid']!)))
+                child: LiveRoomChat(
+                  roomId: int.parse(Get.parameters['roomid']!),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                  left: 16,
+                  top: 10,
+                  right: 16,
+                  bottom: 25 + MediaQuery.of(context).padding.bottom,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  border: Border(
+                    top: BorderSide(color: Color(0x1AFFFFFF)),
+                  ),
+                  color: Color(0x1AFFFFFF),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _ctr,
+                        textInputAction: TextInputAction.send,
+                        onSubmitted: (value) {
+                          if (value.isNotEmpty) {
+                            _onSendMsg(value);
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '发送弹幕',
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (_ctr.text.isNotEmpty) {
+                          _onSendMsg(_ctr.text);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
@@ -247,6 +306,21 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       );
     } else {
       return childWhenDisabled;
+    }
+  }
+
+  void _onSendMsg(msg) async {
+    if (!_isLogin) {
+      SmartDialog.showToast('未登录');
+      return;
+    }
+    dynamic res = await LiveHttp.sendLiveMsg(
+        roomId: _liveRoomController.roomId, msg: msg);
+    if (res['status']) {
+      _ctr.clear();
+      SmartDialog.showToast('发送成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
     }
   }
 }

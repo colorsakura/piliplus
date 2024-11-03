@@ -27,7 +27,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
       padding: EdgeInsets.only(
         left: 10,
         right: 10,
-        bottom: MediaQuery.of(context).padding.bottom,
+        bottom: 5,
       ),
       child: SingleChildScrollView(
         child: Column(
