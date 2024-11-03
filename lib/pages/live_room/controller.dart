@@ -19,6 +19,9 @@ class LiveRoomController extends GetxController {
   Rx<RoomInfoH5Model> roomInfoH5 = RoomInfoH5Model().obs;
   // late bool enableCDN;
 
+  RxList<dynamic> messages = [].obs;
+  RxBool disableAutoScroll = false.obs;
+
   @override
   void onInit() {
     super.onInit();

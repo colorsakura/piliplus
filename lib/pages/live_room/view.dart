@@ -240,6 +240,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
               Expanded(
                 child: LiveRoomChat(
                   roomId: int.parse(Get.parameters['roomid']!),
+                  liveRoomController: _liveRoomController,
                 ),
               ),
               Container(
