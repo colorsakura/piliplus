@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 
+import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/models/live/danmu_info.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
@@ -17,18 +17,25 @@ class LiveRoomChat extends StatefulWidget {
 }
 
 class _LiveRoomChatState extends State<LiveRoomChat> {
-  String dm = "Danmaku Area";
   final List<Widget> _items = [];
   late LiveMessageStream msgStream;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _items.length,
-      itemBuilder: (ctx, i) {
-        return _items[i];
-      },
-    ); //Center(child: Text(dm,style: const TextStyle(color: Colors.red),),);
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        left: 10,
+        right: 10,
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _items,
+        ),
+      ),
+    );
   }
 
   @override
@@ -38,44 +45,35 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
         LiveDanmakuInfo info = v['data'];
         // logger.d("info => $info");
         msgStream = LiveMessageStream(
-            streamToken: info.data.token,
-            roomId: widget.roomId,
-            uid: GStorage.userInfo.get('userInfoCache').mid ?? 0,
-            host: info.data.hostList[0].host,
-            port: info.data.hostList[0].port);
+          streamToken: info.data.token,
+          roomId: widget.roomId,
+          uid: GStorage.userInfo.get('userInfoCache').mid ?? 0,
+          host: info.data.hostList[0].host,
+          port: info.data.hostList[0].port,
+        );
         msgStream.addEventListener((obj) {
           if (obj['cmd'] == 'DANMU_MSG') {
             // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
             setState(() {
-              var widget = Container(
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(100))),
-                child: ListTile(
-                  dense: true,
-                  leading: obj['info'][0][15]['user']['medal'] != null
-                      ? IntrinsicWidth(
-                          child: Container(
-                            // width: 70,
-                            height: 20,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 5,
-                            ),
-                            color: Color((0xff000000 +
-                                obj['info'][0][15]['user']['medal']
-                                    ['color']) as int),
-                            child: Center(
-                              child: Text(
-                                '${obj['info'][0][15]['user']['medal']['name']} '
-                                'lv${obj['info'][0][15]['user']['medal']['level']}',
-                                style:
-                                    const TextStyle(color: Color(0xffdddddd)),
-                              ),
-                            ),
-                          ),
-                        )
-                      : null,
-                  style: ListTileStyle.list,
-                  title: Text.rich(
+              var widget = GestureDetector(
+                onTap: () {
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (_) => AlertDialog(
+                  //     content: SelectableText(
+                  //         '${jsonDecode(obj['info'][0][15]['extra'])['emots']}'),
+                  //   ),
+                  // );
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(
+                    color: Color(0x15FFFFFF),
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                  ),
+                  child: Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
@@ -86,20 +84,14 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                             fontSize: 14,
                           ),
                         ),
-                        TextSpan(
-                          text: obj['info'][1],
-                          style: const TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: 14,
-                          ),
-                        ),
+                        _buildMsg(obj),
                       ],
                     ),
                   ),
                 ),
               );
               _items.add(widget);
-              if (_items.length >= 20) {
+              if (_items.length >= 50) {
                 _items.removeAt(0);
               }
             });
@@ -115,6 +107,58 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
   void dispose() {
     msgStream.close();
     super.dispose();
+  }
+
+  TextSpan _buildMsg(obj) {
+    dynamic emots = jsonDecode(obj['info'][0][15]['extra'])['emots'];
+    if (emots != null) {
+      List list = emots.keys.map((e) {
+        return e.replaceAllMapped(
+          RegExp(r'\[(.*?)\]'),
+          (match) => r'\[' + match.group(1)! + r'\]',
+        );
+      }).toList();
+      RegExp regExp = RegExp(list.join('|'));
+      final List<InlineSpan> spanChildren = <InlineSpan>[];
+      (obj['info'][1] as String).splitMapJoin(
+        regExp,
+        onMatch: (Match match) {
+          String key = match[0]!;
+          spanChildren.add(WidgetSpan(
+            child: ExcludeSemantics(
+                child: NetworkImgLayer(
+              src: emots[key]['url'],
+              type: 'emote',
+              width: emots[key]['width'].toDouble(),
+              height: emots[key]['height'].toDouble(),
+              semanticsLabel: key,
+            )),
+          ));
+          return '';
+        },
+        onNonMatch: (String nonMatchStr) {
+          spanChildren.add(
+            TextSpan(
+              text: nonMatchStr,
+              style: const TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 14,
+              ),
+            ),
+          );
+          return '';
+        },
+      );
+      return TextSpan(children: spanChildren);
+    } else {
+      return TextSpan(
+        text: obj['info'][1],
+        style: const TextStyle(
+          color: Color(0xFFFFFFFF),
+          fontSize: 14,
+        ),
+      );
+    }
   }
 }
 

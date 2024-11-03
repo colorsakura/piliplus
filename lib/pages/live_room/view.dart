@@ -87,7 +87,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
             right: 0,
             bottom: 0,
             child: Opacity(
-              opacity: 0.8,
+              opacity: 0.6,
               child: Image.asset(
                 'assets/images/live/default_bg.webp',
                 fit: BoxFit.cover,
@@ -108,7 +108,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                               .roomInfoH5.value.roomInfo?.appBackground !=
                           null
                   ? Opacity(
-                      opacity: 0.8,
+                      opacity: 0.6,
                       child: NetworkImgLayer(
                         width: Get.width,
                         height: Get.height,
@@ -231,13 +231,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                   child: videoPlayerPanel,
                 ),
               ),
-              Container(
-                  height: MediaQuery.of(context).orientation ==
-                          Orientation.landscape
-                      ? Get.size.height
-                      : Get.size.height - (Get.size.width * 9 / 16) - 100,
-                  color: const Color(0x10000000),
-                  width: Get.size.width,
+              Expanded(
                   child: LiveRoomChat(
                       roomId: int.parse(Get.parameters['roomid']!)))
             ],
