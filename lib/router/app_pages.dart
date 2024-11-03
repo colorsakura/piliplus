@@ -200,8 +200,8 @@ class CustomGetPage extends GetPage<dynamic> {
     this.fullscreen,
     super.transitionDuration,
   }) : super(
-          curve: Curves.easeInOut,
-          transition: Transition.rightToLeft,
+          curve: Curves.linear,
+          transition: Transition.native,
           showCupertinoParallax: false,
           popGesture: false,
           fullscreenDialog: fullscreen != null && fullscreen,
