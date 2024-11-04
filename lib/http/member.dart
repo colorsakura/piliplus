@@ -68,7 +68,7 @@ class MemberHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     Map<String, String> data = {
-      if (accessKey != null) 'access_key': accessKey,
+      if (accessKey?.isNotEmpty == true) 'access_key': accessKey!,
       'appkey': Constants.appKey,
       'build': '1462100',
       'c_locale': 'zh_CN',
@@ -115,7 +115,7 @@ class MemberHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     Map<String, String> data = {
-      if (accessKey != null) 'access_key': accessKey,
+      if (accessKey?.isNotEmpty == true) 'access_key': accessKey!,
       'appkey': Constants.appKey,
       'build': '1462100',
       'c_locale': 'zh_CN',
@@ -168,7 +168,7 @@ class MemberHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     Map<String, String> data = {
-      if (accessKey != null) 'access_key': accessKey,
+      if (accessKey?.isNotEmpty == true) 'access_key': accessKey!,
       if (aid != null) 'aid': aid.toString(),
       'appkey': Constants.appKey,
       'build': '1462100',
@@ -230,7 +230,7 @@ class MemberHttp {
     String? accessKey = GStorage.localCache
         .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
     Map<String, String> data = {
-      if (accessKey != null) 'access_key': accessKey,
+      if (accessKey?.isNotEmpty == true) 'access_key': accessKey!,
       'appkey': Constants.appKey,
       'build': '1462100',
       'c_locale': 'zh_CN',

@@ -6,8 +6,11 @@ import 'package:PiliPalaX/models/live/danmu_info.dart';
 import 'package:PiliPalaX/pages/live_room/controller.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
 import 'package:PiliPalaX/tcp/live.dart';
+import 'package:PiliPalaX/utils/utils.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/storage.dart';
@@ -72,6 +75,23 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                           color: Color(0xFFAAAAAA),
                           fontSize: 14,
                         ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            try {
+                              dynamic uid =
+                                  widget.liveRoomController.messages[index]
+                                      ['info'][0][15]['user']['uid'];
+                              Get.toNamed(
+                                '/member?mid=$uid',
+                                arguments: {
+                                  'heroTag': Utils.makeHeroTag(uid),
+                                },
+                              );
+                            } catch (err) {
+                              print(err.toString());
+                              // SmartDialog.showToast(err.toString());
+                            }
+                          },
                       ),
                       _buildMsg(widget.liveRoomController.messages[index]),
                     ],
@@ -153,12 +173,17 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
 
   TextSpan _buildMsg(obj) {
     dynamic emots = jsonDecode(obj['info'][0][15]['extra'])['emots'];
-    if (emots != null) {
-      List list = emots.keys.map((e) {
-        return e.replaceAllMapped(
-          RegExp(r'\[(.*?)\]'),
-          (match) => r'\[' + match.group(1)! + r'\]',
-        );
+    dynamic uemote = obj['info'][0][13];
+    List list = [
+      if (emots != null) emots.keys,
+      if (uemote is Map) uemote['emoticon_unique'].replaceFirst('upower_', '')
+    ];
+    if (list.isNotEmpty) {
+      list = list.map((e) {
+        return e.toString().replaceAllMapped(
+              RegExp(r'\[(.*?)\]'),
+              (match) => r'\[' + match.group(1)! + r'\]',
+            );
       }).toList();
       RegExp regExp = RegExp(list.join('|'));
       final List<InlineSpan> spanChildren = <InlineSpan>[];
@@ -166,13 +191,14 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
         regExp,
         onMatch: (Match match) {
           String key = match[0]!;
+          dynamic emote = emots?[key] ?? uemote;
           spanChildren.add(WidgetSpan(
             child: ExcludeSemantics(
                 child: NetworkImgLayer(
-              src: emots[key]['url'],
+              src: emote['url'],
               type: 'emote',
-              width: emots[key]['width'].toDouble(),
-              height: emots[key]['height'].toDouble(),
+              width: emote['width'].toDouble(),
+              height: emote['height'].toDouble(),
               semanticsLabel: key,
             )),
           ));

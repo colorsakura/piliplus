@@ -9,12 +9,14 @@ class RoomInfoModel {
   int? liveStatus;
   int? liveTime;
   PlayurlInfo? playurlInfo;
+  bool? isPortrait;
 
   RoomInfoModel.fromJson(Map<String, dynamic> json) {
     roomId = json['room_id'];
     liveStatus = json['live_status'];
     liveTime = json['live_time'];
     playurlInfo = PlayurlInfo.fromJson(json['playurl_info']);
+    isPortrait = json['is_portrait'];
   }
 }
 

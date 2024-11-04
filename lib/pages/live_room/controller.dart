@@ -58,9 +58,12 @@ class LiveRoomController extends GetxController {
     );
   }
 
+  bool? isPortrait;
+
   Future queryLiveInfo() async {
     var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: 10000);
     if (res['status']) {
+      isPortrait = res['data'].isPortrait;
       List<CodecItem> codec =
           res['data'].playurlInfo.playurl.stream.first.format.first.codec;
       CodecItem item = codec.first;

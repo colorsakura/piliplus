@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/pages/live_room/widgets/chat.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -21,6 +22,7 @@ class LiveRoomPage extends StatefulWidget {
 }
 
 class _LiveRoomPageState extends State<LiveRoomPage> {
+  late final int _roomId;
   final LiveRoomController _liveRoomController = Get.put(LiveRoomController());
   PlPlayerController? plPlayerController;
   late Future? _futureBuilder;
@@ -31,6 +33,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   Floating? floating;
 
   late final _isLogin = GStorage.userInfo.get('userInfoCache') != null;
+  late final _node = FocusNode();
   late final _ctr = TextEditingController();
 
   void playCallBack() {
@@ -40,6 +43,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   @override
   void initState() {
     super.initState();
+    _roomId = int.parse(Get.parameters['roomid'] ?? '-1');
     PlPlayerController.setPlayCallBack(playCallBack);
     if (Platform.isAndroid) {
       floating = Floating();
@@ -58,6 +62,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   void dispose() {
     PlPlayerController.setPlayCallBack(null);
     floating?.dispose();
+    _node.dispose();
     plPlayerController?.dispose();
     _ctr.dispose();
     super.dispose();
@@ -149,12 +154,25 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                       return Obx(
                         () => Row(
                           children: [
-                            NetworkImgLayer(
-                              width: 34,
-                              height: 34,
-                              type: 'avatar',
-                              src: _liveRoomController
-                                  .roomInfoH5.value.anchorInfo!.baseInfo!.face,
+                            GestureDetector(
+                              onTap: () {
+                                _node.unfocus();
+                                dynamic uid = _liveRoomController
+                                    .roomInfoH5.value.roomInfo?.uid;
+                                Get.toNamed(
+                                  '/member?mid=$uid',
+                                  arguments: {
+                                    'heroTag': Utils.makeHeroTag(uid),
+                                  },
+                                );
+                              },
+                              child: NetworkImgLayer(
+                                width: 34,
+                                height: 34,
+                                type: 'avatar',
+                                src: _liveRoomController.roomInfoH5.value
+                                    .anchorInfo!.baseInfo!.face,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Column(
@@ -228,19 +246,29 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                     verticalScreenForTwoSeconds();
                   }
                 },
-                child: SizedBox(
-                  width: Get.size.width,
-                  height: MediaQuery.of(context).orientation ==
-                          Orientation.landscape
-                      ? Get.size.height
-                      : Get.size.width * 9 / 16,
-                  child: videoPlayerPanel,
+                child: Listener(
+                  onPointerDown: (_) {
+                    _node.unfocus();
+                  },
+                  child: SizedBox(
+                    width: Get.size.width,
+                    height: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? Get.size.height
+                        : Get.size.width * 9 / 16,
+                    child: videoPlayerPanel,
+                  ),
                 ),
               ),
               Expanded(
-                child: LiveRoomChat(
-                  roomId: int.parse(Get.parameters['roomid']!),
-                  liveRoomController: _liveRoomController,
+                child: Listener(
+                  onPointerDown: (_) {
+                    _node.unfocus();
+                  },
+                  child: LiveRoomChat(
+                    roomId: _roomId,
+                    liveRoomController: _liveRoomController,
+                  ),
                 ),
               ),
               Container(
@@ -264,6 +292,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                   children: [
                     Expanded(
                       child: TextField(
+                        focusNode: _node,
                         controller: _ctr,
                         textInputAction: TextInputAction.send,
                         onSubmitted: (value) {
