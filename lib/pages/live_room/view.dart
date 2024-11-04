@@ -65,6 +65,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     videoSourceInit();
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
     plPlayerController.autoEnterFullscreen();
+    _liveRoomController.liveMsg();
   }
 
   Future<void> videoSourceInit() async {
@@ -87,6 +88,9 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     _node.dispose();
     plPlayerController.dispose();
     _ctr.dispose();
+    _liveRoomController.msgStream?.close();
+    _liveRoomController.scrollController.removeListener(() {});
+    _liveRoomController.scrollController.dispose();
     super.dispose();
   }
 

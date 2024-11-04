@@ -1,9 +1,18 @@
+import 'dart:convert';
+
+import 'package:PiliPalaX/models/live/danmu_info.dart';
+import 'package:PiliPalaX/tcp/live.dart';
+import 'package:PiliPalaX/utils/danmaku.dart';
+import 'package:PiliPalaX/utils/storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/models/live/room_info.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:ns_danmaku/danmaku_controller.dart';
+import 'package:ns_danmaku/models/danmaku_item.dart';
 import '../../models/live/room_info_h5.dart';
 import '../../utils/video_utils.dart';
 
@@ -93,5 +102,66 @@ class LiveRoomController extends GetxController {
       roomInfoH5.value = res['data'];
     }
     return res;
+  }
+
+  LiveMessageStream? msgStream;
+  final ScrollController scrollController = ScrollController();
+
+  void scrollToBottom() {
+    if (disableAutoScroll.value) return;
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.linearToEaseOut,
+      );
+    }
+  }
+
+  void liveMsg() {
+    LiveHttp.liveRoomGetDanmakuToken(roomId: roomId).then((v) {
+      if (v['status']) {
+        LiveDanmakuInfo info = v['data'];
+        // logger.d("info => $info");
+        msgStream = LiveMessageStream(
+          streamToken: info.data.token,
+          roomId: roomId,
+          uid: GStorage.userInfo.get('userInfoCache')?.mid ?? 0,
+          host: info.data.hostList[0].host,
+          port: info.data.hostList[0].port,
+        );
+        msgStream?.addEventListener((obj) {
+          if (obj['cmd'] == 'DANMU_MSG') {
+            // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
+            messages.add(obj);
+            Map json = jsonDecode(obj['info'][0][15]['extra']);
+            controller?.addItems([
+              DanmakuItem(
+                json['content'],
+                color: DmUtils.decimalToColor(json['color']),
+                // time: e.progress,
+                type: DmUtils.getPosition(json['mode']),
+              )
+            ]);
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => scrollToBottom(),
+            );
+          }
+        });
+        msgStream?.init();
+        scrollController.addListener(() {
+          if (scrollController.position.userScrollDirection ==
+              ScrollDirection.forward) {
+            disableAutoScroll.value = true;
+          } else if (scrollController.position.userScrollDirection ==
+              ScrollDirection.reverse) {
+            final pos = scrollController.position;
+            if (pos.maxScrollExtent - pos.pixels <= 100) {
+              disableAutoScroll.value = false;
+            }
+          }
+        });
+      }
+    });
   }
 }

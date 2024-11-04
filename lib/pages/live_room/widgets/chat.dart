@@ -1,20 +1,12 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/http/live.dart';
-import 'package:PiliPalaX/models/live/danmu_info.dart';
 import 'package:PiliPalaX/pages/live_room/controller.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
-import 'package:PiliPalaX/tcp/live.dart';
-import 'package:PiliPalaX/utils/danmaku.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:ns_danmaku/models/danmaku_item.dart';
-
-import '../../../utils/storage.dart';
 
 class LiveRoomChat extends StatefulWidget {
   final int roomId;
@@ -29,23 +21,8 @@ class LiveRoomChat extends StatefulWidget {
 }
 
 class _LiveRoomChatState extends State<LiveRoomChat> {
-  LiveMessageStream? msgStream;
-
-  final ScrollController _scrollController = ScrollController();
-
   bool get disableAutoScroll =>
       widget.liveRoomController.disableAutoScroll.value;
-
-  void _scrollToBottom() {
-    if (disableAutoScroll) return;
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.linearToEaseOut,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +30,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
       children: [
         Obx(
           () => ListView.separated(
-            controller: _scrollController,
+            controller: widget.liveRoomController.scrollController,
             separatorBuilder: (_, index) => const SizedBox(height: 6),
             itemCount: widget.liveRoomController.messages.length,
             itemBuilder: (context, index) {
@@ -114,7 +91,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                     label: const Text('回到底部'),
                     onPressed: () {
                       widget.liveRoomController.disableAutoScroll.value = false;
-                      _scrollToBottom();
+                      widget.liveRoomController.scrollToBottom();
                     },
                   ),
                 )
@@ -122,63 +99,6 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
         )
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    LiveHttp.liveRoomGetDanmakuToken(roomId: widget.roomId).then((v) {
-      if (v['status']) {
-        LiveDanmakuInfo info = v['data'];
-        // logger.d("info => $info");
-        msgStream = LiveMessageStream(
-          streamToken: info.data.token,
-          roomId: widget.roomId,
-          uid: GStorage.userInfo.get('userInfoCache')?.mid ?? 0,
-          host: info.data.hostList[0].host,
-          port: info.data.hostList[0].port,
-        );
-        msgStream?.addEventListener((obj) {
-          if (obj['cmd'] == 'DANMU_MSG') {
-            // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
-            widget.liveRoomController.messages.add(obj);
-            Map json = jsonDecode(obj['info'][0][15]['extra']);
-            widget.liveRoomController.controller?.addItems([
-              DanmakuItem(
-                json['content'],
-                color: DmUtils.decimalToColor(json['color']),
-                // time: e.progress,
-                type: DmUtils.getPosition(json['mode']),
-              )
-            ]);
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) => _scrollToBottom(),
-            );
-          }
-        });
-        msgStream?.init();
-        _scrollController.addListener(() {
-          if (_scrollController.position.userScrollDirection ==
-              ScrollDirection.forward) {
-            widget.liveRoomController.disableAutoScroll.value = true;
-          } else if (_scrollController.position.userScrollDirection ==
-              ScrollDirection.reverse) {
-            final pos = _scrollController.position;
-            if (pos.maxScrollExtent - pos.pixels <= 100) {
-              widget.liveRoomController.disableAutoScroll.value = false;
-            }
-          }
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    msgStream?.close();
-    _scrollController.removeListener(() {});
-    _scrollController.dispose();
-    super.dispose();
   }
 
   TextSpan _buildMsg(obj) {
