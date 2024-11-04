@@ -9,6 +9,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
+import 'package:ns_danmaku/danmaku_controller.dart';
+import 'package:ns_danmaku/danmaku_view.dart';
+import 'package:ns_danmaku/models/danmaku_option.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../utils/storage.dart';
 import 'controller.dart';
@@ -24,7 +28,7 @@ class LiveRoomPage extends StatefulWidget {
 class _LiveRoomPageState extends State<LiveRoomPage> {
   late final int _roomId;
   final LiveRoomController _liveRoomController = Get.put(LiveRoomController());
-  PlPlayerController? plPlayerController;
+  late final PlPlayerController plPlayerController;
   late Future? _futureBuilder;
   late Future? _futureBuilderFuture;
 
@@ -36,8 +40,18 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   late final _node = FocusNode();
   late final _ctr = TextEditingController();
 
+  late bool enableShowDanmaku;
+  late List blockTypes;
+  late double showArea;
+  late double opacityVal;
+  late double fontSizeVal;
+  late double danmakuDurationVal;
+  late double strokeWidth;
+  late int fontWeight;
+  int latestAddedPosition = -1;
+
   void playCallBack() {
-    plPlayerController?.play();
+    plPlayerController.play();
   }
 
   @override
@@ -50,20 +64,28 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     }
     videoSourceInit();
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
-    plPlayerController!.autoEnterFullscreen();
+    plPlayerController.autoEnterFullscreen();
   }
 
   Future<void> videoSourceInit() async {
     _futureBuilder = _liveRoomController.queryLiveInfoH5();
     plPlayerController = _liveRoomController.plPlayerController;
+    blockTypes = plPlayerController.blockTypes;
+    showArea = plPlayerController.showArea;
+    opacityVal = plPlayerController.opacityVal;
+    fontSizeVal = plPlayerController.fontSizeVal;
+    strokeWidth = plPlayerController.strokeWidth;
+    fontWeight = plPlayerController.fontWeight;
+    danmakuDurationVal = plPlayerController.danmakuDurationVal;
   }
 
   @override
   void dispose() {
+    ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
     floating?.dispose();
     _node.dispose();
-    plPlayerController?.dispose();
+    plPlayerController.dispose();
     _ctr.dispose();
     super.dispose();
   }
@@ -75,11 +97,38 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData && snapshot.data['status']) {
           return PLVideoPlayer(
-            controller: plPlayerController!,
+            controller: plPlayerController,
             bottomControl: BottomControl(
               controller: plPlayerController,
               liveRoomCtr: _liveRoomController,
               floating: floating,
+            ),
+            danmuWidget: Obx(
+              () => AnimatedOpacity(
+                opacity: plPlayerController.isOpenDanmu.value ? 1 : 0,
+                duration: const Duration(milliseconds: 100),
+                child: DanmakuView(
+                  createdController: (DanmakuController e) async {
+                    plPlayerController.danmakuController =
+                        _liveRoomController.controller = e;
+                  },
+                  option: DanmakuOption(
+                    fontSize: 15 * fontSizeVal,
+                    fontWeight: fontWeight,
+                    area: showArea,
+                    opacity: opacityVal,
+                    hideTop: blockTypes.contains(5),
+                    hideScroll: blockTypes.contains(2),
+                    hideBottom: blockTypes.contains(4),
+                    duration:
+                        danmakuDurationVal / plPlayerController.playbackSpeed,
+                    strokeWidth: strokeWidth,
+                    // initDuration /
+                    //     (danmakuSpeedVal * widget.playerController.playbackSpeed),
+                  ),
+                  statusChanged: (isPlaying) {},
+                ),
+              ),
             ),
           );
         } else {
@@ -236,10 +285,10 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                 ),
               ),
               PopScope(
-                canPop: plPlayerController?.isFullScreen.value != true,
+                canPop: plPlayerController.isFullScreen.value != true,
                 onPopInvokedWithResult: (bool didPop, Object? result) {
-                  if (plPlayerController?.isFullScreen.value == true) {
-                    plPlayerController!.triggerFullScreen(status: false);
+                  if (plPlayerController.isFullScreen.value == true) {
+                    plPlayerController.triggerFullScreen(status: false);
                   }
                   if (MediaQuery.of(context).orientation ==
                       Orientation.landscape) {
@@ -273,9 +322,9 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
               ),
               Container(
                 padding: EdgeInsets.only(
-                  left: 16,
+                  left: 10,
                   top: 10,
-                  right: 16,
+                  right: 10,
                   bottom: 25 + MediaQuery.of(context).padding.bottom,
                 ),
                 decoration: BoxDecoration(
@@ -290,6 +339,21 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                 ),
                 child: Row(
                   children: [
+                    Obx(
+                      () => IconButton(
+                        onPressed: () {
+                          plPlayerController.isOpenDanmu.value =
+                              !plPlayerController.isOpenDanmu.value;
+                          GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
+                              plPlayerController.isOpenDanmu.value);
+                        },
+                        icon: Icon(
+                          plPlayerController.isOpenDanmu.value
+                              ? Icons.subtitles_outlined
+                              : Icons.subtitles_off_outlined,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: TextField(
                         focusNode: _node,

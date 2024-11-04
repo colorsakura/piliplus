@@ -115,16 +115,15 @@ class VideoReplyReplyController extends CommonController
             begin: Theme.of(Get.context!).colorScheme.onInverseSurface,
             end: Theme.of(Get.context!).colorScheme.surface,
           ).animate(controller!);
-          () async {
-            await Future.delayed(const Duration(milliseconds: 200));
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
             itemScrollCtr.jumpTo(
-              index: hasRoot ? index! + 3 : index! + 1, alignment: 0.25,
-              // duration: const Duration(milliseconds: 200),
+              index: hasRoot ? index! + 3 : index! + 1,
+              alignment: 0.25,
             );
             await Future.delayed(const Duration(milliseconds: 800));
             await controller?.forward();
             index = null;
-          }();
+          });
         }
         id = null;
       }

@@ -205,7 +205,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   Future<void> setBrightness(double value) async {
     try {
-      await ScreenBrightness().setScreenBrightness(value);
+      await ScreenBrightness().setApplicationScreenBrightness(value);
     } catch (_) {}
     _brightnessIndicator.value = true;
     _brightnessTimer?.cancel();

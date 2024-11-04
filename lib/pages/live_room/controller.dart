@@ -3,6 +3,7 @@ import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/models/live/room_info.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
+import 'package:ns_danmaku/danmaku_controller.dart';
 import '../../models/live/room_info_h5.dart';
 import '../../utils/video_utils.dart';
 
@@ -21,6 +22,8 @@ class LiveRoomController extends GetxController {
 
   RxList<dynamic> messages = [].obs;
   RxBool disableAutoScroll = false.obs;
+  double? brightness;
+  DanmakuController? controller;
 
   @override
   void onInit() {

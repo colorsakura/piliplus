@@ -276,7 +276,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   void dispose() {
     if (!Get.previousRoute.startsWith('/video')) {
-      ScreenBrightness().resetScreenBrightness();
+      ScreenBrightness().resetApplicationScreenBrightness();
       PlPlayerController.setPlayCallBack(null);
     }
     videoDetailController.positionSubscription?.cancel();
@@ -310,7 +310,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void didPushNext() async {
     // _bufferedListener?.cancel();
 
-    ScreenBrightness().resetScreenBrightness();
+    ScreenBrightness().resetApplicationScreenBrightness();
 
     videoDetailController.positionSubscription?.cancel();
     videoIntroController.canelTimer();
@@ -344,13 +344,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         plPlayerController
             ?.setCurrBrightness(videoDetailController.brightness!);
         if (videoDetailController.brightness != -1.0) {
-          ScreenBrightness()
-              .setScreenBrightness(videoDetailController.brightness!);
+          ScreenBrightness().setApplicationScreenBrightness(
+              videoDetailController.brightness!);
         } else {
-          ScreenBrightness().resetScreenBrightness();
+          ScreenBrightness().resetApplicationScreenBrightness();
         }
       } else {
-        ScreenBrightness().resetScreenBrightness();
+        ScreenBrightness().resetApplicationScreenBrightness();
       }
     }
     super.didPopNext();

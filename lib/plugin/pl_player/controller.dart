@@ -1035,7 +1035,7 @@ class PlPlayerController {
   Future<void> setBrightness(double brightness) async {
     try {
       this.brightness.value = brightness;
-      ScreenBrightness().setScreenBrightness(brightness);
+      ScreenBrightness().setApplicationScreenBrightness(brightness);
       // setVideoBrightness();
     } catch (e) {
       throw 'Failed to set brightness';

@@ -6,12 +6,13 @@ import 'package:PiliPalaX/models/live/danmu_info.dart';
 import 'package:PiliPalaX/pages/live_room/controller.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
 import 'package:PiliPalaX/tcp/live.dart';
+import 'package:PiliPalaX/utils/danmaku.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:ns_danmaku/models/danmaku_item.dart';
 
 import '../../../utils/storage.dart';
 
@@ -50,56 +51,58 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ListView.separated(
-          controller: _scrollController,
-          separatorBuilder: (_, index) => const SizedBox(height: 6),
-          itemCount: widget.liveRoomController.messages.length,
-          itemBuilder: (context, index) {
-            return Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: const BoxDecoration(
-                  color: Color(0x15FFFFFF),
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                ),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text:
-                            '${widget.liveRoomController.messages[index]['info'][0][15]['user']['base']['name']}: ',
-                        style: const TextStyle(
-                          color: Color(0xFFAAAAAA),
-                          fontSize: 14,
+        Obx(
+          () => ListView.separated(
+            controller: _scrollController,
+            separatorBuilder: (_, index) => const SizedBox(height: 6),
+            itemCount: widget.liveRoomController.messages.length,
+            itemBuilder: (context, index) {
+              return Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(
+                    color: Color(0x15FFFFFF),
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                  ),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text:
+                              '${widget.liveRoomController.messages[index]['info'][0][15]['user']['base']['name']}: ',
+                          style: const TextStyle(
+                            color: Color(0xFFAAAAAA),
+                            fontSize: 14,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              try {
+                                dynamic uid =
+                                    widget.liveRoomController.messages[index]
+                                        ['info'][0][15]['user']['uid'];
+                                Get.toNamed(
+                                  '/member?mid=$uid',
+                                  arguments: {
+                                    'heroTag': Utils.makeHeroTag(uid),
+                                  },
+                                );
+                              } catch (err) {
+                                print(err.toString());
+                                // SmartDialog.showToast(err.toString());
+                              }
+                            },
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            try {
-                              dynamic uid =
-                                  widget.liveRoomController.messages[index]
-                                      ['info'][0][15]['user']['uid'];
-                              Get.toNamed(
-                                '/member?mid=$uid',
-                                arguments: {
-                                  'heroTag': Utils.makeHeroTag(uid),
-                                },
-                              );
-                            } catch (err) {
-                              print(err.toString());
-                              // SmartDialog.showToast(err.toString());
-                            }
-                          },
-                      ),
-                      _buildMsg(widget.liveRoomController.messages[index]),
-                    ],
+                        _buildMsg(widget.liveRoomController.messages[index]),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
         Obx(
           () => widget.liveRoomController.disableAutoScroll.value
@@ -138,12 +141,19 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
         msgStream?.addEventListener((obj) {
           if (obj['cmd'] == 'DANMU_MSG') {
             // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
-            setState(() {
-              widget.liveRoomController.messages.add(obj);
-              WidgetsBinding.instance.addPostFrameCallback(
-                (_) => _scrollToBottom(),
-              );
-            });
+            widget.liveRoomController.messages.add(obj);
+            Map json = jsonDecode(obj['info'][0][15]['extra']);
+            widget.liveRoomController.controller?.addItems([
+              DanmakuItem(
+                json['content'],
+                color: DmUtils.decimalToColor(json['color']),
+                // time: e.progress,
+                type: DmUtils.getPosition(json['mode']),
+              )
+            ]);
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => _scrollToBottom(),
+            );
           }
         });
         msgStream?.init();

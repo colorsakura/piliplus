@@ -216,13 +216,13 @@ class LiveMessageStream {
             }
             _processingData(decompressedData);
           } catch (e) {
-            logger.w(e);
+            logger.i(e);
           }
         }
       }
       socket.close();
     } catch (e) {
-      logger.e('$logTag ===> TCP连接失败: $e');
+      logger.i('$logTag ===> TCP连接失败: $e');
     }
   }
 
@@ -241,7 +241,7 @@ class LiveMessageStream {
         }
       }
     } catch (e) {
-      logger.e('ParseHeader错误: $e');
+      logger.i('ParseHeader错误: $e');
     }
   }
 
