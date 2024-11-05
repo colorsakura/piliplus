@@ -355,6 +355,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                           plPlayerController.isOpenDanmu.value
                               ? Icons.subtitles_outlined
                               : Icons.subtitles_off_outlined,
+                          color: _color,
                         ),
                       ),
                     ),
@@ -363,6 +364,8 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                         focusNode: _node,
                         controller: _ctr,
                         textInputAction: TextInputAction.send,
+                        cursorColor: _color,
+                        style: TextStyle(color: _color),
                         onSubmitted: (value) {
                           if (value.isNotEmpty) {
                             _onSendMsg(value);
@@ -372,7 +375,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                           border: InputBorder.none,
                           hintText: '发送弹幕',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Colors.white.withOpacity(0.6),
                           ),
                         ),
                       ),
@@ -385,7 +388,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
                       },
                       icon: Icon(
                         Icons.send,
-                        color: Colors.white,
+                        color: _color,
                       ),
                     ),
                   ],
@@ -406,6 +409,8 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       return childWhenDisabled;
     }
   }
+
+  Color get _color => Color(0xFFEEEEEE);
 
   void _onSendMsg(msg) async {
     if (!_isLogin) {
