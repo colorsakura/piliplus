@@ -307,13 +307,16 @@ class Staff {
 
 class Vip {
   dynamic type;
+  dynamic status;
 
   Vip({
     this.type,
+    this.status,
   });
 
   Vip.fromJson(Map<String, dynamic> json) {
     type = json["type"];
+    status = json["status"];
   }
 }
 
