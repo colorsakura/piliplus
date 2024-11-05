@@ -119,7 +119,7 @@ class ReplyItemGrpc extends StatelessWidget {
             type: 'avatar',
           ),
         ),
-        if (replyItem.member.vipType > 0)
+        if (replyItem.member.vipStatus > 0)
           Positioned(
             right: 0,
             bottom: 0,
