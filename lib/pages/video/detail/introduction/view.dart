@@ -348,7 +348,12 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                       : videoItem['staff'][index].name,
                                   style: TextStyle(
                                     color:
-                                        videoItem['staff'][index].vip.type == 2
+                                        videoItem['staff'][index].vip.status >
+                                                    0 &&
+                                                videoItem['staff'][index]
+                                                        .vip
+                                                        .type ==
+                                                    2
                                             ? Utils.vipColor
                                             : null,
                                   ),

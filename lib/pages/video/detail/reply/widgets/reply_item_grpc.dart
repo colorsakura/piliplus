@@ -204,7 +204,8 @@ class ReplyItemGrpc extends StatelessWidget {
                       Text(
                         replyItem.member.name,
                         style: TextStyle(
-                          color: (replyItem.member.vipType == 2)
+                          color: (replyItem.member.vipStatus > 0 &&
+                                  replyItem.member.vipType == 2)
                               ? Utils.vipColor
                               : Theme.of(context).colorScheme.outline,
                           fontSize: 13,

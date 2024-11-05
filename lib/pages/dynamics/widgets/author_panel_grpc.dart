@@ -65,7 +65,9 @@ class AuthorPanelGrpc extends StatelessWidget {
                   item.modules.first.moduleAuthor.author.name,
                   // semanticsLabel: "Up主：${item.modules.moduleAuthor.name}",
                   style: TextStyle(
-                    color: item.modules.first.moduleAuthor.author.vip.status > 0
+                    color: item.modules.first.moduleAuthor.author.vip.status >
+                                0 &&
+                            item.modules.first.moduleAuthor.author.vip.type == 2
                         ? Utils.vipColor
                         : Theme.of(context).colorScheme.onSurface,
                     fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,

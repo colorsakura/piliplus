@@ -113,7 +113,8 @@ class UserInfoCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (card.officialVerify?.icon?.isNotEmpty == true)
+            if (card.officialVerify?.icon?.isNotEmpty == true ||
+                (card.vip?.vipStatus ?? -1) > 0)
               Positioned(
                 top: 170,
                 left: 80,
@@ -123,13 +124,19 @@ class UserInfoCard extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.surface,
                   ),
-                  child: NetworkImgLayer(
-                    src: card.officialVerify?.icon,
-                    radius: null,
-                    width: 24,
-                    height: 24,
-                    quality: 100,
-                  ),
+                  child: card.officialVerify?.icon?.isNotEmpty == true
+                      ? NetworkImgLayer(
+                          src: card.officialVerify?.icon,
+                          radius: null,
+                          width: 24,
+                          height: 24,
+                          quality: 100,
+                        )
+                      : Image.asset(
+                          'assets/images/big-vip.png',
+                          width: 24,
+                          height: 24,
+                        ),
                 ),
               ),
             Positioned(
@@ -276,7 +283,10 @@ class UserInfoCard extends StatelessWidget {
                     height: 1,
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: card.vip?.vipType == 2 ? Utils.vipColor : null,
+                    color: (card.vip?.vipStatus ?? -1) > 0 &&
+                            card.vip?.vipType == 2
+                        ? Utils.vipColor
+                        : null,
                   ),
                 ),
               ),

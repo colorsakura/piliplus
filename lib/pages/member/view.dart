@@ -401,7 +401,9 @@ class _MemberPageState extends State<MemberPage>
                     fontWeight: FontWeight.bold,
                     color: _memberController.memberInfo.value.vip?.status !=
                                 null &&
-                            _memberController.memberInfo.value.vip!.status! > 0
+                            _memberController.memberInfo.value.vip!.status! >
+                                0 &&
+                            _memberController.memberInfo.value.vip!.type == 2
                         ? Utils.vipColor
                         : Theme.of(context).colorScheme.onSurface,
                   ),
