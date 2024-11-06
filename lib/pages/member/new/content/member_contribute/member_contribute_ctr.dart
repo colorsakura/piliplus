@@ -45,4 +45,10 @@ class MemberContributeCtr extends CommonController
   Future<LoadingState> customGetData() {
     throw UnimplementedError();
   }
+
+  @override
+  void onClose() {
+    tabController?.dispose();
+    super.onClose();
+  }
 }

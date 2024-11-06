@@ -137,4 +137,10 @@ class MemberControllerNew extends CommonController
       );
     }
   }
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    super.onClose();
+  }
 }
