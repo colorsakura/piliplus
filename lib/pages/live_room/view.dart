@@ -25,7 +25,8 @@ class LiveRoomPage extends StatefulWidget {
   State<LiveRoomPage> createState() => _LiveRoomPageState();
 }
 
-class _LiveRoomPageState extends State<LiveRoomPage> {
+class _LiveRoomPageState extends State<LiveRoomPage>
+    with WidgetsBindingObserver {
   late final int _roomId;
   final LiveRoomController _liveRoomController = Get.put(LiveRoomController());
   late final PlPlayerController plPlayerController;
@@ -57,6 +58,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _roomId = int.parse(Get.parameters['roomid'] ?? '-1');
     PlPlayerController.setPlayCallBack(playCallBack);
     if (Platform.isAndroid) {
@@ -82,6 +84,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
     floating?.dispose();
@@ -92,6 +95,16 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     _liveRoomController.scrollController.removeListener(() {});
     _liveRoomController.scrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _liveRoomController.showDanmaku = true;
+    } else if (state == AppLifecycleState.paused) {
+      _liveRoomController.showDanmaku = false;
+      plPlayerController.danmakuController?.clear();
+    }
   }
 
   @override

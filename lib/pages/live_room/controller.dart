@@ -33,6 +33,7 @@ class LiveRoomController extends GetxController {
   RxBool disableAutoScroll = false.obs;
   double? brightness;
   DanmakuController? controller;
+  bool showDanmaku = true;
 
   @override
   void onInit() {
@@ -135,17 +136,19 @@ class LiveRoomController extends GetxController {
             // logger.i(' 原始弹幕消息 ======> ${jsonEncode(obj)}');
             messages.add(obj);
             Map json = jsonDecode(obj['info'][0][15]['extra']);
-            controller?.addItems([
-              DanmakuItem(
-                json['content'],
-                color: DmUtils.decimalToColor(json['color']),
-                // time: e.progress,
-                type: DmUtils.getPosition(json['mode']),
-              )
-            ]);
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) => scrollToBottom(),
-            );
+            if (showDanmaku) {
+              controller?.addItems([
+                DanmakuItem(
+                  json['content'],
+                  color: DmUtils.decimalToColor(json['color']),
+                  // time: e.progress,
+                  type: DmUtils.getPosition(json['mode']),
+                )
+              ]);
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => scrollToBottom(),
+              );
+            }
           }
         });
         msgStream?.init();
