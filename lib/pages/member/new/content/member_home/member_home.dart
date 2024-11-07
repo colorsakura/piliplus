@@ -256,7 +256,7 @@ class _MemberHomeState extends State<MemberHome>
                         print('not initialized');
                       }
                     }
-                    _ctr.tabController.animateTo(index);
+                    _ctr.tabController?.animateTo(index);
                   } else {
                     // TODO
                     SmartDialog.showToast('view $param');

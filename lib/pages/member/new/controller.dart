@@ -19,7 +19,7 @@ class MemberControllerNew extends CommonController
   int? ownerMid;
   RxBool isFollow = false.obs;
   RxInt relation = 1.obs;
-  late final TabController tabController;
+  TabController? tabController;
   late final List<Tab> tabs;
   List<Tab2>? tab2;
   RxInt contributeInitialIndex = 0.obs;
@@ -140,7 +140,7 @@ class MemberControllerNew extends CommonController
 
   @override
   void onClose() {
-    tabController.dispose();
+    tabController?.dispose();
     super.onClose();
   }
 }
