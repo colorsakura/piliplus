@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -51,7 +52,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
       appBar: AppBar(
         title: const Text('系统通知'),
       ),
-      body: RefreshIndicator(
+      body: refreshIndicator(
         onRefresh: () async {
           await _sysMsgController.onRefresh();
         },

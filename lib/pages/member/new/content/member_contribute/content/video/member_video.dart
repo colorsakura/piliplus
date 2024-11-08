@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h_member_video.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
@@ -54,7 +55,7 @@ class _MemberVideoState extends State<MemberVideo>
 
   _buildBody(LoadingState loadingState) {
     return loadingState is Success && loadingState.response is List
-        ? RefreshIndicator(
+        ? refreshIndicator(
             onRefresh: () async {
               await _controller.onRefresh();
             },

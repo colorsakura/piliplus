@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/home/controller.dart';
 import 'package:PiliPalaX/pages/main/controller.dart';
@@ -89,7 +90,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   Widget build(BuildContext context) {
     super.build(context);
     // print(widget.dynamicsType + widget.mid.value.toString());
-    return RefreshIndicator(
+    return refreshIndicator(
       // key:
       //     ValueKey<String>(widget.dynamicsType + widget.mid.value.toString()),
       onRefresh: () async {

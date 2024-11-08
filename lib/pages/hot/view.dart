@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h_grpc.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
+    return refreshIndicator(
       onRefresh: () async {
         return await _hotController.onRefresh();
       },

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,7 +79,7 @@ class _OwnerFollowListState extends State<OwnerFollowList>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
+    return refreshIndicator(
       onRefresh: () async => await followUpGroup('init'),
       child: FutureBuilder(
         future: _futureBuilderFuture,

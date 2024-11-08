@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
@@ -42,7 +43,7 @@ class _MemberBangumiState extends State<MemberBangumi>
 
   _buildBody(LoadingState loadingState) {
     return loadingState is Success
-        ? RefreshIndicator(
+        ? refreshIndicator(
             onRefresh: () async {
               await _controller.onRefresh();
             },

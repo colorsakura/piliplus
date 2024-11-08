@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/dynamics/widgets/dynamic_panel_grpc.dart';
@@ -39,7 +40,7 @@ class _MemberDynamicState extends State<MemberDynamic>
 
   _buildBody(LoadingState loadingState) {
     return loadingState is Success
-        ? RefreshIndicator(
+        ? refreshIndicator(
             onRefresh: () async {
               await _controller.onRefresh();
             },

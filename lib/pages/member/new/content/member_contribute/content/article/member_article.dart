@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
@@ -43,7 +44,7 @@ class _MemberArticleState extends State<MemberArticle>
         ? MediaQuery.removePadding(
             context: context,
             removeTop: true,
-            child: RefreshIndicator(
+            child: refreshIndicator(
               onRefresh: () async {
                 await _controller.onRefresh();
               },

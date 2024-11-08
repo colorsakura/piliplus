@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class _FollowListState extends State<FollowList> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
+    return refreshIndicator(
       onRefresh: () async => await widget.ctr.queryFollowings('init'),
       child: FutureBuilder(
         future: _futureBuilderFuture,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/tab_type.dart';
 import 'package:PiliPalaX/pages/common/popup_controller.dart';
@@ -83,7 +84,7 @@ class _RcmdPageState extends State<RcmdPage>
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(StyleString.imgRadius),
       ),
-      child: RefreshIndicator(
+      child: refreshIndicator(
         onRefresh: () async {
           await _controller.onRefresh();
         },

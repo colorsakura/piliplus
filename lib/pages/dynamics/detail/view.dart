@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -213,7 +214,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         ),
         // actions: _detailModel != null ? appBarAction() : [],
       ),
-      body: RefreshIndicator(
+      body: refreshIndicator(
         onRefresh: () async {
           await _dynamicDetailController.onRefresh();
         },

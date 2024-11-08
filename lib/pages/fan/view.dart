@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _FansPageState extends State<FansPage> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: RefreshIndicator(
+      body: refreshIndicator(
         onRefresh: () async => await _fansController.onRefresh(),
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

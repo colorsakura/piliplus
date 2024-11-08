@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +177,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ],
         ),
       ),
-      body: RefreshIndicator(
+      body: refreshIndicator(
         onRefresh: () async {
           await _historyController.onRefresh();
           return;

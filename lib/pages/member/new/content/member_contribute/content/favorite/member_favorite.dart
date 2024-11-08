@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
@@ -44,7 +45,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
 
   _buildBody(LoadingState loadingState) {
     return loadingState is Success
-        ? RefreshIndicator(
+        ? refreshIndicator(
             onRefresh: () async {
               await _controller.onRefresh();
             },

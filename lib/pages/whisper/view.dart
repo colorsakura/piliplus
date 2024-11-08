@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -67,7 +68,7 @@ class _WhisperPageState extends State<WhisperPage> {
           const SizedBox(width: 12)
         ],
       ),
-      body: RefreshIndicator(
+      body: refreshIndicator(
         onRefresh: () async {
           await _whisperController.queryMsgFeedUnread();
           await _whisperController.onRefresh();

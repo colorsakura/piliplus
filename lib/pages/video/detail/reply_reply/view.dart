@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
@@ -127,7 +128,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               color: Theme.of(context).dividerColor.withOpacity(0.1),
             ),
             Expanded(
-              child: RefreshIndicator(
+              child: refreshIndicator(
                 onRefresh: () async {
                   await _videoReplyReplyController.onRefresh();
                 },

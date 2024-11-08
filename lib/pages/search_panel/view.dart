@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class _SearchPanelState extends State<SearchPanel>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
+    return refreshIndicator(
       onRefresh: () async {
         await _searchPanelController.onRefresh();
       },

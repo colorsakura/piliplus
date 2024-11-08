@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class _BlackListPageState extends State<BlackListPage> {
           ),
         ),
       ),
-      body: RefreshIndicator(
+      body: refreshIndicator(
         onRefresh: () async => await _blackListController.onRefresh(),
         child: Obx(() => _buildBody(_blackListController.loadingState.value)),
       ),

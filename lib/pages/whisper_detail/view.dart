@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/pages/emote/view.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
@@ -153,7 +154,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
             child: CircularProgressIndicator(),
           );
         }
-        return RefreshIndicator(
+        return refreshIndicator(
           onRefresh: _whisperDetailController.querySessionMsg,
           child: ListView.builder(
             shrinkWrap: true,
