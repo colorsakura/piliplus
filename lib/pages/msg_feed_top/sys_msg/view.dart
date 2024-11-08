@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
+import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/gestures.dart';
@@ -170,11 +171,12 @@ class _SysMsgPageState extends State<SysMsgPage> {
   InlineSpan _buildContent(String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
     RegExp urlRegExp = RegExp(
-        r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*');
+        r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*|\【(.*?)\】');
     content.splitMapJoin(
       urlRegExp,
       onMatch: (Match match) {
-        if (match[0]!.startsWith('#')) {
+        String matchStr = match[0]!;
+        if (matchStr.startsWith('#')) {
           spanChildren.add(
             TextSpan(
               text: match[1],
@@ -190,6 +192,37 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 },
             ),
           );
+        } else if (matchStr.startsWith('【')) {
+          try {
+            bool isBV = match[3]?.startsWith('BV') == true;
+            // validate
+            if (isBV) {
+              IdUtils.bv2av(match[3]!);
+            } else {
+              IdUtils.av2bv(int.parse(match[3]!));
+            }
+            spanChildren.add(TextSpan(text: '【'));
+            spanChildren.add(
+              TextSpan(
+                text: match[3],
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    try {
+                      Uri uri = Uri.parse(match[3]!);
+                      PiliScheme.routePush(uri);
+                    } catch (err) {
+                      SmartDialog.showToast(err.toString());
+                    }
+                  },
+              ),
+            );
+            spanChildren.add(TextSpan(text: '】'));
+          } catch (e) {
+            spanChildren.add(
+              TextSpan(text: match[0]),
+            );
+          }
         } else {
           spanChildren.add(
             TextSpan(
