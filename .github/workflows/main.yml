@@ -9,16 +9,16 @@ jobs:
 
     steps:
       - name: 代码迁出
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 构建Java环境
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: "zulu"
           java-version: "17"
 
       - name: 检查缓存
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: cache-flutter
         with:
           path: /root/flutter-sdk # Flutter SDK 的路径
@@ -34,11 +34,21 @@ jobs:
       - name: 下载项目依赖
         run: flutter pub get
 
+      - name: Write key
+        run: |
+          if [ ! -z "${{ secrets.SIGN_KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.SIGN_KEYSTORE_BASE64 }}" | base64 --decode > android/app/key.jks
+            echo storeFile='key.jks' >> android/key.properties
+            echo storePassword='${{ secrets.KEYSTORE_PASSWORD }}' >> android/key.properties
+            echo keyAlias='${{ secrets.KEY_ALIAS }}' >> android/key.properties
+            echo keyPassword='${{ secrets.KEY_PASSWORD }}' >> android/key.properties
+          fi
+
       - name: flutter build apk
         run: flutter build apk --release --target-platform=android-arm64
 
       - name: 上传
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Pilipala-Release
           path: |
