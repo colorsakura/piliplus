@@ -11,14 +11,14 @@ class PagesPanel extends StatefulWidget {
   const PagesPanel({
     super.key,
     required this.pages,
-    this.cid,
+    required this.cid,
     required this.bvid,
     required this.changeFuc,
     required this.heroTag,
     required this.showEpisodes,
   });
   final List<Part> pages;
-  final int? cid;
+  final int cid;
   final String bvid;
   final Function changeFuc;
   final String heroTag;
@@ -29,7 +29,6 @@ class PagesPanel extends StatefulWidget {
 }
 
 class _PagesPanelState extends State<PagesPanel> {
-  late List<Part> episodes;
   late int cid;
   late int currentIndex;
   // final String heroTag = Get.arguments['heroTag'];
@@ -40,14 +39,13 @@ class _PagesPanelState extends State<PagesPanel> {
   @override
   void initState() {
     super.initState();
-    cid = widget.cid!;
-    episodes = widget.pages;
+    cid = widget.cid;
     heroTag = widget.heroTag;
     _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
-    currentIndex = episodes.indexWhere((Part e) => e.cid == cid);
+    currentIndex = widget.pages.indexWhere((Part e) => e.cid == cid);
     _videoDetailController.cid.listen((int p0) {
       cid = p0;
-      currentIndex = episodes.indexWhere((Part e) => e.cid == cid);
+      currentIndex = max(0, widget.pages.indexWhere((Part e) => e.cid == cid));
       if (!mounted) return;
       const double itemWidth = 150; // 每个列表项的宽度
       final double targetOffset = min(
@@ -98,7 +96,7 @@ class _PagesPanelState extends State<PagesPanel> {
                   onPressed: () => widget.showEpisodes(
                     null,
                     null,
-                    episodes,
+                    widget.pages,
                     widget.bvid,
                     IdUtils.bv2av(widget.bvid),
                     cid,

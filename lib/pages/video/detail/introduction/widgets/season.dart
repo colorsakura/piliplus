@@ -11,12 +11,14 @@ class SeasonPanel extends StatefulWidget {
     required this.changeFuc,
     required this.heroTag,
     required this.showEpisodes,
+    required this.pages,
   });
   final UgcSeason ugcSeason;
   final int? cid;
   final Function changeFuc;
   final String heroTag;
   final Function showEpisodes;
+  final List<Part>? pages;
 
   @override
   State<SeasonPanel> createState() => _SeasonPanelState();
@@ -49,6 +51,8 @@ class _SeasonPanelState extends State<SeasonPanel> {
     //     .episodes!;
     currentIndex = episodes!.indexWhere((EpisodeItem e) => e.cid == cid);
     _videoDetailController.cid.listen((int p0) {
+      bool isPart = widget.pages?.indexWhere((item) => item.cid == p0) != -1;
+      if (isPart) return;
       cid = p0;
       _findEpisode();
       currentIndex = episodes!.indexWhere((EpisodeItem e) => e.cid == cid);

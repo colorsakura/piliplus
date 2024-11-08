@@ -520,10 +520,13 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     heroTag: heroTag,
                     ugcSeason: widget.videoDetail!.ugcSeason!,
                     cid: videoIntroController.lastPlayCid.value != 0
-                        ? videoIntroController.lastPlayCid.value
+                        ? (widget.videoDetail!.pages?.isNotEmpty == true
+                            ? widget.videoDetail!.pages!.first.cid
+                            : videoIntroController.lastPlayCid.value)
                         : widget.videoDetail!.pages!.first.cid,
                     changeFuc: videoIntroController.changeSeasonOrbangu,
                     showEpisodes: widget.showEpisodes,
+                    pages: widget.videoDetail!.pages,
                   ),
                 )
               ],

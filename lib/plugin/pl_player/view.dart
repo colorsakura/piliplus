@@ -347,7 +347,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             String bvid = widget.controller.bvid;
             List episodes = [];
             late Function changeFucCall;
-            if (isSeason) {
+            if (isPage) {
+              final List<Part> pages =
+                  videoIntroController!.videoDetail.value.pages!;
+              episodes = pages;
+              changeFucCall = videoIntroController!.changeSeasonOrbangu;
+            } else if (isSeason) {
               final List<SectionItem> sections =
                   videoIntroController!.videoDetail.value.ugcSeason!.sections!;
               for (int i = 0; i < sections.length; i++) {
@@ -361,11 +366,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 }
               }
               changeFucCall = videoIntroController!.changeSeasonOrbangu;
-            } else if (isPage) {
-              final List<Part> pages =
-                  videoIntroController!.videoDetail.value.pages!;
-              episodes = pages;
-              changeFucCall = videoIntroController!.changeSeasonOrbangu;
             } else if (isBangumi) {
               episodes = (bangumiIntroController!.loadingState.value as Success)
                   .response
@@ -375,7 +375,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             if (widget.showEpisodes != null) {
               widget.showEpisodes!(
                 index,
-                videoIntroController?.videoDetail.value.ugcSeason,
+                isPage
+                    ? null
+                    : videoIntroController?.videoDetail.value.ugcSeason,
                 episodes,
                 bvid,
                 IdUtils.bv2av(bvid),
