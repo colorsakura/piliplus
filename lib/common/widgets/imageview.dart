@@ -16,6 +16,9 @@ class ImageModel {
   dynamic width;
   dynamic height;
   String url;
+
+  dynamic get safeWidth => width ?? 1;
+  dynamic get safeHeight => height ?? 1;
 }
 
 Widget image(
@@ -25,8 +28,8 @@ Widget image(
   double imageWidth = (maxWidth - 2 * 5) / 3;
   double imageHeight = imageWidth;
   if (picArr.length == 1) {
-    dynamic width = picArr[0].width;
-    dynamic height = picArr[0].height;
+    dynamic width = picArr[0].safeWidth;
+    dynamic height = picArr[0].safeHeight;
     double ratioWH = width / height;
     double ratioHW = height / width;
     double maxRatio = 22 / 9;
@@ -69,10 +72,11 @@ Widget image(
               src: picArr[index].url,
               width: imageWidth,
               height: imageHeight,
-              origAspectRatio: picArr[index].width / picArr[index].height,
+              origAspectRatio:
+                  picArr[index].safeWidth / picArr[index].safeHeight,
             ),
           ),
-          if (picArr[index].height / picArr[index].width > 22 / 9)
+          if (picArr[index].safeHeight / picArr[index].safeWidth > 22 / 9)
             const PBadge(
               text: '长图',
               right: 8,
