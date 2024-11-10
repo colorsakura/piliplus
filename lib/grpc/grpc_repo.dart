@@ -193,6 +193,17 @@ class GrpcRepo {
     });
   }
 
+  static Future replyInfo({
+    required int rpid,
+  }) async {
+    return await _request(() async {
+      final request = ReplyInfoReq()..rpid = Int64(rpid);
+      final response = await GrpcClient.instance.replyClient
+          .replyInfo(request, options: options);
+      return {'status': true, 'data': response.reply};
+    });
+  }
+
   static Future mainList({
     int type = 1,
     required int oid,

@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,8 @@ class VideoReplyReplyController extends CommonController
   AnimationController? controller;
   Animation<Color?>? colorAnimation;
 
+  ReplyInfo? firstFloor;
+
   @override
   void onInit() {
     super.onInit();
@@ -77,8 +80,21 @@ class VideoReplyReplyController extends CommonController
   // }
 
   @override
-  Future queryData([bool isRefresh = true]) {
+  Future queryData([bool isRefresh = true]) async {
     if (['没有更多了', '还没有评论'].contains(noMore.value)) return Future.value();
+    if (!isDialogue &&
+        currentPage == 1 &&
+        !hasRoot &&
+        firstFloor == null &&
+        rpid != null) {
+      await GrpcRepo.replyInfo(
+        rpid: rpid!,
+      ).then((res) {
+        if (res['status'] && (res['data']?.mid ?? -1) > 0) {
+          firstFloor = res['data'];
+        }
+      });
+    }
     return super.queryData(isRefresh);
   }
 

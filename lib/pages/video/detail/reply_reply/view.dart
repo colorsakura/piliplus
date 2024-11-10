@@ -47,6 +47,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   late final itemPositionsListener = ItemPositionsListener.create();
   late final _key = GlobalKey<ScaffoldState>();
 
+  ReplyInfo? get firstFloor =>
+      widget.firstFloor ?? _videoReplyReplyController.firstFloor;
+
   @override
   void initState() {
     super.initState();
@@ -75,7 +78,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     super.dispose();
   }
 
-  Widget get _header => widget.firstFloor == null
+  Widget get _header => firstFloor == null
       ? _sortWidget
       : ValueListenableBuilder<Iterable<ItemPosition>>(
           valueListenable: itemPositionsListener.itemPositions,
@@ -147,16 +150,16 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                             return Obx(() => _buildBody(
                                 _videoReplyReplyController.loadingState.value,
                                 index));
-                          } else if (widget.firstFloor != null) {
+                          } else if (firstFloor != null) {
                             if (index == 0) {
                               return ReplyItemGrpc(
-                                replyItem: widget.firstFloor!,
+                                replyItem: firstFloor!,
                                 replyLevel: '2',
                                 showReplyRow: false,
                                 replyType: widget.replyType,
                                 needDivider: false,
                                 onReply: () {
-                                  _onReply(widget.firstFloor!);
+                                  _onReply(firstFloor!);
                                 },
                                 upMid: _videoReplyReplyController.upMid,
                               );
@@ -390,7 +393,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
       return (loadingState is Success ? loadingState.response.length : 0) + 1;
     }
     int itemCount = 0;
-    if (widget.firstFloor != null) {
+    if (firstFloor != null) {
       itemCount = 2;
     }
     if (loadingState is Success) {
