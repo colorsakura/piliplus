@@ -448,67 +448,71 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _pickImg() async {
-    XFile? pickedFile = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 100,
-    );
-    if (pickedFile != null && mounted) {
-      String? mimeType =
-          lookupMimeType(pickedFile.path)?.split('/').getOrNull(1);
-      if (mimeType == 'gif') {
-        SmartDialog.showToast('不能选GIF');
-        return;
-      }
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.path,
-        uiSettings: [
-          AndroidUiSettings(
-            toolbarTitle: '裁剪',
-            toolbarColor: Theme.of(context).colorScheme.primary,
-            toolbarWidgetColor: Colors.white,
-            aspectRatioPresets: [
-              CropAspectRatioPresetCustom(),
-            ],
-            lockAspectRatio: true,
-            hideBottomControls: true,
-            cropStyle: CropStyle.circle,
-            initAspectRatio: CropAspectRatioPresetCustom(),
-          ),
-          IOSUiSettings(
-            title: '裁剪',
-            aspectRatioPresets: [
-              CropAspectRatioPresetCustom(),
-            ],
-            cropStyle: CropStyle.circle,
-            aspectRatioLockEnabled: true,
-            resetAspectRatioEnabled: false,
-            aspectRatioPickerButtonHidden: true,
-          ),
-        ],
+    try {
+      XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
       );
-      if (croppedFile != null) {
-        Request()
-            .post(
-          '/x/member/web/face/update',
-          queryParameters: {
-            'csrf': await Request.getCsrf(),
-          },
-          data: FormData.fromMap({
-            'dopost': 'save',
-            'DisplayRank': 10000,
-            'face': await MultipartFile.fromFile(croppedFile.path),
-          }),
-        )
-            .then((data) {
-          if (data.data['code'] == 0) {
-            (_loadingState as Success).response['face'] = data.data['data'];
-            SmartDialog.showToast('修改成功');
-            setState(() {});
-          } else {
-            SmartDialog.showToast(data.data['message']);
-          }
-        });
+      if (pickedFile != null && mounted) {
+        String? mimeType =
+            lookupMimeType(pickedFile.path)?.split('/').getOrNull(1);
+        if (mimeType == 'gif') {
+          SmartDialog.showToast('不能选GIF');
+          return;
+        }
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: '裁剪',
+              toolbarColor: Theme.of(context).colorScheme.primary,
+              toolbarWidgetColor: Colors.white,
+              aspectRatioPresets: [
+                CropAspectRatioPresetCustom(),
+              ],
+              lockAspectRatio: true,
+              hideBottomControls: true,
+              cropStyle: CropStyle.circle,
+              initAspectRatio: CropAspectRatioPresetCustom(),
+            ),
+            IOSUiSettings(
+              title: '裁剪',
+              aspectRatioPresets: [
+                CropAspectRatioPresetCustom(),
+              ],
+              cropStyle: CropStyle.circle,
+              aspectRatioLockEnabled: true,
+              resetAspectRatioEnabled: false,
+              aspectRatioPickerButtonHidden: true,
+            ),
+          ],
+        );
+        if (croppedFile != null) {
+          Request()
+              .post(
+            '/x/member/web/face/update',
+            queryParameters: {
+              'csrf': await Request.getCsrf(),
+            },
+            data: FormData.fromMap({
+              'dopost': 'save',
+              'DisplayRank': 10000,
+              'face': await MultipartFile.fromFile(croppedFile.path),
+            }),
+          )
+              .then((data) {
+            if (data.data['code'] == 0) {
+              (_loadingState as Success).response['face'] = data.data['data'];
+              SmartDialog.showToast('修改成功');
+              setState(() {});
+            } else {
+              SmartDialog.showToast(data.data['message']);
+            }
+          });
+        }
       }
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
     }
   }
 }

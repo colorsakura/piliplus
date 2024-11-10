@@ -112,50 +112,54 @@ class _CreateFavPageState extends State<CreateFavPage> {
   }
 
   void _pickImg() async {
-    XFile? pickedFile = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 100,
-    );
-    if (pickedFile != null && mounted) {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.path,
-        uiSettings: [
-          AndroidUiSettings(
-            toolbarTitle: '裁剪',
-            toolbarColor: Theme.of(context).colorScheme.primary,
-            toolbarWidgetColor: Colors.white,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.ratio16x9,
-            ],
-            lockAspectRatio: true,
-            hideBottomControls: true,
-            initAspectRatio: CropAspectRatioPreset.ratio16x9,
-          ),
-          IOSUiSettings(
-            title: '裁剪',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.ratio16x9,
-            ],
-            aspectRatioLockEnabled: true,
-            resetAspectRatioEnabled: false,
-            aspectRatioPickerButtonHidden: true,
-          ),
-        ],
+    try {
+      XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
       );
-      if (croppedFile != null) {
-        MsgHttp.uploadImage(
-          path: croppedFile.path,
-          bucket: 'medialist',
-          dir: 'cover',
-        ).then((data) {
-          if (data['status']) {
-            _cover = data['data']['location'];
-            setState(() {});
-          } else {
-            SmartDialog.showToast(data['msg']);
-          }
-        });
+      if (pickedFile != null && mounted) {
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: '裁剪',
+              toolbarColor: Theme.of(context).colorScheme.primary,
+              toolbarWidgetColor: Colors.white,
+              aspectRatioPresets: [
+                CropAspectRatioPreset.ratio16x9,
+              ],
+              lockAspectRatio: true,
+              hideBottomControls: true,
+              initAspectRatio: CropAspectRatioPreset.ratio16x9,
+            ),
+            IOSUiSettings(
+              title: '裁剪',
+              aspectRatioPresets: [
+                CropAspectRatioPreset.ratio16x9,
+              ],
+              aspectRatioLockEnabled: true,
+              resetAspectRatioEnabled: false,
+              aspectRatioPickerButtonHidden: true,
+            ),
+          ],
+        );
+        if (croppedFile != null) {
+          MsgHttp.uploadImage(
+            path: croppedFile.path,
+            bucket: 'medialist',
+            dir: 'cover',
+          ).then((data) {
+            if (data['status']) {
+              _cover = data['data']['location'];
+              setState(() {});
+            } else {
+              SmartDialog.showToast(data['msg']);
+            }
+          });
+        }
       }
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
     }
   }
 

@@ -310,37 +310,42 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
                   if (snapshot.data == true) {
                     _whisperDetailController.sendMsg();
                   } else {
-                    XFile? pickedFile = await _imagePicker.pickImage(
-                      source: ImageSource.gallery,
-                      imageQuality: 100,
-                    );
-                    if (pickedFile != null) {
-                      SmartDialog.showLoading(msg: '正在上传图片');
-                      dynamic result = await MsgHttp.uploadBfs(
-                        path: pickedFile.path,
-                        biz: 'im',
+                    try {
+                      XFile? pickedFile = await _imagePicker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 100,
                       );
-                      if (result['status']) {
-                        int imageSize = await File(pickedFile.path).length();
-                        String mimeType = lookupMimeType(pickedFile.path)
-                                ?.split('/')
-                                .getOrNull(1) ??
-                            'png';
-                        dynamic picMsg = {
-                          'url': result['data']['image_url'],
-                          'height': result['data']['image_height'],
-                          'width': result['data']['image_width'],
-                          'imageType': mimeType,
-                          'original': 1,
-                          'size': imageSize / 1024,
-                        };
-                        SmartDialog.showLoading(msg: '正在发送');
-                        await _whisperDetailController.sendMsg(picMsg: picMsg);
-                      } else {
-                        SmartDialog.dismiss();
-                        SmartDialog.showToast(result['msg']);
-                        return;
+                      if (pickedFile != null) {
+                        SmartDialog.showLoading(msg: '正在上传图片');
+                        dynamic result = await MsgHttp.uploadBfs(
+                          path: pickedFile.path,
+                          biz: 'im',
+                        );
+                        if (result['status']) {
+                          int imageSize = await File(pickedFile.path).length();
+                          String mimeType = lookupMimeType(pickedFile.path)
+                                  ?.split('/')
+                                  .getOrNull(1) ??
+                              'png';
+                          dynamic picMsg = {
+                            'url': result['data']['image_url'],
+                            'height': result['data']['image_height'],
+                            'width': result['data']['image_width'],
+                            'imageType': mimeType,
+                            'original': 1,
+                            'size': imageSize / 1024,
+                          };
+                          SmartDialog.showLoading(msg: '正在发送');
+                          await _whisperDetailController.sendMsg(
+                              picMsg: picMsg);
+                        } else {
+                          SmartDialog.dismiss();
+                          SmartDialog.showToast(result['msg']);
+                          return;
+                        }
                       }
+                    } catch (e) {
+                      SmartDialog.showToast(e.toString());
                     }
                   }
                 },

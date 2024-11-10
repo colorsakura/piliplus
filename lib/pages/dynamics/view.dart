@@ -550,30 +550,34 @@ class _CreatePanelState extends State<CreatePanel> {
                         EasyThrottle.throttle(
                             'imagePicker', const Duration(milliseconds: 500),
                             () async {
-                          List<XFile> pickedFiles =
-                              await _imagePicker.pickMultiImage(
-                            limit: _limit,
-                            imageQuality: 100,
-                          );
-                          if (pickedFiles.isNotEmpty) {
-                            for (int i = 0; i < pickedFiles.length; i++) {
-                              if (_pathList.length == _limit) {
-                                SmartDialog.showToast('最多选择$_limit张图片');
-                                if (i != 0) {
-                                  _pathStream.add(_pathList);
-                                }
-                                break;
-                              } else {
-                                _pathList.add(pickedFiles[i].path);
-                                if (i == pickedFiles.length - 1) {
-                                  _pathStream.add(_pathList);
+                          try {
+                            List<XFile> pickedFiles =
+                                await _imagePicker.pickMultiImage(
+                              limit: _limit,
+                              imageQuality: 100,
+                            );
+                            if (pickedFiles.isNotEmpty) {
+                              for (int i = 0; i < pickedFiles.length; i++) {
+                                if (_pathList.length == _limit) {
+                                  SmartDialog.showToast('最多选择$_limit张图片');
+                                  if (i != 0) {
+                                    _pathStream.add(_pathList);
+                                  }
+                                  break;
+                                } else {
+                                  _pathList.add(pickedFiles[i].path);
+                                  if (i == pickedFiles.length - 1) {
+                                    _pathStream.add(_pathList);
+                                  }
                                 }
                               }
+                              if (_pathList.isNotEmpty && !_isEnable) {
+                                _isEnable = true;
+                                _isEnableStream.add(true);
+                              }
                             }
-                            if (_pathList.isNotEmpty && !_isEnable) {
-                              _isEnable = true;
-                              _isEnableStream.add(true);
-                            }
+                          } catch (e) {
+                            SmartDialog.showToast(e.toString());
                           }
                         });
                       },
