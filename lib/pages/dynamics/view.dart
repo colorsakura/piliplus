@@ -84,7 +84,7 @@ class _DynamicsPageState extends State<DynamicsPage>
     // ..addListener(() {
     //   if (!_dynamicsController.tabController.indexIsChanging) {
     //     // if (!mounted) return;
-    //     // print('indexChanging: ${_dynamicsController.tabController.index}');
+    //     // debugPrint('indexChanging: ${_dynamicsController.tabController.index}');
     //     _dynamicsController
     //         .onSelectType(_dynamicsController.tabController.index);
     //   }
@@ -99,7 +99,7 @@ class _DynamicsPageState extends State<DynamicsPage>
     upPanelPosition = UpPanelPosition.values[setting.get(
         SettingBoxKey.upPanelPosition,
         defaultValue: UpPanelPosition.leftFixed.code)];
-    print('upPanelPosition: $upPanelPosition');
+    debugPrint('upPanelPosition: $upPanelPosition');
     if (GStorage.setting
         .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
       _dynamicsController.scrollController.addListener(() {

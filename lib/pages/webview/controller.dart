@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/utils/event_bus.dart';
@@ -56,17 +57,16 @@ class WebviewController extends GetxController {
           },
           onPageFinished: (String url) async {
             if (type.value == 'liveRoom') {
-              print("adding");
               //注入js
               controller.runJavaScriptReturningResult('''
                 document.styleSheets[0].insertRule('div.open-app-btn.bili-btn-warp {display:none;}', 0);
                 document.styleSheets[0].insertRule('#app__display-area > div.control-panel {display:none;}', 0);
-                ''').then((value) => print(value));
+                ''').then((value) => debugPrint(value.toString()));
             } else if (type.value == 'whisper') {
               controller.runJavaScriptReturningResult('''
                 document.querySelector('#internationalHeader').remove();
                 document.querySelector('#message-navbar').remove();
-              ''').then((value) => print(value));
+              ''').then((value) => debugPrint(value.toString()));
             }
             pageTitle.value = await controller.getTitle() ?? '';
           },

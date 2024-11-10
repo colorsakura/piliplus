@@ -17,7 +17,7 @@ class ActionItem extends StatefulWidget {
   final Function? callBack;
 
   const ActionItem({
-    Key? key,
+    super.key,
     this.icon,
     this.selectIcon,
     this.onTap,
@@ -29,7 +29,7 @@ class ActionItem extends StatefulWidget {
     this.hasOneThree = false,
     this.callBack,
     required this.semanticsLabel,
-  }) : super(key: key);
+  });
 
   @override
   State<ActionItem> createState() => ActionItemState();

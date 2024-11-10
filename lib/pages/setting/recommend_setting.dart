@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/models/common/rcmd_type.dart';
 import 'package:PiliPalaX/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPalaX/utils/recommend_filter.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:get/get.dart';
 
 import 'widgets/switch_item.dart';
 
@@ -94,12 +92,10 @@ class _RecommendSettingState extends State<RecommendSetting> {
                     SmartDialog.showToast('尚未登录，无法收到个性化推荐');
                   }
                 }
-                if (result != null) {
-                  defaultRcmdType = result;
-                  setting.put(SettingBoxKey.defaultRcmdType, result);
-                  SmartDialog.showToast('下次启动时生效');
-                  setState(() {});
-                }
+                defaultRcmdType = result;
+                setting.put(SettingBoxKey.defaultRcmdType, result);
+                SmartDialog.showToast('下次启动时生效');
+                setState(() {});
               }
             },
           ),

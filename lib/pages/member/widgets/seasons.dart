@@ -48,7 +48,7 @@ class MemberSeasonsPanel extends StatelessWidget {
                         onPressed: () => Get.toNamed(
                             '/memberSeasons?mid=${item.meta!.mid}&seasonId=${item.meta!.seasonId}'),
                         style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
                         icon: const Icon(
                           Icons.arrow_forward_ios,

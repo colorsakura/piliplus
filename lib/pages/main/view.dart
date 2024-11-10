@@ -7,7 +7,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPalaX/pages/dynamics/index.dart';
 import 'package:PiliPalaX/pages/home/index.dart';
-import 'package:PiliPalaX/pages/media/index.dart';
 import 'package:PiliPalaX/utils/event_bus.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -24,7 +23,6 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
   final MainController _mainController = Get.put(MainController());
   final HomeController _homeController = Get.put(HomeController());
   final DynamicsController _dynamicController = Get.put(DynamicsController());
-  final MediaController _mediaController = Get.put(MediaController());
 
   int? _lastSelectTime; //上次点击时间
   Box setting = GStorage.setting;

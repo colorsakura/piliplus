@@ -67,7 +67,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                                   },
                                 );
                               } catch (err) {
-                                print(err.toString());
+                                debugPrint(err.toString());
                                 // SmartDialog.showToast(err.toString());
                               }
                             },

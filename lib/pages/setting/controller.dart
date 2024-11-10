@@ -79,7 +79,7 @@ class SettingController extends GetxController {
                   controller.clearLocalStorage();
                   WebViewCookieManager().clearCookies();
                 } catch (e) {
-                  print(e);
+                  debugPrint(e.toString());
                 }
                 userLogin.value = false;
                 if (Get.isRegistered<MainController>()) {

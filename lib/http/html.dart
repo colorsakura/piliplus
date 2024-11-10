@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
-import 'package:html/dom.dart';
-import 'package:html/parser.dart';
+import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as parser;
 import 'index.dart';
 
 class HtmlHttp {
@@ -25,11 +26,11 @@ class HtmlHttp {
           extra: {'ua': 'pc'},
         );
       }
-      Document rootTree = parse(response.data);
+      dom.Document rootTree = parser.parse(response.data);
       // log(response.data.body.toString());
-      Element body = rootTree.body!;
-      Element appDom = body.querySelector('#app')!;
-      Element authorHeader = appDom.querySelector('.fixed-author-header')!;
+      dom.Element body = rootTree.body!;
+      dom.Element appDom = body.querySelector('#app')!;
+      dom.Element authorHeader = appDom.querySelector('.fixed-author-header')!;
       // 头像
       String avatar = authorHeader.querySelector('img')!.attributes['src']!;
       avatar = 'https:${avatar.split('@')[0]}';
@@ -38,7 +39,7 @@ class HtmlHttp {
           .text;
 
       // 动态详情
-      Element opusDetail = appDom.querySelector('.opus-detail')!;
+      dom.Element opusDetail = appDom.querySelector('.opus-detail')!;
       // 发布时间
       String updateTime =
           opusDetail.querySelector('.opus-module-author__pub__text')!.text;
@@ -62,11 +63,11 @@ class HtmlHttp {
         'avatar': avatar,
         'uname': uname,
         'updateTime': updateTime,
-        'content': (test ?? '') + opusContent,
+        'content': test + opusContent,
         'commentId': int.parse(commentId)
       };
     } catch (err) {
-      print('err: $err');
+      debugPrint('err: $err');
     }
   }
 
@@ -80,10 +81,10 @@ class HtmlHttp {
       return;
     }
     try {
-      Document rootTree = parse(response.data);
-      Element body = rootTree.body!;
-      Element appDom = body.querySelector('#app')!;
-      Element authorHeader = appDom.querySelector('.up-left')!;
+      dom.Document rootTree = parser.parse(response.data);
+      dom.Element body = rootTree.body!;
+      dom.Element appDom = body.querySelector('#app')!;
+      dom.Element authorHeader = appDom.querySelector('.up-left')!;
       // 头像
       // String avatar =
       //     authorHeader.querySelector('.bili-avatar-img')!.attributes['data-src']!;
@@ -94,14 +95,14 @@ class HtmlHttp {
               .group(1)!
               .replaceAll(r'\u002F', '/')
               .split('@')[0];
-      // print(avatar);
+      // debugPrint(avatar);
       String uname = authorHeader.querySelector('.up-name')!.text.trim();
       // 动态详情
-      Element opusDetail = appDom.querySelector('.article-content')!;
+      dom.Element opusDetail = appDom.querySelector('.article-content')!;
       // 发布时间
       // String updateTime =
       //     opusDetail.querySelector('.opus-module-author__pub__text')!.text;
-      // print(updateTime);
+      // debugPrint(updateTime);
 
       //
       dynamic opusContent =
@@ -124,10 +125,10 @@ class HtmlHttp {
                     .toList();
                 isJsonContent = true;
               } catch (e) {
-                print('second: $e');
+                debugPrint('second: $e');
               }
             } catch (e) {
-              print('first: $e');
+              debugPrint('first: $e');
             }
           }
         }
@@ -146,7 +147,7 @@ class HtmlHttp {
         'commentId': int.parse(number),
       };
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

@@ -25,8 +25,6 @@ import 'package:screen_brightness/screen_brightness.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../models/video/play/subtitle.dart';
-import '../../pages/video/detail/controller.dart';
-// import 'package:wakelock_plus/wakelock_plus.dart';
 
 Box videoStorage = GStorage.video;
 Box setting = GStorage.setting;
@@ -497,7 +495,7 @@ class PlPlayerController {
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
       debugPrint(stackTrace.toString());
-      print('plPlayer err:  $err');
+      debugPrint('plPlayer err:  $err');
     }
   }
 
@@ -711,9 +709,7 @@ class PlPlayerController {
 
           /// 触发回调事件
           for (var element in _statusListeners) {
-            if (element != null) {
-              element(event ? PlayerStatus.playing : PlayerStatus.paused);
-            }
+            element(event ? PlayerStatus.playing : PlayerStatus.paused);
           }
           if (videoPlayerController!.state.position.inSeconds != 0) {
             makeHeartBeat(positionSeconds.value, type: 'status');
@@ -759,8 +755,8 @@ class PlPlayerController {
               playerStatus.status.value, event);
         }),
         // videoPlayerController!.stream.log.listen((event) {
-        //   print('videoPlayerController!.stream.log.listen');
-        //   print(event);
+        //   debugPrint('videoPlayerController!.stream.log.listen');
+        //   debugPrint(event);
         //   SmartDialog.showToast('视频加载日志： $event');
         // }),
         videoPlayerController!.stream.error.listen((String event) {
@@ -774,8 +770,8 @@ class PlPlayerController {
             EasyThrottle.throttle('videoPlayerController!.stream.error.listen',
                 const Duration(milliseconds: 10000), () {
               Future.delayed(const Duration(milliseconds: 3000), () {
-                print("isBuffering.value: ${isBuffering.value}");
-                print("_buffered.value: ${_buffered.value}");
+                debugPrint("isBuffering.value: ${isBuffering.value}");
+                debugPrint("_buffered.value: ${_buffered.value}");
                 if (isBuffering.value && _buffered.value == Duration.zero) {
                   refreshPlayer();
                   SmartDialog.showToast('视频链接打开失败，重试中',
@@ -785,8 +781,7 @@ class PlPlayerController {
             });
             return;
           }
-          print('videoPlayerController!.stream.error.listen');
-          print(event);
+          debugPrint('videoPlayerController!.stream.error.listen: ');
           if (event.startsWith('Could not open codec')) {
             SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
             return;
@@ -841,7 +836,7 @@ class PlPlayerController {
       //   play();
       // }
     } else {
-      print('seek duration else');
+      debugPrint('seek duration else');
       _timerForSeek?.cancel();
       _timerForSeek =
           Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
@@ -1006,7 +1001,7 @@ class PlPlayerController {
       FlutterVolumeController.updateShowSystemUI(false);
       await FlutterVolumeController.setVolume(volumeNew);
     } catch (err) {
-      print(err);
+      debugPrint(err.toString());
     }
   }
 
@@ -1021,7 +1016,7 @@ class PlPlayerController {
   /// 亮度
   Future<void> getCurrentBrightness() async {
     try {
-      _currentBrightness.value = await ScreenBrightness().current;
+      _currentBrightness.value = await ScreenBrightness().application;
     } catch (e) {
       throw 'Failed to get current brightness';
       //return 0;
@@ -1161,7 +1156,7 @@ class PlPlayerController {
       await setPlaybackSpeed(
           enableAutoLongPressSpeed ? playbackSpeed * 2 : longPressSpeed);
     } else {
-      print(playbackSpeed);
+      debugPrint('$playbackSpeed');
       await setPlaybackSpeed(playbackSpeed);
     }
   }
@@ -1333,7 +1328,7 @@ class PlPlayerController {
       _instance = null;
       videoPlayerServiceHandler.clear();
     } catch (err) {
-      print(err);
+      debugPrint(err.toString());
     }
   }
 
@@ -1364,7 +1359,6 @@ class PlPlayerController {
       return;
     }
     Map<String, String> s = _vttSubtitles[index];
-    debugPrint(s['text']);
     _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
       s['text']!,
       title: s['title']!,

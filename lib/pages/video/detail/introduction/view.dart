@@ -115,14 +115,14 @@ class VideoInfo extends StatefulWidget {
   final Function showEpisodes;
 
   const VideoInfo({
-    Key? key,
+    super.key,
     this.loadingStatus = false,
     this.videoDetail,
     this.heroTag,
     required this.showAiBottomSheet,
     required this.showIntroDetail,
     required this.showEpisodes,
-  }) : super(key: key);
+  });
 
   @override
   State<VideoInfo> createState() => _VideoInfoState();
@@ -300,10 +300,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                         const SizedBox(height: 0),
                                         Obx(
                                           () => Text(
-                                            Utils.numFormat(videoIntroController
-                                                .userStat.value['follower']),
-                                            semanticsLabel:
-                                                "${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝",
+                                            '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝',
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: t.colorScheme.outline,

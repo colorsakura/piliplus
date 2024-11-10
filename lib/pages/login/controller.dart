@@ -69,8 +69,8 @@ class LoginPageController extends GetxController
         qrCodeTimer?.cancel();
         codeInfo.value = res;
         codeInfo.refresh();
-        print("codeInfo");
-        print(codeInfo);
+        debugPrint("codeInfo");
+        debugPrint(codeInfo.toString());
         qrCodeTimer = Timer.periodic(const Duration(milliseconds: 1000), (t) {
           qrCodeLeftTime.value = 180 - t.tick;
           if (qrCodeLeftTime <= 0) {
@@ -85,7 +85,6 @@ class LoginPageController extends GetxController
             if (value['status']) {
               t.cancel();
               statusQRCode.value = '扫码成功';
-              print(value['data']);
               await afterLoginByApp(
                   value['data'], value['data']['cookie_info']);
               Get.back();
@@ -104,7 +103,7 @@ class LoginPageController extends GetxController
   }
 
   void _handleTabChange() {
-    print('tabController.index ${tabController.index}');
+    debugPrint('tabController.index ${tabController.index}');
     if (tabController.index == 2) {
       if (qrCodeTimer == null || qrCodeTimer!.isActive == false) {
         refreshQRCode();
@@ -121,8 +120,8 @@ class LoginPageController extends GetxController
         'refresh': token_info['refresh_token']
       });
       List<dynamic> cookieInfo = cookie_info['cookies'];
-      print("cookieInfo");
-      print(cookieInfo);
+      debugPrint("cookieInfo");
+      debugPrint(cookieInfo.toString());
       List<Cookie> cookies = [];
       String cookieStrings = cookieInfo.map((cookie) {
         String cstr =
@@ -139,11 +138,7 @@ class LoginPageController extends GetxController
         await Request.cookieManager.cookieJar
             .saveFromResponse(Uri.parse(url), cookies);
       }
-      print(cookieStrings);
-      print(Request.cookieManager.cookieJar
-          .loadForRequest(Uri.parse(HttpString.apiBaseUrl)));
       Request.dio.options.headers['cookie'] = cookieStrings;
-      print(Request.dio.options);
       await WebviewCookieManager().setCookies(cookies);
       for (Cookie item in cookies) {
         await web.CookieManager().setCookie(
@@ -285,14 +280,12 @@ class LoginPageController extends GetxController
     }
     // if ((passwordFormKey.currentState as FormState).validate()) {
     var webKeyRes = await LoginHttp.getWebKey();
-    print(webKeyRes);
     if (!webKeyRes['status']) {
       SmartDialog.showToast(webKeyRes['msg']);
       return;
     }
     String salt = webKeyRes['data']['hash'];
     String key = webKeyRes['data']['key'];
-    print(key);
     var res = await LoginHttp.loginByPwd(
       username: username,
       password: password,
@@ -303,11 +296,10 @@ class LoginPageController extends GetxController
       gee_challenge: captchaData.geetest?.challenge,
       recaptcha_token: captchaData.token,
     );
-    print(res);
     if (res['status']) {
       var data = res['data'];
       for (var key in data.keys) {
-        print('$key: ${data[key]}');
+        debugPrint('$key: ${data[key]}');
       }
       if (data == null) {
         SmartDialog.showToast('登录异常，接口未返回数据：${res["msg"]}');
@@ -318,100 +310,100 @@ class LoginPageController extends GetxController
         return;
         //{"code":0,"message":"0","ttl":1,"data":{"status":2,"message":"本次登录环境存在风险, 需使用手机号进行验证或绑定","url":"https://passport.bilibili.com/h5-app/passport/risk/verify?tmp_token=9e785433940891dfa78f033fb7928181&request_id=e5a6d6480df04097870be56c6e60f7ef&source=risk","token_info":null,"cookie_info":null,"sso":null,"is_new":false,"is_tourist":false}}
         //todo: 后续登录流程：https://ivan.hanloth.cn/archives/530/
-        String Url = data['url']!;
-        Uri currentUri = Uri.parse(Url);
-        var safeCenterRes = await LoginHttp.safeCenterGetInfo(
-            tmpCode: currentUri.queryParameters['tmp_token']!);
-        //{"code":0,"message":"0","ttl":1,"data":{"account_info":{"hide_tel":"111*****111","hide_mail":"aaa*****aaaa.aaa","bind_mail":true,"bind_tel":true,"tel_verify":true,"mail_verify":true,"unneeded_check":false,"bind_safe_question":false,"mid":1111111},"member_info":{"nickname":"xxxxxxx","face":"https://i0.hdslb.com/bfs/face/xxxxxxx.jpg","realname_status":false},"sns_info":{"bind_google":false,"bind_fb":false,"bind_apple":false,"bind_qq":true,"bind_weibo":true,"bind_wechat":false},"account_safe":{"score":80}}}
-        if (!safeCenterRes['status']) {
-          SmartDialog.showToast("获取安全验证信息失败，请尝试其它登录方式\n"
-              "(${safeCenterRes['code']}) ${safeCenterRes['msg']}");
-          return;
-        }
-        Map<String, String> accountInfo = {
-          "hindTel": safeCenterRes['data']['account_info']!["hide_tel"],
-          "hindMail": safeCenterRes['data']['account_info']!["hide_mail"],
-        };
-        if (!safeCenterRes['data']['account_info']!['tel_verify']) {
-          SmartDialog.showToast("当前账号未支持手机号验证，请尝试其它登录方式");
-          return;
-        }
-        TextEditingController _textFieldController = TextEditingController();
-        String captchaKey = '';
-        Get.dialog(AlertDialog(
-          title: const Text("本次登录需要验证您的手机号"),
-          content: Column(children: [
-            Text(accountInfo['hindTel'] ?? '未能获取手机号'),
-            TextField(
-              controller: _textFieldController,
-              decoration: const InputDecoration(hintText: "请输入短信验证码"),
-            ),
-          ]),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("发送验证码 "),
-              onPressed: () async {
-                var preCaptureRes = await LoginHttp.preCapture();
-                if (!preCaptureRes['status']) {
-                  SmartDialog.showToast("获取验证码失败，请尝试其它登录方式\n"
-                      "(${preCaptureRes['code']}) ${preCaptureRes['msg']}");
-                  return;
-                }
-                String geeGt = preCaptureRes['data']['gee_gt']!;
-                String geeChallenge = preCaptureRes['data']['gee_challenge'];
-                captchaData.token = preCaptureRes['data']['recaptcha_token']!;
+        // String Url = data['url']!;
+        // Uri currentUri = Uri.parse(Url);
+        // var safeCenterRes = await LoginHttp.safeCenterGetInfo(
+        //     tmpCode: currentUri.queryParameters['tmp_token']!);
+        // //{"code":0,"message":"0","ttl":1,"data":{"account_info":{"hide_tel":"111*****111","hide_mail":"aaa*****aaaa.aaa","bind_mail":true,"bind_tel":true,"tel_verify":true,"mail_verify":true,"unneeded_check":false,"bind_safe_question":false,"mid":1111111},"member_info":{"nickname":"xxxxxxx","face":"https://i0.hdslb.com/bfs/face/xxxxxxx.jpg","realname_status":false},"sns_info":{"bind_google":false,"bind_fb":false,"bind_apple":false,"bind_qq":true,"bind_weibo":true,"bind_wechat":false},"account_safe":{"score":80}}}
+        // if (!safeCenterRes['status']) {
+        //   SmartDialog.showToast("获取安全验证信息失败，请尝试其它登录方式\n"
+        //       "(${safeCenterRes['code']}) ${safeCenterRes['msg']}");
+        //   return;
+        // }
+        // Map<String, String> accountInfo = {
+        //   "hindTel": safeCenterRes['data']['account_info']!["hide_tel"],
+        //   "hindMail": safeCenterRes['data']['account_info']!["hide_mail"],
+        // };
+        // if (!safeCenterRes['data']['account_info']!['tel_verify']) {
+        //   SmartDialog.showToast("当前账号未支持手机号验证，请尝试其它登录方式");
+        //   return;
+        // }
+        // TextEditingController _textFieldController = TextEditingController();
+        // String captchaKey = '';
+        // Get.dialog(AlertDialog(
+        //   title: const Text("本次登录需要验证您的手机号"),
+        //   content: Column(children: [
+        //     Text(accountInfo['hindTel'] ?? '未能获取手机号'),
+        //     TextField(
+        //       controller: _textFieldController,
+        //       decoration: const InputDecoration(hintText: "请输入短信验证码"),
+        //     ),
+        //   ]),
+        //   actions: <Widget>[
+        //     TextButton(
+        //       child: const Text("发送验证码 "),
+        //       onPressed: () async {
+        //         var preCaptureRes = await LoginHttp.preCapture();
+        //         if (!preCaptureRes['status']) {
+        //           SmartDialog.showToast("获取验证码失败，请尝试其它登录方式\n"
+        //               "(${preCaptureRes['code']}) ${preCaptureRes['msg']}");
+        //           return;
+        //         }
+        //         String geeGt = preCaptureRes['data']['gee_gt']!;
+        //         String geeChallenge = preCaptureRes['data']['gee_challenge'];
+        //         captchaData.token = preCaptureRes['data']['recaptcha_token']!;
 
-                getCaptcha(geeGt, geeChallenge, () async {
-                  var safeCenterSendSmsCodeRes =
-                      await LoginHttp.safeCenterSmsCode(
-                          tmpCode: currentUri.queryParameters['tmp_token']!,
-                          geeChallenge: geeChallenge,
-                          geeSeccode: captchaData.seccode!,
-                          geeValidate: captchaData.validate!,
-                          recaptchaToken: captchaData.token!);
-                  if (!safeCenterSendSmsCodeRes['status']) {
-                    SmartDialog.showToast("发送短信验证码失败，请尝试其它登录方式\n"
-                        "(${safeCenterSendSmsCodeRes['code']}) ${safeCenterSendSmsCodeRes['msg']}");
-                    return;
-                  }
-                  SmartDialog.showToast("短信验证码已发送，请查收");
-                  captchaKey = safeCenterSendSmsCodeRes['data']['captcha_key'];
-                });
-              },
-            ),
-            TextButton(
-              onPressed: Get.back,
-              child: const Text(" 取消"),
-            ),
-            TextButton(
-              onPressed: () async {
-                String? code = _textFieldController.text;
-                if (code.isEmpty) {
-                  SmartDialog.showToast("请输入短信验证码");
-                  return;
-                }
-                var safeCenterSmsVerifyRes =
-                    await LoginHttp.safeCenterSmsVerify(
-                  code: code,
-                  tmpCode: currentUri.queryParameters['tmp_token']!,
-                  requestId: currentUri.queryParameters['request_id']!,
-                  source: currentUri.queryParameters['source']!,
-                  captchaKey: captchaKey,
-                );
-                if (!safeCenterSmsVerifyRes['status']) {
-                  SmartDialog.showToast("验证短信验证码失败，请尝试其它登录方式\n"
-                      "(${safeCenterSmsVerifyRes['code']}) ${safeCenterSmsVerifyRes['msg']}");
-                  return;
-                }
-                SmartDialog.showToast("验证成功，正在登录");
-                // loginByPassword();
-              },
-              child: const Text("确认"),
-            ),
-          ],
-        ));
+        //         getCaptcha(geeGt, geeChallenge, () async {
+        //           var safeCenterSendSmsCodeRes =
+        //               await LoginHttp.safeCenterSmsCode(
+        //                   tmpCode: currentUri.queryParameters['tmp_token']!,
+        //                   geeChallenge: geeChallenge,
+        //                   geeSeccode: captchaData.seccode!,
+        //                   geeValidate: captchaData.validate!,
+        //                   recaptchaToken: captchaData.token!);
+        //           if (!safeCenterSendSmsCodeRes['status']) {
+        //             SmartDialog.showToast("发送短信验证码失败，请尝试其它登录方式\n"
+        //                 "(${safeCenterSendSmsCodeRes['code']}) ${safeCenterSendSmsCodeRes['msg']}");
+        //             return;
+        //           }
+        //           SmartDialog.showToast("短信验证码已发送，请查收");
+        //           captchaKey = safeCenterSendSmsCodeRes['data']['captcha_key'];
+        //         });
+        //       },
+        //     ),
+        //     TextButton(
+        //       onPressed: Get.back,
+        //       child: const Text(" 取消"),
+        //     ),
+        //     TextButton(
+        //       onPressed: () async {
+        //         String? code = _textFieldController.text;
+        //         if (code.isEmpty) {
+        //           SmartDialog.showToast("请输入短信验证码");
+        //           return;
+        //         }
+        //         var safeCenterSmsVerifyRes =
+        //             await LoginHttp.safeCenterSmsVerify(
+        //           code: code,
+        //           tmpCode: currentUri.queryParameters['tmp_token']!,
+        //           requestId: currentUri.queryParameters['request_id']!,
+        //           source: currentUri.queryParameters['source']!,
+        //           captchaKey: captchaKey,
+        //         );
+        //         if (!safeCenterSmsVerifyRes['status']) {
+        //           SmartDialog.showToast("验证短信验证码失败，请尝试其它登录方式\n"
+        //               "(${safeCenterSmsVerifyRes['code']}) ${safeCenterSmsVerifyRes['msg']}");
+        //           return;
+        //         }
+        //         SmartDialog.showToast("验证成功，正在登录");
+        //         // loginByPassword();
+        //       },
+        //       child: const Text("确认"),
+        //     ),
+        //   ],
+        // ));
 
-        return;
+        // return;
       }
       if (data['token_info'] == null || data['cookie_info'] == null) {
         SmartDialog.showToast(
@@ -479,12 +471,11 @@ class LoginPageController extends GetxController
       cid: selectedCountryCodeId['country_id'],
       key: key,
     );
-    print(res);
     if (res['status']) {
       SmartDialog.showToast('登录成功');
       var data = res['data'];
       for (var key in data.keys) {
-        print('$key: ${data[key]}');
+        debugPrint('$key: ${data[key]}');
       }
       await afterLoginByApp(data['token_info'], data['cookie_info']);
       Get.back();
@@ -522,7 +513,6 @@ class LoginPageController extends GetxController
       gee_challenge: captchaData.geetest?.challenge,
       recaptcha_token: captchaData.token,
     );
-    print(res);
     if (res['status']) {
       SmartDialog.showToast('发送成功');
       smsSendTimestamp = DateTime.now().millisecondsSinceEpoch;

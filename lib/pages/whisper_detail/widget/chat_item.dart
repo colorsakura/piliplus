@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -40,13 +38,13 @@ enum MsgType {
 }
 
 class ChatItem extends StatelessWidget {
-  dynamic item;
-  List? e_infos;
+  final dynamic item;
+  final List? eInfos;
 
-  ChatItem({
+  const ChatItem({
     super.key,
     this.item,
-    this.e_infos,
+    this.eInfos,
   });
 
   @override
@@ -55,11 +53,11 @@ class ChatItem extends StatelessWidget {
         item.senderUid == GStorage.userInfo.get('userInfoCache')?.mid;
 
     bool isPic = item.msgType == MsgType.pic.value; // 图片
-    bool isText = item.msgType == MsgType.text.value; // 文本
+    // bool isText = item.msgType == MsgType.text.value; // 文本
     // bool isArchive = item.msgType == 11; // 投稿
     // bool isArticle = item.msgType == 12; // 专栏
     bool isRevoke = item.msgType == MsgType.revoke.value; // 撤回消息
-    bool isShareV2 = item.msgType == MsgType.share_v2.value;
+    // bool isShareV2 = item.msgType == MsgType.share_v2.value;
     bool isSystem = item.msgType == MsgType.notify_text.value ||
         item.msgType == MsgType.notify_msg.value ||
         item.msgType == MsgType.pic_card.value ||
@@ -73,17 +71,16 @@ class ChatItem extends StatelessWidget {
 
     Widget richTextMessage(BuildContext context) {
       var text = content['content'];
-      if (e_infos != null) {
+      if (eInfos != null) {
         final List<InlineSpan> children = [];
         Map<String, String> emojiMap = {};
-        for (var e in e_infos!) {
+        for (var e in eInfos!) {
           emojiMap[e['text']] = e['url'];
         }
         text.splitMapJoin(
           RegExp(r"\[[^\[\]]+\]"),
           onMatch: (Match match) {
             final String emojiKey = match[0]!;
-            print(emojiKey);
             if (emojiMap.containsKey(emojiKey)) {
               children.add(WidgetSpan(
                 child: NetworkImgLayer(
@@ -457,8 +454,8 @@ class ChatItem extends StatelessWidget {
 }
 
 class SystemNotice extends StatelessWidget {
-  dynamic item;
-  SystemNotice({super.key, this.item});
+  final dynamic item;
+  const SystemNotice({super.key, this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -515,8 +512,8 @@ class SystemNotice extends StatelessWidget {
 }
 
 class SystemNotice2 extends StatelessWidget {
-  dynamic item;
-  SystemNotice2({super.key, this.item});
+  final dynamic item;
+  const SystemNotice2({super.key, this.item});
 
   @override
   Widget build(BuildContext context) {

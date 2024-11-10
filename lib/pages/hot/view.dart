@@ -10,7 +10,6 @@ import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/animated_dialog.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/pages/home/index.dart';
 import 'package:PiliPalaX/pages/hot/controller.dart';
 import 'package:PiliPalaX/pages/main/index.dart';
@@ -18,7 +17,7 @@ import 'package:PiliPalaX/pages/main/index.dart';
 import '../../utils/grid.dart';
 
 class HotPage extends StatefulWidget {
-  const HotPage({Key? key}) : super(key: key);
+  const HotPage({super.key});
 
   @override
   State<HotPage> createState() => _HotPageState();

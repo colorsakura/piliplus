@@ -1,16 +1,12 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 import '../http/search.dart';
-import '../models/common/search_type.dart';
 import '../pages/video/detail/reply_reply/view.dart';
 import 'id_utils.dart';
 import 'url_utils.dart';
@@ -36,7 +32,7 @@ class PiliScheme {
     final String path = value.path;
 
     if (scheme == 'bilibili') {
-      print(value);
+      debugPrint('$value');
       if (host == 'root') {
         Navigator.popUntil(
             Get.context!, (Route<dynamic> route) => route.isFirst);
@@ -130,15 +126,15 @@ class PiliScheme {
       } else if (host == 'comment' && path.startsWith("/detail/")) {
         //bilibili://comment/detail/17/832703053858603029/238686570016/?subType=0&anchor=238686628816&showEnter=1&extraIntentId=0&scene=1&enterName=%E6%9F%A5%E7%9C%8B%E5%8A%A8%E6%80%81%E8%AF%A6%E6%83%85&enterUri=bilibili://following/detail/832703053858603029
         //fmt.Sprintf("bilibili://comment/detail/%d/%d/%d/?subType=%d&anchor=%d&showEnter=1&extraIntentId=%d", rp.Type, rp.Oid, rootID, subType, rp.RpID, extraIntentID)
-        print(value.queryParameters);
+        debugPrint('${value.queryParameters}');
         List<String> pathParts = path.split('/');
-        int type = int.parse(pathParts[2]);
+        // int type = int.parse(pathParts[2]);
         int oid = int.parse(pathParts[3]);
-        int rootId = int.parse(pathParts[4]);
-        int subType = int.parse(value.queryParameters['subType'] ?? '0');
-        int RpID = int.parse(value.queryParameters['anchor'] ?? '0');
-        int extraIntentId =
-            int.parse(value.queryParameters['extraIntentId'] ?? '0');
+        // int rootId = int.parse(pathParts[4]);
+        // int subType = int.parse(value.queryParameters['subType'] ?? '0');
+        int rpID = int.parse(value.queryParameters['anchor'] ?? '0');
+        // int extraIntentId =
+        // int.parse(value.queryParameters['extraIntentId'] ?? '0');
         Get.to(
           () => Scaffold(
             resizeToAvoidBottomInset: false,
@@ -164,7 +160,7 @@ class PiliScheme {
             ),
             body: VideoReplyReplyPanel(
                 oid: oid,
-                rpid: RpID,
+                rpid: rpID,
                 source: 'routePush',
                 replyType: ReplyType.dynamics,
                 firstFloor: null),
@@ -216,7 +212,7 @@ class PiliScheme {
           getToOpusWeb();
         }
       } else {
-        print(value);
+        debugPrint('$value');
         SmartDialog.showToast('未知路径:$value，请截图反馈给开发者');
         //Utils.toDupNamed(
         //   '/webviewnew',
@@ -274,7 +270,7 @@ class PiliScheme {
 
   // 番剧跳转
   static Future<void> bangumiPush(int? seasonId, int? epId) async {
-    print('seasonId: $seasonId, epId: $epId');
+    debugPrint('seasonId: $seasonId, epId: $epId');
     // SmartDialog.showLoading<dynamic>(msg: '获取中...');
     try {
       Utils.viewBangumi(seasonId: seasonId, epId: epId);
@@ -321,10 +317,10 @@ class PiliScheme {
     // final String scheme = value.scheme!;
     final String host = value.host;
     final String? path = value.path;
-    Map<String, String>? query = value.queryParameters;
+    Map<String, String> query = value.queryParameters;
     RegExp regExp = RegExp(r'^((www\.)|(m\.))?bilibili\.com$');
     if (regExp.hasMatch(host)) {
-      print('bilibili.com');
+      debugPrint('bilibili.com');
     } else if (host.contains('live')) {
       int roomId = int.parse(path!.split('/').last);
       Utils.toDupNamed(
@@ -383,21 +379,19 @@ class PiliScheme {
       final String area = pathPart[1] == 'mobile' ? pathPart[2] : pathPart[1];
       switch (area) {
         case 'bangumi':
-          print('番剧');
+          debugPrint('番剧');
           for (var pathSegment in pathPart) {
             if (pathSegment.startsWith('ss')) {
-              print(pathSegment);
               bangumiPush(matchNum(pathSegment).first, null);
               break;
             } else if (pathSegment.startsWith('ep')) {
-              print(pathSegment);
               bangumiPush(null, matchNum(pathSegment).first);
               break;
             }
           }
           break;
         case 'video':
-          print('投稿');
+          debugPrint('投稿');
           final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
           if (map.containsKey('AV')) {
             videoPush(map['AV']! as int, null);
@@ -408,9 +402,9 @@ class PiliScheme {
           }
           break;
         case 'read':
-          print('专栏');
+          debugPrint('专栏');
           late String id;
-          if (query != null && query['id'] != null) {
+          if (query['id'] != null) {
             id = 'cv${matchNum(query['id']!).first}';
           } else {
             id = 'cv${matchNum(path).firstOrNull}';
@@ -423,7 +417,7 @@ class PiliScheme {
           });
           break;
         case 'space':
-          print('个人空间');
+          debugPrint('个人空间');
           Utils.toDupNamed(
               '/member?mid=${pathPart[1] == 'mobile' ? pathPart.getOrNull(3) : pathPart.getOrNull(2)}',
               arguments: {'face': ''});

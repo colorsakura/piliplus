@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class AnimatedDialog extends StatefulWidget {
   const AnimatedDialog({
-    Key? key,
+    super.key,
     required this.videoItem,
     required this.closeFn,
-  }) : super(key: key);
+  });
 
   final dynamic videoItem;
   final Function closeFn;

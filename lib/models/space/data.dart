@@ -1,12 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'archive.dart';
-import 'article.dart';
 import 'attention_tip.dart';
 import 'audios.dart';
 import 'card.dart';
 import 'coin_archive.dart';
-import 'fans_effect.dart';
 import 'favourite2.dart';
 import 'images.dart';
 import 'like_archive.dart';

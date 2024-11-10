@@ -18,8 +18,8 @@ class SearchVideoPanel extends StatelessWidget {
   SearchVideoPanel({
     required this.ctr,
     required this.loadingState,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final SearchPanelController ctr;
   final dynamic loadingState;
@@ -55,7 +55,7 @@ class SearchVideoPanel extends StatelessWidget {
                                 type: i['type'],
                                 selectedType: controller.selectedType.value,
                                 callFn: (bool selected) async {
-                                  print('selected: $selected');
+                                  debugPrint('selected: $selected');
                                   controller.selectedType.value = i['type'];
                                   ctr.order.value =
                                       i['type'].toString().split('.').last;
@@ -136,8 +136,8 @@ class CustomFilterChip extends StatelessWidget {
     this.type,
     this.selectedType,
     this.callFn,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? label;
   final ArchiveFilterType? type;

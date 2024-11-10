@@ -775,8 +775,6 @@ class Utils {
               WidgetsBinding.instance.platformDispatcher.views.single)
           .padding
           .top;
-      print("paddingTop");
-      print(paddingTop);
       paddingTop += width * 9 / 16;
       return height - paddingTop;
     }

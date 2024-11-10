@@ -49,7 +49,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
       }
       return e.toMap();
     }).toList();
-    print("simpleRuleList:$simpleRuleList");
+    // debugPrint("simpleRuleList:$simpleRuleList");
     localCache.put(LocalCacheKey.danmakuFilterRule, simpleRuleList);
     plPlayerController.danmakuFilterRule.value = simpleRuleList;
     scrollController.removeListener(() {});

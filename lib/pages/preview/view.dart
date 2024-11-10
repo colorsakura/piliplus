@@ -18,10 +18,10 @@ class ImagePreview extends StatefulWidget {
   final int? initialPage;
   final List<String>? imgList;
   const ImagePreview({
-    Key? key,
+    super.key,
     this.initialPage,
     this.imgList,
-  }) : super(key: key);
+  });
 
   @override
   _ImagePreviewState createState() => _ImagePreviewState();
@@ -35,7 +35,6 @@ class _ImagePreviewState extends State<ImagePreview>
   Animation<double>? _doubleClickAnimation;
   late DoubleClickAnimationListener _doubleClickAnimationListener;
   List<double> doubleTapScales = <double>[1.0, 2.0];
-  bool _dismissDisabled = false;
   List<String>? imgList;
 
   @override
@@ -192,14 +191,10 @@ class _ImagePreviewState extends State<ImagePreview>
                       _doubleClickAnimationController.reset();
 
                       if (begin == doubleTapScales[0]) {
-                        setState(() {
-                          _dismissDisabled = true;
-                        });
+                        setState(() {});
                         end = doubleTapScales[1];
                       } else {
-                        setState(() {
-                          _dismissDisabled = false;
-                        });
+                        setState(() {});
                         end = doubleTapScales[0];
                       }
 

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
-import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/models/bangumi/info.dart';
-import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 
@@ -18,7 +13,7 @@ class BangumiCardV extends StatelessWidget {
     this.longPressEnd,
   });
 
-  final bangumiItem;
+  final dynamic bangumiItem;
   final Function()? longPress;
   final Function()? longPressEnd;
 
@@ -66,8 +61,8 @@ class BangumiCardV extends StatelessWidget {
             //     String bvid = episode.bvid!;
             //     int cid = episode.cid!;
             //     String pic = episode.cover!;
-            //     // print('epId');
-            //     // print(epId);
+            //     // debugPrint('epId');
+            //     // debugPrint(epId);
             //     String heroTag = Utils.makeHeroTag(cid);
             //     Get.toNamed(
             //       '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
@@ -139,8 +134,7 @@ class BangumiCardV extends StatelessWidget {
 
 class BangumiContent extends StatelessWidget {
   const BangumiContent({super.key, required this.bangumiItem});
-  // ignore: prefer_typing_uninitialized_variables
-  final bangumiItem;
+  final dynamic bangumiItem;
   @override
   Widget build(BuildContext context) {
     return Expanded(

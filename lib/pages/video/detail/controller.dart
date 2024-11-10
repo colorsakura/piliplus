@@ -282,7 +282,7 @@ class VideoDetailController extends GetxController
           );
         }).toList();
       } catch (e) {
-        print(e.toString());
+        debugPrint(e.toString());
       }
     }
   }
@@ -572,7 +572,7 @@ class VideoDetailController extends GetxController
         return result;
       }
       final List<VideoItem> allVideosList = data.dash!.video!;
-      // print("allVideosList:${allVideosList}");
+      // debugPrint("allVideosList:${allVideosList}");
       // 当前可播放的最高质量视频
       int currentHighVideoQa = allVideosList.first.quality!.code;
       // 预设的画质为null，则当前可用的最高质量

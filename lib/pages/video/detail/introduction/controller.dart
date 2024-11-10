@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,8 +23,6 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:PiliPalaX/pages/member/controller.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../http/search.dart';
 import '../../../../models/model_hot_video_item.dart';
@@ -180,7 +177,6 @@ class VideoIntroController extends GetxController
   Future queryUserStat() async {
     var result = await UserHttp.userStat(mid: videoDetail.value.owner!.mid!);
     if (result['status']) {
-      print(result['data']);
       userStat.value = result['data'];
       userStat.refresh();
     }
@@ -288,7 +284,6 @@ class VideoIntroController extends GetxController
   void coinVideo(int coin) async {
     var res = await VideoHttp.coinVideo(bvid: bvid, multiply: coin);
     if (res['status']) {
-      print(res);
       SmartDialog.showToast('投币成功');
       hasCoin.value = true;
       videoDetail.value.stat!.coin = videoDetail.value.stat!.coin! + coin;
@@ -393,7 +388,7 @@ class VideoIntroController extends GetxController
       }
     } catch (e) {
       // ignore: avoid_print
-      print(e);
+      debugPrint(e.toString());
     }
     SmartDialog.showLoading(msg: '请求中');
     var result = await VideoHttp.favVideo(

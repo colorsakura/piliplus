@@ -1,7 +1,3 @@
-import 'package:get/get.dart';
-import '../../pages/dynamics/tab/controller.dart';
-import '../../pages/dynamics/tab/view.dart';
-
 enum DynamicsType {
   all,
   video,

@@ -15,8 +15,8 @@ class DynamicPanel extends StatelessWidget {
     required this.item,
     this.source,
     this.onRemove,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
 

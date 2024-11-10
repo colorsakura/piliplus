@@ -11,19 +11,19 @@ class IntroDetail extends StatelessWidget {
   final dynamic videoTags;
 
   const IntroDetail({
-    Key? key,
+    super.key,
     this.bangumiDetail,
     this.videoTags,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     TextStyle smallTitle = TextStyle(
       fontSize: 12,
-      color: Theme.of(context).colorScheme.onBackground,
+      color: Theme.of(context).colorScheme.onSurface,
     );
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.only(left: 14, right: 14),
       height: Utils.getSheetHeight(context),
       child: Column(

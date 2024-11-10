@@ -8,6 +8,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/material.dart';
 // import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -42,8 +43,8 @@ class Request {
     cookieManager = CookieManager(cookieJar);
     dio.interceptors.add(cookieManager);
     dio.interceptors.add(AnonymityInterceptor());
-    final List<Cookie> cookie = await cookieManager.cookieJar
-        .loadForRequest(Uri.parse(HttpString.baseUrl));
+    // final List<Cookie> cookie = await cookieManager.cookieJar
+    //     .loadForRequest(Uri.parse(HttpString.baseUrl));
     final userInfo = userInfoCache.get('userInfoCache');
     if (userInfo != null && userInfo.mid != null) {
       final List<Cookie> cookie2 = await cookieManager.cookieJar
@@ -97,7 +98,7 @@ class Request {
     var html = await Request().get(Api.dynamicSpmPrefix);
     String spmPrefix = spmPrefixExp.firstMatch(html.data)!.group(1)!;
     Random rand = Random();
-    String rand_png_end = base64.encode(
+    String randPngEnd = base64.encode(
         List<int>.generate(32, (_) => rand.nextInt(256)) +
             List<int>.filled(4, 0) +
             [73, 69, 78, 68] +
@@ -108,7 +109,7 @@ class Request {
       '39c8': '$spmPrefix.fp.risk',
       '3c43': {
         'adca': 'Linux',
-        'bfe9': rand_png_end.substring(rand_png_end.length - 50),
+        'bfe9': randPngEnd.substring(randPngEnd.length - 50),
       },
     });
 
@@ -224,7 +225,7 @@ class Request {
    * post请求
    */
   post(url, {data, queryParameters, options, cancelToken, extra}) async {
-    // print('post-data: $data');
+    // debugPrint('post-data: $data');
     Response response;
     try {
       response = await dio.post(
@@ -234,7 +235,7 @@ class Request {
         options: options,
         cancelToken: cancelToken,
       );
-      // print('post success: ${response.data}');
+      // debugPrint('post success: ${response.data}');
       return response;
     } on DioException catch (e) {
       Response errResponse = Response(
@@ -257,13 +258,13 @@ class Request {
       response = await dio.download(urlPath, savePath,
           onReceiveProgress: (int count, int total) {
         //进度
-        // print("$count $total");
+        // debugPrint("$count $total");
       });
-      print('downloadFile success: ${response.data}');
+      debugPrint('downloadFile success: ${response.data}');
 
       return response.data;
     } on DioException catch (e) {
-      print('downloadFile error: $e');
+      debugPrint('downloadFile error: $e');
       return Future.error(ApiInterceptor.dioError(e));
     }
   }

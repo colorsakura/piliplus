@@ -167,9 +167,9 @@ class _HeaderControlState extends State<HeaderControl> {
                     //     scale: 0.75,
                     //     child: Switch(
                     //       thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                    //           (Set<MaterialState> states) {
+                    //           (Set<WidgetState> states) {
                     //         if (states.isNotEmpty &&
-                    //             states.first == MaterialState.selected) {
+                    //             states.first == WidgetState.selected) {
                     //           return const Icon(Icons.done);
                     //         }
                     //         return null; // All other states will use the default thumbIcon.
@@ -1328,7 +1328,7 @@ class _HeaderControlState extends State<HeaderControl> {
 
   @override
   Widget build(BuildContext context) {
-    final _ = widget.controller!;
+    final plPlayerController = widget.controller!;
     // final bool isLandscape =
     //     MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -1475,20 +1475,22 @@ class _HeaderControlState extends State<HeaderControl> {
               height: 34,
               child: Obx(
                 () => IconButton(
-                  tooltip: "${_.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
+                  tooltip:
+                      "${plPlayerController.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
                   style: ButtonStyle(
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () {
-                    _.isOpenDanmu.value = !_.isOpenDanmu.value;
-                    setting.put(
-                        SettingBoxKey.enableShowDanmaku, _.isOpenDanmu.value);
+                    plPlayerController.isOpenDanmu.value =
+                        !plPlayerController.isOpenDanmu.value;
+                    setting.put(SettingBoxKey.enableShowDanmaku,
+                        plPlayerController.isOpenDanmu.value);
                     SmartDialog.showToast(
-                        "已${_.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
+                        "已${plPlayerController.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
                         displayTime: const Duration(seconds: 1));
                   },
                   icon: Icon(
-                    _.isOpenDanmu.value
+                    plPlayerController.isOpenDanmu.value
                         ? Icons.subtitles_outlined
                         : Icons.subtitles_off_outlined,
                     size: 19,
@@ -1514,7 +1516,7 @@ class _HeaderControlState extends State<HeaderControl> {
                       bool enableBackgroundPlay = setting.get(
                           SettingBoxKey.enableBackgroundPlay,
                           defaultValue: false);
-                      if (!enableBackgroundPlay) {
+                      if (!enableBackgroundPlay && context.mounted) {
                         // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
                         // await Future.delayed(const Duration(seconds: 2), () {
                         // });
@@ -1551,7 +1553,8 @@ class _HeaderControlState extends State<HeaderControl> {
                                       }),
                                     ),
                                     onPressed: () async {
-                                      _.setBackgroundPlay(true);
+                                      plPlayerController
+                                          .setBackgroundPlay(true);
                                       SmartDialog.showToast("请重新载入本页面刷新");
                                       // Get.back();
                                     },

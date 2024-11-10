@@ -73,7 +73,7 @@ class MemberController extends GetxController {
       wwebid = jsonDecode(
           Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
     } catch (e) {
-      print('failed to get wwebid: $e');
+      debugPrint('failed to get wwebid: $e');
     }
   }
 
@@ -109,7 +109,7 @@ class MemberController extends GetxController {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    if (memberInfo.value == null) {
+    if (memberInfo.value.mid == null) {
       SmartDialog.showToast('尚未获取到用户信息');
       return;
     }

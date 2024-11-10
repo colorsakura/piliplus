@@ -4,8 +4,6 @@ import 'package:PiliPalaX/pages/common/popup_controller.dart';
 import 'package:PiliPalaX/http/video.dart';
 
 class HotController extends PopupController {
-  final int _count = 20;
-
   int idx = 0;
 
   @override

@@ -5,8 +5,6 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../plugin/pl_player/controller.dart';
-
 class ShutdownTimerService with WidgetsBindingObserver {
   static final ShutdownTimerService _instance =
       ShutdownTimerService._internal();
@@ -70,7 +68,7 @@ class ShutdownTimerService with WidgetsBindingObserver {
 
   void _showShutdownDialog() {
     if (isInBackground) {
-      print("app在后台运行，不弹窗");
+      debugPrint("app在后台运行，不弹窗");
       _executeShutdown();
       return;
     }

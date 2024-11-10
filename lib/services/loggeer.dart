@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -45,7 +46,7 @@ Future<bool> clearLogs() async {
   try {
     await file.writeAsString('');
   } catch (e) {
-    print('Error clearing file: $e');
+    debugPrint('Error clearing file: $e');
     return false;
   }
   return true;

@@ -662,7 +662,7 @@ class MemberHttp {
           'data': MemberSeasonsList.fromJson(res.data['data'])
         };
       } catch (err) {
-        print(err);
+        debugPrint(err.toString());
       }
     } else {
       return {

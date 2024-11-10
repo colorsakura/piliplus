@@ -2,12 +2,13 @@
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ApiInterceptor extends Interceptor {
   // @override
   // void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-  //   print("请求之前");
+  //   debugPrint("请求之前");
   //   // 在请求之前添加头部或认证信息
   //   options.headers['Authorization'] = 'Bearer token';
   //   options.headers['Content-Type'] = 'application/json';
@@ -21,7 +22,7 @@ class ApiInterceptor extends Interceptor {
   //       final List<String> locations = response.headers['location']!;
   //       if (locations.isNotEmpty) {
   //         if (locations.first.startsWith('https://www.mcbbs.net')) {
-  //           print('ApiInterceptor@@@@@: ${locations.first}');
+  //           debugPrint('ApiInterceptor@@@@@: ${locations.first}');
   //           final Uri uri = Uri.parse(locations.first);
   //           final String? accessKey = uri.queryParameters['access_key'];
   //           final String? mid = uri.queryParameters['mid'];
@@ -34,7 +35,7 @@ class ApiInterceptor extends Interceptor {
   //       }
   //     }
   //   } catch (err) {
-  //     print('ApiInterceptor: $err');
+  //     debugPrint('ApiInterceptor: $err');
   //   }
 
   //   handler.next(response);
@@ -45,7 +46,7 @@ class ApiInterceptor extends Interceptor {
     // 处理网络请求错误
     // handler.next(err);
     String url = err.requestOptions.uri.toString();
-    print('🌹🌹ApiInterceptor: $url');
+    debugPrint('🌹🌹ApiInterceptor: $url');
     // 屏蔽弹幕、心跳、人数请求的错误提示
     if (!url.contains('heartbeat') &&
         !url.contains('seg.so') &&

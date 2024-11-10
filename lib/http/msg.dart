@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/pages/dynamics/view.dart' show ReplyOption;
-import 'package:PiliPalaX/utils/storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import '../models/msg/account.dart';
 import '../models/msg/session.dart';
@@ -73,7 +72,6 @@ class MsgHttp {
     String csrf = await Request.getCsrf();
     var res = await Request().get(Api.msgSysUserNotify, data: {
       'csrf': csrf,
-      'csrf': csrf,
       'page_size': 20,
     });
     if (res.data['code'] == 0) {
@@ -94,7 +92,6 @@ class MsgHttp {
     String csrf = await Request.getCsrf();
     var res = await Request().get(Api.msgSysUnifiedNotify, data: {
       'csrf': csrf,
-      'csrf': csrf,
       'page_size': 10,
     });
     if (res.data['code'] == 0) {
@@ -114,7 +111,6 @@ class MsgHttp {
   static Future msgSysUpdateCursor(int cursor) async {
     String csrf = await Request.getCsrf();
     var res = await Request().get(Api.msgSysUpdateCursor, data: {
-      'csrf': csrf,
       'csrf': csrf,
       'cursor': cursor,
     });
@@ -442,7 +438,7 @@ class MsgHttp {
               .toList(),
         };
       } catch (err) {
-        print('err🔟: $err');
+        debugPrint('err🔟: $err');
       }
     } else {
       return {
@@ -472,7 +468,7 @@ class MsgHttp {
           'data': SessionMsgDataModel.fromJson(res.data['data']),
         };
       } catch (err) {
-        print(err);
+        debugPrint(err.toString());
       }
     } else {
       return {

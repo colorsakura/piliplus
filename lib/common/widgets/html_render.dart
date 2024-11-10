@@ -1,7 +1,6 @@
 import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import '../../utils/storage.dart';
 import 'network_img_layer.dart';
 
 // ignore: must_be_immutable
@@ -21,8 +20,8 @@ class HtmlRender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double textScale =
-        setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
+    // double textScale =
+    //     setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
     return SelectionArea(
         child: Html(
       data: htmlContent,

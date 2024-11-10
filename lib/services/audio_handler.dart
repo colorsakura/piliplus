@@ -60,9 +60,9 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
 
   Future<void> setMediaItem(MediaItem newMediaItem) async {
     if (!enableBackgroundPlay) return;
-    // print("此时调用栈为：");
-    // print(newMediaItem);
-    // print(newMediaItem.title);
+    // debugPrint("此时调用栈为：");
+    // debugPrint(newMediaItem);
+    // debugPrint(newMediaItem.title);
     // debugPrint(StackTrace.current.toString());
     if (!mediaItem.isClosed) mediaItem.add(newMediaItem);
   }
@@ -106,8 +106,8 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
 
   onVideoDetailChange(dynamic data, int cid) {
     if (!enableBackgroundPlay) return;
-    // print('当前调用栈为：');
-    // print(StackTrace.current);
+    // debugPrint('当前调用栈为：');
+    // debugPrint(StackTrace.current);
     if (!PlPlayerController.instanceExists()) return;
     if (data == null) return;
 
@@ -144,7 +144,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       );
     }
     if (mediaItem == null) return;
-    // print("exist: ${PlPlayerController.instanceExists()}");
+    // debugPrint("exist: ${PlPlayerController.instanceExists()}");
     if (!PlPlayerController.instanceExists()) return;
     _item.add(mediaItem);
     setMediaItem(mediaItem);

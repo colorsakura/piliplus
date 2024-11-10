@@ -1,18 +1,11 @@
 import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPalaX/utils/app_scheme.dart';
-import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
-import '../../http/search.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
 import 'badge.dart';
 import 'network_img_layer.dart';
-import 'stat/danmu.dart';
-import 'stat/view.dart';
-import 'video_popup_menu.dart';
 
 // 视频卡片 - 水平布局
 class VideoCardHGrpc extends StatelessWidget {
@@ -27,7 +20,6 @@ class VideoCardHGrpc extends StatelessWidget {
     this.showDanmaku = true,
     this.showPubdate = false,
   });
-  // ignore: prefer_typing_uninitialized_variables
   final card.Card videoItem;
   final Function()? longPress;
   final Function()? longPressEnd;
@@ -40,7 +32,7 @@ class VideoCardHGrpc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int aid = videoItem.smallCoverV5.base.args.aid.toInt();
-    final String bvid = IdUtils.av2bv(aid);
+    // final String bvid = IdUtils.av2bv(aid);
     String type = 'video';
     // try {
     //   type = videoItem.type;
@@ -158,7 +150,6 @@ class VideoCardHGrpc extends StatelessWidget {
 }
 
 class VideoContent extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final card.Card videoItem;
   final String source;
   final bool showOwner;

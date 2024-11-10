@@ -1,4 +1,3 @@
-import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -8,8 +7,6 @@ import '../../models/model_rec_video_item.dart';
 import 'stat/danmu.dart';
 import 'stat/view.dart';
 import '../../http/dynamics.dart';
-import '../../http/search.dart';
-import '../../models/common/search_type.dart';
 import '../../utils/id_utils.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
@@ -24,11 +21,11 @@ class VideoCardV extends StatelessWidget {
   final Function()? longPressEnd;
 
   const VideoCardV({
-    Key? key,
+    super.key,
     required this.videoItem,
     this.longPress,
     this.longPressEnd,
-  }) : super(key: key);
+  });
 
   bool isStringNumeric(String str) {
     RegExp numericRegex = RegExp(r'^\d+$');
@@ -218,7 +215,7 @@ class VideoCardV extends StatelessWidget {
 
 class VideoContent extends StatelessWidget {
   final dynamic videoItem;
-  const VideoContent({Key? key, required this.videoItem}) : super(key: key);
+  const VideoContent({super.key, required this.videoItem});
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -312,9 +309,9 @@ class VideoStat extends StatelessWidget {
   final dynamic videoItem;
 
   const VideoStat({
-    Key? key,
+    super.key,
     required this.videoItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

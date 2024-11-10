@@ -4,13 +4,12 @@ import '../constants.dart';
 import 'network_img_layer.dart';
 
 class LiveCard extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final dynamic liveItem;
 
   const LiveCard({
-    Key? key,
+    super.key,
     required this.liveItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +74,8 @@ class LiveCard extends StatelessWidget {
 }
 
 class LiveContent extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final liveItem;
-  const LiveContent({Key? key, required this.liveItem}) : super(key: key);
+  final dynamic liveItem;
+  const LiveContent({super.key, required this.liveItem});
   @override
   Widget build(BuildContext context) {
     return Padding(

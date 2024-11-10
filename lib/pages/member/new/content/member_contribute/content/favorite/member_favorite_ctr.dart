@@ -4,9 +4,8 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/models/space_fav/datum.dart';
 import 'package:PiliPalaX/models/space_fav/list.dart';
-import 'package:PiliPalaX/models/space_fav/space_fav.dart';
-import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -51,7 +50,7 @@ class MemberFavoriteCtr extends CommonController {
       secondEnd.value = (res[1].mediaListResponse?.count ?? -1) <=
           (res[1].mediaListResponse?.list?.length ?? -1);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     loadingState.value = response;
     return true;

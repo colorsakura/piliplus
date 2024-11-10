@@ -31,7 +31,6 @@ import '../pages/later/index.dart';
 import '../pages/live_room/view.dart';
 import '../pages/login/index.dart';
 import '../pages/media/index.dart';
-import '../pages/member/index.dart';
 import '../pages/member_archive/index.dart';
 import '../pages/member_coin/index.dart';
 import '../pages/member_dynamics/index.dart';
@@ -53,7 +52,6 @@ import '../pages/setting/play_setting.dart';
 import '../pages/setting/video_setting.dart';
 import '../pages/setting/privacy_setting.dart';
 import '../pages/setting/style_setting.dart';
-import '../pages/setting/hidden_settings.dart';
 import '../pages/subscription/index.dart';
 import '../pages/subscription_detail/index.dart';
 import '../pages/video/detail/index.dart';
@@ -133,8 +131,6 @@ class Routes {
     //
     CustomGetPage(name: '/blackListPage', page: () => const BlackListPage()),
     CustomGetPage(name: '/colorSetting', page: () => const ColorSelectPage()),
-    // 开发人员选项
-    CustomGetPage(name: '/hiddenSetting', page: () => const HiddenSetting()),
     // 首页tabbar
     CustomGetPage(name: '/tabbarSetting', page: () => const TabbarSetPage()),
     CustomGetPage(

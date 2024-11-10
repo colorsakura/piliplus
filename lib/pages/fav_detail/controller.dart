@@ -5,7 +5,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/user/fav_folder.dart';
 
 class FavDetailController extends CommonController {
   // FavFolderItemData? item;

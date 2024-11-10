@@ -318,10 +318,10 @@ class AboutController extends GetxController {
   //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   //   if (Platform.isAndroid) {
   //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  //     print(androidInfo.supportedAbis);
+  //     debugPrint(androidInfo.supportedAbis);
   //   } else if (Platform.isIOS) {
   //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-  //     print(iosInfo);
+  //     debugPrint(iosInfo);
   //   }
   // }
 

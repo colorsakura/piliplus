@@ -14,7 +14,6 @@ import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/models/dynamics/result.dart';
 import 'package:PiliPalaX/pages/dynamics/detail/index.dart';
 import 'package:PiliPalaX/pages/dynamics/widgets/author_panel.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -24,7 +23,7 @@ import '../widgets/dynamic_panel.dart';
 
 class DynamicDetailPage extends StatefulWidget {
   // const DynamicDetailPage({super.key});
-  const DynamicDetailPage({Key? key}) : super(key: key);
+  const DynamicDetailPage({super.key});
 
   @override
   State<DynamicDetailPage> createState() => _DynamicDetailPageState();

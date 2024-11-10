@@ -364,7 +364,7 @@ InlineSpan richNode(item, context) {
       );
     }
   } catch (err) {
-    print('❌rich_node_panel err: $err');
+    debugPrint('❌rich_node_panel err: $err');
     return spacer;
   }
 }

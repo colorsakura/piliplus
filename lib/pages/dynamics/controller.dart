@@ -10,9 +10,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/dynamics.dart';
 import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
-import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/models/dynamics/result.dart';
 import 'package:PiliPalaX/models/dynamics/up.dart';
 import 'package:PiliPalaX/models/live/item.dart';
@@ -133,13 +131,13 @@ class DynamicsController extends GetxController
 
         break;
       case 'DYNAMIC_TYPE_PGC':
-        print('番剧');
+        debugPrint('番剧');
         SmartDialog.showToast('暂未支持的类型，请联系开发者');
         break;
 
       /// 纯文字动态查看
       case 'DYNAMIC_TYPE_WORD':
-        print('纯文本');
+        debugPrint('纯文本');
         Utils.toDupNamed('/dynamicDetail',
             arguments: {'item': item, 'floor': floor});
         break;
@@ -175,7 +173,7 @@ class DynamicsController extends GetxController
 
       /// 番剧查看
       case 'DYNAMIC_TYPE_PGC_UNION':
-        print('DYNAMIC_TYPE_PGC_UNION 番剧');
+        debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
         DynamicArchiveModel pgc = item.modules.moduleDynamic.major.pgc;
         if (pgc.epid != null) {
           Utils.viewBangumi(epId: pgc.epid);

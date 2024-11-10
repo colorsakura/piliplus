@@ -9,9 +9,7 @@ import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/business_type.dart';
-import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/models/live/item.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -82,7 +80,7 @@ class HistoryItem extends StatelessWidget {
             if (result['status']) {
               String bvid = result['data'].bvid!;
               int cid = result['data'].cid!;
-              String pic = result['data'].pic!;
+              // String pic = result['data'].pic!;
               String heroTag = Utils.makeHeroTag(cid);
               var epid = result['data'].epId;
               if (epid != null) {
@@ -254,11 +252,10 @@ class HistoryItem extends StatelessWidget {
                                         child: IconButton(
                                           tooltip: '取消选择',
                                           style: ButtonStyle(
-                                            padding: MaterialStateProperty.all(
+                                            padding: WidgetStateProperty.all(
                                                 EdgeInsets.zero),
                                             backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith(
+                                                WidgetStateProperty.resolveWith(
                                               (states) {
                                                 return Colors.white
                                                     .withOpacity(0.8);

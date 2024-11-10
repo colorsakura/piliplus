@@ -39,8 +39,8 @@ class WhisperDetailController extends GetxController {
         if (messageList.length == 1 &&
             messageList.last.msgType == 18 &&
             messageList.last.msgSource == 18) {
-          // print(messageList.last);
-          // print(messageList.last.content);
+          // debugPrint(messageList.last);
+          // debugPrint(messageList.last.content);
           //{content: [{"text":"对方主动回复或关注你前，最多发送1条消息","color_day":"#9499A0","color_nig":"#9499A0"}]}
         } else {
           ackSessionMsg();
@@ -96,7 +96,7 @@ class WhisperDetailController extends GetxController {
       msgType: picMsg != null ? 2 : 1,
     );
     if (result['status']) {
-      // print(result['data']);
+      // debugPrint(result['data']);
       querySessionMsg();
       replyContentController.text = "";
       SmartDialog.dismiss();

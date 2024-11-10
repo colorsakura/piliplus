@@ -6,12 +6,12 @@ class ScrollAppBar extends StatelessWidget {
   final Function callback;
   final PlayerStatus playerStatus;
 
-  const ScrollAppBar(
-    this.scrollVal,
-    this.callback,
-    this.playerStatus,
-    Key? key,
-  ) : super(key: key);
+  const ScrollAppBar({
+    super.key,
+    required this.scrollVal,
+    required this.callback,
+    required this.playerStatus,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ScrollAppBar extends StatelessWidget {
         opacity: scrollDistance / (videoHeight - kToolbarHeight),
         child: Container(
           height: statusBarHeight + kToolbarHeight,
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           padding: EdgeInsets.only(top: statusBarHeight),
           child: AppBar(
             primary: false,

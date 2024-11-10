@@ -28,13 +28,6 @@ class _MemberDynamicState extends State<MemberDynamic>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ListView.separated(
-      itemCount: 100,
-      itemBuilder: (_, index) {
-        return ListTile(title: Text(index.toString()));
-      },
-      separatorBuilder: (_, index) => const SizedBox(height: 10),
-    );
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 

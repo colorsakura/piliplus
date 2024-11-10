@@ -24,8 +24,7 @@ class VideoCardH extends StatelessWidget {
     this.showDanmaku = true,
     this.showPubdate = false,
   });
-  // ignore: prefer_typing_uninitialized_variables
-  final videoItem;
+  final dynamic videoItem;
   final Function()? longPress;
   final Function()? longPressEnd;
   final String source;
@@ -149,8 +148,7 @@ class VideoCardH extends StatelessWidget {
 }
 
 class VideoContent extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final videoItem;
+  final dynamic videoItem;
   final String source;
   final bool showOwner;
   final bool showView;

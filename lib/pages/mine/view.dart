@@ -363,11 +363,11 @@ class ActionItem extends StatelessWidget {
   final String? text;
 
   const ActionItem({
-    Key? key,
+    super.key,
     this.icon,
     this.onTap,
     this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

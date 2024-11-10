@@ -250,10 +250,10 @@ class _MemberHomeState extends State<MemberHome>
                         if (contributeCtr.tabController?.index != index1) {
                           contributeCtr.tabController?.index = index1;
                         }
-                        print('initialized');
+                        debugPrint('initialized');
                       } catch (e) {
                         _ctr.contributeInitialIndex.value = index1;
-                        print('not initialized');
+                        debugPrint('not initialized');
                       }
                     }
                     _ctr.tabController?.animateTo(index);

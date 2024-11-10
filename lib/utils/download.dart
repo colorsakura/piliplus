@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:PiliPalaX/http/index.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +109,6 @@ class DownloadUtils {
           Uint8List.fromList(response.data),
           quality: 100,
           fileName: picName,
-          extension: 'jpg',
           // 保存到 PiliPalaX文件夹
           androidRelativePath: "Pictures/PiliPalaX",
           skipIfExists: false,

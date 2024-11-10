@@ -163,7 +163,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
             itemBuilder: (_, int i) {
               return ChatItem(
                 item: messageList[i],
-                e_infos: _whisperDetailController.eInfos,
+                eInfos: _whisperDetailController.eInfos,
               );
             },
             padding: const EdgeInsets.only(bottom: 20),

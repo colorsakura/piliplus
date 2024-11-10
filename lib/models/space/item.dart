@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'three_point.dart';
-
 part 'item.g.dart';
 
 @JsonSerializable()

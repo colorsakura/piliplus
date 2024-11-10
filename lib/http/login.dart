@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:flutter/material.dart';
 import '../common/constants.dart';
 import '../models/login/index.dart';
 import '../utils/login.dart';
@@ -43,7 +43,6 @@ class LoginHttp {
     );
     var res = await Request()
         .post(Api.getTVCode, queryParameters: {...params, 'sign': sign});
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -143,7 +142,6 @@ class LoginHttp {
         headers: headers,
       ),
     );
-    print(res);
     if (res.data['code'] == 0 && res.data['data']['recaptcha_url'] == "") {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -187,7 +185,7 @@ class LoginHttp {
   //         contentType: Headers.formUrlEncodedContentType,
   //         headers: headers,
   //       ));
-  //   print("getGuestId: $res");
+  //   debugPrint("getGuestId: $res");
   //   if (res.data['code'] == 0) {
   //     return {'status': true, 'data': res.data['data']};
   //   } else {
@@ -207,7 +205,6 @@ class LoginHttp {
     String? recaptcha_token,
   }) async {
     dynamic publicKey = RSAKeyParser().parse(key);
-    print(publicKey);
     String passwordEncrypted =
         Encrypter(RSA(publicKey: publicKey)).encrypt(salt + password).base64;
 
@@ -250,7 +247,7 @@ class LoginHttp {
     );
     data['sign'] = sign;
     data.map((key, value) {
-      print('$key: $value');
+      debugPrint('$key: $value');
       return MapEntry<String, dynamic>(key, value);
     });
     var res = await Request().post(
@@ -262,7 +259,6 @@ class LoginHttp {
         //responseType: ResponseType.plain
       ),
     );
-    print(res);
     if (res.data['code'] == 0) {
       return {
         'status': true,
@@ -325,7 +321,7 @@ class LoginHttp {
     );
     data['sign'] = sign;
     data.map((key, value) {
-      print('$key: $value');
+      debugPrint('$key: $value');
       return MapEntry<String, dynamic>(key, value);
     });
     var res = await Request().post(
@@ -337,7 +333,6 @@ class LoginHttp {
         //responseType: ResponseType.plain
       ),
     );
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -357,7 +352,6 @@ class LoginHttp {
     var res = await Request().get(Api.safeCenterGetInfo, data: {
       'tmp_code': tmpCode,
     });
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -373,7 +367,6 @@ class LoginHttp {
   // 风控验证手机前的验证码
   static Future preCapture() async {
     var res = await Request().post(Api.preCapture);
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -403,7 +396,6 @@ class LoginHttp {
       'gee_validate': geeValidate,
       'recaptcha_token': recaptchaToken,
     });
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -431,7 +423,6 @@ class LoginHttp {
       'source': source,
       'captcha_key': captchaKey,
     });
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {

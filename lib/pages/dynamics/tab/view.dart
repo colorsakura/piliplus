@@ -21,8 +21,7 @@ import '../widgets/dynamic_panel.dart';
 import 'controller.dart';
 
 class DynamicsTabPage extends StatefulWidget {
-  const DynamicsTabPage({Key? key, required this.dynamicsType})
-      : super(key: key);
+  const DynamicsTabPage({super.key, required this.dynamicsType});
 
   final String dynamicsType;
 
@@ -70,7 +69,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
       }
     });
     dynamicsController.mid.listen((mid) {
-      print('midListen: $mid');
+      // debugPrint('midListen: $mid');
       _dynamicsTabController.mid = mid;
       _dynamicsTabController.scrollController.jumpTo(0);
       _dynamicsTabController.onReload();
@@ -89,7 +88,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // print(widget.dynamicsType + widget.mid.value.toString());
+    // debugPrint(widget.dynamicsType + widget.mid.value.toString());
     return refreshIndicator(
       // key:
       //     ValueKey<String>(widget.dynamicsType + widget.mid.value.toString()),

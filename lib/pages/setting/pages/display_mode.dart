@@ -52,7 +52,7 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
     try {
       modes = await FlutterDisplayMode.supported;
     } on PlatformException catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     var res = await getDisplayModeType(modes);
 

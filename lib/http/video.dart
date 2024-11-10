@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart';
+import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hive/hive.dart';
 import '../common/constants.dart';
@@ -201,10 +202,10 @@ class VideoHttp {
   static Future<LoadingState> hotVideoListGrpc({required int idx}) async {
     dynamic res = await GrpcRepo.popular(idx);
     if (res['status']) {
-      List<Card> list = [];
+      List<card.Card> list = [];
       List<int> blackMidsList =
           localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
-      for (Card item in res['data']) {
+      for (card.Card item in res['data']) {
         if (!blackMidsList.contains(item.smallCoverV5.up.id.toInt())) {
           list.add(item);
         }
@@ -392,7 +393,7 @@ class VideoHttp {
   // 获取投币状态
   static Future hasCoinVideo({required String bvid}) async {
     var res = await Request().get(Api.hasCoinVideo, data: {'bvid': bvid});
-    print('res: $res');
+    debugPrint('res: $res');
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -414,7 +415,6 @@ class VideoHttp {
         // 'csrf': await Request.getCsrf(),
       },
     );
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -512,7 +512,6 @@ class VideoHttp {
         'access_key': accessKey,
       },
     );
-    print(res);
     if (res.data is! String && res.data['code'] == 0) {
       return {'status': true};
     } else {
@@ -546,7 +545,6 @@ class VideoHttp {
       'access_key': accessKey,
       'appkey': Constants.appKey,
     });
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true};
     } else {
@@ -577,7 +575,6 @@ class VideoHttp {
       'access_key': accessKey,
       'appkey': Constants.appKey,
     });
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true};
     } else {
@@ -729,7 +726,6 @@ class VideoHttp {
       're_src': reSrc,
       'csrf': await Request.getCsrf(),
     });
-    print(res);
     if (res.data['code'] == 0) {
       return {'status': true};
     } else {

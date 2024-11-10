@@ -27,12 +27,12 @@ class BangumiIntroPanel extends StatefulWidget {
   final Function showIntroDetail;
 
   const BangumiIntroPanel({
-    Key? key,
+    super.key,
     this.cid,
     required this.heroTag,
     required this.showEpisodes,
     required this.showIntroDetail,
-  }) : super(key: key);
+  });
 
   @override
   State<BangumiIntroPanel> createState() => _BangumiIntroPanelState();
@@ -147,7 +147,7 @@ class _BangumiInfoState extends State<BangumiInfo>
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
     bangumiItem = bangumiIntroController.bangumiItem;
     cid = widget.cid!;
-    print('cid:  $cid');
+    debugPrint('cid:  $cid');
     videoDetailCtr.cid.listen((p0) {
       cid = p0;
       if (!mounted) return;

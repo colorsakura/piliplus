@@ -8,7 +8,7 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import './controller.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -135,9 +135,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class SearchBarAndUser extends StatelessWidget {
   const SearchBarAndUser({
-    Key? key,
+    super.key,
     required this.ctr,
-  }) : super(key: key);
+  });
 
   final HomeController ctr;
 
@@ -198,9 +198,9 @@ class SearchBarAndUser extends StatelessWidget {
 
 class UserAndSearchVertical extends StatelessWidget {
   const UserAndSearchVertical({
-    Key? key,
+    super.key,
     required this.ctr,
-  }) : super(key: key);
+  });
 
   final HomeController ctr;
 
@@ -274,8 +274,8 @@ class DefaultUser extends StatelessWidget {
       child: IconButton(
         tooltip: '默认用户头像',
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
+          padding: WidgetStateProperty.all(EdgeInsets.zero),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
             return Theme.of(context).colorScheme.onInverseSurface;
           }),
         ),
@@ -367,8 +367,7 @@ class CustomChip extends StatelessWidget {
           : BorderSide.none,
       // backgroundColor: colorTheme.primaryContainer.withOpacity(0.1),
       // selectedColor: colorTheme.secondaryContainer.withOpacity(0.8),
-      color:
-          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
         return colorTheme.secondaryContainer.withOpacity(0.6);
       }),
       padding: const EdgeInsets.fromLTRB(6, 1, 6, 1),
@@ -383,9 +382,9 @@ class CustomChip extends StatelessWidget {
 
 class SearchBar extends StatelessWidget {
   const SearchBar({
-    Key? key,
+    super.key,
     required this.ctr,
-  }) : super(key: key);
+  });
 
   final HomeController? ctr;
 

@@ -11,9 +11,9 @@ class MemberSeasonsItem extends StatelessWidget {
   final dynamic seasonItem;
 
   const MemberSeasonsItem({
-    Key? key,
+    super.key,
     required this.seasonItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class MemberSeasonsItem extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           int cid =
-          await SearchHttp.ab2c(aid: seasonItem.aid, bvid: seasonItem.bvid);
+              await SearchHttp.ab2c(aid: seasonItem.aid, bvid: seasonItem.bvid);
           Get.toNamed('/video?bvid=${seasonItem.bvid}&cid=$cid',
               arguments: {'videoItem': seasonItem, 'heroTag': heroTag});
         },

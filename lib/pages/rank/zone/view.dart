@@ -17,7 +17,7 @@ import 'package:PiliPalaX/pages/rank/zone/index.dart';
 import '../../../utils/grid.dart';
 
 class ZonePage extends StatefulWidget {
-  const ZonePage({Key? key, required this.rid}) : super(key: key);
+  const ZonePage({super.key, required this.rid});
 
   final int rid;
 

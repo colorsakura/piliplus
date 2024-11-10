@@ -43,7 +43,7 @@ import '../../../services/shutdown_timer_service.dart';
 import 'widgets/header_control.dart';
 
 class VideoDetailPage extends StatefulWidget {
-  const VideoDetailPage({Key? key}) : super(key: key);
+  const VideoDetailPage({super.key});
 
   @override
   State<VideoDetailPage> createState() => _VideoDetailPageState();
@@ -355,7 +355,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     super.didPopNext();
     videoDetailController.isFirstTime = false;
-    final bool autoplay = autoPlayEnable;
+    // final bool autoplay = autoPlayEnable;
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
     if (videoDetailController.videoUrl != null) {
@@ -372,11 +372,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoIntroController.isPaused = false;
     // if (autoplay) {
     //   // await Future.delayed(const Duration(milliseconds: 300));
-    //   print(plPlayerController);
+    //   debugPrint(plPlayerController);
     //   if (plPlayerController?.buffered.value == Duration.zero) {
     //     _bufferedListener = plPlayerController?.buffered.listen((p0) {
-    //       print("p0");
-    //       print(p0);
+    //       debugPrint("p0");
+    //       debugPrint(p0);
     //       if (p0 > Duration.zero) {
     //         _bufferedListener!.cancel();
     //         plPlayerController?.seekTo(videoDetailController.defaultST);
@@ -463,7 +463,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     () {
                       double videoHeight = context.width * 9 / 16;
                       final double videoWidth = context.width;
-                      // print(videoDetailController.tabCtr.index);
+                      // debugPrint(videoDetailController.tabCtr.index);
                       if (enableVerticalExpand &&
                           plPlayerController?.direction.value == 'vertical') {
                         videoHeight = context.width;

@@ -6,13 +6,13 @@ class ContentContainer extends StatelessWidget {
   final bool isScrollable;
   final Clip? childClipBehavior;
 
-  const ContentContainer(
-      {Key? key,
-      this.contentWidget,
-      this.bottomWidget,
-      this.isScrollable = true,
-      this.childClipBehavior})
-      : super(key: key);
+  const ContentContainer({
+    super.key,
+    this.contentWidget,
+    this.bottomWidget,
+    this.isScrollable = true,
+    this.childClipBehavior,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -18,8 +18,8 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     this.controller,
     this.buildBottomControl,
     this.segmentList,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
@@ -27,10 +27,9 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     Color colorTheme = Theme.of(context).colorScheme.primary;
-    final _ = controller!;
     //阅读器限制
-    Timer? _accessibilityDebounce;
-    double _lastAnnouncedValue = -1;
+    Timer? accessibilityDebounce;
+    double lastAnnouncedValue = -1;
     return Container(
       color: Colors.transparent,
       height: 90,
@@ -40,9 +39,9 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Obx(
             () {
-              final int value = _.sliderPositionSeconds.value;
-              final int max = _.durationSeconds.value;
-              final int buffer = _.bufferedSeconds.value;
+              final int value = controller!.sliderPositionSeconds.value;
+              final int max = controller!.durationSeconds.value;
+              final int buffer = controller!.bufferedSeconds.value;
               if (value > max || max <= 0) {
                 return nil;
               }
@@ -68,28 +67,31 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                           thumbRadius: 7,
                           onDragStart: (duration) {
                             feedBack();
-                            _.onChangedSliderStart();
+                            controller!.onChangedSliderStart();
                           },
                           onDragUpdate: (duration) {
                             double newProgress =
                                 duration.timeStamp.inSeconds / max;
-                            if ((newProgress - _lastAnnouncedValue).abs() >
+                            if ((newProgress - lastAnnouncedValue).abs() >
                                 0.02) {
-                              _accessibilityDebounce?.cancel();
-                              _accessibilityDebounce =
+                              accessibilityDebounce?.cancel();
+                              accessibilityDebounce =
                                   Timer(const Duration(milliseconds: 200), () {
                                 SemanticsService.announce(
                                     "${(newProgress * 100).round()}%",
                                     TextDirection.ltr);
-                                _lastAnnouncedValue = newProgress;
+                                lastAnnouncedValue = newProgress;
                               });
                             }
-                            _.onUpdatedSliderProgress(duration.timeStamp);
+                            controller!
+                                .onUpdatedSliderProgress(duration.timeStamp);
                           },
                           onSeek: (duration) {
-                            _.onChangedSliderEnd();
-                            _.onChangedSlider(duration.inSeconds.toDouble());
-                            _.seekTo(Duration(seconds: duration.inSeconds),
+                            controller!.onChangedSliderEnd();
+                            controller!
+                                .onChangedSlider(duration.inSeconds.toDouble());
+                            controller!.seekTo(
+                                Duration(seconds: duration.inSeconds),
                                 type: 'slider');
                             SemanticsService.announce(
                                 "${(duration.inSeconds / max * 100).round()}%",

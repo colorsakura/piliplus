@@ -12,11 +12,11 @@ class LiveCardV extends StatelessWidget {
   final Function()? longPressEnd;
 
   const LiveCardV({
-    Key? key,
+    super.key,
     required this.liveItem,
     this.longPress,
     this.longPressEnd,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class LiveCardV extends StatelessWidget {
 
 class LiveContent extends StatelessWidget {
   final dynamic liveItem;
-  const LiveContent({Key? key, required this.liveItem}) : super(key: key);
+  const LiveContent({super.key, required this.liveItem});
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -129,9 +129,9 @@ class VideoStat extends StatelessWidget {
   final LiveItemModel? liveItem;
 
   const VideoStat({
-    Key? key,
+    super.key,
     required this.liveItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

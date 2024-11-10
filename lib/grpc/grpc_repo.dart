@@ -16,6 +16,7 @@ import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:fixnum/src/int64.dart';
+import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 
 class GrpcRepo {
@@ -116,7 +117,7 @@ class GrpcRepo {
             return defMsg();
           }
         } catch (e1) {
-          print(e1.toString());
+          debugPrint(e1.toString());
           return defMsg();
         }
       }

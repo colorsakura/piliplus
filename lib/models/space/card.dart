@@ -11,11 +11,8 @@ import 'nameplate.dart';
 import 'nft_certificate.dart';
 import 'official_verify.dart';
 import 'pendant.dart';
-import 'pr_info.dart';
-import 'profession.dart';
 import 'profession_verify.dart';
 import 'relation.dart';
-import 'school.dart';
 import 'vip.dart';
 
 part 'card.g.dart';

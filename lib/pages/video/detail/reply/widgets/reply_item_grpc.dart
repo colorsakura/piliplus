@@ -770,7 +770,7 @@ InlineSpan buildContent(
                   0;
           isValid = seek * 1000 <= duration;
         } catch (e) {
-          print('failed to validate: $e');
+          debugPrint('failed to validate: $e');
         }
         spanChildren.add(
           TextSpan(

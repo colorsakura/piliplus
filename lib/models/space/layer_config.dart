@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'tags.dart';
-
 part 'layer_config.g.dart';
 
 @JsonSerializable()

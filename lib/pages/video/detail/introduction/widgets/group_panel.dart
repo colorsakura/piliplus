@@ -6,8 +6,6 @@ import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/models/member/tags.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 
-import '../../../../../utils/utils.dart';
-
 class GroupPanel extends StatefulWidget {
   final int? mid;
   final List? tags;

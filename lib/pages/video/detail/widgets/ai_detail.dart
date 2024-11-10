@@ -10,9 +10,9 @@ class AiDetail extends StatelessWidget {
   final ModelResult? modelResult;
 
   const AiDetail({
-    Key? key,
+    super.key,
     this.modelResult,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

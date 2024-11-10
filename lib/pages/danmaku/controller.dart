@@ -23,12 +23,12 @@ class PlDanmakuController {
       return;
     }
     danmakuWeightNotifier.addListener(() {
-      print(
+      debugPrint(
           "danmakuWeight changed from $danmakuWeight to ${danmakuWeightNotifier.value}");
       danmakuWeight = danmakuWeightNotifier.value;
     });
     danmakuFilterNotifier.addListener(() {
-      print(
+      debugPrint(
           "danmakuFilter changed from $danmakuFilter to ${danmakuFilterNotifier.value}");
       danmakuFilter = danmakuFilterNotifier.value;
     });

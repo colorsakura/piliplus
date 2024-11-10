@@ -177,6 +177,7 @@ class SettingBoxKey {
       allowRotateScreen = 'allowRotateScreen',
       horizontalScreen = 'horizontalScreen',
       p1080 = 'p1080',
+      // ignore: constant_identifier_names
       CDNService = 'CDNService',
       disableAudioCDN = 'disableAudioCDN',
       // enableCDN = 'enableCDN',

@@ -70,7 +70,7 @@ class PullToRefreshHeader extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 12.0),
-                    child: RefreshImage(top, null),
+                    child: RefreshImage(top: top),
                   ),
                 ),
                 Column(
@@ -93,7 +93,10 @@ class PullToRefreshHeader extends StatelessWidget {
 }
 
 class RefreshImage extends StatelessWidget {
-  const RefreshImage(this.top, Key? key) : super(key: key);
+  const RefreshImage({
+    super.key,
+    required this.top,
+  });
 
   final double top;
 

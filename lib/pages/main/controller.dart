@@ -25,7 +25,6 @@ class MainController extends GetxController {
   final StreamController<bool> bottomBarStream =
       StreamController<bool>.broadcast();
   Box setting = GStorage.setting;
-  DateTime? _lastPressedAt;
   late bool hideTabBar;
   late PageController pageController;
   int selectedIndex = 0;

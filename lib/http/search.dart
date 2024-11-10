@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:hive/hive.dart';
@@ -128,7 +129,7 @@ class SearchHttp {
         }
         return LoadingState.success(data);
       } catch (err) {
-        print(err);
+        debugPrint(err.toString());
         return LoadingState.error(err.toString());
       }
     } else {

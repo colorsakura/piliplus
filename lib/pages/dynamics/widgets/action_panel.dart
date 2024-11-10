@@ -17,8 +17,7 @@ class ActionPanel extends StatefulWidget {
     super.key,
     this.item,
   });
-  // ignore: prefer_typing_uninitialized_variables
-  final item;
+  final dynamic item;
 
   @override
   State<ActionPanel> createState() => _ActionPanelState();
