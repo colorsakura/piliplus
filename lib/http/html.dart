@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
@@ -76,6 +77,11 @@ class HtmlHttp {
     var response = await Request().get(
       "https://www.bilibili.com/$dynamicType/$id/",
       extra: {'ua': 'pc'},
+      options: Options(
+        headers: {
+          'cookie': 'opus-goback=1',
+        },
+      ),
     );
     if (response.data is! String && response.data is! List<int>) {
       return;

@@ -191,15 +191,13 @@ class Request {
    */
   Future get(url, {data, options, cancelToken, extra}) async {
     Response response;
-    options ??= Options();
-    ResponseType resType = ResponseType.json;
     if (extra != null) {
-      resType = extra!['resType'] ?? ResponseType.json;
       if (extra['ua'] != null) {
-        options.headers = {'user-agent': headerUa(type: extra['ua'])};
+        options ??= Options();
+        options.headers ??= <String, dynamic>{};
+        options.headers!['user-agent'] = headerUa(type: extra['ua']);
       }
     }
-    options.responseType = resType;
 
     try {
       response = await dio.get(
