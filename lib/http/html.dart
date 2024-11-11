@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
-import 'package:PiliPalaX/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
@@ -74,14 +73,6 @@ class HtmlHttp {
 
   // read
   static Future reqReadHtml(id, dynamicType) async {
-    try {
-      final String redirectUrl = await UrlUtils.parseRedirectUrl(
-          'https://www.bilibili.com/$dynamicType/$id/');
-      return await reqHtml(redirectUrl.split('/').last, dynamicType);
-    } catch (e) {
-      debugPrint(e.toString());
-      return null;
-    }
     var response = await Request().get(
       "https://www.bilibili.com/$dynamicType/$id/",
       extra: {'ua': 'pc'},
