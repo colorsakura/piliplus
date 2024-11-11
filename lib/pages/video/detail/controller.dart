@@ -449,15 +449,10 @@ class VideoDetailController extends GetxController
                                   await plPlayerController.videoPlayerController
                                       ?.seek(Duration(
                                           seconds: item.segment.first));
-                                  SmartDialog.showToast(
-                                    '已跳至${Utils.formatDuration(item.segment.first)}',
-                                    displayType: SmartToastType.normal,
-                                  );
+                                  _showBlockToast(
+                                      '已跳至${Utils.formatDuration(item.segment.first)}');
                                 } catch (e) {
-                                  SmartDialog.showToast(
-                                    '跳转失败: $e',
-                                    displayType: SmartToastType.normal,
-                                  );
+                                  _showBlockToast('跳转失败: $e');
                                 }
                               },
                               style: IconButton.styleFrom(
@@ -484,6 +479,15 @@ class VideoDetailController extends GetxController
           ),
         ),
       ),
+    );
+  }
+
+  void _showBlockToast(String msg) {
+    SmartDialog.showToast(
+      msg,
+      displayType: SmartToastType.normal,
+      alignment:
+          plPlayerController.isFullScreen.value ? Alignment(-0.9, 0.5) : null,
     );
   }
 
@@ -518,7 +522,6 @@ class VideoDetailController extends GetxController
         segmentList.value = (result.data as List)
             .where((item) =>
                 enableList.contains(item['category']) &&
-                // item['segment'][1] > 0 &&
                 item['segment'][1] >= item['segment'][0])
             .map(
           (item) {
@@ -555,7 +558,7 @@ class VideoDetailController extends GetxController
           );
         }).toList();
       } catch (e) {
-        debugPrint('filed to parse sponsorblock: $e');
+        debugPrint('failed to parse sponsorblock: $e');
       }
     }
   }
@@ -588,17 +591,11 @@ class VideoDetailController extends GetxController
                       ?.seek(Duration(seconds: item.segment.second));
                   // await plPlayerController
                   //     .seekTo(Duration(seconds: item.segment.second));
-                  SmartDialog.showToast(
-                    '已跳过${item.segmentType.title}片段',
-                    displayType: SmartToastType.normal,
-                  );
+                  _showBlockToast('已跳过${item.segmentType.title}片段');
                   item.hasSkipped = true;
                 } catch (e) {
                   debugPrint('failed to skip: $e');
-                  SmartDialog.showToast(
-                    '${item.segmentType.title}片段跳过失败',
-                    displayType: SmartToastType.normal,
-                  );
+                  _showBlockToast('${item.segmentType.title}片段跳过失败');
                 }
               }
               break;

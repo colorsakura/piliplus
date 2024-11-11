@@ -46,7 +46,7 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
       showDanmaku = true;
     } else if (state == AppLifecycleState.paused) {
       showDanmaku = false;
-      playerController.danmakuController?.clear();
+      _controller?.clear();
     }
   }
 
@@ -89,11 +89,10 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
 
   // 播放器状态监听
   void playerListener(PlayerStatus? status) {
-    if (status == PlayerStatus.paused) {
-      _controller?.pause();
-    }
     if (status == PlayerStatus.playing) {
       _controller?.onResume();
+    } else {
+      _controller?.pause();
     }
   }
 
@@ -112,7 +111,10 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
     List<DanmakuElem>? currentDanmakuList =
         _plDanmakuController.getCurrentDanmaku(currentPosition);
 
-    if (showDanmaku && currentDanmakuList != null && _controller != null) {
+    if (showDanmaku &&
+        playerController.playerStatus.status.value == PlayerStatus.playing &&
+        currentDanmakuList != null &&
+        _controller != null) {
       Color? defaultColor = playerController.blockTypes.contains(6)
           ? DmUtils.decimalToColor(16777215)
           : null;
@@ -132,6 +134,8 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     playerController.removePositionListener(videoPositionListen);
+    playerController.removeStatusLister(playerListener);
+    _plDanmakuController.dispose();
     super.dispose();
   }
 

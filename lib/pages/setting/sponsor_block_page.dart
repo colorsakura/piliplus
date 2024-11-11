@@ -176,9 +176,9 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       ),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: _blockLimitItem),
-          SliverToBoxAdapter(child: Divider(height: 1)),
           SliverToBoxAdapter(child: _userIdItem),
+          SliverToBoxAdapter(child: Divider(height: 1)),
+          SliverToBoxAdapter(child: _blockLimitItem),
           SliverToBoxAdapter(child: Divider(height: 1)),
           SliverList.separated(
             itemCount: _blockSettings.length,
