@@ -33,24 +33,49 @@ enum SegmentType {
   preview,
   music_offtopic,
   poi_highlight,
-  chapter,
   filler,
   exclusive_access
 }
 
 extension SegmentTypeExt on SegmentType {
+  /// from https://github.com/hanydd/BilibiliSponsorBlock/*/public/_locales/zh_CN/messages.json
+  String get title => [
+        '赞助广告', //sponsor
+        '无偿/自我推广', //selfpromo
+        '三连/订阅提醒', //interaction
+        '过场/开场动画', //intro
+        '鸣谢/结束画面', //outro
+        '回顾/概要', //preview
+        '音乐:非音乐部分', //music_offtopic
+        '精彩时刻/重点', //poi_highlight
+        '离题闲聊/玩笑', //filler
+        '品牌合作', //exclusive_access
+      ][index];
+
+  String get description => [
+        '付费推广、付费推荐和直接广告。不是自我推广或免费提及他们喜欢的商品/创作者/网站/产品。', //sponsor
+        '类似于 “赞助广告” ，但无报酬或是自我推广。包括有关商品、捐赠的部分或合作者的信息。', //selfpromo
+        '视频中间简短提醒观众来一键三连或关注。 如果片段较长，或是有具体内容，则应分类为自我推广。', //interaction
+        '没有实际内容的间隔片段。可以是暂停、静态帧或重复动画。不适用于包含内容的过场。', //intro
+        '致谢画面或片尾画面。不包含内容的结尾。', //outro
+        '展示此视频或同系列视频将出现的画面集锦，片段中所有内容都将在之后的正片中再次出现。', //preview
+        '仅用于音乐视频。此分类只能用于音乐视频中未包括于其他分类的部分。', //music_offtopic
+        '大部分人都在寻找的空降时间。类似于“封面在12:34”的评论。', //poi_highlight
+        "仅作为填充内容或增添趣味而添加的离题片段，这些内容对理解视频的主要内容并非必需。这不包括提供背景信息或上下文的片段。这是一个非常激进的分类，适用于当你不想看'娱乐性'内容的时候。", //filler
+        '仅用于对整个视频进行标记。适用于展示UP主免费或获得补贴后使用的产品、服务或场地的视频。', //exclusive_access
+      ][index];
+
   Color get color => [
-        Colors.amber,
-        Colors.blue,
-        Colors.red,
-        Colors.indigo,
-        Colors.pink,
-        Colors.purple,
-        Colors.lightGreen,
-        Colors.teal,
-        Colors.cyan,
-        Colors.yellow,
-        Colors.orange
+        Color(0xFF00d400), //sponsor
+        Color(0xFFffff00), //selfpromo
+        Color(0xFFcc00ff), //interaction
+        Color(0xFF00ffff), //intro
+        Color(0xFF0202ed), //outro
+        Color(0xFF008fd6), //preview
+        Color(0xFFff9900), //music_offtopic
+        Color(0xFFff1684), //poi_highlight
+        Color(0xFF7300FF), //filler
+        Color(0xFF008a5c), //exclusive_access
       ][index];
 }
 
@@ -62,11 +87,15 @@ extension SkipTypeExt on SkipType {
 
 class SegmentModel {
   SegmentModel({
+    // ignore: non_constant_identifier_names
+    required this.UUID,
     required this.segmentType,
     required this.segment,
     required this.skipType,
     required this.hasSkipped,
   });
+  // ignore: non_constant_identifier_names
+  String UUID;
   SegmentType segmentType;
   Pair<int, int> segment;
   SkipType skipType;
@@ -215,13 +244,256 @@ class VideoDetailController extends GetxController
   double? _blockLimit;
   List<Pair<SegmentType, SkipType>>? _blockSettings;
   List<Color>? _blockColor;
-  List<SegmentModel>? _segmentList;
+  RxList<SegmentModel> segmentList = <SegmentModel>[].obs;
   List<Segment>? _segmentProgressList;
+  Color _getColor(SegmentType segment) =>
+      _blockColor?[segment.index] ?? segment.color;
+
+  Future _vote(String uuid, int type) async {
+    Request()
+        .post(
+      '${HttpString.sponsorBlockBaseUrl}/api/voteOnSponsorTime',
+      queryParameters: {
+        'UUID': uuid,
+        'userID': GStorage.blockUserID,
+        'type': 1,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    )
+        .then((res) {
+      SmartDialog.showToast(res.statusCode == 200 ? '投票成功' : '投票失败');
+    });
+  }
+
+  void _showCategoryDialog(BuildContext context, SegmentModel segment) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        clipBehavior: Clip.hardEdge,
+        contentPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: SegmentType.values
+                .map((item) => ListTile(
+                      dense: true,
+                      onTap: () {
+                        Get.back();
+                        Request().post(
+                          '${HttpString.sponsorBlockBaseUrl}/api/voteOnSponsorTime',
+                          queryParameters: {
+                            'UUID': segment.UUID,
+                            'userID': GStorage.blockUserID,
+                            'category': item.name,
+                          },
+                        ).then((res) {
+                          SmartDialog.showToast(
+                              '类别更改${res.statusCode == 200 ? '成功' : '失败'}');
+                        });
+                      },
+                      title: Text.rich(
+                        TextSpan(
+                          children: [
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Container(
+                                height:
+                                    MediaQuery.textScalerOf(context).scale(14),
+                                width: 10,
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: 10,
+                                  width: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _getColor(item),
+                                  ),
+                                ),
+                              ),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            TextSpan(
+                              text: ' ${item.title}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showVoteDialog(BuildContext context, SegmentModel segment) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        clipBehavior: Clip.hardEdge,
+        contentPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                dense: true,
+                title: Text(
+                  '赞成票',
+                  style: TextStyle(fontSize: 14),
+                ),
+                onTap: () {
+                  Get.back();
+                  _vote(segment.UUID, 1);
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  '反对票',
+                  style: TextStyle(fontSize: 14),
+                ),
+                onTap: () {
+                  Get.back();
+                  _vote(segment.UUID, 0);
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  '更改类别',
+                  style: TextStyle(fontSize: 14),
+                ),
+                onTap: () {
+                  Get.back();
+                  _showCategoryDialog(context, segment);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showSponsorBlock(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        clipBehavior: Clip.hardEdge,
+        contentPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: segmentList
+                .map(
+                  (item) => ListTile(
+                    onTap: () {
+                      Get.back();
+                      _showVoteDialog(context, item);
+                    },
+                    dense: true,
+                    title: Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Container(
+                              height:
+                                  MediaQuery.textScalerOf(context).scale(14),
+                              width: 10,
+                              alignment: Alignment.center,
+                              child: Container(
+                                height: 10,
+                                width: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _getColor(item.segmentType),
+                                ),
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          TextSpan(
+                            text: ' ${item.segmentType.title}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.only(left: 16, right: 8),
+                    subtitle: Text(
+                      '${Utils.formatDuration(item.segment.first)} 至 ${Utils.formatDuration(item.segment.second)}',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          item.skipType.title,
+                          style: TextStyle(fontSize: 13),
+                        ),
+                        if (item.skipType == SkipType.showOnly)
+                          SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: IconButton(
+                              tooltip: '跳转至此片段',
+                              onPressed: () async {
+                                Get.back();
+                                try {
+                                  plPlayerController.danmakuController?.clear();
+                                  await plPlayerController.videoPlayerController
+                                      ?.seek(Duration(
+                                          seconds: item.segment.first));
+                                  SmartDialog.showToast(
+                                    '已跳至${Utils.formatDuration(item.segment.first)}',
+                                    displayType: SmartToastType.normal,
+                                  );
+                                } catch (e) {
+                                  SmartDialog.showToast(
+                                    '跳转失败: $e',
+                                    displayType: SmartToastType.normal,
+                                  );
+                                }
+                              },
+                              style: IconButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              icon: Icon(
+                                Icons.my_location,
+                                size: 18,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.7),
+                              ),
+                            ),
+                          )
+                        else
+                          const SizedBox(width: 10),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ),
+    );
+  }
 
   Future _sponsorBlock() async {
     dynamic result = await Request().get(
-      'https://www.bsbsb.top/api/skipSegments',
-      data: {'videoID': bvid},
+      '${HttpString.sponsorBlockBaseUrl}/api/skipSegments',
+      data: {
+        'videoID': bvid,
+        'cid': cid.value,
+      },
       options: Options(
         headers: {
           'env': '',
@@ -243,10 +515,10 @@ class VideoDetailController extends GetxController
             .toList()
             .map((item) => item.first.name)
             .toList();
-        _segmentList = (result.data as List)
+        segmentList.value = (result.data as List)
             .where((item) =>
                 enableList.contains(item['category']) &&
-                item['segment'][1] > 0 &&
+                // item['segment'][1] > 0 &&
                 item['segment'][1] >= item['segment'][0])
             .map(
           (item) {
@@ -260,6 +532,7 @@ class VideoDetailController extends GetxController
               }
             }
             return SegmentModel(
+              UUID: item['UUID'],
               segmentType: segmentType,
               segment: Pair(
                 first: _convert(item['segment'][0]),
@@ -270,7 +543,7 @@ class VideoDetailController extends GetxController
             );
           },
         ).toList();
-        _segmentProgressList = _segmentList?.map((item) {
+        _segmentProgressList = segmentList.map((item) {
           double start = (item.segment.first / ((data.timeLength ?? 0) / 1000))
               .clamp(0.0, 1.0);
           double end = (item.segment.second / ((data.timeLength ?? 0) / 1000))
@@ -278,11 +551,11 @@ class VideoDetailController extends GetxController
           return Segment(
             start,
             start == end ? (end + 0.01).clamp(0.0, 1.0) : end,
-            _blockColor?[item.segmentType.index] ?? item.segmentType.color,
+            _getColor(item.segmentType),
           );
         }).toList();
       } catch (e) {
-        debugPrint(e.toString());
+        debugPrint('filed to parse sponsorblock: $e');
       }
     }
   }
@@ -296,14 +569,14 @@ class VideoDetailController extends GetxController
   }
 
   void _initSkip() {
-    if (_segmentList != null && _segmentList!.isNotEmpty) {
+    if (segmentList.isNotEmpty) {
       positionSubscription = plPlayerController
           .videoPlayerController?.stream.position
           .listen((position) async {
         int currentPos = position.inSeconds;
         if (currentPos != _lastPos) {
           _lastPos = currentPos;
-          for (SegmentModel item in _segmentList!) {
+          for (SegmentModel item in segmentList) {
             // debugPrint(
             //     '${position.inSeconds},,${item.segment.first},,${item.segment.second},,${item.skipType.name},,${item.hasSkipped}');
             if (item.segment.first == position.inSeconds) {
@@ -315,11 +588,17 @@ class VideoDetailController extends GetxController
                       ?.seek(Duration(seconds: item.segment.second));
                   // await plPlayerController
                   //     .seekTo(Duration(seconds: item.segment.second));
-                  SmartDialog.showToast('已跳过${item.segmentType.name}');
+                  SmartDialog.showToast(
+                    '已跳过${item.segmentType.title}片段',
+                    displayType: SmartToastType.normal,
+                  );
                   item.hasSkipped = true;
                 } catch (e) {
                   debugPrint('failed to skip: $e');
-                  SmartDialog.showToast('${item.segmentType.name}跳过失败');
+                  SmartDialog.showToast(
+                    '${item.segmentType.title}片段跳过失败',
+                    displayType: SmartToastType.normal,
+                  );
                 }
               }
               break;

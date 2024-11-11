@@ -224,7 +224,8 @@ class Request {
   /*
    * post请求
    */
-  post(url, {data, queryParameters, options, cancelToken, extra}) async {
+  Future<Response> post(url,
+      {data, queryParameters, options, cancelToken, extra}) async {
     // debugPrint('post-data: $data');
     Response response;
     try {

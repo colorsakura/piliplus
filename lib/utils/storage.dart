@@ -12,6 +12,7 @@ import 'package:PiliPalaX/models/model_owner.dart';
 import 'package:PiliPalaX/models/search/hot.dart';
 import 'package:PiliPalaX/models/user/info.dart';
 import 'global_data.dart';
+import 'package:uuid/uuid.dart';
 
 class GStorage {
   static late final Box<dynamic> userInfo;
@@ -48,6 +49,16 @@ class GStorage {
 
   static double get blockLimit =>
       setting.get(SettingBoxKey.blockLimit, defaultValue: 0.0);
+
+  static String get blockUserID {
+    String blockUserID =
+        setting.get(SettingBoxKey.blockUserID, defaultValue: '');
+    if (blockUserID.isEmpty) {
+      blockUserID = Uuid().v4().replaceAll('-', '');
+      setting.put(SettingBoxKey.blockUserID, blockUserID);
+    }
+    return blockUserID;
+  }
 
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
@@ -225,6 +236,7 @@ class SettingBoxKey {
       blockSettings = 'blockSettings',
       blockLimit = 'blockLimit',
       blockColor = 'blockColor',
+      blockUserID = 'blockUserID',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',

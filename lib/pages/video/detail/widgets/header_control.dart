@@ -1454,6 +1454,27 @@ class _HeaderControlState extends State<HeaderControl> {
             //   ),
             //   fuc: () => _.screenshot(),
             // ),
+            Obx(
+              () => widget.videoDetailCtr?.segmentList.isNotEmpty == true
+                  ? SizedBox(
+                      width: 42,
+                      height: 34,
+                      child: IconButton(
+                        tooltip: 'SponsorBlock',
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        ),
+                        onPressed: () =>
+                            widget.videoDetailCtr?.showSponsorBlock(context),
+                        icon: const Icon(
+                          Icons.block,
+                          size: 19,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
             SizedBox(
               width: 42,
               height: 34,
