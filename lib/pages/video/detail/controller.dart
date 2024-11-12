@@ -52,6 +52,19 @@ extension SegmentTypeExt on SegmentType {
         '品牌合作', //exclusive_access
       ][index];
 
+  String get shortTitle => [
+        '赞助广告', //sponsor
+        '推广', //selfpromo
+        '订阅提醒', //interaction
+        '开场', //intro
+        '片尾', //outro
+        '回顾', //preview
+        '非音乐', //music_offtopic
+        '精彩时刻', //poi_highlight
+        '闲聊', //filler
+        '品牌合作', //exclusive_access
+      ][index];
+
   String get description => [
         '付费推广、付费推荐和直接广告。不是自我推广或免费提及他们喜欢的商品/创作者/网站/产品。', //sponsor
         '类似于 “赞助广告” ，但无报酬或是自我推广。包括有关商品、捐赠的部分或合作者的信息。', //selfpromo
@@ -250,19 +263,14 @@ class VideoDetailController extends GetxController
       _blockColor?[segment.index] ?? segment.color;
 
   Future _vote(String uuid, int type) async {
-    Request()
-        .post(
-      '${HttpString.sponsorBlockBaseUrl}/api/voteOnSponsorTime',
+    Request().post(
+      '${GStorage.blockServer}/api/voteOnSponsorTime',
       queryParameters: {
         'UUID': uuid,
         'userID': GStorage.blockUserID,
-        'type': 1,
+        'type': type,
       },
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    )
-        .then((res) {
+    ).then((res) {
       SmartDialog.showToast(res.statusCode == 200 ? '投票成功' : '投票失败');
     });
   }
@@ -282,7 +290,7 @@ class VideoDetailController extends GetxController
                       onTap: () {
                         Get.back();
                         Request().post(
-                          '${HttpString.sponsorBlockBaseUrl}/api/voteOnSponsorTime',
+                          '${GStorage.blockServer}/api/voteOnSponsorTime',
                           queryParameters: {
                             'UUID': segment.UUID,
                             'userID': GStorage.blockUserID,
@@ -436,7 +444,8 @@ class VideoDetailController extends GetxController
                           item.skipType.title,
                           style: TextStyle(fontSize: 13),
                         ),
-                        if (item.skipType == SkipType.showOnly)
+                        if (item.skipType == SkipType.showOnly &&
+                            item.segment.second != 0)
                           SizedBox(
                             width: 36,
                             height: 36,
@@ -449,8 +458,10 @@ class VideoDetailController extends GetxController
                                   await plPlayerController.videoPlayerController
                                       ?.seek(Duration(
                                           seconds: item.segment.first));
-                                  _showBlockToast(
-                                      '已跳至${Utils.formatDuration(item.segment.first)}');
+                                  if (GStorage.blockToast) {
+                                    _showBlockToast(
+                                        '已跳至${item.segmentType.shortTitle}');
+                                  }
                                 } catch (e) {
                                   _showBlockToast('跳转失败: $e');
                                 }
@@ -493,7 +504,7 @@ class VideoDetailController extends GetxController
 
   Future _sponsorBlock() async {
     dynamic result = await Request().get(
-      '${HttpString.sponsorBlockBaseUrl}/api/skipSegments',
+      '${GStorage.blockServer}/api/skipSegments',
       data: {
         'videoID': bvid,
         'cid': cid.value,
@@ -553,7 +564,7 @@ class VideoDetailController extends GetxController
               .clamp(0.0, 1.0);
           return Segment(
             start,
-            start == end ? (end + 0.01).clamp(0.0, 1.0) : end,
+            (start == end && end != 0) ? (end + 0.01).clamp(0.0, 1.0) : end,
             _getColor(item.segmentType),
           );
         }).toList();
@@ -589,13 +600,13 @@ class VideoDetailController extends GetxController
                   plPlayerController.danmakuController?.clear();
                   await plPlayerController.videoPlayerController
                       ?.seek(Duration(seconds: item.segment.second));
-                  // await plPlayerController
-                  //     .seekTo(Duration(seconds: item.segment.second));
-                  _showBlockToast('已跳过${item.segmentType.title}片段');
                   item.hasSkipped = true;
+                  if (GStorage.blockToast) {
+                    _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
+                  }
                 } catch (e) {
                   debugPrint('failed to skip: $e');
-                  _showBlockToast('${item.segmentType.title}片段跳过失败');
+                  _showBlockToast('${item.segmentType.shortTitle}片段跳过失败');
                 }
               }
               break;

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:PiliPalaX/common/widgets/pair.dart';
+import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType;
@@ -59,6 +60,12 @@ class GStorage {
     }
     return blockUserID;
   }
+
+  static bool get blockToast =>
+      setting.get(SettingBoxKey.blockToast, defaultValue: true);
+
+  static String get blockServer => setting.get(SettingBoxKey.blockServer,
+      defaultValue: HttpString.sponsorBlockBaseUrl);
 
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
@@ -237,6 +244,8 @@ class SettingBoxKey {
       blockLimit = 'blockLimit',
       blockColor = 'blockColor',
       blockUserID = 'blockUserID',
+      blockToast = 'blockToast',
+      blockServer = 'blockServer',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',

@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:PiliPalaX/common/widgets/pair.dart';
+import 'package:PiliPalaX/http/constants.dart';
+import 'package:PiliPalaX/pages/setting/widgets/select_item.dart';
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType, SkipTypeExt;
 import 'package:PiliPalaX/utils/storage.dart';
@@ -19,10 +21,13 @@ class SponsorBlockPage extends StatefulWidget {
 
 class _SponsorBlockPageState extends State<SponsorBlockPage> {
   final _url = 'https://github.com/hanydd/BilibiliSponsorBlock';
+  final _textController = TextEditingController();
   late double _blockLimit;
   late List<Pair<SegmentType, SkipType>> _blockSettings;
   late List<Color> _blockColor;
   late String _userId;
+  late bool _blockToast;
+  late String _blockServer;
 
   @override
   void initState() {
@@ -31,6 +36,14 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     _blockSettings = GStorage.blockSettings;
     _blockColor = GStorage.blockColor;
     _userId = GStorage.blockUserID;
+    _blockToast = GStorage.blockToast;
+    _blockServer = GStorage.blockServer;
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   TextStyle get _titleStyle => TextStyle(fontSize: 15);
@@ -38,17 +51,17 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       TextStyle(color: Theme.of(context).colorScheme.outline);
 
   Widget get _blockLimitItem => ListTile(
+        dense: true,
         onTap: () {
-          final textController =
-              TextEditingController(text: _blockLimit.toString());
+          _textController.text = _blockLimit.toString();
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('最短片段时长'),
+                title: Text('最短片段时长', style: _titleStyle),
                 content: TextFormField(
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  controller: textController,
+                  controller: _textController,
                   autofocus: true,
                   decoration: InputDecoration(suffixText: 's'),
                 ),
@@ -65,8 +78,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   TextButton(
                     onPressed: () async {
                       Get.back();
-                      _blockLimit =
-                          max(0.0, double.tryParse(textController.text) ?? 0.0);
+                      _blockLimit = max(
+                          0.0, double.tryParse(_textController.text) ?? 0.0);
                       await GStorage.setting
                           .put(SettingBoxKey.blockLimit, _blockLimit);
                       setState(() {});
@@ -90,29 +103,31 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       );
 
   Widget get _aboudItem => ListTile(
+        dense: true,
         title: Text('关于 SponsorBlock', style: _titleStyle),
         subtitle: Text(_url, style: _subTitleStyle),
         onTap: () => Utils.launchURL(_url),
       );
 
   Widget get _userIdItem => ListTile(
+        dense: true,
         title: Text('用户ID', style: _titleStyle),
         subtitle: Text(_userId, style: _subTitleStyle),
         onTap: () {
           final key = GlobalKey<FormState>();
-          final textController = TextEditingController(text: _userId);
+          _textController.text = _userId;
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('用户ID'),
+                title: Text('用户ID', style: _titleStyle),
                 content: Form(
                   key: key,
                   child: TextFormField(
                     minLines: 1,
                     maxLines: 4,
                     autofocus: true,
-                    controller: textController,
+                    controller: _textController,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\d]+')),
                     ],
@@ -148,7 +163,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     onPressed: () async {
                       if (key.currentState?.validate() == true) {
                         Get.back();
-                        _userId = textController.text;
+                        _userId = _textController.text;
                         await GStorage.setting
                             .put(SettingBoxKey.blockUserID, _userId);
                         setState(() {});
@@ -161,6 +176,109 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             },
           );
         },
+      );
+
+  void _updateBlockToast() async {
+    _blockToast = !_blockToast;
+    await GStorage.setting.put(SettingBoxKey.blockToast, _blockToast);
+    setState(() {});
+  }
+
+  Widget get _blockToastItem => ListTile(
+      dense: true,
+      onTap: _updateBlockToast,
+      title: Text(
+        '显示跳过Toast',
+        style: _titleStyle,
+      ),
+      trailing: Transform.scale(
+        alignment: Alignment.centerRight,
+        scale: 0.8,
+        child: Switch(
+          thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
+            if (states.isNotEmpty && states.first == WidgetState.selected) {
+              return const Icon(Icons.done);
+            }
+            return null;
+          }),
+          value: _blockToast,
+          onChanged: (val) {
+            _updateBlockToast();
+          },
+        ),
+      ));
+
+  Widget get _blockServerItem => ListTile(
+        dense: true,
+        onTap: () {
+          _textController.text = _blockServer;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('服务器地址', style: _titleStyle),
+                content: TextFormField(
+                  keyboardType: TextInputType.url,
+                  controller: _textController,
+                  autofocus: true,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      Get.back();
+                      _blockServer = HttpString.sponsorBlockBaseUrl;
+                      await GStorage.setting
+                          .put(SettingBoxKey.blockServer, _blockServer);
+                      setState(() {});
+                    },
+                    child: Text('重置'),
+                  ),
+                  TextButton(
+                    onPressed: Get.back,
+                    child: Text(
+                      '取消',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      Get.back();
+                      _blockServer = _textController.text;
+                      await GStorage.setting
+                          .put(SettingBoxKey.blockServer, _blockServer);
+                      setState(() {});
+                    },
+                    child: Text('确定'),
+                  )
+                ],
+              );
+            },
+          );
+        },
+        title: Text(
+          '服务器地址',
+          style: _titleStyle,
+        ),
+        subtitle: Text(
+          _blockServer,
+          style: _subTitleStyle,
+        ),
+      );
+
+  Widget get _divider => SliverToBoxAdapter(
+        child: Divider(
+          height: 1,
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+        ),
+      );
+
+  Widget get _dividerL => SliverToBoxAdapter(
+        child: Divider(
+          thickness: 16,
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+        ),
       );
 
   @override
@@ -176,13 +294,15 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       ),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: _userIdItem),
-          SliverToBoxAdapter(child: Divider(height: 1)),
+          _dividerL,
           SliverToBoxAdapter(child: _blockLimitItem),
-          SliverToBoxAdapter(child: Divider(height: 1)),
+          _divider,
+          SliverToBoxAdapter(child: _blockToastItem),
+          _dividerL,
           SliverList.separated(
             itemCount: _blockSettings.length,
             itemBuilder: (_, index) => ListTile(
+              dense: true,
               enabled: _blockSettings[index].second != SkipType.disable,
               onTap: () {
                 showDialog(
@@ -191,20 +311,18 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     clipBehavior: Clip.hardEdge,
                     contentPadding: const EdgeInsets.symmetric(vertical: 16),
                     title: Text.rich(
-                      style: TextStyle(height: 1),
-                      strutStyle: StrutStyle(height: 1, leading: 0),
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Color Picker\n',
-                            style: TextStyle(fontSize: 18, height: 1.5),
+                            text: 'Color Picker ',
+                            style: TextStyle(fontSize: 15),
                           ),
                           WidgetSpan(
                             alignment: PlaceholderAlignment.middle,
                             child: Container(
                               height:
-                                  MediaQuery.textScalerOf(context).scale(16),
-                              width: MediaQuery.textScalerOf(context).scale(16),
+                                  MediaQuery.textScalerOf(context).scale(13),
+                              width: MediaQuery.textScalerOf(context).scale(13),
                               alignment: Alignment.center,
                               child: Container(
                                 height: 10,
@@ -215,11 +333,11 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                                 ),
                               ),
                             ),
-                            style: TextStyle(fontSize: 16, height: 1),
+                            style: TextStyle(fontSize: 13),
                           ),
                           TextSpan(
                             text: ' ${_blockSettings[index].first.title}',
-                            style: TextStyle(fontSize: 16, height: 1),
+                            style: TextStyle(fontSize: 13),
                           ),
                         ],
                       ),
@@ -314,10 +432,18 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 ),
               ),
             ),
-            separatorBuilder: (_, index) => Divider(height: 1),
+            separatorBuilder: (_, index) => Divider(
+              height: 1,
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+            ),
           ),
-          SliverToBoxAdapter(child: Divider(height: 1)),
+          _dividerL,
+          SliverToBoxAdapter(child: _userIdItem),
+          _divider,
+          SliverToBoxAdapter(child: _blockServerItem),
+          _dividerL,
           SliverToBoxAdapter(child: _aboudItem),
+          _dividerL,
           SliverToBoxAdapter(
               child: SizedBox(
             height: 25 + MediaQuery.paddingOf(context).bottom,
