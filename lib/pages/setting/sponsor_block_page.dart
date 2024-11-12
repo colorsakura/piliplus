@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/pages/setting/widgets/select_item.dart';
+import 'package:PiliPalaX/http/index.dart';
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType, SkipTypeExt;
 import 'package:PiliPalaX/utils/storage.dart';
@@ -28,6 +28,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   late String _userId;
   late bool _blockToast;
   late String _blockServer;
+  late bool _blockTrack;
+  bool? _serverStatus;
 
   @override
   void initState() {
@@ -38,6 +40,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     _userId = GStorage.blockUserID;
     _blockToast = GStorage.blockToast;
     _blockServer = GStorage.blockServer;
+    _blockTrack = GStorage.blockTrack;
+    _checkServerStatus();
   }
 
   @override
@@ -46,9 +50,21 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     super.dispose();
   }
 
-  TextStyle get _titleStyle => TextStyle(fontSize: 15);
-  TextStyle get _subTitleStyle =>
-      TextStyle(color: Theme.of(context).colorScheme.outline);
+  TextStyle get _titleStyle => TextStyle(fontSize: 14);
+  TextStyle get _subTitleStyle => TextStyle(
+        fontSize: 12,
+        color: Theme.of(context).colorScheme.outline,
+      );
+
+  _checkServerStatus() {
+    Request().get('$_blockServer/api/status').then((res) {
+      if (res.data is Map) {
+        setState(() {
+          _serverStatus = res.data['uptime'] != null;
+        });
+      }
+    });
+  }
 
   Widget get _blockLimitItem => ListTile(
         dense: true,
@@ -184,6 +200,12 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     setState(() {});
   }
 
+  void _updateBlockTrack() async {
+    _blockTrack = !_blockTrack;
+    await GStorage.setting.put(SettingBoxKey.blockTrack, _blockTrack);
+    setState(() {});
+  }
+
   Widget get _blockToastItem => ListTile(
       dense: true,
       onTap: _updateBlockToast,
@@ -204,6 +226,30 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           value: _blockToast,
           onChanged: (val) {
             _updateBlockToast();
+          },
+        ),
+      ));
+
+  Widget get _blockTrackItem => ListTile(
+      dense: true,
+      onTap: _updateBlockTrack,
+      title: Text(
+        '记录跳过片段',
+        style: _titleStyle,
+      ),
+      trailing: Transform.scale(
+        alignment: Alignment.centerRight,
+        scale: 0.8,
+        child: Switch(
+          thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
+            if (states.isNotEmpty && states.first == WidgetState.selected) {
+              return const Icon(Icons.done);
+            }
+            return null;
+          }),
+          value: _blockTrack,
+          onChanged: (val) {
+            _updateBlockTrack();
           },
         ),
       ));
@@ -267,6 +313,30 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         ),
       );
 
+  Widget get _serverStatusItem => ListTile(
+        dense: true,
+        onTap: _checkServerStatus,
+        title: Text(
+          '服务器状态',
+          style: _titleStyle,
+        ),
+        trailing: Text(
+          _serverStatus == null
+              ? '-'
+              : _serverStatus == true
+                  ? '正常'
+                  : '错误',
+          style: TextStyle(
+            fontSize: 13,
+            color: _serverStatus == null
+                ? null
+                : _serverStatus == true
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.error,
+          ),
+        ),
+      );
+
   Widget get _divider => SliverToBoxAdapter(
         child: Divider(
           height: 1,
@@ -295,9 +365,13 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       body: CustomScrollView(
         slivers: [
           _dividerL,
+          SliverToBoxAdapter(child: _serverStatusItem),
+          _dividerL,
           SliverToBoxAdapter(child: _blockLimitItem),
           _divider,
           SliverToBoxAdapter(child: _blockToastItem),
+          _divider,
+          SliverToBoxAdapter(child: _blockTrackItem),
           _dividerL,
           SliverList.separated(
             itemCount: _blockSettings.length,
@@ -377,22 +451,23 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                           ),
                         ),
                       ),
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 14),
                     ),
                     TextSpan(
                       text: ' ${_blockSettings[index].first.title}',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 14),
                     ),
                   ],
                 ),
               ),
               subtitle: Text(
                 _blockSettings[index].first.description,
-                style: _blockSettings[index].second == SkipType.disable
-                    ? null
-                    : TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: _blockSettings[index].second == SkipType.disable
+                      ? null
+                      : Theme.of(context).colorScheme.outline,
+                ),
               ),
               trailing: PopupMenuButton(
                 initialValue: _blockSettings[index].second,

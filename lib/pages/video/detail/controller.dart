@@ -58,7 +58,7 @@ extension SegmentTypeExt on SegmentType {
         '订阅提醒', //interaction
         '开场', //intro
         '片尾', //outro
-        '回顾', //preview
+        '预览', //preview
         '非音乐', //music_offtopic
         '精彩时刻', //poi_highlight
         '闲聊', //filler
@@ -603,6 +603,12 @@ class VideoDetailController extends GetxController
                   item.hasSkipped = true;
                   if (GStorage.blockToast) {
                     _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
+                  }
+                  if (GStorage.blockTrack) {
+                    Request().post(
+                      '${GStorage.blockServer}/api/viewedVideoSponsorTime',
+                      queryParameters: {'UUID': item.UUID},
+                    );
                   }
                 } catch (e) {
                   debugPrint('failed to skip: $e');

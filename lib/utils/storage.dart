@@ -67,6 +67,9 @@ class GStorage {
   static String get blockServer => setting.get(SettingBoxKey.blockServer,
       defaultValue: HttpString.sponsorBlockBaseUrl);
 
+  static bool get blockTrack =>
+      setting.get(SettingBoxKey.blockTrack, defaultValue: true);
+
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
         defaultValue: ThemeType.system.code)) {
@@ -246,6 +249,7 @@ class SettingBoxKey {
       blockUserID = 'blockUserID',
       blockToast = 'blockToast',
       blockServer = 'blockServer',
+      blockTrack = 'blockTrack',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',

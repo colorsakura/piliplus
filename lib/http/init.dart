@@ -189,7 +189,7 @@ class Request {
   /*
    * get请求
    */
-  Future get(url, {data, options, cancelToken, extra}) async {
+  Future<Response> get(url, {data, options, cancelToken, extra}) async {
     Response response;
     if (extra != null) {
       if (extra['ua'] != null) {
