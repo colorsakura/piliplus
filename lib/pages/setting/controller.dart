@@ -24,6 +24,7 @@ class SettingController extends GetxController {
   RxBool feedBackEnable = false.obs;
   RxDouble toastOpacity = (1.0).obs;
   RxInt picQuality = 10.obs;
+  RxInt previewQ = 80.obs;
   Rx<ThemeType> themeType = ThemeType.system.obs;
   dynamic userInfo;
   Rx<DynamicBadgeMode> dynamicBadgeType = DynamicBadgeMode.number.obs;
@@ -49,6 +50,8 @@ class SettingController extends GetxController {
         defaultValue: DynamicBadgeMode.number.code)];
     defaultHomePage.value =
         setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0);
+    previewQ.value =
+        setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
   }
 
   loginOut(BuildContext context) async {

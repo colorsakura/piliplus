@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -36,12 +37,16 @@ class _ImagePreviewState extends State<ImagePreview>
   late DoubleClickAnimationListener _doubleClickAnimationListener;
   List<double> doubleTapScales = <double>[1.0, 2.0];
   List<String>? imgList;
+  int _quality = 80;
 
   @override
   void initState() {
     super.initState();
 
     imgList = widget.imgList?.map((url) => url.http2https).toList();
+
+    _quality =
+        GStorage.setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
 
     _previewController.initialPage.value = widget.initialPage!;
     _previewController.currentPage.value = widget.initialPage! + 1;
@@ -169,7 +174,7 @@ class _ImagePreviewState extends State<ImagePreview>
                 itemCount: imgList!.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ExtendedImage.network(
-                    imgList![index],
+                    '${imgList![index]}@${_quality}q.webp',
                     fit: BoxFit.contain,
                     mode: ExtendedImageMode.gesture,
                     handleLoadingProgress: true,

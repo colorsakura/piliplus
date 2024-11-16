@@ -32,7 +32,6 @@ class _StyleSettingState extends State<StyleSetting> {
       Get.put(ColorSelectController());
 
   Box setting = GStorage.setting;
-  late int picQuality;
   late ThemeType _tempThemeValue;
   late double maxRowWidth;
   late UpPanelPosition upPanelPosition;
@@ -40,7 +39,6 @@ class _StyleSettingState extends State<StyleSetting> {
   @override
   void initState() {
     super.initState();
-    picQuality = setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
     _tempThemeValue = settingController.themeType.value;
     maxRowWidth =
         setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0) as double;
@@ -221,56 +219,14 @@ class _StyleSettingState extends State<StyleSetting> {
           ListTile(
             dense: false,
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return StatefulBuilder(
-                    builder: (context, StateSetter setState) {
-                      final SettingController settingController =
-                          Get.put(SettingController());
-                      return AlertDialog(
-                        title: const Text('图片质量'),
-                        contentPadding: const EdgeInsets.only(
-                            top: 20, left: 8, right: 8, bottom: 8),
-                        content: SizedBox(
-                          height: 40,
-                          child: Slider(
-                            value: picQuality.toDouble(),
-                            min: 10,
-                            max: 100,
-                            divisions: 9,
-                            label: '$picQuality%',
-                            onChanged: (double val) {
-                              picQuality = val.toInt();
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Get.back(),
-                              child: Text('取消',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outline))),
-                          TextButton(
-                            onPressed: () {
-                              setting.put(
-                                  SettingBoxKey.defaultPicQa, picQuality);
-                              Get.back();
-                              settingController.picQuality.value = picQuality;
-                              GlobalData().imgQuality = picQuality;
-                              SmartDialog.showToast('设置成功');
-                            },
-                            child: const Text('确定'),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
+              _showQualityDialog(
+                  title: '图片质量',
+                  initValue: settingController.picQuality.value,
+                  callback: (picQuality) {
+                    setting.put(SettingBoxKey.defaultPicQa, picQuality);
+                    settingController.picQuality.value = picQuality;
+                    GlobalData().imgQuality = picQuality;
+                  });
             },
             title: Text('图片质量', style: titleStyle),
             subtitle: Text('选择合适的图片清晰度，上限100%', style: subTitleStyle),
@@ -280,6 +236,31 @@ class _StyleSettingState extends State<StyleSetting> {
               child: Obx(
                 () => Text(
                   '${settingController.picQuality.value}%',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            ),
+          ),
+          // preview quality
+          ListTile(
+            dense: false,
+            onTap: () {
+              _showQualityDialog(
+                  title: '查看大图质量',
+                  initValue: settingController.previewQ.value,
+                  callback: (picQuality) {
+                    setting.put(SettingBoxKey.previewQuality, picQuality);
+                    settingController.previewQ.value = picQuality;
+                  });
+            },
+            title: Text('查看大图质量', style: titleStyle),
+            subtitle: Text('选择合适的图片清晰度，上限100%', style: subTitleStyle),
+            leading: const Icon(Icons.image_outlined),
+            trailing: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Obx(
+                () => Text(
+                  '${settingController.previewQ.value}%',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -391,6 +372,55 @@ class _StyleSettingState extends State<StyleSetting> {
             )
         ],
       ),
+    );
+  }
+
+  void _showQualityDialog({
+    required String title,
+    required int initValue,
+    required ValueChanged<int> callback,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        int picQuality = initValue;
+        return AlertDialog(
+          title: Text(title),
+          contentPadding:
+              const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 8),
+          content: SizedBox(
+            height: 40,
+            child: Builder(
+              builder: (context) => Slider(
+                value: picQuality.toDouble(),
+                min: 10,
+                max: 100,
+                divisions: 9,
+                label: '$picQuality%',
+                onChanged: (double val) {
+                  picQuality = val.toInt();
+                  (context as Element).markNeedsBuild();
+                },
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Get.back(),
+                child: Text('取消',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline))),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                callback(picQuality);
+                SmartDialog.showToast('设置成功');
+              },
+              child: const Text('确定'),
+            )
+          ],
+        );
+      },
     );
   }
 }
