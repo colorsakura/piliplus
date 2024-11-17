@@ -318,34 +318,37 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         : SelfSizedHorizontalList(
                             gapSize: 10,
                             itemCount: videoItem['staff'].length,
-                            childBuilder: (index) => Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => Get.toNamed(
-                                      '/member?mid=${videoItem['staff'][index].mid}',
-                                      arguments: {
-                                        'face': videoItem['staff'][index].face,
-                                        heroTag: Utils.makeHeroTag(
-                                            videoItem['staff'][index].mid),
-                                      }),
-                                  child: NetworkImgLayer(
-                                    type: 'avatar',
-                                    src: videoItem['staff'][index].face,
-                                    width: 40,
-                                    height: 40,
-                                    fadeInDuration: Duration.zero,
-                                    fadeOutDuration: Duration.zero,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  videoItem['staff'][index].name.length > 5
-                                      ? '${videoItem['staff'][index].name.toString().substring(0, 5)}...'
-                                      : videoItem['staff'][index].name,
-                                  style: TextStyle(
-                                    color:
-                                        videoItem['staff'][index].vip.status >
+                            childBuilder: (index) => Container(
+                              width: 70,
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () => Get.toNamed(
+                                    '/member?mid=${videoItem['staff'][index].mid}',
+                                    arguments: {
+                                      'face': videoItem['staff'][index].face,
+                                      heroTag: Utils.makeHeroTag(
+                                          videoItem['staff'][index].mid),
+                                    }),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    NetworkImgLayer(
+                                      type: 'avatar',
+                                      src: videoItem['staff'][index].face,
+                                      width: 40,
+                                      height: 40,
+                                      fadeInDuration: Duration.zero,
+                                      fadeOutDuration: Duration.zero,
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      videoItem['staff'][index].name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: videoItem['staff'][index]
+                                                        .vip
+                                                        .status >
                                                     0 &&
                                                 videoItem['staff'][index]
                                                         .vip
@@ -353,17 +356,20 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                                     2
                                             ? Utils.vipColor
                                             : null,
-                                  ),
+                                      ),
+                                    ),
+                                    Text(
+                                      videoItem['staff'][index].title,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  videoItem['staff'][index].title,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                   ),
