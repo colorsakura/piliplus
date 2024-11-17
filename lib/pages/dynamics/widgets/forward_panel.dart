@@ -125,7 +125,9 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
       return videoSeasonWidget(item, context, 'archive', floor: floor);
     // 文章
     case 'DYNAMIC_TYPE_ARTICLE':
-      return articlePanel(item, context, floor: floor);
+      return item is ItemOrigModel
+          ? articlePanel(item, context, floor: floor)
+          : const SizedBox.shrink();
     // return Container(
     //     padding:
     //         const EdgeInsets.only(left: 10, top: 12, right: 10, bottom: 10),
