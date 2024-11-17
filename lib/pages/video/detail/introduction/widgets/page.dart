@@ -122,7 +122,9 @@ class _PagesPanelState extends State<PagesPanel> {
               bool isCurrentIndex = currentIndex == i;
               return Container(
                 width: 150,
-                margin: const EdgeInsets.only(right: 10),
+                margin: EdgeInsets.only(
+                  right: i != widget.pages.length - 1 ? 10 : 0,
+                ),
                 child: Material(
                   color: Theme.of(context).colorScheme.onInverseSurface,
                   borderRadius: BorderRadius.circular(6),
