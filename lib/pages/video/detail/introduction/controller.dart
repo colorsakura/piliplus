@@ -613,19 +613,18 @@ class VideoIntroController extends GetxController
   bool prevPlay() {
     final List episodes = [];
     bool isPages = false;
-    if (videoDetail.value.ugcSeason != null) {
+    if ((videoDetail.value.pages?.length ?? 0) > 1) {
+      isPages = true;
+      final List<Part> pages = videoDetail.value.pages!;
+      episodes.addAll(pages);
+    } else if (videoDetail.value.ugcSeason != null) {
       final UgcSeason ugcSeason = videoDetail.value.ugcSeason!;
       final List<SectionItem> sections = ugcSeason.sections!;
       for (int i = 0; i < sections.length; i++) {
         final List<EpisodeItem> episodesList = sections[i].episodes!;
         episodes.addAll(episodesList);
       }
-    } else if (videoDetail.value.pages != null) {
-      isPages = true;
-      final List<Part> pages = videoDetail.value.pages!;
-      episodes.addAll(pages);
     }
-
     final int currentIndex =
         episodes.indexWhere((e) => e.cid == lastPlayCid.value);
     int prevIndex = currentIndex - 1;
@@ -652,17 +651,17 @@ class VideoIntroController extends GetxController
   bool nextPlay() {
     final List episodes = [];
     bool isPages = false;
-    if (videoDetail.value.ugcSeason != null) {
+    if ((videoDetail.value.pages?.length ?? 0) > 1) {
+      isPages = true;
+      final List<Part> pages = videoDetail.value.pages!;
+      episodes.addAll(pages);
+    } else if (videoDetail.value.ugcSeason != null) {
       final UgcSeason ugcSeason = videoDetail.value.ugcSeason!;
       final List<SectionItem> sections = ugcSeason.sections!;
       for (int i = 0; i < sections.length; i++) {
         final List<EpisodeItem> episodesList = sections[i].episodes!;
         episodes.addAll(episodesList);
       }
-    } else if (videoDetail.value.pages != null) {
-      isPages = true;
-      final List<Part> pages = videoDetail.value.pages!;
-      episodes.addAll(pages);
     }
     final VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: heroTag);

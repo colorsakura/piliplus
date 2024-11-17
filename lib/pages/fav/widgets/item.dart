@@ -76,7 +76,7 @@ class VideoContent extends StatelessWidget {
               favFolderItem.title,
               textAlign: TextAlign.start,
               style: const TextStyle(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
                 letterSpacing: 0.3,
               ),
             ),
