@@ -164,8 +164,10 @@ class LoginPageController extends GetxController
       final HomeController homeCtr = Get.find<HomeController>();
       homeCtr.updateLoginStatus(true);
       homeCtr.userFace.value = result['data'].face;
-      final MediaController mediaCtr = Get.find<MediaController>();
-      mediaCtr.mid = result['data'].mid;
+      final MediaController? mediaCtr = Get.isRegistered<MediaController>()
+          ? Get.find<MediaController>()
+          : null;
+      mediaCtr?.mid = result['data'].mid;
       await LoginUtils.refreshLoginStatus(true);
     } else {
       // 获取用户信息失败
