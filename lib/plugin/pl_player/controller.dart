@@ -862,9 +862,12 @@ class PlPlayerController {
     try {
       DanmakuOption currentOption = danmakuController!.option;
       defaultDuration ??= currentOption.duration;
-      DanmakuOption updatedOption = currentOption.copyWith(
-          duration: (defaultDuration! / speed) * playbackSpeed);
+      DanmakuOption updatedOption =
+          currentOption.copyWith(duration: defaultDuration! / speed);
       danmakuController!.updateOption(updatedOption);
+      if (speed == 1.0) {
+        defaultDuration = null;
+      }
     } catch (_) {}
     // fix 长按倍速后放开不恢复
     if (!doubleSpeedStatus.value) {
