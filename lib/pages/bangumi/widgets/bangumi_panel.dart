@@ -155,7 +155,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                           widget.pages[i].badge == '会员' &&
                           vipStatus != 1) {
                         SmartDialog.showToast('需要大会员');
-                        return;
+                        // return;
                       }
                       widget.changeFuc(
                         widget.pages[i].epId,

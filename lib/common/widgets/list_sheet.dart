@@ -178,7 +178,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           }
           if (vipStatus != 1) {
             SmartDialog.showToast('需要大会员');
-            return;
+            // return;
           }
         }
         SmartDialog.showToast('切换到：$title');
