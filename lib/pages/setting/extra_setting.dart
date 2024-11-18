@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/main/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -146,6 +147,58 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.enableSponsorBlock,
             defaultVal: false,
             onTap: () => Get.toNamed('/sponsorBlock'),
+          ),
+          SetSwitchItem(
+            title: '检查未读动态',
+            subTitle: '点击设置检查周期(min)',
+            leading: Icon(Icons.notifications_none),
+            setKey: SettingBoxKey.checkDynamic,
+            defaultVal: true,
+            callFn: (value) {
+              Get.find<MainController>().checkDynamic = value;
+            },
+            onTap: () {
+              int dynamicPeriod = GStorage.dynamicPeriod;
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('检查周期', style: TextStyle(fontSize: 18)),
+                    content: TextFormField(
+                      autofocus: true,
+                      initialValue: dynamicPeriod.toString(),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (value) {
+                        dynamicPeriod = int.tryParse(value) ?? 5;
+                      },
+                      decoration: InputDecoration(suffixText: 'min'),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          GStorage.setting
+                              .put(SettingBoxKey.dynamicPeriod, dynamicPeriod);
+                          Get.find<MainController>().dynamicPeriod =
+                              dynamicPeriod;
+                        },
+                        child: Text('确定'),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
           ),
           Obx(
             () => ListTile(

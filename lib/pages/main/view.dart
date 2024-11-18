@@ -17,9 +17,13 @@ class MainApp extends StatefulWidget {
 
   @override
   State<MainApp> createState() => _MainAppState();
+
+  static final RouteObserver<PageRoute> routeObserver =
+      RouteObserver<PageRoute>();
 }
 
-class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
+class _MainAppState extends State<MainApp>
+    with SingleTickerProviderStateMixin, RouteAware, WidgetsBindingObserver {
   final MainController _mainController = Get.put(MainController());
   final HomeController _homeController = Get.put(HomeController());
   final DynamicsController _dynamicController = Get.put(DynamicsController());
@@ -37,6 +41,26 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
         PageController(initialPage: _mainController.selectedIndex);
     enableMYBar = setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar = setting.get(SettingBoxKey.useSideBar, defaultValue: false);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    MainApp.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    _mainController.checkUnreadDynamic();
+    super.didPopNext();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _mainController.checkUnreadDynamic();
+    }
   }
 
   void setIndex(int value) async {
@@ -92,6 +116,8 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() async {
+    MainApp.routeObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
     await GrpcClient.instance.shutdown();
     await GStorage.close();
     EventBus().off(EventName.loginEvent);
@@ -125,72 +151,59 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                     width: context.width * 0.0387 +
                         36.801 +
                         MediaQuery.of(context).padding.left,
-                    child: NavigationRail(
-                      groupAlignment: 1,
-                      minWidth: context.width * 0.0286 + 28.56,
-                      backgroundColor: Colors.transparent,
-                      selectedIndex: _mainController.selectedIndex,
-                      onDestinationSelected: (value) => setIndex(value),
-                      labelType: NavigationRailLabelType.none,
-                      leading: UserAndSearchVertical(ctr: _homeController),
-                      destinations: _mainController.navigationBars
-                          .map((e) => NavigationRailDestination(
-                                icon: Badge(
-                                  label: _mainController.dynamicBadgeType ==
-                                          DynamicBadgeMode.number
-                                      ? Text(e['count'].toString())
-                                      : null,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  isLabelVisible:
-                                      _mainController.dynamicBadgeType !=
-                                              DynamicBadgeMode.hidden &&
-                                          e['count'] > 0,
-                                  child: e['icon'],
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onInverseSurface,
-                                ),
-                                selectedIcon: e['selectIcon'],
-                                label: Text(e['label']),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0.01 * context.height),
-                              ))
-                          .toList(),
-                      trailing: SizedBox(height: 0.1 * context.height),
+                    child: Obx(
+                      () => NavigationRail(
+                        groupAlignment: 1,
+                        minWidth: context.width * 0.0286 + 28.56,
+                        backgroundColor: Colors.transparent,
+                        selectedIndex: _mainController.selectedIndex,
+                        onDestinationSelected: (value) => setIndex(value),
+                        labelType: NavigationRailLabelType.none,
+                        leading: UserAndSearchVertical(ctr: _homeController),
+                        destinations: _mainController.navigationBars
+                            .map((e) => NavigationRailDestination(
+                                  icon: _buildIcon(
+                                    id: e['id'],
+                                    count: e['count'],
+                                    icon: e['icon'],
+                                  ),
+                                  selectedIcon: _buildIcon(
+                                    id: e['id'],
+                                    count: e['count'],
+                                    icon: e['selectIcon'],
+                                  ),
+                                  label: Text(e['label']),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0.01 * context.height),
+                                ))
+                            .toList(),
+                        trailing: SizedBox(height: 0.1 * context.height),
+                      ),
                     ),
                   ),
                 ] else if (!isPortait)
-                  NavigationRail(
-                    onDestinationSelected: (value) => setIndex(value),
-                    selectedIndex: _mainController.selectedIndex,
-                    destinations: _mainController.navigationBars
-                        .map(
-                          (e) => NavigationRailDestination(
-                            icon: Badge(
-                              label: _mainController.dynamicBadgeType ==
-                                      DynamicBadgeMode.number
-                                  ? Text(e['count'].toString())
-                                  : null,
-                              padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                              isLabelVisible:
-                                  _mainController.dynamicBadgeType !=
-                                          DynamicBadgeMode.hidden &&
-                                      e['count'] > 0,
-                              child: e['icon'],
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                              textColor: Theme.of(context)
-                                  .colorScheme
-                                  .onInverseSurface,
+                  Obx(
+                    () => NavigationRail(
+                      onDestinationSelected: (value) => setIndex(value),
+                      selectedIndex: _mainController.selectedIndex,
+                      destinations: _mainController.navigationBars
+                          .map(
+                            (e) => NavigationRailDestination(
+                              icon: _buildIcon(
+                                id: e['id'],
+                                count: e['count'],
+                                icon: e['icon'],
+                              ),
+                              selectedIcon: _buildIcon(
+                                id: e['id'],
+                                count: e['count'],
+                                icon: e['selectIcon'],
+                              ),
+                              label: Text(e['label']),
                             ),
-                            selectedIcon: e['selectIcon'],
-                            label: Text(e['label']),
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ),
                   ),
                 VerticalDivider(
                   width: 1,
@@ -226,78 +239,61 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
                         duration: const Duration(milliseconds: 500),
                         offset: Offset(0, snapshot.data ? 0 : 1),
                         child: enableMYBar
-                            ? NavigationBar(
-                                onDestinationSelected: (value) =>
-                                    setIndex(value),
-                                selectedIndex: _mainController.selectedIndex,
-                                destinations: _mainController.navigationBars
-                                    .map(
-                                      (e) => NavigationDestination(
-                                        icon: Badge(
-                                          label: _mainController
-                                                      .dynamicBadgeType ==
-                                                  DynamicBadgeMode.number
-                                              ? Text(e['count'].toString())
-                                              : null,
-                                          padding: const EdgeInsets.fromLTRB(
-                                              6, 0, 6, 0),
-                                          isLabelVisible: _mainController
-                                                      .dynamicBadgeType !=
-                                                  DynamicBadgeMode.hidden &&
-                                              e['count'] > 0,
-                                          child: e['icon'],
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          textColor: Theme.of(context)
-                                              .colorScheme
-                                              .onInverseSurface,
+                            ? Obx(
+                                () => NavigationBar(
+                                  onDestinationSelected: (value) =>
+                                      setIndex(value),
+                                  selectedIndex: _mainController.selectedIndex,
+                                  destinations:
+                                      _mainController.navigationBars.map(
+                                    (e) {
+                                      return NavigationDestination(
+                                        icon: _buildIcon(
+                                          id: e['id'],
+                                          count: e['count'],
+                                          icon: e['icon'],
                                         ),
-                                        selectedIcon: e['selectIcon'],
+                                        selectedIcon: _buildIcon(
+                                          id: e['id'],
+                                          count: e['count'],
+                                          icon: e['selectIcon'],
+                                        ),
                                         label: e['label'],
-                                      ),
-                                    )
-                                    .toList(),
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
                               )
-                            : BottomNavigationBar(
-                                currentIndex: _mainController.selectedIndex,
-                                onTap: (value) => setIndex(value),
-                                iconSize: 16,
-                                selectedFontSize: 12,
-                                unselectedFontSize: 12,
-                                type: BottomNavigationBarType.fixed,
-                                // selectedItemColor:
-                                //     Theme.of(context).colorScheme.primary, // 选中项的颜色
-                                // unselectedItemColor:
-                                //     Theme.of(context).colorScheme.onSurface,
-                                items: _mainController.navigationBars
-                                    .map(
-                                      (e) => BottomNavigationBarItem(
-                                        icon: Badge(
-                                          label: _mainController
-                                                      .dynamicBadgeType ==
-                                                  DynamicBadgeMode.number
-                                              ? Text(e['count'].toString())
-                                              : null,
-                                          padding: const EdgeInsets.fromLTRB(
-                                              6, 0, 6, 0),
-                                          isLabelVisible: _mainController
-                                                      .dynamicBadgeType !=
-                                                  DynamicBadgeMode.hidden &&
-                                              e['count'] > 0,
-                                          child: e['icon'],
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          textColor: Theme.of(context)
-                                              .colorScheme
-                                              .onInverseSurface,
+                            : Obx(
+                                () => BottomNavigationBar(
+                                  currentIndex: _mainController.selectedIndex,
+                                  onTap: (value) => setIndex(value),
+                                  iconSize: 16,
+                                  selectedFontSize: 12,
+                                  unselectedFontSize: 12,
+                                  type: BottomNavigationBarType.fixed,
+                                  // selectedItemColor:
+                                  //     Theme.of(context).colorScheme.primary, // 选中项的颜色
+                                  // unselectedItemColor:
+                                  //     Theme.of(context).colorScheme.onSurface,
+                                  items: _mainController.navigationBars
+                                      .map(
+                                        (e) => BottomNavigationBarItem(
+                                          icon: _buildIcon(
+                                            id: e['id'],
+                                            count: e['count'],
+                                            icon: e['icon'],
+                                          ),
+                                          activeIcon: _buildIcon(
+                                            id: e['id'],
+                                            count: e['count'],
+                                            icon: e['selectIcon'],
+                                          ),
+                                          label: e['label'],
                                         ),
-                                        activeIcon: e['selectIcon'],
-                                        label: e['label'],
-                                      ),
-                                    )
-                                    .toList(),
+                                      )
+                                      .toList(),
+                                ),
                               ),
                       );
                     },
@@ -307,4 +303,26 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
       ),
     );
   }
+
+  Widget _buildIcon({
+    required int id,
+    required int count,
+    required Widget icon,
+  }) =>
+      id == 1 &&
+              _mainController.dynamicBadgeType != DynamicBadgeMode.hidden &&
+              count > 0
+          ? Badge(
+              label: _mainController.dynamicBadgeType == DynamicBadgeMode.number
+                  ? Text(count.toString())
+                  : null,
+              padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+              // isLabelVisible:
+              //     _mainController.dynamicBadgeType != DynamicBadgeMode.hidden &&
+              //         count > 0,
+              // backgroundColor: Theme.of(context).colorScheme.primary,
+              // textColor: Theme.of(context).colorScheme.onInverseSurface,
+              child: icon,
+            )
+          : icon;
 }

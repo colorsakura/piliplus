@@ -70,6 +70,12 @@ class GStorage {
   static bool get blockTrack =>
       setting.get(SettingBoxKey.blockTrack, defaultValue: true);
 
+  static bool get checkDynamic =>
+      setting.get(SettingBoxKey.checkDynamic, defaultValue: true);
+
+  static int get dynamicPeriod =>
+      setting.get(SettingBoxKey.dynamicPeriod, defaultValue: 5);
+
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
         defaultValue: ThemeType.system.code)) {
@@ -251,6 +257,8 @@ class SettingBoxKey {
       blockServer = 'blockServer',
       blockTrack = 'blockTrack',
       previewQuality = 'previewQuality',
+      checkDynamic = 'checkDynamic',
+      dynamicPeriod = 'dynamicPeriod',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',

@@ -31,10 +31,15 @@ class MainController extends GetxController {
   Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
   late DynamicBadgeMode dynamicBadgeType;
+  late bool checkDynamic;
+  late int dynamicPeriod;
+  int? _lastCheckAt;
 
   @override
   void onInit() {
     super.onInit();
+    checkDynamic = GStorage.checkDynamic;
+    dynamicPeriod = GStorage.dynamicPeriod;
     if (setting.get(SettingBoxKey.autoUpdate, defaultValue: false)) {
       Utils.checkUpdate();
     }
@@ -49,6 +54,9 @@ class MainController extends GetxController {
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.code)];
     if (dynamicBadgeType != DynamicBadgeMode.hidden) {
+      if (checkDynamic) {
+        _lastCheckAt = DateTime.now().millisecondsSinceEpoch;
+      }
       getUnreadDynamic();
     }
   }
@@ -78,23 +86,34 @@ class MainController extends GetxController {
     if (!userLogin.value) {
       return;
     }
-    int dynamicItemIndex =
-        navigationBars.indexWhere((item) => item['label'] == "动态");
+    // not needed yet
+    // int dynamicItemIndex =
+    //     navigationBars.indexWhere((item) => item['label'] == "动态");
+    // if (dynamicItemIndex == -1) return;
     var res = await CommonHttp.unReadDynamic();
     var data = res['data'];
-    if (dynamicItemIndex != -1) {
-      navigationBars[dynamicItemIndex]['count'] =
-          data == null ? 0 : data.length; // 修改 count 属性为新的值
-    }
+    navigationBars[1]['count'] =
+        data == null ? 0 : data.length; // 修改 count 属性为新的值
     navigationBars.refresh();
   }
 
   void clearUnread() async {
-    int dynamicItemIndex =
-        navigationBars.indexWhere((item) => item['label'] == "动态");
-    if (dynamicItemIndex != -1) {
-      navigationBars[dynamicItemIndex]['count'] = 0; // 修改 count 属性为新的值
-    }
+    // not needed yet
+    // int dynamicItemIndex =
+    //     navigationBars.indexWhere((item) => item['label'] == "动态");
+    // if (dynamicItemIndex == -1) return;
+    navigationBars[1]['count'] = 0; // 修改 count 属性为新的值
     navigationBars.refresh();
+  }
+
+  void checkUnreadDynamic() {
+    if (!userLogin.value ||
+        dynamicBadgeType == DynamicBadgeMode.hidden ||
+        !checkDynamic) return;
+    int now = DateTime.now().millisecondsSinceEpoch;
+    if (now - (_lastCheckAt ?? 0) >= dynamicPeriod * 60 * 1000) {
+      _lastCheckAt = now;
+      getUnreadDynamic();
+    }
   }
 }
