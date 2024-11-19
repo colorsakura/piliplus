@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/grpc/app/dynamic/v1/dynamic.pb.dart';
 import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
@@ -231,9 +232,18 @@ class GrpcRepo {
         ..localTime = 8
         ..page = Int64(page)
         ..from = 'space';
-      final DynSpaceRsp response = await GrpcClient.instance.dynamicClient
+      final DynSpaceRsp response = await GrpcClient.instance.dynamicClientV2
           .dynSpace(request, options: options);
       return {'status': true, 'data': response};
+    });
+  }
+
+  static Future dynRed() async {
+    return await _request(() async {
+      final request = DynRedReq()..tabOffset.add(TabOffset(tab: 1));
+      final DynRedReply response = await GrpcClient.instance.dynamicClientV1
+          .dynRed(request, options: options);
+      return {'status': true, 'data': response.dynRedItem.count.toInt()};
     });
   }
 }

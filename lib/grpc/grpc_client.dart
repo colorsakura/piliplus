@@ -1,4 +1,5 @@
-import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pbgrpc.dart';
+import 'package:PiliPalaX/grpc/app/dynamic/v1/dynamic.pbgrpc.dart' as v1;
+import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pbgrpc.dart' as v2;
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pbgrpc.dart';
 import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
 import 'package:PiliPalaX/grpc/app/show/popular/v1/popular.pbgrpc.dart';
@@ -9,7 +10,8 @@ class GrpcClient {
   PlayerOnlineClient? _playerOnlineClient;
   PopularClient? _popularClient;
   ReplyClient? _replyClient;
-  DynamicClient? _dynamicClient;
+  v2.DynamicClient? _dynamicClientV2;
+  v1.DynamicClient? _dynamicClientV1;
 
   GrpcClient._internal() {
     _channel = ClientChannel(
@@ -39,9 +41,14 @@ class GrpcClient {
     return _replyClient!;
   }
 
-  DynamicClient get dynamicClient {
-    _dynamicClient ??= DynamicClient(_channel!);
-    return _dynamicClient!;
+  v2.DynamicClient get dynamicClientV2 {
+    _dynamicClientV2 ??= v2.DynamicClient(_channel!);
+    return _dynamicClientV2!;
+  }
+
+  v1.DynamicClient get dynamicClientV1 {
+    _dynamicClientV1 ??= v1.DynamicClient(_channel!);
+    return _dynamicClientV1!;
   }
 
   Future<void> shutdown() async {

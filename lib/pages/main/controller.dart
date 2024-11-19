@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -89,10 +91,15 @@ class MainController extends GetxController {
     // int dynamicItemIndex =
     //     navigationBars.indexWhere((item) => item['label'] == "动态");
     // if (dynamicItemIndex == -1) return;
-    var res = await CommonHttp.unReadDynamic();
-    var data = res['data'];
-    navigationBars[1]['count'] =
-        data == null ? 0 : data.length; // 修改 count 属性为新的值
+    // var res = await CommonHttp.unReadDynamic();
+    // var data = res['data'];
+    // navigationBars[1]['count'] =
+    //     data == null ? 0 : data.length; // 修改 count 属性为新的值
+    await GrpcRepo.dynRed().then((res) {
+      if (res['status']) {
+        navigationBars[1]['count'] = res['data'];
+      }
+    });
     navigationBars.refresh();
   }
 
