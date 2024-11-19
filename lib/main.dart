@@ -114,6 +114,8 @@ class MyApp extends StatelessWidget {
     // 字体缩放大小
     double textScale =
         setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
+    DynamicSchemeVariant dynamicSchemeVariant =
+        DynamicSchemeVariant.values[GStorage.schemeVariant];
 
     // 强制设置高帧率
     if (Platform.isAndroid) {
@@ -144,12 +146,12 @@ class MyApp extends StatelessWidget {
           lightColorScheme = ColorScheme.fromSeed(
             seedColor: brandColor,
             brightness: Brightness.light,
-            // dynamicSchemeVariant: DynamicSchemeVariant.neutral,
+            dynamicSchemeVariant: dynamicSchemeVariant,
           );
           darkColorScheme = ColorScheme.fromSeed(
             seedColor: brandColor,
             brightness: Brightness.dark,
-            // dynamicSchemeVariant: DynamicSchemeVariant.neutral,
+            dynamicSchemeVariant: dynamicSchemeVariant,
           );
         }
         // 图片缓存

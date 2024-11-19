@@ -76,6 +76,9 @@ class GStorage {
   static int get dynamicPeriod =>
       setting.get(SettingBoxKey.dynamicPeriod, defaultValue: 5);
 
+  static int get schemeVariant =>
+      setting.get(SettingBoxKey.schemeVariant, defaultValue: 0);
+
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
         defaultValue: ThemeType.system.code)) {
@@ -259,6 +262,7 @@ class SettingBoxKey {
       previewQuality = 'previewQuality',
       checkDynamic = 'checkDynamic',
       dynamicPeriod = 'dynamicPeriod',
+      schemeVariant = 'schemeVariant',
 
       // 弹幕相关设置 权重（云屏蔽） 屏蔽类型 显示区域 透明度 字体大小 弹幕时间 描边粗细 字体粗细
       danmakuWeight = 'danmakuWeight',
