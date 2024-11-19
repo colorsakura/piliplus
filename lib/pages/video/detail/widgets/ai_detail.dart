@@ -19,7 +19,7 @@ class AiDetail extends StatelessWidget {
     return Container(
       color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.symmetric(horizontal: 14),
-      height: Utils.getSheetHeight(context),
+      // height: Utils.getSheetHeight(context),
       child: Column(
         children: [
           InkWell(

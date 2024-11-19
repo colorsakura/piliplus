@@ -11,7 +11,6 @@ import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../../../utils/utils.dart';
 import 'controller.dart';
 
 class VideoReplyReplyPanel extends StatefulWidget {
@@ -104,9 +103,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
       key: _key,
       resizeToAvoidBottomInset: false,
       body: Container(
-        height: widget.source == 'videoDetail'
-            ? Utils.getSheetHeight(context)
-            : null,
+        // height: widget.source == 'videoDetail'
+        //     ? Utils.getSheetHeight(context)
+        //     : null,
         color: Theme.of(context).colorScheme.surface,
         child: Column(
           children: [

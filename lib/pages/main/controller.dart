@@ -3,11 +3,9 @@ import 'dart:io';
 
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPalaX/http/common.dart';
 import 'package:PiliPalaX/pages/dynamics/index.dart';
 import 'package:PiliPalaX/pages/home/view.dart';
 import 'package:PiliPalaX/pages/media/index.dart';
