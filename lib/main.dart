@@ -57,7 +57,7 @@ void main() async {
   await Request.setCookie();
   RecommendFilter();
   SmartDialog.config.toast =
-      SmartConfigToast(displayType: SmartToastType.onlyRefresh);
+      SmartConfigToast(displayType: SmartToastType.normal);
   // 异常捕获 logo记录
   final Catcher2Options debugConfig = Catcher2Options(
     SilentReportMode(),
@@ -184,7 +184,7 @@ class MyApp extends StatelessWidget {
               surfaceTintColor: lightColorScheme.surfaceTint,
             ),
             cardTheme: CardTheme(
-              elevation: 2,
+              elevation: 1,
               surfaceTintColor: lightColorScheme.surfaceTint,
               shadowColor: Colors.transparent,
             ),
@@ -216,7 +216,7 @@ class MyApp extends StatelessWidget {
               surfaceTintColor: darkColorScheme.surfaceTint,
             ),
             cardTheme: CardTheme(
-              elevation: 2,
+              elevation: 1,
               surfaceTintColor: darkColorScheme.surfaceTint,
               shadowColor: Colors.transparent,
             ),
