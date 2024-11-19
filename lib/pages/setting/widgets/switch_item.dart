@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
 
 class SetSwitchItem extends StatefulWidget {
   final String? title;
@@ -44,9 +43,9 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
   void switchChange(value) async {
     val = value ?? !val;
     await Setting.put(widget.setKey, val);
-    if (widget.setKey == SettingBoxKey.autoUpdate && value == true) {
-      Utils.checkUpdate();
-    }
+    // if (widget.setKey == SettingBoxKey.autoUpdate && value == true) {
+    //   Utils.checkUpdate();
+    // }
     if (widget.callFn != null) {
       widget.callFn!.call(val);
     }

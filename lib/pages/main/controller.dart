@@ -10,7 +10,6 @@ import 'package:PiliPalaX/pages/dynamics/index.dart';
 import 'package:PiliPalaX/pages/home/view.dart';
 import 'package:PiliPalaX/pages/media/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
 import '../../models/common/dynamic_badge_mode.dart';
 import '../../models/common/nav_bar_config.dart';
 
@@ -40,9 +39,9 @@ class MainController extends GetxController {
     super.onInit();
     checkDynamic = GStorage.checkDynamic;
     dynamicPeriod = GStorage.dynamicPeriod;
-    if (setting.get(SettingBoxKey.autoUpdate, defaultValue: false)) {
-      Utils.checkUpdate();
-    }
+    // if (setting.get(SettingBoxKey.autoUpdate, defaultValue: false)) {
+    //   Utils.checkUpdate();
+    // }
     hideTabBar = setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
     int defaultHomePage =
         setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;

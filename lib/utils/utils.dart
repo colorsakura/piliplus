@@ -659,92 +659,92 @@ class Utils {
   }
 
   // 检查更新
-  static Future<bool> checkUpdate() async {
-    SmartDialog.dismiss();
-    var currentInfo = await PackageInfo.fromPlatform();
-    var result = await Request().get(Api.latestApp, extra: {'ua': 'mob'});
-    if (result.data.isEmpty) {
-      SmartDialog.showToast('检查更新失败，github接口未返回数据，请检查网络');
-      return false;
-    }
-    LatestDataModel data = LatestDataModel.fromJson(result.data[0]);
-    String buildNumber = currentInfo.buildNumber;
-    String remoteVersion = data.tagName!;
-    if (Platform.isAndroid) {
-      buildNumber = buildNumber.substring(0, buildNumber.length - 1);
-    } else if (Platform.isIOS) {
-      remoteVersion = remoteVersion.replaceAll('-beta', '');
-    }
-    bool isUpdate =
-        Utils.needUpdate("${currentInfo.version}+$buildNumber", remoteVersion);
-    if (isUpdate) {
-      SmartDialog.show(
-        animationType: SmartAnimationType.centerFade_otherSlide,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('🎉 发现新版本 '),
-            content: SizedBox(
-              height: 280,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.tagName!,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(data.body!),
-                    TextButton(
-                        onPressed: () {
-                          launchUrl(
-                            Uri.parse(
-                                "https://github.com/bggRGjQaUbCoE/PiliPalaX/commits/main/"),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        },
-                        child: Text(
-                          "点此查看完整更新（即commit）内容",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
-                        )),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  GStorage.setting.put(SettingBoxKey.autoUpdate, false);
-                  SmartDialog.dismiss();
-                },
-                child: Text(
-                  '不再提醒',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
-                ),
-              ),
-              TextButton(
-                onPressed: () => SmartDialog.dismiss(),
-                child: Text(
-                  '取消',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
-                ),
-              ),
-              TextButton(
-                onPressed: () => matchVersion(data),
-                child: const Text('Github'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-    return true;
-  }
+  // static Future<bool> checkUpdate() async {
+  //   SmartDialog.dismiss();
+  //   var currentInfo = await PackageInfo.fromPlatform();
+  //   var result = await Request().get(Api.latestApp, extra: {'ua': 'mob'});
+  //   if (result.data.isEmpty) {
+  //     SmartDialog.showToast('检查更新失败，github接口未返回数据，请检查网络');
+  //     return false;
+  //   }
+  //   LatestDataModel data = LatestDataModel.fromJson(result.data[0]);
+  //   String buildNumber = currentInfo.buildNumber;
+  //   String remoteVersion = data.tagName!;
+  //   if (Platform.isAndroid) {
+  //     buildNumber = buildNumber.substring(0, buildNumber.length - 1);
+  //   } else if (Platform.isIOS) {
+  //     remoteVersion = remoteVersion.replaceAll('-beta', '');
+  //   }
+  //   bool isUpdate =
+  //       Utils.needUpdate("${currentInfo.version}+$buildNumber", remoteVersion);
+  //   if (isUpdate) {
+  //     SmartDialog.show(
+  //       animationType: SmartAnimationType.centerFade_otherSlide,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           title: const Text('🎉 发现新版本 '),
+  //           content: SizedBox(
+  //             height: 280,
+  //             child: SingleChildScrollView(
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     data.tagName!,
+  //                     style: const TextStyle(fontSize: 20),
+  //                   ),
+  //                   const SizedBox(height: 8),
+  //                   Text(data.body!),
+  //                   TextButton(
+  //                       onPressed: () {
+  //                         launchUrl(
+  //                           Uri.parse(
+  //                               "https://github.com/bggRGjQaUbCoE/PiliPalaX/commits/main/"),
+  //                           mode: LaunchMode.externalApplication,
+  //                         );
+  //                       },
+  //                       child: Text(
+  //                         "点此查看完整更新（即commit）内容",
+  //                         style: TextStyle(
+  //                             color: Theme.of(context).colorScheme.primary),
+  //                       )),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 GStorage.setting.put(SettingBoxKey.autoUpdate, false);
+  //                 SmartDialog.dismiss();
+  //               },
+  //               child: Text(
+  //                 '不再提醒',
+  //                 style:
+  //                     TextStyle(color: Theme.of(context).colorScheme.outline),
+  //               ),
+  //             ),
+  //             TextButton(
+  //               onPressed: () => SmartDialog.dismiss(),
+  //               child: Text(
+  //                 '取消',
+  //                 style:
+  //                     TextStyle(color: Theme.of(context).colorScheme.outline),
+  //               ),
+  //             ),
+  //             TextButton(
+  //               onPressed: () => matchVersion(data),
+  //               child: const Text('Github'),
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     );
+  //   }
+  //   return true;
+  // }
 
   // 下载适用于当前系统的安装包
   static Future matchVersion(data) async {

@@ -370,13 +370,13 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.autoClearCache,
             defaultVal: false,
           ),
-          const SetSwitchItem(
-            title: '检查更新',
-            subTitle: '每次启动时检查是否需要更新',
-            leading: Icon(Icons.system_update_alt_outlined),
-            setKey: SettingBoxKey.autoUpdate,
-            defaultVal: false,
-          ),
+          // const SetSwitchItem(
+          //   title: '检查更新',
+          //   subTitle: '每次启动时检查是否需要更新',
+          //   leading: Icon(Icons.system_update_alt_outlined),
+          //   setKey: SettingBoxKey.autoUpdate,
+          //   defaultVal: false,
+          // ),
         ],
       ),
     );

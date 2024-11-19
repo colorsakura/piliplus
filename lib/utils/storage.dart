@@ -238,7 +238,7 @@ class SettingBoxKey {
       applyFilterToRelatedVideos = 'applyFilterToRelatedVideos',
 
       /// 其他
-      autoUpdate = 'autoUpdate',
+      // autoUpdate = 'autoUpdate',
       autoClearCache = 'autoClearCache',
       defaultShowComment = 'defaultShowComment',
       replySortType = 'replySortType',
