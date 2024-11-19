@@ -68,8 +68,8 @@ class FavVideoCardH extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-                StyleString.safeSpace, 5, StyleString.safeSpace, 5),
+            padding:
+                const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
             child: LayoutBuilder(
               builder: (context, boxConstraints) {
                 double width =

@@ -242,22 +242,23 @@ class _FavDetailPageState extends State<FavDetailPage> {
     return loadingState is Success
         ? loadingState.response.isEmpty
             ? const SliverToBoxAdapter(child: SizedBox())
-            : SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == loadingState.response.length) {
-                      return Container(
-                        height: MediaQuery.of(context).padding.bottom + 60,
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).padding.bottom),
-                        child: Center(
+            : SliverPadding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: StyleString.cardSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.4,
+                    mainAxisExtent: 0,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index == loadingState.response.length) {
+                        return Container(
+                          height: 60,
+                          alignment: Alignment.center,
                           child: Obx(
                             () => Text(
                               _favDetailController.loadingText.value,
@@ -266,16 +267,16 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                   fontSize: 13),
                             ),
                           ),
-                        ),
+                        );
+                      }
+                      return FavVideoCardH(
+                        videoItem: loadingState.response[index],
+                        callFn: () => _favDetailController
+                            .onCancelFav(loadingState.response[index].id),
                       );
-                    }
-                    return FavVideoCardH(
-                      videoItem: loadingState.response[index],
-                      callFn: () => _favDetailController
-                          .onCancelFav(loadingState.response[index].id),
-                    );
-                  },
-                  childCount: loadingState.response.length + 1,
+                    },
+                    childCount: loadingState.response.length + 1,
+                  ),
                 ),
               )
         : loadingState is Error
