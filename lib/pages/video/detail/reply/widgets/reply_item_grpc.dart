@@ -345,7 +345,7 @@ class ReplyItemGrpc extends StatelessWidget {
   Widget buttonAction(BuildContext context, replyControl) {
     return Row(
       children: <Widget>[
-        const SizedBox(width: 32),
+        const SizedBox(width: 36),
         SizedBox(
           height: 32,
           child: TextButton(
