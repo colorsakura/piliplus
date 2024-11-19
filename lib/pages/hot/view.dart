@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/common/widgets/video_card_h_grpc.dart';
+import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -137,7 +137,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return VideoCardHGrpc(
+          return VideoCardH(
             videoItem: loadingState.response[index],
             showPubdate: true,
             longPress: () {
