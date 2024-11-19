@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:PiliPalaX/services/loggeer.dart';
 import 'package:brotli/brotli.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class PackageHeader {
   int totalSize;
@@ -150,16 +151,16 @@ class HeartbeatPackage extends AbstractPackage<dynamic> {
 }
 
 class LiveMessageStream {
-  String streamToken, host;
-  int roomId, uid, port;
+  String streamToken;
+  int roomId, uid;
+  List<String> servers;
   List<void Function(dynamic obj)> eventListeners = [];
   LiveMessageStream(
       {required this.streamToken,
       required this.roomId,
       required this.uid,
-      required this.host,
-      required this.port});
-  late Socket socket;
+      required this.servers});
+  late WebSocket socket;
   bool heartBeat = true;
   PiliLogger logger = getLogger();
   final String logTag = "LiveStreamService";
@@ -185,12 +186,20 @@ class LiveMessageStream {
 
     final marshaledData = authPackage.marshal();
     logger.d(marshaledData);
-
     try {
-      socket = await Socket.connect(host, port);
-      logger.d('$logTag ===> TCP连接建立');
+      Future<WebSocket> getSocket() async {
+        for (final server in servers) {
+          try {
+            return await WebSocket.connect(server);
+          } catch (e) {}
+        }
+        throw Exception("all servers connect failed");
+      }
+
+      socket = await getSocket();
+      // logger.d('$logTag ===> TCP连接建立');
       socket.add(authPackage.marshal());
-      logger.d('$logTag ===> 发送认证包');
+      // logger.d('$logTag ===> 发送认证包');
       await for (var data in socket) {
         PackageHeader? header = PackageHeader.fromBytesData(data);
         if (header != null) {
@@ -222,7 +231,8 @@ class LiveMessageStream {
       }
       socket.close();
     } catch (e) {
-      logger.i('$logTag ===> TCP连接失败: $e');
+      SmartDialog.showToast("弹幕地址链接失败");
+      // logger.i('$logTag ===> TCP连接失败: $e');
     }
   }
 
