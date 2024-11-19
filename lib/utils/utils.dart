@@ -19,11 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../http/index.dart';
-import '../models/github/latest.dart';
 
 class Utils {
   static final Random random = Random();

@@ -174,7 +174,7 @@ class _ImagePreviewState extends State<ImagePreview>
                 itemCount: imgList!.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ExtendedImage.network(
-                    '${imgList![index]}@${_quality}q.webp',
+                    '${imgList![index]}${_quality == 100 ? '' : '@${_quality}q.webp'}',
                     fit: BoxFit.contain,
                     mode: ExtendedImageMode.gesture,
                     handleLoadingProgress: true,
