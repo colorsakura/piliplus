@@ -12,7 +12,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/custom_toast.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/models/common/color_type.dart';
-import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/pages/search/index.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/router/app_pages.dart';
@@ -107,8 +106,8 @@ class MyApp extends StatelessWidget {
             ['color'];
     Color brandColor = defaultColor;
     // 主题模式
-    ThemeType currentThemeValue = ThemeType.values[setting
-        .get(SettingBoxKey.themeMode, defaultValue: ThemeType.system.code)];
+    // ThemeType currentThemeValue = ThemeType.values[setting
+    //     .get(SettingBoxKey.themeMode, defaultValue: ThemeType.system.code)];
     // 是否动态取色
     bool isDynamicColor =
         setting.get(SettingBoxKey.dynamicColor, defaultValue: true);
@@ -145,10 +144,12 @@ class MyApp extends StatelessWidget {
           lightColorScheme = ColorScheme.fromSeed(
             seedColor: brandColor,
             brightness: Brightness.light,
+            // dynamicSchemeVariant: DynamicSchemeVariant.neutral,
           );
           darkColorScheme = ColorScheme.fromSeed(
             seedColor: brandColor,
             brightness: Brightness.dark,
+            // dynamicSchemeVariant: DynamicSchemeVariant.neutral,
           );
         }
         // 图片缓存
@@ -156,76 +157,13 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           // showSemanticsDebugger: true,
           title: 'PiliPalaX',
-          theme: ThemeData(
-            // fontFamily: 'HarmonyOS',
-            colorScheme: currentThemeValue == ThemeType.dark
-                ? darkColorScheme
-                : lightColorScheme,
-            useMaterial3: true,
-            navigationBarTheme: NavigationBarThemeData(
-                surfaceTintColor: (lightDynamic != null && isDynamicColor)
-                    ? lightColorScheme.surfaceTint
-                    : lightColorScheme.surfaceContainer),
-            snackBarTheme: SnackBarThemeData(
-              actionTextColor: lightColorScheme.primary,
-              backgroundColor: lightColorScheme.secondaryContainer,
-              closeIconColor: lightColorScheme.secondary,
-              contentTextStyle: TextStyle(color: lightColorScheme.secondary),
-              elevation: 20,
-            ),
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: <TargetPlatform, PageTransitionsBuilder>{
-                TargetPlatform.android: ZoomPageTransitionsBuilder(
-                  allowEnterRouteSnapshotting: false,
-                ),
-              },
-            ),
-            popupMenuTheme: PopupMenuThemeData(
-              surfaceTintColor: lightColorScheme.surfaceTint,
-            ),
-            cardTheme: CardTheme(
-              elevation: 1,
-              surfaceTintColor: lightColorScheme.surfaceTint,
-              shadowColor: Colors.transparent,
-            ),
-            dialogTheme: DialogTheme(
-              surfaceTintColor: lightColorScheme.surfaceTint,
-            ),
-            progressIndicatorTheme: ProgressIndicatorThemeData(
-              refreshBackgroundColor: lightColorScheme.onSecondary,
-            ),
+          theme: _getThemeData(
+            colorScheme: lightColorScheme,
+            isDynamic: lightDynamic != null && isDynamicColor,
           ),
-          darkTheme: ThemeData(
-            // fontFamily: 'HarmonyOS',
-            colorScheme: currentThemeValue == ThemeType.light
-                ? lightColorScheme
-                : darkColorScheme,
-            useMaterial3: true,
-            navigationBarTheme: NavigationBarThemeData(
-                surfaceTintColor: (darkDynamic != null && isDynamicColor)
-                    ? darkColorScheme.surfaceTint
-                    : darkColorScheme.surfaceContainer),
-            snackBarTheme: SnackBarThemeData(
-              actionTextColor: darkColorScheme.primary,
-              backgroundColor: darkColorScheme.secondaryContainer,
-              closeIconColor: darkColorScheme.secondary,
-              contentTextStyle: TextStyle(color: darkColorScheme.secondary),
-              elevation: 20,
-            ),
-            popupMenuTheme: PopupMenuThemeData(
-              surfaceTintColor: darkColorScheme.surfaceTint,
-            ),
-            cardTheme: CardTheme(
-              elevation: 1,
-              surfaceTintColor: darkColorScheme.surfaceTint,
-              shadowColor: Colors.transparent,
-            ),
-            dialogTheme: DialogTheme(
-              surfaceTintColor: darkColorScheme.surfaceTint,
-            ),
-            progressIndicatorTheme: ProgressIndicatorThemeData(
-              refreshBackgroundColor: darkColorScheme.onSecondary,
-            ),
+          darkTheme: _getThemeData(
+            colorScheme: darkColorScheme,
+            isDynamic: darkDynamic != null && isDynamicColor,
           ),
           themeMode: GStorage.themeMode,
           localizationsDelegates: const [
@@ -255,6 +193,51 @@ class MyApp extends StatelessWidget {
           ],
         );
       }),
+    );
+  }
+
+  ThemeData _getThemeData({
+    required ColorScheme colorScheme,
+    required bool isDynamic,
+  }) {
+    Color surfaceTintColor =
+        isDynamic ? colorScheme.surfaceTint : colorScheme.surfaceContainer;
+    return ThemeData(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+      navigationBarTheme: NavigationBarThemeData(
+        surfaceTintColor: surfaceTintColor,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        actionTextColor: colorScheme.primary,
+        backgroundColor: colorScheme.secondaryContainer,
+        closeIconColor: colorScheme.secondary,
+        contentTextStyle: TextStyle(
+          color: colorScheme.secondary,
+        ),
+        elevation: 20,
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: ZoomPageTransitionsBuilder(
+            allowEnterRouteSnapshotting: false,
+          ),
+        },
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        surfaceTintColor: surfaceTintColor,
+      ),
+      cardTheme: CardTheme(
+        elevation: 1,
+        surfaceTintColor: surfaceTintColor,
+        shadowColor: Colors.transparent,
+      ),
+      dialogTheme: DialogTheme(
+        surfaceTintColor: surfaceTintColor,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        refreshBackgroundColor: colorScheme.onSecondary,
+      ),
     );
   }
 }
