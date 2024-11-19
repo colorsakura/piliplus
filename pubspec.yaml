@@ -49,19 +49,19 @@ dependencies:
 
   # 图片
   cached_network_image: ^3.4.1
-  extended_image: ^9.0.4
-  saver_gallery: ^3.0.10
+  extended_image: ^9.0.7
+  saver_gallery: ^4.0.0
 
   # QRCode
   qr_flutter: ^4.1.0
 
   # 存储
-  path_provider: ^2.1.4
+  path_provider: ^2.1.5
   hive: ^2.2.3
   hive_flutter: ^1.1.0
 
   # 设备信息
-  device_info_plus: ^11.1.0
+  device_info_plus: ^11.1.1
   # 权限
   permission_handler: ^11.3.1
   # 分享
@@ -83,13 +83,13 @@ dependencies:
   # 下拉刷新
   pull_to_refresh_notification: ^3.1.0
   # 图标
-  font_awesome_flutter: ^10.7.0
+  font_awesome_flutter: ^10.8.0
   material_design_icons_flutter: ^7.0.7296
   # toast
-  flutter_smart_dialog: ^4.9.8+3
+  flutter_smart_dialog: ^4.9.8+5
   # 下滑关闭
   dismissible_page: ^1.0.2
-  custom_sliding_segmented_control: ^1.8.3
+  custom_sliding_segmented_control: ^1.8.4
   # 加密
   crypto: ^3.0.6
   encrypt: ^5.0.3
@@ -115,7 +115,7 @@ dependencies:
   animations: ^2.0.11
 
   # 获取appx信息
-  package_info_plus: ^8.1.0
+  package_info_plus: ^8.1.1
   url_launcher: ^6.3.1
   # 防抖节流
   easy_debounce: ^2.0.3
@@ -147,10 +147,10 @@ dependencies:
   uuid: ^4.5.1
   scrollable_positioned_list: ^0.3.8
   nil: ^1.1.1
-  catcher_2: ^2.0.1
-  logger: ^2.4.0
+  catcher_2: ^2.0.2
+  logger: ^2.5.0
   #瀑布流
-  waterfall_flow: ^3.0.3
+  waterfall_flow: ^3.1.0
   #跑马灯
   marquee: ^2.3.0
   #富文本
@@ -164,9 +164,8 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.19.0
   grpc: ^4.0.1
-  flutter_svg: ^2.0.10+1
+  flutter_svg: ^2.0.14
   image_cropper: ^8.0.2
-
   #解压直播消息
   brotli: ^0.6.0
 
@@ -196,7 +195,7 @@ dev_dependencies:
   #     ref: e045d40
   hive_generator: ^2.0.1
   build_runner: ^2.4.13
-  flutter_native_splash: ^2.4.2
+  flutter_native_splash: ^2.4.3
 
 flutter_launcher_icons:
   android: true
