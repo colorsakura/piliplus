@@ -290,9 +290,12 @@ class _StyleSettingState extends State<StyleSetting> {
             leading: const Icon(Icons.opacity_outlined),
             title: Text('气泡提示不透明度', style: titleStyle),
             subtitle: Text('自定义气泡提示(Toast)不透明度', style: subTitleStyle),
-            trailing: Obx(() => Text(
-                settingController.toastOpacity.value.toStringAsFixed(1),
-                style: Theme.of(context).textTheme.titleSmall)),
+            trailing: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Obx(() => Text(
+                  settingController.toastOpacity.value.toStringAsFixed(1),
+                  style: Theme.of(context).textTheme.titleSmall)),
+            ),
           ),
           ListTile(
             dense: false,

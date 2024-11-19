@@ -76,7 +76,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
             builder: (context) => ListTile(
               title: const Text('调色板风格'),
               leading: Container(
-                width: 36,
+                width: 40,
                 alignment: Alignment.center,
                 child: Icon(Icons.palette_outlined),
               ),

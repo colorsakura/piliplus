@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/pages/main/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
@@ -172,6 +173,9 @@ class _ExtraSettingState extends State<ExtraSetting> {
                       onChanged: (value) {
                         dynamicPeriod = int.tryParse(value) ?? 5;
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                      ],
                       decoration: InputDecoration(suffixText: 'min'),
                     ),
                     actions: [
