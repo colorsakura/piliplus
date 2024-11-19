@@ -122,20 +122,20 @@ class LiveRoomController extends GetxController {
   void liveMsg() {
     LiveHttp.liveRoomDanmaPrefetch(roomId: roomId).then((v) {
       if (v['status']) {
-        for (var obj in v['data'] as List) {
-          messages.add({
-            'name': obj['user']['base']['name'],
-            'uid': obj['user']['uid'],
-            'text': obj['text'],
-            'emots': obj['emots'],
-            'uemote': obj['emoticon']['emoticon_unique'] != ""
-                ? obj['emoticon']
-                : null,
-          });
-          WidgetsBinding.instance.addPostFrameCallback(
-            (_) => scrollToBottom(),
-          );
-        }
+        messages.addAll((v['data'] as List)
+            .map((obj) => {
+                  'name': obj['user']['base']['name'],
+                  'uid': obj['user']['uid'],
+                  'text': obj['text'],
+                  'emots': obj['emots'],
+                  'uemote': obj['emoticon']['emoticon_unique'] != ""
+                      ? obj['emoticon']
+                      : null,
+                })
+            .toList());
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => scrollToBottom(),
+        );
       }
     });
     LiveHttp.liveRoomGetDanmakuToken(roomId: roomId).then((v) {
