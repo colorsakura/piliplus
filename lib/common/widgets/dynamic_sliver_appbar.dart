@@ -95,6 +95,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   // As long as the height is 0 instead of the sliver app bar a sliver to box adapter will be used
   // to calculate dynamically the size for the sliver app bar
   double _height = 0;
+  Orientation? _orientation;
 
   @override
   void initState() {
@@ -105,6 +106,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   @override
   void didUpdateWidget(covariant DynamicSliverAppBar oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     _updateHeight();
   }
 
@@ -124,6 +126,11 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   @override
   Widget build(BuildContext context) {
     //Needed to lay out the flexibleSpace the first time, so we can calculate its intrinsic height
+    Orientation orientation = MediaQuery.orientationOf(context);
+    if (_orientation != orientation) {
+      _orientation = orientation;
+      _height = 0;
+    }
     if (_height == 0) {
       return SliverToBoxAdapter(
         child: Stack(

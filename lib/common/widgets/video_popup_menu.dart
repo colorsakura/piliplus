@@ -24,19 +24,20 @@ class VideoCustomActions {
   late List<VideoCustomAction> actions;
   VideoCustomActions(this.videoItem, this.context) {
     actions = [
-      VideoCustomAction(
-        videoItem.bvid,
-        'copy',
-        Stack(
-          children: [
-            Icon(MdiIcons.identifier, size: 16),
-            Icon(MdiIcons.circleOutline, size: 16),
-          ],
+      if ((videoItem.bvid as String?)?.isNotEmpty == true)
+        VideoCustomAction(
+          videoItem.bvid,
+          'copy',
+          Stack(
+            children: [
+              Icon(MdiIcons.identifier, size: 16),
+              Icon(MdiIcons.circleOutline, size: 16),
+            ],
+          ),
+          () {
+            Utils.copyText(videoItem.bvid);
+          },
         ),
-        () {
-          Utils.copyText(videoItem.bvid);
-        },
-      ),
       VideoCustomAction(
         '稍后再看',
         'pause',

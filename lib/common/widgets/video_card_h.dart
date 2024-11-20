@@ -50,7 +50,8 @@ class VideoCardH extends StatelessWidget {
         excludeSemantics: true,
         customSemanticsActions: <CustomSemanticsAction, void Function()>{
           for (var item in actions)
-            CustomSemanticsAction(label: item.title): item.onTap!,
+            CustomSemanticsAction(
+                label: item.title.isEmpty ? 'label' : item.title): item.onTap!,
         },
         child: InkWell(
           borderRadius: BorderRadius.circular(12),

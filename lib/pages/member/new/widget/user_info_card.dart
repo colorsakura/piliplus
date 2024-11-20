@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 class UserInfoCard extends StatelessWidget {
   const UserInfoCard({
     super.key,
+    required this.isV,
     required this.isOwner,
     required this.card,
     required this.images,
@@ -20,6 +21,7 @@ class UserInfoCard extends StatelessWidget {
     required this.onFollow,
   });
 
+  final bool isV;
   final bool isOwner;
   final int relation;
   final bool isFollow;
@@ -29,245 +31,79 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return isV ? _buildV(context) : _buildH(context);
+  }
+
+  Widget _countWidget({
+    required String title,
+    required int count,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            Utils.numFormat(count),
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            title,
+            style: TextStyle(
+              height: 1,
+              fontSize: 11,
+              color: Theme.of(Get.context!).colorScheme.outline,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildHeader(BuildContext context) {
     bool darken = GStorage.brightness == Brightness.dark;
     String? imgUrl = darken
         ? (images.nightImgurl?.isEmpty == true
             ? images.imgUrl?.http2https
             : images.nightImgurl?.http2https)
         : images.imgUrl?.http2https;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      useSafeArea: false,
-                      context: context,
-                      builder: (context) {
-                        return ImagePreview(
-                          initialPage: 0,
-                          imgList: [imgUrl ?? ''],
-                        );
-                      },
-                    );
-                  },
-                  child: CachedNetworkImage(
-                    imageUrl: imgUrl ?? '',
-                    width: double.infinity,
-                    height: 135,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            darken
-                                ? const Color(0x8D000000)
-                                : const Color(0x5DFFFFFF),
-                            darken ? BlendMode.darken : BlendMode.lighten,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: double.infinity, height: 85)
-              ],
-            ),
-            Positioned(
-              top: 110,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    useSafeArea: false,
-                    context: context,
-                    builder: (context) {
-                      return ImagePreview(
-                        initialPage: 0,
-                        imgList: [card.face ?? ''],
-                      );
-                    },
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 2.5,
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: NetworkImgLayer(
-                    src: card.face,
-                    type: 'avatar',
-                    width: 80,
-                    height: 80,
-                  ),
-                ),
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          useSafeArea: false,
+          context: context,
+          builder: (context) {
+            return ImagePreview(
+              initialPage: 0,
+              imgList: [imgUrl ?? ''],
+            );
+          },
+        );
+      },
+      child: CachedNetworkImage(
+        imageUrl: imgUrl ?? '',
+        width: double.infinity,
+        height: 135,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                darken ? const Color(0x8D000000) : const Color(0x5DFFFFFF),
+                darken ? BlendMode.darken : BlendMode.lighten,
               ),
             ),
-            if (card.officialVerify?.icon?.isNotEmpty == true ||
-                (card.vip?.vipStatus ?? -1) > 0)
-              Positioned(
-                top: 170,
-                left: 80,
-                child: Container(
-                  padding: const EdgeInsets.all(0.01),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
-                  child: card.officialVerify?.icon?.isNotEmpty == true
-                      ? NetworkImgLayer(
-                          src: card.officialVerify?.icon,
-                          radius: null,
-                          width: 24,
-                          height: 24,
-                          quality: 100,
-                        )
-                      : Image.asset(
-                          'assets/images/big-vip.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                ),
-              ),
-            Positioned(
-              top: 140,
-              right: 20,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(
-                      5,
-                      (index) => index % 2 == 0
-                          ? Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: _countWidget(
-                                title: ['粉丝', '关注', '获赞'][index ~/ 2],
-                                count: index == 0
-                                    ? card.fans
-                                    : index == 2
-                                        ? card.attention
-                                        : card.likes?.likeNum ?? 0,
-                                onTap: () {
-                                  if (index == 0) {
-                                    Get.toNamed(
-                                        '/fan?mid=${card.mid}&name=${card.name}');
-                                  } else if (index == 2) {
-                                    Get.toNamed(
-                                        '/follow?mid=${card.mid}&name=${card.name}');
-                                  }
-                                },
-                              ),
-                            )
-                          : SizedBox(
-                              height: 15,
-                              width: 1,
-                              child: VerticalDivider(),
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (!isOwner)
-                        IconButton.outlined(
-                          onPressed: () {
-                            if (GStorage.userInfo.get('userInfoCache') !=
-                                null) {
-                              Get.toNamed(
-                                '/whisperDetail',
-                                parameters: {
-                                  'talkerId': card.mid ?? '',
-                                  'name': card.name ?? '',
-                                  'face': card.face ?? '',
-                                  'mid': card.mid ?? '',
-                                },
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.mail_outline, size: 21),
-                          style: IconButton.styleFrom(
-                            side: BorderSide(
-                              width: 1.0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outline
-                                  .withOpacity(0.5),
-                            ),
-                            padding: EdgeInsets.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: const VisualDensity(
-                              horizontal: -2,
-                              vertical: -2,
-                            ),
-                          ),
-                        ),
-                      const SizedBox(width: 10),
-                      FilledButton.tonal(
-                        onPressed: onFollow,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: relation == -1 || isFollow
-                              ? Theme.of(context).colorScheme.onInverseSurface
-                              : null,
-                          padding: const EdgeInsets.symmetric(horizontal: 50),
-                          visualDensity: const VisualDensity(
-                            horizontal: -2,
-                            vertical: -2,
-                          ),
-                        ),
-                        child: Text.rich(
-                          style: TextStyle(
-                            color: relation == -1 || isFollow
-                                ? Theme.of(context).colorScheme.outline
-                                : null,
-                          ),
-                          TextSpan(
-                            children: [
-                              if (isFollow)
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.top,
-                                  child: Icon(
-                                    Icons.sort,
-                                    size: 16,
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                  ),
-                                ),
-                              TextSpan(
-                                text: isOwner
-                                    ? '编辑资料'
-                                    : relation == -1
-                                        ? '移除黑名单'
-                                        : relation == 2
-                                            ? ' 特别关注'
-                                            : isFollow
-                                                ? ' 已关注'
-                                                : '关注',
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  _buildLeft(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Wrap(
@@ -434,37 +270,255 @@ class UserInfoCard extends StatelessWidget {
         //           .toList(),
         //     ),
         //   ),
-        const SizedBox(height: 5),
-      ],
-    );
-  }
+      ];
 
-  Widget _countWidget({
-    required String title,
-    required int count,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
+  _buildRight(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            Utils.numFormat(count),
-            style: TextStyle(
-              fontSize: 14,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              5,
+              (index) => index % 2 == 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: _countWidget(
+                        title: ['粉丝', '关注', '获赞'][index ~/ 2],
+                        count: index == 0
+                            ? card.fans
+                            : index == 2
+                                ? card.attention
+                                : card.likes?.likeNum ?? 0,
+                        onTap: () {
+                          if (index == 0) {
+                            Get.toNamed(
+                                '/fan?mid=${card.mid}&name=${card.name}');
+                          } else if (index == 2) {
+                            Get.toNamed(
+                                '/follow?mid=${card.mid}&name=${card.name}');
+                          }
+                        },
+                      ),
+                    )
+                  : SizedBox(
+                      height: 15,
+                      width: 1,
+                      child: VerticalDivider(),
+                    ),
             ),
           ),
-          Text(
-            title,
-            style: TextStyle(
-              height: 1,
-              fontSize: 11,
-              color: Theme.of(Get.context!).colorScheme.outline,
-            ),
+          const SizedBox(height: 5),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!isOwner)
+                IconButton.outlined(
+                  onPressed: () {
+                    if (GStorage.userInfo.get('userInfoCache') != null) {
+                      Get.toNamed(
+                        '/whisperDetail',
+                        parameters: {
+                          'talkerId': card.mid ?? '',
+                          'name': card.name ?? '',
+                          'face': card.face ?? '',
+                          'mid': card.mid ?? '',
+                        },
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.mail_outline, size: 21),
+                  style: IconButton.styleFrom(
+                    side: BorderSide(
+                      width: 1.0,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withOpacity(0.5),
+                    ),
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: const VisualDensity(
+                      horizontal: -2,
+                      vertical: -2,
+                    ),
+                  ),
+                ),
+              const SizedBox(width: 10),
+              FilledButton.tonal(
+                onPressed: onFollow,
+                style: FilledButton.styleFrom(
+                  backgroundColor: relation == -1 || isFollow
+                      ? Theme.of(context).colorScheme.onInverseSurface
+                      : null,
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  visualDensity: const VisualDensity(
+                    horizontal: -2,
+                    vertical: -2,
+                  ),
+                ),
+                child: Text.rich(
+                  style: TextStyle(
+                    color: relation == -1 || isFollow
+                        ? Theme.of(context).colorScheme.outline
+                        : null,
+                  ),
+                  TextSpan(
+                    children: [
+                      if (isFollow)
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.top,
+                          child: Icon(
+                            Icons.sort,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      TextSpan(
+                        text: isOwner
+                            ? '编辑资料'
+                            : relation == -1
+                                ? '移除黑名单'
+                                : relation == 2
+                                    ? ' 特别关注'
+                                    : isFollow
+                                        ? ' 已关注'
+                                        : '关注',
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
-      ),
-    );
-  }
+      );
+
+  _buildBadge(BuildContext context) => Container(
+        padding: const EdgeInsets.all(0.01),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        child: card.officialVerify?.icon?.isNotEmpty == true
+            ? NetworkImgLayer(
+                src: card.officialVerify?.icon,
+                radius: null,
+                width: 24,
+                height: 24,
+                quality: 100,
+              )
+            : Image.asset(
+                'assets/images/big-vip.png',
+                width: 24,
+                height: 24,
+              ),
+      );
+
+  _buildAvatar(BuildContext context) => GestureDetector(
+        onTap: () {
+          showDialog(
+            useSafeArea: false,
+            context: context,
+            builder: (context) {
+              return ImagePreview(
+                initialPage: 0,
+                imgList: [card.face ?? ''],
+              );
+            },
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 2.5,
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            shape: BoxShape.circle,
+          ),
+          child: NetworkImgLayer(
+            src: card.face,
+            type: 'avatar',
+            width: 80,
+            height: 80,
+          ),
+        ),
+      );
+
+  _buildV(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildHeader(context),
+                  const SizedBox(width: double.infinity, height: 85)
+                ],
+              ),
+              Positioned(
+                top: 110,
+                left: 20,
+                child: _buildAvatar(context),
+              ),
+              if (card.officialVerify?.icon?.isNotEmpty == true ||
+                  (card.vip?.vipStatus ?? -1) > 0)
+                Positioned(
+                  top: 170,
+                  left: 80,
+                  child: _buildBadge(context),
+                ),
+              Positioned(
+                top: 140,
+                right: 20,
+                child: _buildRight(context),
+              ),
+            ],
+          ),
+          ..._buildLeft(context),
+          const SizedBox(height: 5),
+        ],
+      );
+
+  _buildH(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context),
+          Row(
+            children: [
+              SizedBox(width: MediaQuery.paddingOf(context).left),
+              const SizedBox(width: 20),
+              Stack(
+                children: [
+                  _buildAvatar(context),
+                  if (card.officialVerify?.icon?.isNotEmpty == true ||
+                      (card.vip?.vipStatus ?? -1) > 0)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: _buildBadge(context),
+                    ),
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    ..._buildLeft(context),
+                    const SizedBox(height: 5),
+                  ],
+                ),
+              ),
+              Expanded(child: _buildRight(context)),
+              SizedBox(width: MediaQuery.paddingOf(context).right),
+            ],
+          ),
+        ],
+      );
 }

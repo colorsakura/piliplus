@@ -40,7 +40,7 @@ class _MemberPageNewState extends State<MemberPageNew>
     );
     _userController.scrollController.addListener(() {
       _userController.scrollRatio.value =
-          min(1.0, _userController.scrollController.offset.round() / 150);
+          min(1.0, _userController.scrollController.offset.round() / 120);
     });
   }
 
@@ -53,71 +53,73 @@ class _MemberPageNewState extends State<MemberPageNew>
         () => _userController.loadingState.value is Success
             ? LayoutBuilder(
                 builder: (_, constraints) {
-                  if (constraints.maxHeight > constraints.maxWidth) {
-                    return ExtendedNestedScrollView(
-                      controller: _userController.scrollController,
-                      onlyOneScrollInBody: true,
-                      headerSliverBuilder: (context, innerBoxIsScrolled) {
-                        return [
-                          SliverOverlapAbsorber(
-                            handle: ExtendedNestedScrollView
-                                .sliverOverlapAbsorberHandleFor(context),
-                            sliver: _buildAppBar(),
-                          ),
-                        ];
-                      },
-                      body: _userController.tab2?.isNotEmpty == true
-                          ? LayoutBuilder(
-                              builder: (context, _) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    top: ExtendedNestedScrollView
-                                                .sliverOverlapAbsorberHandleFor(
-                                                    context)
-                                            .layoutExtent ??
-                                        0,
-                                  ),
-                                  child: _buildBody,
-                                );
-                              },
-                            )
-                          : Center(child: const Text('EMPTY')),
-                    );
-                  } else {
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: CustomScrollView(
-                            slivers: [
-                              _buildAppBar(false),
-                            ],
+                  // if (constraints.maxHeight > constraints.maxWidth) {
+                  return ExtendedNestedScrollView(
+                    controller: _userController.scrollController,
+                    onlyOneScrollInBody: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverOverlapAbsorber(
+                          handle: ExtendedNestedScrollView
+                              .sliverOverlapAbsorberHandleFor(context),
+                          sliver: _buildAppBar(
+                            isV: constraints.maxHeight > constraints.maxWidth,
                           ),
                         ),
-                        Expanded(
-                          child: SafeArea(
-                            top: false,
-                            left: false,
-                            bottom: false,
-                            child: Column(
-                              children: [
-                                SizedBox(height: _userController.top),
-                                if ((_userController.tab2?.length ?? -1) > 1)
-                                  _buildTab,
-                                Expanded(
-                                  child:
-                                      _userController.tab2?.isNotEmpty == true
-                                          ? _buildBody
-                                          : Center(
-                                              child: const Text('EMPTY'),
-                                            ),
+                      ];
+                    },
+                    body: _userController.tab2?.isNotEmpty == true
+                        ? LayoutBuilder(
+                            builder: (context, _) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: ExtendedNestedScrollView
+                                              .sliverOverlapAbsorberHandleFor(
+                                                  context)
+                                          .layoutExtent ??
+                                      0,
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
+                                child: _buildBody,
+                              );
+                            },
+                          )
+                        : Center(child: const Text('EMPTY')),
+                  );
+                  // } else {
+                  //   return Row(
+                  //     children: [
+                  //       Expanded(
+                  //         child: CustomScrollView(
+                  //           slivers: [
+                  //             _buildAppBar(false),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         child: SafeArea(
+                  //           top: false,
+                  //           left: false,
+                  //           bottom: false,
+                  //           child: Column(
+                  //             children: [
+                  //               SizedBox(height: _userController.top),
+                  //               if ((_userController.tab2?.length ?? -1) > 1)
+                  //                 _buildTab,
+                  //               Expanded(
+                  //                 child:
+                  //                     _userController.tab2?.isNotEmpty == true
+                  //                         ? _buildBody
+                  //                         : Center(
+                  //                             child: const Text('EMPTY'),
+                  //                           ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   );
+                  // }
                 },
               )
             : Center(
@@ -132,37 +134,44 @@ class _MemberPageNewState extends State<MemberPageNew>
         tabs: _userController.tabs,
       );
 
-  Widget get _buildBody => TabBarView(
-        controller: _userController.tabController,
-        children: _userController.tab2!.map((item) {
-          return switch (item.param!) {
-            'home' => MemberHome(heroTag: _heroTag),
-            // 'dynamic' => MemberDynamic(mid: _mid ?? -1),
-            'dynamic' => MemberDynamicsPage(mid: _mid),
-            'contribute' => Obx(
-                () => MemberContribute(
+  Widget get _buildBody => Padding(
+        padding: EdgeInsets.only(
+          left: MediaQuery.paddingOf(context).left,
+          right: MediaQuery.paddingOf(context).right,
+        ),
+        child: TabBarView(
+          controller: _userController.tabController,
+          children: _userController.tab2!.map((item) {
+            return switch (item.param!) {
+              'home' => MemberHome(heroTag: _heroTag),
+              // 'dynamic' => MemberDynamic(mid: _mid ?? -1),
+              'dynamic' => MemberDynamicsPage(mid: _mid),
+              'contribute' => Obx(
+                  () => MemberContribute(
+                    heroTag: _heroTag,
+                    initialIndex: _userController.contributeInitialIndex.value,
+                    mid: _mid ?? -1,
+                  ),
+                ),
+              'bangumi' => MemberBangumi(
                   heroTag: _heroTag,
-                  initialIndex: _userController.contributeInitialIndex.value,
                   mid: _mid ?? -1,
                 ),
-              ),
-            'bangumi' => MemberBangumi(
-                heroTag: _heroTag,
-                mid: _mid ?? -1,
-              ),
-            'favorite' => MemberFavorite(
-                heroTag: _heroTag,
-                mid: _mid ?? -1,
-              ),
-            _ => Center(child: Text(item.title ?? '')),
-          };
-        }).toList(),
+              'favorite' => MemberFavorite(
+                  heroTag: _heroTag,
+                  mid: _mid ?? -1,
+                ),
+              _ => Center(child: Text(item.title ?? '')),
+            };
+          }).toList(),
+        ),
       );
 
-  Widget _buildAppBar([bool needTab = true]) => MediaQuery.removePadding(
+  Widget _buildAppBar({bool needTab = true, bool isV = true}) =>
+      MediaQuery.removePadding(
         context: context,
         removeTop: true,
-        removeRight: true,
+        // removeRight: true,
         child: DynamicSliverAppBar(
           leading: Padding(
             padding: EdgeInsets.only(top: _userController.top ?? 0),
@@ -178,7 +187,8 @@ class _MemberPageNewState extends State<MemberPageNew>
           pinned: true,
           backgroundColor: Theme.of(context).colorScheme.surface,
           scrolledUnderElevation: 0,
-          flexibleSpace: _buildUserInfo(_userController.loadingState.value),
+          flexibleSpace:
+              _buildUserInfo(_userController.loadingState.value, isV),
           bottom: needTab && (_userController.tab2?.length ?? -1) > 1
               ? PreferredSize(
                   preferredSize: Size.fromHeight(48),
@@ -291,7 +301,7 @@ class _MemberPageNewState extends State<MemberPageNew>
     );
   }
 
-  Widget _buildUserInfo(LoadingState userState) {
+  Widget _buildUserInfo(LoadingState userState, [bool isV = true]) {
     switch (userState) {
       case Empty():
         return _errorWidget('EMPTY');
@@ -303,6 +313,7 @@ class _MemberPageNewState extends State<MemberPageNew>
             padding: EdgeInsets.only(
                 bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
             child: UserInfoCard(
+              isV: isV,
               isOwner: _userController.mid == _userController.ownerMid,
               relation: _userController.relation.value,
               isFollow: _userController.isFollow.value,
