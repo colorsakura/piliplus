@@ -288,7 +288,9 @@ class _ListSheetContentState extends State<ListSheetContent>
                   builder: (_, snapshot) => snapshot.hasData
                       ? _mediumButton(
                           tooltip: _seasonFav == 1 ? '取消订阅' : '订阅',
-                          icon: _seasonFav == 1 ? Icons.alarm_off : Icons.alarm,
+                          icon: _seasonFav == 1
+                              ? Icons.notifications_off_outlined
+                              : Icons.notifications_active_outlined,
                           onPressed: () async {
                             dynamic result = await VideoHttp.seasonFav(
                               isFav: _seasonFav == 1,
