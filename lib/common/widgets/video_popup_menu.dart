@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,7 @@ import '../../utils/storage.dart';
 class VideoCustomAction {
   String title;
   String value;
-  Icon icon;
+  Widget icon;
   VoidCallback? onTap;
   VideoCustomAction(this.title, this.value, this.icon, this.onTap);
 }
@@ -24,18 +25,38 @@ class VideoCustomActions {
   VideoCustomActions(this.videoItem, this.context) {
     actions = [
       VideoCustomAction(
-          '稍后再看', 'pause', Icon(MdiIcons.clockTimeEightOutline, size: 16),
-          () async {
-        var res = await UserHttp.toViewLater(bvid: videoItem.bvid as String);
-        SmartDialog.showToast(res['msg']);
-      }),
-      VideoCustomAction('访问：${videoItem.owner.name}', 'visit',
-          Icon(MdiIcons.accountCircleOutline, size: 16), () async {
-        Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
-          // 'face': videoItem.owner.face,
-          'heroTag': '${videoItem.owner.mid}',
-        });
-      }),
+        videoItem.bvid,
+        'copy',
+        Stack(
+          children: [
+            Icon(MdiIcons.identifier, size: 16),
+            Icon(MdiIcons.circleOutline, size: 16),
+          ],
+        ),
+        () {
+          Utils.copyText(videoItem.bvid);
+        },
+      ),
+      VideoCustomAction(
+        '稍后再看',
+        'pause',
+        Icon(MdiIcons.clockTimeEightOutline, size: 16),
+        () async {
+          var res = await UserHttp.toViewLater(bvid: videoItem.bvid as String);
+          SmartDialog.showToast(res['msg']);
+        },
+      ),
+      VideoCustomAction(
+        '访问：${videoItem.owner.name}',
+        'visit',
+        Icon(MdiIcons.accountCircleOutline, size: 16),
+        () async {
+          Get.toNamed('/member?mid=${videoItem.owner.mid}', arguments: {
+            // 'face': videoItem.owner.face,
+            'heroTag': '${videoItem.owner.mid}',
+          });
+        },
+      ),
       VideoCustomAction(
           '不感兴趣', 'dislike', Icon(MdiIcons.thumbDownOutline, size: 16),
           () async {
