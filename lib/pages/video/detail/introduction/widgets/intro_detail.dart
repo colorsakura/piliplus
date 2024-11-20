@@ -46,7 +46,7 @@ class IntroDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    SelectableText(
                       videoDetail!.title,
                       style: const TextStyle(
                         fontSize: 16,

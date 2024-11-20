@@ -45,7 +45,7 @@ class AiDetail extends StatelessWidget {
                 children: [
                   if (modelResult!.summary != null &&
                       modelResult!.summary!.isNotEmpty) ...[
-                    Text(
+                    SelectableText(
                       '总结: ${modelResult!.summary!}',
                       style: const TextStyle(
                         fontSize: 15,
@@ -66,7 +66,7 @@ class AiDetail extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                          Text(
+                          SelectableText(
                             modelResult!.outline![index].title!,
                             style: const TextStyle(
                               fontSize: 14,
@@ -86,8 +86,8 @@ class AiDetail extends StatelessWidget {
                                 children: [
                                   Wrap(
                                     children: [
-                                      RichText(
-                                        text: TextSpan(
+                                      SelectableText.rich(
+                                        TextSpan(
                                           style: TextStyle(
                                             fontSize: 13,
                                             color: Theme.of(context)

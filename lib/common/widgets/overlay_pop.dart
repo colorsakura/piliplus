@@ -69,7 +69,7 @@ class OverlayPop extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
+                    child: SelectableText(
                       videoItem is card.Card
                           ? (videoItem as card.Card).smallCoverV5.base.title
                           : videoItem.title,
