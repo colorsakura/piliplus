@@ -492,17 +492,20 @@ class UserInfoCard extends StatelessWidget {
             children: [
               SizedBox(width: MediaQuery.paddingOf(context).left),
               const SizedBox(width: 20),
-              Stack(
-                children: [
-                  _buildAvatar(context),
-                  if (card.officialVerify?.icon?.isNotEmpty == true ||
-                      (card.vip?.vipStatus ?? -1) > 0)
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: _buildBadge(context),
-                    ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Stack(
+                  children: [
+                    _buildAvatar(context),
+                    if (card.officialVerify?.icon?.isNotEmpty == true ||
+                        (card.vip?.vipStatus ?? -1) > 0)
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: _buildBadge(context),
+                      ),
+                  ],
+                ),
               ),
               Expanded(
                 child: Column(

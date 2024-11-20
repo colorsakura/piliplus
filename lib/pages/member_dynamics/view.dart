@@ -35,7 +35,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
     mid = widget.mid ?? int.parse(Get.parameters['mid']!);
     final String heroTag = Utils.makeHeroTag(mid);
     _memberDynamicController =
-        Get.put(MemberDynamicsController(widget.mid), tag: heroTag);
+        Get.put(MemberDynamicsController(mid), tag: heroTag);
     // _memberDynamicController.scrollController.addListener(
     //   () {
     //     if (_memberDynamicController.scrollController.position.pixels >=

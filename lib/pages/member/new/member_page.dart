@@ -134,11 +134,8 @@ class _MemberPageNewState extends State<MemberPageNew>
         tabs: _userController.tabs,
       );
 
-  Widget get _buildBody => Padding(
-        padding: EdgeInsets.only(
-          left: MediaQuery.paddingOf(context).left,
-          right: MediaQuery.paddingOf(context).right,
-        ),
+  Widget get _buildBody => SafeArea(
+        top: false,
         child: TabBarView(
           controller: _userController.tabController,
           children: _userController.tab2!.map((item) {
