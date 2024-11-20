@@ -16,12 +16,12 @@ import 'package:status_bar_control/status_bar_control.dart';
 typedef DoubleClickAnimationListener = void Function();
 
 class ImagePreview extends StatefulWidget {
-  final int? initialPage;
-  final List<String>? imgList;
+  final int initialPage;
+  final List<String> imgList;
   const ImagePreview({
     super.key,
-    this.initialPage,
-    this.imgList,
+    required this.initialPage,
+    required this.imgList,
   });
 
   @override
@@ -36,22 +36,24 @@ class _ImagePreviewState extends State<ImagePreview>
   Animation<double>? _doubleClickAnimation;
   late DoubleClickAnimationListener _doubleClickAnimationListener;
   List<double> doubleTapScales = <double>[1.0, 2.0];
-  List<String>? imgList;
+  late List<String> _imgList;
   int _quality = 80;
+  late List<bool> _thumbList;
 
   @override
   void initState() {
     super.initState();
 
-    imgList = widget.imgList?.map((url) => url.http2https).toList();
+    _imgList = widget.imgList.map((url) => url.http2https).toList();
+    _thumbList = List.generate(_imgList.length, (_) => true);
 
     _quality =
         GStorage.setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
 
-    _previewController.initialPage.value = widget.initialPage!;
-    _previewController.currentPage.value = widget.initialPage! + 1;
-    _previewController.imgList.value = imgList!;
-    _previewController.currentImgUrl = imgList![widget.initialPage!];
+    _previewController.initialPage.value = widget.initialPage;
+    _previewController.currentPage.value = widget.initialPage + 1;
+    _previewController.imgList.value = _imgList;
+    _previewController.currentImgUrl = _imgList[widget.initialPage];
     // animationController = AnimationController(
     //     vsync: this, duration: const Duration(milliseconds: 400));
     setStatusBar();
@@ -105,13 +107,13 @@ class _ImagePreviewState extends State<ImagePreview>
                 dense: true,
                 title: const Text('保存到手机', style: TextStyle(fontSize: 14)),
               ),
-              if (imgList!.length > 1)
+              if (_imgList.length > 1)
                 ListTile(
                   onTap: () {
                     Get.back();
                     DownloadUtils.downloadImg(
                       context,
-                      imgList!,
+                      _imgList,
                     );
                   },
                   dense: true,
@@ -171,10 +173,10 @@ class _ImagePreviewState extends State<ImagePreview>
                 canScrollPage: (GestureDetails? gestureDetails) =>
                     gestureDetails?.totalScale == null ||
                     gestureDetails!.totalScale! <= 1.0,
-                itemCount: imgList!.length,
+                itemCount: _imgList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ExtendedImage.network(
-                    '${imgList![index]}${_quality == 100 ? '' : '@${_quality}q.webp'}',
+                    '${_imgList[index]}${_thumbList[index] && _quality != 100 ? '@${_quality}q.webp' : ''}',
                     fit: BoxFit.contain,
                     mode: ExtendedImageMode.gesture,
                     handleLoadingProgress: true,
@@ -241,6 +243,14 @@ class _ImagePreviewState extends State<ImagePreview>
                             ],
                           ),
                         );
+                      } else if (state.extendedImageLoadState ==
+                          LoadState.failed) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          setState(() {
+                            _thumbList[index] = false;
+                          });
+                        });
                       }
                     },
                     initGestureConfigHandler: (ExtendedImageState state) {
@@ -280,7 +290,7 @@ class _ImagePreviewState extends State<ImagePreview>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    imgList!.length > 1
+                    _imgList.length > 1
                         ? Obx(
                             () => Text.rich(
                               textAlign: TextAlign.center,
@@ -292,7 +302,7 @@ class _ImagePreviewState extends State<ImagePreview>
                                         text: _previewController.currentPage
                                             .toString()),
                                     const TextSpan(text: ' / '),
-                                    TextSpan(text: imgList!.length.toString()),
+                                    TextSpan(text: _imgList.length.toString()),
                                   ]),
                             ),
                           )
