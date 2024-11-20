@@ -10,6 +10,12 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
+enum MemberTabType { none, home, dynamic, contribute, favorite, bangumi }
+
+extension MemberTabTypeExt on MemberTabType {
+  String get title => ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
+}
+
 class MemberControllerNew extends CommonController
     with GetTickerProviderStateMixin {
   MemberControllerNew({required this.mid});
@@ -47,12 +53,21 @@ class MemberControllerNew extends CommonController
         tab2!.removeAt(0);
       }
       if (tab2!.isNotEmpty) {
-        if (response.response.defaultTab == 'video') {
-          response.response.defaultTab = 'dynamic';
+        int initialIndex = -1;
+        MemberTabType memberTab = GStorage.memberTab;
+        if (memberTab != MemberTabType.none) {
+          initialIndex = tab2!.indexWhere((item) {
+            return item.param == memberTab.name;
+          });
         }
-        int initialIndex = tab2!.indexWhere((item) {
-          return item.param == response.response.defaultTab;
-        });
+        if (initialIndex == -1) {
+          if (response.response.defaultTab == 'video') {
+            response.response.defaultTab = 'dynamic';
+          }
+          initialIndex = tab2!.indexWhere((item) {
+            return item.param == response.response.defaultTab;
+          });
+        }
         tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
         tabController = TabController(
           vsync: this,

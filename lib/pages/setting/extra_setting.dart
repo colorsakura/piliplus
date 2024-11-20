@@ -1,4 +1,6 @@
 import 'package:PiliPalaX/pages/main/controller.dart';
+import 'package:PiliPalaX/pages/member/new/controller.dart'
+    show MemberTabType, MemberTabTypeExt;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,6 +26,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
   final SettingController settingController = Get.put(SettingController());
   late dynamic defaultReplySort;
   late dynamic defaultDynamicType;
+  late MemberTabType defaultMemberTab;
   late dynamic enableSystemProxy;
   late String defaultSystemProxyHost;
   late String defaultSystemProxyPort;
@@ -42,6 +45,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
     // 优先展示全部动态 all
     defaultDynamicType =
         setting.get(SettingBoxKey.defaultDynamicType, defaultValue: 0);
+    defaultMemberTab = GStorage.memberTab;
     enableSystemProxy =
         setting.get(SettingBoxKey.enableSystemProxy, defaultValue: false);
     defaultSystemProxyHost =
@@ -330,6 +334,33 @@ class _ExtraSettingState extends State<ExtraSetting> {
               if (result != null) {
                 defaultDynamicType = result;
                 setting.put(SettingBoxKey.defaultDynamicType, result);
+                setState(() {});
+              }
+            },
+          ),
+          ListTile(
+            dense: false,
+            title: Text('用户页默认展示TAB', style: titleStyle),
+            leading: const Icon(Icons.tab),
+            subtitle: Text(
+              '当前优先展示「${defaultMemberTab.title}」',
+              style: subTitleStyle,
+            ),
+            onTap: () async {
+              MemberTabType? result = await showDialog(
+                context: context,
+                builder: (context) {
+                  return SelectDialog<MemberTabType>(
+                      title: '用户页默认展示TAB',
+                      value: defaultMemberTab,
+                      values: MemberTabType.values.map((e) {
+                        return {'title': e.title, 'value': e};
+                      }).toList());
+                },
+              );
+              if (result != null) {
+                defaultMemberTab = result;
+                setting.put(SettingBoxKey.memberTab, result.index);
                 setState(() {});
               }
             },

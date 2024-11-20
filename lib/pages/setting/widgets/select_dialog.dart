@@ -4,14 +4,15 @@ class SelectDialog<T> extends StatefulWidget {
   final T value;
   final String title;
   final List<dynamic> values;
-  const SelectDialog(
-      {super.key,
-      required this.value,
-      required this.values,
-      required this.title});
+  const SelectDialog({
+    super.key,
+    required this.value,
+    required this.values,
+    required this.title,
+  });
 
   @override
-  _SelectDialogState<T> createState() => _SelectDialogState<T>();
+  State<SelectDialog<T>> createState() => _SelectDialogState<T>();
 }
 
 class _SelectDialogState<T> extends State<SelectDialog<T>> {
@@ -28,7 +29,11 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
     TextStyle titleStyle = Theme.of(context).textTheme.titleMedium!;
 
     return AlertDialog(
-      title: Text(widget.title),
+      clipBehavior: Clip.hardEdge,
+      title: Text(
+        widget.title,
+        style: TextStyle(fontSize: 18),
+      ),
       contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
       content: StatefulBuilder(builder: (context, StateSetter setState) {
         return SingleChildScrollView(
@@ -37,6 +42,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
             children: [
               for (var i in widget.values) ...[
                 RadioListTile(
+                  dense: true,
                   value: i['value'],
                   title: Text(i['title'], style: titleStyle),
                   groupValue: _tempValue,

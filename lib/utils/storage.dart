@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
+import 'package:PiliPalaX/pages/member/new/controller.dart' show MemberTabType;
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType;
 import 'package:flutter/material.dart';
@@ -78,6 +79,9 @@ class GStorage {
 
   static int get schemeVariant =>
       setting.get(SettingBoxKey.schemeVariant, defaultValue: 0);
+
+  static MemberTabType get memberTab => MemberTabType
+      .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
   static ThemeMode get themeMode {
     switch (setting.get(SettingBoxKey.themeMode,
@@ -273,6 +277,7 @@ class SettingBoxKey {
       danmakuDuration = 'danmakuDuration',
       strokeWidth = 'strokeWidth',
       fontWeight = 'fontWeight',
+      memberTab = 'memberTab',
 
       // 代理host port
       systemProxyHost = 'systemProxyHost',
