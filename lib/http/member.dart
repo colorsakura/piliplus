@@ -350,8 +350,10 @@ class MemberHttp {
       'web_location': 1550101,
       'order_avoided': orderAvoided,
       'dm_img_list': '[]',
-      'dm_img_str': dmImgStr.substring(0, dmImgStr.length - 2),
-      'dm_cover_img_str': dmCoverImgStr.substring(0, dmCoverImgStr.length - 2),
+      'dm_img_str': dmImgStr.substring(
+          0, (dmImgStr.length - 2).clamp(0, dmImgStr.length - 1)),
+      'dm_cover_img_str': dmCoverImgStr.substring(
+          0, (dmCoverImgStr.length - 2).clamp(0, dmCoverImgStr.length - 1)),
       'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
     });
     var res = await Request().get(
@@ -377,7 +379,7 @@ class MemberHttp {
   }
 
   // 用户动态
-  static Future memberDynamic({String? offset, int? mid}) async {
+  static Future<LoadingState> memberDynamic({String? offset, int? mid}) async {
     String dmImgStr = Utils.base64EncodeRandomString(16, 64);
     String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
     Map params = await WbiSign().makSign({
@@ -388,27 +390,23 @@ class MemberHttp {
       'platform': 'web',
       'web_location': '333.999',
       'dm_img_list': '[]',
-      'dm_img_str': dmImgStr.substring(0, dmImgStr.length - 2),
-      'dm_cover_img_str': dmCoverImgStr.substring(0, dmCoverImgStr.length - 2),
+      'dm_img_str': dmImgStr.substring(
+          0, (dmImgStr.length - 2).clamp(0, dmImgStr.length - 1)),
+      'dm_cover_img_str': dmCoverImgStr.substring(
+          0, (dmCoverImgStr.length - 2).clamp(0, dmCoverImgStr.length - 1)),
       'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
       'x-bili-device-req-json': jsonEncode({"platform": "web", "device": "pc"}),
       'x-bili-web-req-json': jsonEncode({"spm_id": "333.999"}),
     });
     var res = await Request().get(Api.memberDynamic, data: params);
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': DynamicsDataModel.fromJson(res.data['data']),
-      };
+      return LoadingState.success(DynamicsDataModel.fromJson(res.data['data']));
     } else {
       Map errMap = {
         -352: '风控校验失败，请检查登录状态',
       };
-      return {
-        'status': false,
-        'data': [],
-        'msg': errMap[res.data['code']] ?? res.data['message'],
-      };
+      return LoadingState.error(
+          errMap[res.data['code']] ?? res.data['message']);
     }
   }
 

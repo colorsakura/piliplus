@@ -1,6 +1,7 @@
 import 'package:PiliPalaX/http/fan.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -36,7 +37,7 @@ class FansController extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (isEnd) {
+    if (isRefresh.not && isEnd) {
       return Future.value();
     }
     return super.queryData(isRefresh);

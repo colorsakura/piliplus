@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/user/info.dart';
@@ -23,7 +24,7 @@ class FavController extends CommonController {
       loadingState.value = LoadingState.error('账号未登录');
       return Future.value();
     }
-    if (!hasMore) {
+    if (isRefresh.not && hasMore.not) {
       return Future.value();
     }
     return super.queryData(isRefresh);

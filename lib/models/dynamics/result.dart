@@ -31,7 +31,7 @@ class DynamicItemModel {
   });
 
   Map? basic;
-  String? idStr;
+  dynamic idStr;
   ItemModulesModel? modules;
   ItemOrigModel? orig;
   String? type;

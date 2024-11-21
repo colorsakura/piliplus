@@ -2,6 +2,7 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -58,7 +59,7 @@ class FavSearchController extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (!hasMore) {
+    if (isRefresh.not && hasMore.not) {
       return Future.value();
     }
     return super.queryData(isRefresh);

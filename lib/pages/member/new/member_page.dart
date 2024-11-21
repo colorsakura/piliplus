@@ -136,6 +136,7 @@ class _MemberPageNewState extends State<MemberPageNew>
 
   Widget get _buildBody => SafeArea(
         top: false,
+        bottom: false,
         child: TabBarView(
           controller: _userController.tabController,
           children: _userController.tab2!.map((item) {

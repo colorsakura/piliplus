@@ -5,6 +5,7 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPalaX/pages/member/new/controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 
 class MemberBangumiCtr extends CommonController {
@@ -38,7 +39,7 @@ class MemberBangumiCtr extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (isEnd) return Future.value();
+    if (isRefresh.not && isEnd) return Future.value();
     return super.queryData(isRefresh);
   }
 

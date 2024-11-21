@@ -1,6 +1,7 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,7 @@ class FavDetailController extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (loadingText.value == '没有更多了') {
+    if (isRefresh.not && loadingText.value == '没有更多了') {
       return Future.value();
     }
     return super.queryData(isRefresh);

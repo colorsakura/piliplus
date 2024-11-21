@@ -4,6 +4,7 @@ import 'package:PiliPalaX/models/space_archive/data.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 
 class MemberVideoCtr extends CommonController {
@@ -43,7 +44,7 @@ class MemberVideoCtr extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (isEnd) return Future.value();
+    if (isRefresh.not && isEnd) return Future.value();
     return super.queryData(isRefresh);
   }
 

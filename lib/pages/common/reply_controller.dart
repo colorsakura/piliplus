@@ -3,6 +3,7 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,7 +57,7 @@ abstract class ReplyController extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (noMore.value == '没有更多了') return Future.value();
+    if (isRefresh.not && noMore.value == '没有更多了') return Future.value();
     return super.queryData(isRefresh);
   }
 
