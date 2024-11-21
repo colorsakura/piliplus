@@ -350,10 +350,8 @@ class MemberHttp {
       'web_location': 1550101,
       'order_avoided': orderAvoided,
       'dm_img_list': '[]',
-      'dm_img_str': dmImgStr.substring(
-          0, (dmImgStr.length - 2).clamp(0, dmImgStr.length - 1)),
-      'dm_cover_img_str': dmCoverImgStr.substring(
-          0, (dmCoverImgStr.length - 2).clamp(0, dmCoverImgStr.length - 1)),
+      'dm_img_str': dmImgStr,
+      'dm_cover_img_str': dmCoverImgStr,
       'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
     });
     var res = await Request().get(
@@ -390,10 +388,8 @@ class MemberHttp {
       'platform': 'web',
       'web_location': '333.999',
       'dm_img_list': '[]',
-      'dm_img_str': dmImgStr.substring(
-          0, (dmImgStr.length - 2).clamp(0, dmImgStr.length - 1)),
-      'dm_cover_img_str': dmCoverImgStr.substring(
-          0, (dmCoverImgStr.length - 2).clamp(0, dmCoverImgStr.length - 1)),
+      'dm_img_str': dmImgStr,
+      'dm_cover_img_str': dmCoverImgStr,
       'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
       'x-bili-device-req-json': jsonEncode({"platform": "web", "device": "pc"}),
       'x-bili-web-req-json': jsonEncode({"spm_id": "333.999"}),

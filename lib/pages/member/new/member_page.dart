@@ -11,6 +11,7 @@ import 'package:PiliPalaX/pages/member/new/controller.dart';
 import 'package:PiliPalaX/pages/member/new/widget/user_info_card.dart';
 import 'package:PiliPalaX/pages/member/view.dart';
 import 'package:PiliPalaX/pages/member_dynamics/view.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class _MemberPageNewState extends State<MemberPageNew>
   int? _mid;
   String? _heroTag;
   late final MemberControllerNew _userController;
+  final _key = GlobalKey<ExtendedNestedScrollViewState>();
 
   @override
   void initState() {
@@ -55,6 +57,7 @@ class _MemberPageNewState extends State<MemberPageNew>
                 builder: (_, constraints) {
                   // if (constraints.maxHeight > constraints.maxWidth) {
                   return ExtendedNestedScrollView(
+                    key: _key,
                     controller: _userController.scrollController,
                     onlyOneScrollInBody: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -132,6 +135,11 @@ class _MemberPageNewState extends State<MemberPageNew>
   Widget get _buildTab => TabBar(
         controller: _userController.tabController,
         tabs: _userController.tabs,
+        onTap: (value) {
+          if (_userController.tabController?.indexIsChanging == false) {
+            _key.currentState?.outerController.animToTop();
+          }
+        },
       );
 
   Widget get _buildBody => SafeArea(

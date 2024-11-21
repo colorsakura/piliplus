@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 extension ImageExtension on num {
   int cacheSize(BuildContext context) {
@@ -9,8 +10,12 @@ extension ImageExtension on num {
 extension ScrollControllerExt on ScrollController {
   void animToTop() {
     if (!hasClients) return;
-    animateTo(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    if (offset >= MediaQuery.of(Get.context!).size.height * 7) {
+      jumpTo(0);
+    } else {
+      animateTo(0,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
   }
 }
 
