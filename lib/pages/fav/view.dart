@@ -1,6 +1,8 @@
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,6 +57,32 @@ class _FavPageState extends State<FavPage> {
         actions: [
           IconButton(
             onPressed: () {
+              Get.toNamed('/createFav')?.then((data) {
+                if (data != null) {
+                  List list = _favController.loadingState.value is Success
+                      ? (_favController.loadingState.value as Success).response
+                      : [];
+                  list.insert(
+                    list.isNotEmpty ? 1 : 0,
+                    FavFolderItemData(
+                      id: data['id'],
+                      fid: data['fid'],
+                      attr: data['attr'],
+                      title: data['title'],
+                      favState: data['fav_state'],
+                      mediaCount: data['media_count'],
+                    ),
+                  );
+                  _favController.loadingState.value =
+                      LoadingState.success(list);
+                }
+              });
+            },
+            icon: const Icon(Icons.add),
+            tooltip: '新建收藏夹',
+          ),
+          IconButton(
+            onPressed: () {
               if (_favController.loadingState.value is Success) {
                 Get.toNamed('/favSearch', arguments: {
                   'type': 1,
@@ -96,7 +124,31 @@ class _FavPageState extends State<FavPage> {
             delegate: SliverChildBuilderDelegate(
               childCount: loadingState.response.length,
               (BuildContext context, int index) {
-                return FavItem(favFolderItem: loadingState.response[index]);
+                String heroTag =
+                    Utils.makeHeroTag(loadingState.response[index].fid);
+                return FavItem(
+                  heroTag: heroTag,
+                  favFolderItem: loadingState.response[index],
+                  onTap: () {
+                    Get.toNamed(
+                      '/favDetail',
+                      arguments: loadingState.response[index],
+                      parameters: {
+                        'heroTag': heroTag,
+                        'mediaId': loadingState.response[index].id.toString(),
+                      },
+                    )?.then((res) {
+                      if (res == true) {
+                        List list =
+                            (_favController.loadingState.value as Success)
+                                .response;
+                        list.removeAt(index);
+                        _favController.loadingState.value =
+                            LoadingState.success(list);
+                      }
+                    });
+                  },
+                );
               },
             ),
           )

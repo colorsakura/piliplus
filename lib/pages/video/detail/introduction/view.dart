@@ -319,7 +319,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             gapSize: 10,
                             itemCount: videoItem['staff'].length,
                             childBuilder: (index) => Container(
-                              width: 70,
+                              width: 80,
                               alignment: Alignment.center,
                               child: GestureDetector(
                                 onTap: () => Get.toNamed(

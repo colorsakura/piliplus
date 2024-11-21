@@ -137,7 +137,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                     .then((data) {
                                   if (data['status']) {
                                     SmartDialog.showToast('删除成功');
-                                    Get.back();
+                                    Get.back(result: true);
                                   } else {
                                     SmartDialog.showToast(data['msg']);
                                   }

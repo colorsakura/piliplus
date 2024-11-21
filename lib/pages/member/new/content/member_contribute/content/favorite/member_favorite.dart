@@ -135,7 +135,13 @@ class _MemberFavoriteState extends State<MemberFavorite>
                       'mediaId': item1.id.toString(),
                       'heroTag': widget.heroTag ?? '',
                     },
-                  );
+                  )?.then((res) {
+                    if (res == true) {
+                      _controller.first.value.mediaListResponse?.list
+                          ?.remove(item1);
+                      _controller.first.refresh();
+                    }
+                  });
                 } else if (item1.type == 21) {
                   PiliScheme.routePush(Uri.parse(item1.link ?? ''));
                 } else if (item1.type == 11) {

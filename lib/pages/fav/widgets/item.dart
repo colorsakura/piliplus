@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/utils/utils.dart';
 
 class FavItem extends StatelessWidget {
+  final String heroTag;
   final dynamic favFolderItem;
-  const FavItem({super.key, required this.favFolderItem});
+  final GestureTapCallback onTap;
+  const FavItem({
+    super.key,
+    required this.onTap,
+    required this.heroTag,
+    required this.favFolderItem,
+  });
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(favFolderItem.fid);
     return InkWell(
-      onTap: () => Get.toNamed(
-        '/favDetail',
-        arguments: favFolderItem,
-        parameters: {
-          'heroTag': heroTag,
-          'mediaId': favFolderItem.id.toString(),
-        },
-      ),
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 7, 12, 7),
         child: LayoutBuilder(
@@ -80,6 +77,15 @@ class VideoContent extends StatelessWidget {
                 letterSpacing: 0.3,
               ),
             ),
+            if (favFolderItem.intro.isNotEmpty)
+              Text(
+                favFolderItem.intro,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
             Text(
               '${favFolderItem.mediaCount}个内容',
               textAlign: TextAlign.start,
