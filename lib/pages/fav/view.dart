@@ -48,12 +48,7 @@ class _FavPageState extends State<FavPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Text(
-          '我的收藏',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        title: Text('我的收藏'),
         actions: [
           IconButton(
             onPressed: () {

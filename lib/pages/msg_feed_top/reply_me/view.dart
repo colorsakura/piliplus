@@ -46,9 +46,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('回复我的'),
-      ),
+      appBar: AppBar(title: const Text('回复我的')),
       body: refreshIndicator(
         onRefresh: () async {
           await _replyMeController.onRefresh();

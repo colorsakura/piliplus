@@ -447,7 +447,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   : AppBar(
                       backgroundColor:
                           showStatusBarBackgroundColor ? null : Colors.black,
-                      elevation: 0,
                       toolbarHeight: 0,
                       systemOverlayStyle: SystemUiOverlayStyle(
                           statusBarIconBrightness:
@@ -835,7 +834,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 : AppBar(
                     backgroundColor:
                         showStatusBarBackgroundColor ? null : Colors.black,
-                    elevation: 0,
                     toolbarHeight: 0,
                     systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarIconBrightness:
@@ -868,7 +866,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 : AppBar(
                     backgroundColor:
                         showStatusBarBackgroundColor ? null : Colors.black,
-                    elevation: 0,
                     toolbarHeight: 0,
                     systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarIconBrightness:
@@ -933,8 +930,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 child: AppBar(
                   primary: false,
                   foregroundColor: Colors.white,
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
                   backgroundColor: Colors.transparent,
                   actions: (videoDetailController.userInfo == null)
                       ? null

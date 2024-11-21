@@ -70,7 +70,6 @@ class _SubDetailPageState extends State<SubDetailPage> {
           SliverAppBar(
             expandedHeight: 260 - MediaQuery.of(context).padding.top,
             pinned: true,
-            titleSpacing: 0,
             title: StreamBuilder(
               stream: titleStreamC.stream,
               initialData: false,

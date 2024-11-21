@@ -160,10 +160,12 @@ class MyApp extends StatelessWidget {
           // showSemanticsDebugger: true,
           title: 'PiliPalaX',
           theme: _getThemeData(
+            context: context,
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,
           ),
           darkTheme: _getThemeData(
+            context: context,
             colorScheme: darkColorScheme,
             isDynamic: darkDynamic != null && isDynamicColor,
           ),
@@ -199,6 +201,7 @@ class MyApp extends StatelessWidget {
   }
 
   ThemeData _getThemeData({
+    required BuildContext context,
     required ColorScheme colorScheme,
     required bool isDynamic,
   }) {
@@ -207,6 +210,14 @@ class MyApp extends StatelessWidget {
     return ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        titleSpacing: 0,
+        centerTitle: false,
+        scrolledUnderElevation: 0,
+        backgroundColor: Platform.isIOS ? colorScheme.surface : null,
+        titleTextStyle: Theme.of(context).textTheme.titleMedium,
+      ),
       navigationBarTheme: NavigationBarThemeData(
         surfaceTintColor: surfaceTintColor,
       ),

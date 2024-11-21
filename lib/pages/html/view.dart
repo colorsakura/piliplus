@@ -115,12 +115,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       () => Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          titleSpacing: 0,
-          centerTitle: false,
-          title: Text(
-            '评论详情',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          title: Text('评论详情'),
         ),
         body: VideoReplyReplyPanel(
           id: id,
@@ -138,12 +133,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        title: Text(title),
         actions: [
           const SizedBox(width: 4),
           IconButton(

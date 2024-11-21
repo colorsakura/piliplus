@@ -51,15 +51,12 @@ class _FavPanelState extends State<FavPanel> {
                   top: Radius.circular(18),
                 ),
               ),
-              centerTitle: false,
-              elevation: 0,
               leading: IconButton(
                 tooltip: '关闭',
                 onPressed: Get.back,
                 icon: const Icon(Icons.close_outlined),
               ),
-              title: Text('添加到收藏夹',
-                  style: Theme.of(context).textTheme.titleMedium),
+              title: Text('添加到收藏夹'),
               actions: [
                 TextButton.icon(
                   onPressed: () {

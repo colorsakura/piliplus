@@ -1,5 +1,4 @@
 import 'package:easy_debounce/easy_throttle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
@@ -53,8 +52,8 @@ class _MemberSearchPageState extends State<MemberSearchPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          titleSpacing: 0,
           actions: [
             IconButton(
                 tooltip: '搜索',
@@ -86,8 +85,12 @@ class _MemberSearchPageState extends State<MemberSearchPage>
         body: Obx(
           () {
             if (_memberSearchCtr.loadingStatus.value == 'init') {
-              return Center(
-                child: Text('搜索「${_memberSearchCtr.uname.value}」的动态、视频'),
+              return FractionallySizedBox(
+                heightFactor: 0.5,
+                widthFactor: 1.0,
+                child: Center(
+                  child: Text('搜索「${_memberSearchCtr.uname.value}」的动态、视频'),
+                ),
               );
             }
             return CustomScrollView(

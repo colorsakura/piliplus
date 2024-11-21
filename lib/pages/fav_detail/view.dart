@@ -71,7 +71,6 @@ class _FavDetailPageState extends State<FavDetailPage> {
           SliverAppBar(
             expandedHeight: 220 - MediaQuery.of(context).padding.top,
             pinned: true,
-            titleSpacing: 0,
             title: StreamBuilder(
               stream: titleStreamC.stream,
               initialData: false,

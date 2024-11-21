@@ -26,13 +26,8 @@ class _WebviewPageState extends State<WebviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: false,
-          titleSpacing: 0,
           title: Obx(
-            () => Text(
-              _webviewController.pageTitle.value,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            () => Text(_webviewController.pageTitle.value),
           ),
           actions: [
             const SizedBox(width: 4),

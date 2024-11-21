@@ -55,14 +55,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
         .labelMedium!
         .copyWith(color: Theme.of(context).colorScheme.outline);
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Text(
-          '推荐流设置',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
+      appBar: AppBar(title: Text('推荐流设置')),
       body: ListView(
         children: [
           ListTile(

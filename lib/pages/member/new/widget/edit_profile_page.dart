@@ -47,9 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('账号资料'),
-      ),
+      appBar: AppBar(title: const Text('账号资料')),
       body: _buildBody(_loadingState),
     );
   }

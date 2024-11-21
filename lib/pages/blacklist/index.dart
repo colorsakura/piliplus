@@ -51,15 +51,8 @@ class _BlackListPageState extends State<BlackListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        titleSpacing: 0,
-        centerTitle: false,
         title: Obx(
-          () => Text(
-            '黑名单管理: ${_blackListController.total.value}',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          () => Text('黑名单管理: ${_blackListController.total.value}'),
         ),
       ),
       body: refreshIndicator(

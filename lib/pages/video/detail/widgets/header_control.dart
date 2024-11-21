@@ -1339,12 +1339,8 @@ class _HeaderControlState extends State<HeaderControl> {
       return AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
         primary: false,
-        centerTitle: false,
         automaticallyImplyLeading: false,
-        titleSpacing: 10,
         title: Row(
           children: [
             SizedBox(

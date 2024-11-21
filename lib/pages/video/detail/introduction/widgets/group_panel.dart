@@ -90,14 +90,11 @@ class _GroupPanelState extends State<GroupPanel> {
                   top: Radius.circular(18),
                 ),
               ),
-              centerTitle: false,
-              elevation: 0,
               leading: IconButton(
                   tooltip: '关闭',
                   onPressed: Get.back,
                   icon: const Icon(Icons.close_outlined)),
-              title: Text('设置关注分组',
-                  style: Theme.of(context).textTheme.titleMedium),
+              title: Text('设置关注分组'),
             ),
             Expanded(
               child: Material(

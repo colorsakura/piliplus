@@ -112,14 +112,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     Get.to(
       () => Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          titleSpacing: 0,
-          centerTitle: false,
-          title: Text(
-            '评论详情',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ),
+        appBar: AppBar(title: Text('评论详情')),
         body: VideoReplyReplyPanel(
           id: id,
           oid: oid,
@@ -192,11 +185,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        centerTitle: false,
-        titleSpacing: 0,
         title: StreamBuilder(
           stream: titleStreamC.stream,
           initialData: false,
@@ -322,15 +310,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     return SliverPersistentHeader(
       delegate: _MySliverPersistentHeaderDelegate(
         child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: Border(
-              top: BorderSide(
-                width: 0.6,
-                color: Theme.of(context).dividerColor.withOpacity(0.05),
-              ),
-            ),
-          ),
+          color: Theme.of(context).colorScheme.surface,
           height: 45,
           padding: const EdgeInsets.only(left: 12, right: 6),
           child: Row(

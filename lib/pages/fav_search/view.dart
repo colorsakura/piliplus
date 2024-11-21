@@ -48,8 +48,8 @@ class _FavSearchPageState extends State<FavSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        titleSpacing: 0,
         actions: [
           IconButton(
               tooltip: '搜索',

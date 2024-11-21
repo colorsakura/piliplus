@@ -203,8 +203,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           Column(
             children: [
               AppBar(
-                centerTitle: false,
-                titleSpacing: 0,
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
                 toolbarHeight:

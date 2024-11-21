@@ -44,14 +44,7 @@ class _SubPageState extends State<SubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Text(
-          '我的订阅',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
+      appBar: AppBar(title: Text('我的订阅')),
       body: FutureBuilder(
         future: _futureBuilderFuture,
         builder: (context, snapshot) {

@@ -56,7 +56,6 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
             width: 1,
           ),
         ),
-        titleSpacing: 0,
         actions: [
           IconButton(
             tooltip: '搜索',

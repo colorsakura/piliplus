@@ -354,14 +354,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Text(
-          'Sponsor Block',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
+      appBar: AppBar(title: Text('Sponsor Block')),
       body: CustomScrollView(
         slivers: [
           _dividerL,

@@ -16,7 +16,6 @@ class HomeAppBar extends StatelessWidget {
     dynamic userInfo = userInfoCache.get('userInfoCache');
     return SliverAppBar(
       // forceElevated: true,
-      scrolledUnderElevation: 0,
       toolbarHeight: MediaQuery.of(context).padding.top,
       expandedHeight: kToolbarHeight + MediaQuery.of(context).padding.top,
       automaticallyImplyLeading: false,
@@ -29,7 +28,6 @@ class HomeAppBar extends StatelessWidget {
             background: Column(
               children: [
                 AppBar(
-                  centerTitle: false,
                   title: const Text(
                     'PiLiPaLa',
                     style: TextStyle(
@@ -95,8 +93,6 @@ class HomeAppBar extends StatelessWidget {
 
                     const SizedBox(width: 10)
                   ],
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
                 ),
               ],
             ),

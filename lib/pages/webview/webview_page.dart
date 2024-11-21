@@ -38,7 +38,6 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
         title: StreamBuilder(
           initialData: null,
           stream: _titleStream.stream,

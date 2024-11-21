@@ -49,12 +49,7 @@ class PiliScheme {
             () => Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                titleSpacing: 0,
-                centerTitle: false,
-                title: Text(
-                  '评论详情',
-                  // style: Theme.of(context).textTheme.titleMedium,
-                ),
+                title: Text('评论详情'),
                 actions: [
                   IconButton(
                     tooltip: '前往原视频',
@@ -139,12 +134,7 @@ class PiliScheme {
           () => Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              titleSpacing: 0,
-              centerTitle: false,
-              title: Text(
-                '评论详情',
-                // style: Theme.of(context).textTheme.titleMedium,
-              ),
+              title: Text('评论详情'),
               actions: [
                 IconButton(
                   tooltip: '前往',
@@ -184,12 +174,7 @@ class PiliScheme {
             () => Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                titleSpacing: 0,
-                centerTitle: false,
-                title: Text(
-                  '评论详情',
-                  // style: Theme.of(context).textTheme.titleMedium,
-                ),
+                title: Text('评论详情'),
                 actions: [
                   IconButton(
                     tooltip: '前往',

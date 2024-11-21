@@ -54,9 +54,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
-        centerTitle: false,
-        title: Text('Ta的投稿', style: Theme.of(context).textTheme.titleMedium),
+        title: Text('Ta的投稿'),
         actions: [
           Obx(
             () => TextButton.icon(

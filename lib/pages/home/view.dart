@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage>
           : Brightness.light,
     ));
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 0, elevation: 0),
+      appBar: AppBar(toolbarHeight: 0),
       body: Column(
         children: [
           if (!_homeController.useSideBar)

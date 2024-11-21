@@ -191,8 +191,6 @@ class _MemberPageNewState extends State<MemberPageNew>
                 )
               : const SizedBox.shrink()),
           pinned: true,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          scrolledUnderElevation: 0,
           flexibleSpace:
               _buildUserInfo(_userController.loadingState.value, isV),
           bottom: needTab && (_userController.tab2?.length ?? -1) > 1
