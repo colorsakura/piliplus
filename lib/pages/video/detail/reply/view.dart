@@ -200,63 +200,68 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, index) {
-                double bottom = MediaQuery.of(context).padding.bottom;
-                if (index == loadingState.response.replies.length) {
-                  return Container(
-                    padding: EdgeInsets.only(bottom: bottom),
-                    height: bottom + 100,
-                    child: Center(
-                      child: Obx(
-                        () => Text(
-                          _videoReplyController.noMore.value,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.outline,
+    return switch (loadingState) {
+      Loading() => SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, index) {
+              return const VideoReplySkeleton();
+            },
+            childCount: 5,
+          ),
+        ),
+      Success() => (loadingState.response.replies as List?)?.isNotEmpty == true
+          ? SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, index) {
+                  double bottom = MediaQuery.of(context).padding.bottom;
+                  if (index == loadingState.response.replies.length) {
+                    return Container(
+                      padding: EdgeInsets.only(bottom: bottom),
+                      height: bottom + 100,
+                      child: Center(
+                        child: Obx(
+                          () => Text(
+                            _videoReplyController.noMore.value,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return ReplyItemGrpc(
-                    replyItem: loadingState.response.replies[index],
-                    showReplyRow: true,
-                    replyLevel: replyLevel,
-                    replyReply: widget.replyReply,
-                    replyType: ReplyType.video,
-                    onReply: () {
-                      _videoReplyController.onReply(
-                        context,
-                        replyItem: loadingState.response.replies[index],
-                        index: index,
-                      );
-                    },
-                    onDelete: _videoReplyController.onMDelete,
-                    isTop: _videoReplyController.hasUpTop && index == 0,
-                    upMid: loadingState.response.subjectControl.upMid,
-                  );
-                }
-              },
-              childCount: loadingState.response.replies.length + 1,
+                    );
+                  } else {
+                    return ReplyItemGrpc(
+                      replyItem: loadingState.response.replies[index],
+                      showReplyRow: true,
+                      replyLevel: replyLevel,
+                      replyReply: widget.replyReply,
+                      replyType: ReplyType.video,
+                      onReply: () {
+                        _videoReplyController.onReply(
+                          context,
+                          replyItem: loadingState.response.replies[index],
+                          index: index,
+                        );
+                      },
+                      onDelete: _videoReplyController.onMDelete,
+                      isTop: _videoReplyController.hasUpTop && index == 0,
+                      upMid: loadingState.response.subjectControl.upMid,
+                    );
+                  }
+                },
+                childCount: loadingState.response.replies.length + 1,
+              ),
+            )
+          : HttpError(
+              callback: _videoReplyController.onReload,
             ),
-          )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _videoReplyController.onReload,
-              )
-            : SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, index) {
-                    return const VideoReplySkeleton();
-                  },
-                  childCount: 5,
-                ),
-              );
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _videoReplyController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }
 

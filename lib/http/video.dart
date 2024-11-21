@@ -67,11 +67,7 @@ class VideoHttp {
           }
         }
       }
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -161,11 +157,7 @@ class VideoHttp {
           }
         }
       }
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -189,11 +181,7 @@ class VideoHttp {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -210,11 +198,7 @@ class VideoHttp {
           list.add(item);
         }
       }
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res['msg']);
     }
@@ -357,11 +341,7 @@ class VideoHttp {
           list.add(videoItem);
         }
       }
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -970,11 +950,7 @@ class VideoHttp {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }

@@ -108,63 +108,68 @@ class _FavPageState extends State<FavPage> {
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.cardSpace,
-                crossAxisSpacing: StyleString.safeSpace,
-                maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.4,
-                mainAxisExtent: 0),
-            delegate: SliverChildBuilderDelegate(
-              childCount: loadingState.response.length,
-              (BuildContext context, int index) {
-                String heroTag =
-                    Utils.makeHeroTag(loadingState.response[index].fid);
-                return FavItem(
-                  heroTag: heroTag,
-                  favFolderItem: loadingState.response[index],
-                  onTap: () {
-                    Get.toNamed(
-                      '/favDetail',
-                      arguments: loadingState.response[index],
-                      parameters: {
-                        'heroTag': heroTag,
-                        'mediaId': loadingState.response[index].id.toString(),
-                      },
-                    )?.then((res) {
-                      if (res == true) {
-                        List list =
-                            (_favController.loadingState.value as Success)
-                                .response;
-                        list.removeAt(index);
-                        _favController.loadingState.value =
-                            LoadingState.success(list);
-                      }
-                    });
-                  },
-                );
-              },
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+              mainAxisSpacing: StyleString.cardSpace,
+              crossAxisSpacing: StyleString.safeSpace,
+              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+              childAspectRatio: StyleString.aspectRatio * 2.4,
+              mainAxisExtent: 0),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                  mainAxisSpacing: StyleString.cardSpace,
+                  crossAxisSpacing: StyleString.safeSpace,
+                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  childAspectRatio: StyleString.aspectRatio * 2.4,
+                  mainAxisExtent: 0),
+              delegate: SliverChildBuilderDelegate(
+                childCount: loadingState.response.length,
+                (BuildContext context, int index) {
+                  String heroTag =
+                      Utils.makeHeroTag(loadingState.response[index].fid);
+                  return FavItem(
+                    heroTag: heroTag,
+                    favFolderItem: loadingState.response[index],
+                    onTap: () {
+                      Get.toNamed(
+                        '/favDetail',
+                        arguments: loadingState.response[index],
+                        parameters: {
+                          'heroTag': heroTag,
+                          'mediaId': loadingState.response[index].id.toString(),
+                        },
+                      )?.then((res) {
+                        if (res == true) {
+                          List list =
+                              (_favController.loadingState.value as Success)
+                                  .response;
+                          list.removeAt(index);
+                          _favController.loadingState.value =
+                              LoadingState.success(list);
+                        }
+                      });
+                    },
+                  );
+                },
+              ),
+            )
+          : HttpError(
+              callback: _favController.onReload,
             ),
-          )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _favController.onReload,
-              )
-            : SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.cardSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.4,
-                    mainAxisExtent: 0),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return const VideoCardHSkeleton();
-                  },
-                  childCount: 10,
-                ),
-              );
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _favController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

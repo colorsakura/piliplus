@@ -72,20 +72,20 @@ abstract class ReplyController extends CommonController {
       }
     }
     cursor = replies.cursor;
-    if (replies.replies.isNotEmpty) {
-      noMore.value = '加载中...';
-      if (replies.cursor.isEnd) {
-        noMore.value = '没有更多了';
-      }
-    } else {
-      // 未登录状态replies可能返回null
-      noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
-    }
     if (currentPage != 1) {
       List<ReplyInfo> list = loadingState.value is Success
           ? (loadingState.value as Success).response.replies
           : <ReplyInfo>[];
       replies.replies.insertAll(0, list);
+    }
+    if (replies.replies.isNotEmpty) {
+      noMore.value = '加载中...';
+      if (replies.cursor.isEnd || replies.replies.length >= count.value) {
+        noMore.value = '没有更多了';
+      }
+    } else {
+      // 未登录状态replies可能返回null
+      noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
     }
     loadingState.value = LoadingState.success(replies);
     return true;

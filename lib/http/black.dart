@@ -1,5 +1,4 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 
 import '../models/user/black.dart';
 import 'index.dart';
@@ -15,11 +14,7 @@ class BlackHttp {
     });
     if (res.data['code'] == 0) {
       BlackListDataModel data = BlackListDataModel.fromJson(res.data['data']);
-      if (!data.list.isNullOrEmpty) {
-        return LoadingState.success(data);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(data);
     } else {
       return LoadingState.error(res.data['message']);
     }

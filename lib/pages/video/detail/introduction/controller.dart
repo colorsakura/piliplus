@@ -699,7 +699,10 @@ class VideoIntroController extends GetxController
     late RelatedController relatedCtr;
     try {
       relatedCtr = Get.find<RelatedController>(tag: heroTag);
-      if (relatedCtr.loadingState.value is Empty) {
+      if (relatedCtr.loadingState.value is! Success) {
+        return false;
+      }
+      if ((relatedCtr.loadingState.value as Success).response.isEmpty == true) {
         SmartDialog.showToast('暂无相关视频，停止连播');
         return false;
       }

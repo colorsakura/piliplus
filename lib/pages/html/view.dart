@@ -320,59 +320,64 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   }
 
   Widget replyList(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverList.builder(
-            itemCount: loadingState.response.replies.length + 1,
-            itemBuilder: (context, index) {
-              if (index == loadingState.response.replies.length) {
-                return Container(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom),
-                  height: MediaQuery.of(context).padding.bottom + 100,
-                  child: Center(
-                    child: Obx(
-                      () => Text(
-                        _htmlRenderCtr.noMore.value,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.outline,
+    return switch (loadingState) {
+      Loading() => SliverList.builder(
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return const VideoReplySkeleton();
+          },
+        ),
+      Success() => (loadingState.response.replies as List?)?.isNotEmpty == true
+          ? SliverList.builder(
+              itemCount: loadingState.response.replies.length + 1,
+              itemBuilder: (context, index) {
+                if (index == loadingState.response.replies.length) {
+                  return Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                    height: MediaQuery.of(context).padding.bottom + 100,
+                    child: Center(
+                      child: Obx(
+                        () => Text(
+                          _htmlRenderCtr.noMore.value,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              } else {
-                return ReplyItemGrpc(
-                  replyItem: loadingState.response.replies[index],
-                  showReplyRow: true,
-                  replyLevel: '1',
-                  replyReply: replyReply,
-                  replyType: ReplyType.values[type],
-                  onReply: () {
-                    _htmlRenderCtr.onReply(
-                      context,
-                      replyItem: loadingState.response.replies[index],
-                      index: index,
-                    );
-                  },
-                  onDelete: _htmlRenderCtr.onMDelete,
-                  isTop: _htmlRenderCtr.hasUpTop && index == 0,
-                  upMid: loadingState.response.subjectControl.upMid,
-                );
-              }
-            },
-          )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _htmlRenderCtr.onReload,
-              )
-            : SliverList.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return const VideoReplySkeleton();
-                },
-              );
+                  );
+                } else {
+                  return ReplyItemGrpc(
+                    replyItem: loadingState.response.replies[index],
+                    showReplyRow: true,
+                    replyLevel: '1',
+                    replyReply: replyReply,
+                    replyType: ReplyType.values[type],
+                    onReply: () {
+                      _htmlRenderCtr.onReply(
+                        context,
+                        replyItem: loadingState.response.replies[index],
+                        index: index,
+                      );
+                    },
+                    onDelete: _htmlRenderCtr.onMDelete,
+                    isTop: _htmlRenderCtr.hasUpTop && index == 0,
+                    upMid: loadingState.response.subjectControl.upMid,
+                  );
+                }
+              },
+            )
+          : HttpError(
+              callback: _htmlRenderCtr.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _htmlRenderCtr.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 
   Container replyHeader() {

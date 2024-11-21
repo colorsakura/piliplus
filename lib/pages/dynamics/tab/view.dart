@@ -10,7 +10,6 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 import '../../../common/skeleton/dynamic_card.dart';
@@ -146,71 +145,74 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? dynamicsWaterfallFlow
-            ? SliverWaterfallFlow.extent(
-                maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                //cacheExtent: 0.0,
-                crossAxisSpacing: StyleString.cardSpace / 2,
-                mainAxisSpacing: StyleString.cardSpace / 2,
+    return switch (loadingState) {
+      Loading() => skeleton(),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? dynamicsWaterfallFlow
+              ? SliverWaterfallFlow.extent(
+                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  //cacheExtent: 0.0,
+                  crossAxisSpacing: StyleString.cardSpace / 2,
+                  mainAxisSpacing: StyleString.cardSpace / 2,
 
-                lastChildLayoutTypeBuilder: (index) =>
-                    index == loadingState.response.length
-                        ? LastChildLayoutType.foot
-                        : LastChildLayoutType.none,
-                children: [
-                  if (dynamicsController.tabController.index == 4 &&
-                      dynamicsController.mid.value != -1) ...[
-                    for (var i in loadingState.response)
-                      DynamicPanel(
-                        item: i,
-                        onRemove: _dynamicsTabController.onRemove,
-                      ),
-                  ] else ...[
-                    for (var i in loadingState.response)
-                      if (!dynamicsController.tempBannedList
-                          .contains(i.modules?.moduleAuthor?.mid))
+                  lastChildLayoutTypeBuilder: (index) =>
+                      index == loadingState.response.length
+                          ? LastChildLayoutType.foot
+                          : LastChildLayoutType.none,
+                  children: [
+                    if (dynamicsController.tabController.index == 4 &&
+                        dynamicsController.mid.value != -1) ...[
+                      for (var i in loadingState.response)
                         DynamicPanel(
                           item: i,
                           onRemove: _dynamicsTabController.onRemove,
                         ),
-                  ]
-                ],
-              )
-            : SliverCrossAxisGroup(
-                slivers: [
-                  const SliverFillRemaining(),
-                  SliverConstrainedCrossAxis(
-                    maxExtent: Grid.maxRowWidth * 2,
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if ((dynamicsController.tabController.index == 4 &&
-                                  dynamicsController.mid.value != -1) ||
-                              !dynamicsController.tempBannedList.contains(
-                                  loadingState.response[index].modules
-                                      ?.moduleAuthor?.mid)) {
-                            return DynamicPanel(
-                              item: loadingState.response[index],
-                              onRemove: _dynamicsTabController.onRemove,
-                            );
-                          }
-                          return const SizedBox();
-                        },
-                        childCount: loadingState.response.length,
+                    ] else ...[
+                      for (var i in loadingState.response)
+                        if (!dynamicsController.tempBannedList
+                            .contains(i.modules?.moduleAuthor?.mid))
+                          DynamicPanel(
+                            item: i,
+                            onRemove: _dynamicsTabController.onRemove,
+                          ),
+                    ]
+                  ],
+                )
+              : SliverCrossAxisGroup(
+                  slivers: [
+                    const SliverFillRemaining(),
+                    SliverConstrainedCrossAxis(
+                      maxExtent: Grid.maxRowWidth * 2,
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            if ((dynamicsController.tabController.index == 4 &&
+                                    dynamicsController.mid.value != -1) ||
+                                !dynamicsController.tempBannedList.contains(
+                                    loadingState.response[index].modules
+                                        ?.moduleAuthor?.mid)) {
+                              return DynamicPanel(
+                                item: loadingState.response[index],
+                                onRemove: _dynamicsTabController.onRemove,
+                              );
+                            }
+                            return const SizedBox();
+                          },
+                          childCount: loadingState.response.length,
+                        ),
                       ),
                     ),
-                  ),
-                  const SliverFillRemaining(),
-                ],
-              )
-        : loadingState is Empty
-            ? const NoData()
-            : loadingState is Error
-                ? HttpError(
-                    errMsg: loadingState.errMsg,
-                    fn: _dynamicsTabController.onReload,
-                  )
-                : skeleton();
+                    const SliverFillRemaining(),
+                  ],
+                )
+          : HttpError(
+              callback: _dynamicsTabController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _dynamicsTabController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

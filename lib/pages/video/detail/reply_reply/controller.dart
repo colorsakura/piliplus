@@ -146,10 +146,20 @@ class VideoReplyReplyController extends CommonController
     }
     upMid ??= replies.subjectControl.upMid.toInt();
     cursor = replies.cursor;
+    if (currentPage != 1) {
+      List<ReplyInfo> list = loadingState.value is Success
+          ? (loadingState.value as Success).response
+          : <ReplyInfo>[];
+      if (isDialogue) {
+        replies.replies.insertAll(0, list);
+      } else {
+        replies.root.replies.insertAll(0, list);
+      }
+    }
     if (isDialogue) {
       if (replies.replies.isNotEmpty) {
         noMore.value = '加载中...';
-        if (replies.cursor.isEnd) {
+        if (replies.cursor.isEnd || count.value >= replies.replies.length) {
           noMore.value = '没有更多了';
         }
       } else {
@@ -159,22 +169,13 @@ class VideoReplyReplyController extends CommonController
     } else {
       if (replies.root.replies.isNotEmpty) {
         noMore.value = '加载中...';
-        if (replies.cursor.isEnd) {
+        if (replies.cursor.isEnd ||
+            count.value >= replies.root.replies.length) {
           noMore.value = '没有更多了';
         }
       } else {
         // 未登录状态replies可能返回null
         noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
-      }
-    }
-    if (currentPage != 1) {
-      List<ReplyInfo> list = loadingState.value is Success
-          ? (loadingState.value as Success).response
-          : <ReplyInfo>[];
-      if (isDialogue) {
-        replies.replies.insertAll(0, list);
-      } else {
-        replies.root.replies.insertAll(0, list);
       }
     }
     if (isDialogue) {

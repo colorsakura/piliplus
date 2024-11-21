@@ -1,5 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/index.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
@@ -99,19 +99,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       );
 
   Widget _buildBody(LoadingState loadingState) {
-    switch (loadingState) {
-      case Error():
-        return CustomScrollView(
-          shrinkWrap: true,
-          slivers: [
-            HttpError(
-              errMsg: loadingState.errMsg,
-              fn: _getInfo,
-            ),
-          ],
-        );
-      case Success():
-        return SingleChildScrollView(
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => SingleChildScrollView(
           child: Column(
             children: [
               _item(
@@ -226,11 +216,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _divider,
             ],
           ),
-        );
-    }
-    return Center(
-      child: CircularProgressIndicator(),
-    );
+        ),
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _getInfo,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 
   Widget _sexDialog(int current) {

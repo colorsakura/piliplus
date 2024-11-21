@@ -1,5 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPalaX/pages/history/widgets/item.dart';
@@ -7,7 +7,6 @@ import 'package:PiliPalaX/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/pages/fav_detail/widget/fav_video_card.dart';
 
 import 'controller.dart';
@@ -83,88 +82,76 @@ class _FavSearchPageState extends State<FavSearchPage> {
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? loadingState.response.isEmpty
-            ? CustomScrollView(
-                slivers: <Widget>[
-                  HttpError(
-                    errMsg: '没有数据',
-                    fn: _favSearchCtr.onReload,
-                  ),
-                ],
-              )
-            : _favSearchCtr.searchType == SearchType.fav
-                ? ListView.builder(
-                    controller: _favSearchCtr.scrollController,
-                    itemCount: loadingState.response.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == loadingState.response.length) {
-                        return Container(
-                          height: MediaQuery.of(context).padding.bottom + 60,
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).padding.bottom,
-                          ),
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? _favSearchCtr.searchType == SearchType.fav
+              ? ListView.builder(
+                  controller: _favSearchCtr.scrollController,
+                  itemCount: loadingState.response.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == loadingState.response.length) {
+                      return Container(
+                        height: MediaQuery.of(context).padding.bottom + 60,
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom,
+                        ),
+                      );
+                    } else {
+                      return FavVideoCardH(
+                        videoItem: loadingState.response[index],
+                        searchType: _favSearchCtr.type,
+                        callFn: () => _favSearchCtr.type != 1
+                            ? _favSearchCtr
+                                .onCancelFav(loadingState.response[index].id!)
+                            : {},
+                      );
+                    }
+                  },
+                )
+              : _favSearchCtr.searchType == SearchType.follow
+                  ? ListView.builder(
+                      controller: _favSearchCtr.scrollController,
+                      itemCount: loadingState.response.length,
+                      itemBuilder: ((context, index) {
+                        return FollowItem(
+                          item: loadingState.response[index],
                         );
-                      } else {
-                        return FavVideoCardH(
-                          videoItem: loadingState.response[index],
-                          searchType: _favSearchCtr.type,
-                          callFn: () => _favSearchCtr.type != 1
-                              ? _favSearchCtr
-                                  .onCancelFav(loadingState.response[index].id!)
-                              : {},
-                        );
-                      }
-                    },
-                  )
-                : _favSearchCtr.searchType == SearchType.follow
-                    ? ListView.builder(
-                        controller: _favSearchCtr.scrollController,
-                        itemCount: loadingState.response.length,
-                        itemBuilder: ((context, index) {
-                          return FollowItem(
-                            item: loadingState.response[index],
-                          );
-                        }),
-                      )
-                    : CustomScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        controller: _favSearchCtr.scrollController,
-                        slivers: [
-                          SliverGrid(
-                            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                                mainAxisSpacing: StyleString.cardSpace,
-                                crossAxisSpacing: StyleString.safeSpace,
-                                maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                                childAspectRatio: StyleString.aspectRatio * 2.4,
-                                mainAxisExtent: 0),
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                return HistoryItem(
-                                  videoItem: loadingState.response[index],
-                                  ctr: _favSearchCtr,
-                                  onChoose: null,
-                                  onUpdateMultiple: () => null,
-                                );
-                              },
-                              childCount: loadingState.response.length,
-                            ),
+                      }),
+                    )
+                  : CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      controller: _favSearchCtr.scrollController,
+                      slivers: [
+                        SliverGrid(
+                          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                              mainAxisSpacing: StyleString.cardSpace,
+                              crossAxisSpacing: StyleString.safeSpace,
+                              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                              childAspectRatio: StyleString.aspectRatio * 2.4,
+                              mainAxisExtent: 0),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return HistoryItem(
+                                videoItem: loadingState.response[index],
+                                ctr: _favSearchCtr,
+                                onChoose: null,
+                                onUpdateMultiple: () => null,
+                              );
+                            },
+                            childCount: loadingState.response.length,
                           ),
-                        ],
-                      )
-        : loadingState is Error
-            ? CustomScrollView(
-                slivers: <Widget>[
-                  HttpError(
-                    errMsg: loadingState.errMsg,
-                    fn: _favSearchCtr.onReload,
-                  ),
-                ],
-              )
-            : const CustomScrollView(
-                slivers: <Widget>[
-                  NoData(),
-                ],
-              );
+                        ),
+                      ],
+                    )
+          : errorWidget(
+              callback: _favSearchCtr.onReload,
+            ),
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _favSearchCtr.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

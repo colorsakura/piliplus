@@ -4,7 +4,6 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 
 import '../../common/constants.dart';
 import '../../utils/grid.dart';
@@ -67,33 +66,32 @@ class _FansPageState extends State<FansPage> {
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? loadingState.response.isNotEmpty
-            ? SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisSpacing: StyleString.cardSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    mainAxisExtent: 56),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return fanItem(item: loadingState.response[index]);
-                  },
-                  childCount: loadingState.response.length,
-                ))
-            : const NoData()
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _fansController.onReload,
-              )
-            : const SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 200,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              );
+    return switch (loadingState) {
+      Loading() => HttpError(
+          callback: _fansController.onReload,
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  mainAxisSpacing: StyleString.cardSpace,
+                  crossAxisSpacing: StyleString.safeSpace,
+                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  mainAxisExtent: 56),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return fanItem(item: loadingState.response[index]);
+                },
+                childCount: loadingState.response.length,
+              ),
+            )
+          : HttpError(
+              callback: _fansController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _fansController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

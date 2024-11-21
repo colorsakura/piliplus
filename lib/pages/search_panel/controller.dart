@@ -45,14 +45,14 @@ class SearchPanelController extends CommonController {
       if (dataList.isNotEmpty) {
         loadingState.value = LoadingState.success(dataList);
       } else {
-        loadingState.value = LoadingState.empty();
+        loadingState.value = LoadingState.success([]);
       }
       if (currentPage == 1) {
         onPushDetail(response.response.list);
       }
     } else {
       if (currentPage == 1) {
-        loadingState.value = LoadingState.empty();
+        loadingState.value = LoadingState.success([]);
       }
     }
     return true;

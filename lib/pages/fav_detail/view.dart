@@ -238,52 +238,27 @@ class _FavDetailPageState extends State<FavDetailPage> {
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? loadingState.response.isEmpty
-            ? const SliverToBoxAdapter(child: SizedBox())
-            : SliverPadding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.cardSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.4,
-                    mainAxisExtent: 0,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      if (index == loadingState.response.length) {
-                        return Container(
-                          height: 60,
-                          alignment: Alignment.center,
-                          child: Obx(
-                            () => Text(
-                              _favDetailController.loadingText.value,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontSize: 13),
-                            ),
-                          ),
-                        );
-                      }
-                      return FavVideoCardH(
-                        videoItem: loadingState.response[index],
-                        callFn: () => _favDetailController
-                            .onCancelFav(loadingState.response[index].id),
-                      );
-                    },
-                    childCount: loadingState.response.length + 1,
-                  ),
-                ),
-              )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _favDetailController.onReload,
-              )
-            : SliverGrid(
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: StyleString.cardSpace,
+            crossAxisSpacing: StyleString.safeSpace,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.4,
+            mainAxisExtent: 0,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom),
+              sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
                   mainAxisSpacing: StyleString.cardSpace,
                   crossAxisSpacing: StyleString.safeSpace,
@@ -293,10 +268,38 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return const VideoCardHSkeleton();
+                    if (index == loadingState.response.length) {
+                      return Container(
+                        height: 60,
+                        alignment: Alignment.center,
+                        child: Obx(
+                          () => Text(
+                            _favDetailController.loadingText.value,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontSize: 13),
+                          ),
+                        ),
+                      );
+                    }
+                    return FavVideoCardH(
+                      videoItem: loadingState.response[index],
+                      callFn: () => _favDetailController
+                          .onCancelFav(loadingState.response[index].id),
+                    );
                   },
-                  childCount: 10,
+                  childCount: loadingState.response.length + 1,
                 ),
-              );
+              ),
+            )
+          : HttpError(
+              callback: _favDetailController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _favDetailController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

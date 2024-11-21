@@ -80,7 +80,7 @@ class _SubPageState extends State<SubPage> {
                 slivers: [
                   HttpError(
                     errMsg: data?['msg'],
-                    fn: () => setState(() {}),
+                    callback: () => setState(() {}),
                   ),
                 ],
               );

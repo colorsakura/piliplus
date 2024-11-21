@@ -195,7 +195,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                         slivers: [
                           HttpError(
                             errMsg: data['msg'],
-                            fn: () => setState(() {
+                            callback: () => setState(() {
                               _futureBuilderFuture =
                                   _searchController.queryHotSearchList();
                             }),

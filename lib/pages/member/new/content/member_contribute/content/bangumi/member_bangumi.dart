@@ -1,6 +1,6 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/bangumi/member_bangumi_ctr.dart';
@@ -42,60 +42,56 @@ class _MemberBangumiState extends State<MemberBangumi>
   }
 
   _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? refreshIndicator(
-            onRefresh: () async {
-              await _controller.onRefresh();
-            },
-            child: CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.only(
-                    left: StyleString.safeSpace,
-                    right: StyleString.safeSpace,
-                    top: StyleString.safeSpace,
-                    bottom: StyleString.safeSpace +
-                        MediaQuery.of(context).padding.bottom,
-                  ),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                      mainAxisSpacing: StyleString.cardSpace - 2,
-                      crossAxisSpacing: StyleString.cardSpace,
-                      maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
-                      childAspectRatio: 0.65,
-                      mainAxisExtent:
-                          MediaQuery.textScalerOf(context).scale(60),
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? refreshIndicator(
+              onRefresh: () async {
+                await _controller.onRefresh();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      left: StyleString.safeSpace,
+                      right: StyleString.safeSpace,
+                      top: StyleString.safeSpace,
+                      bottom: StyleString.safeSpace +
+                          MediaQuery.of(context).padding.bottom,
                     ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        if (index == loadingState.response.length - 1) {
-                          _controller.onLoadMore();
-                        }
-                        return BangumiCardVMemberHome(
-                          bangumiItem: loadingState.response[index],
-                        );
-                      },
-                      childCount: loadingState.response.length,
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                        mainAxisSpacing: StyleString.cardSpace - 2,
+                        crossAxisSpacing: StyleString.cardSpace,
+                        maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
+                        childAspectRatio: 0.65,
+                        mainAxisExtent:
+                            MediaQuery.textScalerOf(context).scale(60),
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          if (index == loadingState.response.length - 1) {
+                            _controller.onLoadMore();
+                          }
+                          return BangumiCardVMemberHome(
+                            bangumiItem: loadingState.response[index],
+                          );
+                        },
+                        childCount: loadingState.response.length,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            )
+          : errorWidget(
+              callback: _controller.onReload,
             ),
-          )
-        : loadingState is Error
-            ? Center(
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    HttpError(
-                      errMsg: loadingState.errMsg,
-                      fn: _controller.onReload,
-                    ),
-                  ],
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              );
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _controller.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

@@ -88,7 +88,7 @@ class LaterController extends CommonController {
               onPressed: () async {
                 var res = await UserHttp.toViewClear();
                 if (res['status']) {
-                  loadingState.value = LoadingState.empty();
+                  loadingState.value = LoadingState.success([]);
                 }
                 Get.back();
                 SmartDialog.showToast(res['msg']);

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 
 import '../../models/user/sub_folder.dart';
 import '../../utils/utils.dart';
@@ -206,7 +205,12 @@ class _SubDetailPageState extends State<SubDetailPage> {
                 Map data = snapshot.data;
                 if (data['status']) {
                   if (_subDetailController.item.mediaCount == 0) {
-                    return const NoData();
+                    return HttpError(
+                      callback: () => setState(() {
+                        _futureBuilderFuture =
+                            _subDetailController.queryUserSubFolderDetail();
+                      }),
+                    );
                   } else {
                     List subList = _subDetailController.subList;
                     return Obx(
@@ -225,7 +229,10 @@ class _SubDetailPageState extends State<SubDetailPage> {
                 } else {
                   return HttpError(
                     errMsg: data['msg'],
-                    fn: () => setState(() {}),
+                    callback: () => setState(() {
+                      _futureBuilderFuture =
+                          _subDetailController.queryUserSubFolderDetail();
+                    }),
                   );
                 }
               } else {

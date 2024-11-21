@@ -1,5 +1,4 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 
 import '../models/bangumi/list.dart';
 import 'index.dart';
@@ -10,11 +9,7 @@ class BangumiHttp {
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);
-      if (!data.list.isNullOrEmpty) {
-        return LoadingState.success(data.list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(data.list);
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -25,11 +20,7 @@ class BangumiHttp {
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);
-      if (!data.list.isNullOrEmpty) {
-        return LoadingState.success(data.list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(data.list);
     } else {
       return LoadingState.error(res.data['message']);
     }

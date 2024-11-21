@@ -1,11 +1,10 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/pages/history/index.dart';
 
 import '../../common/constants.dart';
@@ -215,12 +214,20 @@ class _HistoryPageState extends State<HistoryPage> {
                               ? const SliverToBoxAdapter(
                                   child: Center(child: Text('加载中')),
                                 )
-                              : const NoData(),
+                              : HttpError(
+                                  callback: () => setState(() {
+                                    _futureBuilderFuture =
+                                        _historyController.queryHistoryList();
+                                  }),
+                                ),
                     );
                   } else {
                     return HttpError(
                       errMsg: data['msg'],
-                      fn: () => setState(() {}),
+                      callback: () => setState(() {
+                        _futureBuilderFuture =
+                            _historyController.queryHistoryList();
+                      }),
                     );
                   }
                 } else {

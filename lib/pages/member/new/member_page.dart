@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPalaX/common/widgets/dynamic_sliver_appbar.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/bangumi/member_bangumi.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/favorite/member_favorite.dart';
@@ -291,28 +291,19 @@ class _MemberPageNewState extends State<MemberPageNew>
       );
 
   Widget _errorWidget(msg) {
-    return CustomScrollView(
-      shrinkWrap: true,
-      slivers: [
-        HttpError(
-          errMsg: msg,
-          fn: () {
-            _userController.loadingState.value = LoadingState.loading();
-            _userController.onRefresh();
-          },
-        )
-      ],
+    return errorWidget(
+      errMsg: msg,
+      callback: () {
+        _userController.loadingState.value = LoadingState.loading();
+        _userController.onRefresh();
+      },
     );
   }
 
   Widget _buildUserInfo(LoadingState userState, [bool isV = true]) {
-    switch (userState) {
-      case Empty():
-        return _errorWidget('EMPTY');
-      case Error():
-        return _errorWidget(userState.errMsg);
-      case Success():
-        return Obx(
+    return switch (userState) {
+      Loading() => const CircularProgressIndicator(),
+      Success() => Obx(
           () => Padding(
             padding: EdgeInsets.only(
                 bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
@@ -326,8 +317,9 @@ class _MemberPageNewState extends State<MemberPageNew>
               onFollow: () => _userController.onFollow(context),
             ),
           ),
-        );
-    }
-    return const CircularProgressIndicator();
+        ),
+      Error() => _errorWidget(userState.errMsg),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

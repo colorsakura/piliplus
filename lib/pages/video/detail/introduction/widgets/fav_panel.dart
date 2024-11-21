@@ -147,7 +147,7 @@ class _FavPanelState extends State<FavPanel> {
                           slivers: [
                             HttpError(
                               errMsg: data['msg'],
-                              fn: () => setState(() {
+                              callback: () => setState(() {
                                 _futureBuilderFuture =
                                     widget.ctr!.queryVideoInFolder();
                               }),

@@ -105,6 +105,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
             leading: Icon(Icons.refresh),
             setKey: SettingBoxKey.enableSaveLastData,
             defaultVal: false,
+            needReboot: true,
           ),
           // 分割线
           const Divider(height: 1),

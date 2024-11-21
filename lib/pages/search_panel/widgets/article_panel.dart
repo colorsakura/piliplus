@@ -206,7 +206,7 @@ Widget searchArticlePanel(BuildContext context, searchPanelCtr, loadingState) {
             )
           : HttpError(
               errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
-              fn: searchPanelCtr.onReload,
+              callback: searchPanelCtr.onReload,
             ),
     ],
   );

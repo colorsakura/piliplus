@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/pages/later/index.dart';
 
@@ -74,48 +73,51 @@ class _LaterPageState extends State<LaterPage> {
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              mainAxisSpacing: StyleString.safeSpace,
-              crossAxisSpacing: StyleString.safeSpace,
-              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-              childAspectRatio: StyleString.aspectRatio * 2.4,
-              mainAxisExtent: 0,
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: StyleString.safeSpace,
+            crossAxisSpacing: StyleString.safeSpace,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.4,
+            mainAxisExtent: 0,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.safeSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.4,
+                mainAxisExtent: 0,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  var videoItem = loadingState.response[index];
+                  return VideoCardH(
+                      videoItem: videoItem,
+                      source: 'later',
+                      longPress: () => _laterController.toViewDel(context,
+                          aid: videoItem.aid));
+                },
+                childCount: loadingState.response.length,
+              ),
+            )
+          : HttpError(
+              callback: _laterController.onReload,
             ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                var videoItem = loadingState.response[index];
-                return VideoCardH(
-                    videoItem: videoItem,
-                    source: 'later',
-                    longPress: () => _laterController.toViewDel(context,
-                        aid: videoItem.aid));
-              },
-              childCount: loadingState.response.length,
-            ),
-          )
-        : loadingState is Empty
-            ? const NoData()
-            : loadingState is Error
-                ? HttpError(
-                    errMsg: loadingState.errMsg,
-                    fn: _laterController.onReload,
-                  )
-                : SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                      mainAxisSpacing: StyleString.safeSpace,
-                      crossAxisSpacing: StyleString.safeSpace,
-                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                      childAspectRatio: StyleString.aspectRatio * 2.4,
-                      mainAxisExtent: 0,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return const VideoCardHSkeleton();
-                      },
-                      childCount: 10,
-                    ),
-                  );
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _laterController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

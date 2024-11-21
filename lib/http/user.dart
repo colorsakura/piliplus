@@ -55,11 +55,7 @@ class UserHttp {
       'up_mid': mid,
     });
     if (res.data['code'] == 0) {
-      if (res.data['data'] != null) {
-        return LoadingState.success(FavFolderData.fromJson(res.data['data']));
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(FavFolderData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message'] ?? '账号未登录');
     }
@@ -153,7 +149,7 @@ class UserHttp {
     var res = await Request().get(Api.seeYouLater);
     if (res.data['code'] == 0) {
       if (res.data['data']['count'] == 0) {
-        return LoadingState.empty();
+        return LoadingState.success([]);
       }
       List<HotVideoItemModel> list = [];
       for (var i in res.data['data']['list']) {

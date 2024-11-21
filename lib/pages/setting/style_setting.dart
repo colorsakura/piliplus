@@ -44,7 +44,7 @@ class _StyleSettingState extends State<StyleSetting> {
         setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0) as double;
     upPanelPosition = UpPanelPosition.values[setting.get(
         SettingBoxKey.upPanelPosition,
-        defaultValue: UpPanelPosition.leftFixed.code)];
+        defaultValue: UpPanelPosition.leftFixed.index)];
   }
 
   @override
@@ -67,10 +67,10 @@ class _StyleSettingState extends State<StyleSetting> {
               callFn: (value) {
                 if (value) {
                   autoScreen();
-                  SmartDialog.showToast('已开启横屏适配');
+                  // SmartDialog.showToast('已开启横屏适配');
                 } else {
                   AutoOrientation.portraitUpMode();
-                  SmartDialog.showToast('已关闭横屏适配');
+                  // SmartDialog.showToast('已关闭横屏适配');
                 }
               }),
           const SetSwitchItem(
@@ -171,7 +171,7 @@ class _StyleSettingState extends State<StyleSetting> {
               );
               if (result != null) {
                 upPanelPosition = result;
-                setting.put(SettingBoxKey.upPanelPosition, result.code);
+                setting.put(SettingBoxKey.upPanelPosition, result.index);
                 SmartDialog.showToast('重启生效');
                 setState(() {});
               }
@@ -307,7 +307,7 @@ class _StyleSettingState extends State<StyleSetting> {
               if (result != null) {
                 _tempThemeValue = result;
                 settingController.themeType.value = result;
-                setting.put(SettingBoxKey.themeMode, result.code);
+                setting.put(SettingBoxKey.themeMode, result.index);
                 Get.forceAppUpdate();
               }
             },

@@ -15,6 +15,7 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:nil/nil.dart';
 
 import 'controller.dart';
 import 'widgets/up_panel.dart';
@@ -98,7 +99,7 @@ class _DynamicsPageState extends State<DynamicsPage>
     });
     upPanelPosition = UpPanelPosition.values[setting.get(
         SettingBoxKey.upPanelPosition,
-        defaultValue: UpPanelPosition.leftFixed.code)];
+        defaultValue: UpPanelPosition.leftFixed.index)];
     debugPrint('upPanelPosition: $upPanelPosition');
     if (GStorage.setting
         .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
@@ -128,7 +129,7 @@ class _DynamicsPageState extends State<DynamicsPage>
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Container(
           //抽屉模式增加底色
-          color: upPanelPosition.code > 1
+          color: upPanelPosition.index > 1
               ? Theme.of(context).colorScheme.surface
               : Colors.transparent,
           width: 56,
@@ -137,20 +138,27 @@ class _DynamicsPageState extends State<DynamicsPage>
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == null) {
-                  return const SizedBox();
+                  return nil;
                 }
                 Map data = snapshot.data;
                 if (data['status']) {
                   return Obx(() => UpPanel(_dynamicsController.upData.value,
                       _dynamicsController.scrollController));
                 } else {
-                  return const SizedBox();
+                  return Center(
+                    child: IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        setState(() {
+                          _futureBuilderFutureUp =
+                              _dynamicsController.queryFollowUp();
+                        });
+                      },
+                    ),
+                  );
                 }
               } else {
-                return const SizedBox(
-                  width: 56,
-                  child: UpPanelSkeleton(),
-                );
+                return nil;
               }
             },
           ),

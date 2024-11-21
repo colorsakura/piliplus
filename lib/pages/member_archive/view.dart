@@ -109,13 +109,13 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
                     } else {
                       return HttpError(
                         errMsg: snapshot.data['msg'],
-                        fn: () {},
+                        callback: () {},
                       );
                     }
                   } else {
                     return HttpError(
                       errMsg: "投稿页出现错误",
-                      fn: () {},
+                      callback: () {},
                     );
                   }
                 } else {

@@ -1,6 +1,6 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/space_article/item.dart';
@@ -40,79 +40,75 @@ class _MemberArticleState extends State<MemberArticle>
   }
 
   _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: refreshIndicator(
-              onRefresh: () async {
-                await _controller.onRefresh();
-              },
-              child: ListView.separated(
-                itemCount: loadingState.response.length,
-                itemBuilder: (_, index) {
-                  if (index == loadingState.response.length - 1) {
-                    _controller.onLoadMore();
-                  }
-                  Item item = loadingState.response[index];
-                  return ListTile(
-                    dense: true,
-                    onTap: () {
-                      PiliScheme.routePush(Uri.parse(item.uri ?? ''));
-                    },
-                    leading: item.originImageUrls?.isNotEmpty == true
-                        ? Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            child: LayoutBuilder(
-                              builder: (_, constraints) {
-                                return NetworkImgLayer(
-                                  radius: 6,
-                                  src: item.originImageUrls!.first,
-                                  width: constraints.maxHeight *
-                                      StyleString.aspectRatio,
-                                  height: constraints.maxHeight,
-                                );
-                              },
-                            ),
-                          )
-                        : null,
-                    title: Text(
-                      item.title ?? '',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                    subtitle: item.summary?.isNotEmpty == true
-                        ? Text(
-                            item.summary!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
-                          )
-                        : null,
-                  );
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: refreshIndicator(
+                onRefresh: () async {
+                  await _controller.onRefresh();
                 },
-                separatorBuilder: (_, index) => Divider(height: 1),
-              ),
-            ),
-          )
-        : loadingState is Error
-            ? Center(
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    HttpError(
-                      errMsg: loadingState.errMsg,
-                      fn: _controller.onReload,
-                    ),
-                  ],
+                child: ListView.separated(
+                  itemCount: loadingState.response.length,
+                  itemBuilder: (_, index) {
+                    if (index == loadingState.response.length - 1) {
+                      _controller.onLoadMore();
+                    }
+                    Item item = loadingState.response[index];
+                    return ListTile(
+                      dense: true,
+                      onTap: () {
+                        PiliScheme.routePush(Uri.parse(item.uri ?? ''));
+                      },
+                      leading: item.originImageUrls?.isNotEmpty == true
+                          ? Container(
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                              child: LayoutBuilder(
+                                builder: (_, constraints) {
+                                  return NetworkImgLayer(
+                                    radius: 6,
+                                    src: item.originImageUrls!.first,
+                                    width: constraints.maxHeight *
+                                        StyleString.aspectRatio,
+                                    height: constraints.maxHeight,
+                                  );
+                                },
+                              ),
+                            )
+                          : null,
+                      title: Text(
+                        item.title ?? '',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      subtitle: item.summary?.isNotEmpty == true
+                          ? Text(
+                              item.summary!,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                            )
+                          : null,
+                    );
+                  },
+                  separatorBuilder: (_, index) => Divider(height: 1),
                 ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              );
+              ),
+            )
+          : errorWidget(
+              callback: _controller.onReload,
+            ),
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _controller.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

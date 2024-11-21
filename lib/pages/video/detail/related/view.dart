@@ -43,54 +43,58 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.safeSpace,
-                crossAxisSpacing: StyleString.safeSpace,
-                maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.4,
-                mainAxisExtent: 0),
-            delegate: SliverChildBuilderDelegate((context, index) {
-              if (index == loadingState.response.length) {
-                return SizedBox(height: MediaQuery.of(context).padding.bottom);
-              } else {
-                return Material(
-                  child: VideoCardH(
-                    videoItem: loadingState.response[index],
-                    showPubdate: true,
-                    longPress: () {
-                      _relatedController.popupDialog.add(
-                          _createPopupDialog(loadingState.response[index]));
-                      Overlay.of(context)
-                          .insert(_relatedController.popupDialog.last!);
-                    },
-                    longPressEnd: _relatedController.removePopupDialog,
-                  ),
-                );
-              }
-            }, childCount: loadingState.response.length + 1),
-          )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: '出错了',
-                fn: _relatedController.onReload,
-              )
-            : loadingState is Empty
-                ? const SliverToBoxAdapter(child: SizedBox.shrink())
-                : SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: StyleString.safeSpace,
-                        crossAxisSpacing: StyleString.safeSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.4,
-                        mainAxisExtent: 0),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return const VideoCardHSkeleton();
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+              mainAxisSpacing: StyleString.safeSpace,
+              crossAxisSpacing: StyleString.safeSpace,
+              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+              childAspectRatio: StyleString.aspectRatio * 2.4,
+              mainAxisExtent: 0),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 5,
+          ),
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                  mainAxisSpacing: StyleString.safeSpace,
+                  crossAxisSpacing: StyleString.safeSpace,
+                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  childAspectRatio: StyleString.aspectRatio * 2.4,
+                  mainAxisExtent: 0),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                if (index == loadingState.response.length) {
+                  return SizedBox(
+                      height: MediaQuery.of(context).padding.bottom);
+                } else {
+                  return Material(
+                    child: VideoCardH(
+                      videoItem: loadingState.response[index],
+                      showPubdate: true,
+                      longPress: () {
+                        _relatedController.popupDialog.add(
+                            _createPopupDialog(loadingState.response[index]));
+                        Overlay.of(context)
+                            .insert(_relatedController.popupDialog.last!);
                       },
-                      childCount: 5,
+                      longPressEnd: _relatedController.removePopupDialog,
                     ),
                   );
+                }
+              }, childCount: loadingState.response.length + 1),
+            )
+          : HttpError(
+              callback: _relatedController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _relatedController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

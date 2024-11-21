@@ -17,11 +17,7 @@ class LiveHttp {
       List<LiveItemModel> list = res.data['data']['list']
           .map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
           .toList();
-      if (list.isNotEmpty) {
-        return LoadingState.success(list);
-      } else {
-        return LoadingState.empty();
-      }
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }

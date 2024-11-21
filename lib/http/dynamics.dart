@@ -1,5 +1,4 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 
 import '../models/dynamics/result.dart';
 import '../models/dynamics/up.dart';
@@ -25,11 +24,7 @@ class DynamicsHttp {
     if (res.data['code'] == 0) {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
-        if (!data.items.isNullOrEmpty) {
-          return LoadingState.success(data);
-        } else {
-          return LoadingState.empty();
-        }
+        return LoadingState.success(data);
       } catch (err) {
         return LoadingState.error(err.toString());
       }

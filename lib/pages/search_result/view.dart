@@ -64,7 +64,6 @@ class _SearchResultPageState extends State<SearchResultPage>
           const SizedBox(height: 4),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(left: 8),
             color: Theme.of(context).colorScheme.surface,
             child: Theme(
               data: ThemeData(
@@ -72,6 +71,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 highlightColor: Colors.transparent, // 点击时的背景高亮颜色设置为透明
               ),
               child: TabBar(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 controller: _tabController,
                 tabs: SearchType.values
                     .map(

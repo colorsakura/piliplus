@@ -1,9 +1,8 @@
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/models/follow/result.dart';
 import 'package:PiliPalaX/pages/follow/index.dart';
 
@@ -92,16 +91,14 @@ class _FollowListState extends State<FollowList> {
                           }
                         },
                       )
-                    : const CustomScrollView(slivers: [NoData()]),
+                    : errorWidget(
+                        callback: () => widget.ctr.queryFollowings('init'),
+                      ),
               );
             } else {
-              return CustomScrollView(
-                slivers: [
-                  HttpError(
-                    errMsg: data['msg'],
-                    fn: () => widget.ctr.queryFollowings('init'),
-                  )
-                ],
+              return errorWidget(
+                errMsg: data['msg'],
+                callback: () => widget.ctr.queryFollowings('init'),
               );
             }
           } else {

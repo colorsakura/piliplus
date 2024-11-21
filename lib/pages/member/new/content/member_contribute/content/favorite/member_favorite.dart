@@ -1,7 +1,7 @@
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/space_fav/datum.dart';
@@ -44,54 +44,50 @@ class _MemberFavoriteState extends State<MemberFavorite>
   }
 
   _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? refreshIndicator(
-            onRefresh: () async {
-              await _controller.onRefresh();
-            },
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Obx(
-                    () => _controller.first.value.mediaListResponse?.list
-                                ?.isNotEmpty ==
-                            true
-                        ? _buildItem(_controller.first.value, true)
-                        : const SizedBox.shrink(),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Obx(
-                    () => _controller.second.value.mediaListResponse?.list
-                                ?.isNotEmpty ==
-                            true
-                        ? _buildItem(_controller.second.value, false)
-                        : const SizedBox.shrink(),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 12 + MediaQuery.of(context).padding.bottom,
-                  ),
-                )
-              ],
-            ),
-          )
-        : loadingState is Error
-            ? Center(
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    HttpError(
-                      errMsg: loadingState.errMsg,
-                      fn: _controller.onReload,
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? refreshIndicator(
+              onRefresh: () async {
+                await _controller.onRefresh();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Obx(
+                      () => _controller.first.value.mediaListResponse?.list
+                                  ?.isNotEmpty ==
+                              true
+                          ? _buildItem(_controller.first.value, true)
+                          : const SizedBox.shrink(),
                     ),
-                  ],
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              );
+                  ),
+                  SliverToBoxAdapter(
+                    child: Obx(
+                      () => _controller.second.value.mediaListResponse?.list
+                                  ?.isNotEmpty ==
+                              true
+                          ? _buildItem(_controller.second.value, false)
+                          : const SizedBox.shrink(),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 12 + MediaQuery.of(context).padding.bottom,
+                    ),
+                  )
+                ],
+              ),
+            )
+          : errorWidget(
+              callback: _controller.onReload,
+            ),
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _controller.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 
   _buildItem(Datum data, bool isFirst) {

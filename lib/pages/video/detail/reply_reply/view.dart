@@ -333,7 +333,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         slivers: [
           HttpError(
             errMsg: loadingState.errMsg,
-            fn: _videoReplyReplyController.onReload,
+            callback: _videoReplyReplyController.onReload,
           )
         ],
       );

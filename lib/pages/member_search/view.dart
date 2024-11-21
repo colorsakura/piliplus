@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/no_data.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 
 import '../../common/constants.dart';
@@ -148,12 +147,14 @@ class _MemberSearchPageState extends State<MemberSearchPage>
                                               (context, index) {
                                             return const VideoCardHSkeleton();
                                           }, childCount: 10))
-                                      : const NoData(),
+                                      : HttpError(
+                                          callback: () => setState(() {}),
+                                        ),
                             ));
                       } else {
                         return HttpError(
                           errMsg: data['msg'],
-                          fn: () => setState(() {}),
+                          callback: () => setState(() {}),
                         );
                       }
                     } else {

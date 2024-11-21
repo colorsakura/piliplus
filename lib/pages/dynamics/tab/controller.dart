@@ -55,11 +55,7 @@ class DynamicsTabController extends CommonController {
     if (res['status']) {
       List list = (loadingState.value as Success).response;
       list.removeWhere((item) => item.idStr == dynamicId);
-      if (list.isNotEmpty) {
-        loadingState.value = LoadingState.success(list);
-      } else {
-        loadingState.value = LoadingState.empty();
-      }
+      loadingState.value = LoadingState.success(list);
       SmartDialog.showToast('删除成功');
     } else {
       SmartDialog.showToast(res['msg']);

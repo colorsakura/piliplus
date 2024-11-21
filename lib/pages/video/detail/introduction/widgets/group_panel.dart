@@ -144,7 +144,7 @@ class _GroupPanelState extends State<GroupPanel> {
                           slivers: [
                             HttpError(
                               errMsg: data['msg'],
-                              fn: () => setState(() {}),
+                              callback: () => setState(() {}),
                             ),
                           ],
                         );

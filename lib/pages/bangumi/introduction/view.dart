@@ -69,31 +69,32 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   }
 
   _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? BangumiInfo(
-            heroTag: widget.heroTag,
-            loadingStatus: false,
-            bangumiDetail: loadingState.response,
-            cid: cid,
-            showEpisodes: widget.showEpisodes,
-            showIntroDetail: () => widget.showIntroDetail(
-              loadingState.response,
-              bangumiIntroController.videoTags,
-            ),
-          )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: bangumiIntroController.onReload,
-              )
-            : BangumiInfo(
-                heroTag: widget.heroTag,
-                loadingStatus: true,
-                bangumiDetail: null,
-                cid: cid,
-                showEpisodes: widget.showEpisodes,
-                showIntroDetail: widget.showIntroDetail,
-              );
+    return switch (loadingState) {
+      Loading() => BangumiInfo(
+          heroTag: widget.heroTag,
+          loadingStatus: true,
+          bangumiDetail: null,
+          cid: cid,
+          showEpisodes: widget.showEpisodes,
+          showIntroDetail: widget.showIntroDetail,
+        ),
+      Success() => BangumiInfo(
+          heroTag: widget.heroTag,
+          loadingStatus: false,
+          bangumiDetail: loadingState.response,
+          cid: cid,
+          showEpisodes: widget.showEpisodes,
+          showIntroDetail: () => widget.showIntroDetail(
+            loadingState.response,
+            bangumiIntroController.videoTags,
+          ),
+        ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: bangumiIntroController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }
 

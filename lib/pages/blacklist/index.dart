@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/black.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -63,51 +63,52 @@ class _BlackListPageState extends State<BlackListPage> {
   }
 
   Widget _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? ListView.builder(
-            controller: _blackListController.scrollController,
-            itemCount: loadingState.response.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                onTap: () {},
-                leading: NetworkImgLayer(
-                  width: 45,
-                  height: 45,
-                  type: 'avatar',
-                  src: loadingState.response[index].face,
-                ),
-                title: Text(
-                  loadingState.response[index].uname!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                subtitle: Text(
-                  Utils.dateFormat(loadingState.response[index].mtime),
-                  maxLines: 1,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                dense: true,
-                trailing: TextButton(
-                  onPressed: () => _blackListController
-                      .removeBlack(loadingState.response[index].mid),
-                  child: const Text('移除'),
-                ),
-              );
-            },
-          )
-        : loadingState is Error
-            ? CustomScrollView(
-                slivers: [
-                  HttpError(
-                    errMsg: loadingState.errMsg,
-                    fn: _blackListController.onReload,
-                  )
-                ],
-              )
-            : const SizedBox();
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? ListView.builder(
+              controller: _blackListController.scrollController,
+              itemCount: loadingState.response.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  onTap: () {},
+                  leading: NetworkImgLayer(
+                    width: 45,
+                    height: 45,
+                    type: 'avatar',
+                    src: loadingState.response[index].face,
+                  ),
+                  title: Text(
+                    loadingState.response[index].uname!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  subtitle: Text(
+                    Utils.dateFormat(loadingState.response[index].mtime),
+                    maxLines: 1,
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  dense: true,
+                  trailing: TextButton(
+                    onPressed: () => _blackListController
+                        .removeBlack(loadingState.response[index].mid),
+                    child: const Text('移除'),
+                  ),
+                );
+              },
+            )
+          : errorWidget(
+              callback: _blackListController.onReload,
+            ),
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _blackListController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }
 
@@ -130,9 +131,7 @@ class BlackListController extends CommonController {
     List dataList = currentPage == 1
         ? response.response.list
         : currentList + response.response.list;
-    loadingState.value = dataList.isNotEmpty
-        ? LoadingState.success(dataList)
-        : LoadingState.empty();
+    loadingState.value = LoadingState.success(dataList);
     return true;
   }
 

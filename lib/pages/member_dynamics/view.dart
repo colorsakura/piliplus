@@ -72,72 +72,79 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
       );
 
   _buildContent(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverPadding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.paddingOf(context).bottom,
-            ),
-            sliver: dynamicsWaterfallFlow
-                ? SliverWaterfallFlow.extent(
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    //cacheExtent: 0.0,
-                    crossAxisSpacing: StyleString.safeSpace,
-                    mainAxisSpacing: StyleString.safeSpace,
+    return switch (loadingState) {
+      Loading() => HttpError(
+          callback: _memberDynamicController.onReload,
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom,
+              ),
+              sliver: dynamicsWaterfallFlow
+                  ? SliverWaterfallFlow.extent(
+                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                      //cacheExtent: 0.0,
+                      crossAxisSpacing: StyleString.safeSpace,
+                      mainAxisSpacing: StyleString.safeSpace,
 
-                    /// follow max child trailing layout offset and layout with full cross axis extend
-                    /// last child as loadmore item/no more item in [GridView] and [WaterfallFlow]
-                    /// with full cross axis extend
-                    //  LastChildLayoutType.fullCrossAxisExtend,
+                      /// follow max child trailing layout offset and layout with full cross axis extend
+                      /// last child as loadmore item/no more item in [GridView] and [WaterfallFlow]
+                      /// with full cross axis extend
+                      //  LastChildLayoutType.fullCrossAxisExtend,
 
-                    /// as foot at trailing and layout with full cross axis extend
-                    /// show no more item at trailing when children are not full of viewport
-                    /// if children is full of viewport, it's the same as fullCrossAxisExtend
-                    //  LastChildLayoutType.foot,
-                    lastChildLayoutTypeBuilder: (index) {
-                      if (index == loadingState.response.length - 1) {
-                        EasyThrottle.throttle('member_dynamics',
-                            const Duration(milliseconds: 1000), () {
-                          _memberDynamicController.onLoadMore();
-                        });
-                      }
-                      return index == loadingState.response.length
-                          ? LastChildLayoutType.foot
-                          : LastChildLayoutType.none;
-                    },
-                    children: (loadingState.response as List)
-                        .map((item) => DynamicPanel(item: item))
-                        .toList(),
-                  )
-                : SliverCrossAxisGroup(
-                    slivers: [
-                      const SliverFillRemaining(),
-                      SliverConstrainedCrossAxis(
-                        maxExtent: Grid.maxRowWidth * 2,
-                        sliver: SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              if (index == loadingState.response.length - 1) {
-                                EasyThrottle.throttle('member_dynamics',
-                                    const Duration(milliseconds: 1000), () {
-                                  _memberDynamicController.onLoadMore();
-                                });
-                              }
-                              return DynamicPanel(
-                                  item: loadingState.response[index]);
-                            },
-                            childCount: loadingState.response.length,
+                      /// as foot at trailing and layout with full cross axis extend
+                      /// show no more item at trailing when children are not full of viewport
+                      /// if children is full of viewport, it's the same as fullCrossAxisExtend
+                      //  LastChildLayoutType.foot,
+                      lastChildLayoutTypeBuilder: (index) {
+                        if (index == loadingState.response.length - 1) {
+                          EasyThrottle.throttle('member_dynamics',
+                              const Duration(milliseconds: 1000), () {
+                            _memberDynamicController.onLoadMore();
+                          });
+                        }
+                        return index == loadingState.response.length
+                            ? LastChildLayoutType.foot
+                            : LastChildLayoutType.none;
+                      },
+                      children: (loadingState.response as List)
+                          .map((item) => DynamicPanel(item: item))
+                          .toList(),
+                    )
+                  : SliverCrossAxisGroup(
+                      slivers: [
+                        const SliverFillRemaining(),
+                        SliverConstrainedCrossAxis(
+                          maxExtent: Grid.maxRowWidth * 2,
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                if (index == loadingState.response.length - 1) {
+                                  EasyThrottle.throttle('member_dynamics',
+                                      const Duration(milliseconds: 1000), () {
+                                    _memberDynamicController.onLoadMore();
+                                  });
+                                }
+                                return DynamicPanel(
+                                    item: loadingState.response[index]);
+                              },
+                              childCount: loadingState.response.length,
+                            ),
                           ),
                         ),
-                      ),
-                      const SliverFillRemaining(),
-                    ],
-                  ),
-          )
-        : HttpError(
-            errMsg: loadingState is Error ? loadingState.errMsg : null,
-            fn: () {
-              _memberDynamicController.onReload();
-            },
-          );
+                        const SliverFillRemaining(),
+                      ],
+                    ),
+            )
+          : HttpError(
+              callback: _memberDynamicController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _memberDynamicController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

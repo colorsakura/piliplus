@@ -1,5 +1,5 @@
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/dynamics/widgets/dynamic_panel_grpc.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_dynamic/member_dynamic_ctr.dart';
@@ -32,38 +32,34 @@ class _MemberDynamicState extends State<MemberDynamic>
   }
 
   _buildBody(LoadingState loadingState) {
-    return loadingState is Success
-        ? refreshIndicator(
-            onRefresh: () async {
-              await _controller.onRefresh();
-            },
-            child: ListView.separated(
-              itemCount: loadingState.response.length,
-              itemBuilder: (_, index) {
-                if (index == loadingState.response.length - 1) {
-                  _controller.onLoadMore();
-                }
-                return DynamicPanelGrpc(
-                  item: loadingState.response[index],
-                );
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? refreshIndicator(
+              onRefresh: () async {
+                await _controller.onRefresh();
               },
-              separatorBuilder: (_, index) => const SizedBox(height: 10),
+              child: ListView.separated(
+                itemCount: loadingState.response.length,
+                itemBuilder: (_, index) {
+                  if (index == loadingState.response.length - 1) {
+                    _controller.onLoadMore();
+                  }
+                  return DynamicPanelGrpc(
+                    item: loadingState.response[index],
+                  );
+                },
+                separatorBuilder: (_, index) => const SizedBox(height: 10),
+              ),
+            )
+          : errorWidget(
+              callback: _controller.onReload,
             ),
-          )
-        : loadingState is Error
-            ? Center(
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    HttpError(
-                      errMsg: loadingState.errMsg,
-                      fn: _controller.onReload,
-                    ),
-                  ],
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              );
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _controller.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

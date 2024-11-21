@@ -349,63 +349,68 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   }
 
   Widget replyList(LoadingState loadingState) {
-    return loadingState is Success
-        ? SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index == loadingState.response.replies.length) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom),
-                    height: MediaQuery.of(context).padding.bottom + 100,
-                    child: Center(
-                      child: Obx(
-                        () => Text(
-                          _dynamicDetailController.noMore.value,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.outline,
+    return switch (loadingState) {
+      Loading() => SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoReplySkeleton();
+            },
+            childCount: 8,
+          ),
+        ),
+      Success() => (loadingState.response.replies as List?)?.isNotEmpty == true
+          ? SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response.replies.length) {
+                    return Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                      height: MediaQuery.of(context).padding.bottom + 100,
+                      child: Center(
+                        child: Obx(
+                          () => Text(
+                            _dynamicDetailController.noMore.value,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return ReplyItemGrpc(
-                    replyItem: loadingState.response.replies[index],
-                    showReplyRow: true,
-                    replyLevel: '1',
-                    replyReply: replyReply,
-                    replyType: ReplyType.values[replyType],
-                    onReply: () {
-                      _dynamicDetailController.onReply(
-                        context,
-                        replyItem: loadingState.response.replies[index],
-                        index: index,
-                      );
-                    },
-                    onDelete: _dynamicDetailController.onMDelete,
-                    isTop: _dynamicDetailController.hasUpTop && index == 0,
-                    upMid: loadingState.response.subjectControl.upMid,
-                  );
-                }
-              },
-              childCount: loadingState.response.replies.length + 1,
+                    );
+                  } else {
+                    return ReplyItemGrpc(
+                      replyItem: loadingState.response.replies[index],
+                      showReplyRow: true,
+                      replyLevel: '1',
+                      replyReply: replyReply,
+                      replyType: ReplyType.values[replyType],
+                      onReply: () {
+                        _dynamicDetailController.onReply(
+                          context,
+                          replyItem: loadingState.response.replies[index],
+                          index: index,
+                        );
+                      },
+                      onDelete: _dynamicDetailController.onMDelete,
+                      isTop: _dynamicDetailController.hasUpTop && index == 0,
+                      upMid: loadingState.response.subjectControl.upMid,
+                    );
+                  }
+                },
+                childCount: loadingState.response.replies.length + 1,
+              ),
+            )
+          : HttpError(
+              callback: _dynamicDetailController.onReload,
             ),
-          )
-        : loadingState is Error
-            ? HttpError(
-                errMsg: loadingState.errMsg,
-                fn: _dynamicDetailController.onReload,
-              )
-            : SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return const VideoReplySkeleton();
-                  },
-                  childCount: 8,
-                ),
-              );
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _dynamicDetailController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }
 

@@ -91,7 +91,7 @@ class _ZonePageState extends State<ZonePage>
                               ? (_zoneController.loadingState.value as Error)
                                   .errMsg
                               : '没有相关数据',
-                          fn: _zoneController.onReload,
+                          callback: _zoneController.onReload,
                         ),
             ),
           ),

@@ -109,17 +109,10 @@ class _BangumiPageState extends State<BangumiPage>
                     ),
                     SizedBox(
                       height: Grid.maxRowWidth * 1,
-                      child: Obx(() =>
-                          _bangumiController.followState.value is Empty
-                              ? const SizedBox(
-                                  child: Center(
-                                    child: Text('还没有追番'),
-                                  ),
-                                )
-                              : _bangumiController.followState.value is Success
-                                  ? _buildFollowList(_bangumiController
-                                      .followState.value as Success)
-                                  : const SizedBox()),
+                      child: Obx(
+                        () => _buildFollowBody(
+                            _bangumiController.followState.value),
+                      ),
                     ),
                   ],
                 ),
@@ -144,24 +137,46 @@ class _BangumiPageState extends State<BangumiPage>
             padding: const EdgeInsets.fromLTRB(
                 StyleString.safeSpace, 0, StyleString.safeSpace, 0),
             sliver: Obx(
-              () => _bangumiController.loadingState.value is Loading
-                  ? contentGrid([])
-                  : _bangumiController.loadingState.value is Success
-                      ? contentGrid(
-                          (_bangumiController.loadingState.value as Success)
-                              .response)
-                      : HttpError(
-                          errMsg: _bangumiController.loadingState.value is Error
-                              ? (_bangumiController.loadingState.value as Error)
-                                  .errMsg
-                              : '没有相关数据',
-                          fn: _bangumiController.onReload,
-                        ),
+              () => _buildBody(_bangumiController.loadingState.value),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => const SliverToBoxAdapter(),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                // 行间距
+                mainAxisSpacing: StyleString.cardSpace - 2,
+                // 列间距
+                crossAxisSpacing: StyleString.cardSpace,
+                // 最大宽度
+                maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
+                childAspectRatio: 0.65,
+                mainAxisExtent: MediaQuery.textScalerOf(context).scale(60),
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return BangumiCardV(
+                      bangumiItem: loadingState.response[index]);
+                },
+                childCount: loadingState.response.length,
+              ),
+            )
+          : HttpError(
+              callback: _bangumiController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _bangumiController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 
   Widget _buildFollowList(Success loadingState) {
@@ -185,24 +200,14 @@ class _BangumiPageState extends State<BangumiPage>
     );
   }
 
-  Widget contentGrid(List list) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        // 行间距
-        mainAxisSpacing: StyleString.cardSpace - 2,
-        // 列间距
-        crossAxisSpacing: StyleString.cardSpace,
-        // 最大宽度
-        maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
-        childAspectRatio: 0.65,
-        mainAxisExtent: MediaQuery.textScalerOf(context).scale(60),
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return list.isNotEmpty ? BangumiCardV(bangumiItem: list[index]) : nil;
-        },
-        childCount: list.isNotEmpty ? list.length : 10,
-      ),
-    );
+  Widget _buildFollowBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => nil,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? _buildFollowList(loadingState)
+          : const Center(child: Text('还没有追番')),
+      Error() => Center(child: Text(loadingState.errMsg)),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

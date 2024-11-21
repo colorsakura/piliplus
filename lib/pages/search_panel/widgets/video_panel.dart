@@ -123,7 +123,7 @@ class SearchVideoPanel extends StatelessWidget {
               )
             : HttpError(
                 errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
-                fn: ctr.onReload,
+                callback: ctr.onReload,
               ),
       ],
     );
