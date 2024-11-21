@@ -28,6 +28,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
       children: [
         Obx(
           () => ListView.separated(
+            padding: const EdgeInsets.all(0),
             controller: widget.liveRoomController.scrollController,
             separatorBuilder: (_, index) => const SizedBox(height: 6),
             itemCount: widget.liveRoomController.messages.length,
@@ -82,9 +83,12 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
           () => widget.liveRoomController.disableAutoScroll.value
               ? Positioned(
                   right: 12,
-                  bottom: 12,
+                  bottom: 0,
                   child: ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_downward_rounded),
+                    icon: const Icon(
+                      Icons.arrow_downward_rounded,
+                      size: 20,
+                    ),
                     label: const Text('回到底部'),
                     onPressed: () {
                       widget.liveRoomController.disableAutoScroll.value = false;

@@ -333,9 +333,12 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   onPointerDown: (_) {
                     _node.unfocus();
                   },
-                  child: LiveRoomChat(
-                    roomId: _roomId,
-                    liveRoomController: _liveRoomController,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: LiveRoomChat(
+                      roomId: _roomId,
+                      liveRoomController: _liveRoomController,
+                    ),
                   ),
                 ),
               ),
