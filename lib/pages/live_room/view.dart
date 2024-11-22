@@ -205,6 +205,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               AppBar(
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
+                titleTextStyle: TextStyle(color: Colors.white),
                 toolbarHeight:
                     MediaQuery.of(context).orientation == Orientation.portrait
                         ? 56
