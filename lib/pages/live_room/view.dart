@@ -93,7 +93,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     plPlayerController.dispose();
     _ctr.dispose();
     _liveRoomController.scrollController.removeListener(() {});
-    _liveRoomController.scrollController.dispose();
     super.dispose();
   }
 

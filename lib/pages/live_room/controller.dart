@@ -194,4 +194,10 @@ class LiveRoomController extends GetxController {
       }
     });
   }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
 }

@@ -73,6 +73,7 @@ Widget liveRcmdPanel(item, context, {floor = 1}) {
                   Hero(
                     tag: liveRcmd.roomId.toString(),
                     child: NetworkImgLayer(
+                      radius: 12,
                       type: floor == 1 ? 'emote' : null,
                       width: width,
                       height: width / StyleString.aspectRatio,
@@ -112,7 +113,7 @@ Widget liveRcmdPanel(item, context, {floor = 1}) {
                             ],
                           ),
                           borderRadius: floor == 1
-                              ? null
+                              ? const BorderRadius.all(Radius.circular(12))
                               : const BorderRadius.all(Radius.circular(6))),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
