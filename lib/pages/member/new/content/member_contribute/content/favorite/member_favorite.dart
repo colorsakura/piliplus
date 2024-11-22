@@ -119,25 +119,28 @@ class _MemberFavoriteState extends State<MemberFavorite>
         children: [
           ...(data.mediaListResponse?.list as List<FavList>).map(
             (item1) => ListTile(
-              onTap: () {
+              onTap: () async {
                 if (item1.state == 1) {
                   // invalid
                   return;
                 }
                 if (item1.type == 0) {
-                  Get.toNamed(
+                  dynamic res = await Get.toNamed(
                     '/favDetail',
                     parameters: {
                       'mediaId': item1.id.toString(),
                       'heroTag': widget.heroTag ?? '',
                     },
-                  )?.then((res) {
-                    if (res == true) {
-                      _controller.first.value.mediaListResponse?.list
-                          ?.remove(item1);
-                      _controller.first.refresh();
-                    }
-                  });
+                  );
+                  if (res == true) {
+                    _controller.first.value.mediaListResponse?.list
+                        ?.remove(item1);
+                    _controller.first.refresh();
+                  } else {
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      _controller.onRefresh();
+                    });
+                  }
                 } else if (item1.type == 21) {
                   PiliScheme.routePush(Uri.parse(item1.link ?? ''));
                 } else if (item1.type == 11) {
@@ -213,7 +216,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
               ),
               subtitle: Text(
                 item1.type == 0
-                    ? '${item1.mediaCount}个内容 · ${Utils.isPublic(item1.attr ?? 0) ? '公开' : '私密'}'
+                    ? '${item1.mediaCount}个内容 · ${Utils.isPublicText(item1.attr ?? 0)}'
                     : item1.type == 11
                         ? '${item1.mediaCount}个内容 · ${item1.upper?.name}'
                         : item1.type == 21

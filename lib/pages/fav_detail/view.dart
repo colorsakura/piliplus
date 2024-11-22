@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
+import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -86,11 +87,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _favDetailController.title.value,
+                              _favDetailController.item.value.title ?? '',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Text(
-                              '共${_favDetailController.mediaCount}条视频',
+                              '共${_favDetailController.item.value.mediaCount}条视频',
                               style: Theme.of(context).textTheme.labelMedium,
                             )
                           ],
@@ -125,11 +126,16 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               Get.toNamed(
                                 '/createFav',
                                 parameters: {'mediaId': mediaId},
-                              );
+                              )?.then((res) {
+                                if (res is FavFolderItemData) {
+                                  _favDetailController.item.value = res;
+                                }
+                              });
                             },
                             child: Text('编辑信息'),
                           ),
-                          if (!Utils.isDefault(_favDetailController.attr))
+                          if (!Utils.isDefault(
+                              _favDetailController.item.value.attr ?? 0))
                             PopupMenuItem(
                               onTap: () {
                                 UserHttp.deleteFolder(mediaIds: [mediaId])
@@ -152,13 +158,6 @@ class _FavDetailPageState extends State<FavDetailPage> {
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                // decoration: BoxDecoration(
-                //   border: Border(
-                //     bottom: BorderSide(
-                //       color: Theme.of(context).dividerColor.withOpacity(0.2),
-                //     ),
-                //   ),
-                // ),
                 padding: EdgeInsets.only(
                     top: kTextTabBarHeight +
                         MediaQuery.of(context).padding.top +
@@ -167,65 +166,84 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     right: 20),
                 child: SizedBox(
                   height: 110,
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Obx(
-                        () => Hero(
+                  child: Obx(
+                    () => Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Hero(
                           tag: _favDetailController.heroTag,
                           child: NetworkImgLayer(
                             width: 180,
                             height: 110,
-                            src: _favDetailController.cover.value,
+                            src: _favDetailController.item.value.cover,
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 14),
-                      Obx(
-                        () => Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 4),
-                              Text(
-                                _favDetailController.title.value,
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .fontSize,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                _favDetailController.name.value,
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall!
-                                        .fontSize,
-                                    color:
-                                        Theme.of(context).colorScheme.outline),
-                              ),
-                              const Spacer(),
-                              Text(
-                                '共${_favDetailController.mediaCount}条视频',
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall!
-                                        .fontSize,
-                                    color:
-                                        Theme.of(context).colorScheme.outline),
-                              ),
-                              const SizedBox(height: 20),
-                            ],
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: SizedBox(
+                            height: 110,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 4),
+                                Text(
+                                  _favDetailController.item.value.title ?? '',
+                                  style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .fontSize,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                if (_favDetailController
+                                        .item.value.intro?.isNotEmpty ==
+                                    true)
+                                  Text(
+                                    _favDetailController.item.value.intro ?? '',
+                                    style: TextStyle(
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall!
+                                            .fontSize,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline),
+                                  ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  _favDetailController.item.value.upper?.name ??
+                                      '',
+                                  style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall!
+                                          .fontSize,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline),
+                                ),
+                                const Spacer(),
+                                if (_favDetailController.item.value.attr !=
+                                    null)
+                                  Text(
+                                    '共${_favDetailController.item.value.mediaCount}条视频 · ${Utils.isPublicText(_favDetailController.item.value.attr ?? 0)}',
+                                    style: TextStyle(
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall!
+                                            .fontSize,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

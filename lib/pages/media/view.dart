@@ -134,7 +134,12 @@ class _MediaPageState extends State<MediaPage>
           color: Theme.of(context).dividerColor.withOpacity(0.1),
         ),
         ListTile(
-          onTap: () => Get.toNamed('/fav'),
+          onTap: () async {
+            await Get.toNamed('/fav');
+            Future.delayed(const Duration(milliseconds: 150), () {
+              mediaController.onRefresh();
+            });
+          },
           leading: null,
           dense: true,
           title: Padding(
@@ -212,7 +217,12 @@ class _MediaPageState extends State<MediaPage>
                           .withOpacity(0.5);
                     }),
                   ),
-                  onPressed: () => Get.toNamed('/fav'),
+                  onPressed: () async {
+                    await Get.toNamed('/fav');
+                    Future.delayed(const Duration(milliseconds: 150), () {
+                      mediaController.onRefresh();
+                    });
+                  },
                   icon: Icon(
                     Icons.arrow_forward_ios,
                     size: 18,
@@ -222,9 +232,25 @@ class _MediaPageState extends State<MediaPage>
               ),
             );
           } else {
+            String heroTag =
+                Utils.makeHeroTag(loadingState.response.list[index].fid);
             return FavFolderItem(
+              heroTag: heroTag,
               item: loadingState.response.list[index],
               index: index,
+              onTap: () async {
+                await Get.toNamed(
+                  '/favDetail',
+                  arguments: loadingState.response.list[index],
+                  parameters: {
+                    'mediaId': loadingState.response.list[index].id.toString(),
+                    'heroTag': heroTag,
+                  },
+                );
+                Future.delayed(const Duration(milliseconds: 150), () {
+                  mediaController.onRefresh();
+                });
+              },
             );
           }
         },
@@ -242,19 +268,25 @@ class _MediaPageState extends State<MediaPage>
 }
 
 class FavFolderItem extends StatelessWidget {
-  const FavFolderItem({super.key, this.item, this.index});
+  const FavFolderItem({
+    super.key,
+    this.item,
+    this.index,
+    required this.onTap,
+    required this.heroTag,
+  });
+
   final FavFolderItemData? item;
   final int? index;
+  final GestureTapCallback onTap;
+  final String heroTag;
+
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(item!.fid);
-
     return Container(
       margin: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 14),
       child: GestureDetector(
-        onTap: () => Get.toNamed('/favDetail',
-            arguments: item,
-            parameters: {'mediaId': item!.id.toString(), 'heroTag': heroTag}),
+        onTap: onTap,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +334,7 @@ class FavFolderItem extends StatelessWidget {
               maxLines: 1,
             ),
             Text(
-              ' 共${item!.mediaCount}条视频',
+              ' 共${item!.mediaCount}条视频 · ${Utils.isPublicText(item?.attr ?? 0)}',
               style: Theme.of(context)
                   .textTheme
                   .labelSmall!

@@ -1,3 +1,5 @@
+import 'package:PiliPalaX/models/user/fav_folder.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -58,7 +60,7 @@ class FavItem extends StatelessWidget {
 }
 
 class VideoContent extends StatelessWidget {
-  final dynamic favFolderItem;
+  final FavFolderItemData favFolderItem;
   const VideoContent({super.key, required this.favFolderItem});
 
   @override
@@ -70,17 +72,16 @@ class VideoContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              favFolderItem.title,
+              favFolderItem.title ?? '',
               textAlign: TextAlign.start,
               style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 letterSpacing: 0.3,
               ),
             ),
-            if (favFolderItem.intro.isNotEmpty)
+            if (favFolderItem.intro?.isNotEmpty == true)
               Text(
-                favFolderItem.intro,
-                textAlign: TextAlign.start,
+                favFolderItem.intro!,
                 style: TextStyle(
                   fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                   color: Theme.of(context).colorScheme.outline,
@@ -88,7 +89,14 @@ class VideoContent extends StatelessWidget {
               ),
             Text(
               '${favFolderItem.mediaCount}个内容',
-              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              Utils.isPublicText(favFolderItem.attr ?? 0),
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                 color: Theme.of(context).colorScheme.outline,

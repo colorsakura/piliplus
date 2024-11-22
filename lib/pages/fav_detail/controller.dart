@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
+import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -8,15 +9,10 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/http/video.dart';
 
 class FavDetailController extends CommonController {
-  // FavFolderItemData? item;
+  Rx<FavFolderItemData> item = FavFolderItemData().obs;
   int? mediaId;
   late String heroTag;
   RxString loadingText = '加载中...'.obs;
-  int mediaCount = 0;
-  RxString title = ''.obs;
-  RxString cover = ''.obs;
-  RxString name = ''.obs;
-  late int attr;
   RxBool isOwner = false.obs;
 
   @override
@@ -48,12 +44,8 @@ class FavDetailController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     if (currentPage == 1) {
-      title.value = response.response.info['title'];
-      cover.value = response.response.info['cover'];
-      name.value = response.response.info['upper']['name'];
-      mediaCount = response.response.info['media_count'];
-      attr = response.response.info['attr'];
-      isOwner.value = response.response.info['mid'] ==
+      item.value = response.response.info;
+      isOwner.value = response.response.info.mid ==
           GStorage.userInfo.get('userInfoCache')?.mid;
     }
     List currentList = loadingState.value is Success
@@ -63,7 +55,7 @@ class FavDetailController extends CommonController {
         ? response.response.medias
         : currentList + response.response.medias;
     loadingState.value = LoadingState.success(dataList);
-    if (dataList.length >= mediaCount) {
+    if (dataList.length >= response.response.info.mediaCount) {
       loadingText.value = '没有更多了';
     }
     return true;

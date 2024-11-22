@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/models/model_owner.dart';
+import 'package:PiliPalaX/models/user/fav_folder.dart';
 
 class FavDetailData {
   FavDetailData({
@@ -7,12 +8,13 @@ class FavDetailData {
     this.hasMore,
   });
 
-  Map? info;
+  FavFolderItemData? info;
   List<FavDetailItemData>? medias;
   bool? hasMore;
 
   FavDetailData.fromJson(Map<String, dynamic> json) {
-    info = json['info'];
+    info =
+        json['info'] == null ? null : FavFolderItemData.fromJson(json['info']);
     medias = json['medias'] != null
         ? json['medias']
             .map<FavDetailItemData>((e) => FavDetailItemData.fromJson(e))

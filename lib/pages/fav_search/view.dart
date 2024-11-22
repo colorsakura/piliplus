@@ -83,10 +83,12 @@ class _FavSearchPageState extends State<FavSearchPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => loadingWidget,
+      Loading() => errorWidget(),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? _favSearchCtr.searchType == SearchType.fav
-              ? ListView.builder(
+              ? ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
                   controller: _favSearchCtr.scrollController,
                   itemCount: loadingState.response.length + 1,
                   itemBuilder: (context, index) {

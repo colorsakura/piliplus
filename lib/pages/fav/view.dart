@@ -1,6 +1,6 @@
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
+import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -57,17 +57,7 @@ class _FavPageState extends State<FavPage> {
                   List list = _favController.loadingState.value is Success
                       ? (_favController.loadingState.value as Success).response
                       : [];
-                  list.insert(
-                    list.isNotEmpty ? 1 : 0,
-                    FavFolderItemData(
-                      id: data['id'],
-                      fid: data['fid'],
-                      attr: data['attr'],
-                      title: data['title'],
-                      favState: data['fav_state'],
-                      mediaCount: data['media_count'],
-                    ),
-                  );
+                  list.insert(list.isNotEmpty ? 1 : 0, data);
                   _favController.loadingState.value =
                       LoadingState.success(list);
                 }
@@ -95,14 +85,19 @@ class _FavPageState extends State<FavPage> {
           const SizedBox(width: 6),
         ],
       ),
-      body: CustomScrollView(
-        controller: _favController.scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          Obx(
-            () => _buildBody(_favController.loadingState.value),
-          ),
-        ],
+      body: refreshIndicator(
+        onRefresh: () async {
+          await _favController.onRefresh();
+        },
+        child: CustomScrollView(
+          controller: _favController.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            Obx(
+              () => _buildBody(_favController.loadingState.value),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -124,30 +119,34 @@ class _FavPageState extends State<FavPage> {
           ),
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0),
-              delegate: SliverChildBuilderDelegate(
-                childCount: loadingState.response.length,
-                (BuildContext context, int index) {
-                  String heroTag =
-                      Utils.makeHeroTag(loadingState.response[index].fid);
-                  return FavItem(
-                    heroTag: heroTag,
-                    favFolderItem: loadingState.response[index],
-                    onTap: () {
-                      Get.toNamed(
-                        '/favDetail',
-                        arguments: loadingState.response[index],
-                        parameters: {
-                          'heroTag': heroTag,
-                          'mediaId': loadingState.response[index].id.toString(),
-                        },
-                      )?.then((res) {
+          ? SliverPadding(
+              padding: EdgeInsets.only(
+                  bottom: 80 + MediaQuery.paddingOf(context).bottom),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: StyleString.cardSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.4,
+                    mainAxisExtent: 0),
+                delegate: SliverChildBuilderDelegate(
+                  childCount: loadingState.response.length,
+                  (BuildContext context, int index) {
+                    String heroTag =
+                        Utils.makeHeroTag(loadingState.response[index].fid);
+                    return FavItem(
+                      heroTag: heroTag,
+                      favFolderItem: loadingState.response[index],
+                      onTap: () async {
+                        dynamic res = await Get.toNamed(
+                          '/favDetail',
+                          arguments: loadingState.response[index],
+                          parameters: {
+                            'heroTag': heroTag,
+                            'mediaId':
+                                loadingState.response[index].id.toString(),
+                          },
+                        );
                         if (res == true) {
                           List list =
                               (_favController.loadingState.value as Success)
@@ -155,11 +154,15 @@ class _FavPageState extends State<FavPage> {
                           list.removeAt(index);
                           _favController.loadingState.value =
                               LoadingState.success(list);
+                        } else {
+                          Future.delayed(const Duration(milliseconds: 150), () {
+                            _favController.onRefresh();
+                          });
                         }
-                      });
-                    },
-                  );
-                },
+                      },
+                    );
+                  },
+                ),
               ),
             )
           : HttpError(

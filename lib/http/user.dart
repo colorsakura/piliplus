@@ -101,7 +101,10 @@ class UserHttp {
           contentType: Headers.formUrlEncodedContentType,
         ));
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {
+        'status': true,
+        'data': FavFolderItemData.fromJson(res.data['data'])
+      };
     } else {
       return {'status': false, 'msg': res.data['message']};
     }

@@ -29,6 +29,10 @@ class Utils {
     return (attr & 2) == 0;
   }
 
+  static String isPublicText(int attr) {
+    return isPublic(attr) ? '公开' : '私密';
+  }
+
   static bool isPublic(int attr) {
     return (attr & 1) == 0;
   }

@@ -64,17 +64,7 @@ class _FavPanelState extends State<FavPanel> {
                       if (data != null) {
                         (widget.ctr?.favFolderData.value as FavFolderData?)
                             ?.list
-                            ?.insert(
-                              1,
-                              FavFolderItemData(
-                                id: data['id'],
-                                fid: data['fid'],
-                                attr: data['attr'],
-                                title: data['title'],
-                                favState: data['fav_state'],
-                                mediaCount: data['media_count'],
-                              ),
-                            );
+                            ?.insert(1, data);
                         widget.ctr?.favFolderData.refresh();
                       }
                     });
@@ -125,7 +115,7 @@ class _FavPanelState extends State<FavPanel> {
                                 title: Text(widget.ctr!.favFolderData.value
                                     .list![index].title!),
                                 subtitle: Text(
-                                  '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容 . ${Utils.isPublic(widget.ctr!.favFolderData.value.list![index].attr) ? '公开' : '私密'}',
+                                  '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容 . ${Utils.isPublicText(widget.ctr!.favFolderData.value.list![index].attr)}',
                                 ),
                                 trailing: Transform.scale(
                                   scale: 0.9,
