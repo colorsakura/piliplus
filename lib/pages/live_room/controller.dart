@@ -113,7 +113,7 @@ class LiveRoomController extends GetxController {
     if (scrollController.hasClients) {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.linearToEaseOut,
       );
     }

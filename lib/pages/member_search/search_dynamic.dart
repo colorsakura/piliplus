@@ -93,11 +93,17 @@ class SearchDynamic extends StatelessWidget {
               ),
             )
           : errorWidget(
-              callback: ctr.refreshDynamic,
+              callback: () {
+                ctr.dynamicState.value = LoadingState.loading();
+                ctr.refreshDynamic();
+              },
             ),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
-          callback: ctr.refreshDynamic,
+          callback: () {
+            ctr.dynamicState.value = LoadingState.loading();
+            ctr.refreshDynamic();
+          },
         ),
       LoadingState() => throw UnimplementedError(),
     };

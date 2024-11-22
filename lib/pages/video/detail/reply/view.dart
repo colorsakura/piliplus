@@ -247,6 +247,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       onDelete: _videoReplyController.onMDelete,
                       isTop: _videoReplyController.hasUpTop && index == 0,
                       upMid: loadingState.response.subjectControl.upMid,
+                      getTag: () => heroTag,
                     );
                   }
                 },

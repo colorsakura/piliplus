@@ -50,9 +50,11 @@ class MemberSearchController extends GetxController
       hasData.value = true;
 
       dynamicCount.value = -1;
+      dynamicState.value = LoadingState.loading();
       refreshArchive();
 
       archiveCount.value = -1;
+      archiveState.value = LoadingState.loading();
       refreshDynamic();
     }
   }
@@ -60,14 +62,12 @@ class MemberSearchController extends GetxController
   Future refreshDynamic() async {
     dynamicPn = 1;
     isEndDynamic = false;
-    dynamicState.value = LoadingState.loading();
     await searchDynamic();
   }
 
   Future refreshArchive() async {
     archivePn = 1;
     isEndArchive = false;
-    archiveState.value = LoadingState.loading();
     await searchArchives();
   }
 
@@ -83,7 +83,7 @@ class MemberSearchController extends GetxController
       if (isRefresh) {
         dynamicCount.value = res['count'];
       }
-      if (dynamicState.value is Success) {
+      if (isRefresh.not && dynamicState.value is Success) {
         res['data'].insertAll(0, (dynamicState.value as Success).response);
       }
       dynamicState.value = LoadingState.success(res['data']);
@@ -109,7 +109,7 @@ class MemberSearchController extends GetxController
       if (isRefresh) {
         archiveCount.value = res['data'].page['count'];
       }
-      if (archiveState.value is Success) {
+      if (isRefresh.not && archiveState.value is Success) {
         res['data']
             .list
             .vlist

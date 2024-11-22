@@ -51,6 +51,7 @@ class LaterController extends CommonController {
                   if (aid != null) {
                     List list = (loadingState.value as Success).response;
                     list.removeWhere((e) => e.aid == aid);
+                    count.value -= 1;
                     loadingState.value = LoadingState.success(list);
                   } else {
                     loadingState.value = LoadingState.loading();

@@ -27,7 +27,7 @@ class MemberPageNew extends StatefulWidget {
 class _MemberPageNewState extends State<MemberPageNew>
     with TickerProviderStateMixin {
   int? _mid;
-  String? _heroTag;
+  late final String _heroTag;
   late final MemberControllerNew _userController;
   final _key = GlobalKey<ExtendedNestedScrollViewState>();
 
@@ -35,7 +35,7 @@ class _MemberPageNewState extends State<MemberPageNew>
   void initState() {
     super.initState();
     _mid = int.parse(Get.parameters['mid']!);
-    _heroTag = Get.arguments['heroTag'] ?? Utils.makeHeroTag(_mid);
+    _heroTag = Utils.makeHeroTag(_mid);
     _userController = Get.put(
       MemberControllerNew(mid: _mid),
       tag: _heroTag,

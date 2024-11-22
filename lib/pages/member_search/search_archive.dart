@@ -64,11 +64,17 @@ class SearchArchive extends StatelessWidget {
               ),
             )
           : errorWidget(
-              callback: ctr.refreshArchive,
+              callback: () {
+                ctr.archiveState.value = LoadingState.loading();
+                ctr.refreshArchive();
+              },
             ),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
-          callback: ctr.refreshArchive,
+          callback: () {
+            ctr.archiveState.value = LoadingState.loading();
+            ctr.refreshArchive();
+          },
         ),
       LoadingState() => throw UnimplementedError(),
     };

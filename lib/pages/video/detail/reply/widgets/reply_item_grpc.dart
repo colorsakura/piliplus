@@ -36,6 +36,7 @@ class ReplyItemGrpc extends StatelessWidget {
     this.upMid,
     this.isTop = false,
     this.showDialogue,
+    this.getTag,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -48,6 +49,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final dynamic upMid;
   final bool isTop;
   final VoidCallback? showDialogue;
+  final Function? getTag;
 
   @override
   Widget build(BuildContext context) {
@@ -298,6 +300,7 @@ class ReplyItemGrpc extends StatelessWidget {
                         null,
                         textPainter,
                         didExceedMaxLines,
+                        getTag,
                       ),
                     ],
                   ),
@@ -328,6 +331,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   onDelete!(rpid, replyItem.id.toInt());
                 }
               },
+              getTag: getTag,
             ),
           ),
         ],
@@ -440,6 +444,7 @@ class ReplyItemRow extends StatelessWidget {
     this.replyReply,
     this.onDelete,
     this.upMid,
+    this.getTag,
   });
   final int count;
   final List<ReplyInfo> replies;
@@ -449,6 +454,7 @@ class ReplyItemRow extends StatelessWidget {
   Function? replyReply;
   final Function(dynamic rpid)? onDelete;
   final dynamic upMid;
+  final Function? getTag;
 
   @override
   Widget build(BuildContext context) {
@@ -558,6 +564,7 @@ class ReplyItemRow extends StatelessWidget {
                               replyItem,
                               null,
                               null,
+                              getTag,
                             ),
                           ],
                         ),
@@ -616,6 +623,7 @@ InlineSpan buildContent(
   fReplyItem,
   textPainter,
   didExceedMaxLines,
+  getTag,
 ) {
   final String routePath = Get.currentRoute;
   bool isVideoPage = routePath.startsWith('/video');
@@ -763,11 +771,10 @@ InlineSpan buildContent(
           for (int i = 0; i < split.length; i++) {
             seek += split[i] * pow(60, i).toInt();
           }
-          int duration =
-              Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
-                      .data
-                      .timeLength ??
-                  0;
+          int duration = Get.find<VideoDetailController>(
+                tag: getTag?.call() ?? Get.arguments['heroTag'],
+              ).data.timeLength ??
+              0;
           isValid = seek * 1000 <= duration;
         } catch (e) {
           debugPrint('failed to validate: $e');
