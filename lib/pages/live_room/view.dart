@@ -87,11 +87,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     WidgetsBinding.instance.removeObserver(this);
     ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
+    _liveRoomController.msgStream?.close();
     floating?.dispose();
     _node.dispose();
     plPlayerController.dispose();
     _ctr.dispose();
-    _liveRoomController.msgStream?.close();
     _liveRoomController.scrollController.removeListener(() {});
     _liveRoomController.scrollController.dispose();
     super.dispose();
@@ -306,10 +306,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 onPopInvokedWithResult: (bool didPop, Object? result) {
                   if (plPlayerController.isFullScreen.value == true) {
                     plPlayerController.triggerFullScreen(status: false);
-                  }
-                  if (MediaQuery.of(context).orientation ==
-                      Orientation.landscape) {
-                    verticalScreenForTwoSeconds();
+                    if (MediaQuery.of(context).orientation ==
+                        Orientation.landscape) {
+                      verticalScreenForTwoSeconds();
+                    }
                   }
                 },
                 child: Listener(

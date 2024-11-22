@@ -184,8 +184,8 @@ class LiveMessageStream {
       ),
     );
 
-    final marshaledData = authPackage.marshal();
-    logger.d(marshaledData);
+    // final marshaledData = authPackage.marshal();
+    // logger.d(marshaledData);
     try {
       Future<WebSocket> getSocket() async {
         for (final server in servers) {
