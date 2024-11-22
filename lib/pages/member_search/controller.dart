@@ -1,27 +1,30 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/member.dart';
-import 'package:PiliPalaX/models/member/archive.dart';
 
-class MemberSearchController extends GetxController {
-  final ScrollController scrollController = ScrollController();
-  Rx<TextEditingController> controller = TextEditingController().obs;
-  final FocusNode searchFocusNode = FocusNode();
-  RxString searchKeyWord = ''.obs;
-  String hintText = '搜索';
-  RxString loadingStatus = 'init'.obs;
-  RxString loadingText = '加载中...'.obs;
-  bool hasRequest = false;
+class MemberSearchController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  final scrollController = ScrollController();
+  late final tabController = TabController(vsync: this, length: 2);
+  final textEditingController = TextEditingController();
+  final searchFocusNode = FocusNode();
+
+  RxBool hasData = false.obs;
+
   late int mid;
   RxString uname = ''.obs;
-  int archivePn = 1;
-  int archiveCount = 0;
-  RxList<VListItemModel> archiveList = <VListItemModel>[].obs;
-  int dynamic_pn = 1;
-  RxList<VListItemModel> dynamicList = <VListItemModel>[].obs;
 
-  int ps = 30;
+  int archivePn = 1;
+  RxInt archiveCount = (-1).obs;
+  bool isEndArchive = false;
+  Rx<LoadingState> archiveState = LoadingState.loading().obs;
+
+  int dynamicPn = 1;
+  RxInt dynamicCount = (-1).obs;
+  bool isEndDynamic = false;
+  Rx<LoadingState> dynamicState = LoadingState.loading().obs;
 
   @override
   void onInit() {
@@ -32,69 +35,102 @@ class MemberSearchController extends GetxController {
 
   // 清空搜索
   void onClear() {
-    if (searchKeyWord.value.isNotEmpty && controller.value.text != '') {
-      controller.value.clear();
-      searchKeyWord.value = '';
+    if (textEditingController.value.text.isNotEmpty) {
+      textEditingController.clear();
+      hasData.value = false;
+      searchFocusNode.requestFocus();
     } else {
       Get.back();
     }
   }
 
-  void onChange(value) {
-    searchKeyWord.value = value;
-  }
-
   //  提交搜索内容
   void submit() {
-    loadingStatus.value = 'loading';
-    if (hasRequest) {
-      archivePn = 1;
-      searchArchives();
+    if (textEditingController.text.isNotEmpty) {
+      hasData.value = true;
+
+      dynamicCount.value = -1;
+      refreshArchive();
+
+      archiveCount.value = -1;
+      refreshDynamic();
+    }
+  }
+
+  Future refreshDynamic() async {
+    dynamicPn = 1;
+    isEndDynamic = false;
+    dynamicState.value = LoadingState.loading();
+    await searchDynamic();
+  }
+
+  Future refreshArchive() async {
+    archivePn = 1;
+    isEndArchive = false;
+    archiveState.value = LoadingState.loading();
+    await searchArchives();
+  }
+
+  Future searchDynamic([bool isRefresh = true]) async {
+    if (isRefresh.not && isEndDynamic) return;
+    dynamic res = await MemberHttp.memberDynamicSearch(
+      mid: mid,
+      pn: dynamicPn,
+      ps: 30,
+      keyword: textEditingController.text,
+    );
+    if (res['status']) {
+      if (isRefresh) {
+        dynamicCount.value = res['count'];
+      }
+      if (dynamicState.value is Success) {
+        res['data'].insertAll(0, (dynamicState.value as Success).response);
+      }
+      dynamicState.value = LoadingState.success(res['data']);
+      if (res['data'].length >= dynamicCount.value) {
+        isEndDynamic = true;
+      }
+      dynamicPn++;
+    } else {
+      dynamicState.value = LoadingState.error(res['msg']);
     }
   }
 
   // 搜索视频
-  Future searchArchives({type = 'init'}) async {
-    if (type == 'onLoad' && loadingText.value == '没有更多了') {
-      return;
-    }
-    var res = await MemberHttp.memberArchive(
+  Future searchArchives([bool isRefresh = true]) async {
+    if (isRefresh.not && isEndArchive) return;
+    dynamic res = await MemberHttp.memberArchive(
       mid: mid,
       pn: archivePn,
-      keyword: controller.value.text,
+      keyword: textEditingController.text,
       order: 'pubdate',
     );
     if (res['status']) {
-      if (type == 'init' || archivePn == 1) {
-        archiveList.value = res['data'].list.vlist;
-      } else {
-        archiveList.addAll(res['data'].list.vlist);
+      if (isRefresh) {
+        archiveCount.value = res['data'].page['count'];
       }
-      archiveCount = res['data'].page['count'];
-      if (archiveList.length == archiveCount) {
-        loadingText.value = '没有更多了';
+      if (archiveState.value is Success) {
+        res['data']
+            .list
+            .vlist
+            ?.insertAll(0, (archiveState.value as Success).response);
       }
-      archivePn += 1;
-      hasRequest = true;
+      archiveState.value = LoadingState.success(res['data'].list.vlist);
+      if (res['data'].list.vlist.length >= archiveCount.value) {
+        isEndArchive = true;
+      }
+      archivePn++;
     } else {
-      SmartDialog.showToast(res['msg']);
+      archiveState.value = LoadingState.error(res['msg']);
     }
-    // loadingStatus.value = 'finish';
-    return res;
-  }
-
-  // 搜索动态
-  Future searchDynamic() async {}
-
-  //
-  onLoad() {
-    searchArchives(type: 'onLoad');
   }
 
   @override
   void onClose() {
+    textEditingController.dispose();
     searchFocusNode.dispose();
     scrollController.dispose();
+    tabController.dispose();
     super.onClose();
   }
 }

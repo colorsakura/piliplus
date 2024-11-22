@@ -370,7 +370,6 @@ class MemberHttp {
       };
       return {
         'status': false,
-        'data': [],
         'msg': errMap[res.data['code']] ?? res.data['message'],
       };
     }
@@ -407,9 +406,14 @@ class MemberHttp {
   }
 
   // 搜索用户动态
-  static Future memberDynamicSearch({int? pn, int? ps, int? mid}) async {
-    var res = await Request().get(Api.memberDynamic, data: {
-      'keyword': '海拔',
+  static Future memberDynamicSearch({
+    int? pn,
+    int? ps,
+    int? mid,
+    required String keyword,
+  }) async {
+    var res = await Request().get(Api.memberDynamicSearch, data: {
+      'keyword': keyword,
       'mid': mid,
       'pn': pn,
       'ps': ps,
@@ -418,12 +422,12 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': DynamicsDataModel.fromJson(res.data['data']),
+        'data': res.data['data']['cards'],
+        'count': res.data['data']['total']
       };
     } else {
       return {
         'status': false,
-        'data': [],
         'msg': res.data['message'],
       };
     }

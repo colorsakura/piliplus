@@ -13,7 +13,7 @@ class DynamicsDataModel {
   DynamicsDataModel.fromJson(Map<String, dynamic> json) {
     hasMore = json['has_more'];
     items = json['items']
-        .map<DynamicItemModel>((e) => DynamicItemModel.fromJson(e))
+        ?.map<DynamicItemModel>((e) => DynamicItemModel.fromJson(e))
         .toList();
     offset = json['offset'];
   }
