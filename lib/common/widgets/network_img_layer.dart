@@ -19,12 +19,12 @@ class NetworkImgLayer extends StatelessWidget {
     this.fadeInDuration,
     // 图片质量 默认1%
     this.quality,
-    this.origAspectRatio,
     this.semanticsLabel,
     this.ignoreHeight,
     this.radius,
     this.imageBuilder,
-    this.isLongPic = false,
+    this.isLongPic,
+    this.callback,
   });
 
   final String? src;
@@ -34,31 +34,24 @@ class NetworkImgLayer extends StatelessWidget {
   final Duration? fadeOutDuration;
   final Duration? fadeInDuration;
   final int? quality;
-  final double? origAspectRatio;
   final String? semanticsLabel;
   final bool? ignoreHeight;
   final double? radius;
   final ImageWidgetBuilder? imageBuilder;
-  final bool isLongPic;
+  final Function? isLongPic;
+  final Function? callback;
 
   @override
   Widget build(BuildContext context) {
-    final int defaultImgQuality = GlobalData().imgQuality;
+    late final int defaultImgQuality = GlobalData().imgQuality;
     final String imageUrl =
         '${src?.startsWith('//') == true ? 'https:$src' : src}@${quality ?? defaultImgQuality}q.webp';
     int? memCacheWidth, memCacheHeight;
 
-    if (isLongPic ||
-        width > height ||
-        (origAspectRatio != null && origAspectRatio! > 1)) {
+    if (callback?.call() == true || width <= height) {
       memCacheWidth = width.cacheSize(context);
-    } else if (width < height ||
-        (origAspectRatio != null && origAspectRatio! < 1)) {
-      memCacheHeight = height.cacheSize(context);
     } else {
-      // 不能同时设置，否则会导致图片变形
-      memCacheWidth = width.cacheSize(context);
-      // memCacheHeight = height.cacheSize(context);
+      memCacheHeight = height.cacheSize(context);
     }
     Widget res = src != '' && src != null
         ? ClipRRect(
@@ -80,7 +73,9 @@ class NetworkImgLayer extends StatelessWidget {
               memCacheWidth: memCacheWidth,
               memCacheHeight: memCacheHeight,
               fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              alignment: isLongPic?.call() == true
+                  ? Alignment.topCenter
+                  : Alignment.center,
               fadeOutDuration:
                   fadeOutDuration ?? const Duration(milliseconds: 120),
               fadeInDuration:
@@ -126,7 +121,7 @@ class NetworkImgLayer extends StatelessWidget {
                 width: width,
                 height: height,
                 cacheWidth: width.cacheSize(context),
-                cacheHeight: height.cacheSize(context),
+                // cacheHeight: height.cacheSize(context),
               ),
             ),
     );

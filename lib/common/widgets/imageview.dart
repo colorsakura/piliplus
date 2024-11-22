@@ -71,12 +71,12 @@ Widget image(
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: NetworkImgLayer(
-              isLongPic: picArr[index].isLongPic,
               src: picArr[index].url,
               width: imageWidth,
               height: imageHeight,
-              origAspectRatio:
-                  picArr[index].safeWidth / picArr[index].safeHeight,
+              isLongPic: () => picArr[index].isLongPic,
+              callback: () =>
+                  picArr[index].safeWidth <= picArr[index].safeHeight,
             ),
           ),
           if (picArr[index].isLongPic)
