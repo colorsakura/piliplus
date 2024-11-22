@@ -34,7 +34,7 @@ class _PagesPanelState extends State<PagesPanel> {
   // final String heroTag = Get.arguments['heroTag'];
   late final String heroTag;
   late VideoDetailController _videoDetailController;
-  final ScrollController _scrollController2 = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -50,9 +50,9 @@ class _PagesPanelState extends State<PagesPanel> {
       const double itemWidth = 150; // 每个列表项的宽度
       final double targetOffset = min(
           (currentIndex * itemWidth) - (itemWidth / 2),
-          _scrollController2.position.maxScrollExtent);
+          _scrollController.position.maxScrollExtent);
       // 滑动至目标位置
-      _scrollController2.animateTo(
+      _scrollController.animateTo(
         targetOffset,
         duration: const Duration(milliseconds: 300), // 滑动动画持续时间
         curve: Curves.easeInOut, // 滑动动画曲线
@@ -62,7 +62,7 @@ class _PagesPanelState extends State<PagesPanel> {
 
   @override
   void dispose() {
-    _scrollController2.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -114,7 +114,7 @@ class _PagesPanelState extends State<PagesPanel> {
           height: 35,
           margin: const EdgeInsets.only(bottom: 8),
           child: ListView.builder(
-            controller: _scrollController2,
+            controller: _scrollController,
             scrollDirection: Axis.horizontal,
             itemCount: widget.pages.length,
             itemExtent: 150,

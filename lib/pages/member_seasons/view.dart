@@ -21,7 +21,6 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
   @override
   void dispose() {
     _memberSeasonsController.scrollController.removeListener(() {});
-    _memberSeasonsController.scrollController.dispose();
     super.dispose();
   }
 

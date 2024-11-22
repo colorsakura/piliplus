@@ -32,9 +32,8 @@ class DynamicDetailPage extends StatefulWidget {
 class _DynamicDetailPageState extends State<DynamicDetailPage>
     with TickerProviderStateMixin {
   late DynamicDetailController _dynamicDetailController;
-  late AnimationController fabAnimationCtr;
-  late StreamController<bool> titleStreamC; // appBar title
-  late ScrollController scrollController;
+  AnimationController? _fabAnimationCtr;
+  late StreamController<bool> _titleStreamC; // appBar title
   bool _visibleTitle = false;
   String? action;
   // 回复类型
@@ -49,17 +48,17 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     super.initState();
     // floor 1原创 2转发
     init();
-    titleStreamC = StreamController<bool>();
+    _titleStreamC = StreamController<bool>();
     if (action == 'comment') {
       _visibleTitle = true;
-      titleStreamC.add(true);
+      _titleStreamC.add(true);
     }
 
-    fabAnimationCtr = AnimationController(
+    _fabAnimationCtr = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    fabAnimationCtr.forward();
+    _fabAnimationCtr?.forward();
     // 滚动事件监听
     scrollListener();
   }
@@ -127,29 +126,31 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   // 滑动事件监听
   void scrollListener() {
-    scrollController = _dynamicDetailController.scrollController;
-    scrollController.addListener(
+    _dynamicDetailController.scrollController.addListener(
       () {
         // 分页加载
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_dynamicDetailController.scrollController.position.pixels >=
+            _dynamicDetailController.scrollController.position.maxScrollExtent -
+                300) {
           EasyThrottle.throttle('replylist', const Duration(seconds: 2), () {
             _dynamicDetailController.onLoadMore();
           });
         }
 
         // 标题
-        if (scrollController.offset > 55 && !_visibleTitle) {
+        if (_dynamicDetailController.scrollController.offset > 55 &&
+            !_visibleTitle) {
           _visibleTitle = true;
-          titleStreamC.add(true);
-        } else if (scrollController.offset <= 55 && _visibleTitle) {
+          _titleStreamC.add(true);
+        } else if (_dynamicDetailController.scrollController.offset <= 55 &&
+            _visibleTitle) {
           _visibleTitle = false;
-          titleStreamC.add(false);
+          _titleStreamC.add(false);
         }
 
         // fab按钮
-        final ScrollDirection direction =
-            scrollController.position.userScrollDirection;
+        final ScrollDirection direction = _dynamicDetailController
+            .scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
           _showFab();
         } else if (direction == ScrollDirection.reverse) {
@@ -162,22 +163,23 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   void _showFab() {
     if (!_isFabVisible) {
       _isFabVisible = true;
-      fabAnimationCtr.forward();
+      _fabAnimationCtr?.forward();
     }
   }
 
   void _hideFab() {
     if (_isFabVisible) {
       _isFabVisible = false;
-      fabAnimationCtr.reverse();
+      _fabAnimationCtr?.reverse();
     }
   }
 
   @override
   void dispose() {
-    titleStreamC.close();
-    fabAnimationCtr.dispose();
-    scrollController.removeListener(() {});
+    _titleStreamC.close();
+    _fabAnimationCtr?.dispose();
+    _fabAnimationCtr = null;
+    _dynamicDetailController.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -186,7 +188,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder(
-          stream: titleStreamC.stream,
+          stream: _titleStreamC.stream,
           initialData: false,
           builder: (context, AsyncSnapshot snapshot) {
             return AnimatedOpacity(
@@ -212,7 +214,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 double padding = max(context.width / 2 - Grid.maxRowWidth, 0);
                 if (orientation == Orientation.portrait) {
                   return CustomScrollView(
-                    controller: scrollController,
+                    controller: _dynamicDetailController.scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: [
                       SliverToBoxAdapter(
@@ -252,7 +254,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       ),
                       Expanded(
                         child: CustomScrollView(
-                            controller: scrollController,
+                            controller:
+                                _dynamicDetailController.scrollController,
                             physics: const AlwaysScrollableScrollPhysics(),
                             slivers: [
                               SliverPadding(
@@ -276,30 +279,31 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                 }
               },
             ),
-            Positioned(
-              bottom: MediaQuery.of(context).padding.bottom + 14,
-              right: 14,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 2),
-                  end: const Offset(0, 0),
-                ).animate(CurvedAnimation(
-                  parent: fabAnimationCtr,
-                  curve: Curves.easeInOut,
-                )),
-                child: FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    feedBack();
-                    dynamic oid = _dynamicDetailController.oid ??
-                        IdUtils.bv2av(Get.parameters['bvid']!);
-                    _dynamicDetailController.onReply(context, oid: oid);
-                  },
-                  tooltip: '评论动态',
-                  child: const Icon(Icons.reply),
+            if (_fabAnimationCtr != null)
+              Positioned(
+                bottom: MediaQuery.of(context).padding.bottom + 14,
+                right: 14,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 2),
+                    end: const Offset(0, 0),
+                  ).animate(CurvedAnimation(
+                    parent: _fabAnimationCtr!,
+                    curve: Curves.easeInOut,
+                  )),
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    onPressed: () {
+                      feedBack();
+                      dynamic oid = _dynamicDetailController.oid ??
+                          IdUtils.bv2av(Get.parameters['bvid']!);
+                      _dynamicDetailController.onReply(context, oid: oid);
+                    },
+                    tooltip: '评论动态',
+                    child: const Icon(Icons.reply),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

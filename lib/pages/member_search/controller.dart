@@ -90,4 +90,11 @@ class MemberSearchController extends GetxController {
   onLoad() {
     searchArchives(type: 'onLoad');
   }
+
+  @override
+  void onClose() {
+    searchFocusNode.dispose();
+    scrollController.dispose();
+    super.onClose();
+  }
 }

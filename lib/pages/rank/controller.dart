@@ -64,4 +64,10 @@ class RankController extends GetxController with GetTickerProviderStateMixin {
     //   });
     // }
   }
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    super.onClose();
+  }
 }

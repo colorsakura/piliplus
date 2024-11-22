@@ -21,7 +21,6 @@ class _SubPageState extends State<SubPage> {
   @override
   void dispose() {
     _subController.scrollController.removeListener(() {});
-    _subController.scrollController.dispose();
     super.dispose();
   }
 

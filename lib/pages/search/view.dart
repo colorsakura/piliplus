@@ -26,7 +26,6 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
 
   @override
   void dispose() {
-    _searchController.searchFocusNode.dispose();
     SearchPage.routeObserver.unsubscribe(this);
     super.dispose();
   }

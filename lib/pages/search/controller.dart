@@ -130,4 +130,10 @@ class SSearchController extends GetxController {
     historyList.refresh();
     historyWord.put('cacheList', []);
   }
+
+  @override
+  void onClose() {
+    searchFocusNode.dispose();
+    super.onClose();
+  }
 }

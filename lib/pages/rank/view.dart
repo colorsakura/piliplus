@@ -24,12 +24,6 @@ class _RankPageState extends State<RankPage>
   }
 
   @override
-  void dispose() {
-    _rankController.tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return Row(

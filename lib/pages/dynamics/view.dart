@@ -118,9 +118,7 @@ class _DynamicsPageState extends State<DynamicsPage>
   @override
   void dispose() {
     _dynamicsController.tabController.removeListener(() {});
-    _dynamicsController.tabController.dispose();
     _dynamicsController.scrollController.removeListener(() {});
-    _dynamicsController.scrollController.dispose();
     super.dispose();
   }
 

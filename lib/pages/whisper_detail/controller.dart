@@ -106,4 +106,10 @@ class WhisperDetailController extends GetxController {
       SmartDialog.showToast(result['msg']);
     }
   }
+
+  @override
+  void onClose() {
+    replyContentController.dispose();
+    super.onClose();
+  }
 }

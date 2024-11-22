@@ -318,4 +318,11 @@ class DynamicsController extends GetxController
         .animateToTop();
     scrollController.animToTop();
   }
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    scrollController.dispose();
+    super.onClose();
+  }
 }

@@ -44,4 +44,10 @@ class MemberSeasonsController extends GetxController {
   Future onLoad() async {
     getSeasonDetail('onLoad');
   }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
 }

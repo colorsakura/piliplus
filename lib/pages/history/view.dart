@@ -21,17 +21,16 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   final HistoryController _historyController = Get.put(HistoryController());
   Future? _futureBuilderFuture;
-  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
     _futureBuilderFuture = _historyController.queryHistoryList();
-    scrollController = _historyController.scrollController;
-    scrollController.addListener(
+    _historyController.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_historyController.scrollController.position.pixels >=
+            _historyController.scrollController.position.maxScrollExtent -
+                300) {
           if (!_historyController.isLoadingMore.value) {
             EasyThrottle.throttle('history', const Duration(seconds: 1), () {
               _historyController.onLoad();
@@ -61,8 +60,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _historyController.scrollController.removeListener(() {});
     super.dispose();
   }
 

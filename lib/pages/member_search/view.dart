@@ -20,16 +20,14 @@ class _MemberSearchPageState extends State<MemberSearchPage>
     with SingleTickerProviderStateMixin {
   final MemberSearchController _memberSearchCtr =
       Get.put(MemberSearchController());
-  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
-    scrollController = _memberSearchCtr.scrollController;
-    scrollController.addListener(
+    _memberSearchCtr.scrollController.addListener(
       () {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 300) {
+        if (_memberSearchCtr.scrollController.position.pixels >=
+            _memberSearchCtr.scrollController.position.maxScrollExtent - 300) {
           EasyThrottle.throttle('history', const Duration(seconds: 1), () {
             _memberSearchCtr.onLoad();
           });
@@ -42,9 +40,7 @@ class _MemberSearchPageState extends State<MemberSearchPage>
   @override
   void dispose() {
     // _tabController.dispose();
-    _memberSearchCtr.searchFocusNode.dispose();
-    scrollController.removeListener(() {});
-    scrollController.dispose();
+    _memberSearchCtr.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -94,7 +90,7 @@ class _MemberSearchPageState extends State<MemberSearchPage>
             }
             return CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              controller: scrollController,
+              controller: _memberSearchCtr.scrollController,
               slivers: <Widget>[
                 FutureBuilder(
                   future: _memberSearchCtr.searchArchives(),

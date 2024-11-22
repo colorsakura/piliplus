@@ -23,7 +23,6 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
   @override
   void dispose() {
     _memberArchivesController.scrollController.removeListener(() {});
-    _memberArchivesController.scrollController.dispose();
     super.dispose();
   }
 

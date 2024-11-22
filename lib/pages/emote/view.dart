@@ -114,14 +114,18 @@ class _EmotePanelState extends State<EmotePanel>
                 SizedBox(height: MediaQuery.of(context).padding.bottom),
               ],
             )
-          : errorWidget(
-              callback: _emotePanelController.onReload,
-            ),
-      Error() => errorWidget(
-          errMsg: loadingState.errMsg,
-          callback: _emotePanelController.onReload,
-        ),
+          : _errorWidget,
+      Error() => _errorWidget,
       LoadingState() => throw UnimplementedError(),
     };
   }
+
+  Widget get _errorWidget => Center(
+        child: IconButton(
+          onPressed: () {
+            _emotePanelController.onReload();
+          },
+          icon: Icon(Icons.refresh),
+        ),
+      );
 }

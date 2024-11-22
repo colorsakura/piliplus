@@ -64,4 +64,10 @@ class MemberArchiveController extends GetxController {
   Future onLoad() async {
     getMemberArchive('onLoad');
   }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
 }

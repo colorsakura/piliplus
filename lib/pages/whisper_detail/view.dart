@@ -46,7 +46,6 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
     _readOnlyStream.close();
     _enableSend.close();
     _focusNode.dispose();
-    _whisperDetailController.replyContentController.dispose();
     super.dispose();
   }
 
