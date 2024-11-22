@@ -24,6 +24,7 @@ class NetworkImgLayer extends StatelessWidget {
     this.ignoreHeight,
     this.radius,
     this.imageBuilder,
+    this.isLongPic = false,
   });
 
   final String? src;
@@ -38,6 +39,7 @@ class NetworkImgLayer extends StatelessWidget {
   final bool? ignoreHeight;
   final double? radius;
   final ImageWidgetBuilder? imageBuilder;
+  final bool isLongPic;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,9 @@ class NetworkImgLayer extends StatelessWidget {
         '${src?.startsWith('//') == true ? 'https:$src' : src}@${quality ?? defaultImgQuality}q.webp';
     int? memCacheWidth, memCacheHeight;
 
-    if (width > height || (origAspectRatio != null && origAspectRatio! > 1)) {
+    if (isLongPic ||
+        width > height ||
+        (origAspectRatio != null && origAspectRatio! > 1)) {
       memCacheWidth = width.cacheSize(context);
     } else if (width < height ||
         (origAspectRatio != null && origAspectRatio! < 1)) {
@@ -76,6 +80,7 @@ class NetworkImgLayer extends StatelessWidget {
               memCacheWidth: memCacheWidth,
               memCacheHeight: memCacheHeight,
               fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
               fadeOutDuration:
                   fadeOutDuration ?? const Duration(milliseconds: 120),
               fadeInDuration:

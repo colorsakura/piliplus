@@ -16,9 +16,11 @@ class ImageModel {
   dynamic width;
   dynamic height;
   String url;
+  bool? _isLongPic;
 
   dynamic get safeWidth => width ?? 1;
   dynamic get safeHeight => height ?? 1;
+  bool get isLongPic => _isLongPic ??= (safeHeight / safeWidth) > (22 / 9);
 }
 
 Widget image(
@@ -37,7 +39,7 @@ Widget image(
         ? maxWidth
         : (ratioWH >= 1 || (height > width && ratioHW < 1.5))
             ? 2 * imageWidth
-            : imageWidth;
+            : 1.5 * imageWidth;
     imageHeight = imageWidth * min(ratioHW, maxRatio);
   } else if (picArr.length == 2) {
     imageWidth = imageHeight = 2 * imageWidth;
@@ -69,6 +71,7 @@ Widget image(
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: NetworkImgLayer(
+              isLongPic: picArr[index].isLongPic,
               src: picArr[index].url,
               width: imageWidth,
               height: imageHeight,
@@ -76,7 +79,7 @@ Widget image(
                   picArr[index].safeWidth / picArr[index].safeHeight,
             ),
           ),
-          if (picArr[index].safeHeight / picArr[index].safeWidth > 22 / 9)
+          if (picArr[index].isLongPic)
             const PBadge(
               text: '长图',
               right: 8,
