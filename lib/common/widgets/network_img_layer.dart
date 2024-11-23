@@ -44,8 +44,7 @@ class NetworkImgLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late final int defaultImgQuality = GlobalData().imgQuality;
-    final String imageUrl =
-        '${src?.startsWith('//') == true ? 'https:$src' : src}@${quality ?? defaultImgQuality}q.webp';
+    bool thumbnail = true;
     int? memCacheWidth, memCacheHeight;
 
     if (callback?.call() == true || width <= height) {
@@ -65,27 +64,36 @@ class NetworkImgLayer extends StatelessWidget {
                           ? 0
                           : StyleString.imgRadius.x,
             ),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl.http2https,
-              width: width,
-              height:
-                  ignoreHeight == null || ignoreHeight == false ? height : null,
-              memCacheWidth: memCacheWidth,
-              memCacheHeight: memCacheHeight,
-              fit: BoxFit.cover,
-              alignment: isLongPic?.call() == true
-                  ? Alignment.topCenter
-                  : Alignment.center,
-              fadeOutDuration:
-                  fadeOutDuration ?? const Duration(milliseconds: 120),
-              fadeInDuration:
-                  fadeInDuration ?? const Duration(milliseconds: 120),
-              filterQuality: FilterQuality.low,
-              errorWidget: (BuildContext context, String url, Object error) =>
-                  placeholder(context),
-              placeholder: (BuildContext context, String url) =>
-                  placeholder(context),
-              imageBuilder: imageBuilder,
+            child: Builder(
+              builder: (context) => CachedNetworkImage(
+                imageUrl:
+                    '${src?.startsWith('//') == true ? 'https:$src' : src}${thumbnail ? '@${quality ?? defaultImgQuality}q.webp' : ''}'
+                        .http2https,
+                width: width,
+                height: ignoreHeight == null || ignoreHeight == false
+                    ? height
+                    : null,
+                memCacheWidth: memCacheWidth,
+                memCacheHeight: memCacheHeight,
+                fit: BoxFit.cover,
+                alignment: isLongPic?.call() == true
+                    ? Alignment.topCenter
+                    : Alignment.center,
+                fadeOutDuration:
+                    fadeOutDuration ?? const Duration(milliseconds: 120),
+                fadeInDuration:
+                    fadeInDuration ?? const Duration(milliseconds: 120),
+                filterQuality: FilterQuality.low,
+                errorWidget: (BuildContext context, String url, Object error) =>
+                    placeholder(context),
+                placeholder: (BuildContext context, String url) =>
+                    placeholder(context),
+                imageBuilder: imageBuilder,
+                errorListener: (value) {
+                  thumbnail = false;
+                  (context as Element).markNeedsBuild();
+                },
+              ),
             ),
           )
         : placeholder(context);
