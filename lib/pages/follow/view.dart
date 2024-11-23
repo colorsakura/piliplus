@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
@@ -20,7 +21,8 @@ class _FollowPageState extends State<FollowPage> {
   void initState() {
     super.initState();
     mid = Get.parameters['mid']!;
-    _followController = Get.put(FollowController(), tag: mid);
+    _followController =
+        Get.put(FollowController(), tag: Utils.makeHeroTag(mid));
   }
 
   @override

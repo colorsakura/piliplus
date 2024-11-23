@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -88,8 +89,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           if (opusId != null) {
             isOpusId = true;
             _dynamicDetailController = Get.put(
-                DynamicDetailController(oid, replyType),
-                tag: opusId.toString());
+              DynamicDetailController(oid, replyType),
+              tag: Utils.makeHeroTag(opusId),
+            );
             await _dynamicDetailController.reqHtmlByOpusId(opusId!);
             setState(() {});
           }
@@ -99,8 +101,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       } catch (_) {}
     }
     if (!isOpusId) {
-      _dynamicDetailController =
-          Get.put(DynamicDetailController(oid, replyType), tag: oid.toString());
+      _dynamicDetailController = Get.put(
+        DynamicDetailController(oid, replyType),
+        tag: Utils.makeHeroTag(oid),
+      );
     }
   }
 

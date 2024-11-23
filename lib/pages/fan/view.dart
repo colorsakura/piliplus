@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class _FansPageState extends State<FansPage> {
   void initState() {
     super.initState();
     mid = Get.parameters['mid']!;
-    _fansController = Get.put(FansController(), tag: mid);
+    _fansController = Get.put(FansController(), tag: Utils.makeHeroTag(mid));
     _fansController.scrollController.addListener(
       () async {
         if (_fansController.scrollController.position.pixels >=
