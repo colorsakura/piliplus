@@ -1,27 +1,23 @@
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/models/search/hot.dart';
 import 'package:PiliPalaX/models/search/suggest.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class SSearchController extends GetxController {
-  final FocusNode searchFocusNode = FocusNode();
-  RxString searchKeyWord = ''.obs;
-  Rx<TextEditingController> controller = TextEditingController().obs;
-  RxList<HotSearchItem> hotSearchList = <HotSearchItem>[].obs;
-  Box historyWord = GStorage.historyWord;
-  List<String> historyCacheList = [];
+  final searchFocusNode = FocusNode();
+  final controller = TextEditingController();
+
   RxList<String> historyList = <String>[].obs;
+
   RxList<SearchSuggestItem> searchSuggestList = <SearchSuggestItem>[].obs;
-  final _debouncer =
-      Debouncer(delay: const Duration(milliseconds: 200)); // 设置延迟时间
+
   String hintText = '搜索';
-  RxString defaultSearch = ''.obs;
-  Box setting = GStorage.setting;
-  bool enableHotKey = true;
+
+  late bool enableHotKey;
+
+  Rx<LoadingState> loadingState = LoadingState.loading().obs;
 
   @override
   void onInit() {
@@ -33,28 +29,31 @@ class SSearchController extends GetxController {
       }
       if (Get.parameters['hintText'] != null) {
         hintText = Get.parameters['hintText']!;
-        searchKeyWord.value = hintText;
       }
     }
-    historyCacheList = List<String>.from(historyWord.get('cacheList') ?? []);
-    historyList.value = historyCacheList;
-    enableHotKey = setting.get(SettingBoxKey.enableHotKey, defaultValue: true);
+
+    historyList.value = List.from(GStorage.historyWord.get('cacheList') ?? []);
+
+    enableHotKey =
+        GStorage.setting.get(SettingBoxKey.enableHotKey, defaultValue: true);
+
+    if (enableHotKey) {
+      queryHotSearchList();
+    }
   }
 
-  void onChange(value) {
-    searchKeyWord.value = value;
-    if (value == '') {
-      searchSuggestList.value = [];
-      return;
+  void onChange(String value) {
+    if (value.isEmpty) {
+      searchSuggestList.clear();
+    } else {
+      querySearchSuggest(value);
     }
-    _debouncer.call(() => querySearchSuggest(value));
   }
 
   void onClear() {
-    if (searchKeyWord.value.isNotEmpty && controller.value.text != '') {
-      controller.value.clear();
-      searchKeyWord.value = '';
-      searchSuggestList.value = [];
+    if (controller.value.text != '') {
+      controller.clear();
+      searchSuggestList.clear();
       searchFocusNode.requestFocus();
     } else {
       Get.back();
@@ -62,44 +61,38 @@ class SSearchController extends GetxController {
   }
 
   // 搜索
-  void submit() {
-    // ignore: unrelated_type_equality_checks
-    if (searchKeyWord == '') {
-      if (hintText == '') {
+  void submit() async {
+    if (controller.text.isEmpty) {
+      if (hintText.isEmpty) {
         return;
       }
-      searchKeyWord.value = hintText;
+      controller.text = hintText;
     }
-    List<String> arr =
-        historyCacheList.where((e) => e != searchKeyWord.value).toList();
-    arr.insert(0, searchKeyWord.value);
-    historyCacheList = arr;
 
-    historyList.value = historyCacheList;
-    // 手动刷新
-    historyList.refresh();
-    historyWord.put('cacheList', historyCacheList);
+    historyList.remove(controller.text);
+    historyList.insert(0, controller.text);
+    GStorage.historyWord.put('cacheList', historyList);
     searchFocusNode.unfocus();
-    Get.toNamed('/searchResult', parameters: {'keyword': searchKeyWord.value});
+
+    await Get.toNamed('/searchResult', parameters: {
+      'keyword': controller.text,
+    });
+    searchFocusNode.requestFocus();
   }
 
   // 获取热搜关键词
   Future queryHotSearchList() async {
-    var result = await SearchHttp.hotSearchList();
+    dynamic result = await SearchHttp.hotSearchList();
     if (result['status']) {
-      hotSearchList.value = result['data'].list;
+      loadingState.value = LoadingState.success(result['data'].list);
+    } else {
+      loadingState.value = LoadingState.error(result['msg']);
     }
-    return result;
   }
 
-  // 点击热搜关键词
   void onClickKeyword(String keyword) {
-    searchKeyWord.value = keyword;
-    controller.value.text = keyword;
-    // 移动光标
-    controller.value.selection = TextSelection.fromPosition(
-      TextPosition(offset: controller.value.text.length),
-    );
+    controller.text = keyword;
+    searchSuggestList.clear();
     submit();
   }
 
@@ -112,28 +105,20 @@ class SSearchController extends GetxController {
     }
   }
 
-  onSelect(word) {
-    searchKeyWord.value = word;
-    controller.value.text = word;
-    submit();
-  }
-
   onLongSelect(word) {
-    int index = historyList.indexOf(word);
-    historyList.removeAt(index);
-    historyWord.put('cacheList', historyList);
+    historyList.remove(word);
+    GStorage.historyWord.put('cacheList', historyList);
   }
 
-  onClearHis() {
-    historyList.value = [];
-    historyCacheList = [];
-    historyList.refresh();
-    historyWord.put('cacheList', []);
+  onClearHistory() {
+    historyList.clear();
+    GStorage.historyWord.put('cacheList', []);
   }
 
   @override
   void onClose() {
     searchFocusNode.dispose();
+    controller.dispose();
     super.onClose();
   }
 }

@@ -1,6 +1,7 @@
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'controller.dart';
 import 'widgets/hot_keyword.dart';
 import 'widgets/search_text.dart';
@@ -10,39 +11,10 @@ class SearchPage extends StatefulWidget {
 
   @override
   State<SearchPage> createState() => _SearchPageState();
-  static final RouteObserver<PageRoute> routeObserver =
-      RouteObserver<PageRoute>();
 }
 
 class _SearchPageState extends State<SearchPage> with RouteAware {
   final SSearchController _searchController = Get.put(SSearchController());
-  late Future? _futureBuilderFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _futureBuilderFuture = _searchController.queryHotSearchList();
-  }
-
-  @override
-  void dispose() {
-    SearchPage.routeObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  // 返回当前页面时
-  void didPopNext() async {
-    _searchController.searchFocusNode.requestFocus();
-    super.didPopNext();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    SearchPage.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,38 +35,33 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
           ),
           const SizedBox(width: 10)
         ],
-        title: Obx(
-          () => TextField(
-            autofocus: true,
-            focusNode: _searchController.searchFocusNode,
-            controller: _searchController.controller.value,
-            textInputAction: TextInputAction.search,
-            onChanged: (value) => _searchController.onChange(value),
-            textAlignVertical: TextAlignVertical.center,
-            decoration: InputDecoration(
-              hintText: _searchController.hintText,
-              border: InputBorder.none,
-              suffixIcon: IconButton(
-                tooltip: '清空',
-                icon: const Icon(Icons.clear, size: 22),
-                onPressed: () => _searchController.onClear(),
-              ),
+        title: TextField(
+          autofocus: true,
+          focusNode: _searchController.searchFocusNode,
+          controller: _searchController.controller,
+          textInputAction: TextInputAction.search,
+          onChanged: _searchController.onChange,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: _searchController.hintText,
+            border: InputBorder.none,
+            suffixIcon: IconButton(
+              tooltip: '清空',
+              icon: const Icon(Icons.clear, size: 22),
+              onPressed: _searchController.onClear,
             ),
-            onSubmitted: (String value) => _searchController.submit(),
           ),
+          onSubmitted: (value) => _searchController.submit(),
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 12),
             // 搜索建议
             _searchSuggest(),
-            // 热搜
-            Visibility(
-              visible: _searchController.enableHotKey,
-              child: hotSearch(_searchController),
-            ),
+            if (_searchController.enableHotKey)
+              // 热搜
+              hotSearch(),
             // 搜索历史
             _history()
           ],
@@ -107,32 +74,37 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
     return Obx(
       () => _searchController.searchSuggestList.isNotEmpty &&
               _searchController.searchSuggestList.first.term != null &&
-              _searchController.controller.value.text != ''
-          ? ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: _searchController.searchSuggestList.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  onTap: () => _searchController.onClickKeyword(
-                      _searchController.searchSuggestList[index].term!),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 9, bottom: 9),
-                    child: _searchController.searchSuggestList[index].textRich,
-                  ),
-                );
-              },
+              _searchController.controller.text != ''
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _searchController.searchSuggestList
+                  .map(
+                    (item) => InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      onTap: () => _searchController.onClickKeyword(item.term!),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          top: 9,
+                          bottom: 9,
+                        ),
+                        child: item.textRich,
+                      ),
+                    ),
+                  )
+                  .toList(),
             )
-          : const SizedBox(),
+          : const SizedBox.shrink(),
     );
   }
 
-  Widget hotSearch(ctr) {
+  Widget hotSearch() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 14, 4, 0),
+      padding: const EdgeInsets.fromLTRB(10, 25, 4, 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -152,10 +124,12 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                   height: 34,
                   child: TextButton.icon(
                     style: ButtonStyle(
-                      padding: WidgetStateProperty.all(const EdgeInsets.only(
-                          left: 10, top: 6, bottom: 6, right: 10)),
+                      padding: WidgetStateProperty.all(
+                        const EdgeInsets.only(
+                            left: 10, top: 6, bottom: 6, right: 10),
+                      ),
                     ),
-                    onPressed: () => ctr.queryHotSearchList(),
+                    onPressed: _searchController.queryHotSearchList,
                     icon: const Icon(Icons.refresh_outlined, size: 18),
                     label: const Text('刷新'),
                   ),
@@ -163,60 +137,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
               ],
             ),
           ),
-          LayoutBuilder(
-            builder: (context, boxConstraints) {
-              final double width = boxConstraints.maxWidth;
-              return FutureBuilder(
-                future: _futureBuilderFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.data == null) {
-                      return const SizedBox();
-                    }
-                    Map data = snapshot.data as Map;
-                    if (data['status']) {
-                      return Obx(
-                        () => HotKeyword(
-                          width: width,
-                          // ignore: invalid_use_of_protected_member
-                          hotSearchList: _searchController.hotSearchList.value,
-                          onClick: (keyword) async {
-                            _searchController.searchFocusNode.unfocus();
-                            await Future.delayed(
-                                const Duration(milliseconds: 150));
-                            _searchController.onClickKeyword(keyword);
-                          },
-                        ),
-                      );
-                    } else {
-                      return CustomScrollView(
-                        shrinkWrap: true,
-                        slivers: [
-                          HttpError(
-                            errMsg: data['msg'],
-                            callback: () => setState(() {
-                              _futureBuilderFuture =
-                                  _searchController.queryHotSearchList();
-                            }),
-                          ),
-                        ],
-                      );
-                    }
-                  } else {
-                    // 缓存数据
-                    if (_searchController.hotSearchList.isNotEmpty) {
-                      return HotKeyword(
-                        width: width,
-                        hotSearchList: _searchController.hotSearchList,
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }
-                },
-              );
-            },
-          ),
+          Obx(() => _buildHotKey(_searchController.loadingState.value)),
         ],
       ),
     );
@@ -227,13 +148,17 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
       () => Container(
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(
-            10, 25, 6, MediaQuery.of(context).padding.bottom + 50),
+          10,
+          _searchController.enableHotKey ? 0 : 6,
+          6,
+          MediaQuery.of(context).padding.bottom + 50,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (_searchController.historyList.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.fromLTRB(6, 0, 0, 2),
+                padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -244,9 +169,23 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
-                    TextButton(
-                      onPressed: () => _searchController.onClearHis(),
-                      child: const Text('清空'),
+                    SizedBox(
+                      height: 34,
+                      child: TextButton.icon(
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(
+                            const EdgeInsets.only(
+                              left: 10,
+                              top: 6,
+                              bottom: 6,
+                              right: 10,
+                            ),
+                          ),
+                        ),
+                        onPressed: _searchController.onClearHistory,
+                        icon: const Icon(Icons.clear_all_outlined, size: 18),
+                        label: const Text('清空'),
+                      ),
                     )
                   ],
                 ),
@@ -257,21 +196,39 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                 runSpacing: 8,
                 direction: Axis.horizontal,
                 textDirection: TextDirection.ltr,
-                children: [
-                  for (int i = 0; i < _searchController.historyList.length; i++)
-                    SearchText(
-                      searchText: _searchController.historyList[i],
-                      searchTextIdx: i,
-                      onSelect: (value) => _searchController.onSelect(value),
-                      onLongSelect: (value) =>
-                          _searchController.onLongSelect(value),
+                children: _searchController.historyList
+                    .map(
+                      (item) => SearchText(
+                        searchText: item,
+                        onSelect: _searchController.onClickKeyword,
+                        onLongSelect: _searchController.onLongSelect,
+                      ),
                     )
-                ],
+                    .toList(),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildHotKey(LoadingState loadingState) {
+    return switch (loadingState) {
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? LayoutBuilder(
+              builder: (_, constraints) => HotKeyword(
+                width: constraints.maxWidth,
+                hotSearchList: loadingState.response,
+                onClick: _searchController.onClickKeyword,
+              ),
+            )
+          : const SizedBox.shrink(),
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _searchController.queryHotSearchList,
+        ),
+      _ => const SizedBox.shrink(),
+    };
   }
 }

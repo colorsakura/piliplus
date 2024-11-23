@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class SearchText extends StatelessWidget {
   final String? searchText;
   final Function? onSelect;
-  final int? searchTextIdx;
   final Function? onLongSelect;
   final double? fontSize;
   final Color? bgColor;
@@ -13,7 +12,6 @@ class SearchText extends StatelessWidget {
     super.key,
     this.searchText,
     this.onSelect,
-    this.searchTextIdx,
     this.onLongSelect,
     this.fontSize,
     this.bgColor,

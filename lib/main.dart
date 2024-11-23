@@ -12,7 +12,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/custom_toast.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/models/common/color_type.dart';
-import 'package:PiliPalaX/pages/search/index.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/router/app_pages.dart';
 import 'package:PiliPalaX/pages/main/view.dart';
@@ -190,7 +189,6 @@ class MyApp extends StatelessWidget {
           },
           navigatorObservers: [
             VideoDetailPage.routeObserver,
-            SearchPage.routeObserver,
             MainApp.routeObserver,
           ],
         );

@@ -33,7 +33,7 @@ class SearchHttp {
     return {
       'status': false,
       'data': [],
-      'msg': '请求错误 🙅',
+      'msg': '请求错误',
     };
   }
 

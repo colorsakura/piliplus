@@ -214,6 +214,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     'https://account.bilibili.com/official/mobile/home'),
               ),
               _divider,
+              SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
             ],
           ),
         ),
