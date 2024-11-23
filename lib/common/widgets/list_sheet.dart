@@ -383,14 +383,17 @@ class _ListSheetContentState extends State<ListSheetContent>
             color: Theme.of(context).dividerColor.withOpacity(0.1),
           ),
           if (_isList)
-            TabBar(
-              controller: _ctr,
-              isScrollable: true,
-              tabs: (widget.season.sections as List)
-                  .map((item) => Tab(text: item.title))
-                  .toList(),
-              dividerHeight: 1,
-              dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
+            Material(
+              child: TabBar(
+                controller: _ctr,
+                padding: const EdgeInsets.only(right: 60),
+                isScrollable: true,
+                tabs: (widget.season.sections as List)
+                    .map((item) => Tab(text: item.title))
+                    .toList(),
+                dividerHeight: 1,
+                dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
+              ),
             ),
           Expanded(
             child: _isList
