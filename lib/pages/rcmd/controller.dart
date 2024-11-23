@@ -35,9 +35,11 @@ class RcmdController extends PopupController {
 
   @override
   List? handleListResponse(List currentList, List dataList) {
-    return currentPage == 0 && enableSaveLastData && currentList.length < 500
-        ? dataList +
-            (currentList.isEmpty ? <RecVideoItemAppModel>[] : currentList)
+    return currentPage == 0 &&
+            enableSaveLastData &&
+            currentList.isNotEmpty &&
+            currentList.length < 500
+        ? dataList + currentList
         : null;
   }
 
