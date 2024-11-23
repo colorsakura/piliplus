@@ -160,12 +160,10 @@ class MyApp extends StatelessWidget {
           // showSemanticsDebugger: true,
           title: 'PiliPalaX',
           theme: _getThemeData(
-            context: context,
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,
           ),
           darkTheme: _getThemeData(
-            context: context,
             colorScheme: darkColorScheme,
             isDynamic: darkDynamic != null && isDynamicColor,
           ),
@@ -201,7 +199,6 @@ class MyApp extends StatelessWidget {
   }
 
   ThemeData _getThemeData({
-    required BuildContext context,
     required ColorScheme colorScheme,
     required bool isDynamic,
   }) {
