@@ -1,5 +1,4 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/models/home/rcmd/result.dart';
 import 'package:PiliPalaX/pages/common/popup_controller.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/utils/storage.dart';

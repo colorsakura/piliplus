@@ -359,13 +359,19 @@ class _StyleSettingState extends State<StyleSetting> {
             subtitle: Text('删除或调换首页标签页', style: subTitleStyle),
             leading: const Icon(Icons.toc_outlined),
           ),
+          ListTile(
+            dense: false,
+            onTap: () => Get.toNamed('/navbarSetting'),
+            title: Text('Navbar编辑', style: titleStyle),
+            leading: const Icon(Icons.toc_outlined),
+          ),
           if (Platform.isAndroid)
             ListTile(
               dense: false,
               onTap: () => Get.toNamed('/displayModeSetting'),
               title: Text('屏幕帧率', style: titleStyle),
               leading: const Icon(Icons.autofps_select_outlined),
-            )
+            ),
         ],
       ),
     );

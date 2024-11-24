@@ -2,25 +2,21 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
+import 'package:PiliPalaX/pages/dynamics/view.dart';
+import 'package:PiliPalaX/pages/home/view.dart';
+import 'package:PiliPalaX/pages/media/view.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPalaX/pages/dynamics/index.dart';
-import 'package:PiliPalaX/pages/home/view.dart';
-import 'package:PiliPalaX/pages/media/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import '../../models/common/dynamic_badge_mode.dart';
 import '../../models/common/nav_bar_config.dart';
 
 class MainController extends GetxController {
-  List<Widget> pages = <Widget>[
-    const HomePage(),
-    // const RankPage(),
-    const DynamicsPage(),
-    const MediaPage(),
-  ];
-  RxList navigationBars = defaultNavigationBars.obs;
+  List<Widget> pages = <Widget>[];
+  RxList navigationBars = [].obs;
+
   final StreamController<bool> bottomBarStream =
       StreamController<bool>.broadcast();
   Box setting = GStorage.setting;
@@ -33,30 +29,31 @@ class MainController extends GetxController {
   late bool checkDynamic;
   late int dynamicPeriod;
   int? _lastCheckAt;
+  int? dynIndex;
 
   @override
   void onInit() {
     super.onInit();
     checkDynamic = GStorage.checkDynamic;
     dynamicPeriod = GStorage.dynamicPeriod;
-    // if (setting.get(SettingBoxKey.autoUpdate, defaultValue: false)) {
-    //   Utils.checkUpdate();
-    // }
     hideTabBar = setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
-    int defaultHomePage =
-        setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;
-    selectedIndex = defaultNavigationBars
-        .indexWhere((item) => item['id'] == defaultHomePage);
     dynamic userInfo = userInfoCache.get('userInfoCache');
     userLogin.value = userInfo != null;
     dynamicBadgeType = DynamicBadgeMode.values[setting.get(
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.code)];
+
+    setNavBarConfig();
     if (dynamicBadgeType != DynamicBadgeMode.hidden) {
-      if (checkDynamic) {
-        _lastCheckAt = DateTime.now().millisecondsSinceEpoch;
+      dynIndex = navigationBars.indexWhere((e) => e['id'] == 1);
+      if (dynIndex != -1) {
+        if (checkDynamic) {
+          _lastCheckAt = DateTime.now().millisecondsSinceEpoch;
+        }
+        getUnreadDynamic();
+      } else {
+        checkDynamic = false;
       }
-      getUnreadDynamic();
     }
   }
 
@@ -82,36 +79,28 @@ class MainController extends GetxController {
   }
 
   void getUnreadDynamic() async {
-    if (!userLogin.value) {
+    if (!userLogin.value || dynIndex == null || dynIndex == -1) {
       return;
     }
-    // not needed yet
-    // int dynamicItemIndex =
-    //     navigationBars.indexWhere((item) => item['label'] == "动态");
-    // if (dynamicItemIndex == -1) return;
-    // var res = await CommonHttp.unReadDynamic();
-    // var data = res['data'];
-    // navigationBars[1]['count'] =
-    //     data == null ? 0 : data.length; // 修改 count 属性为新的值
     await GrpcRepo.dynRed().then((res) {
       if (res['status']) {
-        navigationBars[1]['count'] = res['data'];
+        navigationBars[dynIndex!]['count'] = res['data'];
       }
     });
     navigationBars.refresh();
   }
 
   void clearUnread() async {
-    // not needed yet
-    // int dynamicItemIndex =
-    //     navigationBars.indexWhere((item) => item['label'] == "动态");
-    // if (dynamicItemIndex == -1) return;
-    navigationBars[1]['count'] = 0; // 修改 count 属性为新的值
-    navigationBars.refresh();
+    if (dynamicBadgeType != DynamicBadgeMode.hidden) {
+      navigationBars[dynIndex!]['count'] = 0; // 修改 count 属性为新的值
+      navigationBars.refresh();
+    }
   }
 
   void checkUnreadDynamic() {
-    if (!userLogin.value ||
+    if (dynIndex == null ||
+        dynIndex == -1 ||
+        !userLogin.value ||
         dynamicBadgeType == DynamicBadgeMode.hidden ||
         !checkDynamic) return;
     int now = DateTime.now().millisecondsSinceEpoch;
@@ -119,5 +108,29 @@ class MainController extends GetxController {
       _lastCheckAt = now;
       getUnreadDynamic();
     }
+  }
+
+  void setNavBarConfig() async {
+    List defaultNavTabs = [...defaultNavigationBars];
+    List navBarSort =
+        setting.get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]);
+    defaultNavTabs.retainWhere((item) => navBarSort.contains(item['id']));
+    defaultNavTabs.sort((a, b) =>
+        navBarSort.indexOf(a['id']).compareTo(navBarSort.indexOf(b['id'])));
+    navigationBars.value = defaultNavTabs;
+    int defaultHomePage =
+        setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;
+    int defaultIndex =
+        navigationBars.indexWhere((item) => item['id'] == defaultHomePage);
+    // 如果找不到匹配项，默认索引设置为0或其他合适的值
+    selectedIndex = defaultIndex != -1 ? defaultIndex : 0;
+    pages = navigationBars
+        .map<Widget>((e) => switch (e['id']) {
+              0 => HomePage(),
+              1 => DynamicsPage(),
+              2 => MediaPage(),
+              _ => throw UnimplementedError(),
+            })
+        .toList();
   }
 }

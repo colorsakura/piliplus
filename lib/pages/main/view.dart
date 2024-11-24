@@ -152,58 +152,71 @@ class _MainAppState extends State<MainApp>
                         36.801 +
                         MediaQuery.of(context).padding.left,
                     child: Obx(
-                      () => NavigationRail(
-                        groupAlignment: 1,
-                        minWidth: context.width * 0.0286 + 28.56,
-                        backgroundColor: Colors.transparent,
-                        selectedIndex: _mainController.selectedIndex,
-                        onDestinationSelected: (value) => setIndex(value),
-                        labelType: NavigationRailLabelType.none,
-                        leading: UserAndSearchVertical(ctr: _homeController),
-                        destinations: _mainController.navigationBars
-                            .map((e) => NavigationRailDestination(
-                                  icon: _buildIcon(
-                                    id: e['id'],
-                                    count: e['count'],
-                                    icon: e['icon'],
-                                  ),
-                                  selectedIcon: _buildIcon(
-                                    id: e['id'],
-                                    count: e['count'],
-                                    icon: e['selectIcon'],
-                                  ),
-                                  label: Text(e['label']),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 0.01 * context.height),
-                                ))
-                            .toList(),
-                        trailing: SizedBox(height: 0.1 * context.height),
-                      ),
+                      () => _mainController.navigationBars.length > 1
+                          ? NavigationRail(
+                              groupAlignment: 1,
+                              minWidth: context.width * 0.0286 + 28.56,
+                              backgroundColor: Colors.transparent,
+                              selectedIndex: _mainController.selectedIndex,
+                              onDestinationSelected: setIndex,
+                              labelType: NavigationRailLabelType.none,
+                              leading:
+                                  UserAndSearchVertical(ctr: _homeController),
+                              destinations: _mainController.navigationBars
+                                  .map((e) => NavigationRailDestination(
+                                        icon: _buildIcon(
+                                          id: e['id'],
+                                          count: e['count'],
+                                          icon: e['icon'],
+                                        ),
+                                        selectedIcon: _buildIcon(
+                                          id: e['id'],
+                                          count: e['count'],
+                                          icon: e['selectIcon'],
+                                        ),
+                                        label: Text(e['label']),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.01 * context.height),
+                                      ))
+                                  .toList(),
+                              trailing: SizedBox(height: 0.1 * context.height),
+                            )
+                          : Container(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.paddingOf(context).top + 10),
+                              constraints: BoxConstraints(
+                                minWidth: context.width * 0.0286 + 28.56,
+                              ),
+                              child:
+                                  UserAndSearchVertical(ctr: _homeController),
+                            ),
                     ),
                   ),
                 ] else if (!isPortait)
                   Obx(
-                    () => NavigationRail(
-                      onDestinationSelected: (value) => setIndex(value),
-                      selectedIndex: _mainController.selectedIndex,
-                      destinations: _mainController.navigationBars
-                          .map(
-                            (e) => NavigationRailDestination(
-                              icon: _buildIcon(
-                                id: e['id'],
-                                count: e['count'],
-                                icon: e['icon'],
-                              ),
-                              selectedIcon: _buildIcon(
-                                id: e['id'],
-                                count: e['count'],
-                                icon: e['selectIcon'],
-                              ),
-                              label: Text(e['label']),
-                            ),
+                    () => _mainController.navigationBars.length > 1
+                        ? NavigationRail(
+                            onDestinationSelected: setIndex,
+                            selectedIndex: _mainController.selectedIndex,
+                            destinations: _mainController.navigationBars
+                                .map(
+                                  (e) => NavigationRailDestination(
+                                    icon: _buildIcon(
+                                      id: e['id'],
+                                      count: e['count'],
+                                      icon: e['icon'],
+                                    ),
+                                    selectedIcon: _buildIcon(
+                                      id: e['id'],
+                                      count: e['count'],
+                                      icon: e['selectIcon'],
+                                    ),
+                                    label: Text(e['label']),
+                                  ),
+                                )
+                                .toList(),
                           )
-                          .toList(),
-                    ),
+                        : const SizedBox.shrink(),
                   ),
                 VerticalDivider(
                   width: 1,
@@ -240,60 +253,65 @@ class _MainAppState extends State<MainApp>
                         offset: Offset(0, snapshot.data ? 0 : 1),
                         child: enableMYBar
                             ? Obx(
-                                () => NavigationBar(
-                                  onDestinationSelected: (value) =>
-                                      setIndex(value),
-                                  selectedIndex: _mainController.selectedIndex,
-                                  destinations:
-                                      _mainController.navigationBars.map(
-                                    (e) {
-                                      return NavigationDestination(
-                                        icon: _buildIcon(
-                                          id: e['id'],
-                                          count: e['count'],
-                                          icon: e['icon'],
-                                        ),
-                                        selectedIcon: _buildIcon(
-                                          id: e['id'],
-                                          count: e['count'],
-                                          icon: e['selectIcon'],
-                                        ),
-                                        label: e['label'],
-                                      );
-                                    },
-                                  ).toList(),
-                                ),
+                                () => _mainController.navigationBars.length > 1
+                                    ? NavigationBar(
+                                        onDestinationSelected: setIndex,
+                                        selectedIndex:
+                                            _mainController.selectedIndex,
+                                        destinations:
+                                            _mainController.navigationBars.map(
+                                          (e) {
+                                            return NavigationDestination(
+                                              icon: _buildIcon(
+                                                id: e['id'],
+                                                count: e['count'],
+                                                icon: e['icon'],
+                                              ),
+                                              selectedIcon: _buildIcon(
+                                                id: e['id'],
+                                                count: e['count'],
+                                                icon: e['selectIcon'],
+                                              ),
+                                              label: e['label'],
+                                            );
+                                          },
+                                        ).toList(),
+                                      )
+                                    : const SizedBox.shrink(),
                               )
                             : Obx(
-                                () => BottomNavigationBar(
-                                  currentIndex: _mainController.selectedIndex,
-                                  onTap: (value) => setIndex(value),
-                                  iconSize: 16,
-                                  selectedFontSize: 12,
-                                  unselectedFontSize: 12,
-                                  type: BottomNavigationBarType.fixed,
-                                  // selectedItemColor:
-                                  //     Theme.of(context).colorScheme.primary, // 选中项的颜色
-                                  // unselectedItemColor:
-                                  //     Theme.of(context).colorScheme.onSurface,
-                                  items: _mainController.navigationBars
-                                      .map(
-                                        (e) => BottomNavigationBarItem(
-                                          icon: _buildIcon(
-                                            id: e['id'],
-                                            count: e['count'],
-                                            icon: e['icon'],
-                                          ),
-                                          activeIcon: _buildIcon(
-                                            id: e['id'],
-                                            count: e['count'],
-                                            icon: e['selectIcon'],
-                                          ),
-                                          label: e['label'],
-                                        ),
+                                () => _mainController.navigationBars.length > 1
+                                    ? BottomNavigationBar(
+                                        currentIndex:
+                                            _mainController.selectedIndex,
+                                        onTap: setIndex,
+                                        iconSize: 16,
+                                        selectedFontSize: 12,
+                                        unselectedFontSize: 12,
+                                        type: BottomNavigationBarType.fixed,
+                                        // selectedItemColor:
+                                        //     Theme.of(context).colorScheme.primary, // 选中项的颜色
+                                        // unselectedItemColor:
+                                        //     Theme.of(context).colorScheme.onSurface,
+                                        items: _mainController.navigationBars
+                                            .map(
+                                              (e) => BottomNavigationBarItem(
+                                                icon: _buildIcon(
+                                                  id: e['id'],
+                                                  count: e['count'],
+                                                  icon: e['icon'],
+                                                ),
+                                                activeIcon: _buildIcon(
+                                                  id: e['id'],
+                                                  count: e['count'],
+                                                  icon: e['selectIcon'],
+                                                ),
+                                                label: e['label'],
+                                              ),
+                                            )
+                                            .toList(),
                                       )
-                                      .toList(),
-                                ),
+                                    : const SizedBox.shrink(),
                               ),
                       );
                     },

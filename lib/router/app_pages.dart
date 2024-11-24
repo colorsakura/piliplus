@@ -2,6 +2,7 @@
 
 import 'package:PiliPalaX/pages/member/new/member_page.dart';
 import 'package:PiliPalaX/pages/member/new/widget/edit_profile_page.dart';
+import 'package:PiliPalaX/pages/setting/navigation_bar_set.dart';
 import 'package:PiliPalaX/pages/setting/sponsor_block_page.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/create_fav_page.dart';
 import 'package:PiliPalaX/pages/webview/webview_page.dart';
@@ -186,6 +187,9 @@ class Routes {
     CustomGetPage(name: '/sponsorBlock', page: () => const SponsorBlockPage()),
     CustomGetPage(name: '/createFav', page: () => const CreateFavPage()),
     CustomGetPage(name: '/editProfile', page: () => const EditProfilePage()),
+    // navigation bar
+    CustomGetPage(
+        name: '/navbarSetting', page: () => const NavigationBarSetPage()),
   ];
 }
 
