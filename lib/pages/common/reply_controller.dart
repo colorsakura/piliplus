@@ -4,6 +4,7 @@ import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -155,20 +156,18 @@ abstract class ReplyController extends CommonController {
       ),
     )
         .then(
-      (value) {
-        // TODO: data cast
-        if (value != null && value['data'] != null) {
+      (res) {
+        if (res != null) {
           savedReplies[key] = null;
-          if (value['data'] is ReplyInfo) {
-            MainListReply response =
-                (loadingState.value as Success?)?.response ?? MainListReply();
-            if (oid != null) {
-              response.replies.insert(0, value['data']);
-            } else {
-              response.replies[index].replies.add(value['data']);
-            }
-            loadingState.value = LoadingState.success(response);
+          ReplyInfo replyInfo = Utils.replyCast(res);
+          MainListReply response =
+              (loadingState.value as Success?)?.response ?? MainListReply();
+          if (oid != null) {
+            response.replies.insert(0, replyInfo);
+          } else {
+            response.replies[index].replies.add(replyInfo);
           }
+          loadingState.value = LoadingState.success(response);
         }
       },
     );

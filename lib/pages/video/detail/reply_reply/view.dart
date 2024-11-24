@@ -3,6 +3,7 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
@@ -158,7 +159,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                 replyType: widget.replyType,
                                 needDivider: false,
                                 onReply: () {
-                                  _onReply(firstFloor!);
+                                  _onReply(firstFloor!, -1);
                                 },
                                 upMid: _videoReplyReplyController.upMid,
                               );
@@ -237,7 +238,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         ),
       );
 
-  void _onReply(ReplyInfo? item) {
+  void _onReply(ReplyInfo? item, int index) {
     dynamic oid = item?.oid.toInt();
     dynamic root = item?.id.toInt();
     dynamic parent = item?.id.toInt();
@@ -274,20 +275,16 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         },
       ),
     )
-        .then((value) {
-      // 完成评论，数据添加              // TODO: data cast
-      if (value != null && value['data'] != null) {
+        .then((res) {
+      if (res != null) {
         _savedReplies[key] = null;
-        if (value['data'] is ReplyInfo) {
-          List<ReplyInfo> list =
-              _videoReplyReplyController.loadingState.value is Success
-                  ? (_videoReplyReplyController.loadingState.value as Success)
-                      .response
-                  : <ReplyInfo>[];
-          list.add(value['data']);
-          _videoReplyReplyController.loadingState.value =
-              LoadingState.success(list);
-        }
+        ReplyInfo replyInfo = Utils.replyCast(res);
+        List list = (_videoReplyReplyController.loadingState.value as Success?)
+                ?.response ??
+            <ReplyInfo>[];
+        list.insert(index + 1, replyInfo);
+        _videoReplyReplyController.loadingState.value =
+            LoadingState.success(list);
       }
     });
   }
@@ -320,11 +317,11 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                   return ColoredBox(
                     color: _videoReplyReplyController.colorAnimation?.value ??
                         Theme.of(Get.context!).colorScheme.onInverseSurface,
-                    child: _replyItem(loadingState.response[index]),
+                    child: _replyItem(loadingState.response[index], index),
                   );
                 },
               )
-            : _replyItem(loadingState.response[index]);
+            : _replyItem(loadingState.response[index], index);
       }
     } else if (loadingState is Error) {
       return CustomScrollView(
@@ -355,14 +352,14 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
     }
   }
 
-  Widget _replyItem(replyItem) {
+  Widget _replyItem(replyItem, index) {
     return ReplyItemGrpc(
       replyItem: replyItem,
       replyLevel: widget.isDialogue ? '3' : '2',
       showReplyRow: false,
       replyType: widget.replyType,
       onReply: () {
-        _onReply(replyItem);
+        _onReply(replyItem, index);
       },
       onDelete: (rpid, frpid) {
         List list =

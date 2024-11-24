@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/models/video/reply/emote.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
 import 'package:PiliPalaX/pages/emote/index.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/pages/emote/view.dart';
@@ -517,9 +516,7 @@ class _ReplyPageState extends State<ReplyPage>
     );
     if (result['status']) {
       SmartDialog.showToast(result['data']['success_toast']);
-      Get.back(result: {
-        'data': ReplyItemModel.fromJson(result['data']['reply'], ''),
-      });
+      Get.back(result: result['data']['reply']);
     } else {
       SmartDialog.showToast(result['msg']);
     }

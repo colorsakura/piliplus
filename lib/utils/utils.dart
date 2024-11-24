@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/http/video.dart';
@@ -24,6 +25,27 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   static final Random random = Random();
+
+  static ReplyInfo replyCast(res) {
+    Map emote = res['content']['emote'];
+    emote.forEach((key, value) {
+      value['size'] = value['meta']['size'];
+    });
+    return ReplyInfo.create()
+      ..mergeFromProto3Json(
+        res
+          ..['id'] = res['rpid']
+          ..['member']['name'] = res['member']['uname']
+          ..['member']['face'] = res['member']['avatar']
+          ..['member']['level'] = res['member']['level_info']['current_level']
+          ..['member']['vipStatus'] = res['member']['vip']['vipStatus']
+          ..['member']['vipType'] = res['member']['vip']['vipType']
+          ..['member']['officialVerifyType'] =
+              res['member']['official_verify']['type']
+          ..['content']['emote'] = emote,
+        ignoreUnknownFields: true,
+      );
+  }
 
   static bool isDefault(int attr) {
     return (attr & 2) == 0;
