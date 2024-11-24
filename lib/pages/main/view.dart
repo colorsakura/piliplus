@@ -110,7 +110,7 @@ class _MainAppState extends State<MainApp>
         _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
       }
       _dynamicController.flag = true;
-      _mainController.clearUnread();
+      _mainController.setCount();
     } else {
       _dynamicController.flag = false;
     }

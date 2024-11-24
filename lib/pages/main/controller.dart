@@ -49,34 +49,30 @@ class MainController extends GetxController {
           _lastCheckAt = DateTime.now().millisecondsSinceEpoch;
         }
         getUnreadDynamic();
-      } else {
-        checkDynamic = false;
       }
     }
   }
 
   void getUnreadDynamic() async {
-    if (!userLogin.value || dynIndex == null || dynIndex == -1) {
+    if (!userLogin.value || dynIndex == -1) {
       return;
     }
     await GrpcRepo.dynRed().then((res) {
       if (res['status']) {
-        navigationBars[dynIndex!]['count'] = res['data'];
+        setCount(res['data']);
       }
     });
+  }
+
+  void setCount([int count = 0]) async {
+    dynIndex ??= navigationBars.indexWhere((e) => e['id'] == 1);
+    if (dynIndex == -1 || navigationBars[dynIndex!]['count'] == count) return;
+    navigationBars[dynIndex!]['count'] = count; // 修改 count 属性为新的值
     navigationBars.refresh();
   }
 
-  void clearUnread() async {
-    if (dynamicBadgeType != DynamicBadgeMode.hidden) {
-      navigationBars[dynIndex!]['count'] = 0; // 修改 count 属性为新的值
-      navigationBars.refresh();
-    }
-  }
-
   void checkUnreadDynamic() {
-    if (dynIndex == null ||
-        dynIndex == -1 ||
+    if (dynIndex == -1 ||
         !userLogin.value ||
         dynamicBadgeType == DynamicBadgeMode.hidden ||
         !checkDynamic) return;

@@ -23,9 +23,7 @@ class DynamicsTabController extends CommonController {
   @override
   Future onRefresh() async {
     if (dynamicsType == 'all') {
-      if (mainController.navigationBars[1]['count'] != 0) {
-        mainController.clearUnread();
-      }
+      mainController.setCount();
     }
     offset = '';
     await queryData();
