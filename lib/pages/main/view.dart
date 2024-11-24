@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:PiliPalaX/grpc/grpc_client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/dynamic_badge_mode.dart';
@@ -129,12 +131,15 @@ class _MainAppState extends State<MainApp>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
-        _mainController.onBackPressed(context);
-        if (_dynamicController.flag) {
-          _dynamicController.flag = false;
-        }
-        if (!_homeController.flag) {
-          _homeController.flag = true;
+        if (_mainController.selectedIndex != 0) {
+          setIndex(0);
+          _mainController.bottomBarStream.add(true);
+        } else {
+          if (Platform.isAndroid) {
+            const MethodChannel("onUserLeaveHint").invokeMethod('back');
+          } else {
+            SystemNavigator.pop();
+          }
         }
       },
       child: LayoutBuilder(

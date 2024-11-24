@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/pages/dynamics/view.dart';
 import 'package:PiliPalaX/pages/home/view.dart';
 import 'package:PiliPalaX/pages/media/view.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -55,27 +53,6 @@ class MainController extends GetxController {
         checkDynamic = false;
       }
     }
-  }
-
-  void onBackPressed(BuildContext context) {
-    // if (_lastPressedAt == null ||
-    // DateTime.now().difference(_lastPressedAt!) >
-    //     const Duration(seconds: 2)) {
-    // 两次点击时间间隔超过2秒，重新记录时间戳
-    // _lastPressedAt = DateTime.now();
-    if (selectedIndex != 0) {
-      pageController.jumpTo(0);
-    } else {
-      if (Platform.isAndroid) {
-        const MethodChannel("onUserLeaveHint").invokeMethod('back');
-      } else {
-        SystemNavigator.pop(); // 退出应用
-      }
-    }
-    // SmartDialog.showToast("再按一次退出PiliPalaX");
-    // return; // 不退出应用
-    // }
-    // SystemNavigator.pop(); // 退出应用
   }
 
   void getUnreadDynamic() async {
