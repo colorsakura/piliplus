@@ -30,52 +30,59 @@ class _RankPageState extends State<RankPage>
       children: [
         Expanded(
           flex: 18,
-          child: ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
-            itemCount: _rankController.tabs.length,
-            itemBuilder: (context, index) => IntrinsicHeight(
-              child: Obx(
-                () => InkWell(
-                  onTap: () {
-                    _rankController.initialIndex.value = index;
-                    _rankController.tabController.animateTo(index);
-                  },
-                  child: Container(
-                    color: index == _rankController.initialIndex.value
-                        ? Theme.of(context).colorScheme.onInverseSurface
-                        : Colors.transparent,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          height: double.infinity,
-                          width: 3,
-                          color: index == _rankController.initialIndex.value
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent,
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              _rankController.tabs[index]['label'],
-                              style: TextStyle(
-                                color: index ==
-                                        _rankController.initialIndex.value
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                                fontSize: 15,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+            child: Column(
+              children: List.generate(
+                _rankController.tabs.length,
+                (index) => Obx(
+                  () => IntrinsicHeight(
+                    child: InkWell(
+                      onTap: () {
+                        _rankController.initialIndex.value = index;
+                        _rankController.tabController.animateTo(index);
+                      },
+                      child: ColoredBox(
+                        color: index == _rankController.initialIndex.value
+                            ? Theme.of(context).colorScheme.onInverseSurface
+                            : Theme.of(context).colorScheme.surface,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              height: double.infinity,
+                              width: 3,
+                              color: index == _rankController.initialIndex.value
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
                             ),
-                          ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  _rankController.tabs[index]['label'],
+                                  style: TextStyle(
+                                    color: index ==
+                                            _rankController.initialIndex.value
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                    fontSize: 15,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
