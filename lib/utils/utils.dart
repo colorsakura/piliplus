@@ -26,6 +26,11 @@ import 'package:url_launcher/url_launcher.dart';
 class Utils {
   static final Random random = Random();
 
+  static bool isStringNumeric(str) {
+    RegExp numericRegex = RegExp(r'^\d+$');
+    return numericRegex.hasMatch(str.toString());
+  }
+
   static ReplyInfo replyCast(res) {
     Map? emote = res['content']['emote'];
     emote?.forEach((key, value) {

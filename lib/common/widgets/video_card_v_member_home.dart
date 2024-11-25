@@ -20,11 +20,6 @@ class VideoCardVMemberHome extends StatelessWidget {
     this.longPressEnd,
   });
 
-  bool isStringNumeric(String str) {
-    RegExp numericRegex = RegExp(r'^\d+$');
-    return numericRegex.hasMatch(str);
-  }
-
   void onPushDetail(heroTag) async {
     String goto = videoItem.goto ?? '';
     switch (goto) {

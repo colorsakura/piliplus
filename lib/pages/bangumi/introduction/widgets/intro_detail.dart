@@ -49,7 +49,7 @@ class IntroDetail extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  SelectableText(
                     bangumiDetail!.title,
                     style: const TextStyle(
                       fontSize: 16,
@@ -97,7 +97,7 @@ class IntroDetail extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
-                  Text(
+                  SelectableText(
                     '${bangumiDetail!.evaluate!}',
                     style: smallTitle.copyWith(fontSize: 13),
                   ),
@@ -107,7 +107,7 @@ class IntroDetail extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
-                  Text(
+                  SelectableText(
                     bangumiDetail.actors,
                     style: smallTitle.copyWith(fontSize: 13),
                   ),

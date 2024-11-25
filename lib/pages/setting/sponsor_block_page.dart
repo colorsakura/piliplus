@@ -7,6 +7,7 @@ import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType, SkipTypeExt;
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -57,7 +58,20 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       );
 
   _checkServerStatus() {
-    Request().get('$_blockServer/api/status').then((res) {
+    Request()
+        .get(
+      '$_blockServer/api/status',
+      options: Options(
+        headers: {
+          'env': '',
+          'app-key': '',
+          'x-bili-mid': '',
+          'x-bili-aurora-eid': '',
+          'x-bili-aurora-zone': '',
+        },
+      ),
+    )
+        .then((res) {
       if (res.data is Map) {
         setState(() {
           _serverStatus = res.data['uptime'] != null;

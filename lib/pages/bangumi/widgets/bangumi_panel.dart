@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -129,8 +130,8 @@ class _BangumiPanelState extends State<BangumiPanel> {
                   ),
                   child: Text(
                     widget.newEp?['desc']?.contains('连载') == true
-                        ? '连载中，更新至第${widget.newEp?['title']}话'
-                        : '全${widget.newEp?['title']}话',
+                        ? '连载中，更新至${Utils.isStringNumeric(widget.newEp['title']) ? '第${widget.newEp?['title']}话' : '${widget.newEp?['title']}'}'
+                        : '全${widget.pages.length}话',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),

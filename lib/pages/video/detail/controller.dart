@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/icon_button.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
@@ -1045,7 +1046,7 @@ class VideoDetailController extends GetxController
               iconButton(
                 context: context,
                 size: 26,
-                tooltip: '使用当前位置',
+                tooltip: '使用当前位置时间',
                 icon: Icons.my_location,
                 onPressed: () {
                   setState(() {
@@ -1204,6 +1205,7 @@ class VideoDetailController extends GetxController
                                         iconButton(
                                           context: context,
                                           size: 26,
+                                          tooltip: '移除',
                                           icon: Icons.clear,
                                           onPressed: () {
                                             setState(() {
@@ -1365,7 +1367,7 @@ class VideoDetailController extends GetxController
                       )
                     ],
                   )
-                : null,
+                : errorWidget(),
           );
         },
       );

@@ -212,7 +212,7 @@ class Request {
         data: {
           'message': await ApiInterceptor.dioError(e)
         }, // 将自定义 Map 数据赋值给 Response 的 data 属性
-        statusCode: 200,
+        statusCode: -1,
         requestOptions: RequestOptions(),
       );
       return errResponse;
@@ -241,7 +241,7 @@ class Request {
         data: {
           'message': await ApiInterceptor.dioError(e)
         }, // 将自定义 Map 数据赋值给 Response 的 data 属性
-        statusCode: 200,
+        statusCode: -1,
         requestOptions: RequestOptions(),
       );
       return errResponse;

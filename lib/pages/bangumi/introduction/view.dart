@@ -76,7 +76,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
           bangumiDetail: null,
           cid: cid,
           showEpisodes: widget.showEpisodes,
-          showIntroDetail: widget.showIntroDetail,
+          showIntroDetail: () {},
         ),
       Success() => BangumiInfo(
           heroTag: widget.heroTag,

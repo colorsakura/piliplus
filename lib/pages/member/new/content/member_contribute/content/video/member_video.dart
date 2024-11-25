@@ -130,7 +130,6 @@ class _MemberVideoState extends State<MemberVideo>
                           }
                           return VideoCardHMemberVideo(
                             videoItem: loadingState.response[index],
-                            showPubdate: true,
                           );
                         },
                         childCount: loadingState.response.length,

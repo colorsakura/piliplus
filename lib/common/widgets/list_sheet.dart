@@ -158,7 +158,9 @@ class _ListSheetContentState extends State<ListSheetContent>
     late String title;
     if (episode.runtimeType.toString() == "EpisodeItem") {
       if (episode.longTitle != null && episode.longTitle != "") {
-        title = "第${(episode.title ?? '${index + 1}')}话  ${episode.longTitle!}";
+        dynamic leading = episode.title ?? index + 1;
+        title =
+            "${Utils.isStringNumeric(leading) ? '第$leading话' : leading}  ${episode.longTitle!}";
       } else {
         title = episode.title!;
       }
@@ -255,13 +257,12 @@ class _ListSheetContentState extends State<ListSheetContent>
                 'assets/images/big-vip.png',
                 height: 20,
                 semanticLabel: "大会员",
-              ),
-            if (episode.badge != '会员') Text(episode.badge),
+              )
+            else
+              Text(episode.badge),
             const SizedBox(width: 10),
           ],
-          if (!(episode.runtimeType.toString() == 'EpisodeItem' &&
-              (episode.longTitle != null && episode.longTitle != '')))
-            Text('${index + 1}/$length'),
+          if (episode is! bangumi.EpisodeItem) Text('${index + 1}/$length'),
         ],
       ),
     );
