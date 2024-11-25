@@ -187,7 +187,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   feedBack();
                   dynamic oid = _videoReplyController.aid ??
                       IdUtils.bv2av(Get.parameters['bvid']!);
-                  _videoReplyController.onReply(context, oid: oid);
+                  _videoReplyController.onReply(
+                    context,
+                    oid: oid,
+                    replyType: ReplyType.video,
+                  );
                 },
                 tooltip: '发表评论',
                 child: const Icon(Icons.reply),

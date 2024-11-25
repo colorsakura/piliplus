@@ -121,6 +121,7 @@ abstract class ReplyController extends CommonController {
     dynamic oid,
     dynamic replyItem,
     int index = 0,
+    ReplyType? replyType,
   }) {
     dynamic key = oid ?? replyItem.oid + replyItem.id;
     Navigator.of(context)
@@ -131,7 +132,9 @@ abstract class ReplyController extends CommonController {
             oid: oid ?? replyItem.oid.toInt(),
             root: oid != null ? 0 : replyItem.id.toInt(),
             parent: oid != null ? 0 : replyItem.id.toInt(),
-            replyType: ReplyType.video,
+            replyType: replyItem != null
+                ? ReplyType.values[replyItem.type.toInt()]
+                : replyType,
             replyItem: replyItem,
             savedReply: savedReplies[key],
             onSaveReply: (reply) {

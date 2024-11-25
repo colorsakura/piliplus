@@ -307,6 +307,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   _htmlRenderCtr.onReply(
                     context,
                     oid: _htmlRenderCtr.oid.value,
+                    replyType: ReplyType.values[type],
                   );
                 },
                 tooltip: '评论动态',

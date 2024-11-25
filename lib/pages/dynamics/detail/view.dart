@@ -301,7 +301,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       feedBack();
                       dynamic oid = _dynamicDetailController.oid ??
                           IdUtils.bv2av(Get.parameters['bvid']!);
-                      _dynamicDetailController.onReply(context, oid: oid);
+                      _dynamicDetailController.onReply(
+                        context,
+                        oid: oid,
+                        replyType: ReplyType.values[replyType],
+                      );
                     },
                     tooltip: '评论动态',
                     child: const Icon(Icons.reply),

@@ -27,8 +27,8 @@ class Utils {
   static final Random random = Random();
 
   static ReplyInfo replyCast(res) {
-    Map emote = res['content']['emote'];
-    emote.forEach((key, value) {
+    Map? emote = res['content']['emote'];
+    emote?.forEach((key, value) {
       value['size'] = value['meta']['size'];
     });
     return ReplyInfo.create()
