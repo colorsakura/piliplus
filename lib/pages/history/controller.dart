@@ -25,7 +25,7 @@ class HistoryController extends GetxController {
   Future queryHistoryList({type = 'init'}) async {
     int max = 0;
     int viewAt = 0;
-    if (type == 'onload') {
+    if (type == 'onload' && historyList.isNotEmpty) {
       max = historyList.last.history!.oid!;
       viewAt = historyList.last.viewAt!;
     }

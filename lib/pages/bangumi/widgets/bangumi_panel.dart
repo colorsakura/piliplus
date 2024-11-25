@@ -15,6 +15,7 @@ class BangumiPanel extends StatefulWidget {
     required this.changeFuc,
     required this.showEpisodes,
     required this.heroTag,
+    this.newEp,
   });
 
   final List<EpisodeItem> pages;
@@ -22,6 +23,7 @@ class BangumiPanel extends StatefulWidget {
   final Function changeFuc;
   final Function showEpisodes;
   final String heroTag;
+  final dynamic newEp;
 
   @override
   State<BangumiPanel> createState() => _BangumiPanelState();
@@ -126,7 +128,9 @@ class _BangumiPanelState extends State<BangumiPanel> {
                     cid,
                   ),
                   child: Text(
-                    '全${widget.pages.length}话',
+                    widget.newEp?['desc']?.contains('连载') == true
+                        ? '连载中，更新至第${widget.newEp?['title']}话'
+                        : '全${widget.newEp?['title']}话',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),

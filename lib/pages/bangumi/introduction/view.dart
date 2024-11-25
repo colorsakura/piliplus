@@ -399,6 +399,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                               : widget.bangumiDetail!.episodes!.first.cid),
                       changeFuc: bangumiIntroController.changeSeasonOrbangu,
                       showEpisodes: widget.showEpisodes,
+                      newEp: bangumiItem?.newEp,
                     )
                   ],
                 ],

@@ -24,7 +24,7 @@ class GStorage {
   static late final Box<dynamic> video;
 
   static List<Pair<SegmentType, SkipType>> get blockSettings {
-    List<int> list = setting.get(
+    List list = setting.get(
       SettingBoxKey.blockSettings,
       defaultValue: List.generate(SegmentType.values.length, (_) => 1),
     );
@@ -37,7 +37,7 @@ class GStorage {
   }
 
   static List<Color> get blockColor {
-    List<String> list = setting.get(
+    List list = setting.get(
       SettingBoxKey.blockColor,
       defaultValue: List.generate(SegmentType.values.length, (_) => ''),
     );

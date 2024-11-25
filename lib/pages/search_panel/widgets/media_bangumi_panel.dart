@@ -32,19 +32,13 @@ Widget searchBangumiPanel(BuildContext context, ctr, loadingState) {
                     var i = loadingState.response[index];
                     return InkWell(
                       onTap: () {
-                        /// TODO 番剧详情页面
-                        // Get.toNamed('/video?bvid=${i.bvid}&cid=${i.cid}', arguments: {
-                        //   'videoItem': i,
-                        //   'heroTag': Utils.makeHeroTag(i.id),
-                        //   'videoType': SearchType.media_bangumi
-                        // });
+                        Utils.viewBangumi(seasonId: i.seasonId);
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            StyleString.safeSpace,
-                            StyleString.safeSpace,
-                            StyleString.safeSpace,
-                            2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: StyleString.safeSpace,
+                          vertical: StyleString.cardSpace,
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -126,57 +120,6 @@ Widget searchBangumiPanel(BuildContext context, ctr, loadingState) {
                                       const SizedBox(width: 3),
                                       Text(i.indexShow, style: style),
                                     ],
-                                  ),
-                                  const SizedBox(height: 18),
-                                  SizedBox(
-                                    height: 32,
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        Utils.viewBangumi(seasonId: i.seasonId);
-                                        // SmartDialog.showLoading(msg: '获取中...');
-                                        // var res = await SearchHttp.bangumiInfo(
-                                        //     seasonId: i.seasonId);
-                                        // SmartDialog.dismiss().then((value) {
-                                        //   if (res['status']) {
-                                        //     EpisodeItem episode =
-                                        //         res['data'].episodes.first;
-                                        //     int? epId = res['data']
-                                        //         .userStatus
-                                        //         ?.progress
-                                        //         ?.lastEpId;
-                                        //     if (epId == null) {
-                                        //       epId = episode.epId;
-                                        //     } else {
-                                        //       for (var item
-                                        //           in res['data'].episodes) {
-                                        //         if (item.epId == epId) {
-                                        //           episode = item;
-                                        //           break;
-                                        //         }
-                                        //       }
-                                        //     }
-                                        //     String bvid = episode.bvid!;
-                                        //     int cid = episode.cid!;
-                                        //     String pic = episode.cover!;
-                                        //     String heroTag =
-                                        //         Utils.makeHeroTag(cid);
-                                        //     Get.toNamed(
-                                        //       '/video?bvid=$bvid&cid=$cid&seasonId=${i.seasonId}&epId=$epId',
-                                        //       arguments: {
-                                        //         'pic': pic,
-                                        //         'heroTag': heroTag,
-                                        //         'videoType':
-                                        //             SearchType.media_bangumi,
-                                        //         'bangumiItem': res['data'],
-                                        //       },
-                                        //     );
-                                        //   } else {
-                                        //     SmartDialog.showToast(res['msg']);
-                                        //   }
-                                        // });
-                                      },
-                                      child: const Text('观看'),
-                                    ),
                                   ),
                                 ],
                               ),
