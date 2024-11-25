@@ -507,7 +507,7 @@ class VideoDetailController extends GetxController
       '${GStorage.blockServer}/api/skipSegments',
       data: {
         'videoID': bvid,
-        // 'cid': cid.value,
+        'cid': cid.value,
       },
       options: Options(
         headers: {
