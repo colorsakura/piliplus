@@ -163,7 +163,7 @@ abstract class ReplyController extends CommonController {
           MainListReply response =
               (loadingState.value as Success?)?.response ?? MainListReply();
           if (oid != null) {
-            response.replies.insert(0, replyInfo);
+            response.replies.insert(hasUpTop ? 1 : 0, replyInfo);
           } else {
             response.replies[index].replies.add(replyInfo);
           }
