@@ -65,7 +65,6 @@ class _HeaderControlState extends State<HeaderControl> {
   RxString now = ''.obs;
   Timer? clock;
   late String defaultCDNService;
-
   bool get isFullScreen => widget.controller!.isFullScreen.value;
 
   @override
@@ -1450,20 +1449,37 @@ class _HeaderControlState extends State<HeaderControl> {
             //   ),
             //   fuc: () => _.screenshot(),
             // ),
+            if (widget.videoDetailCtr?.enableSponsorBlock == true)
+              SizedBox(
+                width: 42,
+                height: 34,
+                child: IconButton(
+                  tooltip: '提交片段',
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () => widget.videoDetailCtr?.onBlock(context),
+                  icon: const Icon(
+                    Icons.block,
+                    size: 19,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             Obx(
               () => widget.videoDetailCtr?.segmentList.isNotEmpty == true
                   ? SizedBox(
                       width: 42,
                       height: 34,
                       child: IconButton(
-                        tooltip: 'SponsorBlock',
+                        tooltip: '片段信息',
                         style: ButtonStyle(
                           padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
                         onPressed: () =>
-                            widget.videoDetailCtr?.showSponsorBlock(context),
-                        icon: const Icon(
-                          Icons.block,
+                            widget.videoDetailCtr?.showSBDetail(context),
+                        icon: Icon(
+                          MdiIcons.advertisements,
                           size: 19,
                           color: Colors.white,
                         ),

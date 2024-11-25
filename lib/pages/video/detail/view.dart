@@ -85,8 +85,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // StreamSubscription<Duration>? _bufferedListener;
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
@@ -520,7 +518,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   ),
                   Expanded(
                     child: Scaffold(
-                      key: scaffoldKey,
+                      key: videoDetailController.childKey,
                       resizeToAvoidBottomInset: false,
                       body: Column(
                         children: [
@@ -578,7 +576,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 ),
                 Expanded(
                   child: Scaffold(
-                    key: scaffoldKey,
+                    key: videoDetailController.childKey,
                     resizeToAvoidBottomInset: false,
                     body: Column(
                       children: [
@@ -630,7 +628,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               ),
               Expanded(
                 child: Scaffold(
-                  key: scaffoldKey,
+                  key: videoDetailController.childKey,
                   resizeToAvoidBottomInset: false,
                   body: Column(
                     children: [
@@ -685,7 +683,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 Expanded(
                   child: Expanded(
                     child: Scaffold(
-                      key: scaffoldKey,
+                      key: videoDetailController.childKey,
                       resizeToAvoidBottomInset: false,
                       body: Column(
                         children: [
@@ -785,7 +783,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   height: context.height -
                       (removeSafeArea ? 0 : MediaQuery.of(context).padding.top),
                   child: Scaffold(
-                    key: scaffoldKey,
+                    key: videoDetailController.childKey,
                     resizeToAvoidBottomInset: false,
                     body: Column(
                       children: [
@@ -1289,7 +1287,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   // 展示二级回复
   void replyReply(replyItem, id) {
-    scaffoldKey.currentState?.showBottomSheet(
+    videoDetailController.childKey.currentState?.showBottomSheet(
       (context) => VideoReplyReplyPanel(
         id: id,
         // rcount: replyItem.rcount,
@@ -1304,14 +1302,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   // ai总结
   showAiBottomSheet() {
-    scaffoldKey.currentState?.showBottomSheet(
+    videoDetailController.childKey.currentState?.showBottomSheet(
       enableDrag: true,
       (context) => AiDetail(modelResult: videoIntroController.modelResult),
     );
   }
 
   showIntroDetail(videoDetail, videoTags) {
-    scaffoldKey.currentState?.showBottomSheet(
+    videoDetailController.childKey.currentState?.showBottomSheet(
       enableDrag: true,
       (context) => videoDetail is BangumiInfoModel
           ? bangumi.IntroDetail(
@@ -1339,7 +1337,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       context: context,
       scaffoldState: isFullScreen
           ? videoDetailController.scaffoldKey.currentState
-          : scaffoldKey.currentState,
+          : videoDetailController.childKey.currentState,
     ).buildShowBottomSheet();
   }
 }

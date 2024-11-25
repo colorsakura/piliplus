@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
+import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
@@ -7,6 +10,7 @@ import 'package:PiliPalaX/http/init.dart';
 import 'package:dio/dio.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -115,6 +119,19 @@ class SegmentModel {
   bool hasSkipped;
 }
 
+class PostSegmentModel {
+  PostSegmentModel({
+    required this.segment,
+    required this.category,
+    required this.actionType,
+  });
+  Pair<int, int> segment;
+  SegmentType category;
+  ActionType actionType;
+}
+
+enum ActionType { skip, mute, full, poi }
+
 class VideoDetailController extends GetxController
     with GetSingleTickerProviderStateMixin {
   /// 路由传参
@@ -159,6 +176,8 @@ class VideoDetailController extends GetxController
   RxInt oid = 0.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final childKey = GlobalKey<ScaffoldState>();
+
   RxString bgCover = ''.obs;
   PlPlayerController plPlayerController = PlPlayerController.getInstance()
     ..setCurrBrightness(-1.0);
@@ -183,7 +202,7 @@ class VideoDetailController extends GetxController
   late String cacheSecondDecode;
   late int cacheAudioQa;
 
-  late final bool _enableSponsorBlock;
+  late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
 
@@ -244,9 +263,9 @@ class VideoDetailController extends GetxController
     cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
         defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
-    _enableSponsorBlock =
+    enableSponsorBlock =
         setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false);
-    if (_enableSponsorBlock) {
+    if (enableSponsorBlock) {
       _blockLimit = GStorage.blockLimit;
       _blockSettings = GStorage.blockSettings;
       _blockColor = GStorage.blockColor;
@@ -263,14 +282,17 @@ class VideoDetailController extends GetxController
       _blockColor?[segment.index] ?? segment.color;
 
   Future _vote(String uuid, int type) async {
-    Request().post(
+    Request()
+        .post(
       '${GStorage.blockServer}/api/voteOnSponsorTime',
       queryParameters: {
         'UUID': uuid,
         'userID': GStorage.blockUserID,
         'type': type,
       },
-    ).then((res) {
+      options: _options,
+    )
+        .then((res) {
       SmartDialog.showToast(res.statusCode == 200 ? '投票成功' : '投票失败');
     });
   }
@@ -289,14 +311,17 @@ class VideoDetailController extends GetxController
                       dense: true,
                       onTap: () {
                         Get.back();
-                        Request().post(
+                        Request()
+                            .post(
                           '${GStorage.blockServer}/api/voteOnSponsorTime',
                           queryParameters: {
                             'UUID': segment.UUID,
                             'userID': GStorage.blockUserID,
                             'category': item.name,
                           },
-                        ).then((res) {
+                          options: _options,
+                        )
+                            .then((res) {
                           SmartDialog.showToast(
                               '类别更改${res.statusCode == 200 ? '成功' : '失败'}');
                         });
@@ -387,7 +412,7 @@ class VideoDetailController extends GetxController
     );
   }
 
-  void showSponsorBlock(BuildContext context) {
+  void showSBDetail(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -502,14 +527,7 @@ class VideoDetailController extends GetxController
     );
   }
 
-  Future _sponsorBlock() async {
-    dynamic result = await Request().get(
-      '${GStorage.blockServer}/api/skipSegments',
-      data: {
-        'videoID': bvid,
-        'cid': cid.value,
-      },
-      options: Options(
+  Options get _options => Options(
         headers: {
           'env': '',
           'app-key': '',
@@ -519,7 +537,16 @@ class VideoDetailController extends GetxController
           HttpHeaders.cookieHeader:
               'buvid3= ; SESSDATA= ; bili_jct= ; DedeUserID= ; DedeUserID__ckMd5= ; sid= ',
         },
-      ),
+      );
+
+  Future _sponsorBlock() async {
+    dynamic result = await Request().get(
+      '${GStorage.blockServer}/api/skipSegments',
+      data: {
+        'videoID': bvid,
+        'cid': cid.value,
+      },
+      options: _options,
     );
     if (result.data is List && result.data.isNotEmpty) {
       try {
@@ -608,6 +635,7 @@ class VideoDetailController extends GetxController
                     Request().post(
                       '${GStorage.blockServer}/api/viewedVideoSponsorTime',
                       queryParameters: {'UUID': item.UUID},
+                      options: _options,
                     );
                   }
                 } catch (e) {
@@ -832,7 +860,7 @@ class VideoDetailController extends GetxController
     var result = await VideoHttp.videoUrl(cid: cid.value, bvid: bvid);
     if (result['status']) {
       data = result['data'];
-      if (_enableSponsorBlock) {
+      if (enableSponsorBlock) {
         await _sponsorBlock();
       }
       if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
@@ -974,4 +1002,371 @@ class VideoDetailController extends GetxController
     }
     return result;
   }
+
+  List<PostSegmentModel>? list;
+
+  void onBlock(BuildContext context) {
+    PersistentBottomSheetController? ctr;
+    list ??= <PostSegmentModel>[];
+    if (list!.isEmpty) {
+      list!.add(
+        PostSegmentModel(
+          segment: Pair(first: 0, second: 0),
+          category: SegmentType.sponsor,
+          actionType: ActionType.skip,
+        ),
+      );
+    }
+    ctr = plPlayerController.isFullScreen.value
+        ? scaffoldKey.currentState?.showBottomSheet(
+            enableDrag: false,
+            (context) => _postPanel(ctr?.close),
+          )
+        : childKey.currentState?.showBottomSheet(
+            enableDrag: false,
+            (context) => _postPanel(ctr?.close),
+          );
+  }
+
+  Widget _postPanel(onClose) => StatefulBuilder(
+        builder: (context, setState) {
+          List<Widget> segmentWidget({
+            required int index,
+            required bool isFirst,
+          }) {
+            String value = Utils.timeFormat(isFirst
+                ? list![index].segment.first
+                : list![index].segment.second);
+            return [
+              Text(
+                '${isFirst ? '开始' : '结束'}: $value',
+              ),
+              const SizedBox(width: 5),
+              iconButton(
+                context: context,
+                size: 26,
+                tooltip: '使用当前位置',
+                icon: Icons.my_location,
+                onPressed: () {
+                  setState(() {
+                    if (isFirst) {
+                      list![index].segment.first =
+                          plPlayerController.positionSeconds.value;
+                    } else {
+                      list![index].segment.second =
+                          plPlayerController.positionSeconds.value;
+                    }
+                  });
+                },
+              ),
+              const SizedBox(width: 5),
+              iconButton(
+                context: context,
+                size: 26,
+                tooltip: '编辑',
+                icon: Icons.edit,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      String initV = value;
+                      return AlertDialog(
+                        content: TextFormField(
+                          initialValue: value,
+                          autofocus: true,
+                          onChanged: (value) {
+                            initV = value;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[\d:]+'),
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: Get.back,
+                            child: Text(
+                              '取消',
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => Get.back(result: initV),
+                            child: Text('确定'),
+                          ),
+                        ],
+                      );
+                    },
+                  ).then((res) {
+                    if (res != null) {
+                      try {
+                        List<int> split = (res as String)
+                            .split(':')
+                            .toList()
+                            .reversed
+                            .toList()
+                            .map((e) => int.parse(e))
+                            .toList();
+                        int duration = 0;
+                        for (int i = 0; i < split.length; i++) {
+                          duration += split[i] * pow(60, i).toInt();
+                        }
+                        if (duration <= (data.timeLength ?? 0) / 1000) {
+                          setState(() {
+                            if (isFirst) {
+                              list![index].segment.first = duration;
+                            } else {
+                              list![index].segment.second = duration;
+                            }
+                          });
+                        }
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+                    }
+                  });
+                },
+              ),
+            ];
+          }
+
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 16,
+              title: const Text('提交片段'),
+              actions: [
+                iconButton(
+                  context: context,
+                  tooltip: '添加片段',
+                  onPressed: () {
+                    setState(() {
+                      list?.insert(
+                        0,
+                        PostSegmentModel(
+                          segment: Pair(first: 0, second: 0),
+                          category: SegmentType.sponsor,
+                          actionType: ActionType.skip,
+                        ),
+                      );
+                    });
+                  },
+                  icon: Icons.add,
+                ),
+                const SizedBox(width: 10),
+                iconButton(
+                  context: context,
+                  tooltip: '关闭',
+                  onPressed: onClose,
+                  icon: Icons.close,
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
+            body: list?.isNotEmpty == true
+                ? Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                              list!.length,
+                              (index) => Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 5,
+                                ),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onInverseSurface,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        ...segmentWidget(
+                                          isFirst: true,
+                                          index: index,
+                                        ),
+                                        const SizedBox(width: 16),
+                                        ...segmentWidget(
+                                          isFirst: false,
+                                          index: index,
+                                        ),
+                                        const Spacer(),
+                                        iconButton(
+                                          context: context,
+                                          size: 26,
+                                          icon: Icons.clear,
+                                          onPressed: () {
+                                            setState(() {
+                                              list!.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Text('分类: '),
+                                        PopupMenuButton(
+                                          initialValue: list![index].category,
+                                          onSelected: (item) async {
+                                            setState(() {
+                                              list![index].category = item;
+                                            });
+                                          },
+                                          itemBuilder: (context) => SegmentType
+                                              .values
+                                              .map((item) =>
+                                                  PopupMenuItem<SegmentType>(
+                                                    value: item,
+                                                    child: Text(item.title),
+                                                  ))
+                                              .toList(),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                list![index].category.title,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                              Icon(
+                                                size: 20,
+                                                Icons.keyboard_arrow_right,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        const Text('ActionType: '),
+                                        PopupMenuButton(
+                                          initialValue: list![index].actionType,
+                                          onSelected: (item) async {
+                                            setState(() {
+                                              list![index].actionType = item;
+                                            });
+                                          },
+                                          itemBuilder: (context) => ActionType
+                                              .values
+                                              .map((item) =>
+                                                  PopupMenuItem<ActionType>(
+                                                    value: item,
+                                                    child: Text(item.name),
+                                                  ))
+                                              .toList(),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                list![index].actionType.name,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                              Icon(
+                                                size: 20,
+                                                Icons.keyboard_arrow_right,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 88 + MediaQuery.paddingOf(context).bottom,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        right: 16,
+                        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+                        child: FloatingActionButton(
+                          tooltip: '提交',
+                          onPressed: () {
+                            Request()
+                                .post(
+                              '${GStorage.blockServer}/api/skipSegments',
+                              queryParameters: {
+                                'videoID': bvid,
+                                'cid': cid.value,
+                                'userID': GStorage.blockUserID,
+                                'userAgent': Constants.userAgent,
+                                'videoDuration': (data.timeLength ?? 0 / 1000),
+                              },
+                              data: {
+                                'segments': list!
+                                    .map(
+                                      (item) => {
+                                        'segment': [
+                                          item.segment.first,
+                                          item.segment.second,
+                                        ],
+                                        'category': item.category.name,
+                                        'actionType': item.actionType.name,
+                                      },
+                                    )
+                                    .toList(),
+                              },
+                              options: _options,
+                            )
+                                .then(
+                              (res) {
+                                if (res.statusCode == 200) {
+                                  Get.back();
+                                  SmartDialog.showToast('提交成功');
+                                  list?.clear();
+                                } else {
+                                  SmartDialog.showToast(
+                                    '提交失败: ${{
+                                      400: '参数错误',
+                                      403: '被自动审核机制拒绝',
+                                      429: '重复提交太快',
+                                      409: '重复提交'
+                                    }[res.statusCode]}',
+                                  );
+                                }
+                              },
+                            );
+                          },
+                          child: Icon(Icons.check),
+                        ),
+                      )
+                    ],
+                  )
+                : null,
+          );
+        },
+      );
 }
