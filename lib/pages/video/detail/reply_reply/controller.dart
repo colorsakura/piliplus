@@ -159,7 +159,7 @@ class VideoReplyReplyController extends CommonController
     if (isDialogue) {
       if (replies.replies.isNotEmpty) {
         noMore.value = '加载中...';
-        if (replies.cursor.isEnd || count.value >= replies.replies.length) {
+        if (replies.cursor.isEnd || replies.replies.length >= count.value) {
           noMore.value = '没有更多了';
         }
       } else {
@@ -170,7 +170,7 @@ class VideoReplyReplyController extends CommonController
       if (replies.root.replies.isNotEmpty) {
         noMore.value = '加载中...';
         if (replies.cursor.isEnd ||
-            count.value >= replies.root.replies.length) {
+            replies.root.replies.length >= count.value) {
           noMore.value = '没有更多了';
         }
       } else {
