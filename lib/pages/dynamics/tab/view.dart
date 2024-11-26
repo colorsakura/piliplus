@@ -40,12 +40,12 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   @override
   void initState() {
     super.initState();
+    dynamicsController = Get.find<DynamicsController>();
     _dynamicsTabController = Get.put(
-      DynamicsTabController(dynamicsType: widget.dynamicsType),
+      DynamicsTabController(dynamicsType: widget.dynamicsType)
+        ..mid = dynamicsController.mid.value,
       tag: widget.dynamicsType,
     );
-    dynamicsController = Get.find<DynamicsController>();
-
     _dynamicsTabController.scrollController.addListener(() {
       if (_dynamicsTabController.scrollController.position.pixels >=
           _dynamicsTabController.scrollController.position.maxScrollExtent -
