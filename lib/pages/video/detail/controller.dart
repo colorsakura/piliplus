@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/article_content.dart';
 import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
@@ -1025,7 +1027,10 @@ class VideoDetailController extends GetxController
     if (list!.isEmpty) {
       list!.add(
         PostSegmentModel(
-          segment: Pair(first: 0, second: 0),
+          segment: Pair(
+            first: plPlayerController.positionSeconds.value,
+            second: plPlayerController.positionSeconds.value,
+          ),
           category: SegmentType.sponsor,
           actionType: ActionType.skip,
         ),
@@ -1178,7 +1183,10 @@ class VideoDetailController extends GetxController
                         list?.insert(
                           0,
                           PostSegmentModel(
-                            segment: Pair(first: 0, second: 0),
+                            segment: Pair(
+                              first: plPlayerController.positionSeconds.value,
+                              second: plPlayerController.positionSeconds.value,
+                            ),
                             category: SegmentType.sponsor,
                             actionType: ActionType.skip,
                           ),
@@ -1222,11 +1230,8 @@ class VideoDetailController extends GetxController
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          if (list![index].category !=
-                                                  SegmentType
-                                                      .exclusive_access &&
-                                              list![index].actionType !=
-                                                  ActionType.full) ...[
+                                          if (list![index].actionType !=
+                                              ActionType.full) ...[
                                             Row(
                                               children: [
                                                 ...segmentWidget(
@@ -1254,28 +1259,35 @@ class VideoDetailController extends GetxController
                                                     list![index].category,
                                                 onSelected: (item) async {
                                                   list![index].category = item;
-                                                  list![index].actionType =
+                                                  List<ActionType>
+                                                      constraintList =
                                                       _segmentType2ActionType(
-                                                              item)
-                                                          .first;
+                                                          item);
+                                                  if (constraintList
+                                                      .contains(list![index]
+                                                          .actionType)
+                                                      .not) {
+                                                    list![index].actionType =
+                                                        constraintList.first;
+                                                  }
                                                   switch (item) {
                                                     case SegmentType
                                                           .poi_highlight:
-                                                      list![index]
-                                                              .segment
-                                                              .second =
-                                                          list![index]
-                                                              .segment
-                                                              .first;
+                                                      updateSegment(
+                                                        isFirst: false,
+                                                        index: index,
+                                                        value: list![index]
+                                                            .segment
+                                                            .first,
+                                                      );
                                                       break;
                                                     case SegmentType
                                                           .exclusive_access:
-                                                      list![index]
-                                                          .segment
-                                                          .first = 0;
-                                                      list![index]
-                                                          .segment
-                                                          .second = 0;
+                                                      updateSegment(
+                                                        isFirst: true,
+                                                        index: index,
+                                                        value: 0,
+                                                      );
                                                       break;
                                                     case _:
                                                   }

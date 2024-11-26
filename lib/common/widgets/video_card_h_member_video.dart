@@ -61,20 +61,21 @@ class VideoCardHMemberVideo extends StatelessWidget {
                           Hero(
                             tag: heroTag,
                             child: NetworkImgLayer(
-                              src:
-                                  videoItem.season?['cover'] ?? videoItem.cover,
+                              src: videoItem.cover,
+                              // videoItem.season?['cover'] ?? videoItem.cover,
                               width: maxWidth,
                               height: maxHeight,
                             ),
                           ),
-                          if (videoItem.season != null)
-                            PBadge(
-                              text: '合集: ${videoItem.season?['count']}',
-                              right: 6.0,
-                              bottom: 6.0,
-                              type: 'gray',
-                            )
-                          else if (videoItem.duration != null)
+                          // if (videoItem.season != null)
+                          //   PBadge(
+                          //     text: '合集: ${videoItem.season?['count']}',
+                          //     right: 6.0,
+                          //     bottom: 6.0,
+                          //     type: 'gray',
+                          //   )
+                          // else
+                          if (videoItem.duration != null)
                             PBadge(
                               text: Utils.timeFormat(videoItem.duration),
                               right: 6.0,
@@ -126,7 +127,8 @@ class VideoContent extends StatelessWidget {
             ...[
               Expanded(
                 child: Text(
-                  videoItem.season?['title'] ?? videoItem.title ?? '',
+                  // videoItem.season?['title'] ?? videoItem.title ?? '',
+                  videoItem.title ?? '',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -157,13 +159,15 @@ class VideoContent extends StatelessWidget {
               children: [
                 StatView(
                   theme: 'gray',
-                  view: videoItem.season?['view_content'] ??
-                      videoItem.viewContent,
+                  // view: videoItem.season?['view_content'] ??
+                  //     videoItem.viewContent,
+                  view: videoItem.viewContent,
                 ),
                 const SizedBox(width: 8),
                 StatDanMu(
                   theme: 'gray',
-                  danmu: videoItem.season?['danmaku'] ?? videoItem.danmaku,
+                  // danmu: videoItem.season?['danmaku'] ?? videoItem.danmaku,
+                  danmu: videoItem.danmaku,
                 ),
               ],
             ),
