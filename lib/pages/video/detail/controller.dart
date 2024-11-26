@@ -540,7 +540,7 @@ class VideoDetailController extends GetxController
         },
       );
 
-  Future _sponsorBlock() async {
+  Future _querySponsorBlock() async {
     dynamic result = await Request().get(
       '${GStorage.blockServer}/api/skipSegments',
       data: {
@@ -549,6 +549,10 @@ class VideoDetailController extends GetxController
       },
       options: _options,
     );
+    _handleSBData(result);
+  }
+
+  void _handleSBData(result) {
     if (result.data is List && result.data.isNotEmpty) {
       try {
         List<String> list =
@@ -558,7 +562,9 @@ class VideoDetailController extends GetxController
             .toList()
             .map((item) => item.first.name)
             .toList();
-        segmentList.value = (result.data as List)
+
+        // segmentList
+        segmentList.addAll((result.data as List)
             .where((item) =>
                 enableList.contains(item['category']) &&
                 item['segment'][1] >= item['segment'][0])
@@ -584,8 +590,11 @@ class VideoDetailController extends GetxController
               hasSkipped: false,
             );
           },
-        ).toList();
-        _segmentProgressList = segmentList.map((item) {
+        ).toList());
+
+        // _segmentProgressList
+        _segmentProgressList ??= <Segment>[];
+        _segmentProgressList!.addAll(segmentList.map((item) {
           double start = (item.segment.first / ((data.timeLength ?? 0) / 1000))
               .clamp(0.0, 1.0);
           double end = (item.segment.second / ((data.timeLength ?? 0) / 1000))
@@ -595,7 +604,7 @@ class VideoDetailController extends GetxController
             (start == end && end != 0) ? (end + 0.01).clamp(0.0, 1.0) : end,
             _getColor(item.segmentType),
           );
-        }).toList();
+        }).toList());
       } catch (e) {
         debugPrint('failed to parse sponsorblock: $e');
       }
@@ -862,7 +871,7 @@ class VideoDetailController extends GetxController
     if (result['status']) {
       data = result['data'];
       if (enableSponsorBlock) {
-        await _sponsorBlock();
+        await _querySponsorBlock();
       }
       if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
         SmartDialog.showToast(
@@ -1357,6 +1366,9 @@ class VideoDetailController extends GetxController
                                     Get.back();
                                     SmartDialog.showToast('提交成功');
                                     list?.clear();
+                                    _handleSBData(res);
+                                    plPlayerController.segmentList.value =
+                                        _segmentProgressList ?? <Segment>[];
                                   } else {
                                     SmartDialog.showToast(
                                       '提交失败: ${{
