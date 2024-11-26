@@ -1,10 +1,10 @@
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
-import 'package:PiliPalaX/plugin/pl_player/models/play_speed.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class PlaySpeedPage extends StatefulWidget {
@@ -15,11 +15,9 @@ class PlaySpeedPage extends StatefulWidget {
 }
 
 class _PlaySpeedPageState extends State<PlaySpeedPage> {
-  Box videoStorage = GStorage.video;
-  Box settingStorage = GStorage.setting;
   late double playSpeedDefault;
   late double longPressSpeedDefault;
-  late List customSpeedsList;
+  late List speedList;
   late bool enableAutoLongPressSpeed;
   List<Map<dynamic, dynamic>> sheetMenu = [
     {
@@ -29,7 +27,6 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         Icons.speed,
         size: 21,
       ),
-      'show': true,
     },
     {
       'id': 2,
@@ -38,7 +35,6 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         Icons.speed_sharp,
         size: 21,
       ),
-      'show': true,
     },
     {
       'id': -1,
@@ -47,7 +43,6 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         Icons.delete_outline,
         size: 21,
       ),
-      'show': true,
     },
   ];
 
@@ -60,10 +55,9 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
     // 默认长按倍速
     longPressSpeedDefault =
         videoStorage.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
-    // 自定义倍速
-    customSpeedsList =
-        videoStorage.get(VideoBoxKey.customSpeedsList, defaultValue: []);
-    enableAutoLongPressSpeed = settingStorage
+    // 倍速
+    speedList = GStorage.speedList;
+    enableAutoLongPressSpeed = GStorage.setting
         .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
     if (enableAutoLongPressSpeed) {
       Map newItem = sheetMenu[1];
@@ -76,7 +70,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
 
   // 添加自定义倍速
   void onAddSpeed() {
-    double customSpeed = 1.0;
+    double? customSpeed;
     showDialog(
       context: context,
       builder: (context) {
@@ -88,33 +82,43 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               // const Text('输入你想要的视频倍速，例如：1.0'),
               const SizedBox(height: 12),
               TextField(
-                keyboardType: TextInputType.number,
+                autofocus: true,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   labelText: '自定义倍速',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6.0),
                   ),
                 ),
-                onChanged: (e) {
-                  customSpeed = double.parse(e);
+                onChanged: (value) {
+                  customSpeed = double.tryParse(value);
                 },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
+                ],
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: Get.back,
               child: const Text('取消'),
             ),
             TextButton(
               onPressed: () async {
-                customSpeedsList.add(customSpeed);
-                await videoStorage.put(
-                    VideoBoxKey.customSpeedsList, customSpeedsList);
-                setState(() {});
-                Get.back();
+                if (customSpeed == null) {
+                  SmartDialog.showToast('输入倍数不合法');
+                } else if (speedList.contains(customSpeed)) {
+                  SmartDialog.showToast('该倍速已存在');
+                } else {
+                  Get.back();
+                  speedList.add(customSpeed);
+                  speedList.sort();
+                  await videoStorage.put(VideoBoxKey.speedsList, speedList);
+                  setState(() {});
+                }
               },
-              child: const Text('确认添加'),
+              child: const Text('确认'),
             )
           ],
         );
@@ -123,85 +127,83 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   }
 
   // 设定倍速弹窗
-  void showBottomSheet(type, i) {
-    showModalBottomSheet<void>(
+  void showBottomSheet(index) {
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.only(top: 10),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            //重要
-            itemCount: sheetMenu.length,
-            itemBuilder: (BuildContext context, int index) {
-              return sheetMenu[index]['show']
-                  ? ListTile(
-                      onTap: () {
-                        Navigator.pop(context);
-                        menuAction(type, i, sheetMenu[index]['id']);
-                      },
-                      minLeadingWidth: 0,
-                      iconColor: Theme.of(context).colorScheme.onSurface,
-                      leading: sheetMenu[index]['leading'],
-                      title: Text(
-                        sheetMenu[index]['title'],
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    )
-                  : const SizedBox();
-            },
-          ),
+      clipBehavior: Clip.hardEdge,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 10),
+            ...sheetMenu.map(
+              (item) => ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  menuAction(index, item['id']);
+                },
+                minLeadingWidth: 0,
+                iconColor: Theme.of(context).colorScheme.onSurface,
+                leading: item['leading'],
+                title: Text(
+                  item['title'],
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            ),
+            SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
+          ],
         );
       },
     );
   }
 
   //
-  void menuAction(type, index, id) async {
-    double chooseSpeed = 1.0;
-    if (type == 'system' && id == -1) {
-      SmartDialog.showToast('系统预设倍速不支持删除');
-      return;
-    }
-    // 获取当前选中的倍速值
-    if (type == 'system') {
-      chooseSpeed = PlaySpeed.values[index].value;
-    } else {
-      chooseSpeed = customSpeedsList[index];
-    }
+  void menuAction(index, id) async {
+    double speed = speedList[index];
     // 设置
     if (id == 1) {
       // 设置默认倍速
-      playSpeedDefault = chooseSpeed;
+      playSpeedDefault = speed;
       videoStorage.put(VideoBoxKey.playSpeedDefault, playSpeedDefault);
     } else if (id == 2) {
       // 设置默认长按倍速
-      longPressSpeedDefault = chooseSpeed;
+      longPressSpeedDefault = speed;
       videoStorage.put(
           VideoBoxKey.longPressSpeedDefault, longPressSpeedDefault);
     } else if (id == -1) {
-      if (customSpeedsList[index] == playSpeedDefault) {
-        playSpeedDefault = 1.0;
-        videoStorage.put(VideoBoxKey.playSpeedDefault, playSpeedDefault);
+      if ([
+        1.0,
+        playSpeedDefault,
+        longPressSpeedDefault,
+      ].contains(speed)) {
+        SmartDialog.showToast('不支持删除默认倍速');
+        return;
       }
-      if (customSpeedsList[index] == longPressSpeedDefault) {
-        longPressSpeedDefault = 3.0;
-        videoStorage.put(
-            VideoBoxKey.longPressSpeedDefault, longPressSpeedDefault);
-      }
-      customSpeedsList.removeAt(index);
-      await videoStorage.put(VideoBoxKey.customSpeedsList, customSpeedsList);
+      speedList.removeAt(index);
+      await videoStorage.put(VideoBoxKey.speedsList, speedList);
     }
     setState(() {});
-    SmartDialog.showToast('操作成功');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('倍速设置')),
+      appBar: AppBar(
+        title: Text('倍速设置'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await videoStorage.delete(VideoBoxKey.speedsList);
+              speedList = GStorage.speedList;
+              setState(() {});
+            },
+            child: Text('重置'),
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,13 +235,12 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                 });
               },
             ),
-            !enableAutoLongPressSpeed
-                ? ListTile(
-                    dense: false,
-                    title: const Text('默认长按倍速'),
-                    subtitle: Text(longPressSpeedDefault.toString()),
-                  )
-                : const SizedBox(),
+            if (!enableAutoLongPressSpeed)
+              ListTile(
+                dense: false,
+                title: const Text('默认长按倍速'),
+                subtitle: Text(longPressSpeedDefault.toString()),
+              ),
             Padding(
               padding: const EdgeInsets.only(
                 left: 14,
@@ -247,9 +248,18 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                 bottom: 10,
                 top: 20,
               ),
-              child: Text(
-                '系统预设倍速',
-                style: Theme.of(context).textTheme.titleMedium,
+              child: Row(
+                children: [
+                  Text(
+                    '倍速列表',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(width: 12),
+                  TextButton(
+                    onPressed: onAddSpeed,
+                    child: const Text('添加'),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -262,64 +272,14 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                 alignment: WrapAlignment.start,
                 spacing: 8,
                 runSpacing: 2,
-                children: [
-                  for (var i in PlaySpeed.values) ...[
-                    FilledButton.tonal(
-                      onPressed: () => showBottomSheet('system', i.index),
-                      child: Text(i.description),
-                    ),
-                  ]
-                ],
-              ),
-            ),
-            Padding(
-                padding: const EdgeInsets.only(
-                  left: 14,
-                  right: 14,
+                children: List.generate(
+                  speedList.length,
+                  (index) => FilledButton.tonal(
+                    onPressed: () => showBottomSheet(index),
+                    child: Text(speedList[index].toString()),
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Text(
-                      '自定义倍速',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(width: 12),
-                    TextButton(
-                      onPressed: () => onAddSpeed(),
-                      child: const Text('添加'),
-                    )
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 18,
-                right: 18,
-                bottom: MediaQuery.of(context).padding.bottom + 40,
               ),
-              child: customSpeedsList.isNotEmpty
-                  ? Wrap(
-                      alignment: WrapAlignment.start,
-                      spacing: 8,
-                      runSpacing: 2,
-                      children: [
-                        for (int i = 0; i < customSpeedsList.length; i++) ...[
-                          FilledButton.tonal(
-                            onPressed: () => showBottomSheet('custom', i),
-                            child: Text(customSpeedsList[i].toString()),
-                          ),
-                        ]
-                      ],
-                    )
-                  : SizedBox(
-                      height: 80,
-                      child: Center(
-                        child: Text(
-                          '未添加',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline),
-                        ),
-                      ),
-                    ),
             ),
           ],
         ),

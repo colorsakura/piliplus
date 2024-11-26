@@ -23,6 +23,22 @@ class GStorage {
   static late final Box<dynamic> setting;
   static late final Box<dynamic> video;
 
+  static List<double> get speedList => List<double>.from(
+        video.get(
+          VideoBoxKey.speedsList,
+          defaultValue: [
+            0.5,
+            0.75,
+            1.0,
+            1.25,
+            1.5,
+            1.75,
+            2.0,
+            3.0,
+          ],
+        ),
+      );
+
   static List<Pair<SegmentType, SkipType>> get blockSettings {
     List list = setting.get(
       SettingBoxKey.blockSettings,
@@ -339,8 +355,8 @@ class VideoBoxKey {
       playSpeedDefault = 'playSpeedDefault',
       // 默认长按倍速
       longPressSpeedDefault = 'longPressSpeedDefault',
-      // 自定义倍速集合
-      customSpeedsList = 'customSpeedsList',
+      // 倍速集合
+      speedsList = 'speedsList',
       // 画面填充比例
       cacheVideoFit = 'cacheVideoFit';
 }

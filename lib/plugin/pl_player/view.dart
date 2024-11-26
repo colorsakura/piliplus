@@ -461,7 +461,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           initialValue: plPlayerController.playbackSpeed,
           color: Colors.black.withOpacity(0.8),
           itemBuilder: (BuildContext context) {
-            return plPlayerController.speedsList.map((double speed) {
+            return plPlayerController.speedList.map((double speed) {
               return PopupMenuItem<double>(
                 height: 35,
                 padding: const EdgeInsets.only(left: 30),

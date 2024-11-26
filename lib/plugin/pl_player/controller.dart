@@ -251,7 +251,7 @@ class PlPlayerController {
   late double strokeWidth;
   late int fontWeight;
   late double danmakuDurationVal;
-  late List<double> speedsList;
+  late List<double> speedList;
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
   late bool enableLongShowControl;
@@ -374,12 +374,7 @@ class PlPlayerController {
     }
     enableLongShowControl =
         setting.get(SettingBoxKey.enableLongShowControl, defaultValue: false);
-    speedsList = List<double>.from(videoStorage
-        .get(VideoBoxKey.customSpeedsList, defaultValue: <double>[]));
-    for (final PlaySpeed i in PlaySpeed.values) {
-      speedsList.add(i.value);
-    }
-    speedsList.sort();
+    speedList = GStorage.speedList;
 
     // _playerEventSubs = onPlayerStatusChanged.listen((PlayerStatus status) {
     //   if (status == PlayerStatus.playing) {
