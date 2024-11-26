@@ -12,11 +12,13 @@ import 'package:PiliPalaX/utils/storage.dart';
 class PlDanmaku extends StatefulWidget {
   final int cid;
   final PlPlayerController playerController;
+  final bool? isPipMode;
 
   const PlDanmaku({
     super.key,
     required this.cid,
     required this.playerController,
+    this.isPipMode,
   });
 
   @override
@@ -39,6 +41,7 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
   late int fontWeight;
   int latestAddedPosition = -1;
   bool showDanmaku = true;
+  bool? _isFullScreen;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -60,6 +63,7 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
         widget.cid,
         widget.playerController.danmakuWeight,
         widget.playerController.danmakuFilterRule);
+
     if (mounted) {
       playerController = widget.playerController;
       if (enableShowDanmaku || playerController.isOpenDanmu.value) {
@@ -76,6 +80,20 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
         _plDanmakuController.initiate(
             playerController.duration.value.inMilliseconds,
             playerController.position.value.inMilliseconds);
+      }
+    });
+    playerController.isFullScreen.listen((isFullScreen) {
+      if (isFullScreen != _isFullScreen) {
+        _isFullScreen = isFullScreen;
+        if (_controller != null) {
+          _controller!.updateOption(
+            _controller!.option.copyWith(
+              fontSize: isFullScreen == false || widget.isPipMode == true
+                  ? 15 * fontSizeVal
+                  : 15 * fontSizeVal * 1.2,
+            ),
+          );
+        }
       }
     });
     blockTypes = playerController.blockTypes;
@@ -152,7 +170,10 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
               playerController.danmakuController = _controller = e;
             },
             option: DanmakuOption(
-              fontSize: 15 * fontSizeVal,
+              fontSize: playerController.isFullScreen.value == false ||
+                      widget.isPipMode == true
+                  ? 15 * fontSizeVal
+                  : 15 * fontSizeVal * 1.2,
               fontWeight: fontWeight,
               area: showArea,
               opacity: opacityVal,

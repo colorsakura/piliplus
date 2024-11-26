@@ -907,6 +907,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         () => PlDanmaku(
                           key: Key(videoDetailController.danmakuCid.value
                               .toString()),
+                          isPipMode: true,
                           cid: videoDetailController.danmakuCid.value,
                           playerController: plPlayerController!,
                         ),
