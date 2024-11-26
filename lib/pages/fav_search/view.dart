@@ -104,8 +104,10 @@ class _FavSearchPageState extends State<FavSearchPage> {
                         videoItem: loadingState.response[index],
                         searchType: _favSearchCtr.type,
                         callFn: () => _favSearchCtr.type != 1
-                            ? _favSearchCtr
-                                .onCancelFav(loadingState.response[index].id!)
+                            ? _favSearchCtr.onCancelFav(
+                                loadingState.response[index].id!,
+                                loadingState.response[index].type,
+                              )
                             : {},
                       );
                     }

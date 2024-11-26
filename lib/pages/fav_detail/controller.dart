@@ -61,11 +61,12 @@ class FavDetailController extends CommonController {
     return true;
   }
 
-  onCancelFav(int id) async {
+  onCancelFav(int id, int type) async {
     var result = await VideoHttp.favVideo(
       aid: id,
       addIds: '',
       delIds: mediaId.toString(),
+      type: type,
     );
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;

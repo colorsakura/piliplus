@@ -84,9 +84,13 @@ class FavSearchController extends CommonController {
     return true;
   }
 
-  onCancelFav(int id) async {
+  onCancelFav(int id, int type) async {
     var result = await VideoHttp.favVideo(
-        aid: id, addIds: '', delIds: mediaId.toString());
+      aid: id,
+      addIds: '',
+      delIds: mediaId.toString(),
+      type: type,
+    );
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;
       dataList = dataList.where((item) => item.id != id).toList();

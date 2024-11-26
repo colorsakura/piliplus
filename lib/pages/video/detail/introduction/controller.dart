@@ -392,9 +392,10 @@ class VideoIntroController extends GetxController
     }
     SmartDialog.showLoading(msg: '请求中');
     var result = await VideoHttp.favVideo(
-        aid: IdUtils.bv2av(bvid),
-        addIds: addMediaIdsNew.join(','),
-        delIds: delMediaIdsNew.join(','));
+      aid: IdUtils.bv2av(bvid),
+      addIds: addMediaIdsNew.join(','),
+      delIds: delMediaIdsNew.join(','),
+    );
     SmartDialog.dismiss();
     if (result['status']) {
       addMediaIdsNew = [];

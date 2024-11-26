@@ -563,11 +563,15 @@ class VideoHttp {
   }
 
   // （取消）收藏
-  static Future favVideo(
-      {required int aid, String? addIds, String? delIds}) async {
+  static Future favVideo({
+    required int aid,
+    String? addIds,
+    String? delIds,
+    int? type,
+  }) async {
     var res = await Request().post(Api.favVideo, queryParameters: {
       'rid': aid,
-      'type': 2,
+      'type': type ?? 2,
       'add_media_ids': addIds ?? '',
       'del_media_ids': delIds ?? '',
       'csrf': await Request.getCsrf(),

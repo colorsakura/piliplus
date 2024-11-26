@@ -302,8 +302,10 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     }
                     return FavVideoCardH(
                       videoItem: loadingState.response[index],
-                      callFn: () => _favDetailController
-                          .onCancelFav(loadingState.response[index].id),
+                      callFn: () => _favDetailController.onCancelFav(
+                        loadingState.response[index].id,
+                        loadingState.response[index].type,
+                      ),
                     );
                   },
                   childCount: loadingState.response.length + 1,
