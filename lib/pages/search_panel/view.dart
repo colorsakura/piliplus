@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/search_panel/widgets/video_panel.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,6 @@ import 'widgets/article_panel.dart';
 import 'widgets/live_panel.dart';
 import 'widgets/media_bangumi_panel.dart';
 import 'widgets/user_panel.dart';
-import 'widgets/video_panel.dart';
 
 class SearchPanel extends StatefulWidget {
   final String? keyword;
@@ -112,9 +112,10 @@ class _SearchPanelState extends State<SearchPanel>
     } else {
       switch (widget.searchType) {
         case SearchType.video:
-          return SearchVideoPanel(
-            ctr: _searchPanelController,
-            loadingState: loadingState,
+          return searchVideoPanel(
+            context,
+            _searchPanelController,
+            loadingState,
           );
         case SearchType.media_bangumi:
           return searchBangumiPanel(

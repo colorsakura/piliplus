@@ -75,14 +75,11 @@ class LiveItem extends StatelessWidget {
                   double maxHeight = boxConstraints.maxHeight;
                   return Stack(
                     children: [
-                      Hero(
-                        tag: heroTag,
-                        child: NetworkImgLayer(
-                          src: liveItem.cover,
-                          type: 'emote',
-                          width: maxWidth,
-                          height: maxHeight,
-                        ),
+                      NetworkImgLayer(
+                        src: liveItem.cover,
+                        type: 'emote',
+                        width: maxWidth,
+                        height: maxHeight,
                       ),
                       Positioned(
                         left: 0,

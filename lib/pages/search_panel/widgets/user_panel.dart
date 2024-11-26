@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/pages/search_panel/controller.dart';
@@ -13,7 +14,7 @@ import 'package:PiliPalaX/utils/utils.dart';
 import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
 
-Widget searchUserPanel(BuildContext context, searchPanelCtr, loadingState) {
+Widget searchUserPanel(context, searchPanelCtr, LoadingState loadingState) {
   TextStyle style = TextStyle(
       fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
       color: Theme.of(context).colorScheme.outline);
@@ -73,85 +74,89 @@ Widget searchUserPanel(BuildContext context, searchPanelCtr, loadingState) {
           ),
         ),
       ),
-      loadingState is Success
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: StyleString.safeSpace +
-                    MediaQuery.of(context).padding.bottom,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  mainAxisExtent: 56,
+      switch (loadingState) {
+        Loading() => errorWidget(),
+        Success() => (loadingState.response as List?)?.isNotEmpty == true
+            ? SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: StyleString.safeSpace +
+                      MediaQuery.of(context).padding.bottom,
                 ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    var i = loadingState.response[index];
-                    String heroTag = Utils.makeHeroTag(i!.mid);
-                    return InkWell(
-                      onTap: () => Get.toNamed('/member?mid=${i.mid}',
-                          arguments: {'heroTag': heroTag, 'face': i.upic}),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 15),
-                          Hero(
-                            tag: heroTag,
-                            child: NetworkImgLayer(
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    mainAxisSpacing: StyleString.cardSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    mainAxisExtent: 56,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      var i = loadingState.response[index];
+                      String heroTag = Utils.makeHeroTag(i!.mid);
+                      return InkWell(
+                        onTap: () => Get.toNamed('/member?mid=${i.mid}',
+                            arguments: {'heroTag': heroTag, 'face': i.upic}),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 15),
+                            NetworkImgLayer(
                               width: 42,
                               height: 42,
                               src: i.upic,
                               type: 'avatar',
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    i!.uname,
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      i!.uname,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Image.asset(
-                                    'assets/images/lv/lv${i!.level}.png',
-                                    height: 11,
-                                    semanticLabel: '等级${i.level}',
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text('粉丝：${i.fans} ', style: style),
-                                  Text(' 视频：${i.videos}', style: style)
-                                ],
-                              ),
-                              if (i.officialVerify['desc'] != '')
-                                Text(
-                                  i.officialVerify['desc'],
-                                  style: style,
+                                    const SizedBox(width: 6),
+                                    Image.asset(
+                                      'assets/images/lv/lv${i!.level}.png',
+                                      height: 11,
+                                      semanticLabel: '等级${i.level}',
+                                    ),
+                                  ],
                                 ),
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: loadingState.response.length,
+                                Row(
+                                  children: [
+                                    Text('粉丝：${i.fans} ', style: style),
+                                    Text(' 视频：${i.videos}', style: style)
+                                  ],
+                                ),
+                                if (i.officialVerify['desc'] != '')
+                                  Text(
+                                    i.officialVerify['desc'],
+                                    style: style,
+                                  ),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: loadingState.response.length,
+                  ),
                 ),
+              )
+            : HttpError(
+                callback: searchPanelCtr.onReload,
               ),
-            )
-          : HttpError(
-              errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
-              callback: searchPanelCtr.onReload,
-            )
+        Error() => HttpError(
+            errMsg: loadingState.errMsg,
+            callback: searchPanelCtr.onReload,
+          ),
+        LoadingState() => throw UnimplementedError(),
+      },
     ],
   );
 }

@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
@@ -14,87 +15,76 @@ import 'package:intl/intl.dart';
 import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
 
-class SearchVideoPanel extends StatelessWidget {
-  SearchVideoPanel({
-    required this.ctr,
-    required this.loadingState,
-    super.key,
-  });
-
-  final SearchPanelController ctr;
-  final dynamic loadingState;
-
-  final VideoPanelController controller = Get.put(VideoPanelController());
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      controller: ctr.scrollController,
-      slivers: [
-        SliverPersistentHeader(
-          pinned: false,
-          floating: true,
-          delegate: MySliverPersistentHeaderDelegate(
-            child: Container(
-              width: context.width,
-              height: 34,
-              color: Theme.of(context).colorScheme.surface,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(
-                        () => Wrap(
-                          // spacing: ,
-                          children: [
-                            for (var i in controller.filterList) ...[
-                              CustomFilterChip(
-                                label: i['label'],
-                                type: i['type'],
-                                selectedType: controller.selectedType.value,
-                                callFn: (bool selected) async {
-                                  debugPrint('selected: $selected');
-                                  controller.selectedType.value = i['type'];
-                                  ctr.order.value =
-                                      i['type'].toString().split('.').last;
-                                  SmartDialog.showLoading(msg: 'loading');
-                                  await ctr.onRefresh();
-                                  SmartDialog.dismiss();
-                                },
-                              ),
-                            ]
-                          ],
-                        ),
+Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
+  final controller = Get.put(VideoPanelController());
+  return CustomScrollView(
+    controller: ctr.scrollController,
+    slivers: [
+      SliverPersistentHeader(
+        pinned: false,
+        floating: true,
+        delegate: MySliverPersistentHeaderDelegate(
+          child: Container(
+            height: 34,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Obx(
+                      () => Wrap(
+                        // spacing: ,
+                        children: [
+                          for (var i in controller.filterList) ...[
+                            CustomFilterChip(
+                              label: i['label'],
+                              type: i['type'],
+                              selectedType: controller.selectedType.value,
+                              callFn: (bool selected) async {
+                                debugPrint('selected: $selected');
+                                controller.selectedType.value = i['type'];
+                                ctr.order.value =
+                                    i['type'].toString().split('.').last;
+                                SmartDialog.showLoading(msg: 'loading');
+                                await ctr.onRefresh();
+                                SmartDialog.dismiss();
+                              },
+                            ),
+                          ]
+                        ],
                       ),
                     ),
                   ),
-                  const VerticalDivider(indent: 7, endIndent: 8),
-                  const SizedBox(width: 3),
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      tooltip: '筛选',
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-                      onPressed: () =>
-                          controller.onShowFilterDialog(context, ctr),
-                      icon: Icon(
-                        Icons.filter_list_outlined,
-                        size: 18,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                ),
+                const VerticalDivider(indent: 7, endIndent: 8),
+                const SizedBox(width: 3),
+                SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: IconButton(
+                    tooltip: '筛选',
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    ),
+                    onPressed: () =>
+                        controller.onShowFilterDialog(context, ctr),
+                    icon: Icon(
+                      Icons.filter_list_outlined,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        loadingState is Success
+      ),
+      switch (loadingState) {
+        Loading() => errorWidget(),
+        Success() => (loadingState.response as List?)?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
                   left: StyleString.safeSpace,
@@ -122,12 +112,16 @@ class SearchVideoPanel extends StatelessWidget {
                 ),
               )
             : HttpError(
-                errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
                 callback: ctr.onReload,
               ),
-      ],
-    );
-  }
+        Error() => HttpError(
+            errMsg: loadingState.errMsg,
+            callback: ctr.onReload,
+          ),
+        _ => throw UnimplementedError(),
+      },
+    ],
+  );
 }
 
 class CustomFilterChip extends StatelessWidget {

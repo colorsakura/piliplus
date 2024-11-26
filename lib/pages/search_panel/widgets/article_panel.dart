@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/pages/search_panel/controller.dart';
@@ -13,7 +14,7 @@ import 'package:PiliPalaX/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchArticlePanel(BuildContext context, searchPanelCtr, loadingState) {
+Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
   TextStyle textStyle = TextStyle(
       fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
       color: Theme.of(context).colorScheme.outline);
@@ -73,141 +74,151 @@ Widget searchArticlePanel(BuildContext context, searchPanelCtr, loadingState) {
           ),
         ),
       ),
-      loadingState is Success
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: StyleString.safeSpace +
-                    MediaQuery.of(context).padding.bottom,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.safeSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0,
+      switch (loadingState) {
+        Loading() => errorWidget(),
+        Success() => (loadingState.response as List?)?.isNotEmpty == true
+            ? SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: StyleString.safeSpace +
+                      MediaQuery.of(context).padding.bottom,
                 ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () {
-                        Get.toNamed('/htmlRender', parameters: {
-                          'url':
-                              'www.bilibili.com/read/cv${loadingState.response[index].id}',
-                          'title': loadingState.response[index].subTitle,
-                          'id': 'cv${loadingState.response[index].id}',
-                          'dynamicType': 'read'
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: StyleString.safeSpace),
-                        child: LayoutBuilder(
-                          builder: (context, boxConstraints) {
-                            final double width = (boxConstraints.maxWidth -
-                                    StyleString.cardSpace *
-                                        6 /
-                                        MediaQuery.textScalerOf(context)
-                                            .scale(1.0)) /
-                                2;
-                            return Container(
-                              constraints: const BoxConstraints(minHeight: 88),
-                              height: width / StyleString.aspectRatio,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  if (loadingState.response[index].imageUrls !=
-                                          null &&
-                                      loadingState
-                                          .response[index].imageUrls.isNotEmpty)
-                                    AspectRatio(
-                                      aspectRatio: StyleString.aspectRatio,
-                                      child: LayoutBuilder(
-                                          builder: (context, boxConstraints) {
-                                        double maxWidth =
-                                            boxConstraints.maxWidth;
-                                        double maxHeight =
-                                            boxConstraints.maxHeight;
-                                        return NetworkImgLayer(
-                                          width: maxWidth,
-                                          height: maxHeight,
-                                          src: loadingState
-                                              .response[index].imageUrls.first,
-                                        );
-                                      }),
-                                    ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 2, 6, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          RichText(
-                                            maxLines: 2,
-                                            text: TextSpan(
-                                              children: [
-                                                for (var i in loadingState
-                                                    .response[index].title) ...[
-                                                  TextSpan(
-                                                    text: i['text'],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      letterSpacing: 0.3,
-                                                      color: i['type'] == 'em'
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .primary
-                                                          : Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface,
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: StyleString.safeSpace,
+                    crossAxisSpacing: StyleString.safeSpace,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.4,
+                    mainAxisExtent: 0,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          Get.toNamed('/htmlRender', parameters: {
+                            'url':
+                                'www.bilibili.com/read/cv${loadingState.response[index].id}',
+                            'title': loadingState.response[index].subTitle,
+                            'id': 'cv${loadingState.response[index].id}',
+                            'dynamicType': 'read'
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: StyleString.safeSpace),
+                          child: LayoutBuilder(
+                            builder: (context, boxConstraints) {
+                              final double width = (boxConstraints.maxWidth -
+                                      StyleString.cardSpace *
+                                          6 /
+                                          MediaQuery.textScalerOf(context)
+                                              .scale(1.0)) /
+                                  2;
+                              return Container(
+                                constraints:
+                                    const BoxConstraints(minHeight: 88),
+                                height: width / StyleString.aspectRatio,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    if (loadingState
+                                                .response[index].imageUrls !=
+                                            null &&
+                                        loadingState.response[index].imageUrls
+                                            .isNotEmpty)
+                                      AspectRatio(
+                                        aspectRatio: StyleString.aspectRatio,
+                                        child: LayoutBuilder(
+                                            builder: (context, boxConstraints) {
+                                          double maxWidth =
+                                              boxConstraints.maxWidth;
+                                          double maxHeight =
+                                              boxConstraints.maxHeight;
+                                          return NetworkImgLayer(
+                                            width: maxWidth,
+                                            height: maxHeight,
+                                            src: loadingState.response[index]
+                                                .imageUrls.first,
+                                          );
+                                        }),
+                                      ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 2, 6, 0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            RichText(
+                                              maxLines: 2,
+                                              text: TextSpan(
+                                                children: [
+                                                  for (var i in loadingState
+                                                      .response[index]
+                                                      .title) ...[
+                                                    TextSpan(
+                                                      text: i['text'],
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        letterSpacing: 0.3,
+                                                        color: i['type'] == 'em'
+                                                            ? Theme.of(context)
+                                                                .colorScheme
+                                                                .primary
+                                                            : Theme.of(context)
+                                                                .colorScheme
+                                                                .onSurface,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ]
+                                                  ]
+                                                ],
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                                Utils.dateFormat(
+                                                    loadingState.response[index]
+                                                        .pubTime,
+                                                    formatType: 'detail'),
+                                                style: textStyle),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                    '${loadingState.response[index].view}浏览',
+                                                    style: textStyle),
+                                                Text(' • ', style: textStyle),
+                                                Text(
+                                                    '${loadingState.response[index].reply}评论',
+                                                    style: textStyle),
                                               ],
                                             ),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                              Utils.dateFormat(
-                                                  loadingState
-                                                      .response[index].pubTime,
-                                                  formatType: 'detail'),
-                                              style: textStyle),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                  '${loadingState.response[index].view}浏览',
-                                                  style: textStyle),
-                                              Text(' • ', style: textStyle),
-                                              Text(
-                                                  '${loadingState.response[index].reply}评论',
-                                                  style: textStyle),
-                                            ],
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  childCount: loadingState.response.length,
+                      );
+                    },
+                    childCount: loadingState.response.length,
+                  ),
                 ),
+              )
+            : HttpError(
+                callback: searchPanelCtr.onReload,
               ),
-            )
-          : HttpError(
-              errMsg: loadingState is Error ? loadingState.errMsg : '没有相关数据',
-              callback: searchPanelCtr.onReload,
-            ),
+        Error() => HttpError(
+            errMsg: loadingState.errMsg,
+            callback: searchPanelCtr.onReload,
+          ),
+        LoadingState() => throw UnimplementedError(),
+      },
     ],
   );
 }

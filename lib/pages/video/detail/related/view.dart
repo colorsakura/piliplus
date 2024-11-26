@@ -87,9 +87,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
                 }
               }, childCount: loadingState.response.length + 1),
             )
-          : HttpError(
-              callback: _relatedController.onReload,
-            ),
+          : SliverToBoxAdapter(),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _relatedController.onReload,
