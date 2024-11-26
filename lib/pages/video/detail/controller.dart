@@ -1550,7 +1550,7 @@ class VideoDetailController extends GetxController
           ActionType.mute,
         ],
       SegmentType.music_offtopic => [
-          ActionType.mute,
+          ActionType.skip,
         ],
       SegmentType.poi_highlight => [ActionType.poi],
       SegmentType.filler => [
