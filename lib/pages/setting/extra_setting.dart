@@ -139,7 +139,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
       body: ListView(
         children: [
           SetSwitchItem(
-            title: 'Sponsor Block',
+            title: '空降助手',
             subTitle: '点击配置',
             leading: Icon(Icons.block),
             setKey: SettingBoxKey.enableSponsorBlock,

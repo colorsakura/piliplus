@@ -134,7 +134,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
 
   Widget get _aboudItem => ListTile(
         dense: true,
-        title: Text('关于 SponsorBlock', style: _titleStyle),
+        title: Text('关于空降助手', style: _titleStyle),
         subtitle: Text(_url, style: _subTitleStyle),
         onTap: () => Utils.launchURL(_url),
       );
@@ -248,8 +248,13 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       dense: true,
       onTap: _updateBlockTrack,
       title: Text(
-        '记录跳过片段',
+        '跳过次数统计跟踪',
         style: _titleStyle,
+      ),
+      subtitle: Text(
+        // from origin extension
+        '此功能追踪您跳过了哪些片段，让用户知道他们提交的片段帮助了多少人。同时点赞会作为依据，确保垃圾信息不会污染数据库。在您每次跳过片段时，我们都会向服务器发送一条消息。希望大家开启此项设置，以便得到更准确的统计数据。:)',
+        style: _subTitleStyle,
       ),
       trailing: Transform.scale(
         alignment: Alignment.centerRight,
@@ -368,7 +373,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sponsor Block')),
+      appBar: AppBar(title: Text('空降助手')),
       body: CustomScrollView(
         slivers: [
           _dividerL,

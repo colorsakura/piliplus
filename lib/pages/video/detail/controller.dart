@@ -133,6 +133,10 @@ class PostSegmentModel {
 
 enum ActionType { skip, mute, full, poi }
 
+extension ActionTypeExt on ActionType {
+  String get title => ['跳过', '静音', '整个视频', '精彩时刻'][index];
+}
+
 class VideoDetailController extends GetxController
     with GetSingleTickerProviderStateMixin {
   /// 路由传参
@@ -1234,9 +1238,11 @@ class VideoDetailController extends GetxController
                                           PopupMenuButton(
                                             initialValue: list![index].category,
                                             onSelected: (item) async {
-                                              setState(() {
-                                                list![index].category = item;
-                                              });
+                                              list![index].category = item;
+                                              list![index].actionType =
+                                                  _segmentType2ActionType(item)
+                                                      .first;
+                                              setState(() {});
                                             },
                                             itemBuilder: (context) =>
                                                 SegmentType.values
@@ -1273,7 +1279,7 @@ class VideoDetailController extends GetxController
                                             ),
                                           ),
                                           const SizedBox(width: 16),
-                                          const Text('ActionType: '),
+                                          const Text('行为类别: '),
                                           PopupMenuButton(
                                             initialValue:
                                                 list![index].actionType,
@@ -1284,11 +1290,18 @@ class VideoDetailController extends GetxController
                                             },
                                             itemBuilder: (context) => ActionType
                                                 .values
-                                                .map((item) =>
-                                                    PopupMenuItem<ActionType>(
-                                                      value: item,
-                                                      child: Text(item.name),
-                                                    ))
+                                                .map(
+                                                  (item) =>
+                                                      PopupMenuItem<ActionType>(
+                                                    enabled:
+                                                        _segmentType2ActionType(
+                                                                list![index]
+                                                                    .category)
+                                                            .contains(item),
+                                                    value: item,
+                                                    child: Text(item.title),
+                                                  ),
+                                                )
                                                 .toList(),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
@@ -1296,7 +1309,7 @@ class VideoDetailController extends GetxController
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  list![index].actionType.name,
+                                                  list![index].actionType.title,
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     color: Theme.of(context)
@@ -1369,6 +1382,9 @@ class VideoDetailController extends GetxController
                                     _handleSBData(res);
                                     plPlayerController.segmentList.value =
                                         _segmentProgressList ?? <Segment>[];
+                                    if (positionSubscription == null) {
+                                      _initSkip();
+                                    }
                                   } else {
                                     SmartDialog.showToast(
                                       '提交失败: ${{
@@ -1392,4 +1408,76 @@ class VideoDetailController extends GetxController
           );
         },
       );
+
+  List<SegmentType> _actionType2SegmentType(ActionType actionType) {
+    return switch (actionType) {
+      ActionType.skip => [
+          SegmentType.sponsor,
+          SegmentType.selfpromo,
+          SegmentType.interaction,
+          SegmentType.intro,
+          SegmentType.outro,
+          SegmentType.preview,
+          SegmentType.filler,
+        ],
+      ActionType.mute => [
+          SegmentType.sponsor,
+          SegmentType.selfpromo,
+          SegmentType.interaction,
+          SegmentType.intro,
+          SegmentType.outro,
+          SegmentType.preview,
+          SegmentType.music_offtopic,
+          SegmentType.filler,
+        ],
+      ActionType.full => [
+          SegmentType.sponsor,
+          SegmentType.selfpromo,
+          SegmentType.exclusive_access,
+        ],
+      ActionType.poi => [
+          SegmentType.poi_highlight,
+        ],
+    };
+  }
+
+  List<ActionType> _segmentType2ActionType(SegmentType segmentType) {
+    return switch (segmentType) {
+      SegmentType.sponsor => [
+          ActionType.skip,
+          ActionType.mute,
+          ActionType.full
+        ],
+      SegmentType.selfpromo => [
+          ActionType.skip,
+          ActionType.mute,
+          ActionType.full
+        ],
+      SegmentType.interaction => [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.intro => [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.outro => [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.preview => [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.music_offtopic => [
+          ActionType.mute,
+        ],
+      SegmentType.poi_highlight => [ActionType.poi],
+      SegmentType.filler => [
+          ActionType.skip,
+          ActionType.mute,
+        ],
+      SegmentType.exclusive_access => [ActionType.full],
+    };
+  }
 }
