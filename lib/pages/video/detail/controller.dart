@@ -1044,6 +1044,22 @@ class VideoDetailController extends GetxController
 
   Widget _postPanel(onClose, [bool isChild = true]) => StatefulBuilder(
         builder: (context, setState) {
+          void updateSegment({
+            required bool isFirst,
+            required int index,
+            required int value,
+          }) {
+            if (isFirst) {
+              list![index].segment.first = value;
+            } else {
+              list![index].segment.second = value;
+            }
+            if (list![index].category == SegmentType.poi_highlight ||
+                list![index].actionType == ActionType.full) {
+              list![index].segment.second = value;
+            }
+          }
+
           List<Widget> segmentWidget({
             required int index,
             required bool isFirst,
@@ -1063,13 +1079,11 @@ class VideoDetailController extends GetxController
                 icon: Icons.my_location,
                 onPressed: () {
                   setState(() {
-                    if (isFirst) {
-                      list![index].segment.first =
-                          plPlayerController.positionSeconds.value;
-                    } else {
-                      list![index].segment.second =
-                          plPlayerController.positionSeconds.value;
-                    }
+                    updateSegment(
+                      isFirst: isFirst,
+                      index: index,
+                      value: plPlayerController.positionSeconds.value,
+                    );
                   });
                 },
               ),
@@ -1130,11 +1144,11 @@ class VideoDetailController extends GetxController
                         if (duration <=
                             plPlayerController.durationSeconds.value) {
                           setState(() {
-                            if (isFirst) {
-                              list![index].segment.first = duration;
-                            } else {
-                              list![index].segment.second = duration;
-                            }
+                            updateSegment(
+                              isFirst: isFirst,
+                              index: index,
+                              value: duration,
+                            );
                           });
                         }
                       } catch (e) {
@@ -1191,146 +1205,212 @@ class VideoDetailController extends GetxController
                             children: [
                               ...List.generate(
                                 list!.length,
-                                (index) => Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 5,
-                                  ),
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onInverseSurface,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
+                                (index) => Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 5,
+                                      ),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onInverseSurface,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          ...segmentWidget(
-                                            isFirst: true,
-                                            index: index,
-                                          ),
-                                          const SizedBox(width: 16),
-                                          ...segmentWidget(
-                                            isFirst: false,
-                                            index: index,
-                                          ),
-                                          const Spacer(),
-                                          iconButton(
-                                            context: context,
-                                            size: 26,
-                                            tooltip: '移除',
-                                            icon: Icons.clear,
-                                            onPressed: () {
-                                              setState(() {
-                                                list!.removeAt(index);
-                                              });
-                                            },
-                                          ),
+                                          if (list![index].category !=
+                                                  SegmentType
+                                                      .exclusive_access &&
+                                              list![index].actionType !=
+                                                  ActionType.full) ...[
+                                            Row(
+                                              children: [
+                                                ...segmentWidget(
+                                                  isFirst: true,
+                                                  index: index,
+                                                ),
+                                                if (list![index].category !=
+                                                    SegmentType
+                                                        .poi_highlight) ...[
+                                                  const SizedBox(width: 16),
+                                                  ...segmentWidget(
+                                                    isFirst: false,
+                                                    index: index,
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                          ],
+                                          Row(
+                                            children: [
+                                              const Text('分类: '),
+                                              PopupMenuButton(
+                                                initialValue:
+                                                    list![index].category,
+                                                onSelected: (item) async {
+                                                  list![index].category = item;
+                                                  list![index].actionType =
+                                                      _segmentType2ActionType(
+                                                              item)
+                                                          .first;
+                                                  switch (item) {
+                                                    case SegmentType
+                                                          .poi_highlight:
+                                                      list![index]
+                                                              .segment
+                                                              .second =
+                                                          list![index]
+                                                              .segment
+                                                              .first;
+                                                      break;
+                                                    case SegmentType
+                                                          .exclusive_access:
+                                                      list![index]
+                                                          .segment
+                                                          .first = 0;
+                                                      list![index]
+                                                          .segment
+                                                          .second = 0;
+                                                      break;
+                                                    case _:
+                                                  }
+                                                  setState(() {});
+                                                },
+                                                itemBuilder: (context) =>
+                                                    SegmentType.values
+                                                        .map((item) =>
+                                                            PopupMenuItem<
+                                                                SegmentType>(
+                                                              value: item,
+                                                              child: Text(
+                                                                  item.title),
+                                                            ))
+                                                        .toList(),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      list![index]
+                                                          .category
+                                                          .title,
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: MediaQuery
+                                                              .textScalerOf(
+                                                                  context)
+                                                          .scale(14),
+                                                      child: Icon(
+                                                        Icons
+                                                            .keyboard_arrow_right,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              const Text('行为类别: '),
+                                              PopupMenuButton(
+                                                initialValue:
+                                                    list![index].actionType,
+                                                onSelected: (item) async {
+                                                  list![index].actionType =
+                                                      item;
+                                                  if (item == ActionType.full) {
+                                                    updateSegment(
+                                                      isFirst: true,
+                                                      index: index,
+                                                      value: 0,
+                                                    );
+                                                  }
+                                                  setState(() {});
+                                                },
+                                                itemBuilder: (context) =>
+                                                    ActionType.values
+                                                        .map(
+                                                          (item) =>
+                                                              PopupMenuItem<
+                                                                  ActionType>(
+                                                            enabled: _segmentType2ActionType(
+                                                                    list![index]
+                                                                        .category)
+                                                                .contains(item),
+                                                            value: item,
+                                                            child: Text(
+                                                                item.title),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      list![index]
+                                                          .actionType
+                                                          .title,
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: MediaQuery
+                                                              .textScalerOf(
+                                                                  context)
+                                                          .scale(14),
+                                                      child: Icon(
+                                                        Icons
+                                                            .keyboard_arrow_right,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         ],
                                       ),
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          const Text('分类: '),
-                                          PopupMenuButton(
-                                            initialValue: list![index].category,
-                                            onSelected: (item) async {
-                                              list![index].category = item;
-                                              list![index].actionType =
-                                                  _segmentType2ActionType(item)
-                                                      .first;
-                                              setState(() {});
-                                            },
-                                            itemBuilder: (context) =>
-                                                SegmentType.values
-                                                    .map((item) =>
-                                                        PopupMenuItem<
-                                                            SegmentType>(
-                                                          value: item,
-                                                          child:
-                                                              Text(item.title),
-                                                        ))
-                                                    .toList(),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  list![index].category.title,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary,
-                                                  ),
-                                                ),
-                                                Icon(
-                                                  size: 20,
-                                                  Icons.keyboard_arrow_right,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          const Text('行为类别: '),
-                                          PopupMenuButton(
-                                            initialValue:
-                                                list![index].actionType,
-                                            onSelected: (item) async {
-                                              setState(() {
-                                                list![index].actionType = item;
-                                              });
-                                            },
-                                            itemBuilder: (context) => ActionType
-                                                .values
-                                                .map(
-                                                  (item) =>
-                                                      PopupMenuItem<ActionType>(
-                                                    enabled:
-                                                        _segmentType2ActionType(
-                                                                list![index]
-                                                                    .category)
-                                                            .contains(item),
-                                                    value: item,
-                                                    child: Text(item.title),
-                                                  ),
-                                                )
-                                                .toList(),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  list![index].actionType.title,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary,
-                                                  ),
-                                                ),
-                                                Icon(
-                                                  size: 20,
-                                                  Icons.keyboard_arrow_right,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    Positioned(
+                                      top: 10,
+                                      right: 21,
+                                      child: iconButton(
+                                        context: context,
+                                        size: 26,
+                                        tooltip: '移除',
+                                        icon: Icons.clear,
+                                        onPressed: () {
+                                          setState(() {
+                                            list!.removeAt(index);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               SizedBox(
