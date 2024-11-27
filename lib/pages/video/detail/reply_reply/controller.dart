@@ -2,6 +2,7 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
@@ -29,8 +30,6 @@ class VideoReplyReplyController extends CommonController
   // rpid 请求楼中楼回复
   int? rpid;
   ReplyType replyType; // = ReplyType.video;
-  // 当前页
-  RxString noMore = ''.obs;
   // 当前回复的回复
   ReplyInfo? currentReplyItem;
 
@@ -44,6 +43,8 @@ class VideoReplyReplyController extends CommonController
   Animation<Color?>? colorAnimation;
 
   ReplyInfo? firstFloor;
+
+  bool isEnd = false;
 
   @override
   void onInit() {
@@ -81,7 +82,7 @@ class VideoReplyReplyController extends CommonController
 
   @override
   Future queryData([bool isRefresh = true]) async {
-    if (['没有更多了', '还没有评论'].contains(noMore.value)) return Future.value();
+    if (isRefresh.not && isEnd) return Future.value();
     if (!isDialogue &&
         currentPage == 1 &&
         !hasRoot &&
@@ -109,6 +110,7 @@ class VideoReplyReplyController extends CommonController
   @override
   Future onRefresh() {
     cursor = null;
+    isEnd = false;
     return super.onRefresh();
   }
 
@@ -158,24 +160,22 @@ class VideoReplyReplyController extends CommonController
     }
     if (isDialogue) {
       if (replies.replies.isNotEmpty) {
-        noMore.value = '加载中...';
         if (replies.cursor.isEnd || replies.replies.length >= count.value) {
-          noMore.value = '没有更多了';
+          isEnd = true;
         }
       } else {
         // 未登录状态replies可能返回null
-        noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
+        isEnd = true;
       }
     } else {
       if (replies.root.replies.isNotEmpty) {
-        noMore.value = '加载中...';
         if (replies.cursor.isEnd ||
             replies.root.replies.length >= count.value) {
-          noMore.value = '没有更多了';
+          isEnd = true;
         }
       } else {
         // 未登录状态replies可能返回null
-        noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
+        isEnd = true;
       }
     }
     if (isDialogue) {
@@ -210,7 +210,6 @@ class VideoReplyReplyController extends CommonController
         );
 
   queryBySort() {
-    noMore.value = '';
     mode.value = mode.value == Mode.MAIN_LIST_HOT
         ? Mode.MAIN_LIST_TIME
         : Mode.MAIN_LIST_HOT;

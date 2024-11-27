@@ -3,7 +3,9 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
@@ -290,66 +292,75 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   }
 
   Widget _buildBody(LoadingState loadingState, int index) {
-    if (loadingState is Success) {
-      if (index == loadingState.response.length) {
-        _videoReplyReplyController.onLoadMore();
-        return Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-          height: MediaQuery.of(context).padding.bottom + 100,
-          child: Center(
-            child: Obx(
-              () => Text(
-                _videoReplyReplyController.noMore.value,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.outline,
+    return switch (loadingState) {
+      Loading() => CustomScrollView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return const VideoReplySkeleton();
+                },
+                childCount: 8,
+              ),
+            )
+          ],
+        ),
+      Success() => () {
+          if (index == loadingState.response.length) {
+            EasyThrottle.throttle(
+                'replylist', const Duration(milliseconds: 200), () {
+              _videoReplyReplyController.onLoadMore();
+            });
+            return Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom),
+              height: MediaQuery.of(context).padding.bottom + 100,
+              child: Center(
+                child: Obx(
+                  () => Text(
+                    _videoReplyReplyController.isEnd.not
+                        ? '加载中...'
+                        : loadingState.response.isEmpty
+                            ? '还没有评论'
+                            : '没有更多了',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      } else {
-        return _videoReplyReplyController.index == index
-            ? AnimatedBuilder(
-                animation: _videoReplyReplyController.colorAnimation!,
-                builder: (context, child) {
-                  return ColoredBox(
-                    color: _videoReplyReplyController.colorAnimation?.value ??
-                        Theme.of(Get.context!).colorScheme.onInverseSurface,
-                    child: _replyItem(loadingState.response[index], index),
-                  );
-                },
-              )
-            : _replyItem(loadingState.response[index], index);
-      }
-    } else if (loadingState is Error) {
-      return CustomScrollView(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        slivers: [
-          HttpError(
-            errMsg: loadingState.errMsg,
-            callback: _videoReplyReplyController.onReload,
-          )
-        ],
-      );
-    } else {
-      return CustomScrollView(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        slivers: [
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return const VideoReplySkeleton();
-              },
-              childCount: 8,
-            ),
-          )
-        ],
-      );
-    }
+            );
+          } else {
+            return _videoReplyReplyController.index == index
+                ? AnimatedBuilder(
+                    animation: _videoReplyReplyController.colorAnimation!,
+                    builder: (context, child) {
+                      return ColoredBox(
+                        color: _videoReplyReplyController
+                                .colorAnimation?.value ??
+                            Theme.of(Get.context!).colorScheme.onInverseSurface,
+                        child: _replyItem(loadingState.response[index], index),
+                      );
+                    },
+                  )
+                : _replyItem(loadingState.response[index], index);
+          }
+        }(),
+      Error() => CustomScrollView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          slivers: [
+            HttpError(
+              errMsg: loadingState.errMsg,
+              callback: _videoReplyReplyController.onReload,
+            )
+          ],
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 
   Widget _replyItem(replyItem, index) {

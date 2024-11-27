@@ -79,15 +79,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   void scrollListener() {
     _videoReplyController.scrollController.addListener(
       () {
-        if (_videoReplyController.scrollController.position.pixels >=
-            _videoReplyController.scrollController.position.maxScrollExtent -
-                300) {
-          EasyThrottle.throttle('replylist', const Duration(milliseconds: 200),
-              () {
-            _videoReplyController.onLoadMore();
-          });
-        }
-
         final ScrollDirection direction =
             _videoReplyController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
@@ -219,6 +210,10 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 (BuildContext context, index) {
                   double bottom = MediaQuery.of(context).padding.bottom;
                   if (index == loadingState.response.replies.length) {
+                    EasyThrottle.throttle(
+                        'replylist', const Duration(milliseconds: 200), () {
+                      _videoReplyController.onLoadMore();
+                    });
                     return Container(
                       padding: EdgeInsets.only(bottom: bottom),
                       height: bottom + 100,
@@ -259,6 +254,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               ),
             )
           : HttpError(
+              errMsg: '还没有评论',
               callback: _videoReplyController.onReload,
             ),
       Error() => HttpError(

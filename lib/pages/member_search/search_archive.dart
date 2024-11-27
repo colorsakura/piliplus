@@ -5,6 +5,7 @@ import 'package:PiliPalaX/common/widgets/video_card_h.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/member_search/controller.dart';
 import 'package:PiliPalaX/utils/grid.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -50,7 +51,10 @@ class SearchArchive extends StatelessWidget {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == loadingState.response.length - 1) {
-                            ctr.searchArchives(false);
+                            EasyThrottle.throttle('searchArchives',
+                                const Duration(milliseconds: 500), () {
+                              ctr.searchArchives(false);
+                            });
                           }
                           return VideoCardH(
                             videoItem: loadingState.response[index],

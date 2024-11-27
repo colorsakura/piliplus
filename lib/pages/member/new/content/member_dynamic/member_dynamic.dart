@@ -3,6 +3,7 @@ import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/dynamics/widgets/dynamic_panel_grpc.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_dynamic/member_dynamic_ctr.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,7 +44,10 @@ class _MemberDynamicState extends State<MemberDynamic>
                 itemCount: loadingState.response.length,
                 itemBuilder: (_, index) {
                   if (index == loadingState.response.length - 1) {
-                    _controller.onLoadMore();
+                    EasyThrottle.throttle(
+                        'memberDynamic', const Duration(milliseconds: 500), () {
+                      _controller.onLoadMore();
+                    });
                   }
                   return DynamicPanelGrpc(
                     item: loadingState.response[index],

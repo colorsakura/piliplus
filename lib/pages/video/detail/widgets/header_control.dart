@@ -1564,9 +1564,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         !plPlayerController.isOpenDanmu.value;
                     setting.put(SettingBoxKey.enableShowDanmaku,
                         plPlayerController.isOpenDanmu.value);
-                    SmartDialog.showToast(
-                        "已${plPlayerController.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
-                        displayTime: const Duration(seconds: 1));
+                    // SmartDialog.showToast(
+                    //     "已${plPlayerController.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
+                    //     displayTime: const Duration(seconds: 1));
                   },
                   icon: Icon(
                     plPlayerController.isOpenDanmu.value
