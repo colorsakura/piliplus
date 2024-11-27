@@ -29,10 +29,12 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     _tabController = TabController(
       vsync: this,
-      initialIndex: Get.arguments,
+      initialIndex: Get.arguments is int ? Get.arguments : 0,
       length: SearchType.values.length,
     )..addListener(() {
-        Get.find<SSearchController>().initIndex = _tabController.index;
+        if (Get.isRegistered<SSearchController>()) {
+          Get.find<SSearchController>().initIndex = _tabController.index;
+        }
       });
   }
 
