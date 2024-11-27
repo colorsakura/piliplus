@@ -805,7 +805,7 @@ class VideoHttp {
       'cid': cid,
     });
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
+      return {'status': true, 'data': res.data['data']['total']};
     } else {
       return {'status': false, 'data': null, 'msg': res.data['message']};
     }

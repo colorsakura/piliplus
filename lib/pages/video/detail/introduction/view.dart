@@ -158,7 +158,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
-  late final _expandableCtr = ExpandableController(initialExpanded: false);
+  final _expandableCtr = ExpandableController(initialExpanded: false);
 
   @override
   void initState() {

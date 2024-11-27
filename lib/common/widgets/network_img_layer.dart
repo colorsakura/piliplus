@@ -90,7 +90,9 @@ class NetworkImgLayer extends StatelessWidget {
                 imageBuilder: imageBuilder,
                 errorListener: (value) {
                   thumbnail = false;
-                  (context as Element).markNeedsBuild();
+                  if (context.mounted) {
+                    (context as Element).markNeedsBuild();
+                  }
                 },
               ),
             ),

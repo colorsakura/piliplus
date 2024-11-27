@@ -554,6 +554,8 @@ class VideoDetailController extends GetxController
       },
       options: _options,
     );
+    segmentList.clear();
+    _segmentProgressList = null;
     _handleSBData(result);
   }
 

@@ -567,6 +567,9 @@ class VideoIntroController extends GetxController
     this.bvid = bvid;
     lastPlayCid.value = cid;
     queryVideoIntro();
+    if (isShowOnlineTotal) {
+      queryOnlineTotal();
+    }
   }
 
   void startTimer() {
@@ -588,15 +591,15 @@ class VideoIntroController extends GetxController
 
   // 查看同时在看人数
   Future queryOnlineTotal() async {
-    // var result = await VideoHttp.onlineTotal(
-    //   aid: IdUtils.bv2av(bvid),
-    //   bvid: bvid,
-    //   cid: lastPlayCid.value,
-    // );
-    dynamic result = await GrpcRepo.playerOnline(
+    dynamic result = await VideoHttp.onlineTotal(
       aid: IdUtils.bv2av(bvid),
+      bvid: bvid,
       cid: lastPlayCid.value,
     );
+    // dynamic result = await GrpcRepo.playerOnline(
+    //   aid: IdUtils.bv2av(bvid),
+    //   cid: lastPlayCid.value,
+    // );
     if (result['status']) {
       total.value = result['data'];
     }

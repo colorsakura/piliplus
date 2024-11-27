@@ -1437,36 +1437,40 @@ class _HeaderControlState extends State<HeaderControl> {
                     constraints: BoxConstraints(
                         maxWidth: boxConstraints.maxWidth / 2 - 60,
                         maxHeight: 25),
-                    child: Marquee(
-                      text: videoIntroController.videoDetail.value.title!,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                    child: Obx(
+                      () => Marquee(
+                        text: videoIntroController.videoDetail.value.title!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                        scrollAxis: Axis.horizontal,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        blankSpace: 200,
+                        velocity: 40,
+                        startAfter: const Duration(seconds: 1),
+                        showFadingOnlyWhenScrolling: true,
+                        fadingEdgeStartFraction: 0,
+                        fadingEdgeEndFraction: 0.1,
+                        numberOfRounds: 1,
+                        startPadding: 0,
+                        accelerationDuration: const Duration(seconds: 1),
+                        accelerationCurve: Curves.linear,
+                        decelerationDuration: const Duration(milliseconds: 500),
+                        decelerationCurve: Curves.easeOut,
                       ),
-                      scrollAxis: Axis.horizontal,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      blankSpace: 200,
-                      velocity: 40,
-                      startAfter: const Duration(seconds: 1),
-                      showFadingOnlyWhenScrolling: true,
-                      fadingEdgeStartFraction: 0,
-                      fadingEdgeEndFraction: 0.1,
-                      numberOfRounds: 1,
-                      startPadding: 0,
-                      accelerationDuration: const Duration(seconds: 1),
-                      accelerationCurve: Curves.linear,
-                      decelerationDuration: const Duration(milliseconds: 500),
-                      decelerationCurve: Curves.easeOut,
                     ),
                   ),
                   if (videoIntroController.isShowOnlineTotal)
-                    Text(
-                      '${videoIntroController.total.value}人正在看',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
+                    Obx(
+                      () => Text(
+                        '${videoIntroController.total.value}人正在看',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                        ),
                       ),
-                    )
+                    ),
                 ],
               ),
             const Spacer(),
