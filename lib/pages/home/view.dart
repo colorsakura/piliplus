@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -70,10 +71,9 @@ class _HomePageState extends State<HomePage>
                     tabAlignment: TabAlignment.center,
                     onTap: (value) {
                       feedBack();
-                      if (_homeController.initialIndex.value == value) {
+                      if (_homeController.tabController.indexIsChanging.not) {
                         _homeController.tabsCtrList[value]().animateToTop();
                       }
-                      _homeController.initialIndex.value = value;
                     },
                   ),
                 ),
@@ -290,53 +290,53 @@ class DefaultUser extends StatelessWidget {
   }
 }
 
-class CustomTabs extends StatefulWidget {
-  const CustomTabs({super.key});
+// class CustomTabs extends StatefulWidget {
+//   const CustomTabs({super.key});
 
-  @override
-  State<CustomTabs> createState() => _CustomTabsState();
-}
+//   @override
+//   State<CustomTabs> createState() => _CustomTabsState();
+// }
 
-class _CustomTabsState extends State<CustomTabs> {
-  final HomeController _homeController = Get.put(HomeController());
+// class _CustomTabsState extends State<CustomTabs> {
+//   final HomeController _homeController = Get.put(HomeController());
 
-  void onTap(int index) {
-    feedBack();
-    if (_homeController.initialIndex.value == index) {
-      _homeController.tabsCtrList[index]().animateToTop();
-    }
-    _homeController.initialIndex.value = index;
-    _homeController.tabController.index = index;
-  }
+//   void onTap(int index) {
+//     feedBack();
+//     if (_homeController.initialIndex.value == index) {
+//       _homeController.tabsCtrList[index]().animateToTop();
+//     }
+//     _homeController.initialIndex.value = index;
+//     _homeController.tabController.index = index;
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 44,
-      margin: const EdgeInsets.only(top: 4),
-      child: Obx(
-        () => ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-          scrollDirection: Axis.horizontal,
-          itemCount: _homeController.tabs.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(width: 10);
-          },
-          itemBuilder: (BuildContext context, int index) {
-            String label = _homeController.tabs[index]['label'];
-            return Obx(
-              () => CustomChip(
-                onTap: () => onTap(index),
-                label: label,
-                selected: index == _homeController.initialIndex.value,
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 44,
+//       margin: const EdgeInsets.only(top: 4),
+//       child: Obx(
+//         () => ListView.separated(
+//           padding: const EdgeInsets.symmetric(horizontal: 14.0),
+//           scrollDirection: Axis.horizontal,
+//           itemCount: _homeController.tabs.length,
+//           separatorBuilder: (BuildContext context, int index) {
+//             return const SizedBox(width: 10);
+//           },
+//           itemBuilder: (BuildContext context, int index) {
+//             String label = _homeController.tabs[index]['label'];
+//             return Obx(
+//               () => CustomChip(
+//                 onTap: () => onTap(index),
+//                 label: label,
+//                 selected: index == _homeController.initialIndex.value,
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class CustomChip extends StatelessWidget {
   final Function onTap;

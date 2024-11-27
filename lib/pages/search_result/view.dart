@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
@@ -28,7 +29,6 @@ class _SearchResultPageState extends State<SearchResultPage>
     _tabController = TabController(
       vsync: this,
       length: SearchType.values.length,
-      initialIndex: _searchResultController.tabIndex,
     );
   }
 
@@ -101,14 +101,12 @@ class _SearchResultPageState extends State<SearchResultPage>
                 unselectedLabelColor: Theme.of(context).colorScheme.outline,
                 tabAlignment: TabAlignment.start,
                 onTap: (index) {
-                  if (index == _searchResultController.tabIndex) {
+                  if (_tabController.indexIsChanging.not) {
                     Get.find<SearchPanelController>(
                             tag: SearchType.values[index].type +
                                 _searchResultController.keyword!)
                         .animateToTop();
                   }
-
-                  _searchResultController.tabIndex = index;
                 },
               ),
             ),

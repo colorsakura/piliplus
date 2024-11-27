@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,6 @@ import '../mine/view.dart';
 class HomeController extends GetxController with GetTickerProviderStateMixin {
   bool flag = true;
   late RxList tabs = [].obs;
-  RxInt initialIndex = 1.obs;
   late TabController tabController;
   late List tabsCtrList;
   late List<Widget> tabsPageList;
@@ -81,16 +81,11 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
     tabs.value = defaultTabs;
 
-    if (tabbarSort.contains(TabType.rcmd.id)) {
-      initialIndex.value = tabbarSort.indexOf(TabType.rcmd.id);
-    } else {
-      initialIndex.value = 0;
-    }
     tabsCtrList = tabs.map((e) => e['ctr']).toList();
     tabsPageList = tabs.map<Widget>((e) => e['page']).toList();
 
     tabController = TabController(
-      initialIndex: initialIndex.value,
+      initialIndex: max(0, tabbarSort.indexOf(TabType.rcmd.id)),
       length: tabs.length,
       vsync: this,
     );
