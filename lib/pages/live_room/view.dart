@@ -42,14 +42,15 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   late final _node = FocusNode();
   late final _ctr = TextEditingController();
 
-  late bool enableShowDanmaku;
-  late List blockTypes;
-  late double showArea;
-  late double opacityVal;
-  late double fontSizeVal;
-  late double danmakuDurationVal;
-  late double strokeWidth;
-  late int fontWeight;
+  // late bool enableShowDanmaku;
+  // late List blockTypes;
+  // late double showArea;
+  // late double opacityVal;
+  // late double fontSizeVal;
+  // late double fontSizeFSVal;
+  // late double danmakuDurationVal;
+  // late double strokeWidth;
+  // late int fontWeight;
   int latestAddedPosition = -1;
   bool? _isFullScreen;
   bool? _isPipMode;
@@ -93,20 +94,21 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   double _getFontSize(isFullScreen) {
     return isFullScreen == false || _isPipMode != false
-        ? 15 * fontSizeVal
-        : 15 * fontSizeVal * 1.2;
+        ? 15 * plPlayerController.fontSizeVal
+        : 15 * plPlayerController.fontSizeFSVal;
   }
 
   Future<void> videoSourceInit() async {
     _futureBuilder = _liveRoomController.queryLiveInfoH5();
     plPlayerController = _liveRoomController.plPlayerController;
-    blockTypes = plPlayerController.blockTypes;
-    showArea = plPlayerController.showArea;
-    opacityVal = plPlayerController.opacityVal;
-    fontSizeVal = plPlayerController.fontSizeVal;
-    strokeWidth = plPlayerController.strokeWidth;
-    fontWeight = plPlayerController.fontWeight;
-    danmakuDurationVal = plPlayerController.danmakuDurationVal;
+    // blockTypes = plPlayerController.blockTypes;
+    // showArea = plPlayerController.showArea;
+    // opacityVal = plPlayerController.opacityVal;
+    // fontSizeVal = plPlayerController.fontSizeVal;
+    // fontSizeFSVal = plPlayerController.fontSizeFSVal;
+    // strokeWidth = plPlayerController.strokeWidth;
+    // fontWeight = plPlayerController.fontWeight;
+    // danmakuDurationVal = plPlayerController.danmakuDurationVal;
   }
 
   @override
@@ -157,15 +159,15 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   option: DanmakuOption(
                     fontSize:
                         _getFontSize(plPlayerController.isFullScreen.value),
-                    fontWeight: fontWeight,
-                    area: showArea,
-                    opacity: opacityVal,
-                    hideTop: blockTypes.contains(5),
-                    hideScroll: blockTypes.contains(2),
-                    hideBottom: blockTypes.contains(4),
-                    duration:
-                        danmakuDurationVal / plPlayerController.playbackSpeed,
-                    strokeWidth: strokeWidth,
+                    fontWeight: plPlayerController.fontWeight,
+                    area: plPlayerController.showArea,
+                    opacity: plPlayerController.opacityVal,
+                    hideTop: plPlayerController.blockTypes.contains(5),
+                    hideScroll: plPlayerController.blockTypes.contains(2),
+                    hideBottom: plPlayerController.blockTypes.contains(4),
+                    duration: plPlayerController.danmakuDurationVal /
+                        plPlayerController.playbackSpeed,
+                    strokeWidth: plPlayerController.strokeWidth,
                     // initDuration /
                     //     (danmakuSpeedVal * widget.playerController.playbackSpeed),
                   ),

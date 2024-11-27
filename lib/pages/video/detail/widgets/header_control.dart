@@ -892,6 +892,8 @@ class _HeaderControlState extends State<HeaderControl> {
     double opacityVal = widget.controller!.opacityVal;
     // 字体大小
     double fontSizeVal = widget.controller!.fontSizeVal;
+    // 全屏字体大小
+    double fontSizeFSVal = widget.controller!.fontSizeFSVal;
     // 弹幕速度
     double danmakuDurationVal = widget.controller!.danmakuDurationVal;
     // 弹幕描边
@@ -1198,15 +1200,60 @@ class _HeaderControlState extends State<HeaderControl> {
                           widget.controller!.fontSizeVal = fontSizeVal;
                           widget.controller?.putDanmakuSettings();
                           setState(() {});
-                          try {
-                            final DanmakuOption currentOption =
-                                danmakuController.option;
-                            final DanmakuOption updatedOption =
-                                currentOption.copyWith(
-                              fontSize: (15 * fontSizeVal).toDouble(),
-                            );
-                            danmakuController.updateOption(updatedOption);
-                          } catch (_) {}
+                          if (widget.controller?.isFullScreen.value == false) {
+                            try {
+                              final DanmakuOption currentOption =
+                                  danmakuController.option;
+                              final DanmakuOption updatedOption =
+                                  currentOption.copyWith(
+                                fontSize: (15 * fontSizeVal).toDouble(),
+                              );
+                              danmakuController.updateOption(updatedOption);
+                            } catch (_) {}
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Text('全屏字体大小 ${(fontSizeFSVal * 100).toStringAsFixed(1)}%'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0.5,
+                        max: 2.5,
+                        value: fontSizeFSVal,
+                        divisions: 20,
+                        label: '${(fontSizeFSVal * 100).toStringAsFixed(1)}%',
+                        onChanged: (double val) {
+                          fontSizeFSVal = val;
+                          widget.controller!.fontSizeFSVal = fontSizeFSVal;
+                          widget.controller?.putDanmakuSettings();
+                          setState(() {});
+                          if (widget.controller?.isFullScreen.value == true) {
+                            try {
+                              final DanmakuOption currentOption =
+                                  danmakuController.option;
+                              final DanmakuOption updatedOption =
+                                  currentOption.copyWith(
+                                fontSize: (15 * fontSizeFSVal).toDouble(),
+                              );
+                              danmakuController.updateOption(updatedOption);
+                            } catch (_) {}
+                          }
                         },
                       ),
                     ),

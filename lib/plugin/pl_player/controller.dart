@@ -248,6 +248,7 @@ class PlPlayerController {
   late double showArea;
   late double opacityVal;
   late double fontSizeVal;
+  late double fontSizeFSVal;
   late double strokeWidth;
   late int fontWeight;
   late double danmakuDurationVal;
@@ -348,6 +349,8 @@ class PlPlayerController {
     // 字体大小
     fontSizeVal =
         setting.get(SettingBoxKey.danmakuFontScale, defaultValue: 1.0);
+    // 全屏字体大小
+    fontSizeFSVal = GStorage.danmakuFontScaleFS;
     // 弹幕时间
     danmakuDurationVal =
         setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.29);
@@ -1281,6 +1284,7 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuShowArea, showArea);
     setting.put(SettingBoxKey.danmakuOpacity, opacityVal);
     setting.put(SettingBoxKey.danmakuFontScale, fontSizeVal);
+    setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFSVal);
     setting.put(SettingBoxKey.danmakuDuration, danmakuDurationVal);
     setting.put(SettingBoxKey.strokeWidth, strokeWidth);
     setting.put(SettingBoxKey.fontWeight, fontWeight);

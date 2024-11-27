@@ -96,6 +96,9 @@ class GStorage {
   static int get schemeVariant =>
       setting.get(SettingBoxKey.schemeVariant, defaultValue: 0);
 
+  static double get danmakuFontScaleFS =>
+      setting.get(SettingBoxKey.danmakuFontScaleFS, defaultValue: 1.2);
+
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
@@ -292,6 +295,7 @@ class SettingBoxKey {
       danmakuShowArea = 'danmakuShowArea',
       danmakuOpacity = 'danmakuOpacity',
       danmakuFontScale = 'danmakuFontScale',
+      danmakuFontScaleFS = 'danmakuFontScaleFS',
       danmakuDuration = 'danmakuDuration',
       strokeWidth = 'strokeWidth',
       fontWeight = 'fontWeight',

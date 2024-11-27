@@ -32,13 +32,14 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
   // bool danmuPlayStatus = true;
   Box setting = GStorage.setting;
   late bool enableShowDanmaku;
-  late List blockTypes;
-  late double showArea;
-  late double opacityVal;
-  late double fontSizeVal;
-  late double danmakuDurationVal;
-  late double strokeWidth;
-  late int fontWeight;
+  // late List blockTypes;
+  // late double showArea;
+  // late double opacityVal;
+  // late double fontSizeVal;
+  // late double fontSizeFSVal;
+  // late double danmakuDurationVal;
+  // late double strokeWidth;
+  // late int fontWeight;
   int latestAddedPosition = -1;
   bool showDanmaku = true;
   bool? _isFullScreen;
@@ -94,13 +95,14 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
         }
       }
     });
-    blockTypes = playerController.blockTypes;
-    showArea = playerController.showArea;
-    opacityVal = playerController.opacityVal;
-    fontSizeVal = playerController.fontSizeVal;
-    strokeWidth = playerController.strokeWidth;
-    fontWeight = playerController.fontWeight;
-    danmakuDurationVal = playerController.danmakuDurationVal;
+    // blockTypes = playerController.blockTypes;
+    // showArea = playerController.showArea;
+    // opacityVal = playerController.opacityVal;
+    // fontSizeVal = playerController.fontSizeVal;
+    // fontSizeFSVal = playerController.fontSizeFSVal;
+    // strokeWidth = playerController.strokeWidth;
+    // fontWeight = playerController.fontWeight;
+    // danmakuDurationVal = playerController.danmakuDurationVal;
   }
 
   // 播放器状态监听
@@ -157,8 +159,8 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
 
   double _getFontSize(isFullScreen) =>
       isFullScreen == false || widget.isPipMode == true
-          ? 15 * fontSizeVal
-          : 15 * fontSizeVal * 1.2;
+          ? 15 * playerController.fontSizeVal
+          : 15 * playerController.fontSizeFSVal;
 
   @override
   Widget build(BuildContext context) {
@@ -174,14 +176,15 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
             },
             option: DanmakuOption(
               fontSize: _getFontSize(playerController.isFullScreen.value),
-              fontWeight: fontWeight,
-              area: showArea,
-              opacity: opacityVal,
-              hideTop: blockTypes.contains(5),
-              hideScroll: blockTypes.contains(2),
-              hideBottom: blockTypes.contains(4),
-              duration: danmakuDurationVal / playerController.playbackSpeed,
-              strokeWidth: strokeWidth,
+              fontWeight: playerController.fontWeight,
+              area: playerController.showArea,
+              opacity: playerController.opacityVal,
+              hideTop: playerController.blockTypes.contains(5),
+              hideScroll: playerController.blockTypes.contains(2),
+              hideBottom: playerController.blockTypes.contains(4),
+              duration: playerController.danmakuDurationVal /
+                  playerController.playbackSpeed,
+              strokeWidth: playerController.strokeWidth,
               // initDuration /
               //     (danmakuSpeedVal * widget.playerController.playbackSpeed),
             ),
