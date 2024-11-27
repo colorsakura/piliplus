@@ -88,9 +88,7 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
         if (_controller != null) {
           _controller!.updateOption(
             _controller!.option.copyWith(
-              fontSize: isFullScreen == false || widget.isPipMode == true
-                  ? 15 * fontSizeVal
-                  : 15 * fontSizeVal * 1.2,
+              fontSize: _getFontSize(isFullScreen),
             ),
           );
         }
@@ -157,6 +155,11 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  double _getFontSize(isFullScreen) =>
+      isFullScreen == false || widget.isPipMode == true
+          ? 15 * fontSizeVal
+          : 15 * fontSizeVal * 1.2;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
@@ -170,10 +173,7 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
               playerController.danmakuController = _controller = e;
             },
             option: DanmakuOption(
-              fontSize: playerController.isFullScreen.value == false ||
-                      widget.isPipMode == true
-                  ? 15 * fontSizeVal
-                  : 15 * fontSizeVal * 1.2,
+              fontSize: _getFontSize(playerController.isFullScreen.value),
               fontWeight: fontWeight,
               area: showArea,
               opacity: opacityVal,

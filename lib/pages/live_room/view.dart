@@ -5,6 +5,7 @@ import 'package:PiliPalaX/pages/live_room/widgets/chat.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -50,6 +51,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   late double strokeWidth;
   late int fontWeight;
   int latestAddedPosition = -1;
+  bool? _isFullScreen;
+  bool? _isPipMode;
 
   void playCallBack() {
     plPlayerController.play();
@@ -68,6 +71,30 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
     plPlayerController.autoEnterFullscreen();
     _liveRoomController.liveMsg();
+    plPlayerController.isFullScreen.listen((isFullScreen) {
+      if (isFullScreen != _isFullScreen) {
+        _isFullScreen = isFullScreen;
+        _updateFontSize();
+      }
+    });
+  }
+
+  void _updateFontSize() async {
+    _isPipMode =
+        await const MethodChannel("floating").invokeMethod('inPipAlready');
+    if (_liveRoomController.controller != null) {
+      _liveRoomController.controller!.updateOption(
+        _liveRoomController.controller!.option.copyWith(
+          fontSize: _getFontSize(plPlayerController.isFullScreen.value),
+        ),
+      );
+    }
+  }
+
+  double _getFontSize(isFullScreen) {
+    return isFullScreen == false || _isPipMode != false
+        ? 15 * fontSizeVal
+        : 15 * fontSizeVal * 1.2;
   }
 
   Future<void> videoSourceInit() async {
@@ -106,9 +133,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget videoPlayerPanel = FutureBuilder(
+  Widget get videoPlayerPanel {
+    return FutureBuilder(
       future: _futureBuilderFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData && snapshot.data['status']) {
@@ -129,7 +155,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         _liveRoomController.controller = e;
                   },
                   option: DanmakuOption(
-                    fontSize: 15 * fontSizeVal,
+                    fontSize:
+                        _getFontSize(plPlayerController.isFullScreen.value),
                     fontWeight: fontWeight,
                     area: showArea,
                     opacity: opacityVal,
@@ -152,8 +179,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         }
       },
     );
+  }
 
-    Widget childWhenDisabled = Scaffold(
+  Widget get childWhenDisabled {
+    return Scaffold(
       primary: true,
       backgroundColor: Colors.black,
       body: Stack(
@@ -415,6 +444,13 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         ],
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateFontSize();
+    });
     if (Platform.isAndroid) {
       return PiPSwitcher(
         childWhenDisabled: childWhenDisabled,
