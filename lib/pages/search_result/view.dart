@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/search/controller.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,12 +29,16 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     _tabController = TabController(
       vsync: this,
+      initialIndex: Get.arguments,
       length: SearchType.values.length,
-    );
+    )..addListener(() {
+        Get.find<SSearchController>().initIndex = _tabController.index;
+      });
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(() {});
     _tabController.dispose();
     super.dispose();
   }
@@ -114,15 +119,15 @@ class _SearchResultPageState extends State<SearchResultPage>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                for (var i in SearchType.values) ...{
-                  SearchPanel(
-                    keyword: _searchResultController.keyword,
-                    searchType: i,
-                    tag: _tag,
+              children: SearchType.values
+                  .map(
+                    (item) => SearchPanel(
+                      keyword: _searchResultController.keyword,
+                      searchType: item,
+                      tag: _tag,
+                    ),
                   )
-                }
-              ],
+                  .toList(),
             ),
           ),
         ],

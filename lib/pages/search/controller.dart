@@ -19,6 +19,8 @@ class SSearchController extends GetxController {
 
   Rx<LoadingState> loadingState = LoadingState.loading().obs;
 
+  int initIndex = 0;
+
   @override
   void onInit() {
     super.onInit();
@@ -74,9 +76,13 @@ class SSearchController extends GetxController {
     GStorage.historyWord.put('cacheList', historyList);
     searchFocusNode.unfocus();
 
-    await Get.toNamed('/searchResult', parameters: {
-      'keyword': controller.text,
-    });
+    await Get.toNamed(
+      '/searchResult',
+      parameters: {
+        'keyword': controller.text,
+      },
+      arguments: initIndex,
+    );
     searchFocusNode.requestFocus();
   }
 
