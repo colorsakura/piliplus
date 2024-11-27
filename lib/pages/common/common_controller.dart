@@ -8,6 +8,7 @@ abstract class CommonController extends GetxController {
 
   int currentPage = 1;
   bool isLoading = false;
+  bool isEnd = false;
   Rx<LoadingState> loadingState = LoadingState.loading().obs;
 
   Future<LoadingState> customGetData();
@@ -23,7 +24,7 @@ abstract class CommonController extends GetxController {
   void handleSuccess(List currentList, List dataList) {}
 
   Future queryData([bool isRefresh = true]) async {
-    if (isLoading) return;
+    if (isLoading || (isRefresh.not && isEnd)) return;
     isLoading = true;
     LoadingState response = await customGetData();
     if (response is Success) {
@@ -50,6 +51,7 @@ abstract class CommonController extends GetxController {
 
   Future onRefresh() async {
     currentPage = 1;
+    isEnd = false;
     await queryData();
   }
 

@@ -2,6 +2,7 @@ import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -215,17 +216,18 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       _videoReplyController.onLoadMore();
                     });
                     return Container(
+                      alignment: Alignment.center,
                       padding: EdgeInsets.only(bottom: bottom),
                       height: bottom + 100,
-                      child: Center(
-                        child: Obx(
-                          () => Text(
-                            _videoReplyController.noMore.value,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
-                          ),
+                      child: Text(
+                        _videoReplyController.isEnd.not
+                            ? '加载中...'
+                            : loadingState.response.replies.isEmpty
+                                ? '还没有评论'
+                                : '没有更多了',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.outline,
                         ),
                       ),
                     );

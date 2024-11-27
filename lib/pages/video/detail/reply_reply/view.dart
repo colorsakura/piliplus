@@ -149,9 +149,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemBuilder: (_, index) {
                           if (widget.isDialogue) {
-                            return Obx(() => _buildBody(
+                            return _buildBody(
                                 _videoReplyReplyController.loadingState.value,
-                                index));
+                                index);
                           } else if (firstFloor != null) {
                             if (index == 0) {
                               return ReplyItemGrpc(
@@ -176,17 +176,17 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                             } else if (index == 2) {
                               return _sortWidget;
                             } else {
-                              return Obx(() => _buildBody(
+                              return _buildBody(
                                   _videoReplyReplyController.loadingState.value,
-                                  index - 3));
+                                  index - 3);
                             }
                           } else {
                             if (index == 0) {
                               return _sortWidget;
                             } else {
-                              return Obx(() => _buildBody(
+                              return _buildBody(
                                   _videoReplyReplyController.loadingState.value,
-                                  index - 1));
+                                  index - 1);
                             }
                           }
                         },
@@ -285,6 +285,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                 ?.response ??
             <ReplyInfo>[];
         list.insert(index + 1, replyInfo);
+        _videoReplyReplyController.count.value += 1;
         _videoReplyReplyController.loadingState.value =
             LoadingState.success(list);
       }
@@ -314,22 +315,19 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               _videoReplyReplyController.onLoadMore();
             });
             return Container(
+              alignment: Alignment.center,
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom),
               height: MediaQuery.of(context).padding.bottom + 100,
-              child: Center(
-                child: Obx(
-                  () => Text(
-                    _videoReplyReplyController.isEnd.not
-                        ? '加载中...'
-                        : loadingState.response.isEmpty
-                            ? '还没有评论'
-                            : '没有更多了',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
+              child: Text(
+                _videoReplyReplyController.isEnd.not
+                    ? '加载中...'
+                    : loadingState.response.isEmpty
+                        ? '还没有评论'
+                        : '没有更多了',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
               ),
             );
@@ -376,6 +374,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         List list =
             (_videoReplyReplyController.loadingState.value as Success).response;
         list = list.where((item) => item.id != rpid).toList();
+        _videoReplyReplyController.count.value -= 1;
         _videoReplyReplyController.loadingState.value =
             LoadingState.success(list);
       },

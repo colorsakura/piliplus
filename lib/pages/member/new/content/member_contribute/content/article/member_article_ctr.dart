@@ -2,7 +2,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/models/space_article/data.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 
 class MemberArticleCtr extends CommonController {
   MemberArticleCtr({
@@ -11,25 +10,12 @@ class MemberArticleCtr extends CommonController {
 
   final int mid;
 
-  bool isEnd = false;
   int count = -1;
 
   @override
   void onInit() {
     super.onInit();
     queryData();
-  }
-
-  @override
-  Future onRefresh() async {
-    isEnd = false;
-    return super.onRefresh();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && isEnd) return Future.value();
-    return super.queryData(isRefresh);
   }
 
   @override

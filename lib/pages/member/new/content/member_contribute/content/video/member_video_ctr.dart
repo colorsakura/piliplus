@@ -4,7 +4,6 @@ import 'package:PiliPalaX/models/space_archive/data.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 
 class MemberVideoCtr extends CommonController {
@@ -22,13 +21,11 @@ class MemberVideoCtr extends CommonController {
   String? aid;
   RxString order = 'pubdate'.obs;
   RxString sort = 'desc'.obs;
-  bool isEnd = false;
   RxInt count = (-1).obs;
   int? next;
 
   @override
   Future onRefresh() async {
-    isEnd = false;
     aid = null;
     next = null;
     currentPage = 0;
@@ -40,12 +37,6 @@ class MemberVideoCtr extends CommonController {
     super.onInit();
     currentPage = 0;
     queryData();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && isEnd) return Future.value();
-    return super.queryData(isRefresh);
   }
 
   @override

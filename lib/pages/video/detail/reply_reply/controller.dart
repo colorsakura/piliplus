@@ -2,7 +2,6 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
@@ -44,8 +43,6 @@ class VideoReplyReplyController extends CommonController
 
   ReplyInfo? firstFloor;
 
-  bool isEnd = false;
-
   @override
   void onInit() {
     super.onInit();
@@ -82,7 +79,6 @@ class VideoReplyReplyController extends CommonController
 
   @override
   Future queryData([bool isRefresh = true]) async {
-    if (isRefresh.not && isEnd) return Future.value();
     if (!isDialogue &&
         currentPage == 1 &&
         !hasRoot &&
@@ -110,7 +106,6 @@ class VideoReplyReplyController extends CommonController
   @override
   Future onRefresh() {
     cursor = null;
-    isEnd = false;
     return super.onRefresh();
   }
 
@@ -159,24 +154,13 @@ class VideoReplyReplyController extends CommonController
       }
     }
     if (isDialogue) {
-      if (replies.replies.isNotEmpty) {
-        if (replies.cursor.isEnd || replies.replies.length >= count.value) {
-          isEnd = true;
-        }
-      } else {
-        // 未登录状态replies可能返回null
-        isEnd = true;
-      }
+      isEnd = replies.replies.isEmpty ||
+          replies.cursor.isEnd ||
+          replies.replies.length >= count.value;
     } else {
-      if (replies.root.replies.isNotEmpty) {
-        if (replies.cursor.isEnd ||
-            replies.root.replies.length >= count.value) {
-          isEnd = true;
-        }
-      } else {
-        // 未登录状态replies可能返回null
-        isEnd = true;
-      }
+      isEnd = replies.root.replies.isEmpty ||
+          replies.cursor.isEnd ||
+          replies.root.replies.length >= count.value;
     }
     if (isDialogue) {
       loadingState.value = LoadingState.success(replies.replies);

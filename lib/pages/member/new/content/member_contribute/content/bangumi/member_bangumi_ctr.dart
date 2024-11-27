@@ -5,7 +5,6 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPalaX/pages/member/new/controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 
 class MemberBangumiCtr extends CommonController {
@@ -16,7 +15,6 @@ class MemberBangumiCtr extends CommonController {
 
   final int mid;
   final String? heroTag;
-  bool isEnd = false;
   late final int count;
   late final _ctr = Get.find<MemberControllerNew>(tag: heroTag);
 
@@ -32,15 +30,8 @@ class MemberBangumiCtr extends CommonController {
 
   @override
   Future onRefresh() async {
-    isEnd = false;
     currentPage = 1;
     await queryData();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && isEnd) return Future.value();
-    return super.queryData(isRefresh);
   }
 
   @override

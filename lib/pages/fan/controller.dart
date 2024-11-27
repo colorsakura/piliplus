@@ -1,7 +1,6 @@
 import 'package:PiliPalaX/http/fan.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -14,7 +13,6 @@ class FansController extends CommonController {
   late String? name;
   dynamic userInfo;
   RxBool isOwner = false.obs;
-  bool isEnd = false;
 
   @override
   void onInit() {
@@ -27,20 +25,6 @@ class FansController extends CommonController {
     name = Get.parameters['name'] ?? userInfo?.uname;
 
     queryData();
-  }
-
-  @override
-  Future onRefresh() {
-    isEnd = false;
-    return super.onRefresh();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && isEnd) {
-      return Future.value();
-    }
-    return super.queryData(isRefresh);
   }
 
   @override

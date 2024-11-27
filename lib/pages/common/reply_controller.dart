@@ -3,7 +3,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 abstract class ReplyController extends CommonController {
   String nextOffset = "";
   bool isLoadingMore = false;
-  RxString noMore = ''.obs;
   RxInt count = (-1).obs;
   // 当前回复的回复
   ReplyItemModel? currentReplyItem;
@@ -52,14 +50,7 @@ abstract class ReplyController extends CommonController {
   Future onRefresh() {
     cursor = null;
     nextOffset = '';
-    noMore.value = '';
     return super.onRefresh();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && noMore.value == '没有更多了') return Future.value();
-    return super.queryData(isRefresh);
   }
 
   @override
@@ -79,15 +70,9 @@ abstract class ReplyController extends CommonController {
           : <ReplyInfo>[];
       replies.replies.insertAll(0, list);
     }
-    if (replies.replies.isNotEmpty) {
-      noMore.value = '加载中...';
-      if (replies.cursor.isEnd || replies.replies.length >= count.value) {
-        noMore.value = '没有更多了';
-      }
-    } else {
-      // 未登录状态replies可能返回null
-      noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
-    }
+    isEnd = replies.replies.isEmpty ||
+        replies.cursor.isEnd ||
+        replies.replies.length >= count.value;
     loadingState.value = LoadingState.success(replies);
     return true;
   }
@@ -110,7 +95,6 @@ abstract class ReplyController extends CommonController {
       sortTypeTitle.value = sortType.titles;
       sortTypeLabel.value = sortType.labels;
       nextOffset = "";
-      noMore.value = '';
       loadingState.value = LoadingState.loading();
       onRefresh();
     });
@@ -170,6 +154,7 @@ abstract class ReplyController extends CommonController {
           } else {
             response.replies[index].replies.add(replyInfo);
           }
+          count.value += 1;
           loadingState.value = LoadingState.success(response);
         }
       },
@@ -191,6 +176,7 @@ abstract class ReplyController extends CommonController {
         }
       }).toList();
     }
+    count.value -= 1;
     loadingState.value = LoadingState.success(response);
   }
 }

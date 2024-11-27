@@ -2,32 +2,12 @@ import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 
 class MemberDynamicCtr extends CommonController {
   MemberDynamicCtr({
     required this.mid,
   });
   int mid;
-  bool isEnd = false;
-
-  @override
-  void onInit() {
-    super.onInit();
-    // queryData();
-  }
-
-  @override
-  Future onRefresh() {
-    isEnd = false;
-    return super.onRefresh();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && isEnd) return Future.value();
-    return super.queryData(isRefresh);
-  }
 
   @override
   bool customHandleResponse(Success response) {
