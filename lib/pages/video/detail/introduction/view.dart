@@ -1,4 +1,8 @@
 import 'package:PiliPalaX/common/widgets/self_sized_horizontal_list.dart';
+import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
+import 'package:PiliPalaX/utils/extension.dart';
+import 'package:expandable/expandable.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -154,6 +158,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
+  late final _expandableCtr = ExpandableController(initialExpanded: false);
 
   @override
   void initState() {
@@ -165,6 +170,12 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
     loadingStatus = widget.loadingStatus;
     enableAi = setting.get(SettingBoxKey.enableAi, defaultValue: true);
+  }
+
+  @override
+  void dispose() {
+    _expandableCtr.dispose();
+    super.dispose();
   }
 
   void _showFavBottomSheet() => showModalBottomSheet(
@@ -222,7 +233,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       return;
     }
     feedBack();
-    widget.showIntroDetail();
+    // widget.showIntroDetail();
+    _expandableCtr.toggle();
   }
 
   // 用户主页
@@ -382,86 +394,104 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               const SizedBox(height: 8),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: () => showIntroDetail(),
-                child: Row(children: [
-                  Expanded(
-                      child: Text(
-                    widget.videoDetail?.title ?? videoItem['title'] ?? "",
-                    // !loadingStatus
-                    //     ? "${widget.videoDetail?.title}"
-                    //     : videoItem['title'] ?? "",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                onTap: showIntroDetail,
+                child: ExpandablePanel(
+                  controller: _expandableCtr,
+                  collapsed: GestureDetector(
+                    onLongPress: () {
+                      feedBack();
+                      Utils.copyText(
+                          '${widget.videoDetail?.title ?? videoItem['title'] ?? ''}');
+                    },
+                    child: Text(
+                      '${widget.videoDetail?.title ?? videoItem['title'] ?? ''}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: t.colorScheme.outline,
                   ),
-                ]),
+                  expanded: GestureDetector(
+                    onLongPress: () {
+                      feedBack();
+                      Utils.copyText(
+                          '${widget.videoDetail?.title ?? videoItem['title'] ?? ''}');
+                    },
+                    child: Text(
+                      widget.videoDetail?.title ?? videoItem['title'] ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  theme: const ExpandableThemeData(
+                    animationDuration: Duration(milliseconds: 300),
+                    scrollAnimationDuration: Duration(milliseconds: 300),
+                    crossFadePoint: 0,
+                    fadeCurve: Curves.ease,
+                    sizeCurve: Curves.linear,
+                  ),
+                ),
               ),
+              const SizedBox(height: 8),
               Stack(
                 children: [
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
-                    onTap: () => showIntroDetail(),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 7, bottom: 6),
-                      child: Row(
-                        children: <Widget>[
-                          StatView(
-                            theme: 'gray',
-                            view: !loadingStatus
-                                ? widget.videoDetail?.stat?.view ?? '-'
-                                : videoItem['stat']?.view ?? '-',
-                            size: 'medium',
+                    onTap: showIntroDetail,
+                    child: Row(
+                      children: <Widget>[
+                        StatView(
+                          theme: 'gray',
+                          view: !loadingStatus
+                              ? widget.videoDetail?.stat?.view ?? '-'
+                              : videoItem['stat']?.view ?? '-',
+                          size: 'medium',
+                        ),
+                        const SizedBox(width: 10),
+                        StatDanMu(
+                          theme: 'gray',
+                          danmu: !loadingStatus
+                              ? widget.videoDetail?.stat?.danmu ?? '-'
+                              : videoItem['stat']?.danmu ?? '-',
+                          size: 'medium',
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          Utils.dateFormat(
+                              !loadingStatus
+                                  ? widget.videoDetail?.pubdate
+                                  : videoItem['pubdate'],
+                              formatType: 'detail'),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: t.colorScheme.outline,
                           ),
+                        ),
+                        if (MineController.anonymity) ...<Widget>[
                           const SizedBox(width: 10),
-                          StatDanMu(
-                            theme: 'gray',
-                            danmu: !loadingStatus
-                                ? widget.videoDetail?.stat?.danmu ?? '-'
-                                : videoItem['stat']?.danmu ?? '-',
-                            size: 'medium',
+                          Icon(
+                            MdiIcons.incognito,
+                            size: 15,
+                            color: t.colorScheme.outline,
+                            semanticLabel: '无痕',
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            Utils.dateFormat(
-                                !loadingStatus
-                                    ? widget.videoDetail?.pubdate
-                                    : videoItem['pubdate'],
-                                formatType: 'detail'),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: t.colorScheme.outline,
-                            ),
-                          ),
-                          if (MineController.anonymity) ...<Widget>[
-                            const SizedBox(width: 10),
-                            Icon(
-                              MdiIcons.incognito,
-                              size: 15,
-                              color: t.colorScheme.outline,
-                              semanticLabel: '无痕',
-                            ),
-                          ],
-                          const SizedBox(width: 10),
-                          if (videoIntroController.isShowOnlineTotal)
-                            Obx(
-                              () => Text(
-                                '${videoIntroController.total.value}人在看',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: t.colorScheme.outline,
-                                ),
+                        ],
+                        const SizedBox(width: 10),
+                        if (videoIntroController.isShowOnlineTotal)
+                          Obx(
+                            () => Text(
+                              '${videoIntroController.total.value}人在看',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: t.colorScheme.outline,
                               ),
                             ),
-                        ],
-                      ),
+                          ),
+                      ],
                     ),
                   ),
                   if (enableAi)
@@ -488,7 +518,80 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     )
                 ],
               ),
-
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: showIntroDetail,
+                child: ExpandablePanel(
+                  controller: _expandableCtr,
+                  collapsed: const SizedBox.shrink(),
+                  expanded: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () {
+                          Utils.copyText(
+                              '${videoIntroController.videoDetail.value.bvid}');
+                        },
+                        child: Text(
+                          '${videoIntroController.videoDetail.value.bvid}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                      if (videoIntroController
+                          .videoDetail.value.descV2.isNullOrEmpty.not) ...[
+                        const SizedBox(height: 8),
+                        SelectableText.rich(
+                          style: const TextStyle(
+                            height: 1.4,
+                            // fontSize: 13,
+                          ),
+                          TextSpan(
+                            children: [
+                              buildContent(context,
+                                  videoIntroController.videoDetail.value),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (videoIntroController.videoTags is List &&
+                          videoIntroController.videoTags.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: (videoIntroController.videoTags as List)
+                              .map(
+                                (item) => SearchText(
+                                  fontSize: 13,
+                                  searchText: item['tag_name'],
+                                  onSelect: (_) => Get.toNamed('/searchResult',
+                                      parameters: {
+                                        'keyword': item['tag_name']
+                                      }),
+                                  onLongSelect: (_) =>
+                                      Utils.copyText(item['tag_name']),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ],
+                  ),
+                  theme: const ExpandableThemeData(
+                    animationDuration: Duration(milliseconds: 300),
+                    scrollAnimationDuration: Duration(milliseconds: 300),
+                    crossFadePoint: 0,
+                    fadeCurve: Curves.ease,
+                    sizeCurve: Curves.linear,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
               Obx(
                 () => videoIntroController.queryVideoIntroData.value["status"]
                     ? const SizedBox()
@@ -747,5 +850,81 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           //     : '-',
           text: '转发'),
     ]);
+  }
+
+  InlineSpan buildContent(BuildContext context, VideoDetailData content) {
+    final List descV2 = content.descV2!;
+    // type
+    // 1 普通文本
+    // 2 @用户
+    final List<TextSpan> spanChildren = List.generate(descV2.length, (index) {
+      final currentDesc = descV2[index];
+      switch (currentDesc.type) {
+        case 1:
+          final List<InlineSpan> spanChildren = <InlineSpan>[];
+          final RegExp urlRegExp = RegExp(r'https?://\S+\b');
+          final Iterable<Match> matches =
+              urlRegExp.allMatches(currentDesc.rawText);
+
+          int previousEndIndex = 0;
+          for (final Match match in matches) {
+            if (match.start > previousEndIndex) {
+              spanChildren.add(TextSpan(
+                  text: currentDesc.rawText
+                      .substring(previousEndIndex, match.start)));
+            }
+            spanChildren.add(
+              TextSpan(
+                text: match.group(0),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary), // 设置颜色为蓝色
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    // 处理点击事件
+                    try {
+                      Get.toNamed(
+                        '/webviewnew',
+                        parameters: {
+                          'url': match.group(0)!,
+                          'type': 'url',
+                          'pageTitle': match.group(0)!,
+                        },
+                      );
+                    } catch (err) {
+                      SmartDialog.showToast(err.toString());
+                    }
+                  },
+              ),
+            );
+            previousEndIndex = match.end;
+          }
+
+          if (previousEndIndex < currentDesc.rawText.length) {
+            spanChildren.add(TextSpan(
+                text: currentDesc.rawText.substring(previousEndIndex)));
+          }
+
+          final TextSpan result = TextSpan(children: spanChildren);
+          return result;
+        case 2:
+          final Color colorSchemePrimary =
+              Theme.of(context).colorScheme.primary;
+          final String heroTag = Utils.makeHeroTag(currentDesc.bizId);
+          return TextSpan(
+            text: '@${currentDesc.rawText}',
+            style: TextStyle(color: colorSchemePrimary),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Get.toNamed(
+                  '/member?mid=${currentDesc.bizId}',
+                  arguments: {'face': '', 'heroTag': heroTag},
+                );
+              },
+          );
+        default:
+          return const TextSpan();
+      }
+    });
+    return TextSpan(children: spanChildren);
   }
 }

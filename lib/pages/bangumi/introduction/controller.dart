@@ -63,7 +63,6 @@ class BangumiIntroController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    queryVideoTags();
     if (Get.arguments.isNotEmpty as bool) {
       if (Get.arguments.containsKey('bangumiItem') as bool) {
         preRender = true;
@@ -103,6 +102,12 @@ class BangumiIntroController extends CommonController {
     if (userLogin && seasonId != null) {
       queryIsFollowed();
     }
+  }
+
+  @override
+  Future queryData([bool isRefresh = true]) async {
+    await queryVideoTags();
+    return super.queryData(isRefresh);
   }
 
   Future queryVideoTags() async {

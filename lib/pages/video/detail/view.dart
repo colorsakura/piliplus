@@ -1273,6 +1273,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               showIntroDetail: showIntroDetail,
             ),
           ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
+        )
       ],
     );
   }

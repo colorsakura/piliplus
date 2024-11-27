@@ -168,6 +168,7 @@ dependencies:
   image_cropper: ^8.0.2
   #解压直播消息
   brotli: ^0.6.0
+  expandable: ^5.0.1
 
 dependency_overrides:
   screen_brightness: ^2.0.0+2
