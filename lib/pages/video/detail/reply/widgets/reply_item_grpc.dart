@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
@@ -19,8 +18,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/url_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import '../../../../../utils/app_scheme.dart';
-
-Box setting = GStorage.setting;
 
 class ReplyItemGrpc extends StatelessWidget {
   const ReplyItemGrpc({
@@ -59,9 +56,7 @@ class ReplyItemGrpc extends StatelessWidget {
         // 点击整个评论区 评论详情/回复
         onTap: () {
           feedBack();
-          if (replyReply != null) {
-            replyReply!(replyItem, null);
-          }
+          replyReply?.call(replyItem, null, isTop);
         },
         onLongPress: () {
           feedBack();
@@ -318,20 +313,8 @@ class ReplyItemGrpc extends StatelessWidget {
             showReplyRow) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
-            child: ReplyItemRow(
-              upMid: upMid,
-              count: replyItem.count.toInt(),
-              replies: replyItem.replies,
-              replyControl: replyItem.replyControl,
-              // f_rpid: replyItem.rpid,
-              replyItem: replyItem,
-              replyReply: replyReply,
-              onDelete: (rpid) {
-                if (onDelete != null) {
-                  onDelete!(rpid, replyItem.id.toInt());
-                }
-              },
-              getTag: getTag,
+            child: replyItemRow(
+              context: context,
             ),
           ),
         ],
@@ -430,35 +413,9 @@ class ReplyItemGrpc extends StatelessWidget {
       ],
     );
   }
-}
 
-// ignore: must_be_immutable
-class ReplyItemRow extends StatelessWidget {
-  ReplyItemRow({
-    super.key,
-    required this.count,
-    required this.replies,
-    required this.replyControl,
-    // this.f_rpid,
-    this.replyItem,
-    this.replyReply,
-    this.onDelete,
-    this.upMid,
-    this.getTag,
-  });
-  final int count;
-  final List<ReplyInfo> replies;
-  ReplyControl replyControl;
-  // int? f_rpid;
-  ReplyInfo? replyItem;
-  Function? replyReply;
-  final Function(dynamic rpid)? onDelete;
-  final dynamic upMid;
-  final Function? getTag;
-
-  @override
-  Widget build(BuildContext context) {
-    final bool extraRow = replies.length < count;
+  Widget replyItemRow({required BuildContext context}) {
+    final bool extraRow = replyItem.replies.length < replyItem.count.toInt();
     return Container(
       margin: const EdgeInsets.only(left: 42, right: 4, top: 0),
       child: Material(
@@ -469,12 +426,12 @@ class ReplyItemRow extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (replies.isNotEmpty)
-              for (int i = 0; i < replies.length; i++) ...[
+            if (replyItem.replies.isNotEmpty)
+              for (int i = 0; i < replyItem.replies.length; i++) ...[
                 InkWell(
                   // 一楼点击评论展开评论详情
-                  onTap: () =>
-                      replyReply?.call(replyItem, replies[i].id.toInt()),
+                  onTap: () => replyReply?.call(
+                      replyItem, replyItem.replies[i].id.toInt(), isTop),
                   onLongPress: () {
                     feedBack();
                     showModalBottomSheet(
@@ -483,8 +440,10 @@ class ReplyItemRow extends StatelessWidget {
                       isScrollControlled: true,
                       builder: (context) {
                         return MorePanel(
-                          item: replies[i],
-                          onDelete: onDelete,
+                          item: replyItem.replies[i],
+                          onDelete: (rpid) {
+                            onDelete?.call(rpid, replyItem.id.toInt());
+                          },
                         );
                       },
                     );
@@ -493,13 +452,17 @@ class ReplyItemRow extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(
                       8,
-                      i == 0 && (extraRow || replies.length > 1) ? 8 : 4,
+                      i == 0 && (extraRow || replyItem.replies.length > 1)
+                          ? 8
+                          : 4,
                       8,
-                      i == 0 && (extraRow || replies.length > 1) ? 4 : 6,
+                      i == 0 && (extraRow || replyItem.replies.length > 1)
+                          ? 4
+                          : 6,
                     ),
                     child: Semantics(
                       label:
-                          '${replies[i].member.name} ${replies[i].content.message}',
+                          '${replyItem.replies[i].member.name} ${replyItem.replies[i].content.message}',
                       excludeSemantics: true,
                       child: Text.rich(
                         style: TextStyle(
@@ -517,7 +480,7 @@ class ReplyItemRow extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: replies[i].member.name,
+                              text: replyItem.replies[i].member.name,
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
@@ -527,17 +490,18 @@ class ReplyItemRow extends StatelessWidget {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   feedBack();
-                                  final String heroTag =
-                                      Utils.makeHeroTag(replies[i].member.mid);
+                                  final String heroTag = Utils.makeHeroTag(
+                                      replyItem.replies[i].member.mid);
                                   Get.toNamed(
-                                      '/member?mid=${replies[i].member.mid}',
+                                      '/member?mid=${replyItem.replies[i].member.mid}',
                                       arguments: {
-                                        'face': replies[i].member.face,
+                                        'face':
+                                            replyItem.replies[i].member.face,
                                         'heroTag': heroTag
                                       });
                                 },
                             ),
-                            if (replies[i].mid == upMid) ...[
+                            if (replyItem.replies[i].mid == upMid) ...[
                               const TextSpan(text: ' '),
                               const WidgetSpan(
                                 alignment: PlaceholderAlignment.top,
@@ -551,15 +515,16 @@ class ReplyItemRow extends StatelessWidget {
                               const TextSpan(text: ' '),
                             ],
                             TextSpan(
-                              text: replies[i].root == replies[i].parent
+                              text: replyItem.replies[i].root ==
+                                      replyItem.replies[i].parent
                                   ? ': '
-                                  : replies[i].mid == upMid
+                                  : replyItem.replies[i].mid == upMid
                                       ? ''
                                       : ' ',
                             ),
                             buildContent(
                               context,
-                              replies[i],
+                              replyItem.replies[i],
                               replyReply,
                               replyItem,
                               null,
@@ -576,7 +541,7 @@ class ReplyItemRow extends StatelessWidget {
             if (extraRow)
               InkWell(
                 // 一楼点击【共xx条回复】展开评论详情
-                onTap: () => replyReply!(replyItem, null),
+                onTap: () => replyReply?.call(replyItem, null, isTop),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(8, 5, 8, 8),
@@ -587,7 +552,7 @@ class ReplyItemRow extends StatelessWidget {
                             Theme.of(context).textTheme.labelMedium!.fontSize,
                       ),
                       children: [
-                        if (replyControl.upReply)
+                        if (replyItem.replyControl.upReply)
                           TextSpan(
                               text: 'UP主等人 ',
                               style: TextStyle(
@@ -596,7 +561,7 @@ class ReplyItemRow extends StatelessWidget {
                                       .onSurface
                                       .withOpacity(0.85))),
                         TextSpan(
-                          text: replyControl.subReplyEntryText,
+                          text: replyItem.replyControl.subReplyEntryText,
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
@@ -703,6 +668,7 @@ InlineSpan buildContent(
   if (jumpUrlKeysList.isNotEmpty) {
     patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
   }
+  patternStr += r'|https://b23\.tv/[a-zA-Z0-9]{7}';
   final RegExp pattern = RegExp(patternStr);
   List<String> matchedStrs = [];
   void addPlainTextSpan(str) {
@@ -807,10 +773,24 @@ InlineSpan buildContent(
                 : null,
           ),
         );
+      } else if (matchStr.startsWith('https://b23.tv/')) {
+        spanChildren.add(
+          TextSpan(
+            text: ' $matchStr ',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => Get.toNamed(
+                    '/webviewnew',
+                    parameters: {'url': matchStr},
+                  ),
+          ),
+        );
       } else {
         String appUrlSchema = '';
-        final bool enableWordRe = setting.get(SettingBoxKey.enableWordRe,
-            defaultValue: false) as bool;
+        final bool enableWordRe = GStorage.setting
+            .get(SettingBoxKey.enableWordRe, defaultValue: false) as bool;
         if (content.url[matchStr] != null && !matchedStrs.contains(matchStr)) {
           appUrlSchema = content.url[matchStr]!.appUrlSchema;
           if (appUrlSchema.startsWith('bilibili://search') && !enableWordRe) {

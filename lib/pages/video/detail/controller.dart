@@ -1321,18 +1321,13 @@ class VideoDetailController extends GetxController
                                                             .primary,
                                                       ),
                                                     ),
-                                                    SizedBox(
-                                                      height: MediaQuery
-                                                              .textScalerOf(
-                                                                  context)
-                                                          .scale(14),
-                                                      child: Icon(
-                                                        Icons
-                                                            .keyboard_arrow_right,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                      ),
+                                                    Icon(
+                                                      Icons
+                                                          .keyboard_arrow_right,
+                                                      size: 22,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                     ),
                                                   ],
                                                 ),
@@ -1387,19 +1382,14 @@ class VideoDetailController extends GetxController
                                                             .primary,
                                                       ),
                                                     ),
-                                                    SizedBox(
-                                                      height: MediaQuery
-                                                              .textScalerOf(
-                                                                  context)
-                                                          .scale(14),
-                                                      child: Icon(
-                                                        Icons
-                                                            .keyboard_arrow_right,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                      ),
-                                                    )
+                                                    Icon(
+                                                      Icons
+                                                          .keyboard_arrow_right,
+                                                      size: 22,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                    ),
                                                   ],
                                                 ),
                                               ),

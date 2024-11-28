@@ -27,6 +27,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.source,
     this.replyType,
     this.isDialogue = false,
+    this.isTop = false,
     super.key,
   });
   // final dynamic rcount;
@@ -38,6 +39,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
   final String? source;
   final ReplyType? replyType;
   final bool isDialogue;
+  final bool isTop;
 
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
@@ -164,6 +166,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                   _onReply(firstFloor!, -1);
                                 },
                                 upMid: _videoReplyReplyController.upMid,
+                                isTop: widget.isTop,
                               );
                             } else if (index == 1) {
                               return Divider(

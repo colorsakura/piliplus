@@ -109,7 +109,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     }
   }
 
-  void replyReply(replyItem, id) {
+  void replyReply(replyItem, id, isTop) {
     int oid = replyItem.oid.toInt();
     int rpid = replyItem.id.toInt();
     Get.to(
@@ -125,6 +125,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           source: 'dynamic',
           replyType: ReplyType.values[type],
           firstFloor: replyItem,
+          isTop: isTop,
         ),
       ),
     );

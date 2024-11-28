@@ -110,7 +110,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   }
 
   // 查看二级评论
-  void replyReply(replyItem, id) {
+  void replyReply(replyItem, id, isTop) {
     int oid = replyItem.oid.toInt();
     int rpid = replyItem.id.toInt()!;
     Get.to(
@@ -124,6 +124,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           source: 'dynamic',
           replyType: ReplyType.values[replyType],
           firstFloor: replyItem,
+          isTop: isTop,
         ),
       ),
     );

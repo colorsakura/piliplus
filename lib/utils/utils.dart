@@ -27,7 +27,7 @@ class Utils {
   static final Random random = Random();
 
   static bool isStringNumeric(str) {
-    RegExp numericRegex = RegExp(r'^\d+$');
+    RegExp numericRegex = RegExp(r'^[\d\.]+$');
     return numericRegex.hasMatch(str.toString());
   }
 

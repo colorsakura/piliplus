@@ -1311,7 +1311,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   // 展示二级回复
-  void replyReply(replyItem, id) {
+  void replyReply(replyItem, id, isTop) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       (context) => VideoReplyReplyPanel(
         id: id,
@@ -1321,6 +1321,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         firstFloor: replyItem,
         replyType: ReplyType.video,
         source: 'videoDetail',
+        isTop: isTop,
       ),
     );
   }
