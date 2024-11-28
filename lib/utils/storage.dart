@@ -103,29 +103,19 @@ class GStorage {
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
   static ThemeMode get themeMode {
-    switch (setting.get(SettingBoxKey.themeMode,
-        defaultValue: ThemeType.system.code)) {
-      case 0:
-        return ThemeMode.light;
-      case 1:
-        return ThemeMode.dark;
-      case 2:
-      default:
-        return ThemeMode.system;
-    }
+    return switch (GlobalData().themeMode) {
+      0 => ThemeMode.light,
+      1 => ThemeMode.dark,
+      _ => ThemeMode.system
+    };
   }
 
   static Brightness get brightness {
-    switch (setting.get(SettingBoxKey.themeMode,
-        defaultValue: ThemeType.system.code)) {
-      case 0:
-        return Brightness.light;
-      case 1:
-        return Brightness.dark;
-      case 2:
-      default:
-        return PlatformDispatcher.instance.platformBrightness;
-    }
+    return switch (GlobalData().themeMode) {
+      0 => Brightness.light,
+      1 => Brightness.dark,
+      _ => PlatformDispatcher.instance.platformBrightness
+    };
   }
 
   static Future<void> init() async {
@@ -158,8 +148,15 @@ class GStorage {
     );
     // 视频设置
     video = await Hive.openBox('video');
-    GlobalData().imgQuality =
-        setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10); // 设置全局变量
+    // 设置全局变量
+    GlobalData().imgQuality = setting.get(
+      SettingBoxKey.defaultPicQa,
+      defaultValue: 10,
+    );
+    GlobalData().themeMode = setting.get(
+      SettingBoxKey.themeMode,
+      defaultValue: ThemeType.system.code,
+    );
   }
 
   static Future<String> exportAllSettings() async {

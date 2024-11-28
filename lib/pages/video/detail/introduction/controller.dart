@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';

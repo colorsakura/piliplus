@@ -308,6 +308,7 @@ class _StyleSettingState extends State<StyleSetting> {
                 _tempThemeValue = result;
                 settingController.themeType.value = result;
                 setting.put(SettingBoxKey.themeMode, result.index);
+                GlobalData().themeMode = result.index;
                 Get.forceAppUpdate();
               }
             },

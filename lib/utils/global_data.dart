@@ -1,6 +1,8 @@
 class GlobalData {
   int imgQuality = 10;
 
+  int themeMode = 2;
+
   // 私有构造函数
   GlobalData._();
 

@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -17,7 +18,8 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> {
-  final MineController mineController = Get.put(MineController());
+  final MineController mineController = Get.put(MineController())
+    ..themeType.value = ThemeType.values[GlobalData().themeMode];
   late Future _futureBuilderFuture;
 
   @override
@@ -86,19 +88,18 @@ class _MinePageState extends State<MinePage> {
                   tapTargetSize:
                       MaterialTapTargetSize.shrinkWrap, // the '2023' part
                 ),
-                //system -> dark -> light -> system
-                tooltip:
-                    '切换至${mineController.themeType.value == ThemeType.system ? '深色' : (mineController.themeType.value == ThemeType.dark ? '浅色' : '跟随系统')}主题',
-                onPressed: () {
-                  mineController.onChangeTheme();
-                  setState(() {});
-                },
+                tooltip: '切换至${switch (mineController.nextThemeType) {
+                  ThemeType.light => '浅色',
+                  ThemeType.dark => '深色',
+                  ThemeType.system => '跟随系统',
+                }}主题',
+                onPressed: mineController.onChangeTheme,
                 icon: Icon(
-                  mineController.themeType.value == ThemeType.system
-                      ? MdiIcons.themeLightDark
-                      : mineController.themeType.value == ThemeType.light
-                          ? MdiIcons.weatherSunny
-                          : MdiIcons.weatherNight,
+                  switch (mineController.themeType.value) {
+                    ThemeType.light => MdiIcons.weatherSunny,
+                    ThemeType.dark => MdiIcons.weatherNight,
+                    ThemeType.system => MdiIcons.themeLightDark,
+                  },
                   size: 24,
                 ),
               ),

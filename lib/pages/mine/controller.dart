@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,9 @@ class MineController extends GetxController {
   static bool anonymity =
       GStorage.setting.get(SettingBoxKey.anonymity, defaultValue: false);
 
+  ThemeType get nextThemeType =>
+      ThemeType.values[(themeType.value.index + 1) % ThemeType.values.length];
+
   @override
   onInit() {
     super.onInit();
@@ -30,8 +34,7 @@ class MineController extends GetxController {
       userLogin.value = true;
     }
 
-    themeType.value = ThemeType.values[setting.get(SettingBoxKey.themeMode,
-        defaultValue: ThemeType.system.code)];
+    // themeType.value = ThemeType.values[GlobalData().themeMode];
     // anonymity = setting.get(SettingBoxKey.anonymity, defaultValue: false);
   }
 
@@ -190,44 +193,9 @@ class MineController extends GetxController {
   }
 
   onChangeTheme() {
-    ThemeType currentTheme = themeType.value;
-    //system -> dark -> light -> system
-    switch (currentTheme) {
-      case ThemeType.system:
-        setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
-        themeType.value = ThemeType.dark;
-        break;
-      case ThemeType.dark:
-        setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
-        themeType.value = ThemeType.light;
-        break;
-      case ThemeType.light:
-        setting.put(SettingBoxKey.themeMode, ThemeType.system.code);
-        themeType.value = ThemeType.system;
-        break;
-    }
-    // Brightness currentBrightness =
-    //     MediaQuery.of(Get.context!).platformBrightness;
-    // switch (currentTheme) {
-    //   case ThemeType.dark:
-    //     setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
-    //     themeType.value = ThemeType.light;
-    //     break;
-    //   case ThemeType.light:
-    //     setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
-    //     themeType.value = ThemeType.dark;
-    //     break;
-    //   case ThemeType.system:
-    //     // 判断当前的颜色模式
-    //     if (currentBrightness == Brightness.light) {
-    //       setting.put(SettingBoxKey.themeMode, ThemeType.dark.code);
-    //       themeType.value = ThemeType.dark;
-    //     } else {
-    //       setting.put(SettingBoxKey.themeMode, ThemeType.light.code);
-    //       themeType.value = ThemeType.light;
-    //     }
-    //     break;
-    // }
+    themeType.value = nextThemeType;
+    setting.put(SettingBoxKey.themeMode, themeType.value.code);
+    GlobalData().themeMode = themeType.value.code;
     Get.forceAppUpdate();
   }
 

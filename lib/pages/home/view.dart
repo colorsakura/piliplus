@@ -33,13 +33,13 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
+    // Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
     // 设置状态栏图标的亮度
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarIconBrightness: currentBrightness == Brightness.light
-          ? Brightness.dark
-          : Brightness.light,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarIconBrightness: currentBrightness == Brightness.light
+    //       ? Brightness.dark
+    //       : Brightness.light,
+    // ));
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
       body: Column(
