@@ -19,12 +19,11 @@ class LaterController extends CommonController {
     if (currentPage == 1) {
       count.value = response.response['count'];
     }
-    List currentList = loadingState.value is Success
-        ? (loadingState.value as Success).response
-        : [];
-    loadingState.value = currentPage == 1
-        ? LoadingState.success(response.response['list'])
-        : LoadingState.success(currentList + response.response['list']);
+    if (currentPage != 1 && loadingState.value is Success) {
+      response.response['list']
+          .insertAll(0, (loadingState.value as Success).response);
+    }
+    loadingState.value = LoadingState.success(response.response['list']);
     return true;
   }
 

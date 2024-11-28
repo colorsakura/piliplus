@@ -19,13 +19,11 @@ class HistoryItem extends StatelessWidget {
   final dynamic videoItem;
   final dynamic ctr;
   final Function? onChoose;
-  final Function? onUpdateMultiple;
   const HistoryItem({
     super.key,
     required this.videoItem,
     this.ctr,
     this.onChoose,
-    this.onUpdateMultiple,
   });
 
   @override
@@ -159,7 +157,6 @@ class HistoryItem extends StatelessWidget {
           feedBack();
           ctr!.enableMultiple.value = true;
           onChoose?.call();
-          onUpdateMultiple?.call();
         }
       },
       child: Column(
@@ -190,6 +187,7 @@ class HistoryItem extends StatelessWidget {
                                     Hero(
                                       tag: heroTag,
                                       child: NetworkImgLayer(
+                                        radius: 12,
                                         src: (videoItem.cover != ''
                                             ? videoItem.cover
                                             : videoItem.covers.first),
@@ -226,51 +224,47 @@ class HistoryItem extends StatelessWidget {
                               },
                             ),
                           ),
-                          Obx(
-                            () => Positioned.fill(
-                              child: AnimatedOpacity(
-                                opacity: ctr!.enableMultiple.value ? 1 : 0,
-                                duration: const Duration(milliseconds: 200),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.black.withOpacity(
-                                        ctr!.enableMultiple.value &&
-                                                videoItem.checked
-                                            ? 0.6
-                                            : 0),
-                                  ),
-                                  child: Center(
-                                    child: SizedBox(
-                                      width: 34,
-                                      height: 34,
-                                      child: AnimatedScale(
-                                        scale: videoItem.checked ? 1 : 0,
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        curve: Curves.easeInOut,
-                                        child: IconButton(
-                                          tooltip: '取消选择',
-                                          style: ButtonStyle(
-                                            padding: WidgetStateProperty.all(
-                                                EdgeInsets.zero),
-                                            backgroundColor:
-                                                WidgetStateProperty.resolveWith(
-                                              (states) {
-                                                return Colors.white
-                                                    .withOpacity(0.8);
-                                              },
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            feedBack();
-                                            onChoose?.call();
-                                          },
-                                          icon: Icon(Icons.done_all_outlined,
-                                              color: Theme.of(context)
+                          Positioned.fill(
+                            child: AnimatedOpacity(
+                              opacity: videoItem.checked ? 1 : 0,
+                              duration: const Duration(milliseconds: 200),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.black.withOpacity(0.6),
+                                ),
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 34,
+                                    height: 34,
+                                    child: AnimatedScale(
+                                      scale: videoItem.checked ? 1 : 0,
+                                      duration:
+                                          const Duration(milliseconds: 250),
+                                      curve: Curves.easeInOut,
+                                      child: IconButton(
+                                        tooltip: '取消选择',
+                                        style: ButtonStyle(
+                                          padding: WidgetStateProperty.all(
+                                              EdgeInsets.zero),
+                                          backgroundColor:
+                                              WidgetStateProperty.resolveWith(
+                                            (states) {
+                                              return Theme.of(context)
                                                   .colorScheme
-                                                  .primary),
+                                                  .surface
+                                                  .withOpacity(0.8);
+                                            },
+                                          ),
                                         ),
+                                        onPressed: () {
+                                          feedBack();
+                                          onChoose?.call();
+                                        },
+                                        icon: Icon(Icons.done_all_outlined,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
                                       ),
                                     ),
                                   ),

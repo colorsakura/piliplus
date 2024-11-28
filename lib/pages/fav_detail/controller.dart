@@ -48,14 +48,12 @@ class FavDetailController extends CommonController {
       isOwner.value = response.response.info.mid ==
           GStorage.userInfo.get('userInfoCache')?.mid;
     }
-    List currentList = loadingState.value is Success
-        ? (loadingState.value as Success).response
-        : [];
-    List dataList = currentPage == 1
-        ? response.response.medias
-        : currentList + response.response.medias;
-    loadingState.value = LoadingState.success(dataList);
-    if (dataList.length >= response.response.info.mediaCount) {
+    if (currentPage != 1 && loadingState.value is Success) {
+      response.response.medias
+          .insertAll(0, (loadingState.value as Success).response);
+    }
+    loadingState.value = LoadingState.success(response.response.medias);
+    if (response.response.medias.length >= response.response.info.mediaCount) {
       loadingText.value = '没有更多了';
     }
     return true;

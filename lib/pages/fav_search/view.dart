@@ -140,7 +140,6 @@ class _FavSearchPageState extends State<FavSearchPage> {
                                 videoItem: loadingState.response[index],
                                 ctr: _favSearchCtr,
                                 onChoose: null,
-                                onUpdateMultiple: () => null,
                               );
                             },
                             childCount: loadingState.response.length,

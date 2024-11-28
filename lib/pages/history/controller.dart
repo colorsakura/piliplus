@@ -1,53 +1,47 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/user/history.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class HistoryController extends GetxController {
-  final ScrollController scrollController = ScrollController();
-  RxList<HisListItem> historyList = <HisListItem>[].obs;
-  RxBool isLoadingMore = false.obs;
+class HistoryController extends CommonController {
   RxBool pauseStatus = false.obs;
-  Box localCache = GStorage.localCache;
-  RxBool isLoading = false.obs;
+
   RxBool enableMultiple = false.obs;
   RxInt checkedCount = 0.obs;
+
+  int? max;
+  int? viewAt;
 
   @override
   void onInit() {
     super.onInit();
     historyStatus();
+    queryData();
   }
 
-  Future queryHistoryList({type = 'init'}) async {
-    int max = 0;
-    int viewAt = 0;
-    if (type == 'onload' && historyList.isNotEmpty) {
-      max = historyList.last.history!.oid!;
-      viewAt = historyList.last.viewAt!;
+  @override
+  Future onRefresh() {
+    max = null;
+    viewAt = null;
+    return super.onRefresh();
+  }
+
+  @override
+  bool customHandleResponse(Success response) {
+    HistoryData data = response.response;
+    isEnd = data.list.isNullOrEmpty || data.list!.length < 20;
+    max = data.list?.lastOrNull?.history?.oid;
+    viewAt = data.list?.lastOrNull?.viewAt;
+    if (currentPage != 1 && loadingState.value is Success) {
+      data.list?.insertAll(0, (loadingState.value as Success).response);
     }
-    isLoadingMore.value = true;
-    var res = await UserHttp.historyList(max, viewAt);
-    isLoadingMore.value = false;
-    if (res['status']) {
-      if (type == 'onload') {
-        historyList.addAll(res['data'].list);
-      } else {
-        historyList.value = res['data'].list;
-      }
-    }
-    return res;
-  }
-
-  Future onLoad() async {
-    queryHistoryList(type: 'onload');
-  }
-
-  Future onRefresh() async {
-    queryHistoryList(type: 'onRefresh');
+    loadingState.value = LoadingState.success(data.list);
+    return true;
   }
 
   // 暂停观看历史
@@ -60,7 +54,7 @@ class HistoryController extends GetxController {
           content:
               Text(!pauseStatus.value ? '啊叻？你要暂停历史记录功能吗？' : '啊叻？要恢复历史记录功能吗？'),
           actions: [
-            TextButton(onPressed: () => Get.back(), child: const Text('取消')),
+            TextButton(onPressed: Get.back, child: const Text('取消')),
             TextButton(
               onPressed: () async {
                 SmartDialog.showLoading(msg: '请求中');
@@ -70,7 +64,8 @@ class HistoryController extends GetxController {
                   SmartDialog.showToast(
                       !pauseStatus.value ? '暂停观看历史' : '恢复观看历史');
                   pauseStatus.value = !pauseStatus.value;
-                  localCache.put(LocalCacheKey.historyPause, pauseStatus.value);
+                  GStorage.localCache
+                      .put(LocalCacheKey.historyPause, pauseStatus.value);
                 }
                 Get.back();
               },
@@ -87,7 +82,7 @@ class HistoryController extends GetxController {
     var res = await UserHttp.historyStatus();
     if (res['status']) {
       pauseStatus.value = res['data'];
-      localCache.put(LocalCacheKey.historyPause, res['data']);
+      GStorage.localCache.put(LocalCacheKey.historyPause, res['data']);
     } else {
       SmartDialog.showToast(res['msg']);
     }
@@ -102,7 +97,7 @@ class HistoryController extends GetxController {
           title: const Text('提示'),
           content: const Text('啊叻？你要清空历史记录功能吗？'),
           actions: [
-            TextButton(onPressed: () => Get.back(), child: const Text('取消')),
+            TextButton(onPressed: Get.back, child: const Text('取消')),
             TextButton(
               onPressed: () async {
                 SmartDialog.showLoading(msg: '请求中');
@@ -112,7 +107,7 @@ class HistoryController extends GetxController {
                   SmartDialog.showToast('清空观看历史');
                 }
                 Get.back();
-                historyList.clear();
+                loadingState.value = LoadingState.success(<HisListItem>[]);
               },
               child: const Text('确认清空'),
             )
@@ -124,48 +119,38 @@ class HistoryController extends GetxController {
 
   // 删除某条历史记录
   Future delHistory(kid, business) async {
-    // String resKid = 'archive_$kid';
-    // if (business == 'live') {
-    //   resKid = 'live_$kid';
-    // } else if (business.contains('article')) {
-    //   resKid = 'article_$kid';
-    // }
-
-    // var res = await UserHttp.delHistory(resKid);
-    // if (res['status']) {
-    //   historyList.removeWhere((e) => e.kid == kid);
-    //   SmartDialog.showToast(res['msg']);
-    // }
-    _onDelete(historyList.where((e) => e.kid == kid).toList());
+    _onDelete(((loadingState.value as Success).response as List<HisListItem>)
+        .where((e) => e.kid == kid)
+        .toList());
   }
 
   // 删除已看历史记录
   void onDelHistory() {
-    List<HisListItem> list =
-        historyList.where((e) => e.progress == -1).toList();
-    if (list.isNotEmpty) {
-      _onDelete(list);
-    } else {
-      SmartDialog.showToast('无已看记录');
+    if (loadingState.value is Success) {
+      List<HisListItem> list =
+          ((loadingState.value as Success).response as List<HisListItem>)
+              .where((e) => e.progress == -1)
+              .toList();
+      if (list.isNotEmpty) {
+        _onDelete(list);
+      } else {
+        SmartDialog.showToast('无已看记录');
+      }
     }
   }
 
   void _onDelete(List<HisListItem> result) async {
     SmartDialog.showLoading(msg: '请求中');
     List kidList = result.map((item) {
-      // String tag = 'archive';
-      // if (item.history?.business == 'live') {
-      //   tag = 'live';
-      // } else if (item.history?.business?.contains('article') == true) {
-      //   tag = 'article-list';
-      // }
       return '${item.history?.business}_${item.kid}';
     }).toList();
     dynamic response = await UserHttp.delHistory(kidList);
     if (response['status']) {
       Set<HisListItem> remainList =
-          historyList.toSet().difference(result.toSet());
-      historyList.value = remainList.toList();
+          ((loadingState.value as Success).response as List<HisListItem>)
+              .toSet()
+              .difference(result.toSet());
+      loadingState.value = LoadingState.success(remainList.toList());
       if (enableMultiple.value) {
         checkedCount.value = 0;
         enableMultiple.value = false;
@@ -185,7 +170,7 @@ class HistoryController extends GetxController {
           content: const Text('确认删除所选历史记录吗？'),
           actions: [
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: Get.back,
               child: Text(
                 '取消',
                 style: TextStyle(
@@ -196,7 +181,10 @@ class HistoryController extends GetxController {
             TextButton(
               onPressed: () async {
                 Get.back();
-                _onDelete(historyList.where((e) => e.checked!).toList());
+                _onDelete(((loadingState.value as Success).response
+                        as List<HisListItem>)
+                    .where((e) => e.checked)
+                    .toList());
               },
               child: const Text('确认'),
             )
@@ -207,8 +195,6 @@ class HistoryController extends GetxController {
   }
 
   @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
-  }
+  Future<LoadingState> customGetData() =>
+      UserHttp.historyList(max: max, viewAt: viewAt);
 }

@@ -64,11 +64,9 @@ abstract class ReplyController extends CommonController {
       }
     }
     cursor = replies.cursor;
-    if (currentPage != 1) {
-      List<ReplyInfo> list = loadingState.value is Success
-          ? (loadingState.value as Success).response.replies
-          : <ReplyInfo>[];
-      replies.replies.insertAll(0, list);
+    if (currentPage != 1 && loadingState.value is Success) {
+      replies.replies
+          .insertAll(0, (loadingState.value as Success).response.replies);
     }
     isEnd = replies.replies.isEmpty ||
         replies.cursor.isEnd ||

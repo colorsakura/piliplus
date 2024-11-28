@@ -166,7 +166,10 @@ class UserHttp {
   }
 
   // 观看历史
-  static Future historyList(int? max, int? viewAt) async {
+  static Future<LoadingState> historyList({
+    int? max,
+    int? viewAt,
+  }) async {
     var res = await Request().get(Api.historyList, data: {
       'type': 'all',
       'ps': 20,
@@ -174,9 +177,9 @@ class UserHttp {
       'view_at': viewAt ?? 0,
     });
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': HistoryData.fromJson(res.data['data'])};
+      return LoadingState.success(HistoryData.fromJson(res.data['data']));
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

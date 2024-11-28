@@ -31,13 +31,12 @@ class DynamicsTabController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    List currentList = loadingState.value is Success
-        ? (loadingState.value as Success).response
-        : [];
-    loadingState.value = offset == ''
-        ? LoadingState.success(response.response.items)
-        : LoadingState.success(currentList + response.response.items);
     offset = response.response.offset;
+    if (currentPage != 1 && loadingState.value is Success) {
+      response.response.items
+          .insertAll(0, (loadingState.value as Success).response);
+    }
+    loadingState.value = LoadingState.success(response.response.items);
     return true;
   }
 

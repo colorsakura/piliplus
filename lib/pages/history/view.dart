@@ -1,6 +1,9 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/user/history.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,43 +22,35 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  final HistoryController _historyController = Get.put(HistoryController());
-  Future? _futureBuilderFuture;
+  final _historyController = Get.put(HistoryController());
 
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = _historyController.queryHistoryList();
     _historyController.scrollController.addListener(
       () {
         if (_historyController.scrollController.position.pixels >=
             _historyController.scrollController.position.maxScrollExtent -
                 300) {
-          if (!_historyController.isLoadingMore.value) {
-            EasyThrottle.throttle('history', const Duration(seconds: 1), () {
-              _historyController.onLoad();
-            });
-          }
+          EasyThrottle.throttle('history', const Duration(seconds: 1), () {
+            _historyController.onLoadMore();
+          });
         }
       },
     );
-    _historyController.enableMultiple.listen((p0) {
-      setState(() {});
-    });
   }
 
   // 选中
   onChoose(index) {
-    _historyController.historyList[index].checked =
-        !_historyController.historyList[index].checked!;
+    List<HisListItem> list =
+        (_historyController.loadingState.value as Success).response;
+    list[index].checked = list[index].checked.not;
     _historyController.checkedCount.value =
-        _historyController.historyList.where((item) => item.checked!).length;
-    _historyController.historyList.refresh();
-  }
-
-  // 更新多选状态
-  onUpdateMultiple() {
-    setState(() {});
+        list.where((item) => item.checked).length;
+    _historyController.loadingState.value = LoadingState.success(list);
+    if (_historyController.checkedCount.value == 0) {
+      _historyController.enableMultiple.value = false;
+    }
   }
 
   @override
@@ -66,194 +61,187 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        visible: _historyController.enableMultiple.value,
-        child1: AppBar(
-          title: Text('观看记录'),
-          actions: [
-            IconButton(
-              tooltip: '搜索',
-              onPressed: () => Get.toNamed('/favSearch', arguments: {
-                'searchType': SearchType.history,
-              }),
-              icon: const Icon(Icons.search_outlined),
+    return Obx(
+      () => PopScope(
+        canPop: _historyController.enableMultiple.value.not,
+        onPopInvokedWithResult: (didPop, result) {
+          if (_historyController.enableMultiple.value) {
+            _handleSelect();
+          }
+        },
+        child: Scaffold(
+          appBar: AppBarWidget(
+            visible: _historyController.enableMultiple.value,
+            child1: AppBar(
+              title: Text('观看记录'),
+              actions: [
+                IconButton(
+                  tooltip: '搜索',
+                  onPressed: () => Get.toNamed(
+                    '/favSearch',
+                    arguments: {
+                      'searchType': SearchType.history,
+                    },
+                  ),
+                  icon: const Icon(Icons.search_outlined),
+                ),
+                PopupMenuButton<String>(
+                  onSelected: (String type) {
+                    // 处理菜单项选择的逻辑
+                    switch (type) {
+                      case 'pause':
+                        _historyController.onPauseHistory(context);
+                        break;
+                      case 'clear':
+                        _historyController.onClearHistory(context);
+                        break;
+                      case 'del':
+                        _historyController.onDelHistory();
+                        break;
+                      case 'multiple':
+                        _historyController.enableMultiple.value = true;
+                        break;
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'pause',
+                      child: Obx(
+                        () => Text(
+                          !_historyController.pauseStatus.value
+                              ? '暂停观看记录'
+                              : '恢复观看记录',
+                        ),
+                      ),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'clear',
+                      child: Text('清空观看记录'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'del',
+                      child: Text('删除已看记录'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'multiple',
+                      child: Text('多选删除'),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 6),
+              ],
             ),
-            PopupMenuButton<String>(
-              onSelected: (String type) {
-                // 处理菜单项选择的逻辑
-                switch (type) {
-                  case 'pause':
-                    _historyController.onPauseHistory(context);
-                    break;
-                  case 'clear':
-                    _historyController.onClearHistory(context);
-                    break;
-                  case 'del':
-                    _historyController.onDelHistory();
-                    break;
-                  case 'multiple':
-                    _historyController.enableMultiple.value = true;
-                    setState(() {});
-                    break;
-                  default:
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                PopupMenuItem<String>(
-                  value: 'pause',
-                  child: Obx(
-                    () => Text(!_historyController.pauseStatus.value
-                        ? '暂停观看记录'
-                        : '恢复观看记录'),
+            child2: AppBar(
+              leading: IconButton(
+                tooltip: '取消',
+                onPressed: _handleSelect,
+                icon: const Icon(Icons.close_outlined),
+              ),
+              title: Obx(
+                () => Text(
+                  '已选择${_historyController.checkedCount.value}项',
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => _handleSelect(true),
+                  child: const Text('全选'),
+                ),
+                TextButton(
+                  onPressed: () =>
+                      _historyController.onDelCheckedHistory(context),
+                  child: Text(
+                    '删除',
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
-                const PopupMenuItem<String>(
-                  value: 'clear',
-                  child: Text('清空观看记录'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'del',
-                  child: Text('删除已看记录'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'multiple',
-                  child: Text('多选删除'),
+                const SizedBox(width: 6),
+              ],
+            ),
+          ),
+          body: refreshIndicator(
+            onRefresh: () async {
+              await _historyController.onRefresh();
+            },
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _historyController.scrollController,
+              slivers: [
+                Obx(() => _buildBody(_historyController.loadingState.value)),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).padding.bottom + 10,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(width: 6),
-          ],
-        ),
-        child2: AppBar(
-          leading: IconButton(
-            tooltip: '取消',
-            onPressed: () {
-              _historyController.enableMultiple.value = false;
-              for (var item in _historyController.historyList) {
-                item.checked = false;
-              }
-              _historyController.checkedCount.value = 0;
-              setState(() {});
-            },
-            icon: const Icon(Icons.close_outlined),
           ),
-          title: Obx(
-            () => Text(
-              '已选择${_historyController.checkedCount.value}项',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                for (var item in _historyController.historyList) {
-                  item.checked = true;
-                }
-                _historyController.checkedCount.value =
-                    _historyController.historyList.length;
-                _historyController.historyList.refresh();
-              },
-              child: const Text('全选'),
-            ),
-            TextButton(
-              onPressed: () => _historyController.onDelCheckedHistory(context),
-              child: Text(
-                '删除',
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            ),
-            const SizedBox(width: 6),
-          ],
         ),
       ),
-      body: refreshIndicator(
-        onRefresh: () async {
-          await _historyController.onRefresh();
-          return;
-        },
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _historyController.scrollController,
-          slivers: [
-            FutureBuilder(
-              future: _futureBuilderFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data == null) {
-                    return const SliverToBoxAdapter(child: SizedBox());
-                  }
-                  Map data = snapshot.data;
-                  if (data['status']) {
-                    return Obx(
-                      () => _historyController.historyList.isNotEmpty
-                          ? SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithExtentAndRatio(
-                                      mainAxisSpacing: StyleString.cardSpace,
-                                      crossAxisSpacing: StyleString.safeSpace,
-                                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                                      childAspectRatio:
-                                          StyleString.aspectRatio * 2.4,
-                                      mainAxisExtent: 0),
-                              delegate: SliverChildBuilderDelegate(
-                                  (context, index) {
-                                return HistoryItem(
-                                  videoItem:
-                                      _historyController.historyList[index],
-                                  ctr: _historyController,
-                                  onChoose: () => onChoose(index),
-                                  onUpdateMultiple: () => onUpdateMultiple(),
-                                );
-                              },
-                                  childCount:
-                                      _historyController.historyList.length),
-                            )
-                          : _historyController.isLoadingMore.value
-                              ? const SliverToBoxAdapter(
-                                  child: Center(child: Text('加载中')),
-                                )
-                              : HttpError(
-                                  callback: () => setState(() {
-                                    _futureBuilderFuture =
-                                        _historyController.queryHistoryList();
-                                  }),
-                                ),
-                    );
-                  } else {
-                    return HttpError(
-                      errMsg: data['msg'],
-                      callback: () => setState(() {
-                        _futureBuilderFuture =
-                            _historyController.queryHistoryList();
-                      }),
-                    );
-                  }
-                } else {
-                  // 骨架屏
-                  return SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: StyleString.cardSpace,
-                        crossAxisSpacing: StyleString.safeSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.4,
-                        mainAxisExtent: 0),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return const VideoCardHSkeleton();
-                    }, childCount: 10),
+    );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: StyleString.cardSpace,
+            crossAxisSpacing: StyleString.safeSpace,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.4,
+            mainAxisExtent: 0,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.4,
+                mainAxisExtent: 0,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return HistoryItem(
+                    videoItem: loadingState.response[index],
+                    ctr: _historyController,
+                    onChoose: () => onChoose(index),
                   );
-                }
-              },
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.of(context).padding.bottom + 10,
+                },
+                childCount: loadingState.response.length,
               ),
             )
-          ],
+          : HttpError(
+              callback: _historyController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _historyController.onReload,
         ),
-      ),
-      // bottomNavigationBar: BottomAppBar(),
-    );
+      LoadingState() => throw UnimplementedError(),
+    };
+  }
+
+  void _handleSelect([bool checked = false]) {
+    List<HisListItem>? list =
+        (_historyController.loadingState.value as Success?)?.response;
+    if (list.isNullOrEmpty.not) {
+      _historyController.loadingState.value = LoadingState.success(
+          list!.map((item) => item..checked = checked).toList());
+      _historyController.checkedCount.value = checked ? list.length : 0;
+    }
+    if (checked.not) {
+      _historyController.enableMultiple.value = false;
+    }
   }
 }
 

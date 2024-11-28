@@ -36,17 +36,11 @@ class SearchPanelController extends CommonController {
     searchResultController.count[SearchType.values.indexOf(searchType!)] =
         response.response.numResults;
     if (response.response.list != null) {
-      List currentList = currentPage != 1 && loadingState.value is Success
-          ? (loadingState.value as Success).response
-          : [];
-      List dataList = currentPage == 1
-          ? response.response.list
-          : currentList + response.response.list;
-      if (dataList.isNotEmpty) {
-        loadingState.value = LoadingState.success(dataList);
-      } else {
-        loadingState.value = LoadingState.success([]);
+      if (currentPage != 1 && loadingState.value is Success) {
+        response.response.list
+            ?.insertAll(0, (loadingState.value as Success).response);
       }
+      loadingState.value = LoadingState.success(response.response.list);
       if (currentPage == 1) {
         onPushDetail(response.response.list);
       }

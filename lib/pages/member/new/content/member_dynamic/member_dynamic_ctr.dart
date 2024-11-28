@@ -13,9 +13,8 @@ class MemberDynamicCtr extends CommonController {
   bool customHandleResponse(Success response) {
     DynSpaceRsp res = response.response;
     isEnd = !res.hasMore;
-    if (currentPage != 1) {
-      res.list.insertAll(
-          0, (loadingState.value as Success?)?.response ?? <DynamicItem>[]);
+    if (currentPage != 1 && loadingState.value is Success) {
+      res.list.insertAll(0, (loadingState.value as Success).response);
     }
     loadingState.value = LoadingState.success(res.list);
     return true;
