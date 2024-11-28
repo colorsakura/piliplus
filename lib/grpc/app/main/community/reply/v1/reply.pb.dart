@@ -2024,17 +2024,6 @@ class MainListReply extends $pb.GeneratedMessage {
     $core.Iterable<ReplyInfo>? replies,
     SubjectControl? subjectControl,
     ReplyInfo? upTop,
-    ReplyInfo? adminTop,
-    ReplyInfo? voteTop,
-    Notice? notice,
-    Lottery? lottery,
-    Activity? activity,
-    UpSelection? upSelection,
-    Effects? effects,
-    Operation? operation,
-    $core.Iterable<ReplyInfo>? topReplies,
-    QoeInfo? qoe,
-    $core.Map<$core.String, $core.int>? callbacks,
   }) {
     final $result = create();
     if (cursor != null) {
@@ -2049,39 +2038,6 @@ class MainListReply extends $pb.GeneratedMessage {
     if (upTop != null) {
       $result.upTop = upTop;
     }
-    if (adminTop != null) {
-      $result.adminTop = adminTop;
-    }
-    if (voteTop != null) {
-      $result.voteTop = voteTop;
-    }
-    if (notice != null) {
-      $result.notice = notice;
-    }
-    if (lottery != null) {
-      $result.lottery = lottery;
-    }
-    if (activity != null) {
-      $result.activity = activity;
-    }
-    if (upSelection != null) {
-      $result.upSelection = upSelection;
-    }
-    if (effects != null) {
-      $result.effects = effects;
-    }
-    if (operation != null) {
-      $result.operation = operation;
-    }
-    if (topReplies != null) {
-      $result.topReplies.addAll(topReplies);
-    }
-    if (qoe != null) {
-      $result.qoe = qoe;
-    }
-    if (callbacks != null) {
-      $result.callbacks.addAll(callbacks);
-    }
     return $result;
   }
   MainListReply._() : super();
@@ -2093,17 +2049,6 @@ class MainListReply extends $pb.GeneratedMessage {
     ..pc<ReplyInfo>(2, _omitFieldNames ? '' : 'replies', $pb.PbFieldType.PM, subBuilder: ReplyInfo.create)
     ..aOM<SubjectControl>(3, _omitFieldNames ? '' : 'subjectControl', subBuilder: SubjectControl.create)
     ..aOM<ReplyInfo>(4, _omitFieldNames ? '' : 'upTop', subBuilder: ReplyInfo.create)
-    ..aOM<ReplyInfo>(5, _omitFieldNames ? '' : 'adminTop', subBuilder: ReplyInfo.create)
-    ..aOM<ReplyInfo>(6, _omitFieldNames ? '' : 'voteTop', subBuilder: ReplyInfo.create)
-    ..aOM<Notice>(7, _omitFieldNames ? '' : 'notice', subBuilder: Notice.create)
-    ..aOM<Lottery>(8, _omitFieldNames ? '' : 'lottery', subBuilder: Lottery.create)
-    ..aOM<Activity>(9, _omitFieldNames ? '' : 'activity', subBuilder: Activity.create)
-    ..aOM<UpSelection>(10, _omitFieldNames ? '' : 'upSelection', subBuilder: UpSelection.create)
-    ..aOM<Effects>(11, _omitFieldNames ? '' : 'effects', subBuilder: Effects.create)
-    ..aOM<Operation>(12, _omitFieldNames ? '' : 'operation', subBuilder: Operation.create)
-    ..pc<ReplyInfo>(13, _omitFieldNames ? '' : 'topReplies', $pb.PbFieldType.PM, subBuilder: ReplyInfo.create)
-    ..aOM<QoeInfo>(14, _omitFieldNames ? '' : 'qoe', subBuilder: QoeInfo.create)
-    ..m<$core.String, $core.int>(15, _omitFieldNames ? '' : 'callbacks', entryClassName: 'MainListReply.CallbacksEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.O3, packageName: const $pb.PackageName('bilibili.main.community.reply.v1'))
     ..hasRequiredFields = false
   ;
 
@@ -2167,118 +2112,6 @@ class MainListReply extends $pb.GeneratedMessage {
   void clearUpTop() => clearField(4);
   @$pb.TagNumber(4)
   ReplyInfo ensureUpTop() => $_ensure(3);
-
-  /// 管理员置顶评论
-  @$pb.TagNumber(5)
-  ReplyInfo get adminTop => $_getN(4);
-  @$pb.TagNumber(5)
-  set adminTop(ReplyInfo v) { setField(5, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasAdminTop() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearAdminTop() => clearField(5);
-  @$pb.TagNumber(5)
-  ReplyInfo ensureAdminTop() => $_ensure(4);
-
-  /// 投票置顶评论
-  @$pb.TagNumber(6)
-  ReplyInfo get voteTop => $_getN(5);
-  @$pb.TagNumber(6)
-  set voteTop(ReplyInfo v) { setField(6, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasVoteTop() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearVoteTop() => clearField(6);
-  @$pb.TagNumber(6)
-  ReplyInfo ensureVoteTop() => $_ensure(5);
-
-  /// 评论区提示
-  @$pb.TagNumber(7)
-  Notice get notice => $_getN(6);
-  @$pb.TagNumber(7)
-  set notice(Notice v) { setField(7, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasNotice() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearNotice() => clearField(7);
-  @$pb.TagNumber(7)
-  Notice ensureNotice() => $_ensure(6);
-
-  /// 抽奖评论
-  @$pb.TagNumber(8)
-  Lottery get lottery => $_getN(7);
-  @$pb.TagNumber(8)
-  set lottery(Lottery v) { setField(8, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasLottery() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearLottery() => clearField(8);
-  @$pb.TagNumber(8)
-  Lottery ensureLottery() => $_ensure(7);
-
-  /// 活动
-  @$pb.TagNumber(9)
-  Activity get activity => $_getN(8);
-  @$pb.TagNumber(9)
-  set activity(Activity v) { setField(9, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasActivity() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearActivity() => clearField(9);
-  @$pb.TagNumber(9)
-  Activity ensureActivity() => $_ensure(8);
-
-  /// 精选评论区筛选后台信息
-  @$pb.TagNumber(10)
-  UpSelection get upSelection => $_getN(9);
-  @$pb.TagNumber(10)
-  set upSelection(UpSelection v) { setField(10, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasUpSelection() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearUpSelection() => clearField(10);
-  @$pb.TagNumber(10)
-  UpSelection ensureUpSelection() => $_ensure(9);
-
-  /// 特效
-  @$pb.TagNumber(11)
-  Effects get effects => $_getN(10);
-  @$pb.TagNumber(11)
-  set effects(Effects v) { setField(11, v); }
-  @$pb.TagNumber(11)
-  $core.bool hasEffects() => $_has(10);
-  @$pb.TagNumber(11)
-  void clearEffects() => clearField(11);
-  @$pb.TagNumber(11)
-  Effects ensureEffects() => $_ensure(10);
-
-  @$pb.TagNumber(12)
-  Operation get operation => $_getN(11);
-  @$pb.TagNumber(12)
-  set operation(Operation v) { setField(12, v); }
-  @$pb.TagNumber(12)
-  $core.bool hasOperation() => $_has(11);
-  @$pb.TagNumber(12)
-  void clearOperation() => clearField(12);
-  @$pb.TagNumber(12)
-  Operation ensureOperation() => $_ensure(11);
-
-  @$pb.TagNumber(13)
-  $core.List<ReplyInfo> get topReplies => $_getList(12);
-
-  @$pb.TagNumber(14)
-  QoeInfo get qoe => $_getN(13);
-  @$pb.TagNumber(14)
-  set qoe(QoeInfo v) { setField(14, v); }
-  @$pb.TagNumber(14)
-  $core.bool hasQoe() => $_has(13);
-  @$pb.TagNumber(14)
-  void clearQoe() => clearField(14);
-  @$pb.TagNumber(14)
-  QoeInfo ensureQoe() => $_ensure(13);
-
-  @$pb.TagNumber(15)
-  $core.Map<$core.String, $core.int> get callbacks => $_getMap(14);
 }
 
 /// 主评论列表-请求

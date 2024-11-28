@@ -525,29 +525,7 @@ const MainListReply$json = {
     {'1': 'replies', '3': 2, '4': 3, '5': 11, '6': '.bilibili.main.community.reply.v1.ReplyInfo', '10': 'replies'},
     {'1': 'subject_control', '3': 3, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.SubjectControl', '10': 'subjectControl'},
     {'1': 'up_top', '3': 4, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.ReplyInfo', '10': 'upTop'},
-    {'1': 'admin_top', '3': 5, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.ReplyInfo', '10': 'adminTop'},
-    {'1': 'vote_top', '3': 6, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.ReplyInfo', '10': 'voteTop'},
-    {'1': 'notice', '3': 7, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.Notice', '10': 'notice'},
-    {'1': 'lottery', '3': 8, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.Lottery', '10': 'lottery'},
-    {'1': 'activity', '3': 9, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.Activity', '10': 'activity'},
-    {'1': 'up_selection', '3': 10, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.UpSelection', '10': 'upSelection'},
-    {'1': 'effects', '3': 11, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.Effects', '10': 'effects'},
-    {'1': 'operation', '3': 12, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.Operation', '10': 'operation'},
-    {'1': 'top_replies', '3': 13, '4': 3, '5': 11, '6': '.bilibili.main.community.reply.v1.ReplyInfo', '10': 'topReplies'},
-    {'1': 'qoe', '3': 14, '4': 1, '5': 11, '6': '.bilibili.main.community.reply.v1.QoeInfo', '10': 'qoe'},
-    {'1': 'callbacks', '3': 15, '4': 3, '5': 11, '6': '.bilibili.main.community.reply.v1.MainListReply.CallbacksEntry', '10': 'callbacks'},
   ],
-  '3': [MainListReply_CallbacksEntry$json],
-};
-
-@$core.Deprecated('Use mainListReplyDescriptor instead')
-const MainListReply_CallbacksEntry$json = {
-  '1': 'CallbacksEntry',
-  '2': [
-    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 5, '10': 'value'},
-  ],
-  '7': {'7': true},
 };
 
 /// Descriptor for `MainListReply`. Decode as a `google.protobuf.DescriptorProto`.
@@ -557,23 +535,7 @@ final $typed_data.Uint8List mainListReplyDescriptor = $convert.base64Decode(
     'aWxpLm1haW4uY29tbXVuaXR5LnJlcGx5LnYxLlJlcGx5SW5mb1IHcmVwbGllcxJZCg9zdWJqZW'
     'N0X2NvbnRyb2wYAyABKAsyMC5iaWxpYmlsaS5tYWluLmNvbW11bml0eS5yZXBseS52MS5TdWJq'
     'ZWN0Q29udHJvbFIOc3ViamVjdENvbnRyb2wSQgoGdXBfdG9wGAQgASgLMisuYmlsaWJpbGkubW'
-    'Fpbi5jb21tdW5pdHkucmVwbHkudjEuUmVwbHlJbmZvUgV1cFRvcBJICglhZG1pbl90b3AYBSAB'
-    'KAsyKy5iaWxpYmlsaS5tYWluLmNvbW11bml0eS5yZXBseS52MS5SZXBseUluZm9SCGFkbWluVG'
-    '9wEkYKCHZvdGVfdG9wGAYgASgLMisuYmlsaWJpbGkubWFpbi5jb21tdW5pdHkucmVwbHkudjEu'
-    'UmVwbHlJbmZvUgd2b3RlVG9wEkAKBm5vdGljZRgHIAEoCzIoLmJpbGliaWxpLm1haW4uY29tbX'
-    'VuaXR5LnJlcGx5LnYxLk5vdGljZVIGbm90aWNlEkMKB2xvdHRlcnkYCCABKAsyKS5iaWxpYmls'
-    'aS5tYWluLmNvbW11bml0eS5yZXBseS52MS5Mb3R0ZXJ5Ugdsb3R0ZXJ5EkYKCGFjdGl2aXR5GA'
-    'kgASgLMiouYmlsaWJpbGkubWFpbi5jb21tdW5pdHkucmVwbHkudjEuQWN0aXZpdHlSCGFjdGl2'
-    'aXR5ElAKDHVwX3NlbGVjdGlvbhgKIAEoCzItLmJpbGliaWxpLm1haW4uY29tbXVuaXR5LnJlcG'
-    'x5LnYxLlVwU2VsZWN0aW9uUgt1cFNlbGVjdGlvbhJDCgdlZmZlY3RzGAsgASgLMikuYmlsaWJp'
-    'bGkubWFpbi5jb21tdW5pdHkucmVwbHkudjEuRWZmZWN0c1IHZWZmZWN0cxJJCglvcGVyYXRpb2'
-    '4YDCABKAsyKy5iaWxpYmlsaS5tYWluLmNvbW11bml0eS5yZXBseS52MS5PcGVyYXRpb25SCW9w'
-    'ZXJhdGlvbhJMCgt0b3BfcmVwbGllcxgNIAMoCzIrLmJpbGliaWxpLm1haW4uY29tbXVuaXR5Ln'
-    'JlcGx5LnYxLlJlcGx5SW5mb1IKdG9wUmVwbGllcxI7CgNxb2UYDiABKAsyKS5iaWxpYmlsaS5t'
-    'YWluLmNvbW11bml0eS5yZXBseS52MS5Rb2VJbmZvUgNxb2USXAoJY2FsbGJhY2tzGA8gAygLMj'
-    '4uYmlsaWJpbGkubWFpbi5jb21tdW5pdHkucmVwbHkudjEuTWFpbkxpc3RSZXBseS5DYWxsYmFj'
-    'a3NFbnRyeVIJY2FsbGJhY2tzGjwKDkNhbGxiYWNrc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5Eh'
-    'QKBXZhbHVlGAIgASgFUgV2YWx1ZToCOAE=');
+    'Fpbi5jb21tdW5pdHkucmVwbHkudjEuUmVwbHlJbmZvUgV1cFRvcA==');
 
 @$core.Deprecated('Use mainListReqDescriptor instead')
 const MainListReq$json = {
