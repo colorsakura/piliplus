@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ComBtn extends StatelessWidget {
   final Widget? icon;
-  final Function? fuc;
+  final GestureTapCallback? fuc;
 
   const ComBtn({
     this.icon,
@@ -16,9 +16,7 @@ class ComBtn extends StatelessWidget {
       width: 34,
       height: 34,
       child: InkWell(
-        onTap: () {
-          fuc!();
-        },
+        onTap: fuc,
         child: icon!,
       ),
     );

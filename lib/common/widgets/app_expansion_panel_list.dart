@@ -168,7 +168,7 @@ class _AppExpansionPanelListState extends State<AppExpansionPanelList> {
         if (widget.expansionCallback != null &&
             childIndex != index &&
             child.value == _currentOpenPanel?.value) {
-          widget.expansionCallback!(childIndex, false);
+          widget.expansionCallback?.call(childIndex, false);
         }
       }
 

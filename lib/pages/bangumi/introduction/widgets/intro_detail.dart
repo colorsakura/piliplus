@@ -59,13 +59,15 @@ class IntroDetail extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      StatView(
+                      statView(
+                        context: context,
                         theme: 'gray',
                         view: bangumiDetail!.stat!['views'],
                         size: 'medium',
                       ),
                       const SizedBox(width: 6),
-                      StatDanMu(
+                      statDanMu(
+                        context: context,
                         theme: 'gray',
                         danmu: bangumiDetail!.stat!['danmakus'],
                         size: 'medium',

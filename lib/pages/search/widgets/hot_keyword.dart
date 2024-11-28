@@ -27,7 +27,7 @@ class HotKeyword extends StatelessWidget {
               borderRadius: BorderRadius.circular(3),
               clipBehavior: Clip.hardEdge,
               child: InkWell(
-                onTap: () => onClick!(i.keyword),
+                onTap: () => onClick?.call(i.keyword),
                 child: Padding(
                   padding: EdgeInsets.only(
                     left: 2,

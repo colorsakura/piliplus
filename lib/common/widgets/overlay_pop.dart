@@ -53,7 +53,7 @@ class OverlayPop extends StatelessWidget {
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                     ),
-                    onPressed: () => closeFn!(),
+                    onPressed: () => closeFn?.call(),
                     icon: const Icon(
                       Icons.close,
                       size: 18,
@@ -93,7 +93,7 @@ class OverlayPop extends StatelessWidget {
                                   : (videoItem.cover as String).http2https)
                         ],
                       );
-                      closeFn!();
+                      closeFn?.call();
                     },
                     icon: const Icon(Icons.download, size: 20),
                   )

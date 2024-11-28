@@ -56,13 +56,15 @@ class IntroDetail extends StatelessWidget {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        StatView(
+                        statView(
+                          context: context,
                           theme: 'gray',
                           view: videoDetail!.stat!.view,
                           size: 'medium',
                         ),
                         const SizedBox(width: 10),
-                        StatDanMu(
+                        statDanMu(
+                          context: context,
                           theme: 'gray',
                           danmu: videoDetail!.stat!.danmu,
                           size: 'medium',

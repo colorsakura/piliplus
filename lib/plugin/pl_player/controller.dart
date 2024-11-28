@@ -301,9 +301,7 @@ class PlPlayerController {
   static Future<void> playIfExists(
       {bool repeat = false, bool hideControls = true}) async {
     // await _instance?.play(repeat: repeat, hideControls: hideControls);
-    if (_playCallBack != null) {
-      _playCallBack!();
-    }
+    _playCallBack?.call();
   }
 
   // try to get PlayerStatus

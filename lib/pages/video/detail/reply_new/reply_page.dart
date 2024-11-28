@@ -292,9 +292,7 @@ class _ReplyPageState extends State<ReplyPage>
                         _enablePublish = false;
                         _publishStream.add(false);
                       }
-                      if (widget.onSaveReply != null) {
-                        widget.onSaveReply!(value);
-                      }
+                      widget.onSaveReply?.call(value);
                     },
                     focusNode: _focusNode,
                     decoration: const InputDecoration(
@@ -537,8 +535,6 @@ class _ReplyPageState extends State<ReplyPage>
       selection:
           TextSelection.collapsed(offset: cursorPosition + emote.text!.length),
     );
-    if (widget.onSaveReply != null) {
-      widget.onSaveReply!(_replyContentController.text);
-    }
+    widget.onSaveReply?.call(_replyContentController.text);
   }
 }

@@ -68,7 +68,8 @@ class MemberCoinsItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      StatView(
+                      statView(
+                        context: context,
                         view: coinItem.view,
                         theme: 'gray',
                       ),

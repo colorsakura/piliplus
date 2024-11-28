@@ -163,7 +163,7 @@ class CustomFilterChip extends StatelessWidget {
         //     Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
         backgroundColor: Colors.transparent,
         side: BorderSide.none,
-        onSelected: (bool selected) => callFn!(selected),
+        onSelected: (bool selected) => callFn?.call(selected),
       ),
     );
   }

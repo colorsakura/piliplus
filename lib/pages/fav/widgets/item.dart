@@ -1,4 +1,3 @@
-import 'package:PiliPalaX/models/user/fav_folder.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -48,7 +47,7 @@ class FavItem extends StatelessWidget {
                       },
                     ),
                   ),
-                  VideoContent(favFolderItem: favFolderItem)
+                  videoContent(context)
                 ],
               ),
             );
@@ -57,14 +56,8 @@ class FavItem extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final FavFolderItemData favFolderItem;
-  const VideoContent({super.key, required this.favFolderItem});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),

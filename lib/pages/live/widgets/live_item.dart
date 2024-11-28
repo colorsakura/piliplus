@@ -29,11 +29,7 @@ class LiveCardV extends StatelessWidget {
           Get.toNamed('/liveRoom?roomid=${liveItem.roomId}',
               arguments: {'liveItem': liveItem, 'heroTag': heroTag});
         },
-        onLongPress: () {
-          if (longPress != null) {
-            longPress!();
-          }
-        },
+        onLongPress: longPress,
         child: Column(
           children: [
             ClipRRect(
@@ -60,9 +56,7 @@ class LiveCardV extends StatelessWidget {
                         child: AnimatedOpacity(
                           opacity: 1,
                           duration: const Duration(milliseconds: 200),
-                          child: VideoStat(
-                            liveItem: liveItem,
-                          ),
+                          child: videoStat(context),
                         ),
                       ),
                     ],
@@ -70,19 +64,14 @@ class LiveCardV extends StatelessWidget {
                 }),
               ),
             ),
-            LiveContent(liveItem: liveItem)
+            liveContent(context)
           ],
         ),
       ),
     );
   }
-}
 
-class LiveContent extends StatelessWidget {
-  final dynamic liveItem;
-  const LiveContent({super.key, required this.liveItem});
-  @override
-  Widget build(BuildContext context) {
+  Widget liveContent(context) {
     return Expanded(
       flex: 1,
       child: Padding(
@@ -92,7 +81,7 @@ class LiveContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              liveItem.title,
+              '${liveItem.title}',
               textAlign: TextAlign.start,
               style: const TextStyle(
                 fontWeight: FontWeight.w400,
@@ -105,7 +94,7 @@ class LiveContent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    liveItem.uname,
+                    '${liveItem.uname}',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize:
@@ -123,18 +112,8 @@ class LiveContent extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoStat extends StatelessWidget {
-  final LiveItemModel? liveItem;
-
-  const VideoStat({
-    super.key,
-    required this.liveItem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoStat(context) {
     return Container(
       height: 50,
       padding: const EdgeInsets.only(top: 26, left: 10, right: 10),
@@ -153,14 +132,14 @@ class VideoStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            liveItem!.areaName!,
+            '${liveItem.areaName}',
             style: const TextStyle(fontSize: 11, color: Colors.white),
-            semanticsLabel: "${liveItem!.areaName!}直播",
+            semanticsLabel: "${liveItem.areaName}直播",
           ),
           Text(
-            liveItem!.watchedShow!['text_small'],
+            liveItem.watchedShow!['text_small'],
             style: const TextStyle(fontSize: 11, color: Colors.white),
-            semanticsLabel: "${liveItem!.watchedShow!['text_small']}围观",
+            semanticsLabel: "${liveItem.watchedShow?['text_small']}围观",
           ),
         ],
       ),

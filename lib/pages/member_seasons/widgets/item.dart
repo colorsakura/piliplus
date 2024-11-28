@@ -72,7 +72,8 @@ class MemberSeasonsItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      StatView(
+                      statView(
+                        context: context,
                         view: seasonItem.view,
                         theme: 'gray',
                       ),

@@ -147,11 +147,7 @@ class VideoCardVMemberHome extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: InkWell(
             onTap: () async => onPushDetail(heroTag),
-            onLongPress: () {
-              if (longPress != null) {
-                longPress!();
-              }
-            },
+            onLongPress: longPress,
             child: Column(
               children: [
                 AspectRatio(

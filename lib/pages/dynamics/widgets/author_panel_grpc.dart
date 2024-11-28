@@ -255,9 +255,7 @@ class MorePanel extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 Get.back();
-                                if (onRemove != null) {
-                                  onRemove!(item.idStr);
-                                }
+                                onRemove?.call(item.idStr);
                               },
                               child: const Text('确定'),
                             ),

@@ -50,11 +50,7 @@ class VideoCardHGrpc extends StatelessWidget {
         // },
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onLongPress: () {
-            if (longPress != null) {
-              longPress!();
-            }
-          },
+          onLongPress: longPress,
           onTap: () async {
             if (type == 'ketang') {
               SmartDialog.showToast('课堂视频暂不支持播放');
@@ -121,14 +117,7 @@ class VideoCardHGrpc extends StatelessWidget {
                       },
                     ),
                   ),
-                  VideoContent(
-                    videoItem: videoItem,
-                    source: source,
-                    showOwner: showOwner,
-                    showView: showView,
-                    showDanmaku: showDanmaku,
-                    showPubdate: showPubdate,
-                  )
+                  videoContent(context)
                 ],
               );
             },
@@ -147,32 +136,8 @@ class VideoCardHGrpc extends StatelessWidget {
       //   ),
     ]);
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final card.Card videoItem;
-  final String source;
-  final bool showOwner;
-  final bool showView;
-  final bool showDanmaku;
-  final bool showPubdate;
-
-  const VideoContent({
-    super.key,
-    required this.videoItem,
-    this.source = 'normal',
-    this.showOwner = true,
-    this.showView = true,
-    this.showDanmaku = true,
-    this.showPubdate = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // String pubdate = showPubdate
-    //     ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day')
-    //     : '';
-    // if (pubdate != '') pubdate += ' ';
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),

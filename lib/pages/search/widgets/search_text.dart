@@ -29,10 +29,10 @@ class SearchText extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: InkWell(
           onTap: () {
-            onSelect!(searchText);
+            onSelect?.call(searchText);
           },
           onLongPress: () {
-            onLongSelect!(searchText);
+            onLongSelect?.call(searchText);
           },
           borderRadius: BorderRadius.circular(6),
           child: Padding(

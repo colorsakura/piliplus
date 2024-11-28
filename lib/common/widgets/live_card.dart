@@ -53,31 +53,21 @@ class LiveCard extends StatelessWidget {
                       child: AnimatedOpacity(
                         opacity: 1,
                         duration: const Duration(milliseconds: 200),
-                        child: LiveStat(
-                          // view: liveItem.stat.view,
-                          // danmaku: liveItem.stat.danmaku,
-                          // duration: liveItem.duration,
-                          online: liveItem.online as int,
-                        ),
+                        child: liveStat(context),
                       ),
                     ),
                   ],
                 );
               }),
             ),
-            LiveContent(liveItem: liveItem)
+            liveContent(context)
           ],
         ),
       ),
     );
   }
-}
 
-class LiveContent extends StatelessWidget {
-  final dynamic liveItem;
-  const LiveContent({super.key, required this.liveItem});
-  @override
-  Widget build(BuildContext context) {
+  Widget liveContent(context) {
     return Padding(
       // 多列
       padding: const EdgeInsets.fromLTRB(8, 8, 6, 7),
@@ -109,15 +99,8 @@ class LiveContent extends StatelessWidget {
       ),
     );
   }
-}
 
-class LiveStat extends StatelessWidget {
-  const LiveStat({super.key, required this.online});
-
-  final int? online;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget liveStat(context) {
     return Container(
       height: 45,
       padding: const EdgeInsets.only(top: 22, left: 8, right: 8),
@@ -149,7 +132,7 @@ class LiveStat extends StatelessWidget {
           // ],
           // ),
           Text(
-            online.toString(),
+            liveItem.online.toString(),
             style: const TextStyle(fontSize: 11, color: Colors.white),
           )
         ],

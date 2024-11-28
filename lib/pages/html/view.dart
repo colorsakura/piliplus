@@ -448,12 +448,14 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
         sliver: Obx(
           () => _htmlRenderCtr.loaded.value
               ? _htmlRenderCtr.response['isJsonContent'] == true
-                  ? ArticleContent(
+                  ? articleContent(
+                      context: context,
                       list: _htmlRenderCtr.response['content'],
                     )
                   : SliverToBoxAdapter(
                       child: LayoutBuilder(
-                        builder: (_, constraints) => HtmlRender(
+                        builder: (_, constraints) => htmlRender(
+                          context: context,
                           htmlContent: _htmlRenderCtr.response['content'],
                           constrainedWidth: constraints.maxWidth,
                         ),

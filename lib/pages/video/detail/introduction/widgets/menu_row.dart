@@ -61,7 +61,7 @@ class MenuRow extends StatelessWidget {
       child: InkWell(
         onTap: () => {
           feedBack(),
-          onTap!(),
+          onTap?.call(),
         },
         child: Container(
           padding: const EdgeInsets.fromLTRB(13, 5.5, 13, 4.5),
@@ -120,7 +120,7 @@ class ActionRowLineItem extends StatelessWidget {
       child: InkWell(
         onTap: () => {
           feedBack(),
-          onTap!(),
+          onTap?.call(),
         },
         child: Container(
           padding: const EdgeInsets.fromLTRB(13, 5.5, 13, 4.5),

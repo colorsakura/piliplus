@@ -91,10 +91,7 @@ class SubVideoCardH extends StatelessWidget {
                           },
                         ),
                       ),
-                      VideoContent(
-                        videoItem: videoItem,
-                        searchType: searchType,
-                      )
+                      videoContent(context)
                     ],
                   ),
                 );
@@ -105,19 +102,8 @@ class SubVideoCardH extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final dynamic videoItem;
-  final int? searchType;
-  const VideoContent({
-    super.key,
-    required this.videoItem,
-    this.searchType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),
@@ -127,7 +113,7 @@ class VideoContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  videoItem.title,
+                  '${videoItem.title}',
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
@@ -147,13 +133,17 @@ class VideoContent extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 2),
                   child: Row(
                     children: [
-                      StatView(
+                      statView(
+                        context: context,
                         theme: 'gray',
-                        view: videoItem.cntInfo['play'],
+                        view: videoItem.cntInfo?['play'],
                       ),
                       const SizedBox(width: 8),
-                      StatDanMu(
-                          theme: 'gray', danmu: videoItem.cntInfo['danmaku']),
+                      statDanMu(
+                        context: context,
+                        theme: 'gray',
+                        danmu: videoItem.cntInfo?['danmaku'],
+                      ),
                       const Spacer(),
                     ],
                   ),

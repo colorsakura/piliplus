@@ -116,11 +116,7 @@ class FavVideoCardH extends StatelessWidget {
                           },
                         ),
                       ),
-                      VideoContent(
-                        videoItem: videoItem,
-                        callFn: callFn,
-                        searchType: searchType,
-                      )
+                      videoContent(context)
                     ],
                   ),
                 );
@@ -131,21 +127,8 @@ class FavVideoCardH extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final dynamic videoItem;
-  final Function? callFn;
-  final int? searchType;
-  const VideoContent({
-    super.key,
-    required this.videoItem,
-    this.callFn,
-    this.searchType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),
@@ -195,13 +178,17 @@ class VideoContent extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 2),
                   child: Row(
                     children: [
-                      StatView(
+                      statView(
+                        context: context,
                         theme: 'gray',
                         view: videoItem.cntInfo['play'],
                       ),
                       const SizedBox(width: 8),
-                      StatDanMu(
-                          theme: 'gray', danmu: videoItem.cntInfo['danmaku']),
+                      statDanMu(
+                        context: context,
+                        theme: 'gray',
+                        danmu: videoItem.cntInfo['danmaku'],
+                      ),
                       const Spacer(),
                     ],
                   ),
@@ -236,7 +223,7 @@ class VideoContent extends StatelessWidget {
                                     )),
                                 TextButton(
                                   onPressed: () async {
-                                    await callFn!();
+                                    await callFn?.call();
                                     Get.back();
                                   },
                                   child: const Text('确定取消'),

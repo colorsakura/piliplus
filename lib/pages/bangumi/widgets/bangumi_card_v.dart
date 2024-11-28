@@ -123,20 +123,15 @@ class BangumiCardV extends StatelessWidget {
                   }),
                 ),
               ),
-              BangumiContent(bangumiItem: bangumiItem)
+              bagumiContent(context)
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class BangumiContent extends StatelessWidget {
-  const BangumiContent({super.key, required this.bangumiItem});
-  final dynamic bangumiItem;
-  @override
-  Widget build(BuildContext context) {
+  Widget bagumiContent(context) {
     return Expanded(
       child: Padding(
         // 多列

@@ -37,7 +37,7 @@ class HistoryItem extends StatelessWidget {
       onTap: () async {
         if (ctr!.enableMultiple.value) {
           feedBack();
-          onChoose!();
+          onChoose?.call();
           return;
         }
         if (videoItem.history.business.contains('article')) {
@@ -158,8 +158,8 @@ class HistoryItem extends StatelessWidget {
         if (!ctr!.enableMultiple.value) {
           feedBack();
           ctr!.enableMultiple.value = true;
-          onChoose!();
-          onUpdateMultiple!();
+          onChoose?.call();
+          onUpdateMultiple?.call();
         }
       },
       child: Column(
@@ -264,7 +264,7 @@ class HistoryItem extends StatelessWidget {
                                           ),
                                           onPressed: () {
                                             feedBack();
-                                            onChoose!();
+                                            onChoose?.call();
                                           },
                                           icon: Icon(Icons.done_all_outlined,
                                               color: Theme.of(context)
@@ -301,7 +301,7 @@ class HistoryItem extends StatelessWidget {
                             )
                         ],
                       ),
-                      VideoContent(videoItem: videoItem, ctr: ctr)
+                      videoContent(context)
                     ],
                   ),
                 );
@@ -312,15 +312,8 @@ class HistoryItem extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final dynamic videoItem;
-  final dynamic ctr;
-  const VideoContent({super.key, required this.videoItem, this.ctr});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),

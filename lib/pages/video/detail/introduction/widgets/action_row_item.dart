@@ -32,13 +32,11 @@ class ActionRowItem extends StatelessWidget {
       child: InkWell(
         onTap: () => {
           feedBack(),
-          onTap!(),
+          onTap?.call(),
         },
         onLongPress: () {
           feedBack();
-          if (onLongPress != null) {
-            onLongPress!();
-          }
+          onLongPress?.call();
         },
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 7, 15, 7),

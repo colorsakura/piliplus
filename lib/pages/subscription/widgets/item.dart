@@ -56,10 +56,7 @@ class SubItem extends StatelessWidget {
                       },
                     ),
                   ),
-                  VideoContent(
-                    subFolderItem: subFolderItem,
-                    cancelSub: cancelSub,
-                  )
+                  videoContent(context)
                 ],
               ),
             );
@@ -68,15 +65,8 @@ class SubItem extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final SubFolderItemData subFolderItem;
-  final Function(SubFolderItemData)? cancelSub;
-  const VideoContent({super.key, required this.subFolderItem, this.cancelSub});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     // subFolderItem.type == 11：播单
     // subFolderItem.type == 21：合集
     // 其它：其它
@@ -130,7 +120,7 @@ class VideoContent extends StatelessWidget {
               height: 35,
               width: 35,
               child: IconButton(
-                onPressed: () => cancelSub?.call(subFolderItem),
+                onPressed: () => cancelSub(subFolderItem),
                 style: TextButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.outline,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),

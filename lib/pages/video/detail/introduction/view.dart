@@ -444,7 +444,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     onTap: showIntroDetail,
                     child: Row(
                       children: <Widget>[
-                        StatView(
+                        statView(
+                          context: context,
                           theme: 'gray',
                           view: !loadingStatus
                               ? widget.videoDetail?.stat?.view ?? '-'
@@ -452,7 +453,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                           size: 'medium',
                         ),
                         const SizedBox(width: 10),
-                        StatDanMu(
+                        statDanMu(
+                          context: context,
                           theme: 'gray',
                           danmu: !loadingStatus
                               ? widget.videoDetail?.stat?.danmu ?? '-'

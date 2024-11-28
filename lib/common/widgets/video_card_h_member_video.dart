@@ -30,11 +30,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
     return Stack(children: [
       InkWell(
         borderRadius: BorderRadius.circular(12),
-        onLongPress: () {
-          if (longPress != null) {
-            longPress!();
-          }
-        },
+        onLongPress: longPress,
         onTap: () async {
           try {
             Get.toNamed('/video?bvid=$bvid&cid=${videoItem.firstCid}',
@@ -87,9 +83,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                     },
                   ),
                 ),
-                VideoContent(
-                  videoItem: videoItem,
-                )
+                videoContent(context)
               ],
             );
           },
@@ -106,18 +100,8 @@ class VideoCardHMemberVideo extends StatelessWidget {
       ),
     ]);
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final Item videoItem;
-
-  const VideoContent({
-    super.key,
-    required this.videoItem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
@@ -157,14 +141,16 @@ class VideoContent extends StatelessWidget {
             const SizedBox(height: 3),
             Row(
               children: [
-                StatView(
+                statView(
+                  context: context,
                   theme: 'gray',
                   // view: videoItem.season?['view_content'] ??
                   //     videoItem.viewContent,
                   view: videoItem.viewContent,
                 ),
                 const SizedBox(width: 8),
-                StatDanMu(
+                statDanMu(
+                  context: context,
                   theme: 'gray',
                   // danmu: videoItem.season?['danmaku'] ?? videoItem.danmaku,
                   danmu: videoItem.danmaku,

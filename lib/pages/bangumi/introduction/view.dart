@@ -312,7 +312,8 @@ class _BangumiInfoState extends State<BangumiInfo>
                                 ),
                                 Row(
                                   children: [
-                                    StatView(
+                                    statView(
+                                      context: context,
                                       theme: 'gray',
                                       view: !widget.loadingStatus
                                           ? widget.bangumiDetail!.stat!['views']
@@ -320,7 +321,8 @@ class _BangumiInfoState extends State<BangumiInfo>
                                       size: 'medium',
                                     ),
                                     const SizedBox(width: 6),
-                                    StatDanMu(
+                                    statDanMu(
+                                      context: context,
                                       theme: 'gray',
                                       danmu: !widget.loadingStatus
                                           ? widget

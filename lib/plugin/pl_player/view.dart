@@ -371,18 +371,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   .episodes!;
               // changeFucCall = bangumiIntroController!.changeSeasonOrbangu;
             }
-            if (widget.showEpisodes != null) {
-              widget.showEpisodes!(
-                index,
-                isPage
-                    ? null
-                    : videoIntroController?.videoDetail.value.ugcSeason,
-                episodes,
-                bvid,
-                IdUtils.bv2av(bvid),
-                currentCid,
-              );
-            }
+            widget.showEpisodes?.call(
+              index,
+              isPage ? null : videoIntroController?.videoDetail.value.ugcSeason,
+              episodes,
+              bvid,
+              IdUtils.bv2av(bvid),
+              currentCid,
+            );
           },
         ),
       ),

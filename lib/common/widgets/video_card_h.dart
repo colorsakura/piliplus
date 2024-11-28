@@ -55,11 +55,7 @@ class VideoCardH extends StatelessWidget {
         },
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onLongPress: () {
-            if (longPress != null) {
-              longPress!();
-            }
-          },
+          onLongPress: longPress,
           onTap: () async {
             if (type == 'ketang') {
               SmartDialog.showToast('课堂视频暂不支持播放');
@@ -120,14 +116,7 @@ class VideoCardH extends StatelessWidget {
                       },
                     ),
                   ),
-                  VideoContent(
-                    videoItem: videoItem,
-                    source: source,
-                    showOwner: showOwner,
-                    showView: showView,
-                    showDanmaku: showDanmaku,
-                    showPubdate: showPubdate,
-                  )
+                  videoContent(context)
                 ],
               );
             },
@@ -146,28 +135,8 @@ class VideoCardH extends StatelessWidget {
         ),
     ]);
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final dynamic videoItem;
-  final String source;
-  final bool showOwner;
-  final bool showView;
-  final bool showDanmaku;
-  final bool showPubdate;
-
-  const VideoContent({
-    super.key,
-    required this.videoItem,
-    this.source = 'normal',
-    this.showOwner = true,
-    this.showView = true,
-    this.showDanmaku = true,
-    this.showPubdate = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     String pubdate = showPubdate
         ? Utils.dateFormat(videoItem.pubdate!, formatType: 'day')
         : '';
@@ -258,14 +227,16 @@ class VideoContent extends StatelessWidget {
             Row(
               children: [
                 if (showView) ...[
-                  StatView(
+                  statView(
+                    context: context,
                     theme: 'gray',
                     view: videoItem.stat.view as int,
                   ),
                   const SizedBox(width: 8),
                 ],
                 if (showDanmaku)
-                  StatDanMu(
+                  statDanMu(
+                    context: context,
                     theme: 'gray',
                     danmu: videoItem.stat.danmu as int,
                   ),

@@ -1350,20 +1350,28 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   }
 
   showEpisodes(index, season, episodes, bvid, aid, cid) {
-    ListSheet(
-      index: index,
-      season: season,
-      episodes: episodes,
-      bvid: bvid,
-      aid: aid,
-      currentCid: cid,
-      changeFucCall: videoDetailController.videoType == SearchType.media_bangumi
-          ? bangumiIntroController.changeSeasonOrbangu
-          : videoIntroController.changeSeasonOrbangu,
-      context: context,
-      scaffoldState: isFullScreen
-          ? videoDetailController.scaffoldKey.currentState
-          : videoDetailController.childKey.currentState,
-    ).buildShowBottomSheet();
+    PersistentBottomSheetController? bottomSheetController;
+
+    Widget listSheetContent() => ListSheetContent(
+          index: index,
+          season: season,
+          episodes: episodes,
+          bvid: bvid,
+          aid: aid,
+          currentCid: cid,
+          changeFucCall:
+              videoDetailController.videoType == SearchType.media_bangumi
+                  ? bangumiIntroController.changeSeasonOrbangu
+                  : videoIntroController.changeSeasonOrbangu,
+          onClose: bottomSheetController?.close,
+        );
+
+    bottomSheetController = isFullScreen
+        ? videoDetailController.scaffoldKey.currentState?.showBottomSheet(
+            (context) => listSheetContent(),
+          )
+        : videoDetailController.scaffoldKey.currentState?.showBottomSheet(
+            (context) => listSheetContent(),
+          );
   }
 }

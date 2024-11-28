@@ -60,9 +60,7 @@ class ReplyItem extends StatelessWidget {
               return MorePanel(
                 item: replyItem!,
                 onDelete: (rpid) {
-                  if (onDelete != null) {
-                    onDelete!(rpid, null);
-                  }
+                  onDelete?.call(rpid, null);
                 },
               );
             },
@@ -318,9 +316,7 @@ class ReplyItem extends StatelessWidget {
               replyItem: replyItem,
               replyReply: replyReply,
               onDelete: (rpid) {
-                if (onDelete != null) {
-                  onDelete!(rpid, replyItem!.rpid);
-                }
+                onDelete?.call(rpid, replyItem!.rpid);
               },
             ),
           ),
@@ -339,10 +335,7 @@ class ReplyItem extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               feedBack();
-              if (onReply != null) {
-                onReply!();
-                return;
-              }
+              onReply?.call();
             },
             child: Row(children: [
               Icon(Icons.reply,
@@ -990,8 +983,8 @@ class MorePanel extends StatelessWidget {
                 'https://www.bilibili.com/h5/comment/report?mid=${item.mid}&oid=${item.oid}&pageType=1&rpid=${item.rpid}&platform=android',
           },
         );
-        if (result == true && onDelete != null) {
-          onDelete!(item.rpid!);
+        if (result == true) {
+          onDelete?.call(item.rpid!);
         }
         break;
       case 'copyAll':
@@ -1056,10 +1049,7 @@ class MorePanel extends StatelessWidget {
         SmartDialog.dismiss();
         if (result['status']) {
           SmartDialog.showToast('删除成功');
-          // Get.back();
-          if (onDelete != null) {
-            onDelete!(item.rpid!);
-          }
+          onDelete?.call(item.rpid!);
         } else {
           SmartDialog.showToast('删除失败, ${result["msg"]}');
         }

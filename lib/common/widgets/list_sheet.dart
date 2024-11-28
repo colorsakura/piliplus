@@ -13,53 +13,6 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../utils/storage.dart';
 import '../../utils/utils.dart';
 
-class ListSheet {
-  ListSheet({
-    this.index,
-    this.season,
-    required this.episodes,
-    this.bvid,
-    this.aid,
-    required this.currentCid,
-    required this.changeFucCall,
-    required this.context,
-    this.scaffoldState,
-  });
-
-  final dynamic index;
-  final dynamic season;
-  final dynamic episodes;
-  final String? bvid;
-  final int? aid;
-  final int currentCid;
-  final Function changeFucCall;
-  final BuildContext context;
-  final ScaffoldState? scaffoldState;
-
-  late PersistentBottomSheetController bottomSheetController;
-
-  Widget get listSheetContent => ListSheetContent(
-        index: index,
-        season: season,
-        episodes: episodes,
-        bvid: bvid,
-        aid: aid,
-        currentCid: currentCid,
-        changeFucCall: changeFucCall,
-        onClose: bottomSheetController.close,
-      );
-
-  void buildShowBottomSheet() {
-    bottomSheetController = scaffoldState?.showBottomSheet(
-          (context) => listSheetContent,
-        ) ??
-        showBottomSheet(
-          context: context,
-          builder: (context) => listSheetContent,
-        );
-  }
-}
-
 class ListSheetContent extends StatefulWidget {
   const ListSheetContent({
     super.key,
@@ -80,7 +33,7 @@ class ListSheetContent extends StatefulWidget {
   final int? aid;
   final int currentCid;
   final Function changeFucCall;
-  final Function() onClose;
+  final VoidCallback? onClose;
 
   @override
   State<ListSheetContent> createState() => _ListSheetContentState();
@@ -184,7 +137,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           }
         }
         SmartDialog.showToast('切换到：$title');
-        widget.onClose();
+        widget.onClose?.call();
         widget.changeFucCall(
           episode is bangumi.EpisodeItem ? episode.epId : null,
           episode.runtimeType.toString() == "EpisodeItem"

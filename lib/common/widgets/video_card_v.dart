@@ -158,11 +158,7 @@ class VideoCardV extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: InkWell(
             onTap: () async => onPushDetail(heroTag),
-            onLongPress: () {
-              if (longPress != null) {
-                longPress!();
-              }
-            },
+            onLongPress: longPress,
             child: Column(
               children: [
                 AspectRatio(
@@ -194,7 +190,7 @@ class VideoCardV extends StatelessWidget {
                     );
                   }),
                 ),
-                VideoContent(videoItem: videoItem)
+                videoContent(context)
               ],
             ),
           ),
@@ -211,13 +207,8 @@ class VideoCardV extends StatelessWidget {
             )),
     ]);
   }
-}
 
-class VideoContent extends StatelessWidget {
-  final dynamic videoItem;
-  const VideoContent({super.key, required this.videoItem});
-  @override
-  Widget build(BuildContext context) {
+  Widget videoContent(context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(6, 5, 6, 5),
@@ -241,9 +232,7 @@ class VideoContent extends StatelessWidget {
             ),
             const Spacer(),
             // const SizedBox(height: 2),
-            VideoStat(
-              videoItem: videoItem,
-            ),
+            videoStat(context),
             Row(
               children: [
                 if (videoItem.goto == 'bangumi') ...[
@@ -303,28 +292,20 @@ class VideoContent extends StatelessWidget {
       ),
     );
   }
-}
 
-class VideoStat extends StatelessWidget {
-  final dynamic videoItem;
-
-  const VideoStat({
-    super.key,
-    required this.videoItem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget videoStat(context) {
     return Row(
       children: [
-        StatView(
+        statView(
+          context: context,
           theme: 'gray',
           view: videoItem.stat.view,
           goto: videoItem.goto,
         ),
         const SizedBox(width: 6),
         if (videoItem.goto != 'picture')
-          StatDanMu(
+          statDanMu(
+            context: context,
             theme: 'gray',
             danmu: videoItem.stat.danmu,
           ),
