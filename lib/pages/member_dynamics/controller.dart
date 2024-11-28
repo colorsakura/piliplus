@@ -8,7 +8,6 @@ class MemberDynamicsController extends CommonController {
   MemberDynamicsController(this.mid);
   int mid;
   String offset = '';
-  bool hasMore = true;
 
   @override
   void onInit() async {
@@ -19,13 +18,12 @@ class MemberDynamicsController extends CommonController {
   @override
   Future onRefresh() {
     offset = '';
-    hasMore = true;
     return super.onRefresh();
   }
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && (hasMore.not || offset == '-1')) {
+    if (isRefresh.not && (isEnd || offset == '-1')) {
       return Future.value();
     }
     return super.queryData(isRefresh);
@@ -35,7 +33,7 @@ class MemberDynamicsController extends CommonController {
   bool customHandleResponse(Success response) {
     DynamicsDataModel data = response.response;
     offset = data.offset?.isNotEmpty == true ? data.offset! : '-1';
-    hasMore = data.hasMore ?? false;
+    isEnd = !(data.hasMore ?? false);
     if (currentPage != 1 && loadingState.value is Success) {
       data.items?.insertAll(0, (loadingState.value as Success).response);
     }

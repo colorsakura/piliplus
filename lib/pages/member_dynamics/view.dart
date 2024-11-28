@@ -1,6 +1,5 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/pages/member_dynamics/index.dart';
@@ -99,10 +98,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                       //  LastChildLayoutType.foot,
                       lastChildLayoutTypeBuilder: (index) {
                         if (index == loadingState.response.length - 1) {
-                          EasyThrottle.throttle('member_dynamics',
-                              const Duration(milliseconds: 1000), () {
-                            _memberDynamicController.onLoadMore();
-                          });
+                          _memberDynamicController.onLoadMore();
                         }
                         return index == loadingState.response.length
                             ? LastChildLayoutType.foot
@@ -121,10 +117,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
                                 if (index == loadingState.response.length - 1) {
-                                  EasyThrottle.throttle('member_dynamics',
-                                      const Duration(milliseconds: 1000), () {
-                                    _memberDynamicController.onLoadMore();
-                                  });
+                                  _memberDynamicController.onLoadMore();
                                 }
                                 return DynamicPanel(
                                     item: loadingState.response[index]);

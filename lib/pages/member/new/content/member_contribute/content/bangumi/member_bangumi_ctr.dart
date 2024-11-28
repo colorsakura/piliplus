@@ -29,12 +29,6 @@ class MemberBangumiCtr extends CommonController {
   }
 
   @override
-  Future onRefresh() async {
-    currentPage = 1;
-    await queryData();
-  }
-
-  @override
   bool customHandleResponse(Success response) {
     Data data = response.response;
     if (currentPage != 1 && loadingState.value is Success) {

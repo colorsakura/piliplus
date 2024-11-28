@@ -6,7 +6,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -134,15 +133,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   void scrollListener() {
     _dynamicDetailController.scrollController.addListener(
       () {
-        // 分页加载
-        if (_dynamicDetailController.scrollController.position.pixels >=
-            _dynamicDetailController.scrollController.position.maxScrollExtent -
-                300) {
-          EasyThrottle.throttle('replylist', const Duration(seconds: 2), () {
-            _dynamicDetailController.onLoadMore();
-          });
-        }
-
         // 标题
         if (_dynamicDetailController.scrollController.offset > 55 &&
             !_visibleTitle) {
@@ -377,6 +367,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == loadingState.response.replies.length) {
+                    _dynamicDetailController.onLoadMore();
                     return Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.only(

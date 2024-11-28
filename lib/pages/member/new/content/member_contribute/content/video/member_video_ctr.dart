@@ -29,7 +29,7 @@ class MemberVideoCtr extends CommonController {
     aid = null;
     next = null;
     currentPage = 0;
-    await queryData();
+    return super.onRefresh();
   }
 
   @override

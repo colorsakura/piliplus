@@ -33,6 +33,7 @@ class FavController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     hasMore = response.response.hasMore;
+    isEnd = response.response.list.isEmpty;
     if (currentPage != 1 && loadingState.value is Success) {
       response.response.list
           .insertAll(0, (loadingState.value as Success).response);

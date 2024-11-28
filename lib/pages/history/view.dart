@@ -1,10 +1,8 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/models/user/history.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPalaX/utils/extension.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
@@ -25,53 +23,18 @@ class _HistoryPageState extends State<HistoryPage> {
   final _historyController = Get.put(HistoryController());
 
   @override
-  void initState() {
-    super.initState();
-    _historyController.scrollController.addListener(
-      () {
-        if (_historyController.scrollController.position.pixels >=
-            _historyController.scrollController.position.maxScrollExtent -
-                300) {
-          EasyThrottle.throttle('history', const Duration(seconds: 1), () {
-            _historyController.onLoadMore();
-          });
-        }
-      },
-    );
-  }
-
-  // 选中
-  onChoose(index) {
-    List<HisListItem> list =
-        (_historyController.loadingState.value as Success).response;
-    list[index].checked = list[index].checked.not;
-    _historyController.checkedCount.value =
-        list.where((item) => item.checked).length;
-    _historyController.loadingState.value = LoadingState.success(list);
-    if (_historyController.checkedCount.value == 0) {
-      _historyController.enableMultiple.value = false;
-    }
-  }
-
-  @override
-  void dispose() {
-    _historyController.scrollController.removeListener(() {});
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Obx(
       () => PopScope(
-        canPop: _historyController.enableMultiple.value.not,
+        canPop: _historyController.enableMultiSelect.value.not,
         onPopInvokedWithResult: (didPop, result) {
-          if (_historyController.enableMultiple.value) {
-            _handleSelect();
+          if (_historyController.enableMultiSelect.value) {
+            _historyController.handleSelect();
           }
         },
         child: Scaffold(
           appBar: AppBarWidget(
-            visible: _historyController.enableMultiple.value,
+            visible: _historyController.enableMultiSelect.value,
             child1: AppBar(
               title: Text('观看记录'),
               actions: [
@@ -99,7 +62,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         _historyController.onDelHistory();
                         break;
                       case 'multiple':
-                        _historyController.enableMultiple.value = true;
+                        _historyController.enableMultiSelect.value = true;
                         break;
                     }
                   },
@@ -135,7 +98,7 @@ class _HistoryPageState extends State<HistoryPage> {
             child2: AppBar(
               leading: IconButton(
                 tooltip: '取消',
-                onPressed: _handleSelect,
+                onPressed: _historyController.handleSelect,
                 icon: const Icon(Icons.close_outlined),
               ),
               title: Obx(
@@ -145,7 +108,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               actions: [
                 TextButton(
-                  onPressed: () => _handleSelect(true),
+                  onPressed: () => _historyController.handleSelect(true),
                   child: const Text('全选'),
                 ),
                 TextButton(
@@ -211,10 +174,13 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
+                  if (index == loadingState.response.length - 1) {
+                    _historyController.onLoadMore();
+                  }
                   return HistoryItem(
                     videoItem: loadingState.response[index],
                     ctr: _historyController,
-                    onChoose: () => onChoose(index),
+                    onChoose: () => _historyController.onSelect(index),
                   );
                 },
                 childCount: loadingState.response.length,
@@ -229,19 +195,6 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       LoadingState() => throw UnimplementedError(),
     };
-  }
-
-  void _handleSelect([bool checked = false]) {
-    List<HisListItem>? list =
-        (_historyController.loadingState.value as Success?)?.response;
-    if (list.isNullOrEmpty.not) {
-      _historyController.loadingState.value = LoadingState.success(
-          list!.map((item) => item..checked = checked).toList());
-      _historyController.checkedCount.value = checked ? list.length : 0;
-    }
-    if (checked.not) {
-      _historyController.enableMultiple.value = false;
-    }
   }
 }
 

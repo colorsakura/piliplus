@@ -5,7 +5,6 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/black.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -20,30 +19,14 @@ class BlackListPage extends StatefulWidget {
 
 class _BlackListPageState extends State<BlackListPage> {
   final _blackListController = Get.put(BlackListController());
-  Box localCache = GStorage.localCache;
-
-  @override
-  void initState() {
-    super.initState();
-    _blackListController.scrollController.addListener(
-      () async {
-        if (_blackListController.scrollController.position.pixels >=
-            _blackListController.scrollController.position.maxScrollExtent -
-                200) {
-          await _blackListController.onLoadMore();
-        }
-      },
-    );
-  }
 
   @override
   void dispose() {
     List list = _blackListController.loadingState.value is Success
         ? (_blackListController.loadingState.value as Success).response
         : <int>[];
-    localCache.put(LocalCacheKey.blackMidsList,
+    GStorage.localCache.put(LocalCacheKey.blackMidsList,
         list.isNotEmpty ? list.map<int>((e) => e.mid!).toList() : list);
-    _blackListController.scrollController.removeListener(() {});
     super.dispose();
   }
 
@@ -70,6 +53,9 @@ class _BlackListPageState extends State<BlackListPage> {
               controller: _blackListController.scrollController,
               itemCount: loadingState.response.length,
               itemBuilder: (BuildContext context, int index) {
+                if (index == loadingState.response.length - 1) {
+                  _blackListController.onLoadMore();
+                }
                 return ListTile(
                   onTap: () {},
                   leading: NetworkImgLayer(
@@ -125,6 +111,7 @@ class BlackListController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     total.value = response.response.total;
+    isEnd = response.response.list.isEmpty;
     if (currentPage != 1 && loadingState.value is Success) {
       response.response.list
           ?.insertAll(0, (loadingState.value as Success).response);

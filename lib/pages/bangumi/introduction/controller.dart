@@ -289,18 +289,20 @@ class BangumiIntroController extends CommonController {
         }
       }
     } catch (_) {}
-    var result = await VideoHttp.favBangumi(
-      epId: epId,
+    var result = await VideoHttp.favVideo(
+      aid: epId,
+      type: 24,
       addIds: addMediaIdsNew.join(','),
       delIds: delMediaIdsNew.join(','),
     );
     if (result['status']) {
       addMediaIdsNew = [];
       delMediaIdsNew = [];
-      // 重新获取收藏状态
-      queryBangumiLikeCoinFav();
       SmartDialog.showToast('操作成功');
       Get.back();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        queryBangumiLikeCoinFav();
+      });
     } else {
       SmartDialog.showToast(result['msg']);
     }

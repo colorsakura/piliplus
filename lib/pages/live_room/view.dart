@@ -78,6 +78,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         _updateFontSize();
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.orientation == Orientation.landscape) {
+        plPlayerController.triggerFullScreen(status: true);
+      }
+    });
   }
 
   void _updateFontSize() async {
@@ -337,10 +342,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 onPopInvokedWithResult: (bool didPop, Object? result) {
                   if (plPlayerController.isFullScreen.value == true) {
                     plPlayerController.triggerFullScreen(status: false);
-                    if (MediaQuery.of(context).orientation ==
-                        Orientation.landscape) {
-                      verticalScreenForTwoSeconds();
-                    }
+                    // if (MediaQuery.of(context).orientation ==
+                    //     Orientation.landscape) {
+                    //   verticalScreenForTwoSeconds();
+                    // }
                   }
                 },
                 child: Listener(

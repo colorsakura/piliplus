@@ -5,7 +5,6 @@ import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart'
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
@@ -313,10 +312,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         ),
       Success() => () {
           if (index == loadingState.response.length) {
-            EasyThrottle.throttle(
-                'replylist', const Duration(milliseconds: 200), () {
-              _videoReplyReplyController.onLoadMore();
-            });
+            _videoReplyReplyController.onLoadMore();
             return Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(

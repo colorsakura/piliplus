@@ -1,7 +1,6 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
@@ -27,22 +26,6 @@ class _FansPageState extends State<FansPage> {
     super.initState();
     mid = Get.parameters['mid']!;
     _fansController = Get.put(FansController(), tag: Utils.makeHeroTag(mid));
-    _fansController.scrollController.addListener(
-      () async {
-        if (_fansController.scrollController.position.pixels >=
-            _fansController.scrollController.position.maxScrollExtent - 200) {
-          EasyThrottle.throttle('follow', const Duration(seconds: 1), () {
-            _fansController.onLoadMore();
-          });
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _fansController.scrollController.removeListener(() {});
-    super.dispose();
   }
 
   @override
@@ -74,12 +57,16 @@ class _FansPageState extends State<FansPage> {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  mainAxisExtent: 56),
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                mainAxisExtent: 56,
+              ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
+                  if (index == loadingState.response.length - 1) {
+                    _fansController.onLoadMore();
+                  }
                   return fanItem(item: loadingState.response[index]);
                 },
                 childCount: loadingState.response.length,

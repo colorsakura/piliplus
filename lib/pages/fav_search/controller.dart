@@ -2,7 +2,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -16,12 +15,10 @@ class FavSearchController extends CommonController {
   RxString searchKeyWord = ''.obs; // 搜索词
   String hintText = '搜索'; // 默认
   RxString loadingText = '加载中...'.obs; // 加载提示
-  bool hasMore = false;
   int? type;
   int? mediaId;
   int? mid;
   late SearchType searchType;
-  RxBool enableMultiple = false.obs;
 
   int count = 0; // 总数
 
@@ -49,20 +46,11 @@ class FavSearchController extends CommonController {
     if (controller.value.text.isEmpty) {
       return Future.value();
     }
-    hasMore = true;
     return super.onRefresh();
   }
 
   void onChange(value) {
     searchKeyWord.value = value;
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && hasMore.not) {
-      return Future.value();
-    }
-    return super.queryData(isRefresh);
   }
 
   @override
@@ -78,9 +66,9 @@ class FavSearchController extends CommonController {
             ? response.response.list
             : currentList + response.response.list);
     loadingState.value = LoadingState.success(dataList);
-    hasMore = searchType == SearchType.fav
-        ? response.response.hasMore
-        : response.response.list.isNotEmpty;
+    isEnd = searchType == SearchType.fav
+        ? !response.response.hasMore
+        : response.response.list.isEmpty;
     return true;
   }
 

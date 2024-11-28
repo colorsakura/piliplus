@@ -91,6 +91,9 @@ Widget searchUserPanel(context, searchPanelCtr, LoadingState loadingState) {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                      if (index == loadingState.response.length - 1) {
+                        searchPanelCtr.onLoadMore();
+                      }
                       var i = loadingState.response[index];
                       String heroTag = Utils.makeHeroTag(i!.mid);
                       return InkWell(

@@ -38,11 +38,6 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
         Get.find<HomeController>().searchBarStream;
     _hotController.scrollController.addListener(
       () {
-        if (_hotController.scrollController.position.pixels >=
-            _hotController.scrollController.position.maxScrollExtent - 200) {
-          _hotController.onLoadMore();
-        }
-
         final ScrollDirection direction =
             _hotController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
@@ -82,17 +77,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
               MediaQuery.of(context).padding.bottom + 10,
             ),
             sliver: Obx(
-              () => _hotController.loadingState.value is Loading
-                  ? _buildSkeleton()
-                  : _hotController.loadingState.value is Success
-                      ? _buildBody(_hotController.loadingState.value as Success)
-                      : HttpError(
-                          errMsg: _hotController.loadingState.value is Error
-                              ? (_hotController.loadingState.value as Error)
-                                  .errMsg
-                              : '没有相关数据',
-                          callback: _hotController.onReload,
-                        ),
+              () => _buildBody(_hotController.loadingState.value),
             ),
           ),
         ],
@@ -126,30 +111,46 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildBody(Success loadingState) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        mainAxisSpacing: StyleString.safeSpace,
-        crossAxisSpacing: StyleString.safeSpace,
-        maxCrossAxisExtent: Grid.maxRowWidth * 2,
-        childAspectRatio: StyleString.aspectRatio * 2.4,
-        mainAxisExtent: 0,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return VideoCardH(
-            videoItem: loadingState.response[index],
-            showPubdate: true,
-            longPress: () {
-              _hotController.popupDialog
-                  .add(_createPopupDialog(loadingState.response[index]));
-              Overlay.of(context).insert(_hotController.popupDialog.last!);
-            },
-            longPressEnd: _hotController.removePopupDialog,
-          );
-        },
-        childCount: loadingState.response.length,
-      ),
-    );
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => _buildSkeleton(),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.safeSpace,
+                crossAxisSpacing: StyleString.safeSpace,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.4,
+                mainAxisExtent: 0,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response.length - 1) {
+                    _hotController.onLoadMore();
+                  }
+                  return VideoCardH(
+                    videoItem: loadingState.response[index],
+                    showPubdate: true,
+                    longPress: () {
+                      _hotController.popupDialog.add(
+                          _createPopupDialog(loadingState.response[index]));
+                      Overlay.of(context)
+                          .insert(_hotController.popupDialog.last!);
+                    },
+                    longPressEnd: _hotController.removePopupDialog,
+                  );
+                },
+                childCount: loadingState.response.length,
+              ),
+            )
+          : HttpError(
+              callback: _hotController.onReload,
+            ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: _hotController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

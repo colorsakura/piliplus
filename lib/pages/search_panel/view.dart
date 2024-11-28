@@ -1,7 +1,6 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search_panel/widgets/video_panel.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/media_bangumi.dart';
@@ -49,21 +48,6 @@ class _SearchPanelState extends State<SearchPanel>
       ),
       tag: widget.searchType!.type + widget.keyword!,
     );
-    _searchPanelController.scrollController.addListener(() async {
-      if (_searchPanelController.scrollController.position.pixels >=
-          _searchPanelController.scrollController.position.maxScrollExtent -
-              100) {
-        EasyThrottle.throttle('history', const Duration(seconds: 1), () {
-          _searchPanelController.onLoadMore();
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _searchPanelController.scrollController.removeListener(() {});
-    super.dispose();
   }
 
   @override
@@ -142,7 +126,7 @@ class _SearchPanelState extends State<SearchPanel>
             loadingState,
           );
         default:
-          return const SizedBox();
+          return const SizedBox.shrink();
       }
     }
   }

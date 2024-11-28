@@ -23,6 +23,7 @@ class VideoCardH extends StatelessWidget {
     this.showView = true,
     this.showDanmaku = true,
     this.showPubdate = false,
+    this.onTap,
   });
   final dynamic videoItem;
   final Function()? longPress;
@@ -32,6 +33,7 @@ class VideoCardH extends StatelessWidget {
   final bool showView;
   final bool showDanmaku;
   final bool showPubdate;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,10 @@ class VideoCardH extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           onLongPress: longPress,
           onTap: () async {
+            if (onTap != null) {
+              onTap?.call();
+              return;
+            }
             if (type == 'ketang') {
               SmartDialog.showToast('课堂视频暂不支持播放');
               return;

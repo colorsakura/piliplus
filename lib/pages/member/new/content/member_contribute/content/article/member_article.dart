@@ -6,7 +6,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/space_article/item.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/article/member_article_ctr.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,11 +54,7 @@ class _MemberArticleState extends State<MemberArticle>
                   itemCount: loadingState.response.length,
                   itemBuilder: (_, index) {
                     if (index == loadingState.response.length - 1) {
-                      EasyThrottle.throttle(
-                          'memberArticle', const Duration(milliseconds: 500),
-                          () {
-                        _controller.onLoadMore();
-                      });
+                      _controller.onLoadMore();
                     }
                     Item item = loadingState.response[index];
                     return ListTile(

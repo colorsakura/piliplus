@@ -770,20 +770,6 @@ class ReplyItemGrpc extends StatelessWidget {
                   : null,
             ),
           );
-        } else if (matchStr.startsWith('https://b23.tv/')) {
-          spanChildren.add(
-            TextSpan(
-              text: ' $matchStr ',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => Get.toNamed(
-                      '/webviewnew',
-                      parameters: {'url': matchStr},
-                    ),
-            ),
-          );
         } else {
           String appUrlSchema = '';
           final bool enableWordRe = GStorage.setting
@@ -919,6 +905,20 @@ class ReplyItemGrpc extends StatelessWidget {
                     Get.toNamed('/searchResult',
                         parameters: {'keyword': topic});
                   },
+              ),
+            );
+          } else if (matchStr.startsWith('https://b23.tv/')) {
+            spanChildren.add(
+              TextSpan(
+                text: ' $matchStr ',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => Get.toNamed(
+                        '/webviewnew',
+                        parameters: {'url': matchStr},
+                      ),
               ),
             );
           } else {

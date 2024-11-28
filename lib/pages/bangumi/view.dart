@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -39,14 +38,6 @@ class _BangumiPageState extends State<BangumiPage>
         Get.find<HomeController>().searchBarStream;
     _bangumiController.scrollController.addListener(
       () async {
-        if (_bangumiController.scrollController.position.pixels >=
-            _bangumiController.scrollController.position.maxScrollExtent -
-                200) {
-          EasyThrottle.throttle('my-throttler', const Duration(seconds: 1), () {
-            _bangumiController.onLoadMore();
-          });
-        }
-
         final ScrollDirection direction =
             _bangumiController.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
@@ -162,6 +153,9 @@ class _BangumiPageState extends State<BangumiPage>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
+                  if (index == loadingState.response.length - 1) {
+                    _bangumiController.onLoadMore();
+                  }
                   return BangumiCardV(
                       bangumiItem: loadingState.response[index]);
                 },
@@ -188,10 +182,11 @@ class _BangumiPageState extends State<BangumiPage>
           width: Grid.maxRowWidth / 2,
           height: Grid.maxRowWidth * 1,
           margin: EdgeInsets.only(
-              left: StyleString.safeSpace,
-              right: index == loadingState.response.length - 1
-                  ? StyleString.safeSpace
-                  : 0),
+            left: StyleString.safeSpace,
+            right: index == loadingState.response.length - 1
+                ? StyleString.safeSpace
+                : 0,
+          ),
           child: BangumiCardV(
             bangumiItem: loadingState.response[index],
           ),

@@ -1,11 +1,12 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/models/model_hot_video_item.dart';
+import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/user.dart';
 
-class LaterController extends CommonController {
+class LaterController extends MultiSelectController {
   RxInt count = (-1).obs;
 
   @override
@@ -20,8 +21,13 @@ class LaterController extends CommonController {
       count.value = response.response['count'];
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response['list']
-          .insertAll(0, (loadingState.value as Success).response);
+      response.response['list'].insertAll(
+        0,
+        List<HotVideoItemModel>.from((loadingState.value as Success).response),
+      );
+    }
+    if (response.response['list'].length >= count.value) {
+      isEnd = true;
     }
     loadingState.value = LoadingState.success(response.response['list']);
     return true;
@@ -45,7 +51,7 @@ class LaterController extends CommonController {
             ),
             TextButton(
               onPressed: () async {
-                var res = await UserHttp.toViewDel(aid: aid);
+                var res = await UserHttp.toViewDel(aids: [aid]);
                 if (res['status']) {
                   if (aid != null) {
                     List list = (loadingState.value as Success).response;
@@ -103,4 +109,54 @@ class LaterController extends CommonController {
 
   @override
   Future<LoadingState> customGetData() => UserHttp.seeYouLater();
+
+  onDelChecked(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('提示'),
+          content: const Text('确认删除所选稍后再看吗？'),
+          actions: [
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                _onDelete(((loadingState.value as Success).response as List)
+                    .where((e) => e.checked)
+                    .toList());
+              },
+              child: const Text('确认'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _onDelete(List result) async {
+    SmartDialog.showLoading(msg: '请求中');
+    List aids = result.map((item) => item.aid).toList();
+    dynamic res = await UserHttp.toViewDel(aids: aids);
+    if (res['status']) {
+      Set remainList = ((loadingState.value as Success).response as List)
+          .toSet()
+          .difference(result.toSet());
+      loadingState.value = LoadingState.success(remainList.toList());
+      if (enableMultiSelect.value) {
+        checkedCount.value = 0;
+        enableMultiSelect.value = false;
+      }
+    }
+    SmartDialog.dismiss();
+    SmartDialog.showToast(res['msg']);
+  }
 }

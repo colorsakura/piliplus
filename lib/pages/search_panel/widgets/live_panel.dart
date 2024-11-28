@@ -29,6 +29,9 @@ Widget searchLivePanel(BuildContext context, ctr, LoadingState loadingState) {
             ),
             itemCount: loadingState.response.length,
             itemBuilder: (context, index) {
+              if (index == loadingState.response.length - 1) {
+                ctr.onLoadMore();
+              }
               return LiveItem(liveItem: loadingState.response[index]);
             },
           )

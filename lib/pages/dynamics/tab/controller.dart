@@ -21,17 +21,18 @@ class DynamicsTabController extends CommonController {
   }
 
   @override
-  Future onRefresh() async {
+  Future onRefresh() {
     if (dynamicsType == 'all') {
       mainController.setCount();
     }
     offset = '';
-    await queryData();
+    return super.onRefresh();
   }
 
   @override
   bool customHandleResponse(Success response) {
     offset = response.response.offset;
+    isEnd = response.response.items.isEmpty;
     if (currentPage != 1 && loadingState.value is Success) {
       response.response.items
           .insertAll(0, (loadingState.value as Success).response);

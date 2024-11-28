@@ -5,7 +5,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/bangumi/member_bangumi_ctr.dart';
 import 'package:PiliPalaX/utils/grid.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,10 +71,7 @@ class _MemberBangumiState extends State<MemberBangumi>
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == loadingState.response.length - 1) {
-                            EasyThrottle.throttle('memberBangumi',
-                                const Duration(milliseconds: 500), () {
-                              _controller.onLoadMore();
-                            });
+                            _controller.onLoadMore();
                           }
                           return BangumiCardVMemberHome(
                             bangumiItem: loadingState.response[index],

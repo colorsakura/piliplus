@@ -1,19 +1,20 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
+import 'package:PiliPalaX/models/user/fav_detail.dart';
 import 'package:PiliPalaX/models/user/fav_folder.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/video.dart';
 
-class FavDetailController extends CommonController {
+class FavDetailController extends MultiSelectController {
   Rx<FavFolderItemData> item = FavFolderItemData().obs;
   int? mediaId;
   late String heroTag;
-  RxString loadingText = '加载中...'.obs;
   RxBool isOwner = false.obs;
+  RxBool titleCtr = false.obs;
 
   @override
   void onInit() {
@@ -28,20 +29,6 @@ class FavDetailController extends CommonController {
   }
 
   @override
-  Future onRefresh() {
-    loadingText.value = '加载中...';
-    return super.onRefresh();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) {
-    if (isRefresh.not && loadingText.value == '没有更多了') {
-      return Future.value();
-    }
-    return super.queryData(isRefresh);
-  }
-
-  @override
   bool customHandleResponse(Success response) {
     if (currentPage == 1) {
       item.value = response.response.info;
@@ -49,28 +36,30 @@ class FavDetailController extends CommonController {
           GStorage.userInfo.get('userInfoCache')?.mid;
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response.medias
-          .insertAll(0, (loadingState.value as Success).response);
+      response.response.medias?.insertAll(
+        0,
+        List<FavDetailItemData>.from((loadingState.value as Success).response),
+      );
     }
     loadingState.value = LoadingState.success(response.response.medias);
     if (response.response.medias.length >= response.response.info.mediaCount) {
-      loadingText.value = '没有更多了';
+      isEnd = true;
     }
     return true;
   }
 
   onCancelFav(int id, int type) async {
-    var result = await VideoHttp.favVideo(
-      aid: id,
-      addIds: '',
+    var result = await VideoHttp.delFav(
+      ids: ['$id:$type'],
       delIds: mediaId.toString(),
-      type: type,
     );
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;
-      dataList = dataList.where((item) => item.id != id).toList();
+      dataList.removeWhere((item) => item.id == id);
       loadingState.value = LoadingState.success(dataList);
       SmartDialog.showToast('取消收藏');
+    } else {
+      SmartDialog.showToast(result['msg']);
     }
   }
 
@@ -80,4 +69,51 @@ class FavDetailController extends CommonController {
         ps: 20,
         mediaId: mediaId!,
       );
+
+  onDelChecked(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('提示'),
+          content: const Text('确认删除所选收藏吗？'),
+          actions: [
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                List list = ((loadingState.value as Success).response as List)
+                    .where((e) => e.checked)
+                    .toList();
+                dynamic result = await VideoHttp.delFav(
+                  ids: list.map((item) => '${item.id}:${item.type}').toList(),
+                  delIds: mediaId.toString(),
+                );
+                if (result['status']) {
+                  List dataList = (loadingState.value as Success).response;
+                  Set remainList = dataList.toSet().difference(list.toSet());
+                  loadingState.value =
+                      LoadingState.success(remainList.toList());
+                  SmartDialog.showToast('取消收藏');
+                  checkedCount.value = 0;
+                  enableMultiSelect.value = false;
+                } else {
+                  SmartDialog.showToast(result['msg']);
+                }
+              },
+              child: const Text('确认'),
+            )
+          ],
+        );
+      },
+    );
+  }
 }

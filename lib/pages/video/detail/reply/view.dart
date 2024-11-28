@@ -3,7 +3,6 @@ import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -211,10 +210,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 (BuildContext context, index) {
                   double bottom = MediaQuery.of(context).padding.bottom;
                   if (index == loadingState.response.replies.length) {
-                    EasyThrottle.throttle(
-                        'replylist', const Duration(milliseconds: 200), () {
-                      _videoReplyController.onLoadMore();
-                    });
+                    _videoReplyController.onLoadMore();
                     return Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.only(bottom: bottom),

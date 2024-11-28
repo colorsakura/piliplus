@@ -6,7 +6,6 @@ import 'package:PiliPalaX/models/common/tab_type.dart';
 import 'package:PiliPalaX/pages/common/popup_controller.dart';
 import 'package:PiliPalaX/pages/live/controller.dart';
 import 'package:PiliPalaX/pages/live/widgets/live_item.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -48,13 +47,6 @@ class _RcmdPageState extends State<RcmdPage>
         Get.find<HomeController>().searchBarStream;
     _controller.scrollController.addListener(
       () {
-        if (_controller.scrollController.position.pixels >=
-            _controller.scrollController.position.maxScrollExtent - 200) {
-          EasyThrottle.throttle(
-              'my-throttler', const Duration(milliseconds: 200), () {
-            _controller.onLoadMore();
-          });
-        }
         final ScrollDirection direction =
             _controller.scrollController.position.userScrollDirection;
         if (direction == ScrollDirection.forward) {
@@ -135,6 +127,10 @@ class _RcmdPageState extends State<RcmdPage>
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          if (loadingState is Success &&
+              index == loadingState.response.length - 1) {
+            _controller.onLoadMore();
+          }
           return loadingState is Success
               ? widget.tabType == TabType.rcmd
                   ? VideoCardV(

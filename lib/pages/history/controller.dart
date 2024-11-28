@@ -1,5 +1,5 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -8,11 +8,8 @@ import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/user/history.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class HistoryController extends CommonController {
+class HistoryController extends MultiSelectController {
   RxBool pauseStatus = false.obs;
-
-  RxBool enableMultiple = false.obs;
-  RxInt checkedCount = 0.obs;
 
   int? max;
   int? viewAt;
@@ -38,7 +35,10 @@ class HistoryController extends CommonController {
     max = data.list?.lastOrNull?.history?.oid;
     viewAt = data.list?.lastOrNull?.viewAt;
     if (currentPage != 1 && loadingState.value is Success) {
-      data.list?.insertAll(0, (loadingState.value as Success).response);
+      data.list?.insertAll(
+        0,
+        List<HisListItem>.from((loadingState.value as Success).response),
+      );
     }
     loadingState.value = LoadingState.success(data.list);
     return true;
@@ -107,7 +107,7 @@ class HistoryController extends CommonController {
                   SmartDialog.showToast('清空观看历史');
                 }
                 Get.back();
-                loadingState.value = LoadingState.success(<HisListItem>[]);
+                loadingState.value = LoadingState.success([]);
               },
               child: const Text('确认清空'),
             )
@@ -119,7 +119,7 @@ class HistoryController extends CommonController {
 
   // 删除某条历史记录
   Future delHistory(kid, business) async {
-    _onDelete(((loadingState.value as Success).response as List<HisListItem>)
+    _onDelete(((loadingState.value as Success).response as List)
         .where((e) => e.kid == kid)
         .toList());
   }
@@ -127,10 +127,9 @@ class HistoryController extends CommonController {
   // 删除已看历史记录
   void onDelHistory() {
     if (loadingState.value is Success) {
-      List<HisListItem> list =
-          ((loadingState.value as Success).response as List<HisListItem>)
-              .where((e) => e.progress == -1)
-              .toList();
+      List list = ((loadingState.value as Success).response as List)
+          .where((e) => e.progress == -1)
+          .toList();
       if (list.isNotEmpty) {
         _onDelete(list);
       } else {
@@ -139,21 +138,20 @@ class HistoryController extends CommonController {
     }
   }
 
-  void _onDelete(List<HisListItem> result) async {
+  void _onDelete(List result) async {
     SmartDialog.showLoading(msg: '请求中');
     List kidList = result.map((item) {
       return '${item.history?.business}_${item.kid}';
     }).toList();
     dynamic response = await UserHttp.delHistory(kidList);
     if (response['status']) {
-      Set<HisListItem> remainList =
-          ((loadingState.value as Success).response as List<HisListItem>)
-              .toSet()
-              .difference(result.toSet());
+      Set remainList = ((loadingState.value as Success).response as List)
+          .toSet()
+          .difference(result.toSet());
       loadingState.value = LoadingState.success(remainList.toList());
-      if (enableMultiple.value) {
+      if (enableMultiSelect.value) {
         checkedCount.value = 0;
-        enableMultiple.value = false;
+        enableMultiSelect.value = false;
       }
     }
     SmartDialog.dismiss();
@@ -161,8 +159,8 @@ class HistoryController extends CommonController {
   }
 
   // 删除选中的记录
-  Future onDelCheckedHistory(BuildContext context) async {
-    await showDialog(
+  void onDelCheckedHistory(BuildContext context) {
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -181,8 +179,7 @@ class HistoryController extends CommonController {
             TextButton(
               onPressed: () async {
                 Get.back();
-                _onDelete(((loadingState.value as Success).response
-                        as List<HisListItem>)
+                _onDelete(((loadingState.value as Success).response as List)
                     .where((e) => e.checked)
                     .toList());
               },

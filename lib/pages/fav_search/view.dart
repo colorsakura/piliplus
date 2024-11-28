@@ -4,7 +4,6 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPalaX/pages/history/widgets/item.dart';
 import 'package:PiliPalaX/utils/grid.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/pages/fav_detail/widget/fav_video_card.dart';
@@ -22,27 +21,6 @@ class FavSearchPage extends StatefulWidget {
 
 class _FavSearchPageState extends State<FavSearchPage> {
   final FavSearchController _favSearchCtr = Get.put(FavSearchController());
-
-  @override
-  void initState() {
-    super.initState();
-    _favSearchCtr.scrollController.addListener(
-      () {
-        if (_favSearchCtr.scrollController.position.pixels >=
-            _favSearchCtr.scrollController.position.maxScrollExtent - 300) {
-          EasyThrottle.throttle('fav', const Duration(seconds: 1), () {
-            _favSearchCtr.onLoadMore();
-          });
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _favSearchCtr.scrollController.removeListener(() {});
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +71,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
                   itemCount: loadingState.response.length + 1,
                   itemBuilder: (context, index) {
                     if (index == loadingState.response.length) {
+                      _favSearchCtr.onLoadMore();
                       return Container(
                         height: MediaQuery.of(context).padding.bottom + 60,
                         padding: EdgeInsets.only(

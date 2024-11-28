@@ -563,45 +563,19 @@ class VideoHttp {
   }
 
   // （取消）收藏
-  static Future favVideo({
-    required int aid,
-    String? addIds,
-    String? delIds,
-    int? type,
-  }) async {
-    var res = await Request().post(Api.favVideo, queryParameters: {
-      'rid': aid,
-      'type': type ?? 2,
-      'add_media_ids': addIds ?? '',
-      'del_media_ids': delIds ?? '',
-      'csrf': await Request.getCsrf(),
-    });
-    if (res.data['code'] == 0) {
-      return {'status': true, 'data': res.data['data']};
-    } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
-    }
-  }
-
-  // （取消）收藏 bangumi
-  static Future favBangumi({
-    required dynamic epId,
-    String? addIds,
+  static Future delFav({
+    List? ids,
     String? delIds,
   }) async {
     var res = await Request().post(
-      Api.favBangumi,
+      Api.delFav,
       data: {
-        'resources': '$epId:24',
-        'add_media_ids': addIds ?? '',
-        'del_media_ids': delIds ?? '',
+        'resources': ids?.join(','),
+        'media_id': delIds,
+        'platform': 'web',
         'csrf': await Request.getCsrf(),
       },
-      options: Options(
-        headers: {
-          'Content-Type': Headers.formUrlEncodedContentType,
-        },
-      ),
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
@@ -609,6 +583,58 @@ class VideoHttp {
       return {'status': false, 'msg': res.data['message']};
     }
   }
+
+  // （取消）收藏
+  static Future favVideo({
+    int? aid,
+    String? addIds,
+    String? delIds,
+    int? type,
+  }) async {
+    var res = await Request().post(
+      Api.favVideo,
+      data: {
+        'rid': aid,
+        'type': type ?? 2,
+        'add_media_ids': addIds ?? '',
+        'del_media_ids': delIds ?? '',
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  // （取消）收藏 bangumi
+  // static Future favBangumi({
+  //   required dynamic epId,
+  //   String? addIds,
+  //   String? delIds,
+  // }) async {
+  //   var res = await Request().post(
+  //     Api.favBangumi,
+  //     data: {
+  //       'resources': '$epId:24',
+  //       'add_media_ids': addIds ?? '',
+  //       'del_media_ids': delIds ?? '',
+  //       'csrf': await Request.getCsrf(),
+  //     },
+  //     options: Options(
+  //       headers: {
+  //         'Content-Type': Headers.formUrlEncodedContentType,
+  //       },
+  //     ),
+  //   );
+  //   if (res.data['code'] == 0) {
+  //     return {'status': true, 'data': res.data['data']};
+  //   } else {
+  //     return {'status': false, 'msg': res.data['message']};
+  //   }
+  // }
 
   // 查看视频被收藏在哪个文件夹
   static Future videoInFolder({

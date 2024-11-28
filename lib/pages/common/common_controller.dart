@@ -21,7 +21,7 @@ abstract class CommonController extends GetxController {
     return false;
   }
 
-  void handleSuccess(List currentList, List dataList) {}
+  // void handleSuccess(List currentList, List dataList) {}
 
   Future queryData([bool isRefresh = true]) async {
     if (isLoading || (isRefresh.not && isEnd)) return;
@@ -29,6 +29,7 @@ abstract class CommonController extends GetxController {
     LoadingState response = await customGetData();
     if (response is Success) {
       if (!customHandleResponse(response)) {
+        isEnd = response.response.isEmpty;
         List currentList = loadingState.value is Success
             ? (loadingState.value as Success).response
             : [];
@@ -38,7 +39,7 @@ abstract class CommonController extends GetxController {
                 ? LoadingState.success(handleList)
                 : response
             : LoadingState.success(currentList + response.response);
-        handleSuccess(currentList, response.response);
+        // handleSuccess(currentList, response.response);
       }
       currentPage++;
     } else {

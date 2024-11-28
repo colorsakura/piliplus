@@ -27,6 +27,7 @@ class HotVideoItemModel {
     this.seasontype,
     this.isOgv,
     this.rcmdReason,
+    required this.checked,
   });
 
   int? aid;
@@ -54,6 +55,7 @@ class HotVideoItemModel {
   int? seasontype;
   bool? isOgv;
   RcmdReason? rcmdReason;
+  late bool checked;
 
   HotVideoItemModel.fromJson(Map<String, dynamic> json) {
     aid = json["aid"];
@@ -83,6 +85,7 @@ class HotVideoItemModel {
     rcmdReason = json['rcmd_reason'] != '' && json['rcmd_reason'] != null
         ? RcmdReason.fromJson(json['rcmd_reason'])
         : null;
+    checked = false;
   }
 }
 

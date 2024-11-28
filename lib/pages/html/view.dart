@@ -5,7 +5,6 @@ import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -66,14 +65,6 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   void scrollListener() {
     _htmlRenderCtr.scrollController.addListener(
       () {
-        // 分页加载
-        if (_htmlRenderCtr.scrollController.position.pixels >=
-            _htmlRenderCtr.scrollController.position.maxScrollExtent - 300) {
-          EasyThrottle.throttle('replylist', const Duration(seconds: 2), () {
-            _htmlRenderCtr.onLoadMore();
-          });
-        }
-
         // 标题
         // if (scrollController.offset > 55 && !_visibleTitle) {
         //   _visibleTitle = true;
@@ -335,6 +326,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               itemCount: loadingState.response.replies.length + 1,
               itemBuilder: (context, index) {
                 if (index == loadingState.response.replies.length) {
+                  _htmlRenderCtr.onLoadMore();
                   return Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(

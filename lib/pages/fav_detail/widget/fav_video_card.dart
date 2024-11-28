@@ -17,12 +17,16 @@ class FavVideoCardH extends StatelessWidget {
   final dynamic videoItem;
   final Function? callFn;
   final int? searchType;
+  final GestureTapCallback? onTap;
+  final GestureLongPressCallback? onLongPress;
 
   const FavVideoCardH({
     super.key,
     required this.videoItem,
     this.callFn,
     this.searchType,
+    this.onTap,
+    this.onLongPress,
   });
 
   @override
@@ -32,6 +36,10 @@ class FavVideoCardH extends StatelessWidget {
     String heroTag = Utils.makeHeroTag(id);
     return InkWell(
       onTap: () async {
+        if (onTap != null) {
+          onTap!();
+          return;
+        }
         int? seasonId;
         String? epId;
         if (videoItem.ogv != null &&
@@ -65,6 +73,7 @@ class FavVideoCardH extends StatelessWidget {
               epId != null ? SearchType.media_bangumi : SearchType.video,
         });
       },
+      onLongPress: onLongPress,
       child: Column(
         children: [
           Padding(
@@ -213,14 +222,15 @@ class FavVideoCardH extends StatelessWidget {
                               content: const Text('要取消收藏吗?'),
                               actions: [
                                 TextButton(
-                                    onPressed: () => Get.back(),
-                                    child: Text(
-                                      '取消',
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline),
-                                    )),
+                                  onPressed: Get.back,
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline),
+                                  ),
+                                ),
                                 TextButton(
                                   onPressed: () async {
                                     await callFn?.call();

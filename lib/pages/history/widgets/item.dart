@@ -33,7 +33,7 @@ class HistoryItem extends StatelessWidget {
     String heroTag = Utils.makeHeroTag(aid);
     return InkWell(
       onTap: () async {
-        if (ctr!.enableMultiple.value) {
+        if (ctr!.enableMultiSelect.value) {
           feedBack();
           onChoose?.call();
           return;
@@ -153,9 +153,9 @@ class HistoryItem extends StatelessWidget {
         if (ctr is FavSearchController) {
           return;
         }
-        if (!ctr!.enableMultiple.value) {
+        if (!ctr!.enableMultiSelect.value) {
           feedBack();
-          ctr!.enableMultiple.value = true;
+          ctr!.enableMultiSelect.value = true;
           onChoose?.call();
         }
       },
@@ -229,43 +229,41 @@ class HistoryItem extends StatelessWidget {
                               opacity: videoItem.checked ? 1 : 0,
                               duration: const Duration(milliseconds: 200),
                               child: Container(
+                                alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   color: Colors.black.withOpacity(0.6),
                                 ),
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 34,
-                                    height: 34,
-                                    child: AnimatedScale(
-                                      scale: videoItem.checked ? 1 : 0,
-                                      duration:
-                                          const Duration(milliseconds: 250),
-                                      curve: Curves.easeInOut,
-                                      child: IconButton(
-                                        tooltip: '取消选择',
-                                        style: ButtonStyle(
-                                          padding: WidgetStateProperty.all(
-                                              EdgeInsets.zero),
-                                          backgroundColor:
-                                              WidgetStateProperty.resolveWith(
-                                            (states) {
-                                              return Theme.of(context)
-                                                  .colorScheme
-                                                  .surface
-                                                  .withOpacity(0.8);
-                                            },
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          feedBack();
-                                          onChoose?.call();
-                                        },
-                                        icon: Icon(Icons.done_all_outlined,
-                                            color: Theme.of(context)
+                                child: SizedBox(
+                                  width: 34,
+                                  height: 34,
+                                  child: AnimatedScale(
+                                    scale: videoItem.checked ? 1 : 0,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                    child: IconButton(
+                                      tooltip: '取消选择',
+                                      style: ButtonStyle(
+                                        padding: WidgetStateProperty.all(
+                                            EdgeInsets.zero),
+                                        backgroundColor:
+                                            WidgetStateProperty.resolveWith(
+                                          (states) {
+                                            return Theme.of(context)
                                                 .colorScheme
-                                                .primary),
+                                                .surface
+                                                .withOpacity(0.8);
+                                          },
+                                        ),
                                       ),
+                                      onPressed: () {
+                                        feedBack();
+                                        onChoose?.call();
+                                      },
+                                      icon: Icon(Icons.done_all_outlined,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                     ),
                                   ),
                                 ),

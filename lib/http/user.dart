@@ -158,8 +158,10 @@ class UserHttp {
       for (var i in res.data['data']['list']) {
         list.add(HotVideoItemModel.fromJson(i));
       }
-      return LoadingState.success(
-          {'list': list, 'count': res.data['data']['count']});
+      return LoadingState.success({
+        'list': list,
+        'count': res.data['data']['count'],
+      });
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -239,16 +241,18 @@ class UserHttp {
   }
 
   // 移除已观看
-  static Future toViewDel({int? aid}) async {
+  static Future toViewDel({
+    List? aids,
+  }) async {
     final Map<String, dynamic> params = {
       'jsonp': 'jsonp',
       'csrf': await Request.getCsrf(),
+      if (aids != null) 'aid': aids.join(',') else 'viewed': true
     };
-
-    params[aid != null ? 'aid' : 'viewed'] = aid ?? true;
-    var res = await Request().post(
+    dynamic res = await Request().post(
       Api.toViewDel,
-      queryParameters: params,
+      data: params,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'msg': 'yeah！成功移除'};

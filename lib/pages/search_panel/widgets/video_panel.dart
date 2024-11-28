@@ -102,6 +102,9 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                      if (index == loadingState.response.length - 1) {
+                        ctr.onLoadMore();
+                      }
                       return VideoCardH(
                         videoItem: loadingState.response[index],
                         showPubdate: true,

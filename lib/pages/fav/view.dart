@@ -3,7 +3,6 @@ import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/fav_search/view.dart';
 import 'package:PiliPalaX/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
@@ -22,27 +21,6 @@ class FavPage extends StatefulWidget {
 
 class _FavPageState extends State<FavPage> {
   final FavController _favController = Get.put(FavController());
-
-  @override
-  void initState() {
-    super.initState();
-    _favController.scrollController.addListener(
-      () {
-        if (_favController.scrollController.position.pixels >=
-            _favController.scrollController.position.maxScrollExtent - 300) {
-          EasyThrottle.throttle('history', const Duration(seconds: 1), () {
-            _favController.onLoadMore();
-          });
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _favController.scrollController.removeListener(() {});
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,14 +102,18 @@ class _FavPageState extends State<FavPage> {
                   bottom: 80 + MediaQuery.paddingOf(context).bottom),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.cardSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.4,
-                    mainAxisExtent: 0),
+                  mainAxisSpacing: StyleString.cardSpace,
+                  crossAxisSpacing: StyleString.safeSpace,
+                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  childAspectRatio: StyleString.aspectRatio * 2.4,
+                  mainAxisExtent: 0,
+                ),
                 delegate: SliverChildBuilderDelegate(
                   childCount: loadingState.response.length,
                   (BuildContext context, int index) {
+                    if (index == loadingState.response.length - 1) {
+                      _favController.onLoadMore();
+                    }
                     String heroTag =
                         Utils.makeHeroTag(loadingState.response[index].fid);
                     return FavItem(
@@ -155,7 +137,7 @@ class _FavPageState extends State<FavPage> {
                           _favController.loadingState.value =
                               LoadingState.success(list);
                         } else {
-                          Future.delayed(const Duration(milliseconds: 150), () {
+                          Future.delayed(const Duration(milliseconds: 255), () {
                             _favController.onRefresh();
                           });
                         }

@@ -43,17 +43,8 @@ class RcmdController extends PopupController {
   }
 
   @override
-  void handleSuccess(List currentList, List dataList) {
-    if (dataList.length > 1 && currentList.length < 24) {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (currentList.length < 24) queryData(false);
-      });
-    }
-  }
-
-  @override
-  Future onRefresh() async {
+  Future onRefresh() {
     currentPage = 0;
-    await queryData();
+    return super.onRefresh();
   }
 }

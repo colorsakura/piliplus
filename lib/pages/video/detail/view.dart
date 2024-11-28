@@ -16,6 +16,7 @@ import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -1312,18 +1313,20 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   // 展示二级回复
   void replyReply(replyItem, id, isTop) {
-    videoDetailController.childKey.currentState?.showBottomSheet(
-      (context) => VideoReplyReplyPanel(
-        id: id,
-        // rcount: replyItem.rcount,
-        oid: replyItem.oid.toInt(),
-        rpid: replyItem.id.toInt(),
-        firstFloor: replyItem,
-        replyType: ReplyType.video,
-        source: 'videoDetail',
-        isTop: isTop,
-      ),
-    );
+    EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
+      videoDetailController.childKey.currentState?.showBottomSheet(
+        (context) => VideoReplyReplyPanel(
+          id: id,
+          // rcount: replyItem.rcount,
+          oid: replyItem.oid.toInt(),
+          rpid: replyItem.id.toInt(),
+          firstFloor: replyItem,
+          replyType: ReplyType.video,
+          source: 'videoDetail',
+          isTop: isTop,
+        ),
+      );
+    });
   }
 
   // ai总结

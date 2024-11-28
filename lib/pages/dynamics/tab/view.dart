@@ -47,12 +47,6 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
       tag: widget.dynamicsType,
     );
     _dynamicsTabController.scrollController.addListener(() {
-      if (_dynamicsTabController.scrollController.position.pixels >=
-          _dynamicsTabController.scrollController.position.maxScrollExtent -
-              200) {
-        _dynamicsTabController.onLoadMore();
-      }
-
       StreamController<bool> mainStream =
           Get.find<MainController>().bottomBarStream;
       StreamController<bool> searchBarStream =
@@ -155,10 +149,14 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                   crossAxisSpacing: StyleString.cardSpace / 2,
                   mainAxisSpacing: StyleString.cardSpace / 2,
 
-                  lastChildLayoutTypeBuilder: (index) =>
-                      index == loadingState.response.length
-                          ? LastChildLayoutType.foot
-                          : LastChildLayoutType.none,
+                  lastChildLayoutTypeBuilder: (index) {
+                    if (index == loadingState.response.length - 1) {
+                      _dynamicsTabController.onLoadMore();
+                    }
+                    return index == loadingState.response.length
+                        ? LastChildLayoutType.foot
+                        : LastChildLayoutType.none;
+                  },
                   children: [
                     if (dynamicsController.tabController.index == 4 &&
                         dynamicsController.mid.value != -1) ...[
@@ -186,6 +184,9 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
+                            if (index == loadingState.response.length - 1) {
+                              _dynamicsTabController.onLoadMore();
+                            }
                             if ((dynamicsController.tabController.index == 4 &&
                                     dynamicsController.mid.value != -1) ||
                                 !dynamicsController.tempBannedList.contains(
@@ -196,7 +197,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                                 onRemove: _dynamicsTabController.onRemove,
                               );
                             }
-                            return const SizedBox();
+                            return const SizedBox.shrink();
                           },
                           childCount: loadingState.response.length,
                         ),

@@ -92,6 +92,9 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                      if (index == loadingState.response.length - 1) {
+                        searchPanelCtr.onLoadMore();
+                      }
                       return InkWell(
                         onTap: () {
                           Get.toNamed('/htmlRender', parameters: {
