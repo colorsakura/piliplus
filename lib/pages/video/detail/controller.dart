@@ -25,6 +25,7 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:PiliPalaX/utils/video_utils.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:ns_danmaku/models/danmaku_item.dart';
 
 import '../../../utils/id_utils.dart';
@@ -1307,24 +1308,30 @@ class VideoDetailController extends GetxController
                                                 child: Row(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       list![index]
                                                           .category
                                                           .title,
                                                       style: TextStyle(
+                                                        height: 1,
                                                         fontSize: 14,
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .primary,
                                                       ),
+                                                      strutStyle: StrutStyle(
+                                                        height: 1,
+                                                        leading: 0,
+                                                      ),
                                                     ),
                                                     Icon(
-                                                      Icons
-                                                          .keyboard_arrow_right,
-                                                      size: 22,
+                                                      MdiIcons
+                                                          .unfoldMoreHorizontal,
+                                                      size: MediaQuery
+                                                              .textScalerOf(
+                                                                  context)
+                                                          .scale(14),
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .primary,
@@ -1368,24 +1375,30 @@ class VideoDetailController extends GetxController
                                                 child: Row(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       list![index]
                                                           .actionType
                                                           .title,
                                                       style: TextStyle(
+                                                        height: 1,
                                                         fontSize: 14,
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .primary,
                                                       ),
+                                                      strutStyle: StrutStyle(
+                                                        height: 1,
+                                                        leading: 0,
+                                                      ),
                                                     ),
                                                     Icon(
-                                                      Icons
-                                                          .keyboard_arrow_right,
-                                                      size: 22,
+                                                      MdiIcons
+                                                          .unfoldMoreHorizontal,
+                                                      size: MediaQuery
+                                                              .textScalerOf(
+                                                                  context)
+                                                          .scale(14),
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .primary,
@@ -1394,7 +1407,7 @@ class VideoDetailController extends GetxController
                                                 ),
                                               ),
                                             ],
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),

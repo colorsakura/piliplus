@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class SponsorBlockPage extends StatefulWidget {
@@ -51,9 +52,9 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     super.dispose();
   }
 
-  TextStyle get _titleStyle => TextStyle(fontSize: 14);
+  TextStyle get _titleStyle => TextStyle(fontSize: 15);
   TextStyle get _subTitleStyle => TextStyle(
-        fontSize: 12,
+        fontSize: 13,
         color: Theme.of(context).colorScheme.outline,
       );
 
@@ -497,27 +498,32 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                           child: Text(item.title),
                         ))
                     .toList(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _blockSettings[index].second.title,
-                      style: TextStyle(
-                        fontSize: 13,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _blockSettings[index].second.title,
+                        style: TextStyle(
+                          height: 1,
+                          fontSize: 14,
+                          color:
+                              _blockSettings[index].second == SkipType.disable
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context).colorScheme.primary,
+                        ),
+                        strutStyle: StrutStyle(height: 1, leading: 0),
+                      ),
+                      Icon(
+                        MdiIcons.unfoldMoreHorizontal,
+                        size: MediaQuery.textScalerOf(context).scale(14),
                         color: _blockSettings[index].second == SkipType.disable
                             ? Theme.of(context).colorScheme.error
                             : Theme.of(context).colorScheme.primary,
                       ),
-                    ),
-                    Icon(
-                      size: 20,
-                      Icons.keyboard_arrow_right,
-                      color: _blockSettings[index].second == SkipType.disable
-                          ? Theme.of(context).colorScheme.error
-                          : Theme.of(context).colorScheme.primary,
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
