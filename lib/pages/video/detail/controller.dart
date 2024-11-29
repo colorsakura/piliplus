@@ -1029,7 +1029,7 @@ class VideoDetailController extends GetxController
       list!.add(
         PostSegmentModel(
           segment: Pair(
-            first: plPlayerController.positionSeconds.value,
+            first: 0,
             second: plPlayerController.positionSeconds.value,
           ),
           category: SegmentType.sponsor,
@@ -1185,7 +1185,7 @@ class VideoDetailController extends GetxController
                           0,
                           PostSegmentModel(
                             segment: Pair(
-                              first: plPlayerController.positionSeconds.value,
+                              first: 0,
                               second: plPlayerController.positionSeconds.value,
                             ),
                             category: SegmentType.sponsor,

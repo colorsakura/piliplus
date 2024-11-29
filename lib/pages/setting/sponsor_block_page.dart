@@ -60,7 +60,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   _checkServerStatus() {
     Request()
         .get(
-      '$_blockServer/api/status',
+      '$_blockServer/api/status/uptime',
       options: Options(
         headers: {
           'env': '',
@@ -68,15 +68,17 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           'x-bili-mid': '',
           'x-bili-aurora-eid': '',
           'x-bili-aurora-zone': '',
+          'cookie':
+              'buvid3= ; SESSDATA= ; bili_jct= ; DedeUserID= ; DedeUserID__ckMd5= ; sid= ',
         },
       ),
     )
         .then((res) {
-      if (res.data is Map) {
-        setState(() {
-          _serverStatus = res.data['uptime'] != null;
-        });
-      }
+      setState(() {
+        _serverStatus = res.statusCode == 200 &&
+            res.data is String &&
+            (double.tryParse(res.data) ?? int.tryParse(res.data)) != null;
+      });
     });
   }
 

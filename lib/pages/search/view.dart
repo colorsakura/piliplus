@@ -19,7 +19,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
