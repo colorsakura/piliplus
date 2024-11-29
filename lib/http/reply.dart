@@ -70,7 +70,7 @@ class ReplyHttp {
 
   static Future<LoadingState> replyReplyList({
     required int oid,
-    required String root,
+    required int root,
     required int pageNum,
     required int type,
     int sort = 1,

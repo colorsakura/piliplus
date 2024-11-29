@@ -3,6 +3,8 @@ class GlobalData {
 
   int themeMode = 2;
 
+  bool grpcReply = true;
+
   // 私有构造函数
   GlobalData._();
 

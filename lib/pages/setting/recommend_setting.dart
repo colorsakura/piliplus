@@ -231,7 +231,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
             leading: const Icon(Icons.favorite_border_outlined),
             setKey: SettingBoxKey.exemptFilterForFollowed,
             defaultVal: true,
-            callFn: (_) => {RecommendFilter.update},
+            onChanged: (_) => {RecommendFilter.update},
           ),
           // ListTile(
           //   dense: false,
@@ -267,7 +267,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
             leading: const Icon(Icons.explore_outlined),
             setKey: SettingBoxKey.applyFilterToRelatedVideos,
             defaultVal: true,
-            callFn: (_) => {RecommendFilter.update},
+            onChanged: (_) => {RecommendFilter.update},
           ),
           ListTile(
             dense: true,

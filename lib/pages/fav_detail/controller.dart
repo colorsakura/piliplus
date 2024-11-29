@@ -35,16 +35,19 @@ class FavDetailController extends MultiSelectController {
       isOwner.value = response.response.info.mid ==
           GStorage.userInfo.get('userInfoCache')?.mid;
     }
+    if (response.response.medias.isEmpty) {
+      isEnd = true;
+    }
     if (currentPage != 1 && loadingState.value is Success) {
       response.response.medias?.insertAll(
         0,
         List<FavDetailItemData>.from((loadingState.value as Success).response),
       );
     }
-    loadingState.value = LoadingState.success(response.response.medias);
     if (response.response.medias.length >= response.response.info.mediaCount) {
       isEnd = true;
     }
+    loadingState.value = LoadingState.success(response.response.medias);
     return true;
   }
 

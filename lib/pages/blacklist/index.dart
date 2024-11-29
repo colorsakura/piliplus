@@ -111,10 +111,15 @@ class BlackListController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     total.value = response.response.total;
-    isEnd = response.response.list.isEmpty;
+    if (response.response.list.isEmpty) {
+      isEnd = true;
+    }
     if (currentPage != 1 && loadingState.value is Success) {
       response.response.list
           ?.insertAll(0, (loadingState.value as Success).response);
+    }
+    if (response.response.list.length >= total.value) {
+      isEnd = true;
     }
     loadingState.value = LoadingState.success(response.response.list);
     return true;

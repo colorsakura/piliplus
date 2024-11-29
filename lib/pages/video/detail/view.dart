@@ -14,6 +14,7 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.d
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -1314,16 +1315,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 展示二级回复
   void replyReply(replyItem, id, isTop) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
+      int oid = replyItem.oid.toInt();
+      int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
       videoDetailController.childKey.currentState?.showBottomSheet(
         (context) => VideoReplyReplyPanel(
           id: id,
-          // rcount: replyItem.rcount,
-          oid: replyItem.oid.toInt(),
-          rpid: replyItem.id.toInt(),
+          oid: oid,
+          rpid: rpid,
           firstFloor: replyItem,
           replyType: ReplyType.video,
           source: 'videoDetail',
-          isTop: isTop,
+          isTop: isTop ?? false,
         ),
       );
     });

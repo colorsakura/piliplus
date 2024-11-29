@@ -17,8 +17,9 @@ class LaterController extends MultiSelectController {
 
   @override
   bool customHandleResponse(Success response) {
-    if (currentPage == 1) {
-      count.value = response.response['count'];
+    count.value = response.response['count'];
+    if (response.response['list'].isEmpty) {
+      isEnd = true;
     }
     if (currentPage != 1 && loadingState.value is Success) {
       response.response['list'].insertAll(

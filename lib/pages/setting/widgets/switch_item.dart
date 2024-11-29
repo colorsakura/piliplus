@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class SetSwitchItem extends StatefulWidget {
@@ -8,7 +7,7 @@ class SetSwitchItem extends StatefulWidget {
   final String? subTitle;
   final String? setKey;
   final bool? defaultVal;
-  final Function? callFn;
+  final ValueChanged<bool>? onChanged;
   final bool? needReboot;
   final Widget? leading;
   final GestureTapCallback? onTap;
@@ -18,7 +17,7 @@ class SetSwitchItem extends StatefulWidget {
     this.subTitle,
     this.setKey,
     this.defaultVal,
-    this.callFn,
+    this.onChanged,
     this.needReboot,
     this.leading,
     this.onTap,
@@ -30,24 +29,23 @@ class SetSwitchItem extends StatefulWidget {
 }
 
 class _SetSwitchItemState extends State<SetSwitchItem> {
-  // ignore: non_constant_identifier_names
-  Box Setting = GStorage.setting;
   late bool val;
 
   @override
   void initState() {
     super.initState();
-    val = Setting.get(widget.setKey, defaultValue: widget.defaultVal ?? false);
+    val = GStorage.setting
+        .get(widget.setKey, defaultValue: widget.defaultVal ?? false);
   }
 
   void switchChange(value) async {
     val = value ?? !val;
-    await Setting.put(widget.setKey, val);
+    await GStorage.setting.put(widget.setKey, val);
     // if (widget.setKey == SettingBoxKey.autoUpdate && value == true) {
     //   Utils.checkUpdate();
     // }
-    if (widget.callFn != null) {
-      widget.callFn!.call(val);
+    if (widget.onChanged != null) {
+      widget.onChanged!.call(val);
     }
     if (widget.needReboot != null && widget.needReboot!) {
       SmartDialog.showToast('重启生效');
@@ -87,7 +85,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
             return null; // All other states will use the default thumbIcon.
           }),
           value: val,
-          onChanged: (val) => switchChange(val),
+          onChanged: switchChange,
         ),
       ),
     );

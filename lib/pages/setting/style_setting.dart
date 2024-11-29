@@ -64,7 +64,7 @@ class _StyleSettingState extends State<StyleSetting> {
               leading: const Icon(Icons.phonelink_outlined),
               setKey: SettingBoxKey.horizontalScreen,
               defaultVal: false,
-              callFn: (value) {
+              onChanged: (value) {
                 if (value) {
                   autoScreen();
                   // SmartDialog.showToast('已开启横屏适配');

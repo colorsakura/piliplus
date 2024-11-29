@@ -1,9 +1,12 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/video/reply/item.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +20,6 @@ import 'controller.dart';
 
 class VideoReplyReplyPanel extends StatefulWidget {
   const VideoReplyReplyPanel({
-    // this.rcount,
     this.id,
     this.oid,
     this.rpid,
@@ -29,12 +31,11 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.isTop = false,
     super.key,
   });
-  // final dynamic rcount;
   final int? id;
   final int? oid;
   final int? rpid;
   final int? dialog;
-  final ReplyInfo? firstFloor;
+  final dynamic firstFloor;
   final String? source;
   final ReplyType? replyType;
   final bool isDialogue;
@@ -50,7 +51,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   late final itemPositionsListener = ItemPositionsListener.create();
   late final _key = GlobalKey<ScaffoldState>();
 
-  ReplyInfo? get firstFloor =>
+  dynamic get firstFloor =>
       widget.firstFloor ?? _videoReplyReplyController.firstFloor;
 
   @override
@@ -155,18 +156,29 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                 index);
                           } else if (firstFloor != null) {
                             if (index == 0) {
-                              return ReplyItemGrpc(
-                                replyItem: firstFloor!,
-                                replyLevel: '2',
-                                showReplyRow: false,
-                                replyType: widget.replyType,
-                                needDivider: false,
-                                onReply: () {
-                                  _onReply(firstFloor!, -1);
-                                },
-                                upMid: _videoReplyReplyController.upMid,
-                                isTop: widget.isTop,
-                              );
+                              return GlobalData().grpcReply
+                                  ? ReplyItemGrpc(
+                                      replyItem: firstFloor,
+                                      replyLevel: '2',
+                                      showReplyRow: false,
+                                      replyType: widget.replyType,
+                                      needDivider: false,
+                                      onReply: () {
+                                        _onReply(firstFloor, -1);
+                                      },
+                                      upMid: _videoReplyReplyController.upMid,
+                                      isTop: widget.isTop,
+                                    )
+                                  : ReplyItem(
+                                      replyItem: firstFloor,
+                                      replyLevel: '2',
+                                      showReplyRow: false,
+                                      replyType: widget.replyType,
+                                      needDivider: false,
+                                      onReply: () {
+                                        _onReply(firstFloor, -1);
+                                      },
+                                    );
                             } else if (index == 1) {
                               return Divider(
                                 height: 20,
@@ -223,30 +235,32 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                     )
                   : const SizedBox.shrink(),
             ),
-            SizedBox(
-              height: 35,
-              child: TextButton.icon(
-                onPressed: () => _videoReplyReplyController.queryBySort(),
-                icon: const Icon(Icons.sort, size: 16),
-                label: Obx(
-                  () => Text(
-                    _videoReplyReplyController.mode.value == Mode.MAIN_LIST_HOT
-                        ? '按热度'
-                        : '按时间',
-                    style: const TextStyle(fontSize: 13),
+            if (GlobalData().grpcReply)
+              SizedBox(
+                height: 35,
+                child: TextButton.icon(
+                  onPressed: () => _videoReplyReplyController.queryBySort(),
+                  icon: const Icon(Icons.sort, size: 16),
+                  label: Obx(
+                    () => Text(
+                      _videoReplyReplyController.mode.value ==
+                              Mode.MAIN_LIST_HOT
+                          ? '按热度'
+                          : '按时间',
+                      style: const TextStyle(fontSize: 13),
+                    ),
                   ),
                 ),
-              ),
-            )
+              )
           ],
         ),
       );
 
-  void _onReply(ReplyInfo? item, int index) {
+  void _onReply(dynamic item, int index) {
     dynamic oid = item?.oid.toInt();
-    dynamic root = item?.id.toInt();
-    dynamic parent = item?.id.toInt();
-    dynamic key = oid + root + parent;
+    dynamic root = GlobalData().grpcReply ? item?.id.toInt() : item?.rpid;
+    dynamic key = oid + root;
+
     Navigator.of(context)
         .push(
       GetDialogRoute(
@@ -254,7 +268,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
           return ReplyPage(
             oid: oid,
             root: root,
-            parent: parent,
+            parent: root,
             replyType: widget.replyType,
             replyItem: item,
             savedReply: _savedReplies[key],
@@ -282,14 +296,26 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         .then((res) {
       if (res != null) {
         _savedReplies[key] = null;
-        ReplyInfo replyInfo = Utils.replyCast(res);
-        List list = (_videoReplyReplyController.loadingState.value as Success?)
-                ?.response ??
-            <ReplyInfo>[];
-        list.insert(index + 1, replyInfo);
-        _videoReplyReplyController.count.value += 1;
-        _videoReplyReplyController.loadingState.value =
-            LoadingState.success(list);
+        if (GlobalData().grpcReply) {
+          ReplyInfo replyInfo = Utils.replyCast(res);
+          List list =
+              (_videoReplyReplyController.loadingState.value as Success?)
+                      ?.response ??
+                  <ReplyInfo>[];
+          list.insert(index + 1, replyInfo);
+          _videoReplyReplyController.count.value += 1;
+          _videoReplyReplyController.loadingState.value =
+              LoadingState.success(list);
+        } else {
+          List list =
+              (_videoReplyReplyController.loadingState.value as Success?)
+                      ?.response ??
+                  <ReplyItemModel>[];
+          list.insert(index + 1, ReplyItemModel.fromJson(res, ''));
+          _videoReplyReplyController.count.value += 1;
+          _videoReplyReplyController.loadingState.value =
+              LoadingState.success(list);
+        }
       }
     });
   }
@@ -361,36 +387,56 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
   }
 
   Widget _replyItem(replyItem, index) {
-    return ReplyItemGrpc(
-      replyItem: replyItem,
-      replyLevel: widget.isDialogue ? '3' : '2',
-      showReplyRow: false,
-      replyType: widget.replyType,
-      onReply: () {
-        _onReply(replyItem, index);
-      },
-      onDelete: (rpid, frpid) {
-        List list =
-            (_videoReplyReplyController.loadingState.value as Success).response;
-        list = list.where((item) => item.id != rpid).toList();
-        _videoReplyReplyController.count.value -= 1;
-        _videoReplyReplyController.loadingState.value =
-            LoadingState.success(list);
-      },
-      upMid: _videoReplyReplyController.upMid,
-      showDialogue: () {
-        _key.currentState?.showBottomSheet(
-          (context) => VideoReplyReplyPanel(
-            oid: replyItem.oid.toInt(),
-            rpid: replyItem.root.toInt(),
-            dialog: replyItem.dialog.toInt(),
+    return GlobalData().grpcReply
+        ? ReplyItemGrpc(
+            replyItem: replyItem,
+            replyLevel: widget.isDialogue ? '3' : '2',
+            showReplyRow: false,
             replyType: widget.replyType,
-            source: 'videoDetail',
-            isDialogue: true,
-          ),
-        );
-      },
-    );
+            onReply: () {
+              _onReply(replyItem, index);
+            },
+            onDelete: (rpid, frpid) {
+              List list =
+                  (_videoReplyReplyController.loadingState.value as Success)
+                      .response;
+              list = list.where((item) => item.id != rpid).toList();
+              _videoReplyReplyController.count.value -= 1;
+              _videoReplyReplyController.loadingState.value =
+                  LoadingState.success(list);
+            },
+            upMid: _videoReplyReplyController.upMid,
+            showDialogue: () {
+              _key.currentState?.showBottomSheet(
+                (context) => VideoReplyReplyPanel(
+                  oid: replyItem.oid.toInt(),
+                  rpid: replyItem.root.toInt(),
+                  dialog: replyItem.dialog.toInt(),
+                  replyType: widget.replyType,
+                  source: 'videoDetail',
+                  isDialogue: true,
+                ),
+              );
+            },
+          )
+        : ReplyItem(
+            replyItem: replyItem,
+            replyLevel: '2',
+            showReplyRow: false,
+            replyType: widget.replyType,
+            onReply: () {
+              _onReply(replyItem, index);
+            },
+            onDelete: (rpid, frpid) {
+              List list =
+                  (_videoReplyReplyController.loadingState.value as Success)
+                      .response;
+              list.removeWhere((item) => item.rpid == rpid);
+              _videoReplyReplyController.count.value -= 1;
+              _videoReplyReplyController.loadingState.value =
+                  LoadingState.success(list);
+            },
+          );
   }
 
   int _itemCount(LoadingState loadingState) {

@@ -159,7 +159,7 @@ class _PlaySettingState extends State<PlaySetting> {
                 leading: const Icon(Icons.picture_in_picture_outlined),
                 setKey: SettingBoxKey.autoPiP,
                 defaultVal: false,
-                callFn: (val) {
+                onChanged: (val) {
                   if (val &&
                       !setting.get(SettingBoxKey.enableBackgroundPlay,
                           defaultValue: true)) {

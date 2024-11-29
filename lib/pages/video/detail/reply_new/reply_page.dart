@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart'
-    as reply;
 import 'package:PiliPalaX/http/msg.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class ReplyPage extends StatefulWidget {
   final int? root;
   final int? parent;
   final ReplyType? replyType;
-  final reply.ReplyInfo? replyItem;
+  final dynamic replyItem;
   final String? savedReply;
   final Function(String reply)? onSaveReply;
 
@@ -507,8 +506,8 @@ class _ReplyPageState extends State<ReplyPage>
       oid: widget.oid!,
       root: widget.root!,
       parent: widget.parent!,
-      message: widget.replyItem != null && widget.replyItem!.root != 0
-          ? ' 回复 @${widget.replyItem!.member.name} : $message'
+      message: widget.replyItem != null && widget.replyItem.root != 0
+          ? ' 回复 @${GlobalData().grpcReply ? widget.replyItem.member.name : widget.replyItem.member.uname} : $message'
           : message,
       pictures: pictures,
     );

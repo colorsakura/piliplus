@@ -1,6 +1,7 @@
 import 'package:PiliPalaX/pages/main/controller.dart';
 import 'package:PiliPalaX/pages/member/new/controller.dart'
     show MemberTabType, MemberTabTypeExt;
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -152,7 +153,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
             leading: Icon(Icons.notifications_none),
             setKey: SettingBoxKey.checkDynamic,
             defaultVal: true,
-            callFn: (value) {
+            onChanged: (value) {
               Get.find<MainController>().checkDynamic = value;
             },
             onTap: () {
@@ -201,6 +202,16 @@ class _ExtraSettingState extends State<ExtraSetting> {
               );
             },
           ),
+          SetSwitchItem(
+            title: '使用gRPC加载评论',
+            subTitle: '如无法加载评论，可关闭\n非gRPC楼中楼无法定位评论、按热度/时间排序、查看对话',
+            leading: Icon(Icons.reply),
+            setKey: SettingBoxKey.grpcReply,
+            defaultVal: true,
+            onChanged: (value) {
+              GlobalData().grpcReply = value;
+            },
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,
@@ -238,7 +249,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
             leading: const Icon(Icons.whatshot_outlined),
             setKey: SettingBoxKey.enableSearchWord,
             defaultVal: true,
-            callFn: (val) {
+            onChanged: (val) {
               Get.find<HomeController>().defaultSearch.value = '';
             },
           ),

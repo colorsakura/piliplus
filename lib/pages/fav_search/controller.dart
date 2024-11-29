@@ -56,10 +56,10 @@ class FavSearchController extends CommonController {
         : (currentPage == 1
             ? response.response.list
             : currentList + response.response.list);
-    loadingState.value = LoadingState.success(dataList);
     isEnd = searchType == SearchType.fav
         ? !response.response.hasMore
         : response.response.list.isEmpty;
+    loadingState.value = LoadingState.success(dataList);
     return true;
   }
 

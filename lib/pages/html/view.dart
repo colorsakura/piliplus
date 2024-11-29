@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:PiliPalaX/common/widgets/article_content.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -101,25 +104,27 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   }
 
   void replyReply(replyItem, id, isTop) {
-    int oid = replyItem.oid.toInt();
-    int rpid = replyItem.id.toInt();
-    Get.to(
-      () => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text('评论详情'),
+    EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
+      int oid = replyItem.oid.toInt();
+      int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
+      Get.to(
+        () => Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: Text('评论详情'),
+          ),
+          body: VideoReplyReplyPanel(
+            id: id,
+            oid: oid,
+            rpid: rpid,
+            source: 'dynamic',
+            replyType: ReplyType.values[type],
+            firstFloor: replyItem,
+            isTop: isTop ?? false,
+          ),
         ),
-        body: VideoReplyReplyPanel(
-          id: id,
-          oid: oid,
-          rpid: rpid,
-          source: 'dynamic',
-          replyType: ReplyType.values[type],
-          firstFloor: replyItem,
-          isTop: isTop,
-        ),
-      ),
-    );
+      );
+    });
   }
 
   @override
@@ -345,23 +350,39 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     ),
                   );
                 } else {
-                  return ReplyItemGrpc(
-                    replyItem: loadingState.response.replies[index],
-                    showReplyRow: true,
-                    replyLevel: '1',
-                    replyReply: replyReply,
-                    replyType: ReplyType.values[type],
-                    onReply: () {
-                      _htmlRenderCtr.onReply(
-                        context,
-                        replyItem: loadingState.response.replies[index],
-                        index: index,
-                      );
-                    },
-                    onDelete: _htmlRenderCtr.onMDelete,
-                    isTop: _htmlRenderCtr.hasUpTop && index == 0,
-                    upMid: loadingState.response.subjectControl.upMid,
-                  );
+                  return GlobalData().grpcReply
+                      ? ReplyItemGrpc(
+                          replyItem: loadingState.response.replies[index],
+                          showReplyRow: true,
+                          replyLevel: '1',
+                          replyReply: replyReply,
+                          replyType: ReplyType.values[type],
+                          onReply: () {
+                            _htmlRenderCtr.onReply(
+                              context,
+                              replyItem: loadingState.response.replies[index],
+                              index: index,
+                            );
+                          },
+                          onDelete: _htmlRenderCtr.onMDelete,
+                          isTop: _htmlRenderCtr.hasUpTop && index == 0,
+                          upMid: loadingState.response.subjectControl.upMid,
+                        )
+                      : ReplyItem(
+                          replyItem: loadingState.response.replies[index],
+                          showReplyRow: true,
+                          replyLevel: '1',
+                          replyReply: replyReply,
+                          replyType: ReplyType.values[type],
+                          onReply: () {
+                            _htmlRenderCtr.onReply(
+                              context,
+                              replyItem: loadingState.response.replies[index],
+                              index: index,
+                            );
+                          },
+                          onDelete: _htmlRenderCtr.onMDelete,
+                        );
                 }
               },
             )

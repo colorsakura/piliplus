@@ -1,7 +1,9 @@
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/video/reply/item.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/reply.dart';
@@ -29,8 +31,6 @@ class VideoReplyReplyController extends CommonController
   // rpid 请求楼中楼回复
   int? rpid;
   ReplyType replyType; // = ReplyType.video;
-  // 当前回复的回复
-  ReplyInfo? currentReplyItem;
 
   CursorReply? cursor;
   Rx<Mode> mode = Mode.MAIN_LIST_TIME.obs;
@@ -41,41 +41,13 @@ class VideoReplyReplyController extends CommonController
   AnimationController? controller;
   Animation<Color?>? colorAnimation;
 
-  ReplyInfo? firstFloor;
+  dynamic firstFloor;
 
   @override
   void onInit() {
     super.onInit();
     queryData();
   }
-
-  // @override
-  // bool customHandleResponse(Success response) {
-  //   if (response.response.root != null) root = response.response.root;
-  //   List<ReplyItemModel> replies = response.response.replies;
-  //   if (replies.isNotEmpty) {
-  //     noMore.value = '加载中...';
-  //     if (replies.length == response.response.page.count) {
-  //       noMore.value = '没有更多了';
-  //     }
-  //   } else {
-  //     // 未登录状态replies可能返回null
-  //     noMore.value = currentPage == 1 ? '还没有评论' : '没有更多了';
-  //   }
-  //   if (currentPage != 1) {
-  //     List<ReplyItemModel> list = loadingState.value is Success
-  //         ? (loadingState.value as Success).response
-  //         : <ReplyItemModel>[];
-  //     // 每次回复之后，翻页请求有且只有相同的一条回复数据
-  //     if (replies.length == 1 && replies.last.rpid == list.last.rpid) {
-  //       return true;
-  //     } else {
-  //       replies.insertAll(0, list);
-  //     }
-  //   }
-  //   loadingState.value = LoadingState.success(replies);
-  //   return true;
-  // }
 
   @override
   Future queryData([bool isRefresh = true]) async {
@@ -95,14 +67,6 @@ class VideoReplyReplyController extends CommonController
     return super.queryData(isRefresh);
   }
 
-  // @override
-  // Future<LoadingState> customGetData() => ReplyHttp.replyReplyList(
-  //       oid: aid!,
-  //       root: rpid!,
-  //       pageNum: currentPage,
-  //       type: replyType.index,
-  //     );
-
   @override
   Future onRefresh() {
     cursor = null;
@@ -111,61 +75,89 @@ class VideoReplyReplyController extends CommonController
 
   @override
   bool customHandleResponse(Success response) {
-    dynamic replies = response.response;
-    if (replies is DetailListReply && cursor == null) {
-      count.value = replies.root.count.toInt();
-      if (id != null) {
-        index = replies.root.replies
-            .map((item) => item.id.toInt())
-            .toList()
-            .indexOf(id!);
-        if (index != -1) {
-          controller = AnimationController(
-            duration: const Duration(milliseconds: 300),
-            vsync: this,
-          );
-          colorAnimation = ColorTween(
-            begin: Theme.of(Get.context!).colorScheme.onInverseSurface,
-            end: Theme.of(Get.context!).colorScheme.surface,
-          ).animate(controller!);
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            itemScrollCtr.jumpTo(
-              index: hasRoot ? index! + 3 : index! + 1,
-              alignment: 0.25,
+    if (GlobalData().grpcReply) {
+      dynamic replies = response.response;
+      if (replies is DetailListReply && cursor == null) {
+        count.value = replies.root.count.toInt();
+        if (id != null) {
+          index = replies.root.replies
+              .map((item) => item.id.toInt())
+              .toList()
+              .indexOf(id!);
+          if (index != -1) {
+            controller = AnimationController(
+              duration: const Duration(milliseconds: 300),
+              vsync: this,
             );
-            await Future.delayed(const Duration(milliseconds: 800));
-            await controller?.forward();
-            index = null;
-          });
+            colorAnimation = ColorTween(
+              begin: Theme.of(Get.context!).colorScheme.onInverseSurface,
+              end: Theme.of(Get.context!).colorScheme.surface,
+            ).animate(controller!);
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              itemScrollCtr.jumpTo(
+                index: hasRoot ? index! + 3 : index! + 1,
+                alignment: 0.25,
+              );
+              await Future.delayed(const Duration(milliseconds: 800));
+              await controller?.forward();
+              index = null;
+            });
+          }
+          id = null;
         }
-        id = null;
       }
-    }
-    upMid ??= replies.subjectControl.upMid.toInt();
-    cursor = replies.cursor;
-    if (currentPage != 1) {
-      List<ReplyInfo> list = loadingState.value is Success
-          ? (loadingState.value as Success).response
-          : <ReplyInfo>[];
+      upMid ??= replies.subjectControl.upMid.toInt();
+      cursor = replies.cursor;
       if (isDialogue) {
-        replies.replies.insertAll(0, list);
+        if (replies.replies.isEmpty) {
+          isEnd = true;
+        }
       } else {
-        replies.root.replies.insertAll(0, list);
+        if (replies.root.replies.isEmpty) {
+          isEnd = true;
+        }
       }
-    }
-    if (isDialogue) {
-      isEnd = replies.replies.isEmpty ||
-          replies.cursor.isEnd ||
-          replies.replies.length >= count.value;
+      if (currentPage != 1) {
+        List<ReplyInfo> list = loadingState.value is Success
+            ? (loadingState.value as Success).response
+            : <ReplyInfo>[];
+        if (isDialogue) {
+          replies.replies.insertAll(0, list);
+        } else {
+          replies.root.replies.insertAll(0, list);
+        }
+      }
+      if (isDialogue) {
+        if (replies.cursor.isEnd || replies.replies.length >= count.value) {
+          isEnd = true;
+        }
+      } else {
+        if (replies.cursor.isEnd ||
+            replies.root.replies.length >= count.value) {
+          isEnd = true;
+        }
+      }
+      if (isDialogue) {
+        loadingState.value = LoadingState.success(replies.replies);
+      } else {
+        loadingState.value = LoadingState.success(replies.root.replies);
+      }
     } else {
-      isEnd = replies.root.replies.isEmpty ||
-          replies.cursor.isEnd ||
-          replies.root.replies.length >= count.value;
-    }
-    if (isDialogue) {
-      loadingState.value = LoadingState.success(replies.replies);
-    } else {
-      loadingState.value = LoadingState.success(replies.root.replies);
+      if (response.response.root != null) {
+        firstFloor = response.response.root;
+      }
+      List<ReplyItemModel> replies = response.response.replies;
+      count.value = response.response.page.count;
+      if (replies.isEmpty) {
+        isEnd = true;
+      }
+      if (currentPage != 1 && loadingState.value is Success) {
+        replies.insertAll(0, (loadingState.value as Success).response);
+      }
+      if (replies.length >= response.response.page.count) {
+        isEnd = true;
+      }
+      loadingState.value = LoadingState.success(replies);
     }
     return true;
   }
@@ -182,16 +174,23 @@ class VideoReplyReplyController extends CommonController
             mode: mode.value,
           ),
         )
-      : ReplyHttp.replyReplyListGrpc(
-          type: replyType.index,
-          oid: oid!,
-          root: rpid!,
-          rpid: id ?? 0,
-          cursor: CursorReq(
-            next: cursor?.next,
-            mode: mode.value,
-          ),
-        );
+      : GlobalData().grpcReply
+          ? ReplyHttp.replyReplyListGrpc(
+              type: replyType.index,
+              oid: oid!,
+              root: rpid!,
+              rpid: id ?? 0,
+              cursor: CursorReq(
+                next: cursor?.next,
+                mode: mode.value,
+              ),
+            )
+          : ReplyHttp.replyReplyList(
+              oid: oid!,
+              root: rpid!,
+              pageNum: currentPage,
+              type: replyType.index,
+            );
 
   queryBySort() {
     mode.value = mode.value == Mode.MAIN_LIST_HOT

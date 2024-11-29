@@ -225,7 +225,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               subTitle: '根据默认倍速长按时自动双倍',
               setKey: SettingBoxKey.enableAutoLongPressSpeed,
               defaultVal: enableAutoLongPressSpeed,
-              callFn: (val) {
+              onChanged: (val) {
                 Map newItem = sheetMenu[1];
                 val ? newItem['show'] = false : newItem['show'] = true;
                 setState(() {

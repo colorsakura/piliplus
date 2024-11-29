@@ -5,6 +5,7 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPalaX/pages/member/new/controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:get/get.dart';
 
 class MemberBangumiCtr extends CommonController {
@@ -31,10 +32,15 @@ class MemberBangumiCtr extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     Data data = response.response;
+    if (data.item.isNullOrEmpty) {
+      isEnd = true;
+    }
     if (currentPage != 1 && loadingState.value is Success) {
       data.item?.insertAll(0, (loadingState.value as Success).response);
     }
-    isEnd = data.item!.length >= count;
+    if (data.item!.length >= count) {
+      isEnd = true;
+    }
     loadingState.value = LoadingState.success(data.item);
     return true;
   }

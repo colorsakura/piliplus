@@ -3,9 +3,12 @@ import 'dart:math';
 
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -110,23 +113,25 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   // 查看二级评论
   void replyReply(replyItem, id, isTop) {
-    int oid = replyItem.oid.toInt();
-    int rpid = replyItem.id.toInt()!;
-    Get.to(
-      () => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('评论详情')),
-        body: VideoReplyReplyPanel(
-          id: id,
-          oid: oid,
-          rpid: rpid,
-          source: 'dynamic',
-          replyType: ReplyType.values[replyType],
-          firstFloor: replyItem,
-          isTop: isTop,
+    EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
+      int oid = replyItem.oid.toInt();
+      int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
+      Get.to(
+        () => Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(title: Text('评论详情')),
+          body: VideoReplyReplyPanel(
+            id: id,
+            oid: oid,
+            rpid: rpid,
+            source: 'dynamic',
+            replyType: ReplyType.values[replyType],
+            firstFloor: replyItem,
+            isTop: isTop ?? false,
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   // 滑动事件监听
@@ -386,23 +391,40 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       ),
                     );
                   } else {
-                    return ReplyItemGrpc(
-                      replyItem: loadingState.response.replies[index],
-                      showReplyRow: true,
-                      replyLevel: '1',
-                      replyReply: replyReply,
-                      replyType: ReplyType.values[replyType],
-                      onReply: () {
-                        _dynamicDetailController.onReply(
-                          context,
-                          replyItem: loadingState.response.replies[index],
-                          index: index,
-                        );
-                      },
-                      onDelete: _dynamicDetailController.onMDelete,
-                      isTop: _dynamicDetailController.hasUpTop && index == 0,
-                      upMid: loadingState.response.subjectControl.upMid,
-                    );
+                    return GlobalData().grpcReply
+                        ? ReplyItemGrpc(
+                            replyItem: loadingState.response.replies[index],
+                            showReplyRow: true,
+                            replyLevel: '1',
+                            replyReply: replyReply,
+                            replyType: ReplyType.values[replyType],
+                            onReply: () {
+                              _dynamicDetailController.onReply(
+                                context,
+                                replyItem: loadingState.response.replies[index],
+                                index: index,
+                              );
+                            },
+                            onDelete: _dynamicDetailController.onMDelete,
+                            isTop:
+                                _dynamicDetailController.hasUpTop && index == 0,
+                            upMid: loadingState.response.subjectControl.upMid,
+                          )
+                        : ReplyItem(
+                            replyItem: loadingState.response.replies[index],
+                            showReplyRow: true,
+                            replyLevel: '1',
+                            replyReply: replyReply,
+                            replyType: ReplyType.values[replyType],
+                            onReply: () {
+                              _dynamicDetailController.onReply(
+                                context,
+                                replyItem: loadingState.response.replies[index],
+                                index: index,
+                              );
+                            },
+                            onDelete: _dynamicDetailController.onMDelete,
+                          );
                   }
                 },
                 childCount: loadingState.response.replies.length + 1,

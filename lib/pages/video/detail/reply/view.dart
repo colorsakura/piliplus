@@ -1,8 +1,10 @@
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -228,24 +230,43 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       ),
                     );
                   } else {
-                    return ReplyItemGrpc(
-                      replyItem: loadingState.response.replies[index],
-                      showReplyRow: true,
-                      replyLevel: replyLevel,
-                      replyReply: widget.replyReply,
-                      replyType: ReplyType.video,
-                      onReply: () {
-                        _videoReplyController.onReply(
-                          context,
-                          replyItem: loadingState.response.replies[index],
-                          index: index,
-                        );
-                      },
-                      onDelete: _videoReplyController.onMDelete,
-                      isTop: _videoReplyController.hasUpTop && index == 0,
-                      upMid: loadingState.response.subjectControl.upMid,
-                      getTag: () => heroTag,
-                    );
+                    return GlobalData().grpcReply
+                        ? ReplyItemGrpc(
+                            replyItem: loadingState.response.replies[index],
+                            showReplyRow: true,
+                            replyLevel: replyLevel,
+                            replyReply: widget.replyReply,
+                            replyType: ReplyType.video,
+                            onReply: () {
+                              _videoReplyController.onReply(
+                                context,
+                                replyItem: loadingState.response.replies[index],
+                                index: index,
+                              );
+                            },
+                            onDelete: _videoReplyController.onMDelete,
+                            isTop: _videoReplyController.hasUpTop && index == 0,
+                            upMid: loadingState.response.subjectControl.upMid,
+                            getTag: () => heroTag,
+                          )
+                        : ReplyItem(
+                            replyItem: loadingState.response.replies[index],
+                            showReplyRow: true,
+                            replyLevel: replyLevel,
+                            replyReply: widget.replyReply,
+                            replyType: ReplyType.video,
+                            onReply: () {
+                              _videoReplyController.onReply(
+                                context,
+                                replyItem: loadingState.response.replies[index],
+                                index: index,
+                              );
+                            },
+                            onDelete: _videoReplyController.onMDelete,
+                            // isTop: _videoReplyController.hasUpTop && index == 0,
+                            // upMid: loadingState.response.subjectControl.upMid,
+                            // getTag: () => heroTag,
+                          );
                   }
                 },
                 childCount: loadingState.response.replies.length + 1,
@@ -256,7 +277,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               callback: _videoReplyController.onReload,
             ),
       Error() => HttpError(
-          errMsg: loadingState.errMsg,
+          errMsg:
+              '如无法加载评论：\n1.关闭代理\n2.设置中关闭使用gRPC加载评论\n\n${loadingState.errMsg}',
           callback: _videoReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),

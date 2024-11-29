@@ -99,6 +99,9 @@ class GStorage {
   static double get danmakuFontScaleFS =>
       setting.get(SettingBoxKey.danmakuFontScaleFS, defaultValue: 1.2);
 
+  static bool get grpcReply =>
+      setting.get(SettingBoxKey.grpcReply, defaultValue: true);
+
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
@@ -157,6 +160,7 @@ class GStorage {
       SettingBoxKey.themeMode,
       defaultValue: ThemeType.system.code,
     );
+    GlobalData().grpcReply = grpcReply;
   }
 
   static Future<String> exportAllSettings() async {
@@ -274,7 +278,8 @@ class SettingBoxKey {
       previewQuality = 'previewQuality',
       checkDynamic = 'checkDynamic',
       dynamicPeriod = 'dynamicPeriod',
-      schemeVariant = 'schemeVariaznt',
+      schemeVariant = 'schemeVariant',
+      grpcReply = 'grpcReply',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
