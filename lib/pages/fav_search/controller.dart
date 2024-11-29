@@ -10,17 +10,13 @@ import 'package:PiliPalaX/http/user.dart';
 import '../../http/video.dart';
 
 class FavSearchController extends CommonController {
-  Rx<TextEditingController> controller = TextEditingController().obs;
-  final FocusNode searchFocusNode = FocusNode();
-  RxString searchKeyWord = ''.obs; // 搜索词
-  String hintText = '搜索'; // 默认
-  RxString loadingText = '加载中...'.obs; // 加载提示
+  final controller = TextEditingController();
+  final searchFocusNode = FocusNode();
+
   int? type;
   int? mediaId;
   int? mid;
   late SearchType searchType;
-
-  int count = 0; // 总数
 
   @override
   void onInit() {
@@ -33,9 +29,8 @@ class FavSearchController extends CommonController {
 
   // 清空搜索
   void onClear() {
-    if (searchKeyWord.value.isNotEmpty && controller.value.text != '') {
-      controller.value.clear();
-      searchKeyWord.value = '';
+    if (controller.text.isNotEmpty) {
+      controller.clear();
     } else {
       Get.back();
     }
@@ -47,10 +42,6 @@ class FavSearchController extends CommonController {
       return Future.value();
     }
     return super.onRefresh();
-  }
-
-  void onChange(value) {
-    searchKeyWord.value = value;
   }
 
   @override
@@ -81,36 +72,37 @@ class FavSearchController extends CommonController {
     );
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;
-      dataList = dataList.where((item) => item.id != id).toList();
+      dataList.removeWhere((item) => item.id != id);
       loadingState.value = LoadingState.success(dataList);
       SmartDialog.showToast('取消收藏');
     }
   }
 
   @override
-  Future<LoadingState> customGetData() => searchType == SearchType.fav
-      ? UserHttp.userFavFolderDetail(
-          pn: currentPage,
-          ps: 20,
-          mediaId: mediaId!,
-          keyword: searchKeyWord.value,
-          type: type!,
-        )
-      : searchType == SearchType.follow
-          ? MemberHttp.getfollowSearch(
-              mid: mid!,
-              ps: 20,
-              pn: currentPage,
-              name: controller.value.text,
-            )
-          : UserHttp.searchHistory(
-              pn: currentPage,
-              keyword: controller.value.text,
-            );
+  Future<LoadingState> customGetData() => switch (searchType) {
+        SearchType.fav => UserHttp.userFavFolderDetail(
+            pn: currentPage,
+            ps: 20,
+            mediaId: mediaId!,
+            keyword: controller.text,
+            type: type!,
+          ),
+        SearchType.follow => MemberHttp.getfollowSearch(
+            mid: mid!,
+            ps: 20,
+            pn: currentPage,
+            name: controller.value.text,
+          ),
+        SearchType.history => UserHttp.searchHistory(
+            pn: currentPage,
+            keyword: controller.value.text,
+          ),
+      };
 
   @override
   void onClose() {
     searchFocusNode.dispose();
+    controller.dispose();
     super.onClose();
   }
 

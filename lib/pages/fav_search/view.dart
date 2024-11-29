@@ -29,30 +29,28 @@ class _FavSearchPageState extends State<FavSearchPage> {
       appBar: AppBar(
         actions: [
           IconButton(
-              tooltip: '搜索',
-              onPressed: _favSearchCtr.onRefresh,
-              icon: const Icon(Icons.search_outlined, size: 22)),
+            tooltip: '搜索',
+            onPressed: _favSearchCtr.onRefresh,
+            icon: const Icon(Icons.search_outlined, size: 22),
+          ),
           const SizedBox(width: 10)
         ],
-        title: Obx(
-          () => TextField(
-            autofocus: true,
-            focusNode: _favSearchCtr.searchFocusNode,
-            controller: _favSearchCtr.controller.value,
-            textInputAction: TextInputAction.search,
-            onChanged: (value) => _favSearchCtr.onChange(value),
-            textAlignVertical: TextAlignVertical.center,
-            decoration: InputDecoration(
-              hintText: _favSearchCtr.hintText,
-              border: InputBorder.none,
-              suffixIcon: IconButton(
-                tooltip: '清空',
-                icon: const Icon(Icons.clear, size: 22),
-                onPressed: () => _favSearchCtr.onClear(),
-              ),
+        title: TextField(
+          autofocus: true,
+          focusNode: _favSearchCtr.searchFocusNode,
+          controller: _favSearchCtr.controller,
+          textInputAction: TextInputAction.search,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: '搜索',
+            border: InputBorder.none,
+            suffixIcon: IconButton(
+              tooltip: '清空',
+              icon: const Icon(Icons.clear, size: 22),
+              onPressed: _favSearchCtr.onClear,
             ),
-            onSubmitted: (String value) => _favSearchCtr.onRefresh(),
           ),
+          onSubmitted: (value) => _favSearchCtr.onRefresh(),
         ),
       ),
       body: Obx(() => _buildBody(_favSearchCtr.loadingState.value)),
