@@ -44,6 +44,9 @@ abstract class ReplyController extends CommonController {
     sortType = ReplySortType.values[defaultReplySortIndex];
     sortTypeTitle.value = sortType.titles;
     sortTypeLabel.value = sortType.labels;
+    if (sortType == ReplySortType.time) {
+      mode = Mode.MAIN_LIST_TIME;
+    }
   }
 
   @override
