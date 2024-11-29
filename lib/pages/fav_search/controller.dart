@@ -72,7 +72,7 @@ class FavSearchController extends CommonController {
     );
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;
-      dataList.removeWhere((item) => item.id != id);
+      dataList.removeWhere((item) => item.id == id);
       loadingState.value = LoadingState.success(dataList);
       SmartDialog.showToast('取消收藏');
     }
