@@ -51,9 +51,7 @@ class _FansPageState extends State<FansPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => HttpError(
-          callback: _fansController.onReload,
-        ),
+      Loading() => HttpError(),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

@@ -133,7 +133,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     autoPlayEnable =
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
     autoPiP = setting.get(SettingBoxKey.autoPiP, defaultValue: false);
-    pipNoDanmaku = setting.get(SettingBoxKey.pipNoDanmaku, defaultValue: true);
+    pipNoDanmaku = setting.get(SettingBoxKey.pipNoDanmaku, defaultValue: false);
     enableVerticalExpand =
         setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
     removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,

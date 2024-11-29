@@ -274,7 +274,7 @@ class SettingBoxKey {
       previewQuality = 'previewQuality',
       checkDynamic = 'checkDynamic',
       dynamicPeriod = 'dynamicPeriod',
-      schemeVariant = 'schemeVariant',
+      schemeVariant = 'schemeVariaznt',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

@@ -162,7 +162,7 @@ class _PlaySettingState extends State<PlaySetting> {
                 callFn: (val) {
                   if (val &&
                       !setting.get(SettingBoxKey.enableBackgroundPlay,
-                          defaultValue: false)) {
+                          defaultValue: true)) {
                     SmartDialog.showToast('建议开启后台音频服务');
                   }
                 }),
@@ -172,7 +172,7 @@ class _PlaySettingState extends State<PlaySetting> {
               subTitle: '当弹幕开关开启时，小窗屏蔽弹幕以获得较好的体验',
               leading: Icon(Icons.comments_disabled_outlined),
               setKey: SettingBoxKey.pipNoDanmaku,
-              defaultVal: true,
+              defaultVal: false,
             ),
           const SetSwitchItem(
             title: '全屏手势反向',
@@ -247,7 +247,7 @@ class _PlaySettingState extends State<PlaySetting> {
             subTitle: '避免画中画没有播放暂停功能',
             leading: Icon(Icons.volume_up_outlined),
             setKey: SettingBoxKey.enableBackgroundPlay,
-            defaultVal: false,
+            defaultVal: true,
           ),
         ],
       ),

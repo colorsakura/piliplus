@@ -34,7 +34,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
 
   revalidateSetting() {
     enableBackgroundPlay =
-        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: false);
+        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);
   }
 
   @override
