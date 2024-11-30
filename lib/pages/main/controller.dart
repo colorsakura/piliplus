@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
+import 'package:PiliPalaX/http/common.dart';
 import 'package:PiliPalaX/pages/dynamics/view.dart';
 import 'package:PiliPalaX/pages/home/view.dart';
 import 'package:PiliPalaX/pages/media/view.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -57,11 +59,19 @@ class MainController extends GetxController {
     if (!userLogin.value || dynIndex == -1) {
       return;
     }
-    await GrpcRepo.dynRed().then((res) {
-      if (res['status']) {
-        setCount(res['data']);
-      }
-    });
+    if (GlobalData().grpcReply) {
+      await GrpcRepo.dynRed().then((res) {
+        if (res['status']) {
+          setCount(res['data']);
+        }
+      });
+    } else {
+      await CommonHttp.unReadDynamic().then((res) {
+        if (res['status']) {
+          setCount(res['data']);
+        }
+      });
+    }
   }
 
   void setCount([int count = 0]) async {

@@ -51,7 +51,8 @@ class VideoReplyReplyController extends CommonController
 
   @override
   Future queryData([bool isRefresh = true]) async {
-    if (!isDialogue &&
+    if (GlobalData().grpcReply &&
+        !isDialogue &&
         currentPage == 1 &&
         !hasRoot &&
         firstFloor == null &&
