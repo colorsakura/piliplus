@@ -52,7 +52,8 @@ class LaterController extends MultiSelectController {
             ),
             TextButton(
               onPressed: () async {
-                var res = await UserHttp.toViewDel(aids: [aid]);
+                var res =
+                    await UserHttp.toViewDel(aids: aid != null ? [aid] : null);
                 if (res['status']) {
                   if (aid != null) {
                     List list = (loadingState.value as Success).response;
