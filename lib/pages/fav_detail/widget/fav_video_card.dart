@@ -48,6 +48,8 @@ class FavVideoCardH extends StatelessWidget {
           videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
           seasonId = videoItem.ogv['season_id'];
           epId = videoItem.epId;
+          Utils.viewBangumi(seasonId: seasonId, epId: epId);
+          return;
         } else if (videoItem.page == 0 || videoItem.page > 1) {
           var result = await VideoHttp.videoIntro(bvid: bvid);
           if (result['status']) {
