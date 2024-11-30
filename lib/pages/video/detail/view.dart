@@ -286,6 +286,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   //   );
   // }
 
+  void _makeHeartBeat() {
+    plPlayerController!.makeHeartBeat(
+      plPlayerController!.positionSeconds.value,
+      type: 'status',
+      isManual: true,
+      bvid: videoDetailController.bvid,
+      cid: videoDetailController.cid.value,
+    );
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -306,6 +316,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     shutdownTimerService.handleWaitingFinished();
     // _bufferedListener?.cancel();
     if (plPlayerController != null) {
+      _makeHeartBeat();
       plPlayerController!.removeStatusLister(playerListener);
       plPlayerController!.dispose();
     } else {
@@ -338,6 +349,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoDetailController.brightness = plPlayerController?.brightness.value;
     }
     if (plPlayerController != null) {
+      _makeHeartBeat();
       videoDetailController.defaultST = plPlayerController!.position.value;
       plPlayerController!.removeStatusLister(playerListener);
       plPlayerController!.pause();

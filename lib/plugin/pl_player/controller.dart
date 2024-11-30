@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -1243,12 +1244,19 @@ class PlPlayerController {
   }
 
   // 记录播放记录
-  Future makeHeartBeat(int progress, {type = 'playing'}) async {
-    if (!_enableHeart ||
-        MineController.anonymity ||
-        progress == 0 ||
-        playerStatus.status.value == PlayerStatus.paused) {
-      return false;
+  Future makeHeartBeat(
+    int progress, {
+    type = 'playing',
+    bool isManual = false,
+    dynamic bvid,
+    dynamic cid,
+  }) async {
+    if (!_enableHeart || MineController.anonymity || progress == 0) {
+      return;
+    } else if (playerStatus.status.value == PlayerStatus.paused) {
+      if (isManual.not) {
+        return;
+      }
     }
     if (videoType.value == 'live') {
       return;
@@ -1259,8 +1267,8 @@ class PlPlayerController {
 
     if (type == 'status' || type == 'completed') {
       await VideoHttp.heartBeat(
-        bvid: _bvid,
-        cid: _cid,
+        bvid: bvid ?? _bvid,
+        cid: cid ?? _cid,
         progress: isComplete ? -1 : progress,
       );
       return;
@@ -1269,8 +1277,8 @@ class PlPlayerController {
     else if (progress - _heartDuration >= 5) {
       _heartDuration = progress;
       await VideoHttp.heartBeat(
-        bvid: _bvid,
-        cid: _cid,
+        bvid: bvid ?? _bvid,
+        cid: cid ?? _cid,
         progress: progress,
       );
     }
