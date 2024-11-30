@@ -243,6 +243,7 @@ class PlPlayerController {
       ValueNotifier([]);
   // 关联弹幕控制器
   DanmakuController? danmakuController;
+  bool showDanmaku = true;
   // 弹幕相关配置
   late List blockTypes;
   late double showArea;
@@ -1243,7 +1244,10 @@ class PlPlayerController {
 
   // 记录播放记录
   Future makeHeartBeat(int progress, {type = 'playing'}) async {
-    if (!_enableHeart || MineController.anonymity) {
+    if (!_enableHeart ||
+        MineController.anonymity ||
+        progress == 0 ||
+        playerStatus.status.value == PlayerStatus.paused) {
       return false;
     }
     if (videoType.value == 'live') {
@@ -1252,6 +1256,7 @@ class PlPlayerController {
     bool isComplete = playerStatus.status.value == PlayerStatus.completed ||
         type == 'completed';
     // 播放状态变化时，更新
+
     if (type == 'status' || type == 'completed') {
       await VideoHttp.heartBeat(
         bvid: _bvid,
@@ -1261,7 +1266,7 @@ class PlPlayerController {
       return;
     }
     // 正常播放时，间隔5秒更新一次
-    if (progress - _heartDuration >= 5) {
+    else if (progress - _heartDuration >= 5) {
       _heartDuration = progress;
       await VideoHttp.heartBeat(
         bvid: _bvid,
@@ -1335,9 +1340,9 @@ class PlPlayerController {
   Future refreshSubtitles() async {
     _vttSubtitles.clear();
     Map res = await VideoHttp.subtitlesJson(bvid: _bvid, cid: _cid);
-    if (!res["status"]) {
-      SmartDialog.showToast('查询字幕错误，${res["msg"]}');
-    }
+    // if (!res["status"]) {
+    //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
+    // }
     if (res["data"].length == 0) {
       return;
     }

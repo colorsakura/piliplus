@@ -22,7 +22,7 @@ class SponsorBlockPage extends StatefulWidget {
 }
 
 class _SponsorBlockPageState extends State<SponsorBlockPage> {
-  final _url = 'https://github.com/hanydd/BilibiliSponsorBlock';
+  static const _url = 'https://github.com/hanydd/BilibiliSponsorBlock';
   final _textController = TextEditingController();
   late double _blockLimit;
   late List<Pair<SegmentType, SkipType>> _blockSettings;
@@ -78,7 +78,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       setState(() {
         _serverStatus = res.statusCode == 200 &&
             res.data is String &&
-            (double.tryParse(res.data) ?? int.tryParse(res.data)) != null;
+            Utils.isStringNumeric(res.data);
       });
     });
   }

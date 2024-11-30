@@ -25,7 +25,7 @@ class PlDanmaku extends StatefulWidget {
   State<PlDanmaku> createState() => _PlDanmakuState();
 }
 
-class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
+class _PlDanmakuState extends State<PlDanmaku> {
   late PlPlayerController playerController;
   late PlDanmakuController _plDanmakuController;
   DanmakuController? _controller;
@@ -41,23 +41,11 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
   // late double strokeWidth;
   // late int fontWeight;
   int latestAddedPosition = -1;
-  bool showDanmaku = true;
   bool? _isFullScreen;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      showDanmaku = true;
-    } else if (state == AppLifecycleState.paused) {
-      showDanmaku = false;
-      _controller?.clear();
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     enableShowDanmaku =
         setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
     _plDanmakuController = PlDanmakuController(
@@ -129,7 +117,7 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
     List<DanmakuElem>? currentDanmakuList =
         _plDanmakuController.getCurrentDanmaku(currentPosition);
 
-    if (showDanmaku &&
+    if (playerController.showDanmaku &&
         playerController.playerStatus.status.value == PlayerStatus.playing &&
         currentDanmakuList != null &&
         _controller != null) {
@@ -150,7 +138,6 @@ class _PlDanmakuState extends State<PlDanmaku> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     playerController.removePositionListener(videoPositionListen);
     playerController.removeStatusLister(playerListener);
     _plDanmakuController.dispose();

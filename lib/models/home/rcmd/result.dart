@@ -55,7 +55,7 @@ class RecVideoItemAppModel {
     id = json['player_args'] != null
         ? json['player_args']['aid']
         : int.parse(json['param'] ?? '-1');
-    aid = json['player_args'] != null ? json['player_args']['aid'] : -1;
+    aid = id;
     bvid = json['bvid'] ??
         (json['player_args'] != null
             ? IdUtils.av2bv(json['player_args']['aid'])

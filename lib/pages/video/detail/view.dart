@@ -54,7 +54,7 @@ class VideoDetailPage extends StatefulWidget {
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage>
-    with TickerProviderStateMixin, RouteAware {
+    with TickerProviderStateMixin, RouteAware, WidgetsBindingObserver {
   late VideoDetailController videoDetailController;
   late VideoReplyController _videoReplyController;
   PlPlayerController? plPlayerController;
@@ -170,6 +170,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     //           : context.width * 9 / 16),
     //   end: 0,
     // ).animate(_animationController);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   // 获取视频资源，初始化播放器
@@ -180,6 +181,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
       await plPlayerController!.autoEnterFullscreen();
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      videoIntroController.startTimer();
+      videoDetailController.plPlayerController.showDanmaku = true;
+    } else if (state == AppLifecycleState.paused) {
+      videoIntroController.canelTimer();
+      videoDetailController.plPlayerController.showDanmaku = false;
     }
   }
 
@@ -241,7 +253,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Future<void> handlePlay() async {
     if (videoDetailController.videoUrl == null ||
         videoDetailController.audioUrl == null) {
-      SmartDialog.showToast('not initialized');
+      // SmartDialog.showToast('not initialized');
+      debugPrint('not initialized');
       return;
     }
     plPlayerController = videoDetailController.plPlayerController;
@@ -275,6 +288,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     if (!Get.previousRoute.startsWith('/video')) {
       ScreenBrightness().resetApplicationScreenBrightness();
       PlPlayerController.setPlayCallBack(null);
@@ -325,7 +339,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     if (plPlayerController != null) {
       videoDetailController.defaultST = plPlayerController!.position.value;
-      videoIntroController.isPaused = true;
       plPlayerController!.removeStatusLister(playerListener);
       plPlayerController!.pause();
     }
@@ -369,7 +382,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     // }
 
     /// 未开启自动播放时，未播放跳转下一页返回/播放后跳转下一页返回
-    videoIntroController.isPaused = false;
     // if (autoplay) {
     //   // await Future.delayed(const Duration(milliseconds: 300));
     //   debugPrint(plPlayerController);

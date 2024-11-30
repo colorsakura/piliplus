@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/http/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -78,7 +79,11 @@ class VideoCardV extends StatelessWidget {
         break;
       case 'av':
         String bvid = videoItem.bvid ?? IdUtils.av2bv(videoItem.aid);
-        Get.toNamed('/video?bvid=$bvid&cid=${videoItem.cid}', arguments: {
+        int cid = videoItem.cid;
+        if (cid == -1) {
+          cid = await SearchHttp.ab2c(aid: videoItem.aid, bvid: bvid);
+        }
+        Get.toNamed('/video?bvid=$bvid&cid=$cid', arguments: {
           // 'videoItem': videoItem,
           'pic': videoItem.pic,
           'heroTag': heroTag,

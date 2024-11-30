@@ -92,12 +92,16 @@ abstract class ReplyController extends CommonController {
         if (response.response.upper.top != null) {
           final bool flag = response.response.topReplies.any(
               (ReplyItemModel reply) =>
-                  reply.rpid == response.response.upper.top.rpid) as bool;
-          if (!flag) {
+                  reply.rpid != response.response.upper.top.rpid) as bool;
+          if (flag) {
             replies.insert(0, response.response.upper.top);
+            hasUpTop = true;
           }
         }
-        replies.insertAll(0, response.response.topReplies);
+        if (response.response.topReplies != null) {
+          replies.insertAll(0, response.response.topReplies);
+          hasUpTop = true;
+        }
       } else if (loadingState.value is Success) {
         replies.insertAll(0, (loadingState.value as Success).response.replies);
       }

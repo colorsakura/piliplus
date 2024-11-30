@@ -74,7 +74,6 @@ class VideoIntroController extends GetxController
   bool isShowOnlineTotal = false;
   RxString total = '1'.obs;
   Timer? timer;
-  bool isPaused = false;
   String heroTag = '';
   late ModelResult modelResult;
   Rx<Map<String, dynamic>> queryVideoIntroData =
@@ -574,11 +573,8 @@ class VideoIntroController extends GetxController
   void startTimer() {
     if (isShowOnlineTotal) {
       queryOnlineTotal();
-      const duration = Duration(seconds: 10); // 设置定时器间隔为10秒
-      timer ??= Timer.periodic(duration, (Timer timer) {
-        if (!isPaused) {
-          queryOnlineTotal(); // 定时器回调函数，发起请求
-        }
+      timer ??= Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+        queryOnlineTotal();
       });
     }
   }
@@ -606,9 +602,7 @@ class VideoIntroController extends GetxController
 
   @override
   void onClose() {
-    if (timer != null) {
-      timer!.cancel(); // 销毁页面时取消定时器
-    }
+    canelTimer();
     super.onClose();
   }
 
