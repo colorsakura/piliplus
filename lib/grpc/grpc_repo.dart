@@ -112,6 +112,8 @@ class GrpcRepo {
             e.details?.firstOrNull?.getFieldOrNull(2),
             allowMalformed: true,
           );
+          msg = msg.replaceAll(
+              RegExp(r"[^a-zA-Z0-9\u4e00-\u9fa5,.;!?，。；！？]"), '');
           if (msg.isNotEmpty) {
             return {'status': false, 'msg': msg};
           } else {

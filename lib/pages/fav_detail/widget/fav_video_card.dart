@@ -40,13 +40,12 @@ class FavVideoCardH extends StatelessWidget {
           onTap!();
           return;
         }
-        int? seasonId;
         String? epId;
         if (videoItem.ogv != null &&
             (videoItem.ogv['type_name'] == '番剧' ||
                 videoItem.ogv['type_name'] == '国创')) {
           videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
-          seasonId = videoItem.ogv['season_id'];
+          dynamic seasonId = videoItem.ogv['season_id'];
           epId = videoItem.epId;
           Utils.viewBangumi(seasonId: seasonId, epId: epId);
           return;
@@ -63,7 +62,6 @@ class FavVideoCardH extends StatelessWidget {
           'bvid': bvid,
           'cid': videoItem.cid.toString(),
           'epId': epId ?? '',
-          if (seasonId != null) 'seasonId': seasonId.toString(),
         };
         // if (seasonId != null) {
         //   parameters['seasonId'] = seasonId.toString();

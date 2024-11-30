@@ -277,8 +277,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               callback: _videoReplyController.onReload,
             ),
       Error() => HttpError(
-          errMsg:
-              '如无法加载评论：\n1.关闭代理\n2.设置中关闭使用gRPC加载评论\n\n${loadingState.errMsg}',
+          errMsg: loadingState.errMsg,
           callback: _videoReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
