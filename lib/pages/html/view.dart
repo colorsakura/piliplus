@@ -7,6 +7,7 @@ import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -41,6 +42,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   late int type;
   bool _isFabVisible = true;
   late AnimationController fabAnimationCtr;
+
+  late final List<double> _ratio = GStorage.dynamicDetailRatio;
 
   @override
   void initState() {
@@ -134,6 +137,49 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
         title: Text(title),
         actions: [
           const SizedBox(width: 4),
+          if (context.orientation == Orientation.landscape)
+            IconButton(
+              tooltip: '页面比例调节',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        top: 56,
+                        right: 16,
+                      ),
+                      width: context.width / 4,
+                      height: 32,
+                      child: Builder(
+                        builder: (context) => Slider(
+                          min: 1,
+                          max: 100,
+                          value: _ratio.first,
+                          onChanged: (value) async {
+                            if (value >= 10 && value <= 90) {
+                              _ratio[0] = value;
+                              _ratio[1] = 100 - value;
+                              await GStorage.setting.put(
+                                SettingBoxKey.dynamicDetailRatio,
+                                _ratio,
+                              );
+                              (context as Element).markNeedsBuild();
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+              icon: Transform.rotate(
+                angle: pi / 2,
+                child: Icon(Icons.splitscreen),
+              ),
+            ),
           IconButton(
             tooltip: '用内置浏览器打开',
             onPressed: () {
@@ -217,6 +263,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
+                    flex: _ratio[0].toInt(),
                     child: CustomScrollView(
                       controller: orientation == Orientation.portrait
                           ? _htmlRenderCtr.scrollController
@@ -225,7 +272,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                         SliverPadding(
                           padding: orientation == Orientation.portrait
                               ? EdgeInsets.symmetric(horizontal: padding)
-                              : EdgeInsets.only(left: padding / 2),
+                              : EdgeInsets.only(left: padding / 4),
                           sliver: SliverToBoxAdapter(
                             child: Obx(
                               () => _htmlRenderCtr.loaded.value
@@ -237,21 +284,31 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                         SliverPadding(
                           padding: orientation == Orientation.portrait
                               ? EdgeInsets.symmetric(horizontal: padding)
-                              : EdgeInsets.only(left: padding / 2),
+                              : EdgeInsets.only(left: padding / 4),
                           sliver: _buildContent,
                         ),
                         if (orientation == Orientation.portrait) ...[
-                          SliverToBoxAdapter(
-                            child: Divider(
-                              thickness: 8,
-                              color: Theme.of(context)
-                                  .dividerColor
-                                  .withOpacity(0.05),
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(horizontal: padding),
+                            sliver: SliverToBoxAdapter(
+                              child: Divider(
+                                thickness: 8,
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withOpacity(0.05),
+                              ),
                             ),
                           ),
-                          SliverToBoxAdapter(child: replyHeader()),
-                          Obx(
-                            () => replyList(_htmlRenderCtr.loadingState.value),
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(horizontal: padding),
+                            sliver: SliverToBoxAdapter(child: replyHeader()),
+                          ),
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(horizontal: padding),
+                            sliver: Obx(
+                              () =>
+                                  replyList(_htmlRenderCtr.loadingState.value),
+                            ),
                           ),
                         ],
                       ],
@@ -263,17 +320,18 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                         color:
                             Theme.of(context).dividerColor.withOpacity(0.05)),
                     Expanded(
+                      flex: _ratio[1].toInt(),
                       child: CustomScrollView(
                         controller: _htmlRenderCtr.scrollController,
                         slivers: [
                           SliverPadding(
-                            padding: EdgeInsets.only(right: padding / 2),
+                            padding: EdgeInsets.only(right: padding / 4),
                             sliver: SliverToBoxAdapter(
                               child: replyHeader(),
                             ),
                           ),
                           SliverPadding(
-                            padding: EdgeInsets.only(right: padding / 2),
+                            padding: EdgeInsets.only(right: padding / 4),
                             sliver: Obx(
                               () =>
                                   replyList(_htmlRenderCtr.loadingState.value),

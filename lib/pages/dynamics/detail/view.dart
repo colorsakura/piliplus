@@ -7,6 +7,7 @@ import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   int oid = 0;
   int? opusId;
   bool isOpusId = false;
+
+  late final List<double> _ratio = GStorage.dynamicDetailRatio;
 
   @override
   void initState() {
@@ -202,7 +205,53 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             );
           },
         ),
-        // actions: _detailModel != null ? appBarAction() : [],
+        actions: context.orientation == Orientation.landscape
+            ? [
+                IconButton(
+                  tooltip: '页面比例调节',
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            top: 56,
+                            right: 16,
+                          ),
+                          width: context.width / 4,
+                          height: 32,
+                          child: Builder(
+                            builder: (context) => Slider(
+                              min: 1,
+                              max: 100,
+                              value: _ratio.first,
+                              onChanged: (value) async {
+                                if (value >= 10 && value <= 90) {
+                                  _ratio[0] = value;
+                                  _ratio[1] = 100 - value;
+                                  await GStorage.setting.put(
+                                    SettingBoxKey.dynamicDetailRatio,
+                                    _ratio,
+                                  );
+                                  (context as Element).markNeedsBuild();
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Transform.rotate(
+                    angle: pi / 2,
+                    child: Icon(Icons.splitscreen),
+                  ),
+                ),
+                const SizedBox(width: 16),
+              ]
+            : null,
       ),
       body: refreshIndicator(
         onRefresh: () async {
@@ -239,41 +288,42 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   return Row(
                     children: [
                       Expanded(
+                        flex: _ratio[0].toInt(),
                         child: CustomScrollView(
-                            controller: ScrollController(),
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            slivers: [
-                              SliverPadding(
-                                  padding: EdgeInsets.only(left: padding / 2),
-                                  sliver: SliverToBoxAdapter(
-                                    child: DynamicPanel(
-                                      item: _dynamicDetailController.item,
-                                      source: 'detail',
-                                    ),
-                                  )),
-                            ]),
-                      ),
-                      Expanded(
-                        child: CustomScrollView(
-                            controller:
-                                _dynamicDetailController.scrollController,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            slivers: [
-                              SliverPadding(
-                                  padding: EdgeInsets.only(right: padding / 2),
-                                  sliver: replyPersistentHeader(context)),
-                              SliverPadding(
-                                padding: EdgeInsets.only(right: padding / 2),
-                                sliver: Obx(
-                                  () => replyList(_dynamicDetailController
-                                      .loadingState.value),
+                          controller: ScrollController(),
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverPadding(
+                              padding: EdgeInsets.only(left: padding / 4),
+                              sliver: SliverToBoxAdapter(
+                                child: DynamicPanel(
+                                  item: _dynamicDetailController.item,
+                                  source: 'detail',
                                 ),
                               ),
-                            ]
-                            // .map<Widget>(
-                            //     (e) => SliverPadding(padding: padding, sliver: e))
-                            // .toList(),
                             ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: _ratio[1].toInt(),
+                        child: CustomScrollView(
+                          controller: _dynamicDetailController.scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverPadding(
+                              padding: EdgeInsets.only(right: padding / 4),
+                              sliver: replyPersistentHeader(context),
+                            ),
+                            SliverPadding(
+                              padding: EdgeInsets.only(right: padding / 4),
+                              sliver: Obx(
+                                () => replyList(_dynamicDetailController
+                                    .loadingState.value),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );

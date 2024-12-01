@@ -108,6 +108,9 @@ class GStorage {
   static bool get grpcReply =>
       setting.get(SettingBoxKey.grpcReply, defaultValue: true);
 
+  static List<double> get dynamicDetailRatio =>
+      setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
+
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
@@ -310,6 +313,7 @@ class SettingBoxKey {
       memberTab = 'memberTab',
       subtitleFontScale = 'subtitleFontScale',
       subtitleFontScaleFS = 'subtitleFontScaleFS',
+      dynamicDetailRatio = 'dynamicDetailRatio',
 
       // 代理host port
       systemProxyHost = 'systemProxyHost',

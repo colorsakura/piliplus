@@ -73,7 +73,7 @@ Widget htmlRender({
     ],
     style: {
       'html': Style(
-        fontSize: FontSize.large,
+        fontSize: FontSize(17),
         lineHeight: LineHeight.percent(160),
         letterSpacing: 0.3,
       ),
@@ -91,7 +91,7 @@ Widget htmlRender({
         // margin: Margins.zero,
       ),
       'span': Style(
-        fontSize: FontSize.medium,
+        fontSize: FontSize.large,
         height: Height(1.8),
       ),
       'div': Style(height: Height.auto()),
@@ -109,12 +109,12 @@ Widget htmlRender({
         margin: Margins.only(bottom: 8),
       ),
       'h3,h4,h5': Style(
-        fontSize: FontSize.large,
+        fontSize: FontSize(17),
         fontWeight: FontWeight.bold,
         margin: Margins.only(bottom: 4),
       ),
       'figcaption': Style(
-        fontSize: FontSize.medium,
+        fontSize: FontSize.large,
         textAlign: TextAlign.center,
         // margin: Margins.only(top: 4),
       ),

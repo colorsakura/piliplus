@@ -26,7 +26,7 @@ Widget articleContent({
             text: item.word?.words,
             style: TextStyle(
               letterSpacing: 0.3,
-              fontSize: FontSize.large.value,
+              fontSize: 17,
               height: LineHeight.percent(125).size,
               fontStyle:
                   item.word?.style?.italic == true ? FontStyle.italic : null,

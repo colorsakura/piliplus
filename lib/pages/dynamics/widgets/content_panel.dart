@@ -61,9 +61,9 @@ class Content extends StatelessWidget {
               selectionControls: MaterialTextSelectionControls(),
               child: Text.rich(
                 /// fix 默认20px高度
-                style: const TextStyle(
+                style: TextStyle(
                   height: 0,
-                  fontSize: 15,
+                  fontSize: source == 'detail' ? 16 : 15,
                 ),
                 richNode(item, context),
                 maxLines: source == 'detail' ? 999 : 6,

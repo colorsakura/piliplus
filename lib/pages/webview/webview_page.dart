@@ -8,8 +8,17 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-// ignore: constant_identifier_names
-enum WebviewMenuItem { Refresh, Copy, Open_In_Browser, Clear_Cache, Go_Back }
+enum WebviewMenuItem { refresh, copy, openInBrowser, clearCache, goBack }
+
+extension WebviewMenuItemExt on WebviewMenuItem {
+  String get title => [
+        '刷新',
+        '复制链接',
+        '浏览器中打开',
+        '清除缓存',
+        '返回',
+      ][index];
+}
 
 class WebviewPageNew extends StatefulWidget {
   const WebviewPageNew({super.key});
@@ -63,22 +72,22 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
           PopupMenuButton(
             onSelected: (item) async {
               switch (item) {
-                case WebviewMenuItem.Refresh:
+                case WebviewMenuItem.refresh:
                   _webViewController?.reload();
                   break;
-                case WebviewMenuItem.Copy:
+                case WebviewMenuItem.copy:
                   WebUri? uri = await _webViewController?.getUrl();
                   if (uri != null) {
                     Utils.copyText(uri.toString());
                   }
                   break;
-                case WebviewMenuItem.Open_In_Browser:
+                case WebviewMenuItem.openInBrowser:
                   WebUri? uri = await _webViewController?.getUrl();
                   if (uri != null) {
                     Utils.launchURL(uri.toString());
                   }
                   break;
-                case WebviewMenuItem.Clear_Cache:
+                case WebviewMenuItem.clearCache:
                   try {
                     await InAppWebViewController.clearAllCache();
                     await _webViewController?.clearHistory();
@@ -87,9 +96,11 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                     SmartDialog.showToast(e.toString());
                   }
                   break;
-                case WebviewMenuItem.Go_Back:
+                case WebviewMenuItem.goBack:
                   if (await _webViewController?.canGoBack() == true) {
                     _webViewController?.goBack();
+                  } else {
+                    Get.back();
                   }
                   break;
               }
@@ -99,9 +110,9 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                   (item) => PopupMenuItem(value: item, child: Text(item.name))),
               const PopupMenuDivider(),
               PopupMenuItem(
-                  value: WebviewMenuItem.Go_Back,
+                  value: WebviewMenuItem.goBack,
                   child: Text(
-                    WebviewMenuItem.Go_Back.name,
+                    WebviewMenuItem.goBack.name,
                     style:
                         TextStyle(color: Theme.of(context).colorScheme.error),
                   )),
