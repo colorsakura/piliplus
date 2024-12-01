@@ -59,6 +59,8 @@ class FavDetailController extends MultiSelectController {
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;
       dataList.removeWhere((item) => item.id == id);
+      item.value.mediaCount = item.value.mediaCount! - 1;
+      item.refresh();
       loadingState.value = LoadingState.success(dataList);
       SmartDialog.showToast('取消收藏');
     } else {
@@ -103,6 +105,8 @@ class FavDetailController extends MultiSelectController {
                 if (result['status']) {
                   List dataList = (loadingState.value as Success).response;
                   Set remainList = dataList.toSet().difference(list.toSet());
+                  item.value.mediaCount = item.value.mediaCount! - list.length;
+                  item.refresh();
                   loadingState.value =
                       LoadingState.success(remainList.toList());
                   SmartDialog.showToast('取消收藏');

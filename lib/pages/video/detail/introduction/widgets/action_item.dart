@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -42,24 +43,31 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
   bool get _isThumbUp => widget.semanticsLabel == '点赞';
   late int _lastTime;
   bool _hideCircle = false;
+  Timer? _timer;
 
   void _startLongPress() {
     _lastTime = DateTime.now().millisecondsSinceEpoch;
     if (!widget.hasOneThree) {
-      controller?.forward();
-      widget.callBack?.call(true);
+      _timer ??= Timer(const Duration(milliseconds: 100), () {
+        feedBack();
+        controller?.forward();
+        widget.callBack?.call(true);
+        cancelTimer();
+      });
     }
   }
 
   void _cancelLongPress([bool isCancel = false]) {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
-    if (duration < 1500) {
+    if (duration >= 100 && duration < 1500) {
       controller?.reverse();
       widget.callBack?.call(false);
-    }
-    if (duration <= 50 && !isCancel) {
-      feedBack();
-      widget.onTap?.call();
+    } else if (duration < 100) {
+      cancelTimer();
+      if (!isCancel) {
+        feedBack();
+        widget.onTap?.call();
+      }
     }
   }
 
@@ -70,7 +78,7 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
       controller = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 1500),
-        reverseDuration: const Duration(milliseconds: 500),
+        reverseDuration: const Duration(milliseconds: 400),
       );
 
       _animation = Tween<double>(begin: 0, end: -2 * pi).animate(controller!)
@@ -88,8 +96,14 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
     }
   }
 
+  void cancelTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
   @override
   void dispose() {
+    cancelTimer();
     _animation?.removeListener(() {});
     controller?.dispose();
     super.dispose();

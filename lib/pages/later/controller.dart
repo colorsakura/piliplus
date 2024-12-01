@@ -152,6 +152,7 @@ class LaterController extends MultiSelectController {
       Set remainList = ((loadingState.value as Success).response as List)
           .toSet()
           .difference(result.toSet());
+      count.value -= aids.length;
       loadingState.value = LoadingState.success(remainList.toList());
       if (enableMultiSelect.value) {
         checkedCount.value = 0;

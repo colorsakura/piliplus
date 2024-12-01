@@ -300,7 +300,7 @@ class BangumiIntroController extends CommonController {
       delMediaIdsNew = [];
       SmartDialog.showToast('操作成功');
       Get.back();
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 255), () {
         queryBangumiLikeCoinFav();
       });
     } else {
