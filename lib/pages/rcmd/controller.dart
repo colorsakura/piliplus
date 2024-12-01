@@ -43,8 +43,9 @@ class RcmdController extends PopupController {
   }
 
   @override
-  Future onRefresh() {
+  Future onRefresh() async {
     currentPage = 0;
-    return super.onRefresh();
+    isEnd = false;
+    await queryData();
   }
 }
