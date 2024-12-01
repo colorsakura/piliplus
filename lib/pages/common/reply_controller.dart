@@ -200,8 +200,9 @@ abstract class ReplyController extends CommonController {
           savedReplies[key] = null;
           if (GlobalData().grpcReply) {
             ReplyInfo replyInfo = Utils.replyCast(res);
-            MainListReply response =
-                (loadingState.value as Success?)?.response ?? MainListReply();
+            MainListReply response = loadingState.value is Success
+                ? (loadingState.value as Success).response
+                : MainListReply();
             if (oid != null) {
               response.replies.insert(hasUpTop ? 1 : 0, replyInfo);
             } else {
@@ -210,8 +211,9 @@ abstract class ReplyController extends CommonController {
             count.value += 1;
             loadingState.value = LoadingState.success(response);
           } else {
-            ReplyData response =
-                (loadingState.value as Success?)?.response ?? ReplyData();
+            ReplyData response = loadingState.value is Success
+                ? (loadingState.value as Success).response
+                : ReplyData();
             response.replies ??= <ReplyItemModel>[];
             if (oid != null) {
               response.replies

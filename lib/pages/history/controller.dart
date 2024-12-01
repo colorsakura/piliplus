@@ -179,9 +179,11 @@ class HistoryController extends MultiSelectController {
             TextButton(
               onPressed: () async {
                 Get.back();
-                _onDelete(((loadingState.value as Success).response as List)
-                    .where((e) => e.checked)
-                    .toList());
+                if (loadingState.value is Success) {
+                  _onDelete(((loadingState.value as Success).response as List)
+                      .where((e) => e.checked)
+                      .toList());
+                }
               },
               child: const Text('确认'),
             )

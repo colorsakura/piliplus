@@ -298,19 +298,19 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
         _savedReplies[key] = null;
         if (GlobalData().grpcReply) {
           ReplyInfo replyInfo = Utils.replyCast(res);
-          List list =
-              (_videoReplyReplyController.loadingState.value as Success?)
-                      ?.response ??
-                  <ReplyInfo>[];
+          List list = _videoReplyReplyController.loadingState.value is Success
+              ? (_videoReplyReplyController.loadingState.value as Success)
+                  .response
+              : <ReplyInfo>[];
           list.insert(index + 1, replyInfo);
           _videoReplyReplyController.count.value += 1;
           _videoReplyReplyController.loadingState.value =
               LoadingState.success(list);
         } else {
-          List list =
-              (_videoReplyReplyController.loadingState.value as Success?)
-                      ?.response ??
-                  <ReplyItemModel>[];
+          List list = _videoReplyReplyController.loadingState.value is Success
+              ? (_videoReplyReplyController.loadingState.value as Success)
+                  .response
+              : <ReplyItemModel>[];
           list.insert(index + 1, ReplyItemModel.fromJson(res, ''));
           _videoReplyReplyController.count.value += 1;
           _videoReplyReplyController.loadingState.value =

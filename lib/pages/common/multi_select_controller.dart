@@ -18,11 +18,13 @@ abstract class MultiSelectController extends CommonController {
   }
 
   void handleSelect([bool checked = false]) {
-    List? list = (loadingState.value as Success?)?.response;
-    if (list.isNullOrEmpty.not) {
-      loadingState.value = LoadingState.success(
-          list!.map((item) => item..checked = checked).toList());
-      checkedCount.value = checked ? list.length : 0;
+    if (loadingState.value is Success) {
+      List list = (loadingState.value as Success).response;
+      if (list.isNotEmpty) {
+        loadingState.value = LoadingState.success(
+            list.map((item) => item..checked = checked).toList());
+        checkedCount.value = checked ? list.length : 0;
+      }
     }
     if (checked.not) {
       enableMultiSelect.value = false;
