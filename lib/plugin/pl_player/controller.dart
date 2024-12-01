@@ -114,6 +114,7 @@ class PlPlayerController {
   Timer? _timerForGettingVolume;
   Timer? timerForTrackingMouse;
 
+  final RxList<Segment> viewPointList = <Segment>[].obs;
   final RxList<Segment> segmentList = <Segment>[].obs;
 
   // final Durations durations;
@@ -430,6 +431,7 @@ class PlPlayerController {
   }) async {
     try {
       this.dataSource = dataSource;
+      viewPointList.clear();
       this.segmentList.value = segmentList ?? <Segment>[];
       _autoPlay = autoplay;
       _looping = looping;
@@ -1357,17 +1359,27 @@ class PlPlayerController {
     // if (!res["status"]) {
     //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
     // }
-    if (res["data"].length == 0) {
-      return;
+
+    if (res["data"] is List && res["data"].isNotEmpty) {
+      var result = await VideoHttp.vttSubtitles(res["data"]);
+      if (result != null) {
+        _vttSubtitles.value = result;
+      }
+      // if (_vttSubtitles.isEmpty) {
+      //   SmartDialog.showToast('字幕均加载失败');
+      // }
     }
-    var result = await VideoHttp.vttSubtitles(res["data"]);
-    if (result != null) {
-      _vttSubtitles.value = result;
+    if (res["view_points"] is List && res["view_points"].isNotEmpty) {
+      viewPointList.value = (res["view_points"] as List).map((item) {
+        double start = (item['to'] / durationSeconds.value).clamp(0.0, 1.0);
+        return Segment(
+          start,
+          start,
+          Colors.black,
+          item['content'],
+        );
+      }).toList();
     }
-    // if (_vttSubtitles.isEmpty) {
-    //   SmartDialog.showToast('字幕均加载失败');
-    // }
-    return;
   }
 
   // 设定字幕轨道

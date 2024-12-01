@@ -13,11 +13,9 @@ import '../../../common/widgets/audio_video_progress_bar.dart';
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   final PlPlayerController? controller;
   final List<Widget>? buildBottomControl;
-  final List<Segment>? segmentList;
   const BottomControl({
     this.controller,
     this.buildBottomControl,
-    this.segmentList,
     super.key,
   });
 
@@ -98,12 +96,20 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                                 TextDirection.ltr);
                           },
                         ),
-                        if (segmentList?.isNotEmpty == true)
+                        if (controller?.segmentList.isNotEmpty == true)
                           CustomPaint(
                             size: Size(double.infinity, 3.5),
                             painter: SegmentProgressBar(
                               progress: 1,
-                              segmentColors: segmentList!,
+                              segmentColors: controller!.segmentList,
+                            ),
+                          ),
+                        if (controller?.viewPointList.isNotEmpty == true)
+                          CustomPaint(
+                            size: Size(double.infinity, 3.5),
+                            painter: SegmentProgressBar(
+                              progress: 1,
+                              segmentColors: controller!.viewPointList,
                             ),
                           ),
                       ],

@@ -861,11 +861,14 @@ class VideoHttp {
   static Future subtitlesJson(
       {String? aid, String? bvid, required int cid}) async {
     assert(aid != null || bvid != null);
-    var res = await Request().get(Api.subtitleUrl, data: {
-      if (aid != null) 'aid': aid,
-      if (bvid != null) 'bvid': bvid,
-      'cid': cid,
-    });
+    var res = await Request().get(
+      Api.subtitleUrl,
+      data: {
+        if (aid != null) 'aid': aid,
+        if (bvid != null) 'bvid': bvid,
+        'cid': cid,
+      },
+    );
     if (res.data['code'] == 0) {
       dynamic data = res.data['data'];
       List subtitlesJson = data['subtitle']['subtitles'];
@@ -887,6 +890,7 @@ class VideoHttp {
       return {
         'status': true,
         'data': subtitlesJson,
+        'view_points': data['view_points'],
       };
     } else {
       return {'status': false, 'data': [], 'msg': res.data['message']};

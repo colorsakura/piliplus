@@ -607,11 +607,7 @@ class VideoDetailController extends GetxController
               .clamp(0.0, 1.0);
           double end = (item.segment.second / ((data.timeLength ?? 0) / 1000))
               .clamp(0.0, 1.0);
-          return Segment(
-            start,
-            (start == end && end != 0) ? (end + 0.01).clamp(0.0, 1.0) : end,
-            _getColor(item.segmentType),
-          );
+          return Segment(start, end, _getColor(item.segmentType));
         }).toList());
       } catch (e) {
         debugPrint('failed to parse sponsorblock: $e');

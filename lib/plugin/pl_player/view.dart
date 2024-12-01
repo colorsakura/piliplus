@@ -1014,7 +1014,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       BottomControl(
                         controller: widget.controller,
                         buildBottomControl: buildBottomControl(),
-                        segmentList: plPlayerController.segmentList,
                       ),
                 ),
               ),
@@ -1113,6 +1112,14 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           painter: SegmentProgressBar(
                             progress: 1,
                             segmentColors: plPlayerController.segmentList,
+                          ),
+                        ),
+                      if (plPlayerController.viewPointList.isNotEmpty)
+                        CustomPaint(
+                          size: Size(double.infinity, 3.5),
+                          painter: SegmentProgressBar(
+                            progress: 1,
+                            segmentColors: plPlayerController.viewPointList,
                           ),
                         ),
                     ],
