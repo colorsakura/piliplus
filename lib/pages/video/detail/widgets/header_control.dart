@@ -894,6 +894,8 @@ class _HeaderControlState extends State<HeaderControl> {
     double fontSizeVal = widget.controller!.fontSizeVal;
     // 全屏字体大小
     double fontSizeFSVal = widget.controller!.fontSizeFSVal;
+    double subtitleFontScale = widget.controller!.subtitleFontScale.value;
+    double subtitleFontScaleFS = widget.controller!.subtitleFontScaleFS.value;
     // 弹幕速度
     double danmakuDurationVal = widget.controller!.danmakuDurationVal;
     // 弹幕描边
@@ -912,13 +914,18 @@ class _HeaderControlState extends State<HeaderControl> {
             builder: (BuildContext context, StateSetter setState) {
           return Container(
             width: double.infinity,
-            height: 580,
+            height: 600,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
-            margin: const EdgeInsets.all(12),
+            margin: EdgeInsets.only(
+              left: 12,
+              top: 12,
+              right: 12,
+              bottom: widget.controller?.isFullScreen.value == true ? 70 : 12,
+            ),
             padding: const EdgeInsets.only(left: 14, right: 14),
             child: SingleChildScrollView(
               child: Column(
@@ -1254,6 +1261,76 @@ class _HeaderControlState extends State<HeaderControl> {
                               danmakuController.updateOption(updatedOption);
                             } catch (_) {}
                           }
+                        },
+                      ),
+                    ),
+                  ),
+                  Text(
+                      '字幕字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0.5,
+                        max: 2.5,
+                        value: subtitleFontScale,
+                        divisions: 20,
+                        label:
+                            '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
+                        onChanged: (double val) {
+                          subtitleFontScale = val;
+                          widget.controller!.subtitleFontScale.value =
+                              subtitleFontScale;
+                          widget.controller?.putDanmakuSettings();
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
+                  Text(
+                      '全屏字幕字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0.5,
+                        max: 2.5,
+                        value: subtitleFontScaleFS,
+                        divisions: 20,
+                        label:
+                            '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
+                        onChanged: (double val) {
+                          subtitleFontScaleFS = val;
+                          widget.controller!.subtitleFontScaleFS.value =
+                              subtitleFontScaleFS;
+                          widget.controller?.putDanmakuSettings();
+                          setState(() {});
                         },
                       ),
                     ),

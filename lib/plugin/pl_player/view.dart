@@ -75,6 +75,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late BangumiIntroController? bangumiIntroController;
 
   final GlobalKey _playerKey = GlobalKey();
+  final GlobalKey<VideoState> _key = GlobalKey<VideoState>();
+
   final RxBool _mountSeekBackwardButton = false.obs;
   final RxBool _mountSeekForwardButton = false.obs;
   final RxBool _hideSeekBackwardButton = false.obs;
@@ -529,19 +531,43 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     return list;
   }
 
+  PlPlayerController get plPlayerController => widget.controller;
+
+  TextStyle get subTitleStyle => TextStyle(
+        height: 1.5,
+        fontSize: 16 *
+            (plPlayerController.isFullScreen.value
+                ? plPlayerController.subtitleFontScaleFS.value
+                : plPlayerController.subtitleFontScale.value),
+        letterSpacing: 0.1,
+        wordSpacing: 0.1,
+        color: Color(0xffffffff),
+        fontWeight: FontWeight.normal,
+        backgroundColor: Color(0xaa000000),
+      );
+
+  void _updateSubtitle(double value) {
+    _key.currentState?.update(
+      subtitleViewConfiguration: SubtitleViewConfiguration(
+        style: subTitleStyle.copyWith(fontSize: 16 * value),
+        padding: const EdgeInsets.all(24.0),
+        textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final PlPlayerController plPlayerController = widget.controller;
+    if (plPlayerController.isFullScreen.value) {
+      plPlayerController.subtitleFontScaleFS.listen((value) {
+        _updateSubtitle(value);
+      });
+    } else {
+      plPlayerController.subtitleFontScale.listen((value) {
+        _updateSubtitle(value);
+      });
+    }
     final Color colorTheme = Theme.of(context).colorScheme.primary;
-    const TextStyle subTitleStyle = TextStyle(
-      height: 1.5,
-      fontSize: 20.0,
-      letterSpacing: 0.1,
-      wordSpacing: 0.1,
-      color: Color(0xffffffff),
-      fontWeight: FontWeight.normal,
-      backgroundColor: Color(0xaa000000),
-    );
     const TextStyle textStyle = TextStyle(
       color: Colors.white,
       fontSize: 12,
@@ -684,7 +710,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               _gestureType = null;
             },
             child: Video(
-              key: ValueKey('${plPlayerController.videoFit.value}'),
+              key: _key,
               controller: videoController,
               controls: NoVideoControls,
               pauseUponEnteringBackgroundMode:

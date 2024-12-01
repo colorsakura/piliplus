@@ -99,6 +99,12 @@ class GStorage {
   static double get danmakuFontScaleFS =>
       setting.get(SettingBoxKey.danmakuFontScaleFS, defaultValue: 1.2);
 
+  static double get subtitleFontScale =>
+      setting.get(SettingBoxKey.subtitleFontScale, defaultValue: 1.0);
+
+  static double get subtitleFontScaleFS =>
+      setting.get(SettingBoxKey.subtitleFontScaleFS, defaultValue: 1.5);
+
   static bool get grpcReply =>
       setting.get(SettingBoxKey.grpcReply, defaultValue: true);
 
@@ -302,6 +308,8 @@ class SettingBoxKey {
       strokeWidth = 'strokeWidth',
       fontWeight = 'fontWeight',
       memberTab = 'memberTab',
+      subtitleFontScale = 'subtitleFontScale',
+      subtitleFontScaleFS = 'subtitleFontScaleFS',
 
       // 代理host port
       systemProxyHost = 'systemProxyHost',

@@ -258,6 +258,8 @@ class PlPlayerController {
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
   late bool enableLongShowControl;
+  RxDouble subtitleFontScale = (1.0).obs;
+  RxDouble subtitleFontScaleFS = (1.5).obs;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -351,6 +353,8 @@ class PlPlayerController {
         setting.get(SettingBoxKey.danmakuFontScale, defaultValue: 1.0);
     // 全屏字体大小
     fontSizeFSVal = GStorage.danmakuFontScaleFS;
+    subtitleFontScale.value = GStorage.subtitleFontScale;
+    subtitleFontScaleFS.value = GStorage.subtitleFontScaleFS;
     // 弹幕时间
     danmakuDurationVal =
         setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.29);
@@ -1296,6 +1300,8 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuOpacity, opacityVal);
     setting.put(SettingBoxKey.danmakuFontScale, fontSizeVal);
     setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFSVal);
+    setting.put(SettingBoxKey.subtitleFontScale, subtitleFontScale.value);
+    setting.put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS.value);
     setting.put(SettingBoxKey.danmakuDuration, danmakuDurationVal);
     setting.put(SettingBoxKey.strokeWidth, strokeWidth);
     setting.put(SettingBoxKey.fontWeight, fontWeight);
