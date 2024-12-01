@@ -12,6 +12,7 @@ class Segment {
 class SegmentProgressBar extends CustomPainter {
   final double progress;
   final List<Segment> segmentColors;
+  double? _defHeight;
 
   SegmentProgressBar({
     required this.progress,
@@ -36,19 +37,42 @@ class SegmentProgressBar extends CustomPainter {
           (progressEnd < segmentEnd ? progressEnd : segmentEnd) - segmentStart;
       if (segmentWidth >= 0) {
         if (segmentColors[i].title != null) {
+          double fontSize = 8;
           TextPainter textPainter = TextPainter(
             text: TextSpan(
               text: segmentColors[i].title,
-              style: TextStyle(color: Colors.white, fontSize: 8),
+              style: TextStyle(color: Colors.white, fontSize: fontSize),
             ),
             textDirection: TextDirection.ltr,
           )..layout();
+          _defHeight ??= textPainter.height;
+
+          double? prevStart;
+          if (i != 0) {
+            prevStart = segmentColors[i - 1].start * size.width;
+          }
+          double width = i == 0 ? segmentStart : segmentStart - prevStart!;
+
+          while (textPainter.width > width - 2 && fontSize >= 2) {
+            fontSize -= 1;
+            textPainter = TextPainter(
+              text: TextSpan(
+                text: segmentColors[i].title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: fontSize,
+                ),
+              ),
+              textDirection: TextDirection.ltr,
+            );
+            textPainter.layout();
+          }
 
           if (i == 0) {
             canvas.drawRect(
               Rect.fromLTRB(
                 0,
-                size.height - textPainter.height,
+                -_defHeight!,
                 size.width,
                 0,
               ),
@@ -59,21 +83,19 @@ class SegmentProgressBar extends CustomPainter {
           canvas.drawRect(
             Rect.fromLTWH(
               segmentStart,
-              -textPainter.height + 3,
+              -_defHeight!,
               segmentWidth == 0 ? 2 : segmentWidth,
-              size.height + textPainter.height - 3,
+              size.height + _defHeight!,
             ),
             paint,
           );
 
-          double? prevStart;
-          if (i != 0) {
-            prevStart = segmentColors[i - 1].start * size.width;
-          }
           double textX = i == 0
               ? (segmentStart - textPainter.width) / 2
-              : (segmentStart - prevStart! - textPainter.width) / 2 + prevStart;
-          double textY = size.height - textPainter.height - 2;
+              : (segmentStart - prevStart! - textPainter.width) / 2 +
+                  prevStart +
+                  1;
+          double textY = -_defHeight! / 2 - textPainter.height / 2;
           textPainter.paint(canvas, Offset(textX, textY));
         } else {
           canvas.drawRect(
