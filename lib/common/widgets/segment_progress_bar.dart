@@ -35,15 +35,6 @@ class SegmentProgressBar extends CustomPainter {
       final segmentWidth =
           (progressEnd < segmentEnd ? progressEnd : segmentEnd) - segmentStart;
       if (segmentWidth >= 0) {
-        canvas.drawRect(
-          Rect.fromLTWH(
-            segmentStart,
-            0,
-            segmentWidth == 0 ? 2 : segmentWidth,
-            size.height,
-          ),
-          paint,
-        );
         if (segmentColors[i].title != null) {
           TextPainter textPainter = TextPainter(
             text: TextSpan(
@@ -53,6 +44,28 @@ class SegmentProgressBar extends CustomPainter {
             textDirection: TextDirection.ltr,
           )..layout();
 
+          if (i == 0) {
+            canvas.drawRect(
+              Rect.fromLTRB(
+                0,
+                size.height - textPainter.height,
+                size.width,
+                0,
+              ),
+              Paint()..color = Colors.grey[600]!,
+            );
+          }
+
+          canvas.drawRect(
+            Rect.fromLTWH(
+              segmentStart,
+              -textPainter.height + 3,
+              segmentWidth == 0 ? 2 : segmentWidth,
+              size.height + textPainter.height - 3,
+            ),
+            paint,
+          );
+
           double? prevStart;
           if (i != 0) {
             prevStart = segmentColors[i - 1].start * size.width;
@@ -60,8 +73,18 @@ class SegmentProgressBar extends CustomPainter {
           double textX = i == 0
               ? (segmentStart - textPainter.width) / 2
               : (segmentStart - prevStart! - textPainter.width) / 2 + prevStart;
-          double textY = size.height - textPainter.height - 1;
+          double textY = size.height - textPainter.height - 2;
           textPainter.paint(canvas, Offset(textX, textY));
+        } else {
+          canvas.drawRect(
+            Rect.fromLTWH(
+              segmentStart,
+              0,
+              segmentWidth == 0 ? 2 : segmentWidth,
+              size.height,
+            ),
+            paint,
+          );
         }
       }
     }
@@ -69,6 +92,6 @@ class SegmentProgressBar extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return false;
   }
 }
