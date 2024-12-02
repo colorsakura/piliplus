@@ -1582,6 +1582,9 @@ class VideoDetailController extends GetxController
   int vttSubtitlesIndex = 0;
 
   void _getSubtitle() {
+    _vttSubtitles.clear();
+    vttSubtitlesIndex = 0;
+    viewPointList.clear();
     _querySubtitles().then((value) {
       if (_vttSubtitles.isNotEmpty) {
         String preference = setting.get(
