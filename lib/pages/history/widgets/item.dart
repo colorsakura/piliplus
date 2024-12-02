@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
 import 'package:PiliPalaX/pages/fav_search/controller.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class HistoryItem extends StatelessWidget {
     String heroTag = Utils.makeHeroTag(aid);
     return InkWell(
       onTap: () async {
-        if (ctr!.enableMultiSelect.value) {
+        if (ctr is MultiSelectController && ctr!.enableMultiSelect.value) {
           feedBack();
           onChoose?.call();
           return;
