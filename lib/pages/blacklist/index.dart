@@ -25,8 +25,8 @@ class _BlackListPageState extends State<BlackListPage> {
     List list = _blackListController.loadingState.value is Success
         ? (_blackListController.loadingState.value as Success).response
         : <int>[];
-    GStorage.localCache.put(LocalCacheKey.blackMidsList,
-        list.isNotEmpty ? list.map<int>((e) => e.mid!).toList() : list);
+    GStorage.setBlackMidsList(
+        list.isNotEmpty ? list.map<int>((e) => e.mid!).toList() : <int>[]);
     super.dispose();
   }
 
@@ -121,7 +121,8 @@ class BlackListController extends CommonController {
     if (response.response.list.length >= total.value) {
       isEnd = true;
     }
-    loadingState.value = LoadingState.success(response.response.list);
+    loadingState.value = LoadingState.success(
+        response.response.list.isNotEmpty ? response.response.list : <int>[]);
     return true;
   }
 
@@ -131,7 +132,8 @@ class BlackListController extends CommonController {
       List list = (loadingState.value as Success).response;
       list.removeWhere((e) => e.mid == mid);
       total.value = total.value - 1;
-      loadingState.value = LoadingState.success(list);
+      loadingState.value =
+          LoadingState.success(list.isNotEmpty ? list : <int>[]);
       SmartDialog.showToast(result['msg']);
     }
   }

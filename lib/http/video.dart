@@ -53,8 +53,7 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemModel> list = [];
-      List<int> blackMidsList =
-          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+      List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['item']) {
         //过滤掉live与ad，以及拉黑用户
         if (i['goto'] == 'av' &&
@@ -140,8 +139,7 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<RecVideoItemAppModel> list = [];
-      List<int> blackMidsList =
-          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+      List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['items']) {
         // 屏蔽推广和拉黑用户
         if (i['card_goto'] != 'ad_av' &&
@@ -171,10 +169,7 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = [];
-      List<int> blackMidsList = localCache
-          .get(LocalCacheKey.blackMidsList, defaultValue: [-1])
-          .map<int>((e) => e as int)
-          .toList();
+      List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['list']) {
         if (!blackMidsList.contains(i['owner']['mid'])) {
           list.add(HotVideoItemModel.fromJson(i));
@@ -190,8 +185,7 @@ class VideoHttp {
     dynamic res = await GrpcRepo.popular(idx);
     if (res['status']) {
       List<card.Card> list = [];
-      List<int> blackMidsList =
-          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+      List<int> blackMidsList = GStorage.blackMidsList;
       for (card.Card item in res['data']) {
         if (!blackMidsList.contains(item.smallCoverV5.up.id.toInt())) {
           list.add(item);
@@ -977,8 +971,7 @@ class VideoHttp {
     var res = await Request().get(rankApi);
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = [];
-      List<int> blackMidsList =
-          localCache.get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+      List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['list']) {
         if (!blackMidsList.contains(i['owner']['mid'])) {
           list.add(HotVideoItemModel.fromJson(i));

@@ -114,6 +114,14 @@ class GStorage {
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
+  static List<int> get blackMidsList => List<int>.from(GStorage.localCache
+      .get(LocalCacheKey.blackMidsList, defaultValue: <int>[]));
+
+  static void setBlackMidsList(blackMidsList) {
+    if (blackMidsList is! List<int>) return;
+    GStorage.localCache.put(LocalCacheKey.blackMidsList, blackMidsList);
+  }
+
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 

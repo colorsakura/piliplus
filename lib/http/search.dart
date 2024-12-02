@@ -104,8 +104,7 @@ class SearchHttp {
       try {
         switch (searchType) {
           case SearchType.video:
-            List<int> blackMidsList = localCache
-                .get(LocalCacheKey.blackMidsList, defaultValue: <int>[]);
+            List<int> blackMidsList = GStorage.blackMidsList;
             if (res.data['data']['result'] != null) {
               for (var i in res.data['data']['result']) {
                 // 屏蔽推广和拉黑用户
