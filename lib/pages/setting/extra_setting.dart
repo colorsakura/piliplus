@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPalaX/pages/main/controller.dart';
 import 'package:PiliPalaX/pages/member/new/controller.dart'
     show MemberTabType, MemberTabTypeExt;
@@ -211,6 +213,15 @@ class _ExtraSettingState extends State<ExtraSetting> {
             onChanged: (value) {
               GlobalData().grpcReply = value;
             },
+          ),
+          SetSwitchItem(
+            title: '显示视频分段信息',
+            leading: Transform.rotate(
+              angle: pi / 2,
+              child: Icon(Icons.reorder),
+            ),
+            setKey: SettingBoxKey.showViewPoints,
+            defaultVal: true,
           ),
           Obx(
             () => ListTile(

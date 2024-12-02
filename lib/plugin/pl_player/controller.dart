@@ -25,8 +25,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../../models/video/play/subtitle.dart';
-
 Box videoStorage = GStorage.video;
 Box setting = GStorage.setting;
 Box localCache = GStorage.localCache;
@@ -104,8 +102,9 @@ class PlPlayerController {
   bool _enableHeart = true;
 
   late DataSource dataSource;
-  final RxList<Map<String, String>> _vttSubtitles = <Map<String, String>>[].obs;
-  final RxInt _vttSubtitlesIndex = 0.obs;
+  // 视频字幕
+  final RxList<Map<String, String>> vttSubtitles = <Map<String, String>>[].obs;
+  final RxInt vttSubtitlesIndex = 0.obs;
 
   Timer? _timer;
   Timer? _timerForSeek;
@@ -115,6 +114,7 @@ class PlPlayerController {
   Timer? timerForTrackingMouse;
 
   final RxList<Segment> viewPointList = <Segment>[].obs;
+  final RxBool showVP = true.obs;
   final RxList<Segment> segmentList = <Segment>[].obs;
 
   // final Durations durations;
@@ -163,10 +163,6 @@ class PlPlayerController {
   // 视频静音
   Rx<bool> get mute => _mute;
   Stream<bool> get onMuteChanged => _mute.stream;
-
-  // 视频字幕
-  RxList<Map<String, String>> get vttSubtitles => _vttSubtitles;
-  RxInt get vttSubtitlesIndex => _vttSubtitlesIndex;
 
   /// [videoPlayerController] instance of Player
   Player? get videoPlayerController => _videoPlayerController;
@@ -408,6 +404,9 @@ class PlPlayerController {
   Future<void> setDataSource(
     DataSource dataSource, {
     List<Segment>? segmentList,
+    List<Segment>? viewPointList,
+    List<Map<String, String>>? vttSubtitles,
+    int? vttSubtitlesIndex,
     bool autoplay = true,
     // 默认不循环
     PlaylistMode looping = PlaylistMode.none,
@@ -431,8 +430,10 @@ class PlPlayerController {
   }) async {
     try {
       this.dataSource = dataSource;
-      viewPointList.clear();
       this.segmentList.value = segmentList ?? <Segment>[];
+      this.viewPointList.value = viewPointList ?? <Segment>[];
+      this.vttSubtitles.value = vttSubtitles ?? <Map<String, String>>[];
+      this.vttSubtitlesIndex.value = vttSubtitlesIndex ?? 0;
       _autoPlay = autoplay;
       _looping = looping;
       // 初始化视频倍速
@@ -467,35 +468,7 @@ class PlPlayerController {
         startListeners();
       }
       await _initializePlayer(seekTo: seekTo);
-      if (videoType.value != 'live' && _cid != 0) {
-        refreshSubtitles().then((value) {
-          if (_vttSubtitles.isNotEmpty) {
-            if (_vttSubtitlesIndex > 0 &&
-                _vttSubtitlesIndex < _vttSubtitles.length) {
-              setSubtitle(_vttSubtitlesIndex.value);
-            } else {
-              String preference = setting.get(SettingBoxKey.subtitlePreference,
-                  defaultValue: SubtitlePreference.values.first.code);
-              if (preference == 'on') {
-                setSubtitle(1);
-              } else if (preference == 'withoutAi') {
-                bool found = false;
-                for (int i = 1; i < _vttSubtitles.length; i++) {
-                  if (_vttSubtitles[i]['language']!.startsWith('ai')) {
-                    continue;
-                  }
-                  found = true;
-                  setSubtitle(i);
-                  break;
-                }
-                if (!found) _vttSubtitlesIndex.value = 0;
-              } else {
-                _vttSubtitlesIndex.value = 0;
-              }
-            }
-          }
-        });
-      }
+      setSubtitle(this.vttSubtitlesIndex.value);
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
       debugPrint(stackTrace.toString());
@@ -1353,49 +1326,20 @@ class PlPlayerController {
     }
   }
 
-  Future refreshSubtitles() async {
-    _vttSubtitles.clear();
-    Map res = await VideoHttp.subtitlesJson(bvid: _bvid, cid: _cid);
-    // if (!res["status"]) {
-    //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
-    // }
-
-    if (res["data"] is List && res["data"].isNotEmpty) {
-      var result = await VideoHttp.vttSubtitles(res["data"]);
-      if (result != null) {
-        _vttSubtitles.value = result;
-      }
-      // if (_vttSubtitles.isEmpty) {
-      //   SmartDialog.showToast('字幕均加载失败');
-      // }
-    }
-    if (res["view_points"] is List && res["view_points"].isNotEmpty) {
-      viewPointList.value = (res["view_points"] as List).map((item) {
-        double start = (item['to'] / durationSeconds.value).clamp(0.0, 1.0);
-        return Segment(
-          start,
-          start,
-          Colors.black,
-          item['content'],
-        );
-      }).toList();
-    }
-  }
-
   // 设定字幕轨道
   setSubtitle(int index) {
     if (index == 0) {
       _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
-      _vttSubtitlesIndex.value = 0;
+      vttSubtitlesIndex.value = 0;
       return;
     }
-    Map<String, String> s = _vttSubtitles[index];
+    Map<String, String> s = vttSubtitles[index];
     _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
       s['text']!,
       title: s['title']!,
       language: s['language']!,
     ));
-    _vttSubtitlesIndex.value = index;
+    vttSubtitlesIndex.value = index;
   }
 
   static void updatePlayCount() {

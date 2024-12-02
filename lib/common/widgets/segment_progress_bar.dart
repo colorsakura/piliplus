@@ -5,8 +5,19 @@ class Segment {
   final double end;
   final Color color;
   final String? title;
+  final String? url;
+  final int? from;
+  final int? to;
 
-  Segment(this.start, this.end, this.color, [this.title]);
+  Segment(
+    this.start,
+    this.end,
+    this.color, [
+    this.title,
+    this.url,
+    this.from,
+    this.to,
+  ]);
 }
 
 class SegmentProgressBar extends CustomPainter {
@@ -76,7 +87,7 @@ class SegmentProgressBar extends CustomPainter {
                 size.width,
                 0,
               ),
-              Paint()..color = Colors.grey[600]!,
+              Paint()..color = Colors.grey[600]!.withOpacity(0.45),
             );
           }
 

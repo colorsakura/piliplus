@@ -8,6 +8,7 @@ import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
+import 'package:PiliPalaX/models/video/play/subtitle.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'package:floating/floating.dart';
@@ -284,6 +285,7 @@ class VideoDetailController extends GetxController
   List<Pair<SegmentType, SkipType>>? _blockSettings;
   List<Color>? _blockColor;
   RxList<SegmentModel> segmentList = <SegmentModel>[].obs;
+  List<Segment> viewPointList = <Segment>[];
   List<Segment>? _segmentProgressList;
   Color _getColor(SegmentType segment) =>
       _blockColor?[segment.index] ?? segment.color;
@@ -844,6 +846,9 @@ class VideoDetailController extends GetxController
         },
       ),
       segmentList: _segmentProgressList,
+      viewPointList: viewPointList,
+      vttSubtitles: _vttSubtitles,
+      vttSubtitlesIndex: vttSubtitlesIndex,
       // 硬解
       enableHA: enableHA.value,
       hwdec: hwdec.value,
@@ -877,6 +882,7 @@ class VideoDetailController extends GetxController
       if (enableSponsorBlock) {
         await _querySponsorBlock();
       }
+      _getSubtitle();
       if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
         SmartDialog.showToast(
           '该视频为专属视频，仅提供试看',
@@ -1020,7 +1026,6 @@ class VideoDetailController extends GetxController
   List<PostSegmentModel>? list;
 
   void onBlock(BuildContext context) {
-    PersistentBottomSheetController? ctr;
     list ??= <PostSegmentModel>[];
     if (list!.isEmpty) {
       list!.add(
@@ -1034,18 +1039,18 @@ class VideoDetailController extends GetxController
         ),
       );
     }
-    ctr = plPlayerController.isFullScreen.value
+    plPlayerController.isFullScreen.value
         ? scaffoldKey.currentState?.showBottomSheet(
             enableDrag: false,
-            (context) => _postPanel(ctr?.close, false),
+            (context) => _postPanel(false),
           )
         : childKey.currentState?.showBottomSheet(
             enableDrag: false,
-            (context) => _postPanel(ctr?.close),
+            (context) => _postPanel(),
           );
   }
 
-  Widget _postPanel(onClose, [bool isChild = true]) => StatefulBuilder(
+  Widget _postPanel([bool isChild = true]) => StatefulBuilder(
         builder: (context, setState) {
           void updateSegment({
             required bool isFirst,
@@ -1197,7 +1202,7 @@ class VideoDetailController extends GetxController
                   iconButton(
                     context: context,
                     tooltip: '关闭',
-                    onPressed: onClose,
+                    onPressed: Get.back,
                     icon: Icons.close,
                   ),
                   const SizedBox(width: 16),
@@ -1571,5 +1576,74 @@ class VideoDetailController extends GetxController
         ],
       SegmentType.exclusive_access => [ActionType.full],
     };
+  }
+
+  List<Map<String, String>> _vttSubtitles = <Map<String, String>>[];
+  int vttSubtitlesIndex = 0;
+
+  void _getSubtitle() {
+    _querySubtitles().then((value) {
+      if (_vttSubtitles.isNotEmpty) {
+        String preference = setting.get(
+          SettingBoxKey.subtitlePreference,
+          defaultValue: SubtitlePreference.values.first.code,
+        );
+        if (preference == 'on') {
+          vttSubtitlesIndex = 1;
+        } else if (preference == 'withoutAi') {
+          for (int i = 1; i < _vttSubtitles.length; i++) {
+            if (_vttSubtitles[i]['language']!.startsWith('ai')) {
+              continue;
+            }
+            vttSubtitlesIndex = i;
+            break;
+          }
+        }
+        if (plPlayerController.vttSubtitles.isEmpty) {
+          plPlayerController.vttSubtitles.value = _vttSubtitles;
+          plPlayerController.vttSubtitlesIndex.value = vttSubtitlesIndex;
+          if (vttSubtitlesIndex != 0) {
+            plPlayerController.setSubtitle(vttSubtitlesIndex);
+          }
+        }
+      }
+    });
+  }
+
+  Future _querySubtitles() async {
+    Map res = await VideoHttp.subtitlesJson(bvid: bvid, cid: cid.value);
+    // if (!res["status"]) {
+    //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
+    // }
+
+    if (res["data"] is List && res["data"].isNotEmpty) {
+      var result = await VideoHttp.vttSubtitles(res["data"]);
+      if (result != null) {
+        _vttSubtitles = result;
+      }
+      // if (_vttSubtitles.isEmpty) {
+      //   SmartDialog.showToast('字幕均加载失败');
+      // }
+    }
+    if (GStorage.showViewPoints &&
+        res["view_points"] is List &&
+        res["view_points"].isNotEmpty) {
+      viewPointList = (res["view_points"] as List).map((item) {
+        double start =
+            (item['to'] / ((data.timeLength ?? 0) / 1000)).clamp(0.0, 1.0);
+        return Segment(
+          start,
+          start,
+          Colors.black87,
+          item?['content'],
+          item?['imgUrl'],
+          item?['from'],
+          item?['to'],
+        );
+      }).toList();
+      if (plPlayerController.viewPointList.isEmpty) {
+        plPlayerController.viewPointList.value = viewPointList;
+      }
+    }
   }
 }

@@ -44,9 +44,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     // if (widget.setKey == SettingBoxKey.autoUpdate && value == true) {
     //   Utils.checkUpdate();
     // }
-    if (widget.onChanged != null) {
-      widget.onChanged!.call(val);
-    }
+    widget.onChanged?.call(val);
     if (widget.needReboot != null && widget.needReboot!) {
       SmartDialog.showToast('重启生效');
     }

@@ -104,7 +104,8 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                               segmentColors: controller!.segmentList,
                             ),
                           ),
-                        if (controller?.viewPointList.isNotEmpty == true)
+                        if (controller?.viewPointList.isNotEmpty == true &&
+                            controller?.showVP.value == true)
                           CustomPaint(
                             size: Size(double.infinity, 3.5),
                             painter: SegmentProgressBar(

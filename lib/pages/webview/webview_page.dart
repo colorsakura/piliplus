@@ -106,13 +106,13 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
               }
             },
             itemBuilder: (context) => <PopupMenuEntry<WebviewMenuItem>>[
-              ...WebviewMenuItem.values.sublist(0, 4).map(
-                  (item) => PopupMenuItem(value: item, child: Text(item.name))),
+              ...WebviewMenuItem.values.sublist(0, 4).map((item) =>
+                  PopupMenuItem(value: item, child: Text(item.title))),
               const PopupMenuDivider(),
               PopupMenuItem(
                   value: WebviewMenuItem.goBack,
                   child: Text(
-                    WebviewMenuItem.goBack.name,
+                    WebviewMenuItem.goBack.title,
                     style:
                         TextStyle(color: Theme.of(context).colorScheme.error),
                   )),

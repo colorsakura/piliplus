@@ -4,8 +4,7 @@ import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import '../common/constants.dart';
 import '../models/common/reply_type.dart';
@@ -914,6 +913,12 @@ class VideoHttp {
       return "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}.${ms.toString().padLeft(3, '0')}";
     }
 
+    String processList(List list) {
+      return list.fold('WEBVTT\n\n', (previous, item) {
+        return '$previous${item?['sid'] ?? 0}\n${subtitleTimecode(item['from'])} --> ${subtitleTimecode(item['to'])}\n${item['content'].trim()}\n\n';
+      });
+    }
+
     for (var i in subtitlesJson) {
       var res =
           await Request().get("https://${i['subtitle_url'].split('//')[1]}");
@@ -948,21 +953,16 @@ class VideoHttp {
             ]
           }
          */
-      if (res.data != null) {
-        String vttData = "WEBVTT\n\n";
-        for (var item in res.data['body']) {
-          vttData += "${item['sid'] ?? 0}\n";
-          vttData +=
-              "${subtitleTimecode(item['from'])} --> ${subtitleTimecode(item['to'])}\n";
-          vttData += "${item['content'].trim()}\n\n";
-        }
+      if (res.data != null && res.data?['body'] is List) {
+        String vttData = await compute(processList, res.data['body'] as List);
         subtitlesVtt.add({
           'language': i['lan'],
           'title': i['lan_doc'],
           'text': vttData,
         });
       } else {
-        SmartDialog.showToast("字幕${i['lan_doc']}加载失败, ${res.data['message']}");
+        // SmartDialog.showToast("字幕${i['lan_doc']}加载失败, ${res.data['message']}");
+        debugPrint('字幕${i['lan_doc']}加载失败, ${res.data['message']}');
       }
     }
     if (subtitlesVtt.isNotEmpty) {

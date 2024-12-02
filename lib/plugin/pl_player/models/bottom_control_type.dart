@@ -10,4 +10,5 @@ enum BottomControlType {
   speed,
   fullscreen,
   custom,
+  viewPoints,
 }

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/list_sheet.dart';
+import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
@@ -16,6 +18,7 @@ import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:floating/floating.dart';
@@ -350,6 +353,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     if (plPlayerController != null) {
       _makeHeartBeat();
+      videoDetailController.vttSubtitlesIndex =
+          plPlayerController!.vttSubtitlesIndex.value;
       videoDetailController.defaultST = plPlayerController!.position.value;
       plPlayerController!.removeStatusLister(playerListener);
       plPlayerController!.pause();
@@ -960,6 +965,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         ),
                       ),
                 showEpisodes: showEpisodes,
+                showViewPoints: showViewPoints,
               ),
       );
 
@@ -1058,6 +1064,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         ),
                       ),
                       showEpisodes: showEpisodes,
+                      showViewPoints: showViewPoints,
                     ),
             );
           } else {
@@ -1379,8 +1386,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   }
 
   showEpisodes(index, season, episodes, bvid, aid, cid) {
-    PersistentBottomSheetController? bottomSheetController;
-
     Widget listSheetContent() => ListSheetContent(
           index: index,
           season: season,
@@ -1392,15 +1397,162 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               videoDetailController.videoType == SearchType.media_bangumi
                   ? bangumiIntroController.changeSeasonOrbangu
                   : videoIntroController.changeSeasonOrbangu,
-          onClose: bottomSheetController?.close,
         );
+    if (isFullScreen) {
+      videoDetailController.scaffoldKey.currentState?.showBottomSheet(
+        (context) => listSheetContent(),
+      );
+    } else {
+      videoDetailController.childKey.currentState?.showBottomSheet(
+        (context) => listSheetContent(),
+      );
+    }
+  }
 
-    bottomSheetController = isFullScreen
-        ? videoDetailController.scaffoldKey.currentState?.showBottomSheet(
-            (context) => listSheetContent(),
-          )
-        : videoDetailController.scaffoldKey.currentState?.showBottomSheet(
-            (context) => listSheetContent(),
-          );
+  void showViewPoints() {
+    Widget listSheetContent(context, [bool isFS = false]) {
+      int currentIndex = -1;
+      return StatefulBuilder(
+        builder: (context, setState) => SizedBox(
+          height: isFS ? Utils.getSheetHeight(context) : null,
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 16,
+              title: Text('分段信息'),
+              actions: [
+                Text(
+                  '分段进度条',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Obx(
+                  () => Transform.scale(
+                    alignment: Alignment.centerLeft,
+                    scale: 0.8,
+                    child: Switch(
+                      thumbIcon:
+                          WidgetStateProperty.resolveWith<Icon?>((states) {
+                        if (states.isNotEmpty &&
+                            states.first == WidgetState.selected) {
+                          return const Icon(Icons.done);
+                        }
+                        return null;
+                      }),
+                      value:
+                          videoDetailController.plPlayerController.showVP.value,
+                      onChanged: (value) {
+                        videoDetailController.plPlayerController.showVP.value =
+                            value;
+                      },
+                    ),
+                  ),
+                ),
+                iconButton(
+                  context: context,
+                  size: 30,
+                  icon: Icons.clear,
+                  tooltip: '关闭',
+                  onPressed: Get.back,
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ...List.generate(videoDetailController.viewPointList.length,
+                      (index) {
+                    Segment segment =
+                        videoDetailController.viewPointList[index];
+                    if (currentIndex == -1 &&
+                        segment.from != null &&
+                        segment.to != null) {
+                      if (videoDetailController
+                                  .plPlayerController.positionSeconds.value >=
+                              segment.from! &&
+                          videoDetailController
+                                  .plPlayerController.positionSeconds.value <
+                              segment.to!) {
+                        currentIndex = index;
+                      }
+                    }
+                    return ListTile(
+                      dense: true,
+                      onTap: segment.from != null
+                          ? () {
+                              currentIndex = index;
+                              plPlayerController?.danmakuController?.clear();
+                              plPlayerController?.videoPlayerController
+                                  ?.seek(Duration(seconds: segment.from!));
+                              setState(() {});
+                            }
+                          : null,
+                      leading: segment.url?.isNotEmpty == true
+                          ? Container(
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                              decoration: currentIndex == index
+                                  ? BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                        width: 1.8,
+                                        strokeAlign:
+                                            BorderSide.strokeAlignOutside,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    )
+                                  : null,
+                              child: LayoutBuilder(
+                                builder: (_, constraints) => NetworkImgLayer(
+                                  radius: 6,
+                                  src: segment.url,
+                                  width: constraints.maxHeight *
+                                      StyleString.aspectRatio,
+                                  height: constraints.maxHeight,
+                                ),
+                              ),
+                            )
+                          : null,
+                      title: Text(
+                        segment.title ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight:
+                              currentIndex == index ? FontWeight.bold : null,
+                          color: currentIndex == index
+                              ? Theme.of(context).colorScheme.primary
+                              : null,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${segment.from != null ? Utils.timeFormat(segment.from) : ''} - ${segment.to != null ? Utils.timeFormat(segment.to) : ''}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: currentIndex == index
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (isFullScreen) {
+      videoDetailController.scaffoldKey.currentState?.showBottomSheet(
+        (context) => listSheetContent(context, true),
+      );
+    } else {
+      videoDetailController.childKey.currentState?.showBottomSheet(
+        (context) => listSheetContent(context),
+      );
+    }
   }
 }

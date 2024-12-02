@@ -207,7 +207,7 @@ class MyApp extends StatelessWidget {
         titleSpacing: 0,
         centerTitle: false,
         scrolledUnderElevation: 0,
-        backgroundColor: Platform.isIOS ? colorScheme.surface : null,
+        backgroundColor: isDynamic ? null : colorScheme.surface,
         titleTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
       ),
       navigationBarTheme: NavigationBarThemeData(

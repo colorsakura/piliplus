@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
@@ -47,6 +48,7 @@ class PLVideoPlayer extends StatefulWidget {
     this.customWidget,
     this.customWidgets,
     this.showEpisodes,
+    this.showViewPoints,
     super.key,
   });
 
@@ -62,6 +64,7 @@ class PLVideoPlayer extends StatefulWidget {
   final Widget? customWidget;
   final List<Widget>? customWidgets;
   final Function? showEpisodes;
+  final VoidCallback? showViewPoints;
 
   @override
   State<PLVideoPlayer> createState() => _PLVideoPlayerState();
@@ -236,7 +239,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     Map<BottomControlType, Widget> videoProgressWidgets = {
       /// 上一集
       BottomControlType.pre: Container(
-        width: 42,
+        width: 35,
         height: 30,
         alignment: Alignment.center,
         child: ComBtn(
@@ -268,7 +271,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 下一集
       BottomControlType.next: Container(
-        width: 42,
+        width: 35,
         height: 30,
         alignment: Alignment.center,
         child: ComBtn(
@@ -330,9 +333,32 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       /// 空白占位
       BottomControlType.space: const Spacer(),
 
+      /// 分段信息
+      BottomControlType.viewPoints: Obx(
+        () => plPlayerController.viewPointList.isEmpty
+            ? const SizedBox.shrink()
+            : Container(
+                width: 35,
+                height: 30,
+                alignment: Alignment.center,
+                child: ComBtn(
+                  icon: Transform.rotate(
+                    angle: pi / 2,
+                    child: const Icon(
+                      Icons.reorder,
+                      semanticLabel: '分段信息',
+                      size: 22,
+                      color: Colors.white,
+                    ),
+                  ),
+                  fuc: widget.showViewPoints,
+                ),
+              ),
+      ),
+
       /// 选集
       BottomControlType.episode: Container(
-        width: 42,
+        width: 35,
         height: 30,
         alignment: Alignment.center,
         child: ComBtn(
@@ -387,7 +413,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 画面比例
       BottomControlType.fit: SizedBox(
-        width: 42,
+        width: 35,
         height: 30,
         child: TextButton(
           onPressed: () => plPlayerController.toggleVideoFit(),
@@ -408,7 +434,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         () => plPlayerController.vttSubtitles.isEmpty
             ? const SizedBox.shrink()
             : SizedBox(
-                width: 42,
+                width: 35,
                 height: 30,
                 child: PopupMenuButton<int>(
                   onSelected: (int value) {
@@ -434,7 +460,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     }).toList();
                   },
                   child: Container(
-                    width: 42,
+                    width: 35,
                     height: 30,
                     alignment: Alignment.center,
                     child: const Icon(
@@ -450,7 +476,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 播放速度
       BottomControlType.speed: SizedBox(
-        width: 42,
+        width: 35,
         height: 30,
         child: PopupMenuButton<double>(
           onSelected: (double value) {
@@ -473,7 +499,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             }).toList();
           },
           child: Container(
-            width: 42,
+            width: 35,
             height: 30,
             alignment: Alignment.center,
             child: Obx(() => Text("${plPlayerController.playbackSpeed}X",
@@ -485,7 +511,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 全屏
       BottomControlType.fullscreen: SizedBox(
-        width: 42,
+        width: 35,
         height: 30,
         child: Obx(() => ComBtn(
               icon: Icon(
@@ -510,6 +536,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           if (anySeason) BottomControlType.pre,
           if (anySeason) BottomControlType.next,
           BottomControlType.space,
+          BottomControlType.viewPoints,
           if (anySeason) BottomControlType.episode,
           if (plPlayerController.isFullScreen.value) BottomControlType.fit,
           BottomControlType.subtitle,
@@ -1114,7 +1141,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             segmentColors: plPlayerController.segmentList,
                           ),
                         ),
-                      if (plPlayerController.viewPointList.isNotEmpty)
+                      if (plPlayerController.viewPointList.isNotEmpty &&
+                          plPlayerController.showVP.value)
                         CustomPaint(
                           size: Size(double.infinity, 3.5),
                           painter: SegmentProgressBar(
