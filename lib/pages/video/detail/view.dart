@@ -994,7 +994,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   primary: false,
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.transparent,
-                  actions: (videoDetailController.userInfo == null)
+                  actions: videoDetailController.userInfo == null
                       ? null
                       : [
                           PopupMenuButton<String>(

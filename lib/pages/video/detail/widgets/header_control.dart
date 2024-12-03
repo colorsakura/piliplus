@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -177,12 +178,25 @@ class _HeaderControlState extends State<HeaderControl> {
                     //     ),
                     //   ),
                     // ),
+                    if (widget.videoDetailCtr?.userInfo != null)
+                      ListTile(
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed('/webviewnew', parameters: {
+                            'url':
+                                'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr!.bvid)}&bvid=${widget.videoDetailCtr!.bvid}'
+                          });
+                        },
+                        dense: true,
+                        leading: const Icon(Icons.error_outline, size: 20),
+                        title: const Text('举报', style: titleStyle),
+                      ),
                     ListTile(
                       onTap: () async {
+                        Get.back();
                         final res = await UserHttp.toViewLater(
                             bvid: widget.videoDetailCtr!.bvid);
                         SmartDialog.showToast(res['msg']);
-                        Get.back();
                       },
                       dense: true,
                       leading: const Icon(Icons.watch_later_outlined, size: 20),
