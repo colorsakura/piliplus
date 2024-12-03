@@ -849,6 +849,7 @@ class VideoDetailController extends GetxController
       viewPointList: viewPointList,
       vttSubtitles: _vttSubtitles,
       vttSubtitlesIndex: vttSubtitlesIndex,
+      showVP: showVP,
       // 硬解
       enableHA: enableHA.value,
       hwdec: hwdec.value,
@@ -1580,6 +1581,7 @@ class VideoDetailController extends GetxController
 
   List<Map<String, String>> _vttSubtitles = <Map<String, String>>[];
   int vttSubtitlesIndex = 0;
+  bool showVP = true;
 
   void _getSubtitle() {
     _vttSubtitles.clear();
@@ -1646,6 +1648,7 @@ class VideoDetailController extends GetxController
       }).toList();
       if (plPlayerController.viewPointList.isEmpty) {
         plPlayerController.viewPointList.value = viewPointList;
+        plPlayerController.showVP.value = showVP = true;
       }
     }
   }

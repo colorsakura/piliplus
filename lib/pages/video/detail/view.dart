@@ -183,7 +183,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
+      plPlayerController!.addPositionListener(positionListener);
       await plPlayerController!.autoEnterFullscreen();
+    }
+  }
+
+  void positionListener(Duration position) {
+    if (position.inSeconds != videoDetailController.defaultST.inSeconds) {
+      videoDetailController.defaultST = position;
     }
   }
 
@@ -264,6 +271,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit(autoplay: true);
     plPlayerController!.addStatusLister(playerListener);
+    plPlayerController!.addPositionListener(positionListener);
     await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
   }
@@ -291,7 +299,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   void _makeHeartBeat() {
     plPlayerController!.makeHeartBeat(
-      plPlayerController!.positionSeconds.value,
+      videoDetailController.defaultST.inSeconds,
       type: 'status',
       isManual: true,
       bvid: videoDetailController.bvid,
@@ -321,6 +329,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (plPlayerController != null) {
       _makeHeartBeat();
       plPlayerController!.removeStatusLister(playerListener);
+      plPlayerController!.removePositionListener(positionListener);
       plPlayerController!.dispose();
     } else {
       PlPlayerController.updatePlayCount();
@@ -347,16 +356,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         plPlayerController?.playerStatus.status.value;
 
     /// 开启
-    if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
-        as bool) {
-      videoDetailController.brightness = plPlayerController?.brightness.value;
-    }
+    // if (setting.get(SettingBoxKey.enableAutoBrightness, defaultValue: true)
+    //     as bool) {
+    videoDetailController.brightness = plPlayerController?.brightness.value;
+    // }
     if (plPlayerController != null) {
       _makeHeartBeat();
       videoDetailController.vttSubtitlesIndex =
           plPlayerController!.vttSubtitlesIndex.value;
-      videoDetailController.defaultST = plPlayerController!.position.value;
+      videoDetailController.showVP = plPlayerController!.showVP.value;
       plPlayerController!.removeStatusLister(playerListener);
+      plPlayerController!.removePositionListener(positionListener);
       plPlayerController!.pause();
     }
     isShowing = false;
@@ -421,6 +431,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       AutoOrientation.fullAutoMode();
     });
     plPlayerController?.addStatusLister(playerListener);
+    plPlayerController?.addPositionListener(positionListener);
   }
 
   @override

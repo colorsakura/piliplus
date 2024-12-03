@@ -407,6 +407,7 @@ class PlPlayerController {
     List<Segment>? viewPointList,
     List<Map<String, String>>? vttSubtitles,
     int? vttSubtitlesIndex,
+    bool? showVP,
     bool autoplay = true,
     // 默认不循环
     PlaylistMode looping = PlaylistMode.none,
@@ -434,6 +435,7 @@ class PlPlayerController {
       this.viewPointList.value = viewPointList ?? <Segment>[];
       this.vttSubtitles.value = vttSubtitles ?? <Map<String, String>>[];
       this.vttSubtitlesIndex.value = vttSubtitlesIndex ?? 0;
+      this.showVP.value = showVP ?? true;
       _autoPlay = autoplay;
       _looping = looping;
       // 初始化视频倍速
@@ -459,7 +461,10 @@ class PlPlayerController {
           dataSource, _looping, enableHA, hwdec, width, height);
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
+      _position.value = _sliderPosition.value = seekTo;
       updateDurationSecond();
+      updatePositionSecond();
+      updateSliderPositionSecond();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
 

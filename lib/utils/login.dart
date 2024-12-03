@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/pages/dynamics/index.dart';
 import 'package:PiliPalaX/pages/home/index.dart';
@@ -29,7 +29,8 @@ class LoginUtils {
       MediaController mediaCtr = Get.find<MediaController>();
       mediaCtr.userLogin.value = status;
     } catch (err) {
-      SmartDialog.showToast('refreshLoginStatus error: ${err.toString()}');
+      // SmartDialog.showToast('refreshLoginStatus error: ${err.toString()}');
+      debugPrint('refreshLoginStatus error: $err');
     }
   }
 
@@ -67,11 +68,11 @@ class LoginUtils {
 
     final Random random = Random(); // Random.secure();
     final String randomHex32 =
-    List.generate(32, (index) => random.nextInt(16).toRadixString(16))
-        .join();
+        List.generate(32, (index) => random.nextInt(16).toRadixString(16))
+            .join();
     final String randomHex16 =
-    List.generate(16, (index) => random.nextInt(16).toRadixString(16))
-        .join();
+        List.generate(16, (index) => random.nextInt(16).toRadixString(16))
+            .join();
 
     final String deviceID = randomHex32 + yyyyMMddHHmmss + randomHex16;
 

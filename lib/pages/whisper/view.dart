@@ -248,11 +248,11 @@ class _WhisperPageState extends State<WhisperPage> {
                                     leading: Badge(
                                       isLabelVisible:
                                           sessionList[i].unreadCount > 0,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      textColor: Theme.of(context)
-                                          .colorScheme
-                                          .onInverseSurface,
+                                      // backgroundColor:
+                                      //     Theme.of(context).colorScheme.primary,
+                                      // textColor: Theme.of(context)
+                                      //     .colorScheme
+                                      //     .onInverseSurface,
                                       label: Text(
                                           " ${sessionList[i].unreadCount.toString()} "),
                                       alignment: Alignment.topRight,
