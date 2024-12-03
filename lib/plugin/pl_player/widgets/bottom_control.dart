@@ -100,7 +100,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                           CustomPaint(
                             size: Size(double.infinity, 3.5),
                             painter: SegmentProgressBar(
-                              progress: 1,
                               segmentColors: controller!.segmentList,
                             ),
                           ),
@@ -109,7 +108,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                           CustomPaint(
                             size: Size(double.infinity, 3.5),
                             painter: SegmentProgressBar(
-                              progress: 1,
                               segmentColors: controller!.viewPointList,
                             ),
                           ),

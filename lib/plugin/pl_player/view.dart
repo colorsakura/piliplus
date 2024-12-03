@@ -1137,7 +1137,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         CustomPaint(
                           size: Size(double.infinity, 3.5),
                           painter: SegmentProgressBar(
-                            progress: 1,
                             segmentColors: plPlayerController.segmentList,
                           ),
                         ),
@@ -1146,7 +1145,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         CustomPaint(
                           size: Size(double.infinity, 3.5),
                           painter: SegmentProgressBar(
-                            progress: 1,
                             segmentColors: plPlayerController.viewPointList,
                           ),
                         ),
