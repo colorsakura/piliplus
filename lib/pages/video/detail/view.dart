@@ -541,23 +541,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               (horizontalScreen ||
                                   MediaQuery.of(context).orientation ==
                                       Orientation.portrait),
-                          onPopInvokedWithResult:
-                              (bool didPop, Object? result) {
-                            if (plPlayerController?.controlsLock.value ==
-                                true) {
-                              plPlayerController?.onLockControl(false);
-                              return;
-                            }
-                            if (isFullScreen) {
-                              plPlayerController!
-                                  .triggerFullScreen(status: false);
-                            }
-                            if (MediaQuery.of(context).orientation ==
-                                    Orientation.landscape &&
-                                !horizontalScreen) {
-                              verticalScreenForTwoSeconds();
-                            }
-                          },
+                          onPopInvokedWithResult: _onPopInvokedWithResult,
                           child: videoPlayer(videoWidth, videoHeight),
                         ),
                       );
@@ -608,20 +592,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   width: isFullScreen ? context.width : videoWidth,
                   child: PopScope(
                     canPop: !isFullScreen,
-                    onPopInvokedWithResult: (bool didPop, Object? result) {
-                      if (plPlayerController?.controlsLock.value == true) {
-                        plPlayerController?.onLockControl(false);
-                        return;
-                      }
-                      if (isFullScreen) {
-                        plPlayerController!.triggerFullScreen(status: false);
-                      }
-                      if (MediaQuery.of(context).orientation ==
-                              Orientation.landscape &&
-                          !horizontalScreen) {
-                        verticalScreenForTwoSeconds();
-                      }
-                    },
+                    onPopInvokedWithResult: _onPopInvokedWithResult,
                     child: videoPlayer(videoWidth, videoHeight),
                   ),
                 ),
@@ -664,20 +635,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     : videoHeight,
                 child: PopScope(
                   canPop: !isFullScreen,
-                  onPopInvokedWithResult: (bool didPop, Object? result) {
-                    if (plPlayerController?.controlsLock.value == true) {
-                      plPlayerController?.onLockControl(false);
-                      return;
-                    }
-                    if (isFullScreen) {
-                      plPlayerController!.triggerFullScreen(status: false);
-                    }
-                    if (MediaQuery.of(context).orientation ==
-                            Orientation.landscape &&
-                        !horizontalScreen) {
-                      verticalScreenForTwoSeconds();
-                    }
-                  },
+                  onPopInvokedWithResult: _onPopInvokedWithResult,
                   child: videoPlayer(videoWidth, videoHeight),
                 ),
               ),
@@ -722,20 +680,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   width: isFullScreen ? context.width : videoWidth,
                   child: PopScope(
                     canPop: !isFullScreen,
-                    onPopInvokedWithResult: (bool didPop, Object? result) {
-                      if (plPlayerController?.controlsLock.value == true) {
-                        plPlayerController?.onLockControl(false);
-                        return;
-                      }
-                      if (isFullScreen) {
-                        plPlayerController!.triggerFullScreen(status: false);
-                      }
-                      if (MediaQuery.of(context).orientation ==
-                              Orientation.landscape &&
-                          !horizontalScreen) {
-                        verticalScreenForTwoSeconds();
-                      }
-                    },
+                    onPopInvokedWithResult: _onPopInvokedWithResult,
                     child: videoPlayer(videoWidth, videoHeight),
                   ),
                 ),
@@ -803,20 +748,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     height: isFullScreen ? context.height : videoHeight,
                     child: PopScope(
                       canPop: !isFullScreen,
-                      onPopInvokedWithResult: (bool didPop, Object? result) {
-                        if (plPlayerController?.controlsLock.value == true) {
-                          plPlayerController?.onLockControl(false);
-                          return;
-                        }
-                        if (isFullScreen) {
-                          plPlayerController!.triggerFullScreen(status: false);
-                        }
-                        if (MediaQuery.of(context).orientation ==
-                                Orientation.landscape &&
-                            !horizontalScreen) {
-                          verticalScreenForTwoSeconds();
-                        }
-                      },
+                      onPopInvokedWithResult: _onPopInvokedWithResult,
                       child: videoPlayer(videoWidth, videoHeight),
                     ),
                   ),
@@ -1408,9 +1340,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               videoDetailController.videoType == SearchType.media_bangumi
                   ? bangumiIntroController.changeSeasonOrbangu
                   : videoIntroController.changeSeasonOrbangu,
+          onClose: () {
+            if (videoDetailController.bsController != null) {
+              videoDetailController.bsController!.close();
+              videoDetailController.bsController = null;
+            } else {
+              Get.back();
+            }
+          },
         );
     if (isFullScreen) {
-      videoDetailController.scaffoldKey.currentState?.showBottomSheet(
+      videoDetailController.bsController =
+          videoDetailController.scaffoldKey.currentState?.showBottomSheet(
         (context) => listSheetContent(),
       );
     } else {
@@ -1463,7 +1404,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   size: 30,
                   icon: Icons.clear,
                   tooltip: '关闭',
-                  onPressed: Get.back,
+                  onPressed: () {
+                    if (videoDetailController.bsController != null) {
+                      videoDetailController.bsController!.close();
+                      videoDetailController.bsController = null;
+                    } else {
+                      Get.back();
+                    }
+                  },
                 ),
                 const SizedBox(width: 16),
               ],
@@ -1565,13 +1513,33 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
 
     if (isFullScreen) {
-      videoDetailController.scaffoldKey.currentState?.showBottomSheet(
+      videoDetailController.bsController =
+          videoDetailController.scaffoldKey.currentState?.showBottomSheet(
         (context) => listSheetContent(context, true),
       );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         (context) => listSheetContent(context),
       );
+    }
+  }
+
+  void _onPopInvokedWithResult(didPop, result) {
+    if (videoDetailController.bsController != null) {
+      videoDetailController.bsController!.close();
+      videoDetailController.bsController = null;
+      return;
+    }
+    if (plPlayerController?.controlsLock.value == true) {
+      plPlayerController?.onLockControl(false);
+      return;
+    }
+    if (isFullScreen) {
+      plPlayerController!.triggerFullScreen(status: false);
+    }
+    if (MediaQuery.of(context).orientation == Orientation.landscape &&
+        !horizontalScreen) {
+      verticalScreenForTwoSeconds();
     }
   }
 }

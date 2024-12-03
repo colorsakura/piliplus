@@ -7,7 +7,6 @@ import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPalaX/models/video_detail_res.dart' as video;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -24,6 +23,7 @@ class ListSheetContent extends StatefulWidget {
     this.aid,
     required this.currentCid,
     required this.changeFucCall,
+    required this.onClose,
   });
 
   final dynamic index;
@@ -33,6 +33,7 @@ class ListSheetContent extends StatefulWidget {
   final int? aid;
   final int currentCid;
   final Function changeFucCall;
+  final VoidCallback onClose;
 
   @override
   State<ListSheetContent> createState() => _ListSheetContentState();
@@ -136,7 +137,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           }
         }
         SmartDialog.showToast('切换到：$title');
-        Get.back();
+        widget.onClose();
         widget.changeFucCall(
           episode is bangumi.EpisodeItem ? episode.epId : null,
           episode.runtimeType.toString() == "EpisodeItem"
@@ -326,7 +327,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                 _mediumButton(
                   tooltip: '关闭',
                   icon: Icons.close,
-                  onPressed: Get.back,
+                  onPressed: widget.onClose,
                 ),
               ],
             ),

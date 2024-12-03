@@ -214,6 +214,8 @@ class VideoDetailController extends GetxController
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
 
+  PersistentBottomSheetController? bsController;
+
   @override
   void onInit() {
     super.onInit();
@@ -1043,15 +1045,17 @@ class VideoDetailController extends GetxController
         ),
       );
     }
-    plPlayerController.isFullScreen.value
-        ? scaffoldKey.currentState?.showBottomSheet(
-            enableDrag: false,
-            (context) => _postPanel(false),
-          )
-        : childKey.currentState?.showBottomSheet(
-            enableDrag: false,
-            (context) => _postPanel(),
-          );
+    if (plPlayerController.isFullScreen.value) {
+      bsController = scaffoldKey.currentState?.showBottomSheet(
+        enableDrag: false,
+        (context) => _postPanel(false),
+      );
+    } else {
+      childKey.currentState?.showBottomSheet(
+        enableDrag: false,
+        (context) => _postPanel(),
+      );
+    }
   }
 
   Widget _postPanel([bool isChild = true]) => StatefulBuilder(
@@ -1206,7 +1210,14 @@ class VideoDetailController extends GetxController
                   iconButton(
                     context: context,
                     tooltip: '关闭',
-                    onPressed: Get.back,
+                    onPressed: () {
+                      if (bsController != null) {
+                        bsController!.close();
+                        bsController = null;
+                      } else {
+                        Get.back();
+                      }
+                    },
                     icon: Icons.close,
                   ),
                   const SizedBox(width: 16),
