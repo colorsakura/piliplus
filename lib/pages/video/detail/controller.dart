@@ -871,6 +871,10 @@ class VideoDetailController extends GetxController
 
     _initSkip();
 
+    if (vttSubtitlesIndex == null) {
+      _getSubtitle();
+    }
+
     /// 开启自动全屏时，在player初始化完成后立即传入headerControl
     plPlayerController.headerControl = headerControl;
   }
@@ -883,7 +887,6 @@ class VideoDetailController extends GetxController
       if (enableSponsorBlock) {
         await _querySponsorBlock();
       }
-      _getSubtitle();
       if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
         SmartDialog.showToast(
           '该视频为专属视频，仅提供试看',
@@ -1580,12 +1583,11 @@ class VideoDetailController extends GetxController
   }
 
   List<Map<String, String>> _vttSubtitles = <Map<String, String>>[];
-  int vttSubtitlesIndex = 0;
+  int? vttSubtitlesIndex;
   bool showVP = true;
 
   void _getSubtitle() {
     _vttSubtitles.clear();
-    vttSubtitlesIndex = 0;
     viewPointList.clear();
     _querySubtitles().then((value) {
       if (_vttSubtitles.isNotEmpty) {
@@ -1606,9 +1608,9 @@ class VideoDetailController extends GetxController
         }
         if (plPlayerController.vttSubtitles.isEmpty) {
           plPlayerController.vttSubtitles.value = _vttSubtitles;
-          plPlayerController.vttSubtitlesIndex.value = vttSubtitlesIndex;
+          plPlayerController.vttSubtitlesIndex.value = vttSubtitlesIndex!;
           if (vttSubtitlesIndex != 0) {
-            plPlayerController.setSubtitle(vttSubtitlesIndex);
+            plPlayerController.setSubtitle(vttSubtitlesIndex!);
           }
         }
       }
@@ -1621,34 +1623,37 @@ class VideoDetailController extends GetxController
     //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
     // }
 
-    if (res["data"] is List && res["data"].isNotEmpty) {
-      var result = await VideoHttp.vttSubtitles(res["data"]);
-      if (result != null) {
-        _vttSubtitles = result;
+    if (res['status']) {
+      vttSubtitlesIndex = 0;
+      if (res["data"] is List && res["data"].isNotEmpty) {
+        var result = await VideoHttp.vttSubtitles(res["data"]);
+        if (result != null) {
+          _vttSubtitles = result;
+        }
+        // if (_vttSubtitles.isEmpty) {
+        //   SmartDialog.showToast('字幕均加载失败');
+        // }
       }
-      // if (_vttSubtitles.isEmpty) {
-      //   SmartDialog.showToast('字幕均加载失败');
-      // }
-    }
-    if (GStorage.showViewPoints &&
-        res["view_points"] is List &&
-        res["view_points"].isNotEmpty) {
-      viewPointList = (res["view_points"] as List).map((item) {
-        double start =
-            (item['to'] / ((data.timeLength ?? 0) / 1000)).clamp(0.0, 1.0);
-        return Segment(
-          start,
-          start,
-          Colors.black87,
-          item?['content'],
-          item?['imgUrl'],
-          item?['from'],
-          item?['to'],
-        );
-      }).toList();
-      if (plPlayerController.viewPointList.isEmpty) {
-        plPlayerController.viewPointList.value = viewPointList;
-        plPlayerController.showVP.value = showVP = true;
+      if (GStorage.showViewPoints &&
+          res["view_points"] is List &&
+          res["view_points"].isNotEmpty) {
+        viewPointList = (res["view_points"] as List).map((item) {
+          double start =
+              (item['to'] / ((data.timeLength ?? 0) / 1000)).clamp(0.0, 1.0);
+          return Segment(
+            start,
+            start,
+            Colors.black87,
+            item?['content'],
+            item?['imgUrl'],
+            item?['from'],
+            item?['to'],
+          );
+        }).toList();
+        if (plPlayerController.viewPointList.isEmpty) {
+          plPlayerController.viewPointList.value = viewPointList;
+          plPlayerController.showVP.value = showVP = true;
+        }
       }
     }
   }
