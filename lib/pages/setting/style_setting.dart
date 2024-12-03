@@ -152,7 +152,7 @@ class _StyleSettingState extends State<StyleSetting> {
           ),
           ListTile(
             dense: false,
-            title: Text('动态页Up主显示位置', style: titleStyle),
+            title: Text('动态页UP主显示位置', style: titleStyle),
             leading: const Icon(Icons.person_outlined),
             subtitle:
                 Text('当前：${upPanelPosition.labels}', style: subTitleStyle),
@@ -161,7 +161,7 @@ class _StyleSettingState extends State<StyleSetting> {
                 context: context,
                 builder: (context) {
                   return SelectDialog<UpPanelPosition>(
-                    title: '动态页Up主显示位置',
+                    title: '动态页UP主显示位置',
                     value: upPanelPosition,
                     values: UpPanelPosition.values.map((e) {
                       return {'title': e.labels, 'value': e};
@@ -178,8 +178,8 @@ class _StyleSettingState extends State<StyleSetting> {
             },
           ),
           const SetSwitchItem(
-            title: '动态页显示所有已关注Up主',
-            subTitle: '并以最常访问排序Up',
+            title: '动态页显示所有已关注UP主',
+            subTitle: '并以最常访问排序UP',
             leading: Icon(Icons.people_alt_outlined),
             setKey: SettingBoxKey.dynamicsShowAllFollowedUp,
             defaultVal: false,

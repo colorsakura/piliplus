@@ -62,7 +62,7 @@ class AuthorPanel extends StatelessWidget {
               children: [
                 Text(
                   item.modules.moduleAuthor.name,
-                  // semanticsLabel: "Up主：${item.modules.moduleAuthor.name}",
+                  // semanticsLabel: "UP主：${item.modules.moduleAuthor.name}",
                   style: TextStyle(
                     color: item.modules.moduleAuthor!.vip != null &&
                             item.modules.moduleAuthor!.vip['status'] > 0 &&

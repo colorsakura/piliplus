@@ -307,7 +307,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: t.colorScheme.primary),
-                                          // semanticsLabel: "Up主：${owner.name}",
+                                          // semanticsLabel: "UP主：${owner.name}",
                                         ),
                                         const SizedBox(height: 0),
                                         Obx(

@@ -63,7 +63,7 @@ class AuthorPanelGrpc extends StatelessWidget {
               children: [
                 Text(
                   item.modules.first.moduleAuthor.author.name,
-                  // semanticsLabel: "Up主：${item.modules.moduleAuthor.name}",
+                  // semanticsLabel: "UP主：${item.modules.moduleAuthor.name}",
                   style: TextStyle(
                     color: item.modules.first.moduleAuthor.author.vip.status >
                                 0 &&
