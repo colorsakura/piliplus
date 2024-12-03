@@ -1471,8 +1471,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  ...List.generate(videoDetailController.viewPointList.length,
-                      (index) {
+                  ...List.generate(
+                      videoDetailController.viewPointList.length * 2 - 1,
+                      (rawIndex) {
+                    if (rawIndex % 2 == 1) {
+                      return Divider(
+                        height: 1,
+                        color: Theme.of(context).dividerColor.withOpacity(0.1),
+                      );
+                    }
+                    int index = rawIndex ~/ 2;
                     Segment segment =
                         videoDetailController.viewPointList[index];
                     if (currentIndex == -1 &&
