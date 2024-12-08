@@ -51,7 +51,7 @@ class MemberSeasonsItem extends StatelessWidget {
                         bottom: 6,
                         right: 6,
                         type: 'gray',
-                        text: Utils.CustomStamp_str(
+                        text: Utils.customStampStr(
                             timestamp: seasonItem.pubdate, date: 'YY-MM-DD'),
                       )
                   ],
@@ -79,7 +79,7 @@ class MemberSeasonsItem extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        Utils.CustomStamp_str(
+                        Utils.customStampStr(
                             timestamp: seasonItem.pubdate, date: 'YY-MM-DD'),
                         style: TextStyle(
                           fontSize: 11,

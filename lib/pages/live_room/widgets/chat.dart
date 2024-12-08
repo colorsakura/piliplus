@@ -140,7 +140,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
             TextSpan(
               text: nonMatchStr,
               style: const TextStyle(
-                color: Color(0xFFFFFFFF),
+                color: Colors.white,
                 fontSize: 14,
               ),
             ),
@@ -153,7 +153,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
       return TextSpan(
         text: obj['text'],
         style: const TextStyle(
-          color: Color(0xFFFFFFFF),
+          color: Colors.white,
           fontSize: 14,
         ),
       );

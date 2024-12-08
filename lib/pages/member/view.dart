@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPalaX/http/member.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -400,7 +401,7 @@ class _MemberPageState extends State<MemberPage>
                             _memberController.memberInfo.value.vip!.status! >
                                 0 &&
                             _memberController.memberInfo.value.vip!.type == 2
-                        ? Utils.vipColor
+                        ? context.vipColor
                         : Theme.of(context).colorScheme.onSurface,
                   ),
             )),

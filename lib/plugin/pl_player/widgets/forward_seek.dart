@@ -65,14 +65,14 @@ class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
               const Icon(
                 Icons.fast_forward,
                 size: 24.0,
-                color: Color(0xFFFFFFFF),
+                color: Colors.white,
               ),
               const SizedBox(height: 8.0),
               Text(
                 '快进${value.inSeconds}秒',
                 style: const TextStyle(
                   fontSize: 12.0,
-                  color: Color(0xFFFFFFFF),
+                  color: Colors.white,
                 ),
               ),
             ],

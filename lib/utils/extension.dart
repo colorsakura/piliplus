@@ -54,3 +54,11 @@ extension StringExt on String {
 extension boolExt on bool {
   bool get not => !this;
 }
+
+extension BuildContextExt on BuildContext {
+  Color get vipColor {
+    return Theme.of(this).brightness == Brightness.light
+        ? const Color(0xFFFF6699)
+        : const Color(0xFFD44E7D);
+  }
+}

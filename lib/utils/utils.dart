@@ -1,6 +1,3 @@
-// 工具函数
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -13,7 +10,6 @@ import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/group_panel.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -369,12 +365,6 @@ class Utils {
     }
   }
 
-  static Color get vipColor {
-    return GStorage.brightness == Brightness.light
-        ? const Color(0xFFFF6699)
-        : const Color(0xFFD44E7D);
-  }
-
   static Future<String> getCookiePath() async {
     final Directory tempDir = await getApplicationSupportDirectory();
     final String tempPath = "${tempDir.path}/.plpl/";
@@ -542,17 +532,17 @@ class Utils {
     if (formatType == 'detail') {
       currentYearStr = 'MM-DD hh:mm';
       lastYearStr = 'YY-MM-DD hh:mm';
-      return CustomStamp_str(
+      return customStampStr(
           timestamp: timeStamp, date: lastYearStr, toInt: false);
     } else if (formatType == 'day') {
       if (distance <= 43200) {
-        return CustomStamp_str(
+        return customStampStr(
           timestamp: timeStamp,
           date: 'hh:mm',
           toInt: true,
         );
       }
-      return CustomStamp_str(
+      return customStampStr(
         timestamp: timeStamp,
         date: 'YY-MM-DD',
         toInt: true,
@@ -566,16 +556,16 @@ class Utils {
       return '${(distance / 60 / 60).floor()}小时前';
     } else if (DateTime.fromMillisecondsSinceEpoch(time * 1000).year ==
         DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000).year) {
-      return CustomStamp_str(
+      return customStampStr(
           timestamp: timeStamp, date: currentYearStr, toInt: false);
     } else {
-      return CustomStamp_str(
+      return customStampStr(
           timestamp: timeStamp, date: lastYearStr, toInt: false);
     }
   }
 
   // 时间戳转时间
-  static String CustomStamp_str({
+  static String customStampStr({
     int? timestamp, // 为空则显示当前时间
     String? date, // 显示格式，比如：'YY年MM月DD日 hh:mm:ss'
     bool toInt = true, // 去除0开头
@@ -587,8 +577,11 @@ class Utils {
     dynamic dateArr = timeStr.split(' ')[0];
     dynamic timeArr = timeStr.split(' ')[1];
 
+    // ignore: non_constant_identifier_names
     String YY = dateArr.split('-')[0];
+    // ignore: non_constant_identifier_names
     String MM = dateArr.split('-')[1];
+    // ignore: non_constant_identifier_names
     String DD = dateArr.split('-')[2];
 
     String hh = timeArr.split(':')[0];

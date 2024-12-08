@@ -125,21 +125,24 @@ class GStorage {
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
+  static int get themeType =>
+      setting.get(SettingBoxKey.themeMode, defaultValue: ThemeType.system.code);
+
   static ThemeMode get themeMode {
-    return switch (GlobalData().themeMode) {
+    return switch (themeType) {
       0 => ThemeMode.light,
       1 => ThemeMode.dark,
       _ => ThemeMode.system
     };
   }
 
-  static Brightness get brightness {
-    return switch (GlobalData().themeMode) {
-      0 => Brightness.light,
-      1 => Brightness.dark,
-      _ => PlatformDispatcher.instance.platformBrightness
-    };
-  }
+  // static Brightness get brightness {
+  //   return switch (_themeMode) {
+  //     0 => Brightness.light,
+  //     1 => Brightness.dark,
+  //     _ => PlatformDispatcher.instance.platformBrightness
+  //   };
+  // }
 
   static Future<void> init() async {
     final Directory dir = await getApplicationSupportDirectory();
@@ -176,10 +179,10 @@ class GStorage {
       SettingBoxKey.defaultPicQa,
       defaultValue: 10,
     );
-    GlobalData().themeMode = setting.get(
-      SettingBoxKey.themeMode,
-      defaultValue: ThemeType.system.code,
-    );
+    // GlobalData().themeMode = setting.get(
+    //   SettingBoxKey.themeMode,
+    //   defaultValue: ThemeType.system.code,
+    // );
     GlobalData().grpcReply = grpcReply;
   }
 

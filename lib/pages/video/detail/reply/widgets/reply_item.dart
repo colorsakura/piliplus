@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/http/video.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -192,7 +193,7 @@ class ReplyItem extends StatelessWidget {
                         style: TextStyle(
                           color: (replyItem!.member!.vip!['vipStatus'] > 0 &&
                                   replyItem!.member!.vip!['vipType'] == 2)
-                              ? Utils.vipColor
+                              ? context.vipColor
                               : Theme.of(context).colorScheme.outline,
                           fontSize: 13,
                         ),

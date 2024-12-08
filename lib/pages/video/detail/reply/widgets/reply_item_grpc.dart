@@ -5,6 +5,7 @@ import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/zan_grpc.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -202,7 +203,7 @@ class ReplyItemGrpc extends StatelessWidget {
                         style: TextStyle(
                           color: (replyItem.member.vipStatus > 0 &&
                                   replyItem.member.vipType == 2)
-                              ? Utils.vipColor
+                              ? context.vipColor
                               : Theme.of(context).colorScheme.outline,
                           fontSize: 13,
                         ),

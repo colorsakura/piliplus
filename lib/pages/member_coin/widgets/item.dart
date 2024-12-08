@@ -75,7 +75,7 @@ class MemberCoinsItem extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        Utils.CustomStamp_str(
+                        Utils.customStampStr(
                             timestamp: coinItem.pubdate, date: 'MM-DD'),
                         style: TextStyle(
                           fontSize: 11,

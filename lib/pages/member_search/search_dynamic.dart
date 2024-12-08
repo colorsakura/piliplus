@@ -7,6 +7,7 @@ import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/dynamics.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/member_search/controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/grid.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -143,7 +144,7 @@ class SearchDynamic extends StatelessWidget {
                     color: vip != null
                         ? (vip?['status'] ?? vip?['vipStatus']) > 0 &&
                                 (vip?['type'] ?? vip?['vipType']) == 2
-                            ? Utils.vipColor
+                            ? context.vipColor
                             : null
                         : null,
                     fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,

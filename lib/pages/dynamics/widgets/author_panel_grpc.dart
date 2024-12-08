@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart' as dyn;
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -68,7 +69,7 @@ class AuthorPanelGrpc extends StatelessWidget {
                     color: item.modules.first.moduleAuthor.author.vip.status >
                                 0 &&
                             item.modules.first.moduleAuthor.author.vip.type == 2
-                        ? Utils.vipColor
+                        ? context.vipColor
                         : Theme.of(context).colorScheme.onSurface,
                     fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                   ),

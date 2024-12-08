@@ -366,7 +366,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                                         .vip
                                                         .type ==
                                                     2
-                                            ? Utils.vipColor
+                                            ? context.vipColor
                                             : null,
                                       ),
                                     ),

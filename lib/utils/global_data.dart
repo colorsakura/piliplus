@@ -1,7 +1,7 @@
 class GlobalData {
   int imgQuality = 10;
 
-  int themeMode = 2;
+  // int themeMode = 2;
 
   bool grpcReply = true;
 

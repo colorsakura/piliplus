@@ -1,4 +1,3 @@
-import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -44,7 +43,7 @@ class SettingController extends GetxController {
         setting.get(SettingBoxKey.defaultToastOp, defaultValue: 1.0);
     picQuality.value =
         setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
-    themeType.value = ThemeType.values[GlobalData().themeMode];
+    themeType.value = ThemeType.values[GStorage.themeType];
     dynamicBadgeType.value = DynamicBadgeMode.values[setting.get(
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.code)];

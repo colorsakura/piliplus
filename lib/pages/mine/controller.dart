@@ -1,4 +1,3 @@
-import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -195,7 +194,6 @@ class MineController extends GetxController {
   onChangeTheme() {
     themeType.value = nextThemeType;
     setting.put(SettingBoxKey.themeMode, themeType.value.code);
-    GlobalData().themeMode = themeType.value.code;
     Get.forceAppUpdate();
   }
 

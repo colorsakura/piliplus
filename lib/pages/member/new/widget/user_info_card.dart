@@ -66,7 +66,7 @@ class UserInfoCard extends StatelessWidget {
   }
 
   _buildHeader(BuildContext context) {
-    bool darken = GStorage.brightness == Brightness.dark;
+    bool darken = Theme.of(context).brightness == Brightness.dark;
     String? imgUrl = darken
         ? (images.nightImgurl?.isEmpty == true
             ? images.imgUrl?.http2https
@@ -123,7 +123,7 @@ class UserInfoCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: (card.vip?.vipStatus ?? -1) > 0 &&
                             card.vip?.vipType == 2
-                        ? Utils.vipColor
+                        ? context.vipColor
                         : null,
                   ),
                 ),

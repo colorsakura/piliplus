@@ -568,7 +568,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 : plPlayerController.subtitleFontScale.value),
         letterSpacing: 0.1,
         wordSpacing: 0.1,
-        color: Color(0xffffffff),
+        color: Colors.white,
         fontWeight: FontWeight.normal,
         backgroundColor: Color(0xaa000000),
       );
@@ -865,7 +865,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             : _volumeValue.value < 0.5
                                 ? Icons.volume_down
                                 : Icons.volume_up,
-                        color: const Color(0xFFFFFFFF),
+                        color: Colors.white,
                         size: 20.0,
                       ),
                       const SizedBox(width: 2.0),
@@ -873,7 +873,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         '${(_volumeValue.value * 100.0).round()}%',
                         style: const TextStyle(
                           fontSize: 13.0,
-                          color: Color(0xFFFFFFFF),
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -911,7 +911,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                             : _brightnessValue.value < 2.0 / 3.0
                                 ? Icons.brightness_medium
                                 : Icons.brightness_high,
-                        color: const Color(0xFFFFFFFF),
+                        color: Colors.white,
                         size: 18.0,
                       ),
                       const SizedBox(width: 2.0),
@@ -919,7 +919,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         '${(_brightnessValue.value * 100.0).round()}%',
                         style: const TextStyle(
                           fontSize: 13.0,
-                          color: Color(0xFFFFFFFF),
+                          color: Colors.white,
                         ),
                       ),
                     ],

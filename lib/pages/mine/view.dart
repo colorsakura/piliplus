@@ -1,6 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
-import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -19,7 +17,7 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   final MineController mineController = Get.put(MineController())
-    ..themeType.value = ThemeType.values[GlobalData().themeMode];
+    ..themeType.value = ThemeType.values[GStorage.themeType];
   late Future _futureBuilderFuture;
 
   @override

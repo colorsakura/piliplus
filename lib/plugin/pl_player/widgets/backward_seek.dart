@@ -65,14 +65,14 @@ class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
               const Icon(
                 Icons.fast_rewind,
                 size: 24.0,
-                color: Color(0xFFFFFFFF),
+                color: Colors.white,
               ),
               const SizedBox(height: 8.0),
               Text(
                 '快退${value.inSeconds}秒',
                 style: const TextStyle(
                   fontSize: 12.0,
-                  color: Color(0xFFFFFFFF),
+                  color: Colors.white,
                 ),
               ),
             ],
