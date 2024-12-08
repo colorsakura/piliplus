@@ -81,7 +81,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late bool autoPiP;
   late bool pipNoDanmaku;
   late bool removeSafeArea;
-  late bool showStatusBarBackgroundColor;
+  // late bool showStatusBarBackgroundColor;
   final Floating floating = Floating();
   // 生命周期监听
   // late final AppLifecycleListener _lifecycleListener;
@@ -142,9 +142,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         setting.get(SettingBoxKey.enableVerticalExpand, defaultValue: false);
     removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
         defaultValue: false);
-    showStatusBarBackgroundColor = setting.get(
-        SettingBoxKey.videoPlayerShowStatusBarBackgroundColor,
-        defaultValue: false);
+    // showStatusBarBackgroundColor = setting.get(
+    //     SettingBoxKey.videoPlayerShowStatusBarBackgroundColor,
+    //     defaultValue: false);
     if (removeSafeArea) hideStatusBar();
     videoSourceInit();
     appbarStreamListen();
@@ -485,16 +485,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               appBar: removeSafeArea
                   ? null
                   : AppBar(
-                      backgroundColor:
-                          showStatusBarBackgroundColor ? null : Colors.black,
+                      backgroundColor: Colors.black,
+                      // showStatusBarBackgroundColor ? null : Colors.black,
                       toolbarHeight: 0,
-                      systemOverlayStyle: SystemUiOverlayStyle(
-                          statusBarIconBrightness:
-                              Theme.of(context).brightness == Brightness.dark ||
-                                      !showStatusBarBackgroundColor
-                                  ? Brightness.light
-                                  : Brightness.dark,
-                          systemNavigationBarColor: Colors.transparent),
+                      // systemOverlayStyle: SystemUiOverlayStyle(
+                      //   statusBarIconBrightness:
+                      //       Theme.of(context).brightness == Brightness.dark ||
+                      //               !showStatusBarBackgroundColor
+                      //           ? Brightness.light
+                      //           : Brightness.dark,
+                      //   systemNavigationBarColor: Colors.transparent,
+                      // ),
                     ),
               body: Column(
                 children: [
@@ -523,8 +524,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         if (!removeSafeArea) showStatusBar();
                       }
                       return Container(
-                        color:
-                            showStatusBarBackgroundColor ? null : Colors.black,
+                        color: Colors.black,
+                        // showStatusBarBackgroundColor ? null : Colors.black,
                         height: MediaQuery.of(context).orientation ==
                                     Orientation.landscape ||
                                 isFullScreen
@@ -825,16 +826,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             appBar: removeSafeArea
                 ? null
                 : AppBar(
-                    backgroundColor:
-                        showStatusBarBackgroundColor ? null : Colors.black,
+                    backgroundColor: Colors.black,
+                    // showStatusBarBackgroundColor ? null : Colors.black,
                     toolbarHeight: 0,
-                    systemOverlayStyle: SystemUiOverlayStyle(
-                        statusBarIconBrightness:
-                            Theme.of(context).brightness == Brightness.dark ||
-                                    !showStatusBarBackgroundColor
-                                ? Brightness.light
-                                : Brightness.dark,
-                        systemNavigationBarColor: Colors.transparent),
+                    // systemOverlayStyle: SystemUiOverlayStyle(
+                    //   statusBarIconBrightness:
+                    //       Theme.of(context).brightness == Brightness.dark ||
+                    //               !showStatusBarBackgroundColor
+                    //           ? Brightness.light
+                    //           : Brightness.dark,
+                    //   systemNavigationBarColor: Colors.transparent,
+                    // ),
                   ),
             body: Container(
               color: Theme.of(context).colorScheme.surface,
@@ -857,16 +859,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             appBar: removeSafeArea
                 ? null
                 : AppBar(
-                    backgroundColor:
-                        showStatusBarBackgroundColor ? null : Colors.black,
+                    backgroundColor: Colors.black,
+                    // showStatusBarBackgroundColor ? null : Colors.black,
                     toolbarHeight: 0,
-                    systemOverlayStyle: SystemUiOverlayStyle(
-                        statusBarIconBrightness:
-                            Theme.of(context).brightness == Brightness.dark ||
-                                    !showStatusBarBackgroundColor
-                                ? Brightness.light
-                                : Brightness.dark,
-                        systemNavigationBarColor: Colors.transparent),
+                    // systemOverlayStyle: SystemUiOverlayStyle(
+                    //   statusBarIconBrightness:
+                    //       Theme.of(context).brightness == Brightness.dark ||
+                    //               !showStatusBarBackgroundColor
+                    //           ? Brightness.light
+                    //           : Brightness.dark,
+                    //   systemNavigationBarColor: Colors.transparent,
+                    // ),
                   ),
             body: Container(
                 color: Theme.of(context).colorScheme.surface,
