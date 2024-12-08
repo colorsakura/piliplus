@@ -86,8 +86,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   }
 
   void _updateFontSize() async {
-    _isPipMode =
-        await const MethodChannel("floating").invokeMethod('inPipAlready');
+    if (Platform.isAndroid) {
+      _isPipMode =
+          await const MethodChannel("floating").invokeMethod('inPipAlready');
+    }
     if (_liveRoomController.controller != null) {
       _liveRoomController.controller!.updateOption(
         _liveRoomController.controller!.option.copyWith(
@@ -98,7 +100,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   }
 
   double _getFontSize(isFullScreen) {
-    return isFullScreen == false || _isPipMode != false
+    return isFullScreen == false || _isPipMode == true
         ? 15 * plPlayerController.fontSizeVal
         : 15 * plPlayerController.fontSizeFSVal;
   }
