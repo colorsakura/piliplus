@@ -336,6 +336,7 @@ class MemberHttp {
     String? keyword,
     String order = 'pubdate',
     bool orderAvoided = true,
+    dynamic wwebid,
   }) async {
     String dmImgStr = Utils.base64EncodeRandomString(16, 64);
     String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
@@ -353,6 +354,7 @@ class MemberHttp {
       'dm_img_str': dmImgStr,
       'dm_cover_img_str': dmCoverImgStr,
       'dm_img_inter': '{"ds":[],"wh":[0,0,0],"of":[0,0,0]}',
+      'w_webid': wwebid,
     });
     var res = await Request().get(
       Api.memberArchive,

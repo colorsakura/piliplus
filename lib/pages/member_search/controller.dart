@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:PiliPalaX/http/constants.dart';
+import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/member.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as html_parser;
 
 class MemberSearchController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -26,11 +32,14 @@ class MemberSearchController extends GetxController
   bool isEndDynamic = false;
   Rx<LoadingState> dynamicState = LoadingState.loading().obs;
 
+  dynamic wwebid;
+
   @override
   void onInit() {
     super.onInit();
     mid = int.parse(Get.parameters['mid']!);
     uname.value = Get.parameters['uname']!;
+    getWwebid();
   }
 
   // 清空搜索
@@ -96,6 +105,20 @@ class MemberSearchController extends GetxController
     }
   }
 
+  Future getWwebid() async {
+    try {
+      dynamic response =
+          await Request().get('${HttpString.spaceBaseUrl}/$mid/dynamic');
+      dom.Document document = html_parser.parse(response.data);
+      dom.Element? scriptElement =
+          document.querySelector('script#__RENDER_DATA__');
+      wwebid = jsonDecode(
+          Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
+    } catch (e) {
+      debugPrint('failed to get wwebid: $e');
+    }
+  }
+
   // 搜索视频
   Future searchArchives([bool isRefresh = true]) async {
     if (isRefresh.not && isEndArchive) return;
@@ -104,6 +127,7 @@ class MemberSearchController extends GetxController
       pn: archivePn,
       keyword: textEditingController.text,
       order: 'pubdate',
+      wwebid: wwebid,
     );
     if (res['status']) {
       if (isRefresh) {
