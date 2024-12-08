@@ -1,6 +1,5 @@
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
-import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -58,16 +57,20 @@ Widget articleContent({
         return LayoutBuilder(
           builder: (_, constraints) => GestureDetector(
             onTap: () {
-              showDialog(
-                useSafeArea: false,
-                context: context,
-                builder: (context) {
-                  return ImagePreview(
-                    initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
-                    imgList: imgList,
-                  );
-                },
+              context.imageView(
+                initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
+                imgList: imgList,
               );
+              // showDialog(
+              //   useSafeArea: false,
+              //   context: context,
+              //   builder: (context) {
+              //     return ImagePreview(
+              //       initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
+              //       imgList: imgList,
+              //     );
+              //   },
+              // );
             },
             child: NetworkImgLayer(
               width: constraints.maxWidth,

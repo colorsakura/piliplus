@@ -16,12 +16,12 @@ import 'package:status_bar_control/status_bar_control.dart';
 typedef DoubleClickAnimationListener = void Function();
 
 class ImagePreview extends StatefulWidget {
-  final int initialPage;
-  final List<String> imgList;
+  final int? initialPage;
+  final List<String>? imgList;
   const ImagePreview({
     super.key,
-    required this.initialPage,
-    required this.imgList,
+    this.initialPage,
+    this.imgList,
   });
 
   @override
@@ -44,16 +44,22 @@ class _ImagePreviewState extends State<ImagePreview>
   void initState() {
     super.initState();
 
-    _imgList = widget.imgList.map((url) => url.http2https).toList();
+    _imgList = widget.imgList?.map((url) => url.http2https).toList() ??
+        (Get.arguments['imgList'] as List<String>)
+            .map((url) => url.http2https)
+            .toList();
     _thumbList = List.generate(_imgList.length, (_) => true);
 
     _quality =
         GStorage.setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
 
-    _previewController.initialPage.value = widget.initialPage;
-    _previewController.currentPage.value = widget.initialPage + 1;
+    _previewController.initialPage.value =
+        widget.initialPage ?? Get.arguments['initialPage'];
+    _previewController.currentPage.value =
+        (widget.initialPage ?? Get.arguments['initialPage']) + 1;
     _previewController.imgList.value = _imgList;
-    _previewController.currentImgUrl = _imgList[widget.initialPage];
+    _previewController.currentImgUrl =
+        _imgList[widget.initialPage ?? Get.arguments['initialPage']];
     // animationController = AnimationController(
     //     vsync: this, duration: const Duration(milliseconds: 400));
     setStatusBar();

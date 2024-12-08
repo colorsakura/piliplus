@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/pages/preview/view.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -27,15 +27,20 @@ class ProfilePanel extends StatelessWidget {
               child: Stack(
                 children: [
                   GestureDetector(
-                    onTap: () => showDialog(
-                      useSafeArea: false,
-                      context: context,
-                      builder: (context) {
-                        return ImagePreview(initialPage: 0, imgList: [
-                          !loadingStatus ? memberInfo.face : ctr.face.value
-                        ]);
-                      },
+                    onTap: () => context.imageView(
+                      imgList: [
+                        !loadingStatus ? memberInfo.face : ctr.face.value
+                      ],
                     ),
+                    // showDialog(
+                    //   useSafeArea: false,
+                    //   context: context,
+                    //   builder: (context) {
+                    //     return ImagePreview(initialPage: 0, imgList: [
+                    //       !loadingStatus ? memberInfo.face : ctr.face.value
+                    //     ]);
+                    //   },
+                    // ),
                     child: NetworkImgLayer(
                       width: 90,
                       height: 90,

@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/space/card.dart' as space;
 import 'package:PiliPalaX/models/space/images.dart' as space;
-import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
@@ -74,16 +71,19 @@ class UserInfoCard extends StatelessWidget {
         : images.imgUrl?.http2https;
     return GestureDetector(
       onTap: () {
-        showDialog(
-          useSafeArea: false,
-          context: context,
-          builder: (context) {
-            return ImagePreview(
-              initialPage: 0,
-              imgList: [imgUrl ?? ''],
-            );
-          },
+        context.imageView(
+          imgList: [imgUrl ?? ''],
         );
+        // showDialog(
+        //   useSafeArea: false,
+        //   context: context,
+        //   builder: (context) {
+        //     return ImagePreview(
+        //       initialPage: 0,
+        //       imgList: [imgUrl ?? ''],
+        //     );
+        //   },
+        // );
       },
       child: CachedNetworkImage(
         imageUrl: imgUrl ?? '',
@@ -418,16 +418,19 @@ class UserInfoCard extends StatelessWidget {
 
   _buildAvatar(BuildContext context) => GestureDetector(
         onTap: () {
-          showDialog(
-            useSafeArea: false,
-            context: context,
-            builder: (context) {
-              return ImagePreview(
-                initialPage: 0,
-                imgList: [card.face ?? ''],
-              );
-            },
+          context.imageView(
+            imgList: [card.face ?? ''],
           );
+          // showDialog(
+          //   useSafeArea: false,
+          //   context: context,
+          //   builder: (context) {
+          //     return ImagePreview(
+          //       initialPage: 0,
+          //       imgList: [card.face ?? ''],
+          //     );
+          //   },
+          // );
         },
         child: Container(
           decoration: BoxDecoration(

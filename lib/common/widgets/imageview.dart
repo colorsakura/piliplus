@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:PiliPalaX/common/widgets/badge.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/common/widgets/nine_grid_view.dart';
-import 'package:PiliPalaX/pages/preview/view.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 
 class ImageModel {
@@ -55,16 +55,20 @@ Widget image(
     itemCount: picArr.length,
     itemBuilder: (context, index) => GestureDetector(
       onTap: () {
-        showDialog(
-          useSafeArea: false,
-          context: context,
-          builder: (context) {
-            return ImagePreview(
-              initialPage: index,
-              imgList: picArr.map((item) => item.url).toList(),
-            );
-          },
+        context.imageView(
+          initialPage: index,
+          imgList: picArr.map((item) => item.url).toList(),
         );
+        // showDialog(
+        //   useSafeArea: false,
+        //   context: context,
+        //   builder: (context) {
+        //     return ImagePreview(
+        //       initialPage: index,
+        //       imgList: picArr.map((item) => item.url).toList(),
+        //     );
+        //   },
+        // );
       },
       child: Stack(
         children: [

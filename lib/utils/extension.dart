@@ -1,5 +1,7 @@
+import 'package:PiliPalaX/pages/preview/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 extension ImageExtension on num {
   int cacheSize(BuildContext context) {
@@ -60,5 +62,30 @@ extension BuildContextExt on BuildContext {
     return Theme.of(this).brightness == Brightness.light
         ? const Color(0xFFFF6699)
         : const Color(0xFFD44E7D);
+  }
+
+  void imageView({
+    int? initialPage,
+    required List<String> imgList,
+  }) {
+    Navigator.of(this).push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return ImagePreview(
+            initialPage: initialPage ?? 0,
+            imgList: imgList,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 300),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          var tween = Tween(begin: 0.0, end: 1.0)
+              .chain(CurveTween(curve: Curves.linear));
+          return FadeTransition(
+            opacity: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
   }
 }

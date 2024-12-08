@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/pages/preview/view.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'network_img_layer.dart';
@@ -47,16 +47,19 @@ Widget htmlRender({
             // );
             return GestureDetector(
               onTap: () {
-                showDialog(
-                  useSafeArea: false,
-                  context: context,
-                  builder: (context) {
-                    return ImagePreview(
-                      initialPage: 0,
-                      imgList: [imgUrl],
-                    );
-                  },
+                context.imageView(
+                  imgList: [imgUrl],
                 );
+                // showDialog(
+                //   useSafeArea: false,
+                //   context: context,
+                //   builder: (context) {
+                //     return ImagePreview(
+                //       initialPage: 0,
+                //       imgList: [imgUrl],
+                //     );
+                //   },
+                // );
               },
               child: NetworkImgLayer(
                 width: isEmote ? 22 : constrainedWidth,
