@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/utils/extension.dart';
@@ -34,6 +36,7 @@ class ReplyItem extends StatelessWidget {
     this.onDelete,
     this.onViewImage,
     this.onDismissed,
+    this.getTag,
   });
   final ReplyItemModel? replyItem;
   final String? replyLevel;
@@ -45,6 +48,7 @@ class ReplyItem extends StatelessWidget {
   final Function(dynamic rpid, dynamic frpid)? onDelete;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
+  final Function? getTag;
 
   @override
   Widget build(BuildContext context) {
@@ -315,6 +319,7 @@ class ReplyItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: replyItemRow(
+              context: context,
               replies: replyItem!.replies,
               replyControl: replyItem!.replyControl,
               // f_rpid: replyItem!.rpid,
@@ -635,7 +640,7 @@ class ReplyItem extends StatelessWidget {
     if (patternStr.isNotEmpty) {
       patternStr += "|";
     }
-    patternStr += r'(\b(?:\d+[:：])?[0-5]?[0-9][:：][0-5]?[0-9]\b)';
+    patternStr += r'(\b(?:\d+[:：])?\d+[:：]\d+\b)';
     if (jumpUrlKeysList.isNotEmpty) {
       patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
     }
@@ -692,33 +697,55 @@ class ReplyItem extends StatelessWidget {
                 },
             ),
           );
-        } else if (RegExp(r'^\b(?:\d+[:：])?[0-5]?[0-9][:：][0-5]?[0-9]\b$')
-            .hasMatch(matchStr)) {
+        } else if (RegExp(r'^\b(?:\d+[:：])?\d+[:：]\d+\b$').hasMatch(matchStr)) {
           matchStr = matchStr.replaceAll('：', ':');
+          bool isValid = false;
+          try {
+            List<int> split = matchStr
+                .split(':')
+                .map((item) => int.parse(item))
+                .toList()
+                .reversed
+                .toList();
+            int seek = 0;
+            for (int i = 0; i < split.length; i++) {
+              seek += split[i] * pow(60, i).toInt();
+            }
+            int duration = Get.find<VideoDetailController>(
+                  tag: getTag?.call() ?? Get.arguments['heroTag'],
+                ).data.timeLength ??
+                0;
+            isValid = seek * 1000 <= duration;
+          } catch (e) {
+            debugPrint('failed to validate: $e');
+          }
           spanChildren.add(
             TextSpan(
-              text: ' $matchStr ',
-              style: isVideoPage
+              text: isValid ? ' $matchStr ' : matchStr,
+              style: isValid && isVideoPage
                   ? TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                     )
                   : null,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  // 跳转到指定位置
-                  if (isVideoPage) {
-                    try {
-                      SmartDialog.showToast('跳转至：$matchStr');
-                      Get.find<VideoDetailController>(
-                              tag: Get.arguments['heroTag'])
-                          .plPlayerController
-                          .seekTo(Duration(seconds: Utils.duration(matchStr)),
-                              type: 'slider');
-                    } catch (e) {
-                      SmartDialog.showToast('跳转失败: $e');
-                    }
-                  }
-                },
+              recognizer: isValid
+                  ? (TapGestureRecognizer()
+                    ..onTap = () {
+                      // 跳转到指定位置
+                      if (isVideoPage) {
+                        try {
+                          SmartDialog.showToast('跳转至：$matchStr');
+                          Get.find<VideoDetailController>(
+                                  tag: Get.arguments['heroTag'])
+                              .plPlayerController
+                              .seekTo(
+                                  Duration(seconds: Utils.duration(matchStr)),
+                                  type: 'slider');
+                        } catch (e) {
+                          SmartDialog.showToast('跳转失败: $e');
+                        }
+                      }
+                    })
+                  : null,
             ),
           );
         } else {

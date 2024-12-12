@@ -299,7 +299,6 @@ class ReplyItemGrpc extends StatelessWidget {
                         null,
                         textPainter,
                         didExceedMaxLines,
-                        getTag,
                       ),
                     ],
                   ),
@@ -531,7 +530,6 @@ class ReplyItemGrpc extends StatelessWidget {
                               replyItem,
                               null,
                               null,
-                              getTag,
                             ),
                           ],
                         ),
@@ -589,7 +587,6 @@ class ReplyItemGrpc extends StatelessWidget {
     fReplyItem,
     textPainter,
     didExceedMaxLines,
-    getTag,
   ) {
     final String routePath = Get.currentRoute;
     bool isVideoPage = routePath.startsWith('/video');
@@ -665,7 +662,7 @@ class ReplyItemGrpc extends StatelessWidget {
     if (patternStr.isNotEmpty) {
       patternStr += "|";
     }
-    patternStr += r'(\b(?:\d+[:：])?[0-5]?[0-9][:：][0-5]?[0-9]\b)';
+    patternStr += r'(\b(?:\d+[:：])?\d+[:：]\d+\b)';
     if (jumpUrlKeysList.isNotEmpty) {
       patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
     }
@@ -723,8 +720,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 },
             ),
           );
-        } else if (RegExp(r'^\b(?:\d+[:：])?[0-5]?[0-9][:：][0-5]?[0-9]\b$')
-            .hasMatch(matchStr)) {
+        } else if (RegExp(r'^\b(?:\d+[:：])?\d+[:：]\d+\b$').hasMatch(matchStr)) {
           matchStr = matchStr.replaceAll('：', ':');
           bool isValid = false;
           try {

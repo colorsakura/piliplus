@@ -3,10 +3,8 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
 import 'package:PiliPalaX/pages/common/reply_controller.dart';
 import 'package:PiliPalaX/http/reply.dart';
-import 'package:PiliPalaX/pages/video/detail/controller.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
-import 'package:get/get.dart';
 
 class VideoReplyController extends ReplyController {
   VideoReplyController(

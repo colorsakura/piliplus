@@ -271,6 +271,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             onDelete: _videoReplyController.onMDelete,
                             onViewImage: widget.onViewImage,
                             onDismissed: widget.onDismissed,
+                            getTag: () => heroTag,
                           );
                   }
                 },
