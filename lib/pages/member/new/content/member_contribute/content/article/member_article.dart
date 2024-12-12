@@ -52,7 +52,7 @@ class _MemberArticleState extends State<MemberArticle>
                 },
                 child: ListView.separated(
                   itemCount: loadingState.response.length,
-                  itemBuilder: (_, index) {
+                  itemBuilder: (context, index) {
                     if (index == loadingState.response.length - 1) {
                       _controller.onLoadMore();
                     }
@@ -66,7 +66,7 @@ class _MemberArticleState extends State<MemberArticle>
                           ? Container(
                               margin: const EdgeInsets.symmetric(vertical: 6),
                               child: LayoutBuilder(
-                                builder: (_, constraints) {
+                                builder: (context, constraints) {
                                   return NetworkImgLayer(
                                     radius: 6,
                                     src: item.originImageUrls!.first,
@@ -97,7 +97,7 @@ class _MemberArticleState extends State<MemberArticle>
                           : null,
                     );
                   },
-                  separatorBuilder: (_, index) => Divider(height: 1),
+                  separatorBuilder: (context, index) => Divider(height: 1),
                 ),
               ),
             )

@@ -89,7 +89,7 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
             Expanded(
               child: ListView.builder(
                 itemCount: modes.length,
-                itemBuilder: (_, int i) {
+                itemBuilder: (context, int i) {
                   final DisplayMode mode = modes[i];
                   return RadioListTile<DisplayMode>(
                     value: mode,

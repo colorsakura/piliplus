@@ -23,10 +23,12 @@ class ImageModel {
   bool get isLongPic => _isLongPic ??= (safeHeight / safeWidth) > (22 / 9);
 }
 
-Widget image(
+Widget imageview(
   double maxWidth,
-  List<ImageModel> picArr,
-) {
+  List<ImageModel> picArr, [
+  VoidCallback? onViewImage,
+  ValueChanged<int>? onDismissed,
+]) {
   double imageWidth = (maxWidth - 2 * 5) / 3;
   double imageHeight = imageWidth;
   if (picArr.length == 1) {
@@ -53,43 +55,48 @@ Widget image(
     height: picArr.length == 1 ? imageHeight : null,
     width: picArr.length == 1 ? imageWidth : maxWidth,
     itemCount: picArr.length,
-    itemBuilder: (context, index) => GestureDetector(
-      onTap: () {
-        context.imageView(
-          initialPage: index,
-          imgList: picArr.map((item) => item.url).toList(),
-        );
-        // showDialog(
-        //   useSafeArea: false,
-        //   context: context,
-        //   builder: (context) {
-        //     return ImagePreview(
-        //       initialPage: index,
-        //       imgList: picArr.map((item) => item.url).toList(),
-        //     );
-        //   },
-        // );
-      },
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: NetworkImgLayer(
-              src: picArr[index].url,
-              width: imageWidth,
-              height: imageHeight,
-              isLongPic: () => picArr[index].isLongPic,
-              callback: () =>
-                  picArr[index].safeWidth <= picArr[index].safeHeight,
+    itemBuilder: (context, index) => Hero(
+      tag: picArr[index].url,
+      child: GestureDetector(
+        onTap: () {
+          onViewImage?.call();
+          context.imageView(
+            initialPage: index,
+            imgList: picArr.map((item) => item.url).toList(),
+            onDismissed: onDismissed,
+          );
+          // showDialog(
+          //   useSafeArea: false,
+          //   context: context,
+          //   builder: (context) {
+          //     return ImagePreview(
+          //       initialPage: index,
+          //       imgList: picArr.map((item) => item.url).toList(),
+          //     );
+          //   },
+          // );
+        },
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: NetworkImgLayer(
+                src: picArr[index].url,
+                width: imageWidth,
+                height: imageHeight,
+                isLongPic: () => picArr[index].isLongPic,
+                callback: () =>
+                    picArr[index].safeWidth <= picArr[index].safeHeight,
+              ),
             ),
-          ),
-          if (picArr[index].isLongPic)
-            const PBadge(
-              text: '长图',
-              right: 8,
-              bottom: 8,
-            ),
-        ],
+            if (picArr[index].isLongPic)
+              const PBadge(
+                text: '长图',
+                right: 8,
+                bottom: 8,
+              ),
+          ],
+        ),
       ),
     ),
   );

@@ -15,7 +15,7 @@ import 'init.dart';
 
 class UserHttp {
   static Future<dynamic> userStat({required int mid}) async {
-    var res = await Request().get(Api.userStat, data: {'vmid': mid});
+    var res = await Request().get(Api.userStat, queryParameters: {'vmid': mid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -49,7 +49,7 @@ class UserHttp {
     required int ps,
     required int mid,
   }) async {
-    var res = await Request().get(Api.userFavFolder, data: {
+    var res = await Request().get(Api.userFavFolder, queryParameters: {
       'pn': pn,
       'ps': ps,
       'up_mid': mid,
@@ -113,7 +113,7 @@ class UserHttp {
   static Future folderInfo({
     dynamic mediaId,
   }) async {
-    var res = await Request().get(Api.folderInfo, data: {
+    var res = await Request().get(Api.folderInfo, queryParameters: {
       'media_id': mediaId,
     });
     if (res.data['code'] == 0) {
@@ -130,7 +130,7 @@ class UserHttp {
       String keyword = '',
       String order = 'mtime',
       int type = 0}) async {
-    var res = await Request().get(Api.userFavFolderDetail, data: {
+    var res = await Request().get(Api.userFavFolderDetail, queryParameters: {
       'media_id': mediaId,
       'pn': pn,
       'ps': ps,
@@ -172,7 +172,7 @@ class UserHttp {
     int? max,
     int? viewAt,
   }) async {
-    var res = await Request().get(Api.historyList, data: {
+    var res = await Request().get(Api.historyList, queryParameters: {
       'type': 'all',
       'ps': 20,
       'max': max ?? 0,
@@ -265,7 +265,7 @@ class UserHttp {
   static Future thirdLogin() async {
     var res = await Request().get(
       'https://passport.bilibili.com/login/app/third',
-      data: {
+      queryParameters: {
         'appkey': Constants.appKey,
         'api': Constants.thirdApi,
         'sign': Constants.thirdSign,
@@ -319,7 +319,7 @@ class UserHttp {
   static Future hasFollow(int mid) async {
     var res = await Request().get(
       Api.hasFollow,
-      data: {
+      queryParameters: {
         'fid': mid,
       },
     );
@@ -359,7 +359,7 @@ class UserHttp {
       {required int pn, required String keyword}) async {
     var res = await Request().get(
       Api.searchHistory,
-      data: {
+      queryParameters: {
         'pn': pn,
         'keyword': keyword,
         'business': 'all',
@@ -378,7 +378,7 @@ class UserHttp {
     required int pn,
     required int ps,
   }) async {
-    var res = await Request().get(Api.userSubFolder, data: {
+    var res = await Request().get(Api.userSubFolder, queryParameters: {
       'up_mid': mid,
       'ps': ps,
       'pn': pn,
@@ -399,7 +399,7 @@ class UserHttp {
     required int pn,
     required int ps,
   }) async {
-    var res = await Request().get(Api.favSeasonList, data: {
+    var res = await Request().get(Api.favSeasonList, queryParameters: {
       'season_id': id,
       'ps': ps,
       'pn': pn,
@@ -419,7 +419,7 @@ class UserHttp {
     required int pn,
     required int ps,
   }) async {
-    var res = await Request().get(Api.favResourceList, data: {
+    var res = await Request().get(Api.favResourceList, queryParameters: {
       'media_id': id,
       'ps': ps,
       'pn': pn,
@@ -463,7 +463,8 @@ class UserHttp {
   }
 
   static videoTags({required String bvid}) async {
-    var res = await Request().get(Api.videoTags, data: {'bvid': bvid});
+    var res =
+        await Request().get(Api.videoTags, queryParameters: {'bvid': bvid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {

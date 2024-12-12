@@ -147,7 +147,7 @@ class Request {
     // ..httpClientAdapter = Http2Adapter(
     //   ConnectionManager(
     //     idleTimeout: const Duration(milliseconds: 10000),
-    //     onClientCreate: (_, ClientSetting config) =>
+    //     onClientCreate: (context, ClientSetting config) =>
     //         config.onBadCertificate = (_) => true,
     //   ),
     // );
@@ -189,7 +189,8 @@ class Request {
   /*
    * get请求
    */
-  Future<Response> get(url, {data, options, cancelToken, extra}) async {
+  Future<Response> get(url,
+      {queryParameters, options, cancelToken, extra}) async {
     Response response;
     if (extra != null) {
       if (extra['ua'] != null) {
@@ -202,7 +203,7 @@ class Request {
     try {
       response = await dio.get(
         url,
-        queryParameters: data,
+        queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
       );

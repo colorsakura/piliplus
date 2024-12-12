@@ -66,7 +66,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                   itemCount: _replyMeController.msgFeedReplyMeList.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, int i) {
+                  itemBuilder: (context, int i) {
                     return ListTile(
                       onTap: () {
                         String? nativeUri = _replyMeController

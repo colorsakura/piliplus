@@ -57,7 +57,7 @@ class MemberFavoriteCtr extends CommonController {
   }
 
   Future userfavFolder() async {
-    var res = await Request().get(Api.userFavFolder, data: {
+    var res = await Request().get(Api.userFavFolder, queryParameters: {
       'pn': page,
       'ps': 20,
       'up_mid': mid,
@@ -81,7 +81,7 @@ class MemberFavoriteCtr extends CommonController {
   }
 
   Future userSubFolder() async {
-    var res = await Request().get(Api.userSubFolder, data: {
+    var res = await Request().get(Api.userSubFolder, queryParameters: {
       'up_mid': mid,
       'ps': 20,
       'pn': page1,

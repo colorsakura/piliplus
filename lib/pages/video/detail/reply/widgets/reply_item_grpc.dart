@@ -35,6 +35,8 @@ class ReplyItemGrpc extends StatelessWidget {
     this.isTop = false,
     this.showDialogue,
     this.getTag,
+    this.onViewImage,
+    this.onDismissed,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -48,6 +50,8 @@ class ReplyItemGrpc extends StatelessWidget {
   final bool isTop;
   final VoidCallback? showDialogue;
   final Function? getTag;
+  final VoidCallback? onViewImage;
+  final ValueChanged<int>? onDismissed;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,7 @@ class ReplyItemGrpc extends StatelessWidget {
           feedBack();
           // showDialog(
           //   context: Get.context!,
-          //   builder: (_) => AlertDialog(
+          //   builder: (context) => AlertDialog(
           //     content: SelectableText(jsonEncode(replyItem.toProto3Json())),
           //   ),
           // );
@@ -993,7 +997,7 @@ class ReplyItemGrpc extends StatelessWidget {
       spanChildren.add(
         WidgetSpan(
           child: LayoutBuilder(
-            builder: (_, constraints) => image(
+            builder: (context, constraints) => imageview(
               constraints.maxWidth,
               content.pictures
                   .map(
@@ -1004,6 +1008,8 @@ class ReplyItemGrpc extends StatelessWidget {
                     ),
                   )
                   .toList(),
+              onViewImage,
+              onDismissed,
             ),
           ),
         ),

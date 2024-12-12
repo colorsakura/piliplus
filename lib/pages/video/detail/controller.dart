@@ -216,6 +216,16 @@ class VideoDetailController extends GetxController
 
   PersistentBottomSheetController? bsController;
 
+  bool imageStatus = false;
+
+  void onViewImage() {
+    imageStatus = true;
+  }
+
+  void onDismissed(value) {
+    imageStatus = false;
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -311,7 +321,7 @@ class VideoDetailController extends GetxController
   void _showCategoryDialog(BuildContext context, SegmentModel segment) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (context) => AlertDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         content: SingleChildScrollView(
@@ -376,7 +386,7 @@ class VideoDetailController extends GetxController
   void _showVoteDialog(BuildContext context, SegmentModel segment) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (context) => AlertDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         content: SingleChildScrollView(
@@ -426,7 +436,7 @@ class VideoDetailController extends GetxController
   void showSBDetail(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (context) => AlertDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         content: SingleChildScrollView(
@@ -532,7 +542,6 @@ class VideoDetailController extends GetxController
   void _showBlockToast(String msg) {
     SmartDialog.showToast(
       msg,
-      displayType: SmartToastType.normal,
       alignment:
           plPlayerController.isFullScreen.value ? Alignment(-0.9, 0.5) : null,
     );
@@ -553,7 +562,7 @@ class VideoDetailController extends GetxController
   Future _querySponsorBlock() async {
     dynamic result = await Request().get(
       '${GStorage.blockServer}/api/skipSegments',
-      data: {
+      queryParameters: {
         'videoID': bvid,
         'cid': cid.value,
       },
@@ -1112,7 +1121,7 @@ class VideoDetailController extends GetxController
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (_) {
+                    builder: (context) {
                       String initV = value;
                       return AlertDialog(
                         content: TextFormField(

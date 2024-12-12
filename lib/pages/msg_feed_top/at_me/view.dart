@@ -67,7 +67,7 @@ class _AtMePageState extends State<AtMePage> {
                   itemCount: _atMeController.msgFeedAtMeList.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, int i) {
+                  itemBuilder: (context, int i) {
                     return ListTile(
                       onTap: () {
                         String? nativeUri =

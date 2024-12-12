@@ -91,7 +91,7 @@ class MemberHttp {
     int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       Api.spaceArticle,
-      data: data,
+      queryParameters: data,
       options: Options(
         headers: {
           'env': 'prod',
@@ -136,7 +136,7 @@ class MemberHttp {
     int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       Api.spaceFav,
-      data: data,
+      queryParameters: data,
       options: Options(
         headers: {
           'env': 'prod',
@@ -206,7 +206,7 @@ class MemberHttp {
                   : type == ContributeType.series
                       ? Api.spaceSeries
                       : Api.spaceBangumi,
-      data: data,
+      queryParameters: data,
       options: Options(
         headers: {
           'env': 'prod',
@@ -251,7 +251,7 @@ class MemberHttp {
     int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       Api.space,
-      data: data,
+      queryParameters: data,
       options: Options(
         headers: {
           'env': 'prod',
@@ -284,7 +284,7 @@ class MemberHttp {
     });
     var res = await Request().get(
       Api.memberInfo,
-      data: params,
+      queryParameters: params,
       extra: {'ua': 'pc'},
     );
     if (res.data['code'] == 0) {
@@ -302,7 +302,7 @@ class MemberHttp {
   }
 
   static Future memberStat({int? mid}) async {
-    var res = await Request().get(Api.userStat, data: {'vmid': mid});
+    var res = await Request().get(Api.userStat, queryParameters: {'vmid': mid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -316,7 +316,7 @@ class MemberHttp {
 
   static Future memberCardInfo({int? mid}) async {
     var res = await Request()
-        .get(Api.memberCardInfo, data: {'mid': mid, 'photo': true});
+        .get(Api.memberCardInfo, queryParameters: {'mid': mid, 'photo': true});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -358,7 +358,7 @@ class MemberHttp {
     });
     var res = await Request().get(
       Api.memberArchive,
-      data: params,
+      queryParameters: params,
       extra: {'ua': 'Mozilla/5.0'},
     );
     if (res.data['code'] == 0) {
@@ -395,7 +395,7 @@ class MemberHttp {
       'x-bili-device-req-json': jsonEncode({"platform": "web", "device": "pc"}),
       'x-bili-web-req-json': jsonEncode({"spm_id": "333.999"}),
     });
-    var res = await Request().get(Api.memberDynamic, data: params);
+    var res = await Request().get(Api.memberDynamic, queryParameters: params);
     if (res.data['code'] == 0) {
       return LoadingState.success(DynamicsDataModel.fromJson(res.data['data']));
     } else {
@@ -414,7 +414,7 @@ class MemberHttp {
     int? mid,
     required String keyword,
   }) async {
-    var res = await Request().get(Api.memberDynamicSearch, data: {
+    var res = await Request().get(Api.memberDynamicSearch, queryParameters: {
       'keyword': keyword,
       'mid': mid,
       'pn': pn,
@@ -510,7 +510,7 @@ class MemberHttp {
     int? pn,
     int? ps,
   ) async {
-    var res = await Request().get(Api.followUpGroup, data: {
+    var res = await Request().get(Api.followUpGroup, queryParameters: {
       'mid': mid,
       'tagid': tagid,
       'pn': pn,
@@ -554,7 +554,7 @@ class MemberHttp {
 
   // 获取uo专栏
   static Future getMemberSeasons(int? mid, int? pn, int? ps) async {
-    var res = await Request().get(Api.getMemberSeasonsApi, data: {
+    var res = await Request().get(Api.getMemberSeasonsApi, queryParameters: {
       'mid': mid,
       'page_num': pn,
       'page_size': ps,
@@ -582,7 +582,7 @@ class MemberHttp {
     });
     var res = await Request().get(
       Api.getRecentCoinVideoApi,
-      data: {
+      queryParameters: {
         'vmid': mid,
         'gaia_source': 'main_web',
         'web_location': 333.999,
@@ -615,7 +615,7 @@ class MemberHttp {
     });
     var res = await Request().get(
       Api.getRecentLikeVideoApi,
-      data: {
+      queryParameters: {
         'vmid': mid,
         'gaia_source': 'main_web',
         'web_location': 333.999,
@@ -647,7 +647,7 @@ class MemberHttp {
   }) async {
     var res = await Request().get(
       Api.getSeasonDetailApi,
-      data: {
+      queryParameters: {
         'mid': mid,
         'season_id': seasonId,
         'sort_reverse': sortReverse,
@@ -675,7 +675,8 @@ class MemberHttp {
 
   // 获取up播放数、点赞数
   static Future memberView({required int mid}) async {
-    var res = await Request().get(Api.getMemberViewApi, data: {'mid': mid});
+    var res = await Request()
+        .get(Api.getMemberViewApi, queryParameters: {'mid': mid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -705,7 +706,7 @@ class MemberHttp {
       'web_location': 333.999,
     };
     Map params = await WbiSign().makSign(data);
-    var res = await Request().get(Api.followSearch, data: {
+    var res = await Request().get(Api.followSearch, queryParameters: {
       ...data,
       'w_rid': params['w_rid'],
       'wts': params['wts'],

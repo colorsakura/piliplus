@@ -241,7 +241,7 @@ class MorePanel extends StatelessWidget {
                 Get.back();
                 showDialog(
                     context: context,
-                    builder: (_) => AlertDialog(
+                    builder: (context) => AlertDialog(
                           title: const Text('确定删除该动态?'),
                           actions: [
                             TextButton(

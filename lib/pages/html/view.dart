@@ -525,7 +525,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     )
                   : SliverToBoxAdapter(
                       child: LayoutBuilder(
-                        builder: (_, constraints) => htmlRender(
+                        builder: (context, constraints) => htmlRender(
                           context: context,
                           htmlContent: _htmlRenderCtr.response['content'],
                           constrainedWidth: constraints.maxWidth,

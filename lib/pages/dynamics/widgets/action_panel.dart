@@ -88,7 +88,7 @@ class _ActionPanelState extends State<ActionPanel> {
                 context: context,
                 isScrollControlled: true,
                 useSafeArea: true,
-                builder: (_) => RepostPanel(
+                builder: (context) => RepostPanel(
                   item: widget.item,
                   callback: () {
                     int count = int.tryParse(

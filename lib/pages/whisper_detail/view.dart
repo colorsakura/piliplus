@@ -159,7 +159,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
             shrinkWrap: true,
             reverse: true,
             itemCount: messageList.length,
-            itemBuilder: (_, int i) {
+            itemBuilder: (context, int i) {
               return ChatItem(
                 item: messageList[i],
                 eInfos: _whisperDetailController.eInfos,

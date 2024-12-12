@@ -59,7 +59,7 @@ class HomeAppBar extends StatelessWidget {
                       GestureDetector(
                         onTap: () => showModalBottomSheet(
                           context: context,
-                          builder: (_) => const SizedBox(
+                          builder: (context) => const SizedBox(
                             height: 450,
                             child: MinePage(),
                           ),
@@ -80,7 +80,7 @@ class HomeAppBar extends StatelessWidget {
                         tooltip: '登录',
                         onPressed: () => showModalBottomSheet(
                           context: context,
-                          builder: (_) => const SizedBox(
+                          builder: (context) => const SizedBox(
                             height: 450,
                             child: MinePage(),
                           ),

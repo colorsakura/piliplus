@@ -5,7 +5,7 @@ import 'index.dart';
 
 class BlackHttp {
   static Future<LoadingState> blackList({required int pn, int? ps}) async {
-    var res = await Request().get(Api.blackLst, data: {
+    var res = await Request().get(Api.blackLst, queryParameters: {
       'pn': pn,
       'ps': ps ?? 50,
       're_version': 0,

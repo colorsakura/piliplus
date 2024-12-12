@@ -110,7 +110,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     showDialog(
         context: context,
         useSafeArea: true,
-        builder: (_) => const Dialog(
+        builder: (context) => const Dialog(
               child: MinePage(),
             ));
   }

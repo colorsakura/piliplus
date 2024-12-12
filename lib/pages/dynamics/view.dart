@@ -63,7 +63,7 @@ class _DynamicsPageState extends State<DynamicsPage>
                   context: context,
                   useSafeArea: true,
                   isScrollControlled: true,
-                  builder: (_) => const CreatePanel(),
+                  builder: (context) => const CreatePanel(),
                 );
               }
             },
@@ -356,7 +356,7 @@ class _CreatePanelState extends State<CreatePanel> {
             StreamBuilder(
               initialData: false,
               stream: _isEnableStream.stream,
-              builder: (_, snapshot) => FilledButton.tonal(
+              builder: (context, snapshot) => FilledButton.tonal(
                 onPressed: snapshot.data == true ? _onCreate : null,
                 style: FilledButton.styleFrom(
                   padding:
@@ -536,7 +536,7 @@ class _CreatePanelState extends State<CreatePanel> {
         StreamBuilder(
           initialData: const [],
           stream: _pathStream.stream,
-          builder: (_, snapshot) => SizedBox(
+          builder: (context, snapshot) => SizedBox(
             height: 75,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
@@ -619,7 +619,7 @@ class _CreatePanelState extends State<CreatePanel> {
                   );
                 }
               },
-              separatorBuilder: (_, index) => const SizedBox(width: 10),
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
             ),
           ),
         ),

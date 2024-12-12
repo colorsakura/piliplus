@@ -168,7 +168,7 @@ class _LaterPageState extends State<LaterPage> {
                         bottom: 0,
                         child: IgnorePointer(
                           child: LayoutBuilder(
-                            builder: (_, constraints) => AnimatedOpacity(
+                            builder: (context, constraints) => AnimatedOpacity(
                               opacity: videoItem.checked ? 1 : 0,
                               duration: const Duration(milliseconds: 200),
                               child: Container(

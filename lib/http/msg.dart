@@ -12,7 +12,7 @@ import 'init.dart';
 
 class MsgHttp {
   static Future msgFeedReplyMe({int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedReply, data: {
+    var res = await Request().get(Api.msgFeedReply, queryParameters: {
       'id': cursor == -1 ? null : cursor,
       'reply_time': cursorTime == -1 ? null : cursorTime,
     });
@@ -31,7 +31,7 @@ class MsgHttp {
   }
 
   static Future msgFeedAtMe({int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedAt, data: {
+    var res = await Request().get(Api.msgFeedAt, queryParameters: {
       'id': cursor == -1 ? null : cursor,
       'at_time': cursorTime == -1 ? null : cursorTime,
     });
@@ -50,7 +50,7 @@ class MsgHttp {
   }
 
   static Future msgFeedLikeMe({int cursor = -1, int cursorTime = -1}) async {
-    var res = await Request().get(Api.msgFeedLike, data: {
+    var res = await Request().get(Api.msgFeedLike, queryParameters: {
       'id': cursor == -1 ? null : cursor,
       'like_time': cursorTime == -1 ? null : cursorTime,
     });
@@ -70,7 +70,7 @@ class MsgHttp {
 
   static Future msgFeedSysUserNotify() async {
     String csrf = await Request.getCsrf();
-    var res = await Request().get(Api.msgSysUserNotify, data: {
+    var res = await Request().get(Api.msgSysUserNotify, queryParameters: {
       'csrf': csrf,
       'page_size': 20,
     });
@@ -90,7 +90,7 @@ class MsgHttp {
 
   static Future msgFeedSysUnifiedNotify() async {
     String csrf = await Request.getCsrf();
-    var res = await Request().get(Api.msgSysUnifiedNotify, data: {
+    var res = await Request().get(Api.msgSysUnifiedNotify, queryParameters: {
       'csrf': csrf,
       'page_size': 10,
     });
@@ -110,7 +110,7 @@ class MsgHttp {
 
   static Future msgSysUpdateCursor(int cursor) async {
     String csrf = await Request.getCsrf();
-    var res = await Request().get(Api.msgSysUpdateCursor, data: {
+    var res = await Request().get(Api.msgSysUpdateCursor, queryParameters: {
       'csrf': csrf,
       'cursor': cursor,
     });
@@ -400,7 +400,7 @@ class MsgHttp {
     }
 
     Map signParams = await WbiSign().makSign(params);
-    var res = await Request().get(Api.sessionList, data: signParams);
+    var res = await Request().get(Api.sessionList, queryParameters: signParams);
     if (res.data['code'] == 0) {
       try {
         return {
@@ -424,7 +424,7 @@ class MsgHttp {
   }
 
   static Future accountList(uids) async {
-    var res = await Request().get(Api.sessionAccountList, data: {
+    var res = await Request().get(Api.sessionAccountList, queryParameters: {
       'uids': uids,
       'build': 0,
       'mobi_app': 'web',
@@ -460,7 +460,7 @@ class MsgHttp {
       'build': 0,
       'mobi_app': 'web',
     });
-    var res = await Request().get(Api.sessionMsg, data: params);
+    var res = await Request().get(Api.sessionMsg, queryParameters: params);
     if (res.data['code'] == 0) {
       try {
         return {
@@ -494,7 +494,7 @@ class MsgHttp {
       'csrf_token': csrf,
       'csrf': csrf
     });
-    var res = await Request().get(Api.ackSessionMsg, data: params);
+    var res = await Request().get(Api.ackSessionMsg, queryParameters: params);
     if (res.data['code'] == 0) {
       return {
         'status': true,

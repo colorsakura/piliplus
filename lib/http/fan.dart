@@ -6,7 +6,7 @@ import 'index.dart';
 class FanHttp {
   static Future<LoadingState> fans(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
-    var res = await Request().get(Api.fans, data: {
+    var res = await Request().get(Api.fans, queryParameters: {
       'vmid': vmid,
       'pn': pn,
       'ps': ps,

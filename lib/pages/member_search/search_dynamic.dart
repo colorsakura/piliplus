@@ -277,7 +277,7 @@ class SearchDynamic extends StatelessWidget {
           ? Container(
               margin: const EdgeInsets.symmetric(vertical: 6),
               child: LayoutBuilder(
-                builder: (_, constraints) {
+                builder: (context, constraints) {
                   return NetworkImgLayer(
                     radius: 6,
                     src: json['pic'],

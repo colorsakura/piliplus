@@ -143,7 +143,7 @@ class _MainAppState extends State<MainApp>
         }
       },
       child: LayoutBuilder(
-        builder: (_, constriants) {
+        builder: (context, constriants) {
           bool isPortait = constriants.maxHeight > constriants.maxWidth;
 
           return Scaffold(

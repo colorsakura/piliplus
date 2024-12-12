@@ -127,7 +127,7 @@ class _ReplyPageState extends State<ReplyPage>
       child: GestureDetector(
         onTap: Get.back,
         child: LayoutBuilder(
-          builder: (_, constraints) {
+          builder: (context, constraints) {
             bool isH = constraints.maxWidth > constraints.maxHeight;
             late double padding = constraints.maxWidth * 0.12;
             return Padding(
@@ -234,7 +234,7 @@ class _ReplyPageState extends State<ReplyPage>
                   image: FileImage(File(_pathList[index])),
                 ),
               ),
-              separatorBuilder: (_, index) => const SizedBox(width: 10),
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
             ),
           );
         } else {
@@ -317,7 +317,7 @@ class _ReplyPageState extends State<ReplyPage>
                 StreamBuilder(
                   initialData: true,
                   stream: _keyboardStream.stream,
-                  builder: (_, snapshot) => ToolbarIconButton(
+                  builder: (context, snapshot) => ToolbarIconButton(
                     tooltip: '输入',
                     onPressed: () {
                       if (!_selectKeyboard) {
@@ -334,7 +334,7 @@ class _ReplyPageState extends State<ReplyPage>
                 StreamBuilder(
                   initialData: true,
                   stream: _keyboardStream.stream,
-                  builder: (_, snapshot) => ToolbarIconButton(
+                  builder: (context, snapshot) => ToolbarIconButton(
                     tooltip: '表情',
                     onPressed: () {
                       if (_selectKeyboard) {
@@ -391,7 +391,7 @@ class _ReplyPageState extends State<ReplyPage>
                 StreamBuilder(
                   initialData: _enablePublish,
                   stream: _publishStream.stream,
-                  builder: (_, snapshot) => FilledButton.tonal(
+                  builder: (context, snapshot) => FilledButton.tonal(
                     onPressed: snapshot.data == true ? submitReplyAdd : null,
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

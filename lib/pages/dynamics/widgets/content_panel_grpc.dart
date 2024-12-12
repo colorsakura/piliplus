@@ -18,7 +18,7 @@ class ContentGrpc extends StatelessWidget {
   InlineSpan picsNodes() {
     return WidgetSpan(
       child: LayoutBuilder(
-        builder: (_, constraints) => image(
+        builder: (context, constraints) => imageview(
           constraints.maxWidth,
           item.modules.first.moduleDynamic.dynDraw.items
               .map(

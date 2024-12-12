@@ -390,13 +390,13 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           _dividerL,
           SliverList.separated(
             itemCount: _blockSettings.length,
-            itemBuilder: (_, index) => ListTile(
+            itemBuilder: (context, index) => ListTile(
               dense: true,
               enabled: _blockSettings[index].second != SkipType.disable,
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (_) => AlertDialog(
+                  builder: (context) => AlertDialog(
                     clipBehavior: Clip.hardEdge,
                     contentPadding: const EdgeInsets.symmetric(vertical: 16),
                     title: Text.rich(
@@ -527,7 +527,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 ),
               ),
             ),
-            separatorBuilder: (_, index) => Divider(
+            separatorBuilder: (context, index) => Divider(
               height: 1,
               color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
             ),

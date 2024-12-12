@@ -40,7 +40,7 @@ class SearchHttp {
   // 获取搜索建议
   static Future searchSuggest({required term}) async {
     var res = await Request().get(Api.searchSuggest,
-        data: {'term': term, 'main_ver': 'v1', 'highlight': term});
+        queryParameters: {'term': term, 'main_ver': 'v1', 'highlight': term});
     if (res.data is String) {
       Map<String, dynamic> resultMap = json.decode(res.data);
       if (resultMap['code'] == 0) {
@@ -98,7 +98,7 @@ class SearchHttp {
       if (pubBegin != null) 'pubtime_begin_s': pubBegin,
       if (pubEnd != null) 'pubtime_end_s': pubEnd,
     };
-    var res = await Request().get(Api.searchByType, data: reqData);
+    var res = await Request().get(Api.searchByType, queryParameters: reqData);
     if (res.data['code'] == 0) {
       dynamic data;
       try {
@@ -146,8 +146,8 @@ class SearchHttp {
     } else if (bvid != null) {
       data['bvid'] = bvid;
     }
-    final dynamic res =
-        await Request().get(Api.ab2c, data: <String, dynamic>{...data});
+    final dynamic res = await Request()
+        .get(Api.ab2c, queryParameters: <String, dynamic>{...data});
     if (res.data['code'] == 0) {
       return res.data['data'].first['cid'];
     } else {
@@ -159,7 +159,7 @@ class SearchHttp {
   static Future<LoadingState> bangumiInfoNew({int? seasonId, int? epId}) async {
     final dynamic res = await Request().get(
       Api.bangumiInfo,
-      data: {
+      queryParameters: {
         if (seasonId != null) 'season_id': seasonId,
         if (epId != null) 'ep_id': epId,
       },
@@ -182,8 +182,8 @@ class SearchHttp {
     } else if (epId != null) {
       data['ep_id'] = epId;
     }
-    final dynamic res =
-        await Request().get(Api.bangumiInfo, data: <String, dynamic>{...data});
+    final dynamic res = await Request()
+        .get(Api.bangumiInfo, queryParameters: <String, dynamic>{...data});
     if (res.data['code'] == 0) {
       return {
         'status': true,

@@ -17,7 +17,7 @@ import 'video_panel.dart';
 InlineSpan picsNodes(List<OpusPicsModel> pics) {
   return WidgetSpan(
     child: LayoutBuilder(
-      builder: (_, constraints) => image(
+      builder: (context, constraints) => imageview(
         constraints.maxWidth,
         pics
             .map(

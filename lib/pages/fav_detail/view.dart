@@ -352,7 +352,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           bottom: 0,
                           child: IgnorePointer(
                             child: LayoutBuilder(
-                              builder: (_, constraints) => AnimatedOpacity(
+                              builder: (context, constraints) =>
+                                  AnimatedOpacity(
                                 opacity: loadingState.response[index].checked
                                     ? 1
                                     : 0,

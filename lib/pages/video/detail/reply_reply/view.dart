@@ -20,6 +20,7 @@ import 'controller.dart';
 
 class VideoReplyReplyPanel extends StatefulWidget {
   const VideoReplyReplyPanel({
+    super.key,
     this.id,
     this.oid,
     this.rpid,
@@ -29,7 +30,8 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.replyType,
     this.isDialogue = false,
     this.isTop = false,
-    super.key,
+    this.onViewImage,
+    this.onDismissed,
   });
   final int? id;
   final int? oid;
@@ -40,6 +42,8 @@ class VideoReplyReplyPanel extends StatefulWidget {
   final ReplyType? replyType;
   final bool isDialogue;
   final bool isTop;
+  final VoidCallback? onViewImage;
+  final ValueChanged<int>? onDismissed;
 
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
@@ -149,7 +153,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                         itemScrollController:
                             _videoReplyReplyController.itemScrollCtr,
                         physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (_, index) {
+                        itemBuilder: (context, index) {
                           if (widget.isDialogue) {
                             return _buildBody(
                                 _videoReplyReplyController.loadingState.value,
@@ -168,6 +172,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                       },
                                       upMid: _videoReplyReplyController.upMid,
                                       isTop: widget.isTop,
+                                      onViewImage: widget.onViewImage,
+                                      onDismissed: widget.onDismissed,
                                     )
                                   : ReplyItem(
                                       replyItem: firstFloor,
@@ -178,6 +184,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                       onReply: () {
                                         _onReply(firstFloor, -1);
                                       },
+                                      onViewImage: widget.onViewImage,
+                                      onDismissed: widget.onDismissed,
                                     );
                             } else if (index == 1) {
                               return Divider(
@@ -418,6 +426,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                 ),
               );
             },
+            onViewImage: widget.onViewImage,
+            onDismissed: widget.onDismissed,
           )
         : ReplyItem(
             replyItem: replyItem,
@@ -436,6 +446,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               _videoReplyReplyController.loadingState.value =
                   LoadingState.success(list);
             },
+            onViewImage: widget.onViewImage,
+            onDismissed: widget.onDismissed,
           );
   }
 

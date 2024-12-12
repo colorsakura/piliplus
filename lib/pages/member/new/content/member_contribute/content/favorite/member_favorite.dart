@@ -168,7 +168,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
               leading: Container(
                 margin: const EdgeInsets.symmetric(vertical: 6),
                 child: LayoutBuilder(
-                  builder: (_, constraints) {
+                  builder: (context, constraints) {
                     return Stack(
                       children: [
                         NetworkImgLayer(

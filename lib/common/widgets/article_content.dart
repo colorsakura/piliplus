@@ -16,7 +16,7 @@ Widget articleContent({
       .toList();
   return SliverList.separated(
     itemCount: list.length,
-    itemBuilder: (_, index) {
+    itemBuilder: (context, index) {
       ArticleContentModel item = list[index];
       if (item.text != null) {
         List<InlineSpan> spanList = [];
@@ -55,7 +55,7 @@ Widget articleContent({
         );
       } else if (item.pic != null) {
         return LayoutBuilder(
-          builder: (_, constraints) => GestureDetector(
+          builder: (context, constraints) => GestureDetector(
             onTap: () {
               context.imageView(
                 initialPage: imgList.indexOf(item.pic!.pics!.first.url!),

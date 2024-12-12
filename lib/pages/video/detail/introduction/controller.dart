@@ -849,7 +849,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, constraints) {
+    return LayoutBuilder(builder: (context, constraints) {
       return _buildBody(constraints.maxHeight > constraints.maxWidth);
     });
   }

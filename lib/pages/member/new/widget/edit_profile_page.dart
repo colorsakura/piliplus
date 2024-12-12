@@ -75,7 +75,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Request()
         .get(
       '${HttpString.appBaseUrl}/x/v2/account/myinfo',
-      data: data,
+      queryParameters: data,
     )
         .then((data) {
       setState(() {
@@ -145,7 +145,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (_) => _sexDialog(loadingState.response['sex']),
+                    builder: (context_) =>
+                        _sexDialog(loadingState.response['sex']),
                   );
                 },
               ),

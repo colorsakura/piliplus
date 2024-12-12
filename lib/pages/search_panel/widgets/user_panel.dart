@@ -188,7 +188,7 @@ class UserPanelController extends GetxController {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => SingleChildScrollView(
+      builder: (context) => SingleChildScrollView(
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.only(

@@ -88,7 +88,7 @@ class Utils {
         Map followStatus = result['data'];
         showDialog(
           context: context,
-          builder: (_) {
+          builder: (context) {
             bool isSpecialFollowed = followStatus['special'] == 1;
             String text = isSpecialFollowed ? '移除特别关注' : '加入特别关注';
             return AlertDialog(

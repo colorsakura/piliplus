@@ -349,7 +349,7 @@ class LoginHttp {
   static Future safeCenterGetInfo({
     required String tmpCode,
   }) async {
-    var res = await Request().get(Api.safeCenterGetInfo, data: {
+    var res = await Request().get(Api.safeCenterGetInfo, queryParameters: {
       'tmp_code': tmpCode,
     });
     if (res.data['code'] == 0) {

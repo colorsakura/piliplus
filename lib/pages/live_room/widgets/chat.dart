@@ -30,7 +30,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
           () => ListView.separated(
             padding: const EdgeInsets.all(0),
             controller: widget.liveRoomController.scrollController,
-            separatorBuilder: (_, index) => const SizedBox(height: 6),
+            separatorBuilder: (context, index) => const SizedBox(height: 6),
             itemCount: widget.liveRoomController.messages.length,
             itemBuilder: (context, index) {
               return Container(

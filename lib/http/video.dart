@@ -41,7 +41,7 @@ class VideoHttp {
       {required int ps, required int freshIdx}) async {
     var res = await Request().get(
       Api.recommendListWeb,
-      data: {
+      queryParameters: {
         'version': 1,
         'feed_version': 'V8',
         'homepage_ver': 1,
@@ -119,7 +119,7 @@ class VideoHttp {
 
     var res = await Request().get(
       Api.recommendListApp,
-      data: data,
+      queryParameters: data,
       options: Options(headers: {
         'Host': 'app.bilibili.com',
         'buvid': LoginHttp.buvid,
@@ -165,7 +165,7 @@ class VideoHttp {
       {required int pn, required int ps}) async {
     var res = await Request().get(
       Api.hotList,
-      data: {'pn': pn, 'ps': ps},
+      queryParameters: {'pn': pn, 'ps': ps},
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = [];
@@ -229,7 +229,7 @@ class VideoHttp {
     });
 
     try {
-      var res = await Request().get(Api.videoUrl, data: params);
+      var res = await Request().get(Api.videoUrl, queryParameters: params);
       if (res.data['code'] == 0) {
         return {
           'status': true,
@@ -250,7 +250,8 @@ class VideoHttp {
 
   // 视频信息 标题、简介
   static Future videoIntro({required String bvid}) async {
-    var res = await Request().get(Api.videoIntro, data: {'bvid': bvid});
+    var res =
+        await Request().get(Api.videoIntro, queryParameters: {'bvid': bvid});
     VideoDetailResponse result = VideoDetailResponse.fromJson(res.data);
     if (result.code == 0) {
       return {
@@ -305,7 +306,7 @@ class VideoHttp {
   static Future videoRelation({required dynamic bvid}) async {
     var res = await Request().get(
       Api.videoRelation,
-      data: {
+      queryParameters: {
         'aid': IdUtils.bv2av(bvid),
         'bvid': bvid,
       },
@@ -325,7 +326,8 @@ class VideoHttp {
 
   // 相关视频
   static Future<LoadingState> relatedVideoList({required String bvid}) async {
-    var res = await Request().get(Api.relatedList, data: {'bvid': bvid});
+    var res =
+        await Request().get(Api.relatedList, queryParameters: {'bvid': bvid});
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = [];
       for (var i in res.data['data']) {
@@ -344,7 +346,7 @@ class VideoHttp {
   static Future bangumiLikeCoinFav({dynamic epId}) async {
     var res = await Request().get(
       Api.bangumiLikeCoinFav,
-      data: {'ep_id': epId},
+      queryParameters: {'ep_id': epId},
     );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
@@ -355,7 +357,8 @@ class VideoHttp {
 
   // 获取点赞状态
   static Future hasLikeVideo({required String bvid}) async {
-    var res = await Request().get(Api.hasLikeVideo, data: {'bvid': bvid});
+    var res =
+        await Request().get(Api.hasLikeVideo, queryParameters: {'bvid': bvid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -365,7 +368,8 @@ class VideoHttp {
 
   // 获取投币状态
   static Future hasCoinVideo({required String bvid}) async {
-    var res = await Request().get(Api.hasCoinVideo, data: {'bvid': bvid});
+    var res =
+        await Request().get(Api.hasCoinVideo, queryParameters: {'bvid': bvid});
     debugPrint('res: $res');
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
@@ -397,7 +401,8 @@ class VideoHttp {
 
   // 获取收藏状态
   static Future hasFavVideo({required int aid}) async {
-    var res = await Request().get(Api.hasFavVideo, data: {'aid': aid});
+    var res =
+        await Request().get(Api.hasFavVideo, queryParameters: {'aid': aid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -507,7 +512,7 @@ class VideoHttp {
       return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     assert((reasonId != null) ^ (feedbackId != null));
-    var res = await Request().get(Api.feedDislike, data: {
+    var res = await Request().get(Api.feedDislike, queryParameters: {
       'goto': goto,
       'id': id,
       // 'mid': mid,
@@ -537,7 +542,7 @@ class VideoHttp {
       return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     // assert ((reasonId != null) ^ (feedbackId != null));
-    var res = await Request().get(Api.feedDislikeCancel, data: {
+    var res = await Request().get(Api.feedDislikeCancel, queryParameters: {
       'goto': goto,
       'id': id,
       // 'mid': mid,
@@ -637,7 +642,7 @@ class VideoHttp {
   }) async {
     var res = await Request().get(
       Api.videoInFolder,
-      data: {
+      queryParameters: {
         'up_mid': mid,
         'rid': rid,
         if (type != null) 'type': type,
@@ -712,7 +717,7 @@ class VideoHttp {
 
   // 查询是否关注up
   static Future hasFollow({required int mid}) async {
-    var res = await Request().get(Api.hasFollow, data: {'fid': mid});
+    var res = await Request().get(Api.hasFollow, queryParameters: {'fid': mid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -818,7 +823,7 @@ class VideoHttp {
 
   // 查看视频同时在看人数
   static Future onlineTotal({int? aid, String? bvid, int? cid}) async {
-    var res = await Request().get(Api.onlineTotal, data: {
+    var res = await Request().get(Api.onlineTotal, queryParameters: {
       'aid': aid,
       'bvid': bvid,
       'cid': cid,
@@ -840,7 +845,7 @@ class VideoHttp {
       'cid': cid,
       'up_mid': upMid,
     });
-    var res = await Request().get(Api.aiConclusion, data: params);
+    var res = await Request().get(Api.aiConclusion, queryParameters: params);
     if (res.data['code'] == 0 && res.data['data']['code'] == 0) {
       return {
         'status': true,
@@ -856,7 +861,7 @@ class VideoHttp {
     assert(aid != null || bvid != null);
     var res = await Request().get(
       Api.subtitleUrl,
-      data: {
+      queryParameters: {
         if (aid != null) 'aid': aid,
         if (bvid != null) 'bvid': bvid,
         'cid': cid,

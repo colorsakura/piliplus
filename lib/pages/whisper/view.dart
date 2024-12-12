@@ -160,7 +160,7 @@ class _WhisperPageState extends State<WhisperPage> {
                                 itemCount: sessionList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (_, int i) {
+                                itemBuilder: (context, int i) {
                                   dynamic content =
                                       sessionList[i].lastMsg.content;
                                   if (content == null || content == "") {

@@ -236,7 +236,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
                 StreamBuilder(
                   initialData: false,
                   stream: _publishStream.stream,
-                  builder: (_, snapshot) => FilledButton.tonal(
+                  builder: (context, snapshot) => FilledButton.tonal(
                     onPressed: snapshot.data == true ? submitReplyAdd : null,
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

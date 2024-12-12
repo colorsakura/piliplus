@@ -41,7 +41,7 @@ class _MemberDynamicState extends State<MemberDynamic>
               },
               child: ListView.separated(
                 itemCount: loadingState.response.length,
-                itemBuilder: (_, index) {
+                itemBuilder: (context, index) {
                   if (index == loadingState.response.length - 1) {
                     _controller.onLoadMore();
                   }
@@ -49,7 +49,8 @@ class _MemberDynamicState extends State<MemberDynamic>
                     item: loadingState.response[index],
                   );
                 },
-                separatorBuilder: (_, index) => const SizedBox(height: 10),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
               ),
             )
           : errorWidget(

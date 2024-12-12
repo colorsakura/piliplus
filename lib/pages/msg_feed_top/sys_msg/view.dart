@@ -72,7 +72,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   itemCount: _sysMsgController.msgFeedSysMsgList.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, int i) {
+                  itemBuilder: (context, int i) {
                     String? content =
                         _sysMsgController.msgFeedSysMsgList[i].content;
                     if (content != null) {
@@ -88,7 +88,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                       onLongPress: () {
                         showDialog(
                             context: context,
-                            builder: (_) => AlertDialog(
+                            builder: (context) => AlertDialog(
                                   title: const Text('确定删除该通知?'),
                                   actions: [
                                     TextButton(

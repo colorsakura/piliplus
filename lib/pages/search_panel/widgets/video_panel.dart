@@ -256,7 +256,7 @@ class VideoPanelController extends GetxController {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => StatefulBuilder(
+      builder: (context) => StatefulBuilder(
         builder: (context, setState) {
           Widget dateWidget([bool isFirst = true]) {
             return SearchText(

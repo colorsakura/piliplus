@@ -4,7 +4,7 @@ import 'index.dart';
 class FollowHttp {
   static Future followings(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
-    var res = await Request().get(Api.followings, data: {
+    var res = await Request().get(Api.followings, queryParameters: {
       'vmid': vmid,
       'pn': pn,
       'ps': ps,

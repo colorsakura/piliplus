@@ -152,7 +152,7 @@ class _MemberPageState extends State<MemberPage>
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (_) => AlertDialog(
+                          builder: (context) => AlertDialog(
                             clipBehavior: Clip.hardEdge,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20,

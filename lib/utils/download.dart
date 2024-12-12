@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:PiliPalaX/http/init.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -92,17 +93,14 @@ class DownloadUtils {
       if (!await checkPermissionDependOnSdkInt(context)) {
         return;
       }
-      Dio dio = Dio()
-        ..options = BaseOptions(
-          connectTimeout: const Duration(milliseconds: 10000),
-          receiveTimeout: const Duration(milliseconds: 10000),
-        );
       for (int i = 0; i < imgList.length; i++) {
         SmartDialog.showLoading(
             msg:
                 '正在下载原图${imgList.length > 1 ? '${i + 1}/${imgList.length}' : ''}');
-        var response = await dio.get(imgList[i],
-            options: Options(responseType: ResponseType.bytes));
+        var response = await Request().get(
+          imgList[i],
+          options: Options(responseType: ResponseType.bytes),
+        );
         String picName =
             "${imgType}_${DateTime.now().toString().replaceAll(' ', '_').replaceAll(':', '-').split('.').first}";
         final SaveResult result = await SaverGallery.saveImage(

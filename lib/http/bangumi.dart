@@ -5,7 +5,8 @@ import 'index.dart';
 
 class BangumiHttp {
   static Future<LoadingState> bangumiList({int? page}) async {
-    var res = await Request().get(Api.bangumiList, data: {'page': page});
+    var res =
+        await Request().get(Api.bangumiList, queryParameters: {'page': page});
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);
@@ -16,7 +17,8 @@ class BangumiHttp {
   }
 
   static Future<LoadingState> bangumiFollow({int? mid}) async {
-    var res = await Request().get(Api.bangumiFollow, data: {'vmid': mid});
+    var res =
+        await Request().get(Api.bangumiFollow, queryParameters: {'vmid': mid});
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);

@@ -50,7 +50,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
         title: StreamBuilder(
           initialData: null,
           stream: _titleStream.stream,
-          builder: (_, snapshot) => Text(
+          builder: (context, snapshot) => Text(
             maxLines: 1,
             snapshot.hasData ? snapshot.data! : _url,
             overflow: TextOverflow.ellipsis,
@@ -61,7 +61,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
           child: StreamBuilder(
             initialData: 0.0,
             stream: _progressStream.stream,
-            builder: (_, snapshot) => snapshot.data as double < 1
+            builder: (context, snapshot) => snapshot.data as double < 1
                 ? LinearProgressIndicator(
                     value: snapshot.data as double,
                   )

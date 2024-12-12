@@ -217,7 +217,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
     return switch (loadingState) {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? LayoutBuilder(
-              builder: (_, constraints) => HotKeyword(
+              builder: (context, constraints) => HotKeyword(
                 width: constraints.maxWidth,
                 hotSearchList: loadingState.response,
                 onClick: _searchController.onClickKeyword,

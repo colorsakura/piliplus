@@ -28,7 +28,7 @@ class ReplyHttp {
     var res = !isLogin
         ? await Request().get(
             '${HttpString.apiBaseUrl}${Api.replyList}/main',
-            data: {
+            queryParameters: {
               'oid': oid,
               'type': type,
               'pagination_str':
@@ -39,7 +39,7 @@ class ReplyHttp {
           )
         : await Request().get(
             '${HttpString.apiBaseUrl}${Api.replyList}',
-            data: {
+            queryParameters: {
               'oid': oid,
               'type': type,
               'sort': sort,
@@ -82,7 +82,7 @@ class ReplyHttp {
         : null;
     var res = await Request().get(
       '${HttpString.apiBaseUrl}${Api.replyReplyList}',
-      data: {
+      queryParameters: {
         'oid': oid,
         'root': root,
         'pn': pageNum,
@@ -200,7 +200,7 @@ class ReplyHttp {
   }
 
   static Future<LoadingState> getEmoteList({String? business}) async {
-    var res = await Request().get(Api.myEmote, data: {
+    var res = await Request().get(Api.myEmote, queryParameters: {
       'business': business ?? 'reply',
       'web_location': '333.1245',
     });

@@ -12,7 +12,7 @@ class LiveHttp {
   static Future<LoadingState> liveList(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
     var res = await Request().get(Api.liveList,
-        data: {'page': pn, 'page_size': 30, 'platform': 'web'});
+        queryParameters: {'page': pn, 'page_size': 30, 'platform': 'web'});
     if (res.data['code'] == 0) {
       List<LiveItemModel> list = res.data['data']['list']
           .map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
@@ -67,7 +67,7 @@ class LiveHttp {
   }
 
   static Future liveRoomInfo({roomId, qn}) async {
-    var res = await Request().get(Api.liveRoomInfo, data: {
+    var res = await Request().get(Api.liveRoomInfo, queryParameters: {
       'room_id': roomId,
       'protocol': '0, 1',
       'format': '0, 1, 2',
@@ -90,7 +90,7 @@ class LiveHttp {
   }
 
   static Future liveRoomInfoH5({roomId, qn}) async {
-    var res = await Request().get(Api.liveRoomInfoH5, data: {
+    var res = await Request().get(Api.liveRoomInfoH5, queryParameters: {
       'room_id': roomId,
     });
     if (res.data['code'] == 0) {
@@ -108,7 +108,7 @@ class LiveHttp {
   }
 
   static Future liveRoomDanmaPrefetch({roomId}) async {
-    var res = await Request().get(Api.liveRoomDmPrefetch, data: {
+    var res = await Request().get(Api.liveRoomDmPrefetch, queryParameters: {
       'roomid': roomId,
     });
     if (res.data['code'] == 0) {
@@ -123,7 +123,7 @@ class LiveHttp {
   }
 
   static Future liveRoomGetDanmakuToken({roomId}) async {
-    var res = await Request().get(Api.liveRoomDmToken, data: {
+    var res = await Request().get(Api.liveRoomDmToken, queryParameters: {
       'id': roomId,
     });
     if (res.data['code'] == 0) {

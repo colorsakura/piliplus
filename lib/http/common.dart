@@ -2,7 +2,7 @@ import 'index.dart';
 
 class CommonHttp {
   static Future unReadDynamic() async {
-    var res = await Request().get(Api.getUnreadDynamic, data: {
+    var res = await Request().get(Api.getUnreadDynamic, queryParameters: {
       'alltype_offset': 0,
       'video_offset': 0,
       'article_offset': 0,

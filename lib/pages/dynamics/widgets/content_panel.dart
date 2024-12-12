@@ -17,7 +17,7 @@ class Content extends StatelessWidget {
   InlineSpan picsNodes() {
     return WidgetSpan(
       child: LayoutBuilder(
-        builder: (_, constraints) => image(
+        builder: (context, constraints) => imageview(
           constraints.maxWidth,
           (item.modules.moduleDynamic.major.opus.pics as List)
               .map(

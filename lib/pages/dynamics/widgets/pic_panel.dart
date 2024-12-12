@@ -9,7 +9,7 @@ Widget picWidget(item, context) {
     return const SizedBox();
   }
   return LayoutBuilder(
-    builder: (_, constraints) => image(
+    builder: (context, constraints) => imageview(
       constraints.maxWidth,
       (item.modules.moduleDynamic.major.draw.items as List)
           .map(

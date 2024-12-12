@@ -346,6 +346,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 离开当前页面时
   void didPushNext() async {
     // _bufferedListener?.cancel();
+    if (videoDetailController.imageStatus) {
+      return;
+    }
 
     ScreenBrightness().resetApplicationScreenBrightness();
 
@@ -376,6 +379,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   // 返回当前页面时
   void didPopNext() async {
+    if (videoDetailController.imageStatus) {
+      return;
+    }
+
     isShowing = true;
     PlPlayerController.setPlayCallBack(playCallBack);
     videoIntroController.startTimer();
@@ -1286,6 +1293,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           oid: videoDetailController.oid.value,
           heroTag: heroTag,
           replyReply: replyReply,
+          onViewImage: videoDetailController.onViewImage,
+          onDismissed: videoDetailController.onDismissed,
         ),
       );
 
@@ -1303,6 +1312,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           replyType: ReplyType.video,
           source: 'videoDetail',
           isTop: isTop ?? false,
+          onViewImage: videoDetailController.onViewImage,
+          onDismissed: videoDetailController.onDismissed,
         ),
       );
     });
@@ -1474,7 +1485,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                     )
                                   : null,
                               child: LayoutBuilder(
-                                builder: (_, constraints) => NetworkImgLayer(
+                                builder: (context, constraints) =>
+                                    NetworkImgLayer(
                                   radius: 6,
                                   src: segment.url,
                                   width: constraints.maxHeight *

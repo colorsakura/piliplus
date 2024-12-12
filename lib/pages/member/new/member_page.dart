@@ -54,7 +54,7 @@ class _MemberPageNewState extends State<MemberPageNew>
       body: Obx(
         () => _userController.loadingState.value is Success
             ? LayoutBuilder(
-                builder: (_, constraints) {
+                builder: (context, constraints) {
                   // if (constraints.maxHeight > constraints.maxWidth) {
                   return ExtendedNestedScrollView(
                     key: _key,
@@ -251,7 +251,7 @@ class _MemberPageNewState extends State<MemberPageNew>
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (_) => AlertDialog(
+                          builder: (context) => AlertDialog(
                             clipBehavior: Clip.hardEdge,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20,

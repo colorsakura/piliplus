@@ -20,7 +20,7 @@ class DynamicsHttp {
       data['host_mid'] = mid;
       data.remove('timezone_offset');
     }
-    var res = await Request().get(Api.followDynamic, data: data);
+    var res = await Request().get(Api.followDynamic, queryParameters: data);
     if (res.data['code'] == 0) {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
@@ -80,7 +80,7 @@ class DynamicsHttp {
   static Future dynamicDetail({
     String? id,
   }) async {
-    var res = await Request().get(Api.dynamicDetail, data: {
+    var res = await Request().get(Api.dynamicDetail, queryParameters: {
       'timezone_offset': -480,
       'id': id,
       'features': 'itemOpusStyle',

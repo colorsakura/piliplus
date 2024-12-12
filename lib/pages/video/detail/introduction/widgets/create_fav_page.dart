@@ -230,7 +230,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: LayoutBuilder(
-                          builder: (_, constraints) {
+                          builder: (context, constraints) {
                             return ClipRRect(
                               borderRadius: BorderRadius.circular(6),
                               child: Image.network(

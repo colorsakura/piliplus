@@ -117,7 +117,7 @@ class LikeMeList extends StatelessWidget {
       itemCount: msgFeedLikeMeList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (_, int i) {
+      itemBuilder: (context, int i) {
         return ListTile(
           onTap: () {
             String? nativeUri = msgFeedLikeMeList[i].item?.nativeUri;

@@ -21,15 +21,19 @@ class VideoReplyPanel extends StatefulWidget {
   final String? replyLevel;
   final String heroTag;
   final Function replyReply;
+  final VoidCallback? onViewImage;
+  final ValueChanged<int>? onDismissed;
 
   const VideoReplyPanel({
+    super.key,
     this.bvid,
     this.oid,
     this.rpid = 0,
     this.replyLevel,
     required this.heroTag,
     required this.replyReply,
-    super.key,
+    this.onViewImage,
+    this.onDismissed,
   });
 
   @override
@@ -248,6 +252,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             isTop: _videoReplyController.hasUpTop && index == 0,
                             upMid: loadingState.response.subjectControl.upMid,
                             getTag: () => heroTag,
+                            onViewImage: widget.onViewImage,
+                            onDismissed: widget.onDismissed,
                           )
                         : ReplyItem(
                             replyItem: loadingState.response.replies[index],
@@ -263,9 +269,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                               );
                             },
                             onDelete: _videoReplyController.onMDelete,
-                            // isTop: _videoReplyController.hasUpTop && index == 0,
-                            // upMid: loadingState.response.subjectControl.upMid,
-                            // getTag: () => heroTag,
+                            onViewImage: widget.onViewImage,
+                            onDismissed: widget.onDismissed,
                           );
                   }
                 },

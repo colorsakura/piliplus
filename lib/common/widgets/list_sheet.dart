@@ -171,7 +171,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                     )
                   : null,
               child: LayoutBuilder(
-                builder: (_, constraints) => NetworkImgLayer(
+                builder: (context, constraints) => NetworkImgLayer(
                   radius: 6,
                   src: episode is video.EpisodeItem
                       ? episode.arc?.pic
@@ -239,7 +239,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                 ),
                 StreamBuilder(
                   stream: _favStream?.stream,
-                  builder: (_, snapshot) => snapshot.hasData
+                  builder: (context, snapshot) => snapshot.hasData
                       ? _mediumButton(
                           tooltip: _seasonFav == 1 ? '取消订阅' : '订阅',
                           icon: _seasonFav == 1
@@ -312,7 +312,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                 StreamBuilder(
                   stream: _indexStream?.stream,
                   initialData: 0,
-                  builder: (_, snapshot) => _mediumButton(
+                  builder: (context, snapshot) => _mediumButton(
                     tooltip: reverse[snapshot.data] ? '正序' : '反序',
                     icon: !reverse[snapshot.data]
                         ? MdiIcons.sortAscending
@@ -405,7 +405,7 @@ class _ListSheetContentState extends State<ListSheetContent>
             );
           },
           itemScrollController: itemScrollController[i ?? 0],
-          separatorBuilder: (_, index) => Divider(
+          separatorBuilder: (context, index) => Divider(
             height: 1,
             color: Theme.of(context).dividerColor.withOpacity(0.1),
           ),

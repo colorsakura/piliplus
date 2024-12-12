@@ -292,7 +292,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                                                     .isFollowed.value) {
                                                   showDialog(
                                                     context: context,
-                                                    builder: (_) =>
+                                                    builder: (context) =>
                                                         _followDialog(),
                                                   );
                                                 } else {

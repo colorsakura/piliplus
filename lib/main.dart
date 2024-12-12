@@ -54,8 +54,8 @@ void main() async {
   Request();
   await Request.setCookie();
   RecommendFilter();
-  SmartDialog.config.toast =
-      SmartConfigToast(displayType: SmartToastType.normal);
+  SmartDialog.config.loading =
+      SmartConfigLoading(backType: SmartBackType.normal);
   // 异常捕获 logo记录
   final Catcher2Options debugConfig = Catcher2Options(
     SilentReportMode(),
