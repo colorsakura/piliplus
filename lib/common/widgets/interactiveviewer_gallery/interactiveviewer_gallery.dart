@@ -232,6 +232,8 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
             itemCount: widget.sources.length,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: Get.back,
                 onDoubleTapDown: (TapDownDetails details) {
                   _doubleTapLocalPosition = details.localPosition;
                 },
@@ -351,36 +353,31 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   }
 
   Widget _itemBuilder(sources, index) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        Get.back();
-      },
-      child: Center(
-        child: Hero(
-          tag: sources[index],
-          child: CachedNetworkImage(
-            fadeInDuration: const Duration(milliseconds: 0),
-            fadeOutDuration: const Duration(milliseconds: 0),
-            imageUrl: _thumbList[index] && _quality != 100
-                ? '${sources[index]}@${_quality}q.webp'
-                : sources[index],
-            fit: BoxFit.contain,
-            progressIndicatorBuilder: (context, url, progress) {
-              return Container(
+    return Center(
+      child: Hero(
+        tag: sources[index],
+        child: CachedNetworkImage(
+          fadeInDuration: const Duration(milliseconds: 0),
+          fadeOutDuration: const Duration(milliseconds: 0),
+          imageUrl: _thumbList[index] && _quality != 100
+              ? '${sources[index]}@${_quality}q.webp'
+              : sources[index],
+          fit: BoxFit.contain,
+          progressIndicatorBuilder: (context, url, progress) {
+            return Center(
+              child: SizedBox(
                 width: 150.0,
-                alignment: Alignment.center,
                 child: LinearProgressIndicator(value: progress.progress ?? 0),
-              );
-            },
-            errorListener: (value) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  _thumbList[index] = false;
-                });
+              ),
+            );
+          },
+          errorListener: (value) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              setState(() {
+                _thumbList[index] = false;
               });
-            },
-          ),
+            });
+          },
         ),
       ),
     );

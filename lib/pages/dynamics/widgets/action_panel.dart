@@ -102,9 +102,10 @@ class _ActionPanelState extends State<ActionPanel> {
                 ),
               );
             },
-            icon: const Icon(
+            icon: Icon(
               FontAwesomeIcons.shareFromSquare,
               size: 16,
+              color: color,
               semanticLabel: "转发",
             ),
             style: TextButton.styleFrom(
@@ -119,9 +120,10 @@ class _ActionPanelState extends State<ActionPanel> {
           child: TextButton.icon(
             onPressed: () => _dynamicsController.pushDetail(widget.item, 1,
                 action: 'comment'),
-            icon: const Icon(
+            icon: Icon(
               FontAwesomeIcons.comment,
               size: 16,
+              color: color,
               semanticLabel: "评论",
             ),
             style: TextButton.styleFrom(
