@@ -77,6 +77,7 @@ Widget imageview(
           // );
         },
         child: Stack(
+          alignment: Alignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
