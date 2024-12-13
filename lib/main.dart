@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPalaX/utils/cache_manage.dart';
+import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -110,8 +111,10 @@ class MyApp extends StatelessWidget {
     // 字体缩放大小
     double textScale =
         setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
-    DynamicSchemeVariant dynamicSchemeVariant =
-        DynamicSchemeVariant.values[GStorage.schemeVariant];
+    // DynamicSchemeVariant dynamicSchemeVariant =
+    //     DynamicSchemeVariant.values[GStorage.schemeVariant];
+    FlexSchemeVariant variant =
+        FlexSchemeVariant.values[GStorage.schemeVariant];
 
     // 强制设置高帧率
     if (Platform.isAndroid) {
@@ -139,15 +142,19 @@ class MyApp extends StatelessWidget {
           darkColorScheme = darkDynamic.harmonized();
         } else {
           // dynamic取色失败，采用品牌色
-          lightColorScheme = ColorScheme.fromSeed(
-            seedColor: brandColor,
+          lightColorScheme = SeedColorScheme.fromSeeds(
+            primaryKey: brandColor,
             brightness: Brightness.light,
-            dynamicSchemeVariant: dynamicSchemeVariant,
+            variant: variant,
+            // dynamicSchemeVariant: dynamicSchemeVariant,
+            // tones: FlexTones.soft(Brightness.light),
           );
-          darkColorScheme = ColorScheme.fromSeed(
-            seedColor: brandColor,
+          darkColorScheme = SeedColorScheme.fromSeeds(
+            primaryKey: brandColor,
             brightness: Brightness.dark,
-            dynamicSchemeVariant: dynamicSchemeVariant,
+            variant: variant,
+            // dynamicSchemeVariant: dynamicSchemeVariant,
+            // tones: FlexTones.soft(Brightness.dark),
           );
         }
         // 图片缓存
@@ -158,10 +165,13 @@ class MyApp extends StatelessWidget {
           theme: _getThemeData(
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,
+            variant: variant,
           ),
           darkTheme: _getThemeData(
             colorScheme: darkColorScheme,
             isDynamic: darkDynamic != null && isDynamicColor,
+            isDark: true,
+            variant: variant,
           ),
           themeMode: GStorage.themeMode,
           localizationsDelegates: const [
@@ -196,9 +206,9 @@ class MyApp extends StatelessWidget {
   ThemeData _getThemeData({
     required ColorScheme colorScheme,
     required bool isDynamic,
+    bool isDark = false,
+    required FlexSchemeVariant variant,
   }) {
-    Color surfaceTintColor =
-        isDynamic ? colorScheme.surfaceTint : colorScheme.surfaceContainer;
     return ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
@@ -211,15 +221,17 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        surfaceTintColor: surfaceTintColor,
+        surfaceTintColor: isDynamic
+            ? colorScheme.surfaceTint
+            : isDark
+                ? colorScheme.surfaceTint
+                : null,
       ),
       snackBarTheme: SnackBarThemeData(
         actionTextColor: colorScheme.primary,
         backgroundColor: colorScheme.secondaryContainer,
         closeIconColor: colorScheme.secondary,
-        contentTextStyle: TextStyle(
-          color: colorScheme.secondary,
-        ),
+        contentTextStyle: TextStyle(color: colorScheme.secondary),
         elevation: 20,
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
@@ -230,15 +242,26 @@ class MyApp extends StatelessWidget {
         },
       ),
       popupMenuTheme: PopupMenuThemeData(
-        surfaceTintColor: surfaceTintColor,
+        surfaceTintColor:
+            isDynamic || variant == FlexSchemeVariant.material3Legacy
+                ? isDark
+                    ? colorScheme.surfaceTint
+                    : null
+                : null,
       ),
       cardTheme: CardTheme(
         elevation: 1,
-        surfaceTintColor: surfaceTintColor,
+        surfaceTintColor: isDynamic
+            ? colorScheme.surfaceTint
+            : variant == FlexSchemeVariant.material3Legacy
+                ? isDark
+                    ? colorScheme.surfaceTint
+                    : null
+                : null,
         shadowColor: Colors.transparent,
       ),
       dialogTheme: DialogTheme(
-        surfaceTintColor: surfaceTintColor,
+        surfaceTintColor: isDark ? colorScheme.surfaceTint : null,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         refreshBackgroundColor: colorScheme.onSecondary,

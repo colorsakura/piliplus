@@ -23,7 +23,7 @@ class ProfilePanel extends StatelessWidget {
         return Row(
           children: [
             Hero(
-              tag: ctr.heroTag!,
+              tag: !loadingStatus ? memberInfo.face : ctr.face.value,
               child: Stack(
                 children: [
                   GestureDetector(
@@ -32,15 +32,6 @@ class ProfilePanel extends StatelessWidget {
                         !loadingStatus ? memberInfo.face : ctr.face.value
                       ],
                     ),
-                    // showDialog(
-                    //   useSafeArea: false,
-                    //   context: context,
-                    //   builder: (context) {
-                    //     return ImagePreview(initialPage: 0, imgList: [
-                    //       !loadingStatus ? memberInfo.face : ctr.face.value
-                    //     ]);
-                    //   },
-                    // ),
                     child: NetworkImgLayer(
                       width: 90,
                       height: 90,

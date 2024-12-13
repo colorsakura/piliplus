@@ -40,32 +40,25 @@ Widget htmlRender({
             //     extensionContext.element!.previousElementSibling == null ||
             //         extensionContext.element!.nextElementSibling == null;
             // imgUrl = Utils().imageUrl(imgUrl!);
-            // return Image.network(
-            //   imgUrl,
+            // return CachedNetworkImage(
+            //   imageUrl: imgUrl,
             //   width: isEmote ? 22 : null,
             //   height: isEmote ? 22 : null,
             // );
-            return GestureDetector(
-              onTap: () {
-                context.imageView(
-                  imgList: [imgUrl],
-                );
-                // showDialog(
-                //   useSafeArea: false,
-                //   context: context,
-                //   builder: (context) {
-                //     return ImagePreview(
-                //       initialPage: 0,
-                //       imgList: [imgUrl],
-                //     );
-                //   },
-                // );
-              },
-              child: NetworkImgLayer(
-                width: isEmote ? 22 : constrainedWidth,
-                height: isEmote ? 22 : 200,
-                src: imgUrl,
-                ignoreHeight: !isEmote,
+            return Hero(
+              tag: imgUrl,
+              child: GestureDetector(
+                onTap: () {
+                  context.imageView(
+                    imgList: [imgUrl],
+                  );
+                },
+                child: NetworkImgLayer(
+                  width: isEmote ? 22 : constrainedWidth,
+                  height: isEmote ? 22 : 200,
+                  src: imgUrl,
+                  ignoreHeight: !isEmote,
+                ),
               ),
             );
           } catch (err) {

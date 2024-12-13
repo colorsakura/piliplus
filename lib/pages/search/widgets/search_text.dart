@@ -22,8 +22,7 @@ class SearchText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: bgColor ??
-          Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
+      color: bgColor ?? Theme.of(context).colorScheme.onInverseSurface,
       borderRadius: BorderRadius.circular(6),
       child: Padding(
         padding: EdgeInsets.zero,

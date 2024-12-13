@@ -169,6 +169,7 @@ dependencies:
   #解压直播消息
   brotli: ^0.6.0
   expandable: ^5.0.1
+  flex_seed_scheme: ^3.4.1
 
 dependency_overrides:
   screen_brightness: ^2.0.0+2

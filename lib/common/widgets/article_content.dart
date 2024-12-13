@@ -55,29 +55,22 @@ Widget articleContent({
         );
       } else if (item.pic != null) {
         return LayoutBuilder(
-          builder: (context, constraints) => GestureDetector(
-            onTap: () {
-              context.imageView(
-                initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
-                imgList: imgList,
-              );
-              // showDialog(
-              //   useSafeArea: false,
-              //   context: context,
-              //   builder: (context) {
-              //     return ImagePreview(
-              //       initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
-              //       imgList: imgList,
-              //     );
-              //   },
-              // );
-            },
-            child: NetworkImgLayer(
-              width: constraints.maxWidth,
-              height: constraints.maxWidth *
-                  item.pic!.pics!.first.height! /
-                  item.pic!.pics!.first.width!,
-              src: item.pic!.pics!.first.url,
+          builder: (context, constraints) => Hero(
+            tag: item.pic!.pics!.first.url!,
+            child: GestureDetector(
+              onTap: () {
+                context.imageView(
+                  initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
+                  imgList: imgList,
+                );
+              },
+              child: NetworkImgLayer(
+                width: constraints.maxWidth,
+                height: constraints.maxWidth *
+                    item.pic!.pics!.first.height! /
+                    item.pic!.pics!.first.width!,
+                src: item.pic!.pics!.first.url,
+              ),
             ),
           ),
         );

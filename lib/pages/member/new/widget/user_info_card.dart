@@ -69,34 +69,27 @@ class UserInfoCard extends StatelessWidget {
             ? images.imgUrl?.http2https
             : images.nightImgurl?.http2https)
         : images.imgUrl?.http2https;
-    return GestureDetector(
-      onTap: () {
-        context.imageView(
-          imgList: [imgUrl ?? ''],
-        );
-        // showDialog(
-        //   useSafeArea: false,
-        //   context: context,
-        //   builder: (context) {
-        //     return ImagePreview(
-        //       initialPage: 0,
-        //       imgList: [imgUrl ?? ''],
-        //     );
-        //   },
-        // );
-      },
-      child: CachedNetworkImage(
-        imageUrl: imgUrl ?? '',
-        width: double.infinity,
-        height: 135,
-        imageBuilder: (context, imageProvider) => Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                darken ? const Color(0x8D000000) : const Color(0x5DFFFFFF),
-                darken ? BlendMode.darken : BlendMode.lighten,
+    return Hero(
+      tag: imgUrl ?? 'bgTag',
+      child: GestureDetector(
+        onTap: () {
+          context.imageView(
+            imgList: [imgUrl ?? 'bgTag'],
+          );
+        },
+        child: CachedNetworkImage(
+          imageUrl: imgUrl ?? '',
+          width: double.infinity,
+          height: 135,
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  darken ? const Color(0x8D000000) : const Color(0x5DFFFFFF),
+                  darken ? BlendMode.darken : BlendMode.lighten,
+                ),
               ),
             ),
           ),
@@ -134,13 +127,13 @@ class UserInfoCard extends StatelessWidget {
                 semanticLabel: '等级${card.levelInfo?.currentLevel}',
               ),
               if (card.vip?.vipStatus == 1)
-                Image.network(
-                  card.vip!.label!.image!,
+                CachedNetworkImage(
+                  imageUrl: card.vip!.label!.image!,
                   height: 20,
                 ),
               if (card.nameplate?.image?.isNotEmpty == true)
-                Image.network(
-                  card.nameplate!.image!,
+                CachedNetworkImage(
+                  imageUrl: card.nameplate!.image!,
                   height: 20,
                 ),
               // GestureDetector(
@@ -416,35 +409,28 @@ class UserInfoCard extends StatelessWidget {
               ),
       );
 
-  _buildAvatar(BuildContext context) => GestureDetector(
-        onTap: () {
-          context.imageView(
-            imgList: [card.face ?? ''],
-          );
-          // showDialog(
-          //   useSafeArea: false,
-          //   context: context,
-          //   builder: (context) {
-          //     return ImagePreview(
-          //       initialPage: 0,
-          //       imgList: [card.face ?? ''],
-          //     );
-          //   },
-          // );
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 2.5,
-              color: Theme.of(context).colorScheme.surface,
+  _buildAvatar(BuildContext context) => Hero(
+        tag: card.face ?? 'avatarTag',
+        child: GestureDetector(
+          onTap: () {
+            context.imageView(
+              imgList: [card.face ?? 'avatarTag'],
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2.5,
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              shape: BoxShape.circle,
             ),
-            shape: BoxShape.circle,
-          ),
-          child: NetworkImgLayer(
-            src: card.face,
-            type: 'avatar',
-            width: 80,
-            height: 80,
+            child: NetworkImgLayer(
+              src: card.face,
+              type: 'avatar',
+              width: 80,
+              height: 80,
+            ),
           ),
         ),
       );

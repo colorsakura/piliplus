@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -432,22 +433,22 @@ class _MemberPageState extends State<MemberPage>
               if (_memberController
                       .memberInfo.value.vip?.label?['img_label_uri_hans'] !=
                   '')
-                Image.network(
-                  _memberController
+                CachedNetworkImage(
+                  imageUrl: _memberController
                       .memberInfo.value.vip!.label!['img_label_uri_hans'],
                   height: 20,
-                  semanticLabel:
-                      _memberController.memberInfo.value.vip!.label!['text'],
+                  // semanticLabel:
+                  //     _memberController.memberInfo.value.vip!.label!['text'],
                 )
               else if (_memberController.memberInfo.value.vip
                       ?.label?['img_label_uri_hans_static'] !=
                   '')
-                Image.network(
-                  _memberController.memberInfo.value.vip!
+                CachedNetworkImage(
+                  imageUrl: _memberController.memberInfo.value.vip!
                       .label!['img_label_uri_hans_static'],
                   height: 20,
-                  semanticLabel:
-                      _memberController.memberInfo.value.vip!.label!['text'],
+                  // semanticLabel:
+                  //     _memberController.memberInfo.value.vip!.label!['text'],
                 ),
             ],
             const SizedBox(width: 5),

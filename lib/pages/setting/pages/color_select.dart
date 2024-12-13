@@ -1,34 +1,35 @@
+import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/color_type.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-extension _SchemeExt on DynamicSchemeVariant {
-  String get title => [
-        '色调点', //tonalSpot
-        '富达', //fidelity
-        '单色', //monochrome
-        '中性的', //neutral
-        '充满活力', //vibrant
-        '富有表现力', //expressive
-        '内容', //content
-        '彩虹', //rainbow
-        '水果沙拉', //fruitSalad
-      ][index];
-  // from ImageToolbox
-  String get subTitle => [
-        '默认调色板样式，它允许自定义所有四种颜色，其他允许您仅设置关键颜色', //tonalSpot
-        '与内容方案非常相似的方案', //fidelity
-        '单色主题，颜色纯黑/白/灰', //monochrome
-        '色彩比单色稍多的风格', //neutral
-        '响亮的主题，主要调色板的色彩度最大，其他调色板的色彩度增加', //vibrant
-        '有趣的主题 - 源颜色的色调不会出现在主题中', //expressive
-        '将源颜色放置在Scheme.primaryContainer中的方案', //content
-        '有趣的主题 - 源颜色的色调不会出现在主题中', //rainbow
-        '有趣的主题 - 源颜色的色调不会出现在主题中', //fruitSalad
-      ][index];
-}
+// extension _SchemeExt on DynamicSchemeVariant {
+//   String get title => [
+//         '色调点', //tonalSpot
+//         '富达', //fidelity
+//         '单色', //monochrome
+//         '中性的', //neutral
+//         '充满活力', //vibrant
+//         '富有表现力', //expressive
+//         '内容', //content
+//         '彩虹', //rainbow
+//         '水果沙拉', //fruitSalad
+//       ][index];
+//   // from ImageToolbox
+//   String get subTitle => [
+//         '默认调色板样式，它允许自定义所有四种颜色，其他允许您仅设置关键颜色', //tonalSpot
+//         '与内容方案非常相似的方案', //fidelity
+//         '单色主题，颜色纯黑/白/灰', //monochrome
+//         '色彩比单色稍多的风格', //neutral
+//         '响亮的主题，主要调色板的色彩度最大，其他调色板的色彩度增加', //vibrant
+//         '有趣的主题 - 源颜色的色调不会出现在主题中', //expressive
+//         '将源颜色放置在Scheme.primaryContainer中的方案', //content
+//         '有趣的主题 - 源颜色的色调不会出现在主题中', //rainbow
+//         '有趣的主题 - 源颜色的色调不会出现在主题中', //fruitSalad
+//       ][index];
+// }
 
 class ColorSelectPage extends StatefulWidget {
   const ColorSelectPage({super.key});
@@ -60,8 +61,8 @@ List<Item> generateItems(int count) {
 
 class _ColorSelectPageState extends State<ColorSelectPage> {
   final ColorSelectController ctr = Get.put(ColorSelectController());
-  DynamicSchemeVariant _dynamicSchemeVariant =
-      DynamicSchemeVariant.values[GStorage.schemeVariant];
+  FlexSchemeVariant _dynamicSchemeVariant =
+      FlexSchemeVariant.values[GStorage.schemeVariant];
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                 child: Icon(Icons.palette_outlined),
               ),
               subtitle: Text(
-                _dynamicSchemeVariant.subTitle,
+                _dynamicSchemeVariant.description,
                 style: TextStyle(fontSize: 12),
               ),
               trailing: PopupMenuButton(
@@ -90,17 +91,17 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                   (context as Element).markNeedsBuild();
                   Get.forceAppUpdate();
                 },
-                itemBuilder: (context) => DynamicSchemeVariant.values
-                    .map((item) => PopupMenuItem<DynamicSchemeVariant>(
+                itemBuilder: (context) => FlexSchemeVariant.values
+                    .map((item) => PopupMenuItem<FlexSchemeVariant>(
                           value: item,
-                          child: Text(item.title),
+                          child: Text(item.variantName),
                         ))
                     .toList(),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      _dynamicSchemeVariant.title,
+                      _dynamicSchemeVariant.variantName,
                       style: TextStyle(
                         height: 1,
                         fontSize: 13,

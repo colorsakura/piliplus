@@ -55,7 +55,7 @@ class GStorage {
   static List<Color> get blockColor {
     List list = setting.get(
       SettingBoxKey.blockColor,
-      defaultValue: List.filled(SegmentType.values.length, ''),
+      defaultValue: List.generate(SegmentType.values.length, (_) => ''),
     );
     return SegmentType.values
         .map((item) => list[item.index].isNotEmpty
@@ -94,7 +94,7 @@ class GStorage {
       setting.get(SettingBoxKey.dynamicPeriod, defaultValue: 5);
 
   static int get schemeVariant =>
-      setting.get(SettingBoxKey.schemeVariant, defaultValue: 0);
+      setting.get(SettingBoxKey.schemeVariant, defaultValue: 10);
 
   static double get danmakuFontScaleFS =>
       setting.get(SettingBoxKey.danmakuFontScaleFS, defaultValue: 1.2);

@@ -65,16 +65,6 @@ Widget imageview(
             imgList: picArr.map((item) => item.url).toList(),
             onDismissed: onDismissed,
           );
-          // showDialog(
-          //   useSafeArea: false,
-          //   context: context,
-          //   builder: (context) {
-          //     return ImagePreview(
-          //       initialPage: index,
-          //       imgList: picArr.map((item) => item.url).toList(),
-          //     );
-          //   },
-          // );
         },
         child: Stack(
           alignment: Alignment.center,

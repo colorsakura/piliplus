@@ -6,6 +6,7 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -786,8 +787,8 @@ class ReplyItemGrpc extends StatelessWidget {
               [
                 if (content.url[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
-                    child: Image.network(
-                      content.url[matchStr]!.prefixIcon,
+                    child: CachedNetworkImage(
+                      imageUrl: content.url[matchStr]!.prefixIcon,
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -946,8 +947,8 @@ class ReplyItemGrpc extends StatelessWidget {
             [
               if (content.url[patternStr]?.hasPrefixIcon() == true) ...[
                 WidgetSpan(
-                  child: Image.network(
-                    content.url[patternStr]!.prefixIcon,
+                  child: CachedNetworkImage(
+                    imageUrl: content.url[patternStr]!.prefixIcon,
                     height: 19,
                     color: Theme.of(context).colorScheme.primary,
                   ),

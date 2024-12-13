@@ -1168,8 +1168,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
                         onPressed: videoDetailController.showShootDanmakuSheet,
-                        child:
-                            const Text('发弹幕', style: TextStyle(fontSize: 12)),
+                        child: Text(
+                          '发弹幕',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(

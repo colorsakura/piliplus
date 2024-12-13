@@ -93,7 +93,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
     _quality =
         GStorage.setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
-    _thumbList = List.filled(widget.sources.length, true);
+    _thumbList = List.generate(widget.sources.length, (_) => true);
 
     _pageController = PageController(initialPage: widget.initIndex);
 
