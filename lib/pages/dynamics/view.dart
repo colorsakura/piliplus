@@ -167,6 +167,7 @@ class _DynamicsPageState extends State<DynamicsPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: upPanelPosition == UpPanelPosition.rightDrawer

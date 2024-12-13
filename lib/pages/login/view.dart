@@ -420,7 +420,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return OrientationBuilder(builder: (context, orientation) {
       return Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
               tooltip: '关闭',

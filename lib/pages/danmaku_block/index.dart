@@ -113,6 +113,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: TabBar(
             controller: _danmakuBlockController.tabController,

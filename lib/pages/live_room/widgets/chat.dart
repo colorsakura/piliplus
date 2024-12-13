@@ -106,7 +106,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
     dynamic emots = obj['emots'];
     dynamic uemote = obj['uemote'];
     List list = [
-      if (emots != null) emots.keys,
+      if (emots != null) ...emots.keys,
       if (uemote is Map) uemote['emoticon_unique'].replaceFirst('upower_', '')
     ];
     if (list.isNotEmpty) {

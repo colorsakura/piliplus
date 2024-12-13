@@ -190,6 +190,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: StreamBuilder(
           stream: _titleStreamC.stream,

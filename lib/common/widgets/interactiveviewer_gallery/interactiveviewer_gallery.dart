@@ -390,7 +390,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     double targetScale = widget.minScale;
 
     if (currentScale <= widget.minScale) {
-      targetScale = widget.maxScale * 0.7;
+      targetScale = widget.maxScale * 0.4;
     }
 
     double offSetX = targetScale == 1.0

@@ -133,6 +133,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(title),
         actions: [
