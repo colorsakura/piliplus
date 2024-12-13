@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class SearchResultController extends GetxController {
   String? keyword;
 
-  RxList<int> count = List.generate(5, (_) => -1).toList().obs;
+  RxList<int> count = List.filled(5, -1).toList().obs;
 
   @override
   void onInit() {

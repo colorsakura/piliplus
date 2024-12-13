@@ -579,7 +579,7 @@ class _ReportPanelState extends State<ReportPanel> {
               },
               ['头像违规', '昵称违规', '签名违规'][index],
             ),
-          ).toList(),
+          ),
           const Text('举报理由（单选，非必选）'),
           ...List.generate(
             5,
@@ -591,7 +591,7 @@ class _ReportPanelState extends State<ReportPanel> {
               },
               ['色情低俗', '不实信息', '违禁', '人身攻击', '赌博诈骗'][index],
             ),
-          ).toList(),
+          ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

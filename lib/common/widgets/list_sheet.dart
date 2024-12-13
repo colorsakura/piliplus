@@ -71,12 +71,10 @@ class _ListSheetContentState extends State<ListSheetContent>
         });
     }
     itemScrollController = _isList
-        ? List.generate(
-            widget.season.sections.length, (_) => ItemScrollController())
+        ? List.filled(widget.season.sections.length, ItemScrollController())
         : [ItemScrollController()];
-    reverse = _isList
-        ? List.generate(widget.season.sections.length, (_) => false)
-        : [false];
+    reverse =
+        _isList ? List.filled(widget.season.sections.length, false) : [false];
     WidgetsBinding.instance.addPostFrameCallback((_) {
       itemScrollController[_index].jumpTo(index: currentIndex);
     });

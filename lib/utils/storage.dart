@@ -55,7 +55,7 @@ class GStorage {
   static List<Color> get blockColor {
     List list = setting.get(
       SettingBoxKey.blockColor,
-      defaultValue: List.generate(SegmentType.values.length, (_) => ''),
+      defaultValue: List.filled(SegmentType.values.length, ''),
     );
     return SegmentType.values
         .map((item) => list[item.index].isNotEmpty
