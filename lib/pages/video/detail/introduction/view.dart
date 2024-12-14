@@ -305,8 +305,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              color: t.colorScheme.primary),
+                                            fontSize: 12,
+                                            // color: t.colorScheme.primary,
+                                          ),
                                           // semanticsLabel: "UP主：${owner.name}",
                                         ),
                                         const SizedBox(height: 0),
@@ -667,11 +668,12 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           onPressed: () => videoIntroController.actionRelationMod(context),
           style: TextButton.styleFrom(
             visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
-            foregroundColor:
-                attr != 0 ? t.colorScheme.outline : t.colorScheme.onPrimary,
+            foregroundColor: attr != 0
+                ? t.colorScheme.outline
+                : t.colorScheme.onSecondaryContainer,
             backgroundColor: attr != 0
                 ? t.colorScheme.onInverseSurface
-                : t.colorScheme.primary, // 设置按钮背景色
+                : t.colorScheme.secondaryContainer,
           ),
           child: Text(
             attr == 128

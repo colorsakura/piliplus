@@ -130,8 +130,17 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                       ),
                     ),
                     onPressed: _searchController.queryHotSearchList,
-                    icon: const Icon(Icons.refresh_outlined, size: 18),
-                    label: const Text('刷新'),
+                    icon: Icon(
+                      Icons.refresh_outlined,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    label: Text(
+                      '刷新',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -183,8 +192,17 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                           ),
                         ),
                         onPressed: _searchController.onClearHistory,
-                        icon: const Icon(Icons.clear_all_outlined, size: 18),
-                        label: const Text('清空'),
+                        icon: Icon(
+                          Icons.clear_all_outlined,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        label: Text(
+                          '清空',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
                       ),
                     )
                   ],

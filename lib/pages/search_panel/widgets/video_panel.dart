@@ -311,11 +311,11 @@ class VideoPanelController extends GetxController {
               onLongSelect: (_) {},
               bgColor: currentPubTimeFilterval == -1 &&
                       (isFirst ? customPubBegin : customPubEnd)
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : null,
+                  ? Theme.of(context).colorScheme.secondaryContainer
+                  : Theme.of(context).colorScheme.outline.withOpacity(0.1),
               textColor: currentPubTimeFilterval == -1 &&
                       (isFirst ? customPubBegin : customPubEnd)
-                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  ? Theme.of(context).colorScheme.onSecondaryContainer
                   : Theme.of(context).colorScheme.outline.withOpacity(0.8),
             );
           }
@@ -386,12 +386,14 @@ class VideoPanelController extends GetxController {
                             },
                             onLongSelect: (_) {},
                             bgColor: item['value'] == currentPubTimeFilterval
-                                ? Theme.of(context).colorScheme.primaryContainer
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
                                 : null,
                             textColor: item['value'] == currentPubTimeFilterval
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .onPrimaryContainer
+                                    .onSecondaryContainer
                                 : null,
                           ),
                         )
@@ -435,12 +437,14 @@ class VideoPanelController extends GetxController {
                             },
                             onLongSelect: (_) {},
                             bgColor: item['value'] == currentTimeFilterval
-                                ? Theme.of(context).colorScheme.primaryContainer
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
                                 : null,
                             textColor: item['value'] == currentTimeFilterval
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .onPrimaryContainer
+                                    .onSecondaryContainer
                                 : null,
                           ),
                         )
@@ -471,12 +475,14 @@ class VideoPanelController extends GetxController {
                             },
                             onLongSelect: (_) {},
                             bgColor: item['value'] == currentZoneFilterval
-                                ? Theme.of(context).colorScheme.primaryContainer
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
                                 : null,
                             textColor: item['value'] == currentZoneFilterval
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .onPrimaryContainer
+                                    .onSecondaryContainer
                                 : null,
                           ),
                         )

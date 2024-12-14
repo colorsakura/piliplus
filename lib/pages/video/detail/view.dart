@@ -1201,7 +1201,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             // ignore: deprecated_member_use
                             color: videoDetailController
                                     .plPlayerController.isOpenDanmu.value
-                                ? Theme.of(context).colorScheme.primary
+                                ? Theme.of(context).colorScheme.secondary
                                 : Theme.of(context).colorScheme.outline,
                           ),
                         ),

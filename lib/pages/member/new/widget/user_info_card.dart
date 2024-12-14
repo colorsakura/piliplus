@@ -131,11 +131,11 @@ class UserInfoCard extends StatelessWidget {
                   imageUrl: card.vip!.label!.image!,
                   height: 20,
                 ),
-              if (card.nameplate?.image?.isNotEmpty == true)
-                CachedNetworkImage(
-                  imageUrl: card.nameplate!.image!,
-                  height: 20,
-                ),
+              // if (card.nameplate?.image?.isNotEmpty == true)
+              //   CachedNetworkImage(
+              //     imageUrl: card.nameplate!.image!,
+              //     height: 20,
+              //   ),
               // GestureDetector(
               //   onTap: () {
               //     Utils.copyText(card.mid.toString());

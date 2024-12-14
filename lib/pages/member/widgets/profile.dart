@@ -199,9 +199,7 @@ class ProfilePanel extends StatelessWidget {
                                     ? Theme.of(context)
                                         .colorScheme
                                         .onInverseSurface
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .primary, // 设置按钮背景色
+                                    : Theme.of(context).colorScheme.primary,
                               ),
                               child: Obx(() => Text(ctr.attributeText.value)),
                             ),

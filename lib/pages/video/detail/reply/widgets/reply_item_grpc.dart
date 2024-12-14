@@ -371,7 +371,7 @@ class ReplyItemGrpc extends StatelessWidget {
               child: Text(
                 'UP主觉得很赞',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                   fontWeight: FontWeight.normal,
                 ),
@@ -387,7 +387,7 @@ class ReplyItemGrpc extends StatelessWidget {
           Text(
             '热评',
             style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize),
           ),
         if (replyLevel == '2' &&
@@ -475,7 +475,7 @@ class ReplyItemGrpc extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withOpacity(0.85),
+                                .withOpacity(0.8),
                             height: 1.6),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -487,7 +487,7 @@ class ReplyItemGrpc extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .primary
-                                    .withOpacity(0.85),
+                                    .withOpacity(0.8),
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -560,14 +560,14 @@ class ReplyItemGrpc extends StatelessWidget {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withOpacity(0.85))),
+                                      .withOpacity(0.8))),
                         TextSpan(
                           text: replyItem.replyControl.subReplyEntryText,
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(0.85),
+                                .withOpacity(0.8),
                           ),
                         )
                       ],

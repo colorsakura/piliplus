@@ -179,9 +179,8 @@ class _FavPanelState extends State<FavPanel> {
                         vertical: -2,
                       ),
                       foregroundColor: Theme.of(context).colorScheme.outline,
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .onInverseSurface, // 设置按钮背景色
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onInverseSurface,
                     ),
                     child: const Text('取消'),
                   ),

@@ -178,8 +178,7 @@ class _GroupPanelState extends State<GroupPanel> {
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primary, // 设置按钮背景色
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     child: Text(showDefaultBtn ? '保存至默认分组' : '保存'),
                   ),

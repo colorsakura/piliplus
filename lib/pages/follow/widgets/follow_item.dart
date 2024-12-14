@@ -57,7 +57,7 @@ class FollowItem extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   foregroundColor: Theme.of(context).colorScheme.outline,
                   backgroundColor:
-                      Theme.of(context).colorScheme.onInverseSurface, // 设置按钮背景色
+                      Theme.of(context).colorScheme.onInverseSurface,
                 ),
                 child: const Text(
                   '已关注',

@@ -293,10 +293,10 @@ class ArticlePanelController extends GetxController {
                         },
                         onLongSelect: (_) {},
                         bgColor: item['value'] == currentOrderFilterval.value
-                            ? Theme.of(context).colorScheme.primaryContainer
+                            ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
                         textColor: item['value'] == currentOrderFilterval.value
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
                             : null,
                       ),
                     )
@@ -327,10 +327,10 @@ class ArticlePanelController extends GetxController {
                         },
                         onLongSelect: (_) {},
                         bgColor: item['value'] == currentZoneFilterval.value
-                            ? Theme.of(context).colorScheme.primaryContainer
+                            ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
                         textColor: item['value'] == currentZoneFilterval.value
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
                             : null,
                       ),
                     )

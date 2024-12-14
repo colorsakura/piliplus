@@ -373,7 +373,7 @@ class ReplyItem extends StatelessWidget {
               child: Text(
                 'UP主觉得很赞',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                   fontWeight: FontWeight.normal,
                 ),
@@ -387,7 +387,7 @@ class ReplyItem extends StatelessWidget {
           Text(
             '热评',
             style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize),
           ),
         const Spacer(),
@@ -459,7 +459,7 @@ class ReplyItem extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withOpacity(0.85),
+                                .withOpacity(0.8),
                             height: 1.6),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -471,7 +471,7 @@ class ReplyItem extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .primary
-                                    .withOpacity(0.85),
+                                    .withOpacity(0.8),
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -541,14 +541,14 @@ class ReplyItem extends StatelessWidget {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withOpacity(0.85))),
+                                      .withOpacity(0.8))),
                         TextSpan(
                           text: replyControl!.entryText!,
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(0.85),
+                                .withOpacity(0.8),
                           ),
                         )
                       ],

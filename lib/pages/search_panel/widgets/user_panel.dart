@@ -227,10 +227,10 @@ class UserPanelController extends GetxController {
                         },
                         onLongSelect: (_) {},
                         bgColor: item['value'] == currentOrderFilterval.value
-                            ? Theme.of(context).colorScheme.primaryContainer
+                            ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
                         textColor: item['value'] == currentOrderFilterval.value
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
                             : null,
                       ),
                     )
@@ -261,11 +261,11 @@ class UserPanelController extends GetxController {
                         },
                         onLongSelect: (_) {},
                         bgColor: item['value'] == currentUserTypeFilterval.value
-                            ? Theme.of(context).colorScheme.primaryContainer
+                            ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
                         textColor: item['value'] ==
                                 currentUserTypeFilterval.value
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
                             : null,
                       ),
                     )

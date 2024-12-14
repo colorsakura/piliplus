@@ -150,11 +150,19 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                           child: TextButton.icon(
                             onPressed: () =>
                                 _videoReplyController.queryBySort(),
-                            icon: const Icon(Icons.sort, size: 16),
+                            icon: Icon(
+                              Icons.sort,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                             label: Obx(
                               () => Text(
                                 _videoReplyController.sortTypeLabel.value,
-                                style: const TextStyle(fontSize: 13),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
                               ),
                             ),
                           ),

@@ -248,14 +248,21 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                 height: 35,
                 child: TextButton.icon(
                   onPressed: () => _videoReplyReplyController.queryBySort(),
-                  icon: const Icon(Icons.sort, size: 16),
+                  icon: Icon(
+                    Icons.sort,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                   label: Obx(
                     () => Text(
                       _videoReplyReplyController.mode.value ==
                               Mode.MAIN_LIST_HOT
                           ? '按热度'
                           : '按时间',
-                      style: const TextStyle(fontSize: 13),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ),
                 ),
