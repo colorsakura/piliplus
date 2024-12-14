@@ -42,8 +42,8 @@ class PBadge extends StatelessWidget {
       color = Colors.white;
     }
     if (type == 'color') {
-      bgColor = t.primaryContainer.withOpacity(0.5);
-      color = t.primary;
+      bgColor = t.secondaryContainer.withOpacity(0.5);
+      color = t.onSecondaryContainer;
     }
     if (type == 'line') {
       bgColor = Colors.transparent;

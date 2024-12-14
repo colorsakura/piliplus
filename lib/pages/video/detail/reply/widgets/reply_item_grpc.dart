@@ -709,7 +709,7 @@ class ReplyItemGrpc extends StatelessWidget {
             TextSpan(
               text: matchStr,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {

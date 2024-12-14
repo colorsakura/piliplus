@@ -101,69 +101,73 @@ class UserInfoCard extends StatelessWidget {
   _buildLeft(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Wrap(
-            spacing: 5,
-            runSpacing: 8,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () => Utils.copyText(card.name ?? ''),
-                child: Text(
-                  card.name ?? '',
-                  style: TextStyle(
-                    height: 1,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: (card.vip?.vipStatus ?? -1) > 0 &&
-                            card.vip?.vipType == 2
-                        ? context.vipColor
-                        : null,
+          child: FittedBox(
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Utils.copyText(card.name ?? ''),
+                  child: Text(
+                    card.name ?? '',
+                    style: TextStyle(
+                      height: 1,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: (card.vip?.vipStatus ?? -1) > 0 &&
+                              card.vip?.vipType == 2
+                          ? context.vipColor
+                          : null,
+                    ),
                   ),
                 ),
-              ),
-              Image.asset(
-                'assets/images/lv/lv${card.levelInfo?.currentLevel}.png',
-                height: 11,
-                semanticLabel: '等级${card.levelInfo?.currentLevel}',
-              ),
-              if (card.vip?.vipStatus == 1)
-                CachedNetworkImage(
-                  imageUrl: card.vip!.label!.image!,
-                  height: 20,
+                const SizedBox(width: 8),
+                Image.asset(
+                  'assets/images/lv/lv${card.levelInfo?.currentLevel}.png',
+                  height: 11,
+                  semanticLabel: '等级${card.levelInfo?.currentLevel}',
                 ),
-              // if (card.nameplate?.image?.isNotEmpty == true)
-              //   CachedNetworkImage(
-              //     imageUrl: card.nameplate!.image!,
-              //     height: 20,
-              //   ),
-              // GestureDetector(
-              //   onTap: () {
-              //     Utils.copyText(card.mid.toString());
-              //   },
-              //   child: Container(
-              //     padding:
-              //         const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
-              //     decoration: BoxDecoration(
-              //       color: Theme.of(context).colorScheme.secondaryContainer,
-              //       borderRadius: const BorderRadius.all(Radius.circular(12)),
-              //     ),
-              //     child: Text(
-              //       'uid: ${card.mid}',
-              //       style: TextStyle(
-              //         height: 1,
-              //         fontSize: 12,
-              //         fontWeight: FontWeight.w500,
-              //         color: Theme.of(context).colorScheme.onSecondaryContainer,
-              //       ),
-              //       strutStyle: const StrutStyle(
-              //         height: 1,
-              //         leading: 0,
-              //         fontSize: 12,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
+                if (card.vip?.vipStatus == 1) ...[
+                  const SizedBox(width: 8),
+                  CachedNetworkImage(
+                    imageUrl: card.vip!.label!.image!,
+                    height: 20,
+                  ),
+                ],
+                if (card.nameplate?.image?.isNotEmpty == true) ...[
+                  const SizedBox(width: 8),
+                  CachedNetworkImage(
+                    imageUrl: card.nameplate!.image!,
+                    height: 20,
+                  ),
+                ],
+                // GestureDetector(
+                //   onTap: () {
+                //     Utils.copyText(card.mid.toString());
+                //   },
+                //   child: Container(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
+                //     decoration: BoxDecoration(
+                //       color: Theme.of(context).colorScheme.secondaryContainer,
+                //       borderRadius: const BorderRadius.all(Radius.circular(12)),
+                //     ),
+                //     child: Text(
+                //       'uid: ${card.mid}',
+                //       style: TextStyle(
+                //         height: 1,
+                //         fontSize: 12,
+                //         fontWeight: FontWeight.w500,
+                //         color: Theme.of(context).colorScheme.onSecondaryContainer,
+                //       ),
+                //       strutStyle: const StrutStyle(
+                //         height: 1,
+                //         leading: 0,
+                //         fontSize: 12,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
         if (card.officialVerify?.desc?.isNotEmpty == true)
@@ -275,25 +279,21 @@ class UserInfoCard extends StatelessWidget {
             children: List.generate(
               5,
               (index) => index % 2 == 0
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: _countWidget(
-                        title: ['粉丝', '关注', '获赞'][index ~/ 2],
-                        count: index == 0
-                            ? card.fans
-                            : index == 2
-                                ? card.attention
-                                : card.likes?.likeNum ?? 0,
-                        onTap: () {
-                          if (index == 0) {
-                            Get.toNamed(
-                                '/fan?mid=${card.mid}&name=${card.name}');
-                          } else if (index == 2) {
-                            Get.toNamed(
-                                '/follow?mid=${card.mid}&name=${card.name}');
-                          }
-                        },
-                      ),
+                  ? _countWidget(
+                      title: ['粉丝', '关注', '获赞'][index ~/ 2],
+                      count: index == 0
+                          ? card.fans
+                          : index == 2
+                              ? card.attention
+                              : card.likes?.likeNum ?? 0,
+                      onTap: () {
+                        if (index == 0) {
+                          Get.toNamed('/fan?mid=${card.mid}&name=${card.name}');
+                        } else if (index == 2) {
+                          Get.toNamed(
+                              '/follow?mid=${card.mid}&name=${card.name}');
+                        }
+                      },
                     )
                   : SizedBox(
                       height: 15,
@@ -462,6 +462,7 @@ class UserInfoCard extends StatelessWidget {
                   child: _buildBadge(context),
                 ),
               Positioned(
+                left: 120,
                 top: 140,
                 right: 20,
                 child: _buildRight(context),

@@ -221,11 +221,7 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        surfaceTintColor: isDynamic
-            ? colorScheme.surfaceTint
-            : isDark
-                ? colorScheme.surfaceTint
-                : null,
+        surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
       ),
       snackBarTheme: SnackBarThemeData(
         actionTextColor: colorScheme.primary,
@@ -242,27 +238,16 @@ class MyApp extends StatelessWidget {
         },
       ),
       popupMenuTheme: PopupMenuThemeData(
-        surfaceTintColor:
-            isDynamic || variant == FlexSchemeVariant.material3Legacy
-                ? isDark
-                    ? colorScheme.surfaceTint
-                    : null
-                : null,
+        surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
       ),
       cardTheme: CardTheme(
         elevation: 1,
-        surfaceTintColor: isDynamic
-            ? colorScheme.surfaceTint
-            : variant == FlexSchemeVariant.material3Legacy
-                ? isDark
-                    ? colorScheme.surfaceTint
-                    : null
-                : null,
+        surfaceTintColor: isDark ? colorScheme.onSurfaceVariant : null,
         shadowColor: Colors.transparent,
       ),
-      dialogTheme: DialogTheme(
-        surfaceTintColor: isDark ? colorScheme.surfaceTint : null,
-      ),
+      // dialogTheme: DialogTheme(
+      //   surfaceTintColor: isDark ? colorScheme.onSurfaceVariant : null,
+      // ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         refreshBackgroundColor: colorScheme.onSecondary,
       ),
