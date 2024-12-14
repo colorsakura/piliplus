@@ -8,7 +8,6 @@ import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import '../../models/common/dynamic_badge_mode.dart';
 import '../../models/common/nav_bar_config.dart';
 import '../main/index.dart';
@@ -75,14 +74,6 @@ class SettingController extends GetxController {
                 userInfoCache.put('userInfoCache', null);
                 localCache.put(LocalCacheKey.accessKey,
                     {'mid': -1, 'value': '', 'refresh': ''});
-                try {
-                  final WebViewController controller = WebViewController();
-                  controller.clearCache();
-                  controller.clearLocalStorage();
-                  WebViewCookieManager().clearCookies();
-                } catch (e) {
-                  debugPrint(e.toString());
-                }
                 userLogin.value = false;
                 if (Get.isRegistered<MainController>()) {
                   MainController mainController = Get.find<MainController>();

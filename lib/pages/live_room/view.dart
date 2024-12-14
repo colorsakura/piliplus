@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/pages/live_room/widgets/chat.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,9 +11,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
-import 'package:ns_danmaku/danmaku_controller.dart';
-import 'package:ns_danmaku/danmaku_view.dart';
-import 'package:ns_danmaku/models/danmaku_option.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../utils/storage.dart';
@@ -42,15 +40,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   late final _node = FocusNode();
   late final _ctr = TextEditingController();
 
-  // late bool enableShowDanmaku;
-  // late List blockTypes;
-  // late double showArea;
-  // late double opacityVal;
-  // late double fontSizeVal;
-  // late double fontSizeFSVal;
-  // late double danmakuDurationVal;
-  // late double strokeWidth;
-  // late int fontWeight;
   int latestAddedPosition = -1;
   bool? _isFullScreen;
   bool? _isPipMode;
@@ -108,14 +97,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   Future<void> videoSourceInit() async {
     _futureBuilder = _liveRoomController.queryLiveInfoH5();
     plPlayerController = _liveRoomController.plPlayerController;
-    // blockTypes = plPlayerController.blockTypes;
-    // showArea = plPlayerController.showArea;
-    // opacityVal = plPlayerController.opacityVal;
-    // fontSizeVal = plPlayerController.fontSizeVal;
-    // fontSizeFSVal = plPlayerController.fontSizeFSVal;
-    // strokeWidth = plPlayerController.strokeWidth;
-    // fontWeight = plPlayerController.fontWeight;
-    // danmakuDurationVal = plPlayerController.danmakuDurationVal;
   }
 
   @override
@@ -158,7 +139,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               () => AnimatedOpacity(
                 opacity: plPlayerController.isOpenDanmu.value ? 1 : 0,
                 duration: const Duration(milliseconds: 100),
-                child: DanmakuView(
+                child: DanmakuScreen(
                   createdController: (DanmakuController e) async {
                     plPlayerController.danmakuController =
                         _liveRoomController.controller = e;
@@ -172,13 +153,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     hideTop: plPlayerController.blockTypes.contains(5),
                     hideScroll: plPlayerController.blockTypes.contains(2),
                     hideBottom: plPlayerController.blockTypes.contains(4),
-                    duration: plPlayerController.danmakuDurationVal /
+                    duration: plPlayerController.danmakuDurationVal ~/
                         plPlayerController.playbackSpeed,
                     strokeWidth: plPlayerController.strokeWidth,
-                    // initDuration /
-                    //     (danmakuSpeedVal * widget.playerController.playbackSpeed),
                   ),
-                  statusChanged: (isPlaying) {},
                 ),
               ),
             ),
@@ -206,8 +184,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               child: Image.asset(
                 'assets/images/live/default_bg.webp',
                 fit: BoxFit.cover,
-                // width: Get.width,
-                // height: Get.height,
               ),
             ),
           ),

@@ -1,7 +1,7 @@
+import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:ns_danmaku/ns_danmaku.dart';
 import 'package:PiliPalaX/models/danmaku/dm.pb.dart';
 import 'package:PiliPalaX/pages/danmaku/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -29,17 +29,8 @@ class _PlDanmakuState extends State<PlDanmaku> {
   late PlPlayerController playerController;
   late PlDanmakuController _plDanmakuController;
   DanmakuController? _controller;
-  // bool danmuPlayStatus = true;
   Box setting = GStorage.setting;
   late bool enableShowDanmaku;
-  // late List blockTypes;
-  // late double showArea;
-  // late double opacityVal;
-  // late double fontSizeVal;
-  // late double fontSizeFSVal;
-  // late double danmakuDurationVal;
-  // late double strokeWidth;
-  // late int fontWeight;
   int latestAddedPosition = -1;
   bool? _isFullScreen;
 
@@ -83,14 +74,6 @@ class _PlDanmakuState extends State<PlDanmaku> {
         }
       }
     });
-    // blockTypes = playerController.blockTypes;
-    // showArea = playerController.showArea;
-    // opacityVal = playerController.opacityVal;
-    // fontSizeVal = playerController.fontSizeVal;
-    // fontSizeFSVal = playerController.fontSizeFSVal;
-    // strokeWidth = playerController.strokeWidth;
-    // fontWeight = playerController.fontWeight;
-    // danmakuDurationVal = playerController.danmakuDurationVal;
   }
 
   // 播放器状态监听
@@ -121,18 +104,16 @@ class _PlDanmakuState extends State<PlDanmaku> {
         playerController.playerStatus.status.value == PlayerStatus.playing &&
         currentDanmakuList != null &&
         _controller != null) {
-      Color? defaultColor = playerController.blockTypes.contains(6)
-          ? DmUtils.decimalToColor(16777215)
-          : null;
+      Color? defaultColor =
+          playerController.blockTypes.contains(6) ? Colors.white : null;
 
-      _controller!.addItems(currentDanmakuList
-          .map((e) => DanmakuItem(
-                e.content,
-                color: defaultColor ?? DmUtils.decimalToColor(e.color),
-                time: e.progress,
-                type: DmUtils.getPosition(e.mode),
-              ))
-          .toList());
+      for (DanmakuElem e in currentDanmakuList) {
+        _controller!.addDanmaku(DanmakuContentItem(
+          e.content,
+          color: defaultColor ?? DmUtils.decimalToColor(e.color),
+          type: DmUtils.getPosition(e.mode),
+        ));
+      }
     }
   }
 
@@ -157,7 +138,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
         () => AnimatedOpacity(
           opacity: playerController.isOpenDanmu.value ? 1 : 0,
           duration: const Duration(milliseconds: 100),
-          child: DanmakuView(
+          child: DanmakuScreen(
             createdController: (DanmakuController e) async {
               playerController.danmakuController = _controller = e;
             },
@@ -169,13 +150,10 @@ class _PlDanmakuState extends State<PlDanmaku> {
               hideTop: playerController.blockTypes.contains(5),
               hideScroll: playerController.blockTypes.contains(2),
               hideBottom: playerController.blockTypes.contains(4),
-              duration: playerController.danmakuDurationVal /
+              duration: playerController.danmakuDurationVal ~/
                   playerController.playbackSpeed,
               strokeWidth: playerController.strokeWidth,
-              // initDuration /
-              //     (danmakuSpeedVal * widget.playerController.playbackSpeed),
             ),
-            statusChanged: (isPlaying) {},
           ),
         ),
       );

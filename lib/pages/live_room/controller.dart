@@ -4,6 +4,7 @@ import 'package:PiliPalaX/models/live/danmu_info.dart';
 import 'package:PiliPalaX/tcp/live.dart';
 import 'package:PiliPalaX/utils/danmaku.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -11,8 +12,6 @@ import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/live.dart';
 import 'package:PiliPalaX/models/live/room_info.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
-import 'package:ns_danmaku/danmaku_controller.dart';
-import 'package:ns_danmaku/models/danmaku_item.dart';
 import '../../models/live/room_info_h5.dart';
 import '../../utils/video_utils.dart';
 
@@ -164,14 +163,13 @@ class LiveRoomController extends GetxController {
             });
             Map json = jsonDecode(obj['info'][0][15]['extra']);
             if (showDanmaku) {
-              controller?.addItems([
-                DanmakuItem(
+              controller?.addDanmaku(
+                DanmakuContentItem(
                   json['content'],
                   color: DmUtils.decimalToColor(json['color']),
-                  // time: e.progress,
                   type: DmUtils.getPosition(json['mode']),
-                )
-              ]);
+                ),
+              );
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => scrollToBottom(),
               );

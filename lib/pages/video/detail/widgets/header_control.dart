@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:ns_danmaku/ns_danmaku.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
 import 'package:PiliPalaX/models/video/play/url.dart';
@@ -997,13 +997,6 @@ class _HeaderControlState extends State<HeaderControl> {
                               danmakuWeight;
                           widget.controller!.putDanmakuSettings();
                           setState(() {});
-                          // try {
-                          //   final DanmakuOption currentOption =
-                          //       danmakuController.option;
-                          //   final DanmakuOption updatedOption =
-                          //   currentOption.copyWith(strokeWidth: val);
-                          //   danmakuController.updateOption(updatedOption);
-                          // } catch (_) {}
                         },
                       ),
                     ),
@@ -1028,16 +1021,14 @@ class _HeaderControlState extends State<HeaderControl> {
                               widget.controller?.putDanmakuSettings();
                               setState(() {});
                               try {
-                                final DanmakuOption currentOption =
-                                    danmakuController.option;
-                                final DanmakuOption updatedOption =
-                                    currentOption.copyWith(
-                                  hideTop: blockTypes.contains(5),
-                                  hideBottom: blockTypes.contains(4),
-                                  hideScroll: blockTypes.contains(2),
-                                  // 添加或修改其他需要修改的选项属性
+                                danmakuController.updateOption(
+                                  danmakuController.option.copyWith(
+                                    hideTop: blockTypes.contains(5),
+                                    hideBottom: blockTypes.contains(4),
+                                    hideScroll: blockTypes.contains(2),
+                                    // 添加或修改其他需要修改的选项属性
+                                  ),
                                 );
-                                danmakuController.updateOption(updatedOption);
                               } catch (_) {}
                             },
                             text: i['label'],
@@ -1061,11 +1052,10 @@ class _HeaderControlState extends State<HeaderControl> {
                               widget.controller?.putDanmakuSettings();
                               setState(() {});
                               try {
-                                final DanmakuOption currentOption =
-                                    danmakuController.option;
-                                final DanmakuOption updatedOption =
-                                    currentOption.copyWith(area: i['value']);
-                                danmakuController.updateOption(updatedOption);
+                                danmakuController.updateOption(
+                                  danmakuController.option
+                                      .copyWith(area: i['value']),
+                                );
                               } catch (_) {}
                             },
                             text: i['label'],
@@ -1105,11 +1095,9 @@ class _HeaderControlState extends State<HeaderControl> {
                           widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
-                            final DanmakuOption currentOption =
-                                danmakuController.option;
-                            final DanmakuOption updatedOption =
-                                currentOption.copyWith(opacity: val);
-                            danmakuController.updateOption(updatedOption);
+                            danmakuController.updateOption(
+                              danmakuController.option.copyWith(opacity: val),
+                            );
                           } catch (_) {}
                         },
                       ),
@@ -1144,11 +1132,10 @@ class _HeaderControlState extends State<HeaderControl> {
                           widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
-                            final DanmakuOption currentOption =
-                                danmakuController.option;
-                            final DanmakuOption updatedOption =
-                                currentOption.copyWith(fontWeight: fontWeight);
-                            danmakuController.updateOption(updatedOption);
+                            danmakuController.updateOption(
+                              danmakuController.option
+                                  .copyWith(fontWeight: fontWeight),
+                            );
                           } catch (_) {}
                         },
                       ),
@@ -1183,11 +1170,10 @@ class _HeaderControlState extends State<HeaderControl> {
                           widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
-                            final DanmakuOption currentOption =
-                                danmakuController.option;
-                            final DanmakuOption updatedOption =
-                                currentOption.copyWith(strokeWidth: val);
-                            danmakuController.updateOption(updatedOption);
+                            danmakuController.updateOption(
+                              danmakuController.option
+                                  .copyWith(strokeWidth: val),
+                            );
                           } catch (_) {}
                         },
                       ),
@@ -1223,13 +1209,11 @@ class _HeaderControlState extends State<HeaderControl> {
                           setState(() {});
                           if (widget.controller?.isFullScreen.value == false) {
                             try {
-                              final DanmakuOption currentOption =
-                                  danmakuController.option;
-                              final DanmakuOption updatedOption =
-                                  currentOption.copyWith(
-                                fontSize: (15 * fontSizeVal).toDouble(),
+                              danmakuController.updateOption(
+                                danmakuController.option.copyWith(
+                                  fontSize: (15 * fontSizeVal).toDouble(),
+                                ),
                               );
-                              danmakuController.updateOption(updatedOption);
                             } catch (_) {}
                           }
                         },
@@ -1266,13 +1250,11 @@ class _HeaderControlState extends State<HeaderControl> {
                           setState(() {});
                           if (widget.controller?.isFullScreen.value == true) {
                             try {
-                              final DanmakuOption currentOption =
-                                  danmakuController.option;
-                              final DanmakuOption updatedOption =
-                                  currentOption.copyWith(
-                                fontSize: (15 * fontSizeFSVal).toDouble(),
+                              danmakuController.updateOption(
+                                danmakuController.option.copyWith(
+                                  fontSize: (15 * fontSizeFSVal).toDouble(),
+                                ),
                               );
-                              danmakuController.updateOption(updatedOption);
                             } catch (_) {}
                           }
                         },
@@ -1380,11 +1362,11 @@ class _HeaderControlState extends State<HeaderControl> {
                           widget.controller?.putDanmakuSettings();
                           setState(() {});
                           try {
-                            final DanmakuOption updatedOption =
-                                danmakuController.option.copyWith(
-                                    duration: danmakuDurationVal /
-                                        widget.controller!.playbackSpeed);
-                            danmakuController.updateOption(updatedOption);
+                            danmakuController.updateOption(
+                              danmakuController.option.copyWith(
+                                  duration: danmakuDurationVal ~/
+                                      widget.controller!.playbackSpeed),
+                            );
                           } catch (_) {}
                         },
                       ),

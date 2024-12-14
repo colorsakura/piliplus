@@ -1,5 +1,5 @@
+import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:flutter/material.dart';
-import 'package:ns_danmaku/ns_danmaku.dart';
 
 class DmUtils {
   static Color decimalToColor(int decimalColor) {

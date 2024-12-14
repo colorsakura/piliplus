@@ -349,10 +349,11 @@ class ReplyItem extends StatelessWidget {
               onReply?.call();
             },
             child: Row(children: [
-              Icon(Icons.reply,
-                  size: 18,
-                  color:
-                      Theme.of(context).colorScheme.outline.withOpacity(0.8)),
+              Icon(
+                Icons.reply,
+                size: 18,
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
+              ),
               const SizedBox(width: 3),
               Text(
                 '回复',
@@ -459,7 +460,7 @@ class ReplyItem extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withOpacity(0.8),
+                                .withOpacity(0.85),
                             height: 1.6),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -468,10 +469,7 @@ class ReplyItem extends StatelessWidget {
                             TextSpan(
                               text: '${replies![i].member!.uname}',
                               style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withOpacity(0.8),
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -538,17 +536,15 @@ class ReplyItem extends StatelessWidget {
                           TextSpan(
                               text: 'UP主等人 ',
                               style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.8))),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.85),
+                              )),
                         TextSpan(
                           text: replyControl!.entryText!,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.8),
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         )
                       ],
@@ -686,7 +682,7 @@ class ReplyItem extends StatelessWidget {
             TextSpan(
               text: matchStr,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                color: Theme.of(context).colorScheme.primary,
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {

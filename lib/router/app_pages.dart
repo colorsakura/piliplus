@@ -57,7 +57,6 @@ import '../pages/subscription/index.dart';
 import '../pages/subscription_detail/index.dart';
 import '../pages/video/detail/index.dart';
 import '../pages/video/detail/reply_reply/index.dart';
-import '../pages/webview/index.dart';
 import '../pages/whisper/index.dart';
 import '../pages/whisper_detail/index.dart';
 import '../utils/storage.dart';
@@ -73,7 +72,6 @@ class Routes {
     // 视频详情
     CustomGetPage(name: '/video', page: () => const VideoDetailPage()),
     //
-    CustomGetPage(name: '/webview', page: () => const WebviewPage()),
     CustomGetPage(name: '/webviewnew', page: () => const WebviewPageNew()),
     // 设置
     CustomGetPage(name: '/setting', page: () => const SettingPage()),

@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,7 +15,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:ns_danmaku/ns_danmaku.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/pages/mine/controller.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -843,9 +843,9 @@ class PlPlayerController {
     await _videoPlayerController?.setRate(speed);
     try {
       DanmakuOption currentOption = danmakuController!.option;
-      defaultDuration ??= currentOption.duration;
+      defaultDuration ??= currentOption.duration.toDouble();
       DanmakuOption updatedOption =
-          currentOption.copyWith(duration: defaultDuration! / speed);
+          currentOption.copyWith(duration: defaultDuration! ~/ speed);
       danmakuController!.updateOption(updatedOption);
       if (speed == 1.0) {
         defaultDuration = null;

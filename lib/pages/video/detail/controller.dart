@@ -10,6 +10,7 @@ import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/models/video/play/subtitle.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:dio/dio.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:PiliPalaX/utils/video_utils.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:ns_danmaku/models/danmaku_item.dart';
 
 import '../../../utils/id_utils.dart';
 import 'widgets/header_control.dart';
@@ -733,16 +733,13 @@ class VideoDetailController extends GetxController
                           SmartDialog.showToast('发送成功');
                           // 发送成功，自动预览该弹幕，避免重新请求
                           // TODO: 暂停状态下预览弹幕仍会移动与计时，可考虑添加到dmSegList或其他方式实现
-                          plPlayerController.danmakuController?.addItems([
-                            DanmakuItem(
-                              msg,
-                              color: Colors.white,
-                              time: plPlayerController
-                                  .position.value.inMilliseconds,
-                              type: DanmakuItemType.scroll,
-                              isSend: true,
-                            )
-                          ]);
+                          plPlayerController.danmakuController
+                              ?.addDanmaku(DanmakuContentItem(
+                            msg,
+                            color: Colors.white,
+                            type: DanmakuItemType.scroll,
+                            selfSend: true,
+                          ));
                           Get.back();
                         } else {
                           SmartDialog.showToast('发送失败，错误信息为${res['msg']}');
