@@ -465,7 +465,15 @@ class UserInfoCard extends StatelessWidget {
                 left: 120,
                 top: 140,
                 right: 20,
-                child: _buildRight(context),
+                bottom: 0,
+                child: LayoutBuilder(
+                  builder: (_, constraints) => FittedBox(
+                    child: SizedBox(
+                      width: constraints.maxWidth,
+                      child: _buildRight(context),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
