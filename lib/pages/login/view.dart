@@ -120,12 +120,15 @@ class _LoginPageState extends State<LoginPage> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Text(_loginPageCtr.codeInfo.value['data']?['url'] ?? "",
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                child: Text(
+                  _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.4))),
+                            .withOpacity(0.4),
+                      ),
+                ),
               ),
             )),
         Padding(

@@ -88,12 +88,12 @@ class NetworkImgLayer extends StatelessWidget {
                 placeholder: (BuildContext context, String url) =>
                     placeholder(context),
                 imageBuilder: imageBuilder,
-                errorListener: (value) {
-                  thumbnail = false;
-                  if (context.mounted) {
-                    (context as Element).markNeedsBuild();
-                  }
-                },
+                // errorListener: (value) {
+                //   thumbnail = false;
+                //   if (context.mounted) {
+                //     (context as Element).markNeedsBuild();
+                //   }
+                // },
               ),
             ),
           )
