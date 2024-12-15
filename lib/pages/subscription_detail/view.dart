@@ -202,6 +202,15 @@ class _SubDetailPageState extends State<SubDetailPage> {
             future: _futureBuilderFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                // TODO: refactor
+                if (snapshot.data is! Map) {
+                  return HttpError(
+                    callback: () => setState(() {
+                      _futureBuilderFuture =
+                          _subDetailController.queryUserSubFolderDetail();
+                    }),
+                  );
+                }
                 Map data = snapshot.data;
                 if (data['status']) {
                   if (_subDetailController.item.mediaCount == 0) {

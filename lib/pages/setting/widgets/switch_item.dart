@@ -11,6 +11,8 @@ class SetSwitchItem extends StatefulWidget {
   final bool? needReboot;
   final Widget? leading;
   final GestureTapCallback? onTap;
+  final EdgeInsetsGeometry? contentPadding;
+  final TextStyle? titleStyle;
 
   const SetSwitchItem({
     this.title,
@@ -21,6 +23,8 @@ class SetSwitchItem extends StatefulWidget {
     this.needReboot,
     this.leading,
     this.onTap,
+    this.contentPadding,
+    this.titleStyle,
     super.key,
   });
 
@@ -45,7 +49,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     //   Utils.checkUpdate();
     // }
     widget.onChanged?.call(val);
-    if (widget.needReboot != null && widget.needReboot!) {
+    if (widget.needReboot == true) {
       SmartDialog.showToast('重启生效');
     }
     setState(() {});
@@ -53,15 +57,18 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle titleStyle = Theme.of(context).textTheme.titleMedium!.copyWith(
-        color: widget.onTap != null && !val
-            ? Theme.of(context).colorScheme.outline
-            : null);
+    TextStyle titleStyle = widget.titleStyle ??
+        Theme.of(context).textTheme.titleMedium!.copyWith(
+              color: widget.onTap != null && !val
+                  ? Theme.of(context).colorScheme.outline
+                  : null,
+            );
     TextStyle subTitleStyle = Theme.of(context)
         .textTheme
         .labelMedium!
         .copyWith(color: Theme.of(context).colorScheme.outline);
     return ListTile(
+      contentPadding: widget.contentPadding,
       enabled: widget.onTap != null ? val : true,
       enableFeedback: true,
       onTap: () =>

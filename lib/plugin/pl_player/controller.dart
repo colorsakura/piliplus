@@ -250,6 +250,7 @@ class PlPlayerController {
   late double fontSizeFSVal;
   late double strokeWidth;
   late int fontWeight;
+  late bool massiveMode;
   late double danmakuDurationVal;
   late List<double> speedList;
   double? defaultDuration;
@@ -352,6 +353,7 @@ class PlPlayerController {
     fontSizeFSVal = GStorage.danmakuFontScaleFS;
     subtitleFontScale.value = GStorage.subtitleFontScale;
     subtitleFontScaleFS.value = GStorage.subtitleFontScaleFS;
+    massiveMode = GStorage.danmakuMassiveMode;
     // 弹幕时间
     danmakuDurationVal =
         setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.29);

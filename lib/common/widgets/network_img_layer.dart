@@ -67,7 +67,7 @@ class NetworkImgLayer extends StatelessWidget {
             child: Builder(
               builder: (context) => CachedNetworkImage(
                 imageUrl:
-                    '${src?.startsWith('//') == true ? 'https:$src' : src?.http2https}${thumbnail ? '@${quality ?? defaultImgQuality}q.webp' : ''}',
+                    '${src?.startsWith('//') == true ? 'https:$src' : src?.http2https}${type != 'emote' && thumbnail ? '@${quality ?? defaultImgQuality}q.webp' : ''}',
                 width: width,
                 height: ignoreHeight == null || ignoreHeight == false
                     ? height

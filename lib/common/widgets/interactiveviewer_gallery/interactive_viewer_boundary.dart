@@ -25,9 +25,11 @@ class InteractiveViewerBoundary extends StatefulWidget {
     required this.maxScale,
     required this.minScale,
     this.onDismissed,
+    this.onReset,
     this.dismissThreshold = 0.2,
   });
 
+  final VoidCallback? onReset;
   final double dismissThreshold;
   final VoidCallback? onDismissed;
 
@@ -230,6 +232,8 @@ class InteractiveViewerBoundaryState extends State<InteractiveViewerBoundary>
       onPanStart: _handleDragStart,
       onPanUpdate: _handleDragUpdate,
       onPanEnd: _handleDragEnd,
+      onReset: widget.onReset,
+      isAnimating: () => _animateController.value != 0,
       child: content,
     );
   }

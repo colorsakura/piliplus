@@ -6,7 +6,6 @@ import 'package:PiliPalaX/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -223,6 +222,13 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
           onDismissed: () {
             Get.back();
             widget.onDismissed?.call(_pageController!.page!.floor());
+          },
+          onReset: () {
+            if (!_enablePageView) {
+              setState(() {
+                _enablePageView = true;
+              });
+            }
           },
           child: PageView.builder(
             onPageChanged: _onPageChanged,

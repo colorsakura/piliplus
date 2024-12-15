@@ -48,6 +48,7 @@ class _SubPageState extends State<SubPage> {
         future: _futureBuilderFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            // TODO: refactor
             Map? data = snapshot.data;
             if (data != null && data['status']) {
               return Obx(() => CustomScrollView(

@@ -384,7 +384,7 @@ class UserHttp {
       'pn': pn,
       'platform': 'web',
     });
-    if (res.data['code'] == 0) {
+    if (res.data['code'] == 0 && res.data['data'] is Map) {
       return {
         'status': true,
         'data': SubFolderModelData.fromJson(res.data['data'])

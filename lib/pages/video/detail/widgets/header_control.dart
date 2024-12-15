@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPalaX/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:floating/floating.dart';
@@ -916,6 +917,7 @@ class _HeaderControlState extends State<HeaderControl> {
     double strokeWidth = widget.controller!.strokeWidth;
     // 字体粗细
     int fontWeight = widget.controller!.fontWeight;
+    bool massiveMode = widget.controller!.massiveMode;
 
     final DanmakuController danmakuController =
         widget.controller!.danmakuController!;
@@ -1041,7 +1043,7 @@ class _HeaderControlState extends State<HeaderControl> {
                   ),
                   const Text('显示区域'),
                   Padding(
-                    padding: const EdgeInsets.only(top: 12, bottom: 18),
+                    padding: const EdgeInsets.only(top: 12),
                     child: Row(
                       children: [
                         for (final Map<String, dynamic> i in showAreas) ...[
@@ -1065,6 +1067,23 @@ class _HeaderControlState extends State<HeaderControl> {
                         ]
                       ],
                     ),
+                  ),
+                  SetSwitchItem(
+                    title: '海量弹幕',
+                    contentPadding: EdgeInsets.all(0),
+                    titleStyle: TextStyle(fontSize: 14),
+                    defaultVal: massiveMode,
+                    setKey: SettingBoxKey.danmakuMassiveMode,
+                    onChanged: (value) {
+                      massiveMode = value;
+                      widget.controller!.massiveMode = value;
+                      setState(() {});
+                      try {
+                        danmakuController.updateOption(
+                          danmakuController.option.copyWith(massiveMode: value),
+                        );
+                      } catch (_) {}
+                    },
                   ),
                   Text('不透明度 ${opacityVal * 100}%'),
                   Padding(
@@ -1261,6 +1280,47 @@ class _HeaderControlState extends State<HeaderControl> {
                       ),
                     ),
                   ),
+                  Text('弹幕时长 $danmakuDurationVal 秒'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 1,
+                        max: 4,
+                        value: pow(danmakuDurationVal, 1 / 4) as double,
+                        divisions: 60,
+                        label: danmakuDurationVal.toString(),
+                        onChanged: (double val) {
+                          danmakuDurationVal =
+                              (pow(val, 4) as double).toPrecision(2);
+                          widget.controller!.danmakuDurationVal =
+                              danmakuDurationVal;
+                          widget.controller?.putDanmakuSettings();
+                          setState(() {});
+                          try {
+                            danmakuController.updateOption(
+                              danmakuController.option.copyWith(
+                                  duration: danmakuDurationVal ~/
+                                      widget.controller!.playbackSpeed),
+                            );
+                          } catch (_) {}
+                        },
+                      ),
+                    ),
+                  ),
                   Text(
                       '字幕字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
                   Padding(
@@ -1327,47 +1387,6 @@ class _HeaderControlState extends State<HeaderControl> {
                               subtitleFontScaleFS;
                           widget.controller?.putDanmakuSettings();
                           setState(() {});
-                        },
-                      ),
-                    ),
-                  ),
-                  Text('弹幕时长 $danmakuDurationVal 秒'),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 0,
-                      bottom: 6,
-                      left: 10,
-                      right: 10,
-                    ),
-                    child: SliderTheme(
-                      data: SliderThemeData(
-                        trackShape: MSliderTrackShape(),
-                        thumbColor: Theme.of(context).colorScheme.primary,
-                        activeTrackColor: Theme.of(context).colorScheme.primary,
-                        trackHeight: 10,
-                        thumbShape: const RoundSliderThumbShape(
-                            enabledThumbRadius: 6.0),
-                      ),
-                      child: Slider(
-                        min: 1,
-                        max: 4,
-                        value: pow(danmakuDurationVal, 1 / 4) as double,
-                        divisions: 60,
-                        label: danmakuDurationVal.toString(),
-                        onChanged: (double val) {
-                          danmakuDurationVal =
-                              (pow(val, 4) as double).toPrecision(2);
-                          widget.controller!.danmakuDurationVal =
-                              danmakuDurationVal;
-                          widget.controller?.putDanmakuSettings();
-                          setState(() {});
-                          try {
-                            danmakuController.updateOption(
-                              danmakuController.option.copyWith(
-                                  duration: danmakuDurationVal ~/
-                                      widget.controller!.playbackSpeed),
-                            );
-                          } catch (_) {}
                         },
                       ),
                     ),

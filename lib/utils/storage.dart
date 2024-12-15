@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
@@ -98,6 +97,9 @@ class GStorage {
 
   static double get danmakuFontScaleFS =>
       setting.get(SettingBoxKey.danmakuFontScaleFS, defaultValue: 1.2);
+
+  static bool get danmakuMassiveMode =>
+      setting.get(SettingBoxKey.danmakuMassiveMode, defaultValue: false);
 
   static double get subtitleFontScale =>
       setting.get(SettingBoxKey.subtitleFontScale, defaultValue: 1.0);
@@ -323,6 +325,7 @@ class SettingBoxKey {
       danmakuFontScale = 'danmakuFontScale',
       danmakuFontScaleFS = 'danmakuFontScaleFS',
       danmakuDuration = 'danmakuDuration',
+      danmakuMassiveMode = 'danmakuMassiveMode',
       strokeWidth = 'strokeWidth',
       fontWeight = 'fontWeight',
       memberTab = 'memberTab',
