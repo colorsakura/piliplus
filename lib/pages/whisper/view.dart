@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -150,6 +151,16 @@ class _WhisperPageState extends State<WhisperPage> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.data != null) {
+                    // TODO: refactor
+                    if (snapshot.data is! Map) {
+                      return HttpError(
+                        isSliver: false,
+                        callback: () => setState(() {
+                          _futureBuilderFuture =
+                              _whisperController.querySessionList('init');
+                        }),
+                      );
+                    }
                     Map data = snapshot.data as Map;
                     if (data['status']) {
                       List sessionList = _whisperController.sessionList;

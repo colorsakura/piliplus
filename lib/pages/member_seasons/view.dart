@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,6 +60,16 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data != null) {
+                  // TODO: refactor
+                  if (snapshot.data is! Map) {
+                    return HttpError(
+                      isSliver: false,
+                      callback: () => setState(() {
+                        _futureBuilderFuture = _memberSeasonsController
+                            .getSeasonDetail('onRefresh');
+                      }),
+                    );
+                  }
                   Map data = snapshot.data as Map;
                   List list = _memberSeasonsController.seasonsList;
                   if (data['status']) {

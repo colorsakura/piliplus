@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
 import 'package:PiliPalaX/models/common/up_panel_position.dart';
@@ -137,6 +138,16 @@ class _DynamicsPageState extends State<DynamicsPage>
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == null) {
                   return nil;
+                }
+                // TODO: refactor
+                if (snapshot.data is! Map) {
+                  return HttpError(
+                    isSliver: false,
+                    callback: () => setState(() {
+                      _futureBuilderFutureUp =
+                          _dynamicsController.queryFollowUp();
+                    }),
+                  );
                 }
                 Map data = snapshot.data;
                 if (data['status']) {

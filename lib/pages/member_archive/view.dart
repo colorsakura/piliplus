@@ -77,6 +77,15 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
               builder: (BuildContext context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.data != null) {
+                    // TODO: refactor
+                    if (snapshot.data is! Map) {
+                      return HttpError(
+                        callback: () => setState(() {
+                          _futureBuilderFuture = _memberArchivesController
+                              .getMemberArchive('init');
+                        }),
+                      );
+                    }
                     Map data = snapshot.data as Map;
                     List list = _memberArchivesController.archivesList;
                     if (data['status']) {

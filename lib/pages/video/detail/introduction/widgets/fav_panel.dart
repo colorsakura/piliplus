@@ -92,6 +92,16 @@ class _FavPanelState extends State<FavPanel> {
                   future: _futureBuilderFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
+                      // TODO: refactor
+                      if (snapshot.data is! Map) {
+                        return HttpError(
+                          isSliver: false,
+                          callback: () => setState(() {
+                            _futureBuilderFuture =
+                                widget.ctr!.queryVideoInFolder();
+                          }),
+                        );
+                      }
                       Map data = snapshot.data as Map;
                       if (data['status']) {
                         return Obx(

@@ -102,6 +102,15 @@ class _GroupPanelState extends State<GroupPanel> {
                   future: _futureBuilderFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
+                      // TODO: refactor
+                      if (snapshot.data is! Map) {
+                        return HttpError(
+                          isSliver: false,
+                          callback: () => setState(() {
+                            _futureBuilderFuture = MemberHttp.followUpTags();
+                          }),
+                        );
+                      }
                       Map data = snapshot.data as Map;
                       if (data['status']) {
                         return ListView.builder(
