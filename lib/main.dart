@@ -242,7 +242,11 @@ class MyApp extends StatelessWidget {
       ),
       cardTheme: CardTheme(
         elevation: 1,
-        surfaceTintColor: isDark ? colorScheme.onSurfaceVariant : null,
+        surfaceTintColor: isDynamic
+            ? colorScheme.onSurfaceVariant
+            : isDark
+                ? colorScheme.onSurfaceVariant
+                : null,
         shadowColor: Colors.transparent,
       ),
       // dialogTheme: DialogTheme(
