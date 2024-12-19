@@ -8,7 +8,7 @@ class RecommendFilter {
   static late int minLikeRatioForRecommend;
   static late bool exemptFilterForFollowed;
   static late bool applyFilterToRelatedVideos;
-  static late List<String> banWordList;
+  static late String banWords;
   RecommendFilter() {
     update();
   }
@@ -21,9 +21,7 @@ class RecommendFilter {
         setting.get(SettingBoxKey.minDurationForRcmd, defaultValue: 0);
     minLikeRatioForRecommend =
         setting.get(SettingBoxKey.minLikeRatioForRecommend, defaultValue: 0);
-    banWordList = (setting.get(SettingBoxKey.banWordForRecommend,
-            defaultValue: '') as String)
-        .split(' ');
+    banWords = setting.get(SettingBoxKey.banWordForRecommend, defaultValue: '');
     exemptFilterForFollowed =
         setting.get(SettingBoxKey.exemptFilterForFollowed, defaultValue: true);
     applyFilterToRelatedVideos = setting
@@ -51,8 +49,18 @@ class RecommendFilter {
             minLikeRatioForRecommend * videoItem.stat.view) {
       return true;
     }
-    for (var word in banWordList) {
-      if (word.isNotEmpty && videoItem.title.contains(word)) return true;
+    if (filterTitle(videoItem.title)) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool filterTitle(String title, {bool? isFollowed}) {
+    if (exemptFilterForFollowed && isFollowed == true) {
+      return false;
+    }
+    if (banWords.isNotEmpty && RegExp(banWords).hasMatch(title)) {
+      return true;
     }
     return false;
   }

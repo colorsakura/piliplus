@@ -171,7 +171,8 @@ class VideoHttp {
       List<HotVideoItemModel> list = [];
       List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['list']) {
-        if (!blackMidsList.contains(i['owner']['mid'])) {
+        if (!blackMidsList.contains(i['owner']['mid']) &&
+            !RecommendFilter.filterTitle(i['title'])) {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }
@@ -978,7 +979,8 @@ class VideoHttp {
       List<HotVideoItemModel> list = [];
       List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['list']) {
-        if (!blackMidsList.contains(i['owner']['mid'])) {
+        if (!blackMidsList.contains(i['owner']['mid']) &&
+            !RecommendFilter.filterTitle(i['title'])) {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }

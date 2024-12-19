@@ -155,43 +155,42 @@ class _RecommendSettingState extends State<RecommendSetting> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('标题关键词过滤'),
-                    content: Column(mainAxisSize: MainAxisSize.min, children: [
-                      const Text('使用空格隔开，如：尝试 测试'),
-                      TextField(
-                        controller: textController,
-                        //decoration: InputDecoration(hintText: hintText),
-                      )
-                    ]),
+                    title: const Text(
+                      '标题关键词过滤',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('使用|隔开，如：尝试|测试'),
+                        TextField(
+                          controller: textController,
+                          textInputAction: TextInputAction.newline,
+                          minLines: 1,
+                          maxLines: 4,
+                        )
+                      ],
+                    ),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('清空'),
-                        onPressed: () {
-                          textController.text = '';
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('取消'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          SmartDialog.showToast('关键词未被修改');
-                        },
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline),
+                        ),
                       ),
                       TextButton(
                         child: const Text('保存'),
                         onPressed: () async {
-                          Navigator.of(context).pop();
-                          String filter = textController.text.trim();
-                          banWordForRecommend = filter;
+                          Get.back();
+                          banWordForRecommend = textController.text;
                           setting.put(SettingBoxKey.banWordForRecommend,
                               banWordForRecommend);
                           setState(() {});
                           RecommendFilter.update();
-                          if (filter.isNotEmpty) {
-                            SmartDialog.showToast('已保存：$banWordForRecommend');
-                          } else {
-                            SmartDialog.showToast('已清除全部关键词');
-                          }
+                          SmartDialog.showToast('已保存');
                         },
                       ),
                     ],
@@ -285,7 +284,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
             },
           ),
           SetSwitchItem(
-            title: '已关注Up豁免推荐过滤',
+            title: '已关注UP豁免推荐过滤',
             subTitle: '推荐中已关注用户发布的内容不会被过滤',
             leading: const Icon(Icons.favorite_border_outlined),
             setKey: SettingBoxKey.exemptFilterForFollowed,
