@@ -308,7 +308,7 @@ Widget videoContent(BuildContext context, Item videoItem) {
 //                   style: TextStyle(
 //                     fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
 //                     color:
-//                         Theme.of(context).colorScheme.outline.withOpacity(0.8),
+//                         Theme.of(context).colorScheme.outline.withValues(alpha: 0.8),
 //                   ),
 //                   text: Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
 //             )),
@@ -326,7 +326,7 @@ Widget videoContent(BuildContext context, Item videoItem) {
 //                   style: TextStyle(
 //                     fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
 //                     color:
-//                         Theme.of(context).colorScheme.outline.withOpacity(0.8),
+//                         Theme.of(context).colorScheme.outline.withValues(alpha: 0.8),
 //                   ),
 //                   text: Utils.shortenChineseDateString(
 //                       videoItem.desc.split(' · ').last)),

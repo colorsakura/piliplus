@@ -365,7 +365,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                       StyleString.aspectRatio,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black.withOpacity(0.6),
+                                    color: Colors.black.withValues(alpha: 0.6),
                                   ),
                                   child: SizedBox(
                                     width: 34,
@@ -388,7 +388,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               return Theme.of(context)
                                                   .colorScheme
                                                   .surface
-                                                  .withOpacity(0.8);
+                                                  .withValues(alpha: 0.8);
                                             },
                                           ),
                                         ),

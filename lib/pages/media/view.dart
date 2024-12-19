@@ -131,7 +131,7 @@ class _MediaPageState extends State<MediaPage>
       children: [
         Divider(
           height: 20,
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
         ),
         ListTile(
           onTap: () async {
@@ -214,7 +214,7 @@ class _MediaPageState extends State<MediaPage>
                       return Theme.of(context)
                           .colorScheme
                           .primaryContainer
-                          .withOpacity(0.5);
+                          .withValues(alpha: 0.5);
                     }),
                   ),
                   onPressed: () async {
@@ -302,13 +302,13 @@ class FavFolderItem extends StatelessWidget {
                 color: Theme.of(context)
                     .colorScheme
                     .onInverseSurface
-                    .withOpacity(0.4),
+                    .withValues(alpha: 0.4),
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context)
                         .colorScheme
                         .onInverseSurface
-                        .withOpacity(0.4),
+                        .withValues(alpha: 0.4),
                     offset: const Offset(4, -12), // 阴影与容器的距离
                     blurRadius: 0.0, // 高斯的标准偏差与盒子的形状卷积。
                     spreadRadius: 0.0, // 在应用模糊之前，框应该膨胀的量。

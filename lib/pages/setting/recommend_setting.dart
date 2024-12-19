@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -208,6 +209,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
               style: subTitleStyle,
             ),
             onTap: () async {
+              const List<int> defDurations = [0, 30, 60, 90, 120];
               int? result = await showDialog(
                 context: context,
                 builder: (context) {
@@ -216,18 +218,8 @@ class _RecommendSettingState extends State<RecommendSetting> {
                       value: minDurationForRcmd,
                       values: [
                         ...[
-                          0,
-                          30,
-                          60,
-                          90,
-                          120,
-                          if (![
-                            0,
-                            30,
-                            60,
-                            90,
-                            120,
-                          ].contains(minDurationForRcmd))
+                          ...defDurations,
+                          if (defDurations.contains(minDurationForRcmd).not)
                             minDurationForRcmd,
                         ]..sort(),
                         -1
@@ -240,21 +232,26 @@ class _RecommendSettingState extends State<RecommendSetting> {
                 },
               );
               if (result != null) {
+                void updateDuration(int value) {
+                  minDurationForRcmd = value;
+                  setting.put(SettingBoxKey.minDurationForRcmd, value);
+                  RecommendFilter.update();
+                  setState(() {});
+                }
+
                 if (result == -1 && context.mounted) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      String initialValue =
-                          result == -1 ? '' : minDurationForRcmd.toString();
+                      String duration = '';
                       return AlertDialog(
                         title: Text(
                           '自定义时长',
                           style: TextStyle(fontSize: 18),
                         ),
-                        content: TextFormField(
+                        content: TextField(
                           autofocus: true,
-                          initialValue: initialValue,
-                          onChanged: (value) => initialValue = value,
+                          onChanged: (value) => duration = value,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp(r'\d+')),
@@ -273,26 +270,16 @@ class _RecommendSettingState extends State<RecommendSetting> {
                           TextButton(
                             onPressed: () {
                               Get.back();
-                              int result = int.tryParse(initialValue) ?? 0;
-                              minDurationForRcmd = result;
-                              setting.put(
-                                  SettingBoxKey.minDurationForRcmd, result);
-                              RecommendFilter.update();
-                              setState(() {});
+                              updateDuration(int.tryParse(duration) ?? 0);
                             },
-                            child: Text(
-                              '确定',
-                            ),
+                            child: const Text('确定'),
                           ),
                         ],
                       );
                     },
                   );
                 } else {
-                  minDurationForRcmd = result;
-                  setting.put(SettingBoxKey.minDurationForRcmd, result);
-                  RecommendFilter.update();
-                  setState(() {});
+                  updateDuration(result);
                 }
               }
             },
@@ -351,8 +338,10 @@ class _RecommendSettingState extends State<RecommendSetting> {
               '* 设定较严苛的条件可导致推荐项数锐减或多次请求，请酌情选择。\n'
               '* 后续可能会增加更多过滤条件，敬请期待。',
               style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color:
-                      Theme.of(context).colorScheme.outline.withOpacity(0.7)),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .outline
+                      .withValues(alpha: 0.7)),
             ),
           )
         ],

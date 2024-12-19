@@ -127,7 +127,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.85),
+                                  .withValues(alpha: 0.85),
                             ),
                           ),
                           const SizedBox(height: 5),
@@ -156,7 +156,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                       indent: 72,
                       endIndent: 20,
                       height: 6,
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha: 0.1),
                     );
                   },
                 );

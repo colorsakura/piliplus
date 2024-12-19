@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.4),
+                            .withValues(alpha: 0.4),
                       ),
                 ),
               ),
@@ -138,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.4)))),
+                        .withValues(alpha: 0.4)))),
       ],
     );
   }
@@ -278,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.4)))),
+                        .withValues(alpha: 0.4)))),
       ],
     );
   }
@@ -294,8 +294,10 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color:
-                        Theme.of(context).colorScheme.outline.withOpacity(0.4)),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.4)),
               ),
               child: Row(
                 children: [
@@ -337,7 +339,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Theme.of(context)
                           .colorScheme
                           .outline
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5),
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -365,8 +367,10 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color:
-                        Theme.of(context).colorScheme.outline.withOpacity(0.4)),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.4)),
               ),
               child: Row(
                 children: [
@@ -414,7 +418,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.4)))),
+                        .withValues(alpha: 0.4)))),
       ],
     );
   }

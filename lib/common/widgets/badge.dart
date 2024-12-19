@@ -38,11 +38,11 @@ class PBadge extends StatelessWidget {
     // 边框色
     Color borderColor = Colors.transparent;
     if (type == 'gray') {
-      bgColor = Colors.black54.withOpacity(0.4);
+      bgColor = Colors.black54.withValues(alpha: 0.4);
       color = Colors.white;
     }
     if (type == 'color') {
-      bgColor = t.secondaryContainer.withOpacity(0.5);
+      bgColor = t.secondaryContainer.withValues(alpha: 0.5);
       color = t.onSecondaryContainer;
     }
     if (type == 'line') {

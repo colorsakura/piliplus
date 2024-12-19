@@ -296,7 +296,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                 thickness: 8,
                                 color: Theme.of(context)
                                     .dividerColor
-                                    .withOpacity(0.05),
+                                    .withValues(alpha: 0.05),
                               ),
                             ),
                           ),
@@ -318,8 +318,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   if (orientation == Orientation.landscape) ...[
                     VerticalDivider(
                         thickness: 8,
-                        color:
-                            Theme.of(context).dividerColor.withOpacity(0.05)),
+                        color: Theme.of(context)
+                            .dividerColor
+                            .withValues(alpha: 0.05)),
                     Expanded(
                       flex: _ratio[1].toInt(),
                       child: CustomScrollView(

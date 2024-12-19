@@ -9,8 +9,8 @@ Widget statDanMu({
 }) {
   Map<String, Color> colorObject = {
     'white': Colors.white,
-    'gray': Theme.of(context).colorScheme.outline.withOpacity(0.8),
-    'black': Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+    'gray': Theme.of(context).colorScheme.outline.withValues(alpha: 0.8),
+    'black': Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
   };
   Color color = colorObject[theme]!;
   return Row(

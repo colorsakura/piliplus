@@ -726,7 +726,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 //             child: Divider(
                 //               indent: 12,
                 //               endIndent: 12,
-                //               color: Theme.of(context).dividerColor.withOpacity(0.06),
+                //               color: Theme.of(context).dividerColor.withValues(alpha: 0.06),
                 //             ),
                 //           ),
                 //           const RelatedVideoPanel(),
@@ -1112,7 +1112,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         border: Border(
           bottom: BorderSide(
             width: 1,
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
           ),
         ),
       ),
@@ -1271,7 +1271,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   height: 1,
                   indent: 12,
                   endIndent: 12,
-                  color: Theme.of(context).dividerColor.withOpacity(0.06),
+                  color: Theme.of(context).dividerColor.withValues(alpha: 0.06),
                 ),
               ),
             ),
@@ -1445,7 +1445,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     if (rawIndex % 2 == 1) {
                       return Divider(
                         height: 1,
-                        color: Theme.of(context).dividerColor.withOpacity(0.1),
+                        color: Theme.of(context)
+                            .dividerColor
+                            .withValues(alpha: 0.1),
                       );
                     }
                     int index = rawIndex ~/ 2;

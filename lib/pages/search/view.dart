@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
       appBar: AppBar(
         shape: Border(
           bottom: BorderSide(
-            color: Theme.of(context).dividerColor.withOpacity(0.08),
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.08),
             width: 1,
           ),
         ),
