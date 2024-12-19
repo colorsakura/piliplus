@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/rcmd_type.dart';
 import 'package:PiliPalaX/pages/setting/widgets/select_dialog.dart';
@@ -212,16 +214,86 @@ class _RecommendSettingState extends State<RecommendSetting> {
                   return SelectDialog<int>(
                       title: '选择时长（0即不过滤）',
                       value: minDurationForRcmd,
-                      values: [0, 30, 60, 90, 120].map((e) {
+                      values: [
+                        ...[
+                          0,
+                          30,
+                          60,
+                          90,
+                          120,
+                          if (![
+                            0,
+                            30,
+                            60,
+                            90,
+                            120,
+                          ].contains(minDurationForRcmd))
+                            minDurationForRcmd,
+                        ]..sort(),
+                        -1
+                      ].map((e) {
+                        if (e == -1) {
+                          return {'title': '自定义', 'value': e};
+                        }
                         return {'title': '$e 秒', 'value': e};
                       }).toList());
                 },
               );
               if (result != null) {
-                minDurationForRcmd = result;
-                setting.put(SettingBoxKey.minDurationForRcmd, result);
-                RecommendFilter.update();
-                setState(() {});
+                if (result == -1 && context.mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      String initialValue =
+                          result == -1 ? '' : minDurationForRcmd.toString();
+                      return AlertDialog(
+                        title: Text(
+                          '自定义时长',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        content: TextFormField(
+                          autofocus: true,
+                          initialValue: initialValue,
+                          onChanged: (value) => initialValue = value,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                          ],
+                          decoration: const InputDecoration(suffixText: 's'),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: Get.back,
+                            child: Text(
+                              '取消',
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                              int result = int.tryParse(initialValue) ?? 0;
+                              minDurationForRcmd = result;
+                              setting.put(
+                                  SettingBoxKey.minDurationForRcmd, result);
+                              RecommendFilter.update();
+                              setState(() {});
+                            },
+                            child: Text(
+                              '确定',
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  minDurationForRcmd = result;
+                  setting.put(SettingBoxKey.minDurationForRcmd, result);
+                  RecommendFilter.update();
+                  setState(() {});
+                }
               }
             },
           ),
