@@ -90,7 +90,7 @@ class ReplyItem extends StatelessWidget {
                 color: Theme.of(context)
                     .colorScheme
                     .onInverseSurface
-                    .withValues(alpha: 0.5),
+                    .withOpacity(0.5),
               )
           ],
         ),
@@ -352,10 +352,7 @@ class ReplyItem extends StatelessWidget {
               Icon(
                 Icons.reply,
                 size: 18,
-                color: Theme.of(context)
-                    .colorScheme
-                    .outline
-                    .withValues(alpha: 0.8),
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.8),
               ),
               const SizedBox(width: 3),
               Text(
@@ -463,7 +460,7 @@ class ReplyItem extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withValues(alpha: 0.85),
+                                .withOpacity(0.85),
                             height: 1.6),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -542,7 +539,7 @@ class ReplyItem extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withValues(alpha: 0.85),
+                                    .withOpacity(0.85),
                               )),
                         TextSpan(
                           text: replyControl!.entryText!,

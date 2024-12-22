@@ -35,7 +35,7 @@ def _keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties["keyAlias"]
 def _keyPassword = System.getenv("KEY_PASSWORD") ?: keystoreProperties["keyPassword"]
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion flutter.compileSdkVersion
 
     namespace 'com.example.pilipalax'
     ndkVersion flutter.ndkVersion
@@ -61,7 +61,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        minSdkVersion 21
+        minSdkVersion flutter.minSdkVersion
         multiDexEnabled true
     }
 

@@ -136,7 +136,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
               ),
             Divider(
               height: 1,
-              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
             ),
             Expanded(
               child: refreshIndicator(
@@ -192,7 +192,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                 height: 20,
                                 color: Theme.of(context)
                                     .dividerColor
-                                    .withValues(alpha: 0.1),
+                                    .withOpacity(0.1),
                                 thickness: 6,
                               );
                             } else if (index == 2) {

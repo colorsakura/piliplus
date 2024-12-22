@@ -163,7 +163,7 @@ class CustomFilterChip extends StatelessWidget {
         ),
         selectedColor: Colors.transparent,
         // backgroundColor:
-        //     Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
+        //     Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
         backgroundColor: Colors.transparent,
         side: BorderSide.none,
         onSelected: (bool selected) => callFn?.call(selected),
@@ -312,17 +312,11 @@ class VideoPanelController extends GetxController {
               bgColor: currentPubTimeFilterval == -1 &&
                       (isFirst ? customPubBegin : customPubEnd)
                   ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.1),
+                  : Theme.of(context).colorScheme.outline.withOpacity(0.1),
               textColor: currentPubTimeFilterval == -1 &&
                       (isFirst ? customPubBegin : customPubEnd)
                   ? Theme.of(context).colorScheme.onSecondaryContainer
-                  : Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.8),
+                  : Theme.of(context).colorScheme.outline.withOpacity(0.8),
             );
           }
 

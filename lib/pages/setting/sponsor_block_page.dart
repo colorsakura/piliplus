@@ -362,14 +362,14 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   Widget get _divider => SliverToBoxAdapter(
         child: Divider(
           height: 1,
-          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
         ),
       );
 
   Widget get _dividerL => SliverToBoxAdapter(
         child: Divider(
           thickness: 16,
-          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
         ),
       );
 
@@ -529,8 +529,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
             ),
             separatorBuilder: (context, index) => Divider(
               height: 1,
-              color:
-                  Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
             ),
           ),
           _dividerL,

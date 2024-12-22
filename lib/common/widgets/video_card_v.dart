@@ -327,7 +327,7 @@ class VideoCardV extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .outline
-                          .withValues(alpha: 0.8),
+                          .withOpacity(0.8),
                     ),
                     text:
                         Utils.formatTimestampToRelativeTime(videoItem.pubdate)),
@@ -349,7 +349,7 @@ class VideoCardV extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .outline
-                          .withValues(alpha: 0.8),
+                          .withOpacity(0.8),
                     ),
                     text: Utils.shortenChineseDateString(
                         videoItem.desc.split(' · ').last)),

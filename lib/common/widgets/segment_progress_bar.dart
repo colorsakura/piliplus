@@ -77,7 +77,7 @@ class SegmentProgressBar extends CustomPainter {
                 size.width,
                 0,
               ),
-              Paint()..color = Colors.grey[600]!.withValues(alpha: 0.45),
+              Paint()..color = Colors.grey[600]!.withOpacity(0.45),
             );
           }
 

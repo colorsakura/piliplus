@@ -233,7 +233,7 @@ class HistoryItem extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: Colors.black.withValues(alpha: 0.6),
+                                  color: Colors.black.withOpacity(0.6),
                                 ),
                                 child: SizedBox(
                                   width: 34,
@@ -253,7 +253,7 @@ class HistoryItem extends StatelessWidget {
                                             return Theme.of(context)
                                                 .colorScheme
                                                 .surface
-                                                .withValues(alpha: 0.8);
+                                                .withOpacity(0.8);
                                           },
                                         ),
                                       ),

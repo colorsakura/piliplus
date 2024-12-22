@@ -72,7 +72,7 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
                       color: Theme.of(context)
                           .colorScheme
                           .primary
-                          .withValues(alpha: 0.3))),
+                          .withOpacity(0.3))),
               color: Theme.of(context).colorScheme.surface,
             ),
             child: Row(

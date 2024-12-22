@@ -131,7 +131,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
     // return Container(
     //     padding:
     //         const EdgeInsets.only(left: 10, top: 12, right: 10, bottom: 10),
-    //     color: Theme.of(context).dividerColor.withValues(alpha: 0.08),
+    //     color: Theme.of(context).dividerColor.withOpacity(0.08),
     //     child: articlePanel(item, context, floor: floor));
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
@@ -140,7 +140,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
         child: Container(
           padding:
               const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 8),
-          color: Theme.of(context).dividerColor.withValues(alpha: 0.08),
+          color: Theme.of(context).dividerColor.withOpacity(0.08),
           child: forWard(item.orig, context, ctr, source, floor: floor + 1),
         ),
       );

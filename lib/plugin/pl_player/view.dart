@@ -444,7 +444,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           plPlayerController.vttSubtitlesIndex.value
                       ? 0
                       : plPlayerController.vttSubtitlesIndex.value,
-                  color: Colors.black.withValues(alpha: 0.8),
+                  color: Colors.black.withOpacity(0.8),
                   itemBuilder: (BuildContext context) {
                     return plPlayerController.vttSubtitles
                         .asMap()
@@ -483,7 +483,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             plPlayerController.setPlaybackSpeed(value);
           },
           initialValue: plPlayerController.playbackSpeed,
-          color: Colors.black.withValues(alpha: 0.8),
+          color: Colors.black.withOpacity(0.8),
           itemBuilder: (BuildContext context) {
             return plPlayerController.speedList.map((double speed) {
               return PopupMenuItem<double>(
@@ -1077,11 +1077,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         buffered: Duration(seconds: buffer),
                         total: Duration(seconds: max),
                         progressBarColor: colorTheme,
-                        baseBarColor: Colors.white.withValues(alpha: 0.2),
+                        baseBarColor: Colors.white.withOpacity(0.2),
                         bufferedBarColor: Theme.of(context)
                             .colorScheme
                             .primary
-                            .withValues(alpha: 0.4),
+                            .withOpacity(0.4),
                         timeLabelLocation: TimeLabelLocation.none,
                         thumbColor: colorTheme,
                         barHeight: 3.5,

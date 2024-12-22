@@ -208,7 +208,7 @@ class UserInfoCard extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withValues(alpha: 0.7),
+                            .withOpacity(0.7),
                       ),
                     )
                   ],
@@ -328,7 +328,7 @@ class UserInfoCard extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .outline
-                          .withValues(alpha: 0.5),
+                          .withOpacity(0.5),
                     ),
                     padding: EdgeInsets.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,

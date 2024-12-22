@@ -21,7 +21,7 @@ class CustomToast extends StatelessWidget {
         color: Theme.of(context)
             .colorScheme
             .primaryContainer
-            .withValues(alpha: toastOpacity),
+            .withOpacity(toastOpacity),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

@@ -188,7 +188,7 @@ class _UpPanelState extends State<UpPanel> {
                   ? Theme.of(context)
                       .colorScheme
                       .secondaryContainer
-                      .withValues(alpha: 0.7)
+                      .withOpacity(0.7)
                   : Theme.of(context).colorScheme.primary,
               child: data.face != ''
                   ? NetworkImgLayer(

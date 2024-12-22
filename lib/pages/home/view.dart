@@ -179,7 +179,7 @@ class SearchBarAndUser extends StatelessWidget {
                               splashColor: Theme.of(context)
                                   .colorScheme
                                   .primaryContainer
-                                  .withValues(alpha: 0.3),
+                                  .withOpacity(0.3),
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(50),
                               ),
@@ -228,7 +228,7 @@ class UserAndSearchVertical extends StatelessWidget {
                               splashColor: Theme.of(context)
                                   .colorScheme
                                   .primaryContainer
-                                  .withValues(alpha: 0.3),
+                                  .withOpacity(0.3),
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(50),
                               ),
@@ -361,14 +361,14 @@ class CustomChip extends StatelessWidget {
     return InputChip(
       side: selected
           ? BorderSide(
-              color: colorScheme.secondary.withValues(alpha: 0.2),
+              color: colorScheme.secondary.withOpacity(0.2),
               width: 2,
             )
           : BorderSide.none,
-      // backgroundColor: colorTheme.primaryContainer.withValues(alpha: 0.1),
-      // selectedColor: colorTheme.secondaryContainer.withValues(alpha: 0.8),
+      // backgroundColor: colorTheme.primaryContainer.withOpacity(0.1),
+      // selectedColor: colorTheme.secondaryContainer.withOpacity(0.8),
       color: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
-        return colorTheme.secondaryContainer.withValues(alpha: 0.6);
+        return colorTheme.secondaryContainer.withOpacity(0.6);
       }),
       padding: const EdgeInsets.fromLTRB(6, 1, 6, 1),
       label: Text(label, style: chipTextStyle),
@@ -400,9 +400,9 @@ class SearchBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(25),
         ),
         child: Material(
-          color: colorScheme.onSecondaryContainer.withValues(alpha: 0.05),
+          color: colorScheme.onSecondaryContainer.withOpacity(0.05),
           child: InkWell(
-            splashColor: colorScheme.primaryContainer.withValues(alpha: 0.3),
+            splashColor: colorScheme.primaryContainer.withOpacity(0.3),
             onTap: () => Get.toNamed(
               '/search',
               parameters: {'hintText': ctr!.defaultSearch.value},

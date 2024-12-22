@@ -171,13 +171,13 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
                                   width: 46,
                                   height: 46,
                                   decoration: BoxDecoration(
-                                    color: e['color'].withValues(alpha: 0.8),
+                                    color: e['color'].withOpacity(0.8),
                                     borderRadius: BorderRadius.circular(50),
                                     border: Border.all(
                                       width: 2,
                                       color: ctr.currentColor.value == index
                                           ? Colors.black
-                                          : e['color'].withValues(alpha: 0.8),
+                                          : e['color'].withOpacity(0.8),
                                     ),
                                   ),
                                   child: AnimatedOpacity(

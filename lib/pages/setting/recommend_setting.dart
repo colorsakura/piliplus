@@ -220,8 +220,8 @@ class _RecommendSettingState extends State<RecommendSetting> {
                           ...defDurations,
                           if (defDurations.contains(minDurationForRcmd).not)
                             minDurationForRcmd,
+                          -1
                         ]..sort(),
-                        -1
                       ].map((e) {
                         if (e == -1) {
                           return {'title': '自定义', 'value': e};
@@ -271,7 +271,7 @@ class _RecommendSettingState extends State<RecommendSetting> {
                               Get.back();
                               updateDuration(int.tryParse(duration) ?? 0);
                             },
-                            child: const Text('确定'),
+                            child: Text('确定'),
                           ),
                         ],
                       );
@@ -337,10 +337,8 @@ class _RecommendSettingState extends State<RecommendSetting> {
               '* 设定较严苛的条件可导致推荐项数锐减或多次请求，请酌情选择。\n'
               '* 后续可能会增加更多过滤条件，敬请期待。',
               style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.7)),
+                  color:
+                      Theme.of(context).colorScheme.outline.withOpacity(0.7)),
             ),
           )
         ],

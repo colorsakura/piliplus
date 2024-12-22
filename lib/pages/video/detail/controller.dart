@@ -522,7 +522,7 @@ class VideoDetailController extends GetxController
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withValues(alpha: 0.7),
+                                    .withOpacity(0.7),
                               ),
                             ),
                           )

@@ -334,7 +334,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           ),
           Divider(
             height: 1,
-            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+            color: Theme.of(context).dividerColor.withOpacity(0.1),
           ),
           if (_isList)
             Material(
@@ -346,8 +346,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                     .map((item) => Tab(text: item.title))
                     .toList(),
                 dividerHeight: 1,
-                dividerColor:
-                    Theme.of(context).dividerColor.withValues(alpha: 0.1),
+                dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
               ),
             ),
           Expanded(
@@ -408,7 +407,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           itemScrollController: itemScrollController[i ?? 0],
           separatorBuilder: (context, index) => Divider(
             height: 1,
-            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+            color: Theme.of(context).dividerColor.withOpacity(0.1),
           ),
         ),
       );

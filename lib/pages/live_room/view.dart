@@ -405,7 +405,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                           border: InputBorder.none,
                           hintText: '发送弹幕',
                           hintStyle: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: Colors.white.withOpacity(0.6),
                           ),
                         ),
                       ),

@@ -145,7 +145,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         color: Theme.of(context)
                             .colorScheme
                             .onSecondaryContainer
-                            .withValues(alpha: 0.5),
+                            .withOpacity(0.5),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(3))),
                   ),

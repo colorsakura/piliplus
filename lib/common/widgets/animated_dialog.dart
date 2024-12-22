@@ -50,7 +50,7 @@ class AnimatedDialogState extends State<AnimatedDialog>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withValues(alpha: opacityAnimation.value),
+      color: Colors.black.withOpacity(opacityAnimation.value),
       child: InkWell(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
