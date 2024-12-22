@@ -8,7 +8,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:saver_gallery/saver_gallery.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import 'controller.dart';
 
@@ -26,21 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   bool showPassword = false;
   GlobalKey globalKey = GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _loginPageCtr.dispose();
-    _loginPageCtr.telTextController.dispose();
-    _loginPageCtr.usernameTextController.dispose();
-    _loginPageCtr.passwordTextController.dispose();
-    _loginPageCtr.smsCodeTextController.dispose();
-    super.dispose();
-  }
-
   Widget loginByQRCode() {
     return Column(
       children: [
@@ -48,8 +32,10 @@ class _LoginPageState extends State<LoginPage> {
         const Text('使用 bilibili 官方 App 扫码登录'),
         const SizedBox(height: 20),
         Obx(() => Text('剩余有效时间: ${_loginPageCtr.qrCodeLeftTime} 秒',
-            style:
-                const TextStyle(fontFeatures: [FontFeature.tabularFigures()]))),
+            style: TextStyle(
+                fontFeatures: const [FontFeature.tabularFigures()],
+                color: Theme.of(context).colorScheme.primaryFixedDim))),
+        const SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -94,8 +80,18 @@ class _LoginPageState extends State<LoginPage> {
         ),
         RepaintBoundary(
           key: globalKey,
-          child: Obx(
-            () => QrImageView(
+          child: Obx(() {
+            if (_loginPageCtr.codeInfo.value['data']?['url'] == null) {
+              return Container(
+                height: 200,
+                width: 200,
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  semanticsLabel: '二维码加载中',
+                ),
+              );
+            }
+            return QrImageView(
               backgroundColor: Colors.white,
               eyeStyle: QrEyeStyle(
                 eyeShape: QrEyeShape.square,
@@ -105,33 +101,39 @@ class _LoginPageState extends State<LoginPage> {
                 dataModuleShape: QrDataModuleShape.square,
                 color: Colors.black87,
               ),
-              data: _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+              data: _loginPageCtr.codeInfo.value['data']!['url']!,
               size: 200,
               semanticsLabel: '二维码',
-            ),
-          ),
+            );
+          }),
         ),
         const SizedBox(height: 10),
-        Obx(() => Text(_loginPageCtr.statusQRCode.value)),
+        Obx(() => Text(
+              _loginPageCtr.statusQRCode.value,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondaryFixedDim),
+            )),
         Obx(() => GestureDetector(
               onTap: () {
                 //以外部方式打开此链接
-                launchUrlString(
-                    _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
-                    mode: LaunchMode.externalApplication);
+                // launchUrlString(
+                //     _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+                //     mode: LaunchMode.externalApplication);
+                // 复制到剪贴板
+                Clipboard.setData(ClipboardData(
+                    text: _loginPageCtr.codeInfo.value['data']?['url'] ?? ""));
+                SmartDialog.showToast('已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开',
+                    displayTime: const Duration(seconds: 5));
               },
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Text(
-                  _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                child: Text(_loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.4),
-                      ),
-                ),
+                            .withOpacity(0.4))),
               ),
             )),
         Padding(
@@ -177,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
             controller: _loginPageCtr.passwordTextController,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.lock),
+              prefixIcon: const Icon(Icons.password),
               border: const UnderlineInputBorder(),
               labelText: '密码',
               suffixIcon: IconButton(
@@ -265,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         OutlinedButton.icon(
           onPressed: _loginPageCtr.loginByPassword,
-          icon: const Icon(Icons.login_outlined),
+          icon: const Icon(Icons.login),
           label: const Text('登录'),
         ),
         const SizedBox(height: 20),
@@ -377,7 +379,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: _loginPageCtr.smsCodeTextController,
                       decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.key),
+                        prefixIcon: Icon(Icons.sms),
                         border: InputBorder.none,
                         labelText: '验证码',
                       ),
@@ -402,7 +404,7 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 20),
         OutlinedButton.icon(
           onPressed: _loginPageCtr.loginBySmsCode,
-          icon: const Icon(Icons.login_outlined),
+          icon: const Icon(Icons.login),
           label: const Text('登录'),
         ),
         const SizedBox(height: 20),
@@ -440,17 +442,23 @@ class _LoginPageState extends State<LoginPage> {
                 dividerHeight: 0,
                 tabs: const [
                   Tab(
-                      child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [Icon(Icons.lock), Text(' 密码')])),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [Icon(Icons.password), Text(' 密码')],
+                    ),
+                  ),
                   Tab(
-                      child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [Icon(Icons.key), Text(' 短信')])),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [Icon(Icons.sms), Text(' 短信')],
+                    ),
+                  ),
                   Tab(
-                      child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [Icon(Icons.qr_code), Text(' 扫码')])),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [Icon(Icons.qr_code), Text(' 扫码')],
+                    ),
+                  ),
                 ],
                 controller: _loginPageCtr.tabController,
               ))
@@ -459,8 +467,8 @@ class _LoginPageState extends State<LoginPage> {
           bottom: orientation == Orientation.portrait
               ? TabBar(
                   tabs: const [
-                    Tab(icon: Icon(Icons.lock), text: '密码'),
-                    Tab(icon: Icon(Icons.key), text: '短信'),
+                    Tab(icon: Icon(Icons.password), text: '密码'),
+                    Tab(icon: Icon(Icons.sms), text: '短信'),
                     Tab(icon: Icon(Icons.qr_code), text: '扫码'),
                   ],
                   controller: _loginPageCtr.tabController,

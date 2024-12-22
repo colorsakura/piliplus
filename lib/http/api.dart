@@ -587,6 +587,9 @@ class Api {
   static const String safeCenterSmsVerify =
       '${HttpString.passBaseUrl}/x/safecenter/login/tel/verify';
 
+  static const String oauth2AccessToken =
+      '${HttpString.passBaseUrl}/x/passport-login/oauth2/access_token';
+
   /// 密码加密密钥
   /// disable_rcmd
   /// local_id
