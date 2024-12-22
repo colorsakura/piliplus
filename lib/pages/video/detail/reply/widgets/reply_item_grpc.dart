@@ -784,8 +784,8 @@ class ReplyItemGrpc extends StatelessWidget {
               [
                 if (content.url[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
-                    child: CachedNetworkImage(
-                      imageUrl: content.url[matchStr]!.prefixIcon,
+                    child: Image.network(
+                      content.url[matchStr]!.prefixIcon,
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
                     ),

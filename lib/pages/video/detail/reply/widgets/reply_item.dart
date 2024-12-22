@@ -760,8 +760,8 @@ class ReplyItem extends StatelessWidget {
               [
                 if (content.jumpUrl[matchStr]?['prefix_icon'] != null) ...[
                   WidgetSpan(
-                    child: CachedNetworkImage(
-                      imageUrl: content.jumpUrl[matchStr]['prefix_icon'],
+                    child: Image.network(
+                      content.jumpUrl[matchStr]['prefix_icon'],
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
                     ),
