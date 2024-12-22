@@ -93,21 +93,24 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         RepaintBoundary(
-            key: globalKey,
-            child: Obx(() => QrImageView(
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  eyeStyle: QrEyeStyle(
-                    eyeShape: QrEyeShape.square,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  dataModuleStyle: QrDataModuleStyle(
-                    dataModuleShape: QrDataModuleShape.square,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  data: _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
-                  size: 200,
-                  semanticsLabel: '二维码',
-                ))),
+          key: globalKey,
+          child: Obx(
+            () => QrImageView(
+              backgroundColor: Colors.white,
+              eyeStyle: QrEyeStyle(
+                eyeShape: QrEyeShape.square,
+                color: Colors.black87,
+              ),
+              dataModuleStyle: QrDataModuleStyle(
+                dataModuleShape: QrDataModuleShape.square,
+                color: Colors.black87,
+              ),
+              data: _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
+              size: 200,
+              semanticsLabel: '二维码',
+            ),
+          ),
+        ),
         const SizedBox(height: 10),
         Obx(() => Text(_loginPageCtr.statusQRCode.value)),
         Obx(() => GestureDetector(
