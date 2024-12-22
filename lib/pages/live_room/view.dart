@@ -129,7 +129,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData && snapshot.data['status']) {
           return PLVideoPlayer(
-            controller: plPlayerController,
+            plPlayerController: plPlayerController,
             bottomControl: BottomControl(
               controller: plPlayerController,
               liveRoomCtr: _liveRoomController,
