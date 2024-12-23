@@ -62,6 +62,7 @@ class VideoReplyReplyController extends CommonController
       ).then((res) {
         if (res['status'] && (res['data']?.mid ?? -1) > 0) {
           firstFloor = res['data'];
+          hasRoot = true;
         }
       });
     }
@@ -85,7 +86,7 @@ class VideoReplyReplyController extends CommonController
               .map((item) => item.id.toInt())
               .toList()
               .indexOf(id!);
-          if (index != -1) {
+          if (index != null && index != -1) {
             controller = AnimationController(
               duration: const Duration(milliseconds: 300),
               vsync: this,
@@ -95,13 +96,15 @@ class VideoReplyReplyController extends CommonController
               end: Theme.of(Get.context!).colorScheme.surface,
             ).animate(controller!);
             WidgetsBinding.instance.addPostFrameCallback((_) async {
-              itemScrollCtr.jumpTo(
-                index: hasRoot ? index! + 3 : index! + 1,
-                alignment: 0.25,
-              );
-              await Future.delayed(const Duration(milliseconds: 800));
-              await controller?.forward();
-              index = null;
+              if (index != null) {
+                itemScrollCtr.jumpTo(
+                  index: hasRoot ? index! + 3 : index! + 1,
+                  alignment: 0.25,
+                );
+                await Future.delayed(const Duration(milliseconds: 800));
+                await controller?.forward();
+                index = null;
+              }
             });
           }
           id = null;
@@ -146,6 +149,7 @@ class VideoReplyReplyController extends CommonController
     } else {
       if (response.response.root != null) {
         firstFloor = response.response.root;
+        hasRoot = true;
       }
       List<ReplyItemModel> replies = response.response.replies;
       count.value = response.response.page.count;
