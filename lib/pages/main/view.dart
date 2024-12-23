@@ -147,6 +147,7 @@ class _MainAppState extends State<MainApp>
           bool isPortait = constriants.maxHeight > constriants.maxWidth;
 
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             extendBody: true,
             body: Row(
               mainAxisAlignment: MainAxisAlignment.center,

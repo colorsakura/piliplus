@@ -62,13 +62,6 @@ class _MediaPageState extends State<MediaPage>
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         toolbarHeight: 30,
-        backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness:
-              Theme.of(context).brightness == Brightness.light
-                  ? Brightness.dark
-                  : Brightness.light,
-        ),
       ),
       body: SingleChildScrollView(
         controller: mediaController.scrollController,

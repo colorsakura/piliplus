@@ -186,14 +186,6 @@ class _DynamicsPageState extends State<DynamicsPage>
               : null,
           leadingWidth: 50,
           toolbarHeight: 50,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness:
-                Theme.of(context).brightness == Brightness.light
-                    ? Brightness.dark
-                    : Brightness.light,
-          ),
           title: SizedBox(
             height: 50,
             child: TabBar(

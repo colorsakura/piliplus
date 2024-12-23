@@ -127,15 +127,15 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 if (card.vip?.vipStatus == 1) ...[
                   const SizedBox(width: 8),
-                  CachedNetworkImage(
-                    imageUrl: card.vip!.label!.image!,
+                  Image.network(
+                    card.vip!.label!.image!,
                     height: 20,
                   ),
                 ],
                 if (card.nameplate?.image?.isNotEmpty == true) ...[
                   const SizedBox(width: 8),
-                  CachedNetworkImage(
-                    imageUrl: card.nameplate!.image!,
+                  Image.network(
+                    card.nameplate!.image!,
                     height: 20,
                   ),
                 ],

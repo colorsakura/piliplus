@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/utils/extension.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -906,8 +905,8 @@ class ReplyItem extends StatelessWidget {
             [
               if (content.jumpUrl[patternStr]?['prefix_icon'] != null) ...[
                 WidgetSpan(
-                  child: CachedNetworkImage(
-                    imageUrl: content.jumpUrl[patternStr]['prefix_icon'],
+                  child: Image.network(
+                    content.jumpUrl[patternStr]['prefix_icon'],
                     height: 19,
                     color: Theme.of(context).colorScheme.primary,
                   ),
