@@ -26,7 +26,7 @@ class WhisperDetailController extends GetxController {
     talkerId = int.parse(Get.parameters['talkerId']!);
     name = Get.parameters['name']!;
     face = Get.parameters['face']!;
-    mid = Get.parameters['mid']!;
+    mid = Get.parameters['mid'];
 
     querySessionMsg();
   }

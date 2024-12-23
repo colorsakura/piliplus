@@ -249,10 +249,12 @@ class _WhisperPageState extends State<WhisperPage> {
                                               sessionList[i].accountInfo.name,
                                           'face':
                                               sessionList[i].accountInfo.face,
-                                          'mid': sessionList[i]
-                                              .accountInfo
-                                              .mid
-                                              .toString(),
+                                          if (sessionList[i].accountInfo.mid !=
+                                              null)
+                                            'mid': sessionList[i]
+                                                .accountInfo
+                                                .mid
+                                                .toString(),
                                         },
                                       );
                                     },
