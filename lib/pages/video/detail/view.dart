@@ -1562,7 +1562,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               plPlayerController?.danmakuController?.clear();
                               plPlayerController?.videoPlayerController
                                   ?.seek(Duration(seconds: segment.from!));
-                              setState(() {});
+                              if (videoDetailController.bsController != null) {
+                                videoDetailController.bsController!.close();
+                                videoDetailController.bsController = null;
+                              } else {
+                                setState(() {});
+                              }
                             }
                           : null,
                       leading: segment.url?.isNotEmpty == true
