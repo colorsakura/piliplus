@@ -171,9 +171,19 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     loadingStatus = widget.loadingStatus;
     enableAi = setting.get(SettingBoxKey.enableAi, defaultValue: true);
 
+    bool exapndIntroPanel = GStorage.exapndIntroPanel;
+
     _expandableCtr = ExpandableController(
-      initialExpanded: GStorage.exapndIntroPanel,
+      initialExpanded: exapndIntroPanel,
     );
+
+    if (exapndIntroPanel.not) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.orientation == Orientation.landscape) {
+          _expandableCtr.toggle();
+        }
+      });
+    }
   }
 
   @override
