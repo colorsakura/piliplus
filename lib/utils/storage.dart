@@ -113,6 +113,9 @@ class GStorage {
   static bool get showViewPoints =>
       setting.get(SettingBoxKey.showViewPoints, defaultValue: true);
 
+  static bool get showRelatedVideo =>
+      setting.get(SettingBoxKey.showRelatedVideo, defaultValue: true);
+
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
@@ -306,6 +309,7 @@ class SettingBoxKey {
       schemeVariant = 'schemeVariant',
       grpcReply = 'grpcReply',
       showViewPoints = 'showViewPoints',
+      showRelatedVideo = 'showRelatedVideo',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

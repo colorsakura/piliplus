@@ -550,12 +550,13 @@ class VideoIntroController extends GetxController
     videoDetailCtr.danmakuCid.value = cid;
     videoDetailCtr.queryVideoUrl();
     // 重新请求相关视频
-    try {
-      final RelatedController relatedCtr =
-          Get.find<RelatedController>(tag: heroTag);
-      relatedCtr.bvid = bvid;
-      relatedCtr.queryData();
-    } catch (_) {}
+    if (videoDetailCtr.showRelatedVideo) {
+      try {
+        Get.find<RelatedController>(tag: heroTag)
+          ..bvid = bvid
+          ..queryData();
+      } catch (_) {}
+    }
     // 重新请求评论
     try {
       final VideoReplyController videoReplyCtr =
@@ -652,8 +653,7 @@ class VideoIntroController extends GetxController
     final VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: heroTag);
 
-    if (videoDetailController.sourceType.value == 'watchLater' ||
-        videoDetailController.sourceType.value == 'fav') {
+    if (videoDetailController.isPlayAll) {
       episodes.addAll(videoDetailCtr.mediaList);
     } else if ((videoDetail.value.pages?.length ?? 0) > 1) {
       isPages = true;
@@ -671,7 +671,8 @@ class VideoIntroController extends GetxController
     final PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
     if (episodes.isEmpty) {
-      if (platRepeat == PlayRepeat.autoPlayRelated) {
+      if (platRepeat == PlayRepeat.autoPlayRelated &&
+          videoDetailCtr.showRelatedVideo) {
         return playRelated();
       }
       return false;
@@ -692,7 +693,8 @@ class VideoIntroController extends GetxController
     if (nextIndex >= episodes.length) {
       if (platRepeat == PlayRepeat.listCycle) {
         nextIndex = 0;
-      } else if (platRepeat == PlayRepeat.autoPlayRelated) {
+      } else if (platRepeat == PlayRepeat.autoPlayRelated &&
+          videoDetailCtr.showRelatedVideo) {
         return playRelated();
       } else {
         return false;

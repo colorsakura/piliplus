@@ -64,6 +64,7 @@ class _MediaPageState extends State<MediaPage>
         toolbarHeight: 30,
       ),
       body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: mediaController.scrollController,
         child: Column(
           children: [
@@ -183,6 +184,9 @@ class _MediaPageState extends State<MediaPage>
           height: MediaQuery.textScalerOf(context).scale(200),
           child: Obx(() => _buildBody(mediaController.loadingState.value)),
         ),
+        SizedBox(
+          height: MediaQuery.paddingOf(context).bottom + 100,
+        )
       ],
     );
   }

@@ -223,6 +223,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.showViewPoints,
             defaultVal: true,
           ),
+          SetSwitchItem(
+            title: '视频页显示相关视频',
+            leading: Icon(Icons.recommend_outlined),
+            setKey: SettingBoxKey.showRelatedVideo,
+            defaultVal: true,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,

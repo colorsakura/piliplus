@@ -216,6 +216,8 @@ class VideoDetailController extends GetxController
   late String cacheSecondDecode;
   late int cacheAudioQa;
 
+  late final showRelatedVideo = GStorage.showRelatedVideo;
+
   late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
@@ -236,6 +238,8 @@ class VideoDetailController extends GetxController
   RxString sourceType = 'normal'.obs;
   List<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[];
   RxString watchLaterTitle = ''.obs;
+  bool get isPlayAll =>
+      sourceType.value == 'watchLater' || sourceType.value == 'fav';
 
   @override
   void onInit() {
@@ -366,9 +370,11 @@ class VideoDetailController extends GetxController
         ..bvid = bvid
         ..queryVideoIntro();
 
-      Get.find<RelatedController>(tag: heroTag)
-        ..bvid = bvid
-        ..onRefresh();
+      if (showRelatedVideo) {
+        Get.find<RelatedController>(tag: heroTag)
+          ..bvid = bvid
+          ..onRefresh();
+      }
     } catch (_) {}
   }
 

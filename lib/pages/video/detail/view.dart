@@ -795,7 +795,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               SearchType.media_bangumi,
                           '相关视频',
                           videoDetailController.videoType ==
-                              SearchType.media_bangumi,
+                                  SearchType.media_bangumi ||
+                              videoDetailController.showRelatedVideo.not,
                         ),
                         Expanded(
                           child: TabBarView(
@@ -803,7 +804,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             controller: videoDetailController.tabCtr,
                             children: <Widget>[
                               if (videoDetailController.videoType ==
-                                  SearchType.video)
+                                      SearchType.video &&
+                                  videoDetailController.showRelatedVideo)
                                 CustomScrollView(
                                   controller: _introController,
                                   slivers: [
@@ -1296,7 +1298,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 showIntroDetail: showIntroDetail,
                 showEpisodes: showEpisodes,
               ),
-              if (needRelated) ...[
+              if (needRelated && videoDetailController.showRelatedVideo) ...[
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -1323,12 +1325,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 ),
               ),
             SliverToBoxAdapter(
-              child: SizedBox(height: MediaQuery.paddingOf(context).bottom),
+              child: SizedBox(
+                height: MediaQuery.paddingOf(context).bottom +
+                    (videoDetailController.isPlayAll &&
+                            MediaQuery.orientationOf(context) ==
+                                Orientation.landscape
+                        ? 75
+                        : 0),
+              ),
             )
           ],
         );
-    if (videoDetailController.sourceType.value == 'watchLater' ||
-        videoDetailController.sourceType.value == 'fav') {
+    if (videoDetailController.isPlayAll) {
       return Stack(
         children: [
           introPanel(),
