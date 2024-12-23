@@ -229,7 +229,7 @@ class UserInfoCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 6, right: 20),
           child: Wrap(
-            spacing: 5,
+            spacing: 8,
             runSpacing: 8,
             crossAxisAlignment: WrapCrossAlignment.end,
             children: [

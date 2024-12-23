@@ -133,32 +133,9 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
     }
     if (_height == 0) {
       return SliverToBoxAdapter(
-        child: Stack(
-          children: [
-            Padding(
-              // Padding which centers the flexible space within the app bar
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.paddingOf(context).top / 2),
-              child: Container(
-                  key: _childKey,
-                  child:
-                      widget.flexibleSpace ?? SizedBox(height: kToolbarHeight)),
-            ),
-            Positioned.fill(
-              // 10 is the magic number which the app bar is pushed down within the sliver app bar. Couldnt find exactly where this number
-              // comes from and found it through trial and error.
-              top: 10,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  leading: widget.leading,
-                  actions: widget.actions,
-                ),
-              ),
-            )
-          ],
+        child: Container(
+          key: _childKey,
+          child: widget.flexibleSpace ?? SizedBox(height: kToolbarHeight),
         ),
       );
     }
