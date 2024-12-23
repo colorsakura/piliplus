@@ -221,8 +221,8 @@ class _RecommendSettingState extends State<RecommendSetting> {
                           ...defDurations,
                           if (defDurations.contains(minDurationForRcmd).not)
                             minDurationForRcmd,
-                          -1
                         ]..sort(),
+                        -1,
                       ].map((e) {
                         if (e == -1) {
                           return {'title': '自定义', 'value': e};

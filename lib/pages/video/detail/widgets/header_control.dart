@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPalaX/pages/setting/widgets/switch_item.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:floating/floating.dart';
@@ -139,7 +140,7 @@ class _HeaderControlState extends State<HeaderControl> {
             bottom: 12 + MediaQuery.paddingOf(context).bottom,
           ),
           child: Column(
-            children: <Widget>[
+            children: [
               SizedBox(
                 height: 35,
                 child: Center(
@@ -513,6 +514,7 @@ class _HeaderControlState extends State<HeaderControl> {
                             );
                           },
                         ),
+                        const SizedBox(height: 14),
                       ],
                     ),
                   ),
@@ -529,51 +531,115 @@ class _HeaderControlState extends State<HeaderControl> {
 
   /// 定时关闭
   void scheduleExit() async {
-    const List<int> scheduleTimeChoices = [
-      -1,
-      15,
-      30,
-      45,
-      60,
-    ];
+    const List<int> scheduleTimeChoices = [0, 15, 30, 45, 60];
     showModalBottomSheet(
       context: context,
       elevation: 0,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
+      builder: (context) {
         return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return Container(
-            width: double.infinity,
-            height: 500,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-            ),
-            margin: const EdgeInsets.all(12),
-            padding: const EdgeInsets.only(left: 14, right: 14),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Column(
+          builder: (context, setState) {
+            return Container(
+              width: double.infinity,
+              height: 500,
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+              margin: EdgeInsets.only(
+                left: 12,
+                top: 12,
+                right: 12,
+                bottom: 12 + MediaQuery.paddingOf(context).bottom,
+              ),
+              padding: const EdgeInsets.only(left: 14, right: 14),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
                       const SizedBox(height: 30),
                       const Center(child: Text('定时关闭', style: titleStyle)),
                       const SizedBox(height: 10),
-                      for (final int choice in scheduleTimeChoices) ...<Widget>[
-                        ListTile(
+                      ...[
+                        ...[
+                          ...scheduleTimeChoices,
+                          if (scheduleTimeChoices
+                              .contains(
+                                  shutdownTimerService.scheduledExitInMinutes)
+                              .not)
+                            shutdownTimerService.scheduledExitInMinutes,
+                        ]..sort(),
+                        -1,
+                      ].map(
+                        (choice) => ListTile(
                           dense: true,
                           onTap: () {
-                            shutdownTimerService.scheduledExitInMinutes =
-                                choice;
-                            shutdownTimerService.startShutdownTimer();
-                            Get.back();
+                            if (choice == -1) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  String duration = '';
+                                  return AlertDialog(
+                                    title: Text(
+                                      '自定义时长',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    content: TextField(
+                                      autofocus: true,
+                                      onChanged: (value) => duration = value,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'\d+')),
+                                      ],
+                                      decoration: const InputDecoration(
+                                          suffixText: 'min'),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: Get.back,
+                                        child: Text(
+                                          '取消',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                          int choice =
+                                              int.tryParse(duration) ?? 0;
+                                          shutdownTimerService
+                                              .scheduledExitInMinutes = choice;
+                                          shutdownTimerService
+                                              .startShutdownTimer();
+                                          setState(() {});
+                                        },
+                                        child: Text('确定'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              Get.back();
+                              shutdownTimerService.scheduledExitInMinutes =
+                                  choice;
+                              shutdownTimerService.startShutdownTimer();
+                            }
                           },
                           contentPadding: const EdgeInsets.only(),
-                          title: Text(choice == -1 ? "禁用" : "$choice分钟后"),
+                          title: Text(choice == -1
+                              ? '自定义'
+                              : choice == 0
+                                  ? "禁用"
+                                  : "$choice分钟后"),
                           trailing: shutdownTimerService
                                       .scheduledExitInMinutes ==
                                   choice
@@ -581,15 +647,16 @@ class _HeaderControlState extends State<HeaderControl> {
                                   Icons.done,
                                   color: Theme.of(context).colorScheme.primary,
                                 )
-                              : const SizedBox(),
-                        )
-                      ],
+                              : null,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       const Center(
-                          child: SizedBox(
-                        width: 100,
-                        child: Divider(height: 1),
-                      )),
+                        child: SizedBox(
+                          width: 125,
+                          child: Divider(height: 1),
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       ListTile(
                         dense: true,
@@ -600,27 +667,29 @@ class _HeaderControlState extends State<HeaderControl> {
                         },
                         contentPadding: const EdgeInsets.only(),
                         title: const Text("额外等待视频播放完毕", style: titleStyle),
-                        trailing: Switch(
-                          // thumb color (round icon)
-                          activeColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primaryContainer,
-                          inactiveThumbColor:
-                              Theme.of(context).colorScheme.primaryContainer,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.surface,
-                          splashRadius: 10.0,
-                          // boolean variable value
-                          value: shutdownTimerService.waitForPlayingCompleted,
-                          // changes the state of the switch
-                          onChanged: (value) => setState(() =>
-                              shutdownTimerService.waitForPlayingCompleted =
-                                  value),
+                        trailing: Transform.scale(
+                          alignment: Alignment
+                              .centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
+                          scale: 0.8,
+                          child: Switch(
+                            thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                                (Set<WidgetState> states) {
+                              if (states.isNotEmpty &&
+                                  states.first == WidgetState.selected) {
+                                return const Icon(Icons.done);
+                              }
+                              return null;
+                            }),
+                            value: shutdownTimerService.waitForPlayingCompleted,
+                            onChanged: (value) => setState(() =>
+                                shutdownTimerService.waitForPlayingCompleted =
+                                    value),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
                       Row(
-                        children: <Widget>[
+                        children: [
                           const Text('倒计时结束:', style: titleStyle),
                           const Spacer(),
                           ActionRowLineItem(
@@ -645,11 +714,14 @@ class _HeaderControlState extends State<HeaderControl> {
                           )
                         ],
                       ),
-                    ]),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
     );
   }
@@ -691,9 +763,14 @@ class _HeaderControlState extends State<HeaderControl> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-          margin: const EdgeInsets.all(12),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
           child: Column(
-            children: <Widget>[
+            children: [
               SizedBox(
                 height: 45,
                 child: GestureDetector(
@@ -718,50 +795,55 @@ class _HeaderControlState extends State<HeaderControl> {
               Expanded(
                 child: Material(
                   child: Scrollbar(
-                    child: ListView(
-                      children: [
-                        for (int i = 0; i < totalQaSam; i++) ...[
-                          ListTile(
-                            dense: true,
-                            onTap: () {
-                              if (currentVideoQa.code ==
-                                  videoFormat[i].quality) {
-                                return;
-                              }
-                              final int quality = videoFormat[i].quality!;
-                              widget.videoDetailCtr!.currentVideoQa =
-                                  VideoQualityCode.fromCode(quality)!;
-                              String oldQualityDesc = VideoQualityCode.fromCode(
-                                      setting.get(SettingBoxKey.defaultVideoQa,
-                                          defaultValue:
-                                              VideoQuality.values.last.code))!
-                                  .description;
-                              setting.put(
-                                  SettingBoxKey.defaultVideoQa, quality);
-                              SmartDialog.showToast(
-                                  "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}");
-                              widget.videoDetailCtr!.updatePlayer();
-                              Get.back();
-                            },
-                            // 可能包含会员解锁画质
-                            enabled: i >= totalQaSam - userfulQaSam,
-                            contentPadding:
-                                const EdgeInsets.only(left: 20, right: 20),
-                            title: Text(videoFormat[i].newDesc!),
-                            trailing: currentVideoQa.code ==
-                                    videoFormat[i].quality
-                                ? Icon(
-                                    Icons.done,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )
-                                : Text(
-                                    videoFormat[i].format!,
-                                    style: subTitleStyle,
-                                  ),
-                          ),
-                        ]
-                      ],
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeBottom: true,
+                      child: ListView(
+                        children: [
+                          for (int i = 0; i < totalQaSam; i++) ...[
+                            ListTile(
+                              dense: true,
+                              onTap: () {
+                                if (currentVideoQa.code ==
+                                    videoFormat[i].quality) {
+                                  return;
+                                }
+                                final int quality = videoFormat[i].quality!;
+                                widget.videoDetailCtr!.currentVideoQa =
+                                    VideoQualityCode.fromCode(quality)!;
+                                String oldQualityDesc =
+                                    VideoQualityCode.fromCode(setting.get(
+                                            SettingBoxKey.defaultVideoQa,
+                                            defaultValue:
+                                                VideoQuality.values.last.code))!
+                                        .description;
+                                setting.put(
+                                    SettingBoxKey.defaultVideoQa, quality);
+                                SmartDialog.showToast(
+                                    "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}");
+                                widget.videoDetailCtr!.updatePlayer();
+                                Get.back();
+                              },
+                              // 可能包含会员解锁画质
+                              enabled: i >= totalQaSam - userfulQaSam,
+                              contentPadding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              title: Text(videoFormat[i].newDesc!),
+                              trailing: currentVideoQa.code ==
+                                      videoFormat[i].quality
+                                  ? Icon(
+                                      Icons.done,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    )
+                                  : Text(
+                                      videoFormat[i].format!,
+                                      style: subTitleStyle,
+                                    ),
+                            ),
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -790,53 +872,64 @@ class _HeaderControlState extends State<HeaderControl> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-          margin: const EdgeInsets.all(12),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
           child: Column(
-            children: <Widget>[
+            children: [
               const SizedBox(
                   height: 45,
                   child: Center(child: Text('选择音质', style: titleStyle))),
               Expanded(
                 child: Material(
-                  child: ListView(
-                    children: <Widget>[
-                      for (final AudioItem i in audio) ...<Widget>[
-                        ListTile(
-                          dense: true,
-                          onTap: () {
-                            if (currentAudioQa.code == i.id) {
-                              return;
-                            }
-                            final int quality = i.id!;
-                            widget.videoDetailCtr!.currentAudioQa =
-                                AudioQualityCode.fromCode(quality)!;
-                            String oldQualityDesc = AudioQualityCode.fromCode(
-                                    setting.get(SettingBoxKey.defaultAudioQa,
-                                        defaultValue:
-                                            AudioQuality.values.last.code))!
-                                .description;
-                            setting.put(SettingBoxKey.defaultAudioQa, quality);
-                            SmartDialog.showToast(
-                                "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}");
-                            widget.videoDetailCtr!.updatePlayer();
-                            Get.back();
-                          },
-                          contentPadding:
-                              const EdgeInsets.only(left: 20, right: 20),
-                          title: Text(i.quality!),
-                          subtitle: Text(
-                            i.codecs!,
-                            style: subTitleStyle,
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: true,
+                    child: ListView(
+                      children: [
+                        for (final AudioItem i in audio) ...[
+                          ListTile(
+                            dense: true,
+                            onTap: () {
+                              if (currentAudioQa.code == i.id) {
+                                return;
+                              }
+                              final int quality = i.id!;
+                              widget.videoDetailCtr!.currentAudioQa =
+                                  AudioQualityCode.fromCode(quality)!;
+                              String oldQualityDesc = AudioQualityCode.fromCode(
+                                      setting.get(SettingBoxKey.defaultAudioQa,
+                                          defaultValue:
+                                              AudioQuality.values.last.code))!
+                                  .description;
+                              setting.put(
+                                  SettingBoxKey.defaultAudioQa, quality);
+                              SmartDialog.showToast(
+                                  "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}");
+                              widget.videoDetailCtr!.updatePlayer();
+                              Get.back();
+                            },
+                            contentPadding:
+                                const EdgeInsets.only(left: 20, right: 20),
+                            title: Text(i.quality!),
+                            subtitle: Text(
+                              i.codecs!,
+                              style: subTitleStyle,
+                            ),
+                            trailing: currentAudioQa.code == i.id
+                                ? Icon(
+                                    Icons.done,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : const SizedBox(),
                           ),
-                          trailing: currentAudioQa.code == i.id
-                              ? Icon(
-                                  Icons.done,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : const SizedBox(),
-                        ),
-                      ]
-                    ],
+                        ]
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -876,7 +969,12 @@ class _HeaderControlState extends State<HeaderControl> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-          margin: const EdgeInsets.all(12),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
           child: Column(
             children: [
               const SizedBox(
@@ -884,35 +982,42 @@ class _HeaderControlState extends State<HeaderControl> {
                   child: Center(child: Text('选择解码格式', style: titleStyle))),
               Expanded(
                 child: Material(
-                  child: ListView(
-                    children: [
-                      for (var i in list) ...[
-                        ListTile(
-                          dense: true,
-                          onTap: () {
-                            if (i.startsWith(currentDecodeFormats.code)) return;
-                            widget.videoDetailCtr!.currentDecodeFormats =
-                                VideoDecodeFormatsCode.fromString(i)!;
-                            widget.videoDetailCtr!.updatePlayer();
-                            Get.back();
-                          },
-                          contentPadding:
-                              const EdgeInsets.only(left: 20, right: 20),
-                          title: Text(VideoDecodeFormatsCode.fromString(i)!
-                              .description!),
-                          subtitle: Text(
-                            i!,
-                            style: subTitleStyle,
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: true,
+                    child: ListView(
+                      children: [
+                        for (var i in list) ...[
+                          ListTile(
+                            dense: true,
+                            onTap: () {
+                              if (i.startsWith(currentDecodeFormats.code)) {
+                                return;
+                              }
+                              widget.videoDetailCtr!.currentDecodeFormats =
+                                  VideoDecodeFormatsCode.fromString(i)!;
+                              widget.videoDetailCtr!.updatePlayer();
+                              Get.back();
+                            },
+                            contentPadding:
+                                const EdgeInsets.only(left: 20, right: 20),
+                            title: Text(VideoDecodeFormatsCode.fromString(i)!
+                                .description!),
+                            subtitle: Text(
+                              i!,
+                              style: subTitleStyle,
+                            ),
+                            trailing: i.startsWith(currentDecodeFormats.code)
+                                ? Icon(
+                                    Icons.done,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : const SizedBox(),
                           ),
-                          trailing: i.startsWith(currentDecodeFormats.code)
-                              ? Icon(
-                                  Icons.done,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : const SizedBox(),
-                        ),
-                      ]
-                    ],
+                        ]
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -1050,9 +1155,9 @@ class _HeaderControlState extends State<HeaderControl> {
                   Padding(
                     padding: const EdgeInsets.only(top: 12, bottom: 18),
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         for (final Map<String, dynamic> i
-                            in blockTypesList) ...<Widget>[
+                            in blockTypesList) ...[
                           ActionRowLineItem(
                             onTap: () async {
                               final bool isChoose =
@@ -1458,7 +1563,12 @@ class _HeaderControlState extends State<HeaderControl> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-          margin: const EdgeInsets.all(12),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
           child: Column(
             children: [
               const SizedBox(
@@ -1466,27 +1576,32 @@ class _HeaderControlState extends State<HeaderControl> {
                   child: Center(child: Text('选择播放顺序', style: titleStyle))),
               Expanded(
                 child: Material(
-                  child: ListView(
-                    children: <Widget>[
-                      for (final PlayRepeat i in PlayRepeat.values) ...[
-                        ListTile(
-                          dense: true,
-                          onTap: () {
-                            widget.controller!.setPlayRepeat(i);
-                            Get.back();
-                          },
-                          contentPadding:
-                              const EdgeInsets.only(left: 20, right: 20),
-                          title: Text(i.description),
-                          trailing: widget.controller!.playRepeat == i
-                              ? Icon(
-                                  Icons.done,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : const SizedBox(),
-                        )
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: true,
+                    child: ListView(
+                      children: [
+                        for (final PlayRepeat i in PlayRepeat.values) ...[
+                          ListTile(
+                            dense: true,
+                            onTap: () {
+                              widget.controller!.setPlayRepeat(i);
+                              Get.back();
+                            },
+                            contentPadding:
+                                const EdgeInsets.only(left: 20, right: 20),
+                            title: Text(i.description),
+                            trailing: widget.controller!.playRepeat == i
+                                ? Icon(
+                                    Icons.done,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : const SizedBox(),
+                          )
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -1738,9 +1853,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         // });
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Column(children: <Widget>[
+                            content: Column(children: [
                               const Row(
-                                children: <Widget>[
+                                children: [
                                   Icon(
                                     Icons.check,
                                     color: Colors.green,

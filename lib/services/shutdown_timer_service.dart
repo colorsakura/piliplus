@@ -11,7 +11,7 @@ class ShutdownTimerService with WidgetsBindingObserver {
   Timer? _shutdownTimer;
   Timer? _autoCloseDialogTimer;
   //定时退出
-  int scheduledExitInMinutes = -1;
+  int scheduledExitInMinutes = 0;
   bool exitApp = false;
   bool waitForPlayingCompleted = false;
   bool isWaiting = false;
@@ -36,7 +36,7 @@ class ShutdownTimerService with WidgetsBindingObserver {
 
   void startShutdownTimer() {
     cancelShutdownTimer(); // Cancel any previous timer
-    if (scheduledExitInMinutes == -1) {
+    if (scheduledExitInMinutes == 0) {
       //使用toast提示用户已取消
       SmartDialog.showToast("取消定时关闭");
       return;
