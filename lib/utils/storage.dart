@@ -116,6 +116,15 @@ class GStorage {
   static bool get showRelatedVideo =>
       setting.get(SettingBoxKey.showRelatedVideo, defaultValue: true);
 
+  static bool get showVideoReply =>
+      setting.get(SettingBoxKey.showVideoReply, defaultValue: true);
+
+  static bool get showBangumiReply =>
+      setting.get(SettingBoxKey.showBangumiReply, defaultValue: true);
+
+  static bool get exapndIntroPanel =>
+      setting.get(SettingBoxKey.exapndIntroPanel, defaultValue: false);
+
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
@@ -310,6 +319,9 @@ class SettingBoxKey {
       grpcReply = 'grpcReply',
       showViewPoints = 'showViewPoints',
       showRelatedVideo = 'showRelatedVideo',
+      showVideoReply = 'showVideoReply',
+      showBangumiReply = 'showBangumiReply',
+      exapndIntroPanel = 'exapndIntroPanel',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

@@ -229,6 +229,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.showRelatedVideo,
             defaultVal: true,
           ),
+          SetSwitchItem(
+            title: '默认展开视频简介',
+            leading: Icon(Icons.expand_more),
+            setKey: SettingBoxKey.exapndIntroPanel,
+            defaultVal: false,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,

@@ -158,7 +158,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
-  final _expandableCtr = ExpandableController(initialExpanded: false);
+  late final ExpandableController _expandableCtr;
 
   @override
   void initState() {
@@ -170,6 +170,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
     loadingStatus = widget.loadingStatus;
     enableAi = setting.get(SettingBoxKey.enableAi, defaultValue: true);
+
+    _expandableCtr = ExpandableController(
+      initialExpanded: GStorage.exapndIntroPanel,
+    );
   }
 
   @override
