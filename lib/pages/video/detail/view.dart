@@ -1156,7 +1156,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     bool showReply = true,
   }) {
     int length = (showIntro ? 1 : 0) + (showReply ? 1 : 0);
-    if (length != 0 && videoDetailController.tabCtr.length != length) {
+    if (videoDetailController.tabCtr.length != length) {
       videoDetailController.tabCtr = TabController(length: length, vsync: this);
     }
 

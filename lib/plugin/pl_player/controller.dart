@@ -1351,6 +1351,10 @@ class PlPlayerController {
   }
 
   static void updatePlayCount() {
-    _instance?._playerCount.value -= 1;
+    if (_instance?._playerCount.value == 1) {
+      _instance?.dispose();
+    } else {
+      _instance?._playerCount.value -= 1;
+    }
   }
 }
