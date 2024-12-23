@@ -44,12 +44,13 @@ class _MediaListPanelState extends State<MediaListPanel> {
   void initState() {
     super.initState();
     mediaList.value = widget.mediaList;
+    _isEnd = widget.hasMore.not;
   }
 
   void loadMore() async {
     var res = await UserHttp.getMediaList(
       type: 3,
-      bizId: widget.mediaId!,
+      bizId: widget.mediaId ?? -1,
       ps: 20,
       oid: mediaList.last.id,
     );
