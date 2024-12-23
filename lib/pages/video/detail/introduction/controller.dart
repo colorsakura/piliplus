@@ -549,6 +549,7 @@ class VideoIntroController extends GetxController
     }
     videoDetailCtr.danmakuCid.value = cid;
     videoDetailCtr.queryVideoUrl();
+
     // 重新请求相关视频
     if (videoDetailCtr.showRelatedVideo) {
       try {
@@ -557,13 +558,16 @@ class VideoIntroController extends GetxController
           ..queryData();
       } catch (_) {}
     }
+
     // 重新请求评论
-    try {
-      final VideoReplyController videoReplyCtr =
-          Get.find<VideoReplyController>(tag: heroTag);
-      videoReplyCtr.aid = aid;
-      videoReplyCtr.onRefresh();
-    } catch (_) {}
+    if (videoDetailCtr.showReply) {
+      try {
+        Get.find<VideoReplyController>(tag: heroTag)
+          ..aid = aid
+          ..onRefresh();
+      } catch (_) {}
+    }
+
     this.bvid = bvid;
     lastPlayCid.value = cid;
     queryVideoIntro();

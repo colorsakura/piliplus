@@ -230,6 +230,18 @@ class _ExtraSettingState extends State<ExtraSetting> {
             defaultVal: true,
           ),
           SetSwitchItem(
+            title: '显示视频评论',
+            leading: Icon(Icons.reply_all),
+            setKey: SettingBoxKey.showVideoReply,
+            defaultVal: true,
+          ),
+          SetSwitchItem(
+            title: '显示番剧评论',
+            leading: Icon(Icons.reply_all),
+            setKey: SettingBoxKey.showBangumiReply,
+            defaultVal: true,
+          ),
+          SetSwitchItem(
             title: '默认展开视频简介',
             leading: Icon(Icons.expand_more),
             setKey: SettingBoxKey.exapndIntroPanel,

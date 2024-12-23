@@ -387,14 +387,18 @@ class BangumiIntroController extends CommonController {
     if (cover is String && cover.isNotEmpty) {
       videoDetailCtr.videoItem['pic'] = cover;
     }
+
     // 重新请求评论
-    try {
-      /// 未渲染回复组件时可能异常
-      VideoReplyController videoReplyCtr =
-          Get.find<VideoReplyController>(tag: Get.arguments['heroTag']);
-      videoReplyCtr.aid = aid;
-      videoReplyCtr.onRefresh();
-    } catch (_) {}
+    if (videoDetailCtr.showReply) {
+      try {
+        /// 未渲染回复组件时可能异常
+        VideoReplyController videoReplyCtr =
+            Get.find<VideoReplyController>(tag: Get.arguments['heroTag']);
+        videoReplyCtr.aid = aid;
+        videoReplyCtr.onRefresh();
+      } catch (_) {}
+    }
+
     if (userLogin) {
       queryBangumiLikeCoinFav();
     }

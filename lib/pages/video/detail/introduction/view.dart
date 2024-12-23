@@ -542,7 +542,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                               '${videoIntroController.videoDetail.value.bvid}');
                         },
                         child: Text(
-                          '${videoIntroController.videoDetail.value.bvid}',
+                          videoIntroController.videoDetail.value.bvid ?? '',
                           style: TextStyle(
                             fontSize: 14,
                             color: Theme.of(context).colorScheme.primary,

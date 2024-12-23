@@ -218,6 +218,11 @@ class VideoDetailController extends GetxController
 
   late final showRelatedVideo = GStorage.showRelatedVideo;
 
+  late final _showVideoReply = GStorage.showVideoReply;
+  late final _showBangumiReply = GStorage.showBangumiReply;
+  bool get showReply =>
+      videoType == SearchType.video ? _showVideoReply : _showBangumiReply;
+
   late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
@@ -361,9 +366,11 @@ class VideoDetailController extends GetxController
       videoItem['pic'] = cover;
       queryVideoUrl();
 
-      Get.find<VideoReplyController>(tag: heroTag)
-        ..aid = aid
-        ..onRefresh();
+      if (showReply) {
+        Get.find<VideoReplyController>(tag: heroTag)
+          ..aid = aid
+          ..onRefresh();
+      }
 
       Get.find<VideoIntroController>(tag: heroTag)
         ..lastPlayCid.value = cid

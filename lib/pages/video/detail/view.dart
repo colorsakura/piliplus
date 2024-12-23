@@ -100,9 +100,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     videoDetailController = Get.put(VideoDetailController(), tag: heroTag);
 
-    _videoReplyController = Get.put(
-        VideoReplyController(videoDetailController.oid.value, '0', '1'),
-        tag: heroTag);
+    if (videoDetailController.showReply) {
+      _videoReplyController = Get.put(
+          VideoReplyController(videoDetailController.oid.value, '0', '1'),
+          tag: heroTag);
+    }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     videoIntroController.videoDetail.listen((value) {
       if (!context.mounted) return;
@@ -179,7 +181,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 获取视频资源，初始化播放器
   Future<void> videoSourceInit() async {
     _futureBuilderFuture = videoDetailController.queryVideoUrl();
-    _videoReplyController.queryData();
+    if (videoDetailController.showReply) {
+      _videoReplyController.queryData();
+    }
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
@@ -561,14 +565,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       resizeToAvoidBottomInset: false,
                       body: Column(
                         children: [
-                          tabbarBuild(),
+                          buildTabbar(
+                            showReply: videoDetailController.showReply,
+                          ),
                           Expanded(
                             child: TabBarView(
                               physics: const ClampingScrollPhysics(),
                               controller: videoDetailController.tabCtr,
                               children: [
                                 videoIntro(),
-                                videoReplyPanel,
+                                if (videoDetailController.showReply)
+                                  videoReplyPanel,
                               ],
                             ),
                           ),
@@ -610,14 +617,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     resizeToAvoidBottomInset: false,
                     body: Column(
                       children: [
-                        tabbarBuild(),
+                        buildTabbar(showReply: videoDetailController.showReply),
                         Expanded(
                           child: TabBarView(
                             physics: const ClampingScrollPhysics(),
                             controller: videoDetailController.tabCtr,
                             children: [
                               videoIntro(),
-                              videoReplyPanel,
+                              if (videoDetailController.showReply)
+                                videoReplyPanel,
                             ],
                           ),
                         ),
@@ -653,14 +661,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   resizeToAvoidBottomInset: false,
                   body: Column(
                     children: [
-                      tabbarBuild(false),
+                      buildTabbar(
+                        needIndicator: false,
+                        showReply: videoDetailController.showReply,
+                      ),
                       Expanded(
                         child: Row(
                           children: [
                             Expanded(child: videoIntro()),
-                            Expanded(
-                              child: videoReplyPanel,
-                            )
+                            if (videoDetailController.showReply)
+                              Expanded(child: videoReplyPanel)
                           ],
                         ),
                       )
@@ -699,8 +709,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       resizeToAvoidBottomInset: false,
                       body: Column(
                         children: [
-                          tabbarBuild(false, '', true),
-                          Expanded(child: videoReplyPanel),
+                          buildTabbar(
+                            showIntro: false,
+                            showReply: videoDetailController.showReply,
+                          ),
+                          if (videoDetailController.showReply)
+                            Expanded(child: videoReplyPanel),
                         ],
                       ),
                     ),
@@ -790,13 +804,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     resizeToAvoidBottomInset: false,
                     body: Column(
                       children: [
-                        tabbarBuild(
-                          videoDetailController.videoType !=
-                              SearchType.media_bangumi,
-                          '相关视频',
-                          videoDetailController.videoType ==
-                                  SearchType.media_bangumi ||
-                              videoDetailController.showRelatedVideo.not,
+                        buildTabbar(
+                          introText: '相关视频',
+                          showIntro: videoDetailController.videoType ==
+                                  SearchType.video &&
+                              videoDetailController.showRelatedVideo,
+                          showReply: videoDetailController.showReply,
                         ),
                         Expanded(
                           child: TabBarView(
@@ -812,7 +825,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                     RelatedVideoPanel(heroTag: heroTag),
                                   ],
                                 ),
-                              videoReplyPanel,
+                              if (videoDetailController.showReply)
+                                videoReplyPanel,
                             ],
                           ),
                         )
@@ -1133,15 +1147,58 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  Widget tabbarBuild([
+  Widget buildTabbar({
     bool needIndicator = true,
     String introText = '简介',
-    bool isSingle = false,
-  ]) {
-    if (videoDetailController.tabCtr.length != (isSingle ? 1 : 2)) {
-      videoDetailController.tabCtr =
-          TabController(length: isSingle ? 1 : 2, vsync: this);
+    bool showIntro = true,
+    bool showReply = true,
+  }) {
+    int length = (showIntro ? 1 : 0) + (showReply ? 1 : 0);
+    if (length != 0 && videoDetailController.tabCtr.length != length) {
+      videoDetailController.tabCtr = TabController(length: length, vsync: this);
     }
+
+    Widget tabbar() => TabBar(
+          labelColor: needIndicator.not || length == 1
+              ? Theme.of(context).colorScheme.onSurface
+              : null,
+          indicatorColor:
+              needIndicator.not || length == 1 ? Colors.transparent : null,
+          padding: EdgeInsets.zero,
+          controller: videoDetailController.tabCtr,
+          labelStyle: const TextStyle(fontSize: 13),
+          labelPadding:
+              const EdgeInsets.symmetric(horizontal: 10.0), // 设置每个标签的宽度
+          dividerColor: Colors.transparent,
+          onTap: (value) {
+            void animToTop() {
+              if (value == 0) {
+                if (showIntro) {
+                  _introController.animToTop();
+                } else if (showReply) {
+                  _videoReplyController.animateToTop();
+                }
+              } else {
+                _videoReplyController.animateToTop();
+              }
+            }
+
+            if (needIndicator.not || length == 1) {
+              animToTop();
+            } else if (videoDetailController.tabCtr.indexIsChanging.not) {
+              animToTop();
+            }
+          },
+          tabs: [
+            if (showIntro) Tab(text: introText),
+            if (showReply)
+              Tab(
+                text:
+                    '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
+              ),
+          ],
+        );
+
     return Container(
       width: double.infinity,
       height: 45,
@@ -1156,42 +1213,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       child: Material(
         child: Row(
           children: [
-            Flexible(
-              flex: 1,
-              child: Obx(
-                () => TabBar(
-                  labelColor: needIndicator
-                      ? null
-                      : Theme.of(context).colorScheme.onSurface,
-                  indicatorColor: needIndicator ? null : Colors.transparent,
-                  padding: EdgeInsets.zero,
-                  controller: videoDetailController.tabCtr,
-                  labelStyle: const TextStyle(fontSize: 13),
-                  labelPadding:
-                      const EdgeInsets.symmetric(horizontal: 10.0), // 设置每个标签的宽度
-                  dividerColor: Colors.transparent,
-                  onTap: (value) {
-                    if (isSingle) {
-                      _videoReplyController.animateToTop();
-                    } else if (!needIndicator ||
-                        !videoDetailController.tabCtr.indexIsChanging) {
-                      if (value == 0) {
-                        _introController.animToTop();
-                      } else {
-                        _videoReplyController.animateToTop();
-                      }
-                    }
-                  },
-                  tabs: [
-                    if (!isSingle) Tab(text: introText),
-                    Tab(
-                      text:
-                          '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
-                    ),
-                  ],
-                ),
+            if (length == 0)
+              const Spacer()
+            else
+              Flexible(
+                flex: 1,
+                child: showReply ? Obx(() => tabbar()) : tabbar(),
               ),
-            ),
             Flexible(
               flex: 1,
               child: Center(
@@ -1289,7 +1317,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Widget videoIntro([bool needRelated = true]) {
     Widget introPanel() => CustomScrollView(
-          controller: _introController,
+          controller: needRelated ? _introController : null,
           slivers: [
             if (videoDetailController.videoType == SearchType.video) ...[
               VideoIntroPanel(
