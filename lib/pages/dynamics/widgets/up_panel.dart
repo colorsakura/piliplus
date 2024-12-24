@@ -97,9 +97,9 @@ class _UpPanelState extends State<UpPanel> {
                   upItemBuild(UpItem(face: '', uname: '全部动态', mid: -1), 0),
                   upItemBuild(
                       UpItem(
-                        face: userInfo.face,
+                        face: userInfo?.face,
                         uname: '我',
-                        mid: userInfo.mid,
+                        mid: userInfo?.mid,
                       ),
                       1),
                   for (int i = 0; i < upList.length; i++) ...[

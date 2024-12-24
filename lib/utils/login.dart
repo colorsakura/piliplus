@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,20 +15,18 @@ class LoginUtils {
   static Future refreshLoginStatus(bool status) async {
     try {
       // 更改我的页面登录状态
-      await Get.find<MineController>().resetUserInfo();
+      if (status.not) {
+        await Get.find<MineController>().resetUserInfo();
+      }
 
       // 更改主页登录状态
-      HomeController homeCtr = Get.find<HomeController>();
-      homeCtr.updateLoginStatus(status);
+      Get.find<HomeController>().updateLoginStatus(status);
 
-      MineController mineCtr = Get.find<MineController>();
-      mineCtr.userLogin.value = status;
+      Get.find<MineController>().userLogin.value = status;
 
-      DynamicsController dynamicsCtr = Get.find<DynamicsController>();
-      dynamicsCtr.userLogin.value = status;
+      Get.find<DynamicsController>().userLogin.value = status;
 
-      MediaController mediaCtr = Get.find<MediaController>();
-      mediaCtr.userLogin.value = status;
+      Get.find<MediaController>().userLogin.value = status;
     } catch (err) {
       // SmartDialog.showToast('refreshLoginStatus error: ${err.toString()}');
       debugPrint('refreshLoginStatus error: $err');

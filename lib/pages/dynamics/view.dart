@@ -59,7 +59,7 @@ class _DynamicsPageState extends State<DynamicsPage>
               }),
             ),
             onPressed: () {
-              if (GStorage.userInfo.get('userInfoCache') != null) {
+              if (GStorage.isLogin) {
                 showModalBottomSheet(
                   context: context,
                   useSafeArea: true,

@@ -78,6 +78,7 @@ class Utils {
           '${GStorage.setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'web')}'
           '端」推荐');
       await GStorage.userInfo.put('userInfoCache', result['data']);
+
       try {
         final HomeController homeCtr = Get.find<HomeController>();
         homeCtr.updateLoginStatus(true);
