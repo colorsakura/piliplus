@@ -244,7 +244,13 @@ class _ExtraSettingState extends State<ExtraSetting> {
           SetSwitchItem(
             title: '默认展开视频简介',
             leading: Icon(Icons.expand_more),
-            setKey: SettingBoxKey.exapndIntroPanel,
+            setKey: SettingBoxKey.alwaysExapndIntroPanel,
+            defaultVal: false,
+          ),
+          SetSwitchItem(
+            title: '横屏自动展开视频简介',
+            leading: Icon(Icons.expand_more),
+            setKey: SettingBoxKey.exapndIntroPanelH,
             defaultVal: false,
           ),
           Obx(
