@@ -191,22 +191,6 @@ class _HeaderControlState extends State<HeaderControl> {
                         // if (widget.videoDetailCtr?.userInfo != null)
                         ListTile(
                           dense: true,
-                          onTap: () {
-                            if (widget.videoDetailCtr?.userInfo == null) {
-                              SmartDialog.showToast('账号未登录');
-                              return;
-                            }
-                            Get.back();
-                            Get.toNamed('/webviewnew', parameters: {
-                              'url':
-                                  'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr!.bvid)}&bvid=${widget.videoDetailCtr!.bvid}'
-                            });
-                          },
-                          leading: const Icon(Icons.error_outline, size: 20),
-                          title: const Text('举报', style: titleStyle),
-                        ),
-                        ListTile(
-                          dense: true,
                           onTap: () async {
                             Get.back();
                             final res = await UserHttp.toViewLater(
@@ -513,6 +497,22 @@ class _HeaderControlState extends State<HeaderControl> {
                               },
                             );
                           },
+                        ),
+                        ListTile(
+                          dense: true,
+                          onTap: () {
+                            if (widget.videoDetailCtr?.userInfo == null) {
+                              SmartDialog.showToast('账号未登录');
+                              return;
+                            }
+                            Get.back();
+                            Get.toNamed('/webviewnew', parameters: {
+                              'url':
+                                  'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr!.bvid)}&bvid=${widget.videoDetailCtr!.bvid}'
+                            });
+                          },
+                          leading: const Icon(Icons.error_outline, size: 20),
+                          title: const Text('举报', style: titleStyle),
                         ),
                         const SizedBox(height: 14),
                       ],
