@@ -254,11 +254,19 @@ class _AboutPageState extends State<AboutPage> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('是否导入以下登录信息？'),
-                              content: Text(data.text!),
+                              content: SingleChildScrollView(
+                                child: Text(data.text!),
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: Get.back,
-                                  child: const Text('取消'),
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () async {
@@ -325,13 +333,20 @@ class _AboutPageState extends State<AboutPage> {
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('是否导入如下设置？'),
-                                  content: Text(data.text!),
+                                  content: SingleChildScrollView(
+                                    child: Text(data.text!),
+                                  ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: const Text('取消'),
+                                      onPressed: Get.back,
+                                      child: Text(
+                                        '取消',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () async {
