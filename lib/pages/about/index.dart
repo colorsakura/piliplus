@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/services/loggeer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -166,6 +167,9 @@ class _AboutPageState extends State<AboutPage> {
           ListTile(
             onTap: () {
               Get.toNamed('/logs');
+            },
+            onLongPress: () {
+              clearLogs();
             },
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('错误日志'),
