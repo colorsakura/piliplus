@@ -22,6 +22,8 @@ class GStorage {
   static late final Box<dynamic> setting;
   static late final Box<dynamic> video;
 
+  static bool get isLogin => userInfo.get('userInfoCache') != null;
+
   static List<double> get speedList => List<double>.from(
         video.get(
           VideoBoxKey.speedsList,

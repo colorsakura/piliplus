@@ -2,22 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/login.dart';
 import 'package:gt3_flutter_plugin/gt3_flutter_plugin.dart';
 import 'package:PiliPalaX/models/login/index.dart';
-import '../../utils/login.dart';
-import 'package:hive/hive.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-
-import '../../http/constants.dart';
-import '../../http/init.dart';
-import '../../http/user.dart';
-import '../../utils/storage.dart';
-import '../home/controller.dart';
-import '../media/controller.dart';
 
 class LoginPageController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -86,7 +77,7 @@ class LoginPageController extends GetxController
             if (value['status']) {
               t.cancel();
               statusQRCode.value = '扫码成功';
-              await afterLoginByApp(
+              await Utils.afterLoginByApp(
                   value['data'], value['data']['cookie_info']);
               Get.back();
             } else if (value['code'] == 86038) {
@@ -108,58 +99,6 @@ class LoginPageController extends GetxController
       if (qrCodeTimer == null || qrCodeTimer!.isActive == false) {
         refreshQRCode();
       }
-    }
-  }
-
-  Future afterLoginByApp(Map<String, dynamic> token_info, cookie_info) async {
-    try {
-      Box localCache = GStorage.localCache;
-      localCache.put(LocalCacheKey.accessKey, {
-        'mid': token_info['mid'],
-        'value': token_info['access_token'],
-        'refresh': token_info['refresh_token']
-      });
-      List<dynamic> cookieInfo = cookie_info['cookies'];
-      List<Cookie> cookies = [];
-      String cookieStrings = cookieInfo.map((cookie) {
-        String cstr =
-            '${cookie['name']}=${cookie['value']};Domain=.bilibili.com;Path=/;';
-        cookies.add(Cookie.fromSetCookieValue(cstr));
-        return cstr;
-      }).join('');
-      List<String> Urls = [
-        HttpString.baseUrl,
-        HttpString.apiBaseUrl,
-        HttpString.tUrl
-      ];
-      for (var url in Urls) {
-        await Request.cookieManager.cookieJar
-            .saveFromResponse(Uri.parse(url), cookies);
-      }
-      Request.dio.options.headers['cookie'] = cookieStrings;
-      await WebviewCookieManager().setCookies(cookies);
-    } catch (e) {
-      SmartDialog.showToast('设置登录态失败，$e');
-    }
-    final result = await UserHttp.userInfo();
-    if (result['status'] && result['data'].isLogin) {
-      SmartDialog.showToast('登录成功，当前采用「'
-          '${GStorage.setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'web')}'
-          '端」推荐');
-      await GStorage.userInfo.put('userInfoCache', result['data']);
-      try {
-        final HomeController homeCtr = Get.find<HomeController>();
-        homeCtr.updateLoginStatus(true);
-        homeCtr.userFace.value = result['data'].face;
-        final MediaController mediaCtr = Get.find<MediaController>();
-        mediaCtr.mid = result['data'].mid;
-      } catch (_) {}
-      await LoginUtils.refreshLoginStatus(true);
-    } else {
-      // 获取用户信息失败
-      SmartDialog.showNotify(
-          msg: '登录失败，请检查cookie是否正确，${result['message']}',
-          notifyType: NotifyType.warning);
     }
   }
 
@@ -415,7 +354,8 @@ class LoginPageController extends GetxController
                   return;
                 }
                 SmartDialog.showToast('正在保存身份信息');
-                await afterLoginByApp(data['token_info'], data['cookie_info']);
+                await Utils.afterLoginByApp(
+                    data['token_info'], data['cookie_info']);
                 Get.back();
                 Get.back();
               },
@@ -432,7 +372,7 @@ class LoginPageController extends GetxController
         return;
       }
       SmartDialog.showToast('正在保存身份信息');
-      await afterLoginByApp(data['token_info'], data['cookie_info']);
+      await Utils.afterLoginByApp(data['token_info'], data['cookie_info']);
       Get.back();
     } else {
       // handle login result
@@ -495,7 +435,7 @@ class LoginPageController extends GetxController
     if (res['status']) {
       SmartDialog.showToast('登录成功');
       var data = res['data'];
-      await afterLoginByApp(data['token_info'], data['cookie_info']);
+      await Utils.afterLoginByApp(data['token_info'], data['cookie_info']);
       Get.back();
     } else {
       SmartDialog.showToast(res['msg']);

@@ -18,6 +18,7 @@ import 'api.dart';
 import 'constants.dart';
 import 'interceptor.dart';
 import 'interceptor_anonymity.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 
 class Request {
   static final Request _instance = Request._internal();
@@ -43,8 +44,19 @@ class Request {
     cookieManager = CookieManager(cookieJar);
     dio.interceptors.add(cookieManager);
     dio.interceptors.add(AnonymityInterceptor());
-    // final List<Cookie> cookie = await cookieManager.cookieJar
-    //     .loadForRequest(Uri.parse(HttpString.baseUrl));
+    final List<Cookie> cookies = await cookieManager.cookieJar
+        .loadForRequest(Uri.parse(HttpString.baseUrl));
+    for (Cookie item in cookies) {
+      await web.CookieManager().setCookie(
+        url: web.WebUri(item.domain ?? ''),
+        name: item.name,
+        value: item.value,
+        path: item.path ?? '',
+        domain: item.domain,
+        isSecure: item.secure,
+        isHttpOnly: item.httpOnly,
+      );
+    }
     final userInfo = userInfoCache.get('userInfoCache');
     if (userInfo != null && userInfo.mid != null) {
       final List<Cookie> cookie2 = await cookieManager.cookieJar
@@ -65,7 +77,7 @@ class Request {
       log("setCookie, ${e.toString()}");
     }
 
-    // final String cookieString = cookie
+    // final String cookieString = cookies
     //     .map((Cookie cookie) => '${cookie.name}=${cookie.value}')
     //     .join('; ');
     // dio.options.headers['cookie'] = cookieString;

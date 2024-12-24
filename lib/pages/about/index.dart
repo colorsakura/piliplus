@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -190,11 +195,103 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
           ListTile(
+            title: const Text('导入/导出登录信息'),
+            leading: const Icon(Icons.import_export_outlined),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => SimpleDialog(
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    ListTile(
+                      title: const Text('导出'),
+                      onTap: () async {
+                        dynamic accessKey = GStorage.localCache
+                            .get(LocalCacheKey.accessKey, defaultValue: {});
+                        dynamic cookies = (await CookieManager(PersistCookieJar(
+                          ignoreExpires: true,
+                          storage: FileStorage(await Utils.getCookiePath()),
+                        ))
+                                .cookieJar
+                                .loadForRequest(Uri.parse(HttpString.baseUrl)))
+                            .map(
+                              (Cookie cookie) => {
+                                'name': cookie.name,
+                                'value': cookie.value,
+                              },
+                            )
+                            .toList();
+                        dynamic res = jsonEncode({
+                          'accessKey': accessKey,
+                          'cookies': cookies,
+                        });
+                        Utils.copyText('$res');
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: SelectableText('$res'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('导入'),
+                      onTap: () async {
+                        Get.back();
+                        ClipboardData? data =
+                            await Clipboard.getData('text/plain');
+                        if (data == null ||
+                            data.text == null ||
+                            data.text!.isEmpty) {
+                          SmartDialog.showToast('剪贴板无数据');
+                          return;
+                        }
+                        if (!context.mounted) return;
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('是否导入以下登录信息？'),
+                              content: Text(data.text!),
+                              actions: [
+                                TextButton(
+                                  onPressed: Get.back,
+                                  child: const Text('取消'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Get.back();
+                                    try {
+                                      dynamic res = jsonDecode(data.text!);
+                                      Utils.afterLoginByApp(
+                                        res['accessKey'],
+                                        {'cookies': res['cookies']},
+                                      );
+                                    } catch (e) {
+                                      SmartDialog.showToast('导入失败：$e');
+                                    }
+                                  },
+                                  child: const Text('确定'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          ListTile(
               title: const Text('导入/导出设置'),
               dense: false,
               leading: const Icon(Icons.import_export_outlined),
-              onTap: () async {
-                await showDialog(
+              onTap: () {
+                showDialog(
                   context: context,
                   builder: (context) {
                     return SimpleDialog(

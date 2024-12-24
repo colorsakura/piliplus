@@ -3,13 +3,20 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPalaX/http/constants.dart';
+import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/http/search.dart';
+import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
+import 'package:PiliPalaX/pages/home/controller.dart';
+import 'package:PiliPalaX/pages/media/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/group_panel.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:PiliPalaX/utils/login.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +25,74 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 
 class Utils {
   static final Random random = Random();
+
+  static Future afterLoginByApp(
+      Map<String, dynamic> token_info, cookie_info) async {
+    try {
+      GStorage.localCache.put(LocalCacheKey.accessKey, {
+        'mid': token_info['mid'],
+        'value': token_info['access_token'] ?? token_info['value'],
+        'refresh': token_info['refresh_token'] ?? token_info['refresh']
+      });
+      List<dynamic> cookieInfo = cookie_info['cookies'];
+      List<Cookie> cookies = [];
+      String cookieStrings = cookieInfo.map((cookie) {
+        String cstr =
+            '${cookie['name']}=${cookie['value']};Domain=.bilibili.com;Path=/;';
+        cookies.add(Cookie.fromSetCookieValue(cstr));
+        return cstr;
+      }).join('');
+      List<String> urls = [
+        HttpString.baseUrl,
+        HttpString.apiBaseUrl,
+        HttpString.tUrl
+      ];
+      for (var url in urls) {
+        await Request.cookieManager.cookieJar
+            .saveFromResponse(Uri.parse(url), cookies);
+      }
+      Request.dio.options.headers['cookie'] = cookieStrings;
+      await WebviewCookieManager().setCookies(cookies);
+      for (Cookie item in cookies) {
+        await web.CookieManager().setCookie(
+          url: web.WebUri(item.domain ?? ''),
+          name: item.name,
+          value: item.value,
+          path: item.path ?? '',
+          domain: item.domain,
+          isSecure: item.secure,
+          isHttpOnly: item.httpOnly,
+        );
+      }
+    } catch (e) {
+      SmartDialog.showToast('设置登录态失败，$e');
+    }
+    final result = await UserHttp.userInfo();
+    if (result['status'] && result['data'].isLogin) {
+      SmartDialog.showToast('登录成功，当前采用「'
+          '${GStorage.setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'web')}'
+          '端」推荐');
+      await GStorage.userInfo.put('userInfoCache', result['data']);
+      try {
+        final HomeController homeCtr = Get.find<HomeController>();
+        homeCtr.updateLoginStatus(true);
+        homeCtr.userFace.value = result['data'].face;
+        final MediaController mediaCtr = Get.find<MediaController>();
+        mediaCtr.mid = result['data'].mid;
+      } catch (_) {}
+      await LoginUtils.refreshLoginStatus(true);
+    } else {
+      // 获取用户信息失败
+      SmartDialog.showNotify(
+          msg: '登录失败，请检查cookie是否正确，${result['message']}',
+          notifyType: NotifyType.warning);
+    }
+  }
 
   static bool isStringNumeric(str) {
     RegExp numericRegex = RegExp(r'^[\d\.]+$');
