@@ -2,7 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/http/init.dart';
+import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -16,6 +20,7 @@ class LoginPageController extends GetxController
   final TextEditingController usernameTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
   final TextEditingController smsCodeTextController = TextEditingController();
+  final TextEditingController cookieTextController = TextEditingController();
 
   Rx<Map<String, dynamic>> codeInfo = Rx<Map<String, dynamic>>({});
 
@@ -40,7 +45,7 @@ class LoginPageController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 3, vsync: this)
+    tabController = TabController(length: 4, vsync: this)
       ..addListener(_handleTabChange);
   }
 
@@ -54,6 +59,7 @@ class LoginPageController extends GetxController
     usernameTextController.dispose();
     passwordTextController.dispose();
     smsCodeTextController.dispose();
+    cookieTextController.dispose();
     super.onClose();
   }
 
@@ -195,6 +201,50 @@ class LoginPageController extends GetxController
           }
         });
     captcha.startCaptcha(registerData);
+  }
+
+  // cookie登录
+  void loginByCookie() async {
+    if (cookieTextController.text.isEmpty) {
+      SmartDialog.showToast('cookie不能为空');
+      return;
+    }
+    try {
+      dynamic result = await Request().get(
+        "https://api.bilibili.com/x/member/web/account",
+        options: Options(
+          headers: {
+            "Cookie": cookieTextController.text,
+          },
+        ),
+      );
+      if (result.data['code'] == 0) {
+        try {
+          await Utils.afterLoginByApp(
+            {'mid': '${result.data['data']['mid']}'},
+            {
+              'cookies':
+                  cookieTextController.text.split(';').toList().map((item) {
+                List list = item.split('=').toList();
+                return {
+                  'name': list.firstOrNull,
+                  'value': list.getOrNull(1),
+                };
+              }).toList()
+            },
+          );
+          if (GStorage.isLogin) {
+            Get.back();
+          }
+        } catch (e) {
+          SmartDialog.showToast("登录失败: $e");
+        }
+      } else {
+        SmartDialog.showToast("哔哩哔哩登录已失效，请重新登录");
+      }
+    } catch (e) {
+      SmartDialog.showToast("获取哔哩哔哩用户信息失败，可前往账号管理重试");
+    }
   }
 
   // app端密码登录

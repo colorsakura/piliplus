@@ -148,6 +148,49 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget loginByCookie() {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        const Text('使用Cookie登录'),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            '使用App端Api实现的功能将不可用',
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: TextField(
+            minLines: 1,
+            maxLines: 10,
+            controller: _loginPageCtr.cookieTextController,
+            inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r"\s"))],
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.cookie_outlined),
+              border: const UnderlineInputBorder(),
+              labelText: 'Cookie',
+              suffixIcon: IconButton(
+                onPressed: _loginPageCtr.cookieTextController.clear,
+                icon: const Icon(Icons.clear),
+              ),
+            ),
+          ),
+        ),
+        OutlinedButton.icon(
+          onPressed: _loginPageCtr.loginByCookie,
+          icon: const Icon(Icons.login),
+          label: const Text('登录'),
+        ),
+      ],
+    );
+  }
+
   Widget loginByPassword() {
     return Column(
       children: [
@@ -450,13 +493,19 @@ class _LoginPageState extends State<LoginPage> {
                   Tab(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [Icon(Icons.sms), Text(' 短信')],
+                      children: [Icon(Icons.sms_outlined), Text(' 短信')],
                     ),
                   ),
                   Tab(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [Icon(Icons.qr_code), Text(' 扫码')],
+                    ),
+                  ),
+                  Tab(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [Icon(Icons.cookie_outlined), Text(' Cookie')],
                     ),
                   ),
                 ],
@@ -468,8 +517,9 @@ class _LoginPageState extends State<LoginPage> {
               ? TabBar(
                   tabs: const [
                     Tab(icon: Icon(Icons.password), text: '密码'),
-                    Tab(icon: Icon(Icons.sms), text: '短信'),
+                    Tab(icon: Icon(Icons.sms_outlined), text: '短信'),
                     Tab(icon: Icon(Icons.qr_code), text: '扫码'),
+                    Tab(icon: Icon(Icons.cookie_outlined), text: 'Cookie'),
                   ],
                   controller: _loginPageCtr.tabController,
                 )
@@ -491,6 +541,7 @@ class _LoginPageState extends State<LoginPage> {
               tabViewOuter(loginByPassword()),
               tabViewOuter(loginBySmS()),
               tabViewOuter(loginByQRCode()),
+              tabViewOuter(loginByCookie()),
             ],
           ),
         ),
