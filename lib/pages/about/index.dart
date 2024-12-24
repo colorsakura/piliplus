@@ -173,9 +173,7 @@ class _AboutPageState extends State<AboutPage> {
             onTap: () {
               Get.toNamed('/logs');
             },
-            onLongPress: () {
-              clearLogs();
-            },
+            onLongPress: clearLogs,
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('错误日志'),
             trailing: Icon(Icons.arrow_forward, size: 16, color: outline),
@@ -201,11 +199,13 @@ class _AboutPageState extends State<AboutPage> {
               showDialog(
                 context: context,
                 builder: (context) => SimpleDialog(
+                  title: const Text('导入/导出登录信息'),
                   clipBehavior: Clip.hardEdge,
                   children: [
                     ListTile(
                       title: const Text('导出'),
                       onTap: () async {
+                        Get.back();
                         dynamic accessKey = GStorage.localCache
                             .get(LocalCacheKey.accessKey, defaultValue: {});
                         dynamic cookies = (await CookieManager(PersistCookieJar(

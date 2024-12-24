@@ -5,7 +5,7 @@ import 'package:PiliPalaX/utils/storage.dart';
 
 class RcmdController extends PopupController {
   late bool enableSaveLastData;
-  late String defaultRcmdType = 'web';
+  late String defaultRcmdType = 'app';
 
   @override
   void onInit() {
