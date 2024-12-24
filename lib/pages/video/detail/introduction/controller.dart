@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -78,6 +79,8 @@ class VideoIntroController extends GetxController
   late ModelResult modelResult;
   Rx<Map<String, dynamic>> queryVideoIntroData =
       Rx<Map<String, dynamic>>({"status": true});
+
+  ExpandableController? expandableCtr;
 
   @override
   void onInit() {
@@ -609,6 +612,8 @@ class VideoIntroController extends GetxController
   @override
   void onClose() {
     canelTimer();
+    expandableCtr?.dispose();
+    expandableCtr = null;
     super.onClose();
   }
 

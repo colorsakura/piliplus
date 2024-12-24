@@ -74,12 +74,6 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
   }
 
   @override
-  void dispose() {
-    videoIntroController.onClose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return Obx(() => videoIntroController.videoDetail.value.title == null
@@ -158,7 +152,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
-  late final ExpandableController _expandableCtr;
 
   @override
   void initState() {
@@ -171,26 +164,22 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     loadingStatus = widget.loadingStatus;
     enableAi = setting.get(SettingBoxKey.enableAi, defaultValue: true);
 
-    bool alwaysExapndIntroPanel = GStorage.alwaysExapndIntroPanel;
+    if (videoIntroController.expandableCtr == null) {
+      bool alwaysExapndIntroPanel = GStorage.alwaysExapndIntroPanel;
 
-    _expandableCtr = ExpandableController(
-      initialExpanded: alwaysExapndIntroPanel,
-    );
+      videoIntroController.expandableCtr = ExpandableController(
+        initialExpanded: alwaysExapndIntroPanel,
+      );
 
-    if (alwaysExapndIntroPanel.not && GStorage.exapndIntroPanelH) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.orientation == Orientation.landscape &&
-            _expandableCtr.expanded.not) {
-          _expandableCtr.toggle();
-        }
-      });
+      if (alwaysExapndIntroPanel.not && GStorage.exapndIntroPanelH) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (context.orientation == Orientation.landscape &&
+              videoIntroController.expandableCtr?.expanded == false) {
+            videoIntroController.expandableCtr?.toggle();
+          }
+        });
+      }
     }
-  }
-
-  @override
-  void dispose() {
-    _expandableCtr.dispose();
-    super.dispose();
   }
 
   void _showFavBottomSheet() => showModalBottomSheet(
@@ -249,7 +238,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     }
     feedBack();
     // widget.showIntroDetail();
-    _expandableCtr.toggle();
+    videoIntroController.expandableCtr?.toggle();
   }
 
   // 用户主页
@@ -412,7 +401,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 behavior: HitTestBehavior.translucent,
                 onTap: showIntroDetail,
                 child: ExpandablePanel(
-                  controller: _expandableCtr,
+                  controller: videoIntroController.expandableCtr,
                   collapsed: GestureDetector(
                     onLongPress: () {
                       feedBack();
@@ -540,7 +529,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 behavior: HitTestBehavior.translucent,
                 onTap: showIntroDetail,
                 child: ExpandablePanel(
-                  controller: _expandableCtr,
+                  controller: videoIntroController.expandableCtr,
                   collapsed: const SizedBox.shrink(),
                   expanded: Column(
                     mainAxisSize: MainAxisSize.min,
