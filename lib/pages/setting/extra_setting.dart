@@ -253,6 +253,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.exapndIntroPanelH,
             defaultVal: false,
           ),
+          SetSwitchItem(
+            title: '横屏分P/合集列表显示在Tab栏',
+            leading: Icon(Icons.format_list_numbered_rtl_sharp),
+            setKey: SettingBoxKey.horizontalSeasonPanel,
+            defaultVal: false,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,

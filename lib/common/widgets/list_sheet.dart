@@ -23,7 +23,7 @@ class ListSheetContent extends StatefulWidget {
     this.aid,
     required this.currentCid,
     required this.changeFucCall,
-    required this.onClose,
+    this.onClose,
   });
 
   final dynamic index;
@@ -33,7 +33,7 @@ class ListSheetContent extends StatefulWidget {
   final int? aid;
   final int currentCid;
   final Function changeFucCall;
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   @override
   State<ListSheetContent> createState() => _ListSheetContentState();
@@ -42,7 +42,7 @@ class ListSheetContent extends StatefulWidget {
 class _ListSheetContentState extends State<ListSheetContent>
     with TickerProviderStateMixin {
   late List<ItemScrollController> itemScrollController = [];
-  late final int currentIndex =
+  late int currentIndex =
       widget.episodes!.indexWhere((dynamic e) => e.cid == widget.currentCid) ??
           0;
   late List<bool> reverse;
@@ -58,10 +58,18 @@ class _ListSheetContentState extends State<ListSheetContent>
   StreamController? _favStream;
 
   @override
+  void didUpdateWidget(ListSheetContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    currentIndex = widget.episodes!
+            .indexWhere((dynamic e) => e.cid == widget.currentCid) ??
+        0;
+  }
+
+  @override
   void initState() {
     super.initState();
     if (_isList) {
-      _indexStream = StreamController<int>();
+      _indexStream ??= StreamController<int>();
       _ctr = TabController(
         vsync: this,
         length: widget.season.sections.length,
@@ -81,7 +89,7 @@ class _ListSheetContentState extends State<ListSheetContent>
       itemScrollController[_index].jumpTo(index: currentIndex);
     });
     if (widget.bvid != null && widget.season != null) {
-      _favStream = StreamController<int>();
+      _favStream ??= StreamController<int>();
       () async {
         dynamic result = await VideoHttp.videoRelation(bvid: widget.bvid);
         if (result['status']) {
@@ -95,7 +103,9 @@ class _ListSheetContentState extends State<ListSheetContent>
   @override
   void dispose() {
     _favStream?.close();
+    _favStream = null;
     _indexStream?.close();
+    _indexStream = null;
     _ctr?.removeListener(() {});
     _ctr?.dispose();
     super.dispose();
@@ -137,7 +147,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           }
         }
         SmartDialog.showToast('切换到：$title');
-        widget.onClose();
+        widget.onClose?.call();
         widget.changeFucCall(
           episode is bangumi.EpisodeItem ? episode.epId : null,
           episode.runtimeType.toString() == "EpisodeItem"
@@ -234,7 +244,7 @@ class _ListSheetContentState extends State<ListSheetContent>
             child: Row(
               children: [
                 Text(
-                  '合集（${_isList ? widget.season.epCount : widget.episodes!.length}）',
+                  '合集（${_isList ? widget.season.epCount : widget.episodes?.length ?? ''}）',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 StreamBuilder(
@@ -324,11 +334,12 @@ class _ListSheetContentState extends State<ListSheetContent>
                     },
                   ),
                 ),
-                _mediumButton(
-                  tooltip: '关闭',
-                  icon: Icons.close,
-                  onPressed: widget.onClose,
-                ),
+                if (widget.onClose != null)
+                  _mediumButton(
+                    tooltip: '关闭',
+                    icon: Icons.close,
+                    onPressed: widget.onClose,
+                  ),
               ],
             ),
           ),

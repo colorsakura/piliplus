@@ -30,7 +30,7 @@ class PagesPanel extends StatefulWidget {
 
 class _PagesPanelState extends State<PagesPanel> {
   late int cid;
-  late int currentIndex;
+  late int pageIndex;
   // final String heroTag = Get.arguments['heroTag'];
   late final String heroTag;
   late VideoDetailController _videoDetailController;
@@ -42,14 +42,13 @@ class _PagesPanelState extends State<PagesPanel> {
     cid = widget.cid;
     heroTag = widget.heroTag;
     _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
-    currentIndex = widget.pages.indexWhere((Part e) => e.cid == cid);
+    pageIndex = widget.pages.indexWhere((Part e) => e.cid == cid);
     _videoDetailController.cid.listen((int p0) {
       cid = p0;
-      currentIndex = max(0, widget.pages.indexWhere((Part e) => e.cid == cid));
+      pageIndex = max(0, widget.pages.indexWhere((Part e) => e.cid == cid));
       if (!mounted) return;
       const double itemWidth = 150; // 每个列表项的宽度
-      final double targetOffset = min(
-          (currentIndex * itemWidth) - (itemWidth / 2),
+      final double targetOffset = min((pageIndex * itemWidth) - (itemWidth / 2),
           _scrollController.position.maxScrollExtent);
       // 滑动至目标位置
       _scrollController.animateTo(
@@ -78,7 +77,7 @@ class _PagesPanelState extends State<PagesPanel> {
               const Text('视频选集 '),
               Expanded(
                 child: Text(
-                  ' 正在播放：${widget.pages[currentIndex].pagePart}',
+                  ' 正在播放：${widget.pages[pageIndex].pagePart}',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 12,
@@ -119,7 +118,7 @@ class _PagesPanelState extends State<PagesPanel> {
             itemCount: widget.pages.length,
             itemExtent: 150,
             itemBuilder: (BuildContext context, int i) {
-              bool isCurrentIndex = currentIndex == i;
+              bool isCurrentIndex = pageIndex == i;
               return Container(
                 width: 150,
                 margin: EdgeInsets.only(

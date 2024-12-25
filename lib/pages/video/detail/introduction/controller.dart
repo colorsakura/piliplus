@@ -691,13 +691,6 @@ class VideoIntroController extends GetxController
         episodes.indexWhere((e) => e.cid == lastPlayCid.value);
     int nextIndex = currentIndex + 1;
 
-    int cid = episodes[nextIndex].cid!;
-    while (cid == -1) {
-      nextIndex++;
-      SmartDialog.showToast('当前视频暂不支持播放，自动跳过');
-      cid = episodes[nextIndex].cid!;
-    }
-
     // 列表循环
     if (nextIndex >= episodes.length) {
       if (platRepeat == PlayRepeat.listCycle) {
@@ -709,6 +702,18 @@ class VideoIntroController extends GetxController
         return false;
       }
     }
+
+    int cid = episodes[nextIndex].cid!;
+
+    while (cid == -1) {
+      SmartDialog.showToast('当前视频暂不支持播放，自动跳过');
+      nextIndex++;
+      if (nextIndex >= episodes.length) {
+        return false;
+      }
+      cid = episodes[nextIndex].cid!;
+    }
+
     final String rBvid = isPages ? bvid : episodes[nextIndex].bvid;
     final int rAid = isPages ? IdUtils.bv2av(bvid) : episodes[nextIndex].aid!;
     changeSeasonOrbangu(null, rBvid, cid, rAid, null);

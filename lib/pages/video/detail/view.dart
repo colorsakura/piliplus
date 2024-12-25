@@ -13,6 +13,8 @@ import 'package:PiliPalaX/pages/bangumi/introduction/widgets/intro_detail.dart'
     as bangumi;
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.dart'
     as video;
+import 'package:PiliPalaX/pages/video/detail/introduction/widgets/page.dart';
+import 'package:PiliPalaX/pages/video/detail/introduction/widgets/season.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/extension.dart';
@@ -89,6 +91,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late final MethodChannel onUserLeaveHintListener;
   // StreamSubscription<Duration>? _bufferedListener;
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
+
+  bool get _shouldShowSeasonPanel =>
+      (videoIntroController.videoDetail.value.ugcSeason != null ||
+          ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)) &&
+      context.orientation == Orientation.landscape &&
+      videoDetailController.horizontalSeasonPanel;
 
   @override
   void initState() {
@@ -578,6 +586,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 videoIntro(),
                                 if (videoDetailController.showReply)
                                   videoReplyPanel,
+                                if (_shouldShowSeasonPanel) seasonPanel,
                               ],
                             ),
                           ),
@@ -628,6 +637,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               videoIntro(),
                               if (videoDetailController.showReply)
                                 videoReplyPanel,
+                              if (_shouldShowSeasonPanel) seasonPanel,
                             ],
                           ),
                         ),
@@ -672,7 +682,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           children: [
                             Expanded(child: videoIntro()),
                             if (videoDetailController.showReply)
-                              Expanded(child: videoReplyPanel)
+                              Expanded(child: videoReplyPanel),
+                            if (_shouldShowSeasonPanel)
+                              Expanded(child: seasonPanel),
                           ],
                         ),
                       )
@@ -715,8 +727,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             showIntro: false,
                             showReply: videoDetailController.showReply,
                           ),
-                          if (videoDetailController.showReply)
-                            Expanded(child: videoReplyPanel),
+                          Expanded(
+                            child: TabBarView(
+                              controller: videoDetailController.tabCtr,
+                              children: [
+                                if (videoDetailController.showReply)
+                                  videoReplyPanel,
+                                if (_shouldShowSeasonPanel) seasonPanel,
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -726,10 +746,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 //   child: TabBarView(
                 //     physics: const ClampingScrollPhysics(),
                 //     controller: videoDetailController.tabCtr,
-                //     children: <Widget>[
+                //     children: [
                 //       CustomScrollView(
                 //         key: const PageStorageKey<String>('简介'),
-                //         slivers: <Widget>[
+                //         slivers: [
                 //           if (videoDetailController.videoType ==
                 //               SearchType.video) ...[
                 //             const VideoIntroPanel(),
@@ -817,7 +837,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           child: TabBarView(
                             physics: const ClampingScrollPhysics(),
                             controller: videoDetailController.tabCtr,
-                            children: <Widget>[
+                            children: [
                               if (videoDetailController.videoType ==
                                       SearchType.video &&
                                   videoDetailController.showRelatedVideo)
@@ -829,9 +849,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 ),
                               if (videoDetailController.showReply)
                                 videoReplyPanel,
+                              if (_shouldShowSeasonPanel) seasonPanel,
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -1155,7 +1176,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     bool showIntro = true,
     bool showReply = true,
   }) {
-    int length = (showIntro ? 1 : 0) + (showReply ? 1 : 0);
+    int length = (showIntro ? 1 : 0) +
+        (showReply ? 1 : 0) +
+        (_shouldShowSeasonPanel ? 1 : 0);
     if (videoDetailController.tabCtr.length != length) {
       videoDetailController.tabCtr = TabController(length: length, vsync: this);
     }
@@ -1198,6 +1221,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 text:
                     '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
               ),
+            if (_shouldShowSeasonPanel) Tab(text: '播放列表'),
           ],
         );
 
@@ -1421,6 +1445,67 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       return introPanel();
     }
   }
+
+  Widget get seasonPanel => Column(
+        children: [
+          if ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)
+            Obx(
+              () => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: PagesPanel(
+                  heroTag: heroTag,
+                  pages: videoIntroController.videoDetail.value.pages!,
+                  cid: videoIntroController.lastPlayCid.value,
+                  bvid: videoIntroController.bvid,
+                  changeFuc: videoIntroController.changeSeasonOrbangu,
+                  showEpisodes: showEpisodes,
+                ),
+              ),
+            ),
+          if (videoIntroController.videoDetail.value.ugcSeason != null) ...[
+            if ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)
+              Divider(
+                height: 1,
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SeasonPanel(
+                heroTag: heroTag,
+                onTap: false,
+                ugcSeason: videoIntroController.videoDetail.value.ugcSeason!,
+                cid: videoIntroController.lastPlayCid.value != 0
+                    ? (videoIntroController
+                                .videoDetail.value.pages?.isNotEmpty ==
+                            true
+                        ? videoIntroController
+                            .videoDetail.value.pages!.first.cid
+                        : videoIntroController.lastPlayCid.value)
+                    : videoIntroController.videoDetail.value.pages!.first.cid,
+                changeFuc: videoIntroController.changeSeasonOrbangu,
+                showEpisodes: showEpisodes,
+                pages: videoIntroController.videoDetail.value.pages,
+              ),
+            ),
+            Expanded(
+              child: Obx(
+                () => ListSheetContent(
+                  index: videoDetailController.seasonIndex.value,
+                  season: videoIntroController.videoDetail.value.ugcSeason!,
+                  episodes: videoDetailController.episodes,
+                  bvid: videoDetailController.bvid,
+                  aid: IdUtils.bv2av(videoDetailController.bvid),
+                  currentCid: videoDetailController.seasonCid,
+                  changeFucCall: videoDetailController.videoType ==
+                          SearchType.media_bangumi
+                      ? bangumiIntroController.changeSeasonOrbangu
+                      : videoIntroController.changeSeasonOrbangu,
+                ),
+              ),
+            ),
+          ],
+        ],
+      );
 
   Widget get videoReplyPanel => Obx(
         () => VideoReplyPanel(

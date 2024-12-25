@@ -627,7 +627,11 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               // 点赞收藏转发 布局样式2
               if (!isHorizontal) actionGrid(context, videoIntroController),
               // 合集
-              if (!loadingStatus && widget.videoDetail?.ugcSeason != null) ...[
+              if (!loadingStatus &&
+                  widget.videoDetail?.ugcSeason != null &&
+                  (context.orientation != Orientation.landscape ||
+                      (context.orientation == Orientation.landscape &&
+                          videoDetailCtr.horizontalSeasonPanel.not)))
                 Obx(
                   () => SeasonPanel(
                     heroTag: heroTag,
@@ -641,11 +645,13 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     showEpisodes: widget.showEpisodes,
                     pages: widget.videoDetail!.pages,
                   ),
-                )
-              ],
+                ),
               if (!loadingStatus &&
                   widget.videoDetail?.pages != null &&
-                  widget.videoDetail!.pages!.length > 1) ...[
+                  widget.videoDetail!.pages!.length > 1 &&
+                  (context.orientation != Orientation.landscape ||
+                      (context.orientation == Orientation.landscape &&
+                          videoDetailCtr.horizontalSeasonPanel.not))) ...[
                 Obx(
                   () => PagesPanel(
                     heroTag: heroTag,
