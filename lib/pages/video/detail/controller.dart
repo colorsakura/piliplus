@@ -366,7 +366,7 @@ class VideoDetailController extends GetxController
           changeMediaList: changeMediaList,
           panelTitle: watchLaterTitle.value,
           bvid: bvid,
-          hasMore: mediaList.length < Get.arguments['count'],
+          count: Get.arguments['count'],
           loadMoreMedia: loadMoreMedia,
         ),
       );

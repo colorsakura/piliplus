@@ -12,21 +12,21 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MediaListPanel extends StatefulWidget {
   const MediaListPanel({
+    super.key,
     required this.mediaList,
     this.changeMediaList,
     this.panelTitle,
     this.bvid,
-    this.hasMore = false,
     required this.loadMoreMedia,
-    super.key,
+    required this.count,
   });
 
   final List<MediaVideoItemModel> mediaList;
   final Function? changeMediaList;
   final String? panelTitle;
   final String? bvid;
-  final bool hasMore;
   final VoidCallback loadMoreMedia;
+  final int count;
 
   @override
   State<MediaListPanel> createState() => _MediaListPanelState();
@@ -78,7 +78,7 @@ class _MediaListPanelState extends State<MediaListPanel> {
                   itemBuilder: ((context, index) {
                     var item = widget.mediaList[index];
                     if (index == widget.mediaList.length - 1 &&
-                        widget.hasMore) {
+                        widget.mediaList.length < widget.count) {
                       widget.loadMoreMedia();
                     }
                     return InkWell(
