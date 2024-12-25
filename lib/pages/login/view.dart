@@ -150,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget loginByCookie() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 20),
         const Text('使用Cookie登录'),
@@ -348,7 +349,10 @@ class _LoginPageState extends State<LoginPage> {
               child: Row(
                 children: [
                   const SizedBox(width: 12),
-                  const Icon(Icons.phone),
+                  Icon(
+                    Icons.phone,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 12),
                   PopupMenuButton<Map<String, dynamic>>(
                     padding: EdgeInsets.zero,
@@ -422,7 +426,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: _loginPageCtr.smsCodeTextController,
                       decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.sms),
+                        prefixIcon: Icon(Icons.sms_outlined),
                         border: InputBorder.none,
                         labelText: '验证码',
                       ),
