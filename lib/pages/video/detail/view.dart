@@ -1189,19 +1189,22 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     bool showIntro = true,
     bool showReply = true,
   }) {
-    int length = (showIntro ? 1 : 0) +
-        (showReply ? 1 : 0) +
-        (_shouldShowSeasonPanel ? 1 : 0);
-    if (videoDetailController.tabCtr.length != length) {
-      videoDetailController.tabCtr = TabController(length: length, vsync: this);
+    List<String> tabs = [
+      if (showIntro) introText,
+      if (showReply) '评论',
+      if (_shouldShowSeasonPanel) '播放列表',
+    ];
+    if (videoDetailController.tabCtr.length != tabs.length) {
+      videoDetailController.tabCtr =
+          TabController(length: tabs.length, vsync: this);
     }
 
     Widget tabbar() => TabBar(
-          labelColor: needIndicator.not || length == 1
+          labelColor: needIndicator.not || tabs.length == 1
               ? Theme.of(context).colorScheme.onSurface
               : null,
           indicatorColor:
-              needIndicator.not || length == 1 ? Colors.transparent : null,
+              needIndicator.not || tabs.length == 1 ? Colors.transparent : null,
           padding: EdgeInsets.zero,
           controller: videoDetailController.tabCtr,
           labelStyle: const TextStyle(fontSize: 13),
@@ -1210,32 +1213,30 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           dividerColor: Colors.transparent,
           onTap: (value) {
             void animToTop() {
-              if (value == 0) {
-                if (showIntro) {
-                  _introController.animToTop();
-                } else if (showReply) {
-                  _videoReplyController.animateToTop();
-                }
-              } else {
+              String text = tabs[value];
+              if (text == '简介' || text == '相关视频') {
+                _introController.animToTop();
+              } else if (text.startsWith('评论')) {
                 _videoReplyController.animateToTop();
               }
             }
 
-            if (needIndicator.not || length == 1) {
+            if (needIndicator.not || tabs.length == 1) {
               animToTop();
             } else if (videoDetailController.tabCtr.indexIsChanging.not) {
               animToTop();
             }
           },
-          tabs: [
-            if (showIntro) Tab(text: introText),
-            if (showReply)
-              Tab(
+          tabs: tabs.map((text) {
+            if (text == '评论') {
+              return Tab(
                 text:
                     '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
-              ),
-            if (_shouldShowSeasonPanel) Tab(text: '播放列表'),
-          ],
+              );
+            } else {
+              return Tab(text: text);
+            }
+          }).toList(),
         );
 
     return Container(
@@ -1252,11 +1253,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       child: Material(
         child: Row(
           children: [
-            if (length == 0)
+            if (tabs.isEmpty)
               const Spacer()
             else
               Flexible(
-                flex: length == 3 ? 2 : 1,
+                flex: tabs.length == 3 ? 2 : 1,
                 child: showReply ? Obx(() => tabbar()) : tabbar(),
               ),
             Flexible(
