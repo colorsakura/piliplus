@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
@@ -183,11 +182,6 @@ class VideoDetailController extends GetxController
   RxBool enableHA = true.obs;
   RxString hwdec = 'auto-safe'.obs;
 
-  /// 本地存储
-  Box userInfoCache = GStorage.userInfo;
-  Box localCache = GStorage.localCache;
-  Box setting = GStorage.setting;
-
   RxInt oid = 0.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -247,36 +241,35 @@ class VideoDetailController extends GetxController
 
   // 页面来源 稍后再看 收藏夹
   RxString sourceType = 'normal'.obs;
-  List<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[];
-  RxString watchLaterTitle = ''.obs;
+  late RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;
+  late RxString watchLaterTitle = ''.obs;
   bool get isPlayAll =>
       sourceType.value == 'watchLater' || sourceType.value == 'fav';
 
   @override
   void onInit() {
     super.onInit();
-    final Map argMap = Get.arguments;
-    userInfo = userInfoCache.get('userInfoCache');
-    var keys = argMap.keys.toList();
+    userInfo = GStorage.userInfo.get('userInfoCache');
+    var keys = Get.arguments.keys.toList();
     if (keys.isNotEmpty) {
       if (keys.contains('videoItem')) {
-        var args = argMap['videoItem'];
+        var args = Get.arguments['videoItem'];
         if (args.pic != null && args.pic != '') {
           videoItem['pic'] = args.pic;
         }
       }
       if (keys.contains('pic')) {
-        videoItem['pic'] = argMap['pic'];
+        videoItem['pic'] = Get.arguments['pic'];
       }
     }
 
-    sourceType.value = argMap['sourceType'] ?? 'normal';
+    sourceType.value = Get.arguments['sourceType'] ?? 'normal';
 
     if (sourceType.value == 'watchLater') {
       watchLaterTitle.value = '稍后再看';
       fetchMediaList();
     } else if (sourceType.value == 'fav') {
-      watchLaterTitle.value = argMap['favTitle'];
+      watchLaterTitle.value = Get.arguments['favTitle'];
       queryFavVideoList();
     }
 
@@ -332,8 +325,7 @@ class VideoDetailController extends GetxController
 
   // 获取稍后再看列表
   Future fetchMediaList() async {
-    final Map argMap = Get.arguments;
-    var count = argMap['count'];
+    var count = Get.arguments['count'];
     var res = await UserHttp.getMediaList(
       type: 2,
       bizId: userInfo.mid,
@@ -341,6 +333,25 @@ class VideoDetailController extends GetxController
     );
     if (res['status']) {
       mediaList = res['data'].reversed.toList();
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
+  void loadMoreMedia() async {
+    if (mediaList.length >= Get.arguments['count']) {
+      return;
+    }
+    var res = await UserHttp.getMediaList(
+      type: 3,
+      bizId: Get.arguments['mediaId'] ?? -1,
+      ps: 20,
+      oid: mediaList.last.id,
+    );
+    if (res['status']) {
+      if (res['data'].isNotEmpty) {
+        mediaList.addAll(res['data']);
+      }
     } else {
       SmartDialog.showToast(res['msg']);
     }
@@ -355,8 +366,8 @@ class VideoDetailController extends GetxController
           changeMediaList: changeMediaList,
           panelTitle: watchLaterTitle.value,
           bvid: bvid,
-          mediaId: Get.arguments['mediaId'],
-          hasMore: mediaList.length != Get.arguments['count'],
+          hasMore: mediaList.length < Get.arguments['count'],
+          loadMoreMedia: loadMoreMedia,
         ),
       );
     }
@@ -393,16 +404,15 @@ class VideoDetailController extends GetxController
 
   // 获取收藏夹视频列表
   Future queryFavVideoList() async {
-    final Map argMap = Get.arguments;
-    var mediaId = argMap['mediaId'];
-    var oid = argMap['oid'];
+    var mediaId = Get.arguments['mediaId'];
+    var oid = Get.arguments['oid'];
     var res = await UserHttp.parseFavVideo(
       mediaId: mediaId,
       oid: oid,
       bvid: bvid,
     );
     if (res['status']) {
-      mediaList = res['data'];
+      mediaList.value = res['data'];
     }
   }
 

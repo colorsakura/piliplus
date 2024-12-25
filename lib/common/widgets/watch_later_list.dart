@@ -1,68 +1,50 @@
 import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
 import 'package:PiliPalaX/common/widgets/stat/view.dart';
-import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MediaListPanel extends StatefulWidget {
   const MediaListPanel({
-    this.sheetHeight,
     required this.mediaList,
     this.changeMediaList,
     this.panelTitle,
     this.bvid,
-    this.mediaId,
     this.hasMore = false,
+    required this.loadMoreMedia,
     super.key,
   });
 
-  final double? sheetHeight;
   final List<MediaVideoItemModel> mediaList;
   final Function? changeMediaList;
   final String? panelTitle;
   final String? bvid;
-  final int? mediaId;
   final bool hasMore;
+  final VoidCallback loadMoreMedia;
 
   @override
   State<MediaListPanel> createState() => _MediaListPanelState();
 }
 
 class _MediaListPanelState extends State<MediaListPanel> {
-  RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;
-  bool _isEnd = false;
+  final _scrollController = ItemScrollController();
 
   @override
   void initState() {
     super.initState();
-    mediaList.value = widget.mediaList;
-    _isEnd = widget.hasMore.not;
-  }
-
-  void loadMore() async {
-    var res = await UserHttp.getMediaList(
-      type: 3,
-      bizId: widget.mediaId ?? -1,
-      ps: 20,
-      oid: mediaList.last.id,
-    );
-    if (res['status']) {
-      if (res['data'].isNotEmpty) {
-        mediaList.addAll(res['data']);
-      } else {
-        _isEnd = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      int index =
+          widget.mediaList.indexWhere((item) => item.bvid == widget.bvid);
+      if (index != -1 && index != 0) {
+        _scrollController.jumpTo(index: index);
       }
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
+    });
   }
 
   @override
@@ -90,12 +72,14 @@ class _MediaListPanelState extends State<MediaListPanel> {
             child: Material(
               color: Theme.of(context).colorScheme.surface,
               child: Obx(
-                () => ListView.builder(
-                  itemCount: mediaList.length,
+                () => ScrollablePositionedList.builder(
+                  itemScrollController: _scrollController,
+                  itemCount: widget.mediaList.length,
                   itemBuilder: ((context, index) {
-                    var item = mediaList[index];
-                    if (index == widget.mediaList.length - 1 && _isEnd.not) {
-                      loadMore();
+                    var item = widget.mediaList[index];
+                    if (index == widget.mediaList.length - 1 &&
+                        widget.hasMore) {
+                      widget.loadMoreMedia();
                     }
                     return InkWell(
                       onTap: () async {

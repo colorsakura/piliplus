@@ -691,6 +691,11 @@ class VideoIntroController extends GetxController
         episodes.indexWhere((e) => e.cid == lastPlayCid.value);
     int nextIndex = currentIndex + 1;
 
+    if (videoDetailController.isPlayAll &&
+        currentIndex == episodes.length - 2) {
+      videoDetailCtr.loadMoreMedia();
+    }
+
     // 列表循环
     if (nextIndex >= episodes.length) {
       if (platRepeat == PlayRepeat.listCycle) {

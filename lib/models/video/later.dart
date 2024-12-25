@@ -55,7 +55,6 @@ class MediaVideoItemModel {
   int? type;
   Upper? upper;
   String? link;
-  String? bvId;
   String? shortLink;
   Rights? rights;
   dynamic elecInfo;
