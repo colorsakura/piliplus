@@ -12,6 +12,7 @@ import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:PiliPalaX/plugin/pl_player/controller.dart';
@@ -347,8 +348,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 child: ComBtn(
                   icon: Transform.rotate(
                     angle: pi / 2,
-                    child: const Icon(
-                      Icons.reorder,
+                    child: Icon(
+                      MdiIcons.viewHeadline,
                       semanticLabel: '分段信息',
                       size: 22,
                       color: Colors.white,

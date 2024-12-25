@@ -12,6 +12,7 @@ import 'package:PiliPalaX/models/common/dynamics_type.dart';
 import 'package:PiliPalaX/models/common/reply_sort_type.dart';
 import 'package:PiliPalaX/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../home/index.dart';
 import 'controller.dart';
@@ -144,7 +145,17 @@ class _ExtraSettingState extends State<ExtraSetting> {
           SetSwitchItem(
             title: '空降助手',
             subTitle: '点击配置',
-            leading: Icon(Icons.block),
+            leading: Stack(
+              alignment: Alignment.center,
+              children: [
+                const Icon(Icons.shield),
+                Icon(
+                  Icons.play_arrow_rounded,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+              ],
+            ),
             setKey: SettingBoxKey.enableSponsorBlock,
             defaultVal: false,
             onTap: () => Get.toNamed('/sponsorBlock'),
@@ -152,7 +163,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
           SetSwitchItem(
             title: '检查未读动态',
             subTitle: '点击设置检查周期(min)',
-            leading: Icon(Icons.notifications_none),
+            leading: const Icon(Icons.notifications_none),
             setKey: SettingBoxKey.checkDynamic,
             defaultVal: true,
             onChanged: (value) {
@@ -207,7 +218,11 @@ class _ExtraSettingState extends State<ExtraSetting> {
           SetSwitchItem(
             title: '使用gRPC加载评论',
             subTitle: '如无法加载评论，可关闭\n非gRPC楼中楼无法定位评论、按热度/时间排序、查看对话',
-            leading: Icon(Icons.reply),
+            leading: SizedBox(
+              height: 24,
+              width: 24,
+              child: Icon(MdiIcons.google, size: 20),
+            ),
             setKey: SettingBoxKey.grpcReply,
             defaultVal: true,
             onChanged: (value) {
@@ -218,44 +233,44 @@ class _ExtraSettingState extends State<ExtraSetting> {
             title: '显示视频分段信息',
             leading: Transform.rotate(
               angle: pi / 2,
-              child: Icon(Icons.reorder),
+              child: Icon(MdiIcons.viewHeadline),
             ),
             setKey: SettingBoxKey.showViewPoints,
             defaultVal: true,
           ),
           SetSwitchItem(
             title: '视频页显示相关视频',
-            leading: Icon(Icons.recommend_outlined),
+            leading: Icon(MdiIcons.motionPlayOutline),
             setKey: SettingBoxKey.showRelatedVideo,
             defaultVal: true,
           ),
           SetSwitchItem(
             title: '显示视频评论',
-            leading: Icon(Icons.reply_all),
+            leading: Icon(MdiIcons.commentTextOutline),
             setKey: SettingBoxKey.showVideoReply,
             defaultVal: true,
           ),
           SetSwitchItem(
             title: '显示番剧评论',
-            leading: Icon(Icons.reply_all),
+            leading: Icon(MdiIcons.commentTextOutline),
             setKey: SettingBoxKey.showBangumiReply,
             defaultVal: true,
           ),
           SetSwitchItem(
             title: '默认展开视频简介',
-            leading: Icon(Icons.expand_more),
+            leading: const Icon(Icons.expand_more),
             setKey: SettingBoxKey.alwaysExapndIntroPanel,
             defaultVal: false,
           ),
           SetSwitchItem(
             title: '横屏自动展开视频简介',
-            leading: Icon(Icons.expand_more),
+            leading: const Icon(Icons.expand_more),
             setKey: SettingBoxKey.exapndIntroPanelH,
             defaultVal: false,
           ),
           SetSwitchItem(
             title: '横屏分P/合集列表显示在Tab栏',
-            leading: Icon(Icons.format_list_numbered_rtl_sharp),
+            leading: const Icon(Icons.format_list_numbered_rtl_sharp),
             setKey: SettingBoxKey.horizontalSeasonPanel,
             defaultVal: false,
           ),

@@ -1256,7 +1256,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               const Spacer()
             else
               Flexible(
-                flex: 1,
+                flex: length == 3 ? 2 : 1,
                 child: showReply ? Obx(() => tabbar()) : tabbar(),
               ),
             Flexible(

@@ -1760,10 +1760,16 @@ class _HeaderControlState extends State<HeaderControl> {
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () => widget.videoDetailCtr?.onBlock(context),
-                  icon: const Icon(
-                    Icons.block,
-                    size: 19,
-                    color: Colors.white,
+                  icon: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(Icons.shield, size: 18),
+                      Icon(
+                        Icons.play_arrow_rounded,
+                        size: 17,
+                        color: Colors.black87,
+                      ),
+                    ],
                   ),
                 ),
               ),

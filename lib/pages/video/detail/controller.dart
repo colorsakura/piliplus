@@ -1578,56 +1578,89 @@ class VideoDetailController extends GetxController
                           child: FloatingActionButton(
                             tooltip: '提交',
                             onPressed: () {
-                              Request()
-                                  .post(
-                                '${GStorage.blockServer}/api/skipSegments',
-                                queryParameters: {
-                                  'videoID': bvid,
-                                  'cid': cid.value,
-                                  'userID': GStorage.blockUserID,
-                                  'userAgent': Constants.userAgent,
-                                  'videoDuration':
-                                      plPlayerController.durationSeconds.value,
-                                },
-                                data: {
-                                  'segments': list!
-                                      .map(
-                                        (item) => {
-                                          'segment': [
-                                            item.segment.first,
-                                            item.segment.second,
-                                          ],
-                                          'category': item.category.name,
-                                          'actionType': item.actionType.name,
-                                        },
-                                      )
-                                      .toList(),
-                                },
-                                options: _options,
-                              )
-                                  .then(
-                                (res) {
-                                  if (res.statusCode == 200) {
-                                    Get.back();
-                                    SmartDialog.showToast('提交成功');
-                                    list?.clear();
-                                    _handleSBData(res);
-                                    plPlayerController.segmentList.value =
-                                        _segmentProgressList ?? <Segment>[];
-                                    if (positionSubscription == null) {
-                                      _initSkip();
-                                    }
-                                  } else {
-                                    SmartDialog.showToast(
-                                      '提交失败: ${{
-                                        400: '参数错误',
-                                        403: '被自动审核机制拒绝',
-                                        429: '重复提交太快',
-                                        409: '重复提交'
-                                      }[res.statusCode]}',
-                                    );
-                                  }
-                                },
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text(
+                                    '确定无误再提交',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: Get.back,
+                                      child: Text(
+                                        '取消',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        Request()
+                                            .post(
+                                          '${GStorage.blockServer}/api/skipSegments',
+                                          queryParameters: {
+                                            'videoID': bvid,
+                                            'cid': cid.value,
+                                            'userID': GStorage.blockUserID,
+                                            'userAgent': Constants.userAgent,
+                                            'videoDuration': plPlayerController
+                                                .durationSeconds.value,
+                                          },
+                                          data: {
+                                            'segments': list!
+                                                .map(
+                                                  (item) => {
+                                                    'segment': [
+                                                      item.segment.first,
+                                                      item.segment.second,
+                                                    ],
+                                                    'category':
+                                                        item.category.name,
+                                                    'actionType':
+                                                        item.actionType.name,
+                                                  },
+                                                )
+                                                .toList(),
+                                          },
+                                          options: _options,
+                                        )
+                                            .then(
+                                          (res) {
+                                            if (res.statusCode == 200) {
+                                              Get.back();
+                                              SmartDialog.showToast('提交成功');
+                                              list?.clear();
+                                              _handleSBData(res);
+                                              plPlayerController
+                                                      .segmentList.value =
+                                                  _segmentProgressList ??
+                                                      <Segment>[];
+                                              if (positionSubscription ==
+                                                  null) {
+                                                _initSkip();
+                                              }
+                                            } else {
+                                              SmartDialog.showToast(
+                                                '提交失败: ${{
+                                                  400: '参数错误',
+                                                  403: '被自动审核机制拒绝',
+                                                  429: '重复提交太快',
+                                                  409: '重复提交'
+                                                }[res.statusCode]}',
+                                              );
+                                            }
+                                          },
+                                        );
+                                      },
+                                      child: const Text('确定提交'),
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                             child: Icon(Icons.check),
