@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPalaX/http/live.dart';
@@ -39,6 +40,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   late final _isLogin = GStorage.userInfo.get('userInfoCache') != null;
   late final _node = FocusNode();
   late final _ctr = TextEditingController();
+  StreamSubscription? _listener;
 
   int latestAddedPosition = -1;
   bool? _isFullScreen;
@@ -61,7 +63,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
     plPlayerController.autoEnterFullscreen();
     _liveRoomController.liveMsg();
-    plPlayerController.isFullScreen.listen((isFullScreen) {
+    _listener = plPlayerController.isFullScreen.listen((isFullScreen) {
       if (isFullScreen != _isFullScreen) {
         _isFullScreen = isFullScreen;
         _updateFontSize();
@@ -101,6 +103,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   @override
   void dispose() {
+    _listener?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);

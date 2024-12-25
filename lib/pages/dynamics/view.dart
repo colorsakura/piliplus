@@ -40,6 +40,7 @@ class _DynamicsPageState extends State<DynamicsPage>
   late Future _futureBuilderFutureUp;
   Box userInfoCache = GStorage.userInfo;
   late UpPanelPosition upPanelPosition;
+  StreamSubscription? _listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -91,7 +92,7 @@ class _DynamicsPageState extends State<DynamicsPage>
     //         .onSelectType(_dynamicsController.tabController.index);
     //   }
     // });
-    _dynamicsController.userLogin.listen((status) {
+    _listener = _dynamicsController.userLogin.listen((status) {
       if (mounted) {
         setState(() {
           _futureBuilderFutureUp = _dynamicsController.queryFollowUp();
@@ -118,6 +119,7 @@ class _DynamicsPageState extends State<DynamicsPage>
 
   @override
   void dispose() {
+    _listener?.cancel();
     _dynamicsController.tabController.removeListener(() {});
     _dynamicsController.scrollController.removeListener(() {});
     super.dispose();

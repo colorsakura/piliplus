@@ -681,115 +681,113 @@ class PlPlayerController {
 
   /// 播放事件监听
   void startListeners() {
-    subscriptions.addAll(
-      [
-        videoPlayerController!.stream.playing.listen((event) {
-          if (event) {
-            playerStatus.status.value = PlayerStatus.playing;
-          } else {
-            playerStatus.status.value = PlayerStatus.paused;
-          }
-          videoPlayerServiceHandler.onStatusChange(
-              playerStatus.status.value, isBuffering.value);
+    subscriptions = [
+      videoPlayerController!.stream.playing.listen((event) {
+        if (event) {
+          playerStatus.status.value = PlayerStatus.playing;
+        } else {
+          playerStatus.status.value = PlayerStatus.paused;
+        }
+        videoPlayerServiceHandler.onStatusChange(
+            playerStatus.status.value, isBuffering.value);
+
+        /// 触发回调事件
+        for (var element in _statusListeners) {
+          element(event ? PlayerStatus.playing : PlayerStatus.paused);
+        }
+        if (videoPlayerController!.state.position.inSeconds != 0) {
+          makeHeartBeat(positionSeconds.value, type: 'status');
+        }
+      }),
+      videoPlayerController!.stream.completed.listen((event) {
+        if (event) {
+          playerStatus.status.value = PlayerStatus.completed;
 
           /// 触发回调事件
           for (var element in _statusListeners) {
-            element(event ? PlayerStatus.playing : PlayerStatus.paused);
+            element(PlayerStatus.completed);
           }
-          if (videoPlayerController!.state.position.inSeconds != 0) {
-            makeHeartBeat(positionSeconds.value, type: 'status');
-          }
-        }),
-        videoPlayerController!.stream.completed.listen((event) {
-          if (event) {
-            playerStatus.status.value = PlayerStatus.completed;
+        } else {
+          // playerStatus.status.value = PlayerStatus.playing;
+        }
+        makeHeartBeat(positionSeconds.value, type: 'completed');
+      }),
+      videoPlayerController!.stream.position.listen((event) {
+        _position.value = event;
+        updatePositionSecond();
+        if (!isSliderMoving.value) {
+          _sliderPosition.value = event;
+          updateSliderPositionSecond();
+        }
 
-            /// 触发回调事件
-            for (var element in _statusListeners) {
-              element(PlayerStatus.completed);
-            }
-          } else {
-            // playerStatus.status.value = PlayerStatus.playing;
-          }
-          makeHeartBeat(positionSeconds.value, type: 'completed');
-        }),
-        videoPlayerController!.stream.position.listen((event) {
-          _position.value = event;
-          updatePositionSecond();
-          if (!isSliderMoving.value) {
-            _sliderPosition.value = event;
-            updateSliderPositionSecond();
-          }
-
-          /// 触发回调事件
-          for (var element in _positionListeners) {
-            element(event);
-          }
-          makeHeartBeat(event.inSeconds);
-        }),
-        videoPlayerController!.stream.duration.listen((Duration event) {
-          duration.value = event;
-        }),
-        videoPlayerController!.stream.buffer.listen((Duration event) {
-          _buffered.value = event;
-          updateBufferedSecond();
-        }),
-        videoPlayerController!.stream.buffering.listen((bool event) {
-          isBuffering.value = event;
-          videoPlayerServiceHandler.onStatusChange(
-              playerStatus.status.value, event);
-        }),
-        // videoPlayerController!.stream.log.listen((event) {
-        //   debugPrint('videoPlayerController!.stream.log.listen');
-        //   debugPrint(event);
-        //   SmartDialog.showToast('视频加载日志： $event');
-        // }),
-        videoPlayerController!.stream.error.listen((String event) {
-          // 直播的错误提示没有参考价值，均不予显示
-          if (videoType.value == 'live') return;
-          if (event.startsWith("Failed to open https://") ||
-              event.startsWith("Can not open external file https://") ||
-              //tcp: ffurl_read returned 0xdfb9b0bb
-              //tcp: ffurl_read returned 0xffffff99
-              event.startsWith('tcp: ffurl_read returned ')) {
-            EasyThrottle.throttle('videoPlayerController!.stream.error.listen',
-                const Duration(milliseconds: 10000), () {
-              Future.delayed(const Duration(milliseconds: 3000), () {
-                debugPrint("isBuffering.value: ${isBuffering.value}");
-                debugPrint("_buffered.value: ${_buffered.value}");
-                if (isBuffering.value && _buffered.value == Duration.zero) {
-                  refreshPlayer();
-                  SmartDialog.showToast('视频链接打开失败，重试中',
-                      displayTime: const Duration(milliseconds: 500));
-                }
-              });
+        /// 触发回调事件
+        for (var element in _positionListeners) {
+          element(event);
+        }
+        makeHeartBeat(event.inSeconds);
+      }),
+      videoPlayerController!.stream.duration.listen((Duration event) {
+        duration.value = event;
+      }),
+      videoPlayerController!.stream.buffer.listen((Duration event) {
+        _buffered.value = event;
+        updateBufferedSecond();
+      }),
+      videoPlayerController!.stream.buffering.listen((bool event) {
+        isBuffering.value = event;
+        videoPlayerServiceHandler.onStatusChange(
+            playerStatus.status.value, event);
+      }),
+      // videoPlayerController!.stream.log.listen((event) {
+      //   debugPrint('videoPlayerController!.stream.log.listen');
+      //   debugPrint(event);
+      //   SmartDialog.showToast('视频加载日志： $event');
+      // }),
+      videoPlayerController!.stream.error.listen((String event) {
+        // 直播的错误提示没有参考价值，均不予显示
+        if (videoType.value == 'live') return;
+        if (event.startsWith("Failed to open https://") ||
+            event.startsWith("Can not open external file https://") ||
+            //tcp: ffurl_read returned 0xdfb9b0bb
+            //tcp: ffurl_read returned 0xffffff99
+            event.startsWith('tcp: ffurl_read returned ')) {
+          EasyThrottle.throttle('videoPlayerController!.stream.error.listen',
+              const Duration(milliseconds: 10000), () {
+            Future.delayed(const Duration(milliseconds: 3000), () {
+              debugPrint("isBuffering.value: ${isBuffering.value}");
+              debugPrint("_buffered.value: ${_buffered.value}");
+              if (isBuffering.value && _buffered.value == Duration.zero) {
+                refreshPlayer();
+                SmartDialog.showToast('视频链接打开失败，重试中',
+                    displayTime: const Duration(milliseconds: 500));
+              }
             });
-            return;
-          }
-          debugPrint('videoPlayerController!.stream.error.listen: ');
-          if (event.startsWith('Could not open codec')) {
-            SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
-            return;
-          }
-          SmartDialog.showToast('视频加载错误, $event');
-        }),
-        // videoPlayerController!.stream.volume.listen((event) {
-        //   if (!mute.value && _volumeBeforeMute != event) {
-        //     _volumeBeforeMute = event / 100;
-        //   }
-        // }),
-        // 媒体通知监听
-        onPlayerStatusChanged.listen((PlayerStatus event) {
-          videoPlayerServiceHandler.onStatusChange(event, isBuffering.value);
-        }),
-        onPositionChanged.listen((Duration event) {
-          EasyThrottle.throttle(
-              'mediaServicePosition',
-              const Duration(seconds: 1),
-              () => videoPlayerServiceHandler.onPositionChange(event));
-        }),
-      ],
-    );
+          });
+          return;
+        }
+        debugPrint('videoPlayerController!.stream.error.listen: ');
+        if (event.startsWith('Could not open codec')) {
+          SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
+          return;
+        }
+        SmartDialog.showToast('视频加载错误, $event');
+      }),
+      // videoPlayerController!.stream.volume.listen((event) {
+      //   if (!mute.value && _volumeBeforeMute != event) {
+      //     _volumeBeforeMute = event / 100;
+      //   }
+      // }),
+      // 媒体通知监听
+      onPlayerStatusChanged.listen((PlayerStatus event) {
+        videoPlayerServiceHandler.onStatusChange(event, isBuffering.value);
+      }),
+      onPositionChanged.listen((Duration event) {
+        EasyThrottle.throttle(
+            'mediaServicePosition',
+            const Duration(seconds: 1),
+            () => videoPlayerServiceHandler.onPositionChange(event));
+      }),
+    ];
   }
 
   /// 移除事件监听

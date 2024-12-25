@@ -21,6 +21,7 @@ class MediaPage extends StatefulWidget {
 class _MediaPageState extends State<MediaPage>
     with AutomaticKeepAliveClientMixin {
   late MediaController mediaController;
+  StreamSubscription? _listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -32,7 +33,7 @@ class _MediaPageState extends State<MediaPage>
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
 
-    mediaController.userLogin.listen((status) {
+    _listener = mediaController.userLogin.listen((status) {
       mediaController.onReload();
     });
     mediaController.scrollController.addListener(
@@ -50,6 +51,7 @@ class _MediaPageState extends State<MediaPage>
 
   @override
   void dispose() {
+    _listener?.cancel();
     mediaController.scrollController.removeListener(() {});
     super.dispose();
   }

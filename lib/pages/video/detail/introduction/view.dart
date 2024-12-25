@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPalaX/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/utils/extension.dart';
@@ -50,7 +52,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
   late String heroTag;
   late VideoIntroController videoIntroController;
   VideoDetailData? videoDetail;
-  // late Future? _futureBuilderFuture;
+  StreamSubscription? _listener;
 
   // 添加页面缓存
   @override
@@ -68,9 +70,15 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag)
       ..heroTag = heroTag;
     // _futureBuilderFuture = videoIntroController.queryVideoIntro();
-    videoIntroController.videoDetail.listen((value) {
+    _listener = videoIntroController.videoDetail.listen((value) {
       videoDetail = value;
     });
+  }
+
+  @override
+  void dispose() {
+    _listener?.cancel();
+    super.dispose();
   }
 
   @override

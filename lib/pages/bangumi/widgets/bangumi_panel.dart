@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -41,6 +43,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
   late int cid;
   late final VideoDetailController videoDetailCtr;
   final ItemScrollController itemScrollController = ItemScrollController();
+  StreamSubscription? _listener;
 
   @override
   void initState() {
@@ -54,7 +57,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
     }
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
 
-    videoDetailCtr.cid.listen((int p0) {
+    _listener = videoDetailCtr.cid.listen((int p0) {
       cid = p0;
       currentIndex = widget.pages.indexWhere((EpisodeItem e) => e.cid == cid);
       if (!mounted) return;
@@ -65,6 +68,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
 
   @override
   void dispose() {
+    _listener?.cancel();
     listViewScrollCtr.dispose();
     listViewScrollCtr_2.dispose();
     super.dispose();

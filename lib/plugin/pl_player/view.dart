@@ -146,6 +146,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     }
   }
 
+  StreamSubscription? _listener;
+  StreamSubscription? _listenerFS;
+
   @override
   void initState() {
     super.initState();
@@ -178,7 +181,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     Future.microtask(() async {
       try {
         _brightnessValue.value = await ScreenBrightness().application;
-        ScreenBrightness()
+        _listener = ScreenBrightness()
             .onApplicationScreenBrightnessChanged
             .listen((double value) {
           if (mounted) {
@@ -222,6 +225,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   void dispose() {
+    _listener?.cancel();
+    _listenerFS?.cancel();
     animationController.dispose();
     FlutterVolumeController.removeListener();
     super.dispose();
@@ -578,15 +583,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   Widget build(BuildContext context) {
-    if (isFullScreen) {
-      plPlayerController.subtitleFontScaleFS.listen((value) {
-        _updateSubtitle(value);
-      });
-    } else {
-      plPlayerController.subtitleFontScale.listen((value) {
-        _updateSubtitle(value);
-      });
-    }
+    _listenerFS = isFullScreen
+        ? plPlayerController.subtitleFontScaleFS.listen((value) {
+            _updateSubtitle(value);
+          })
+        : _listenerFS = plPlayerController.subtitleFontScale.listen((value) {
+            _updateSubtitle(value);
+          });
     final Color colorTheme = Theme.of(context).colorScheme.primary;
     const TextStyle textStyle = TextStyle(
       color: Colors.white,

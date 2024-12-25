@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +35,8 @@ class _PlDanmakuState extends State<PlDanmaku> {
   late bool enableShowDanmaku;
   int latestAddedPosition = -1;
   bool? _isFullScreen;
+  StreamSubscription? _listenerDanmaku;
+  StreamSubscription? _listenerFS;
 
   @override
   void initState() {
@@ -55,14 +59,14 @@ class _PlDanmakuState extends State<PlDanmaku> {
         ..addStatusLister(playerListener)
         ..addPositionListener(videoPositionListen);
     }
-    playerController.isOpenDanmu.listen((p0) {
+    _listenerDanmaku = playerController.isOpenDanmu.listen((p0) {
       if (p0 && !_plDanmakuController.initiated) {
         _plDanmakuController.initiate(
             playerController.duration.value.inMilliseconds,
             playerController.position.value.inMilliseconds);
       }
     });
-    playerController.isFullScreen.listen((isFullScreen) {
+    _listenerFS = playerController.isFullScreen.listen((isFullScreen) {
       if (isFullScreen != _isFullScreen) {
         _isFullScreen = isFullScreen;
         if (_controller != null) {
@@ -119,6 +123,8 @@ class _PlDanmakuState extends State<PlDanmaku> {
 
   @override
   void dispose() {
+    _listenerDanmaku?.cancel();
+    _listenerFS?.cancel();
     playerController.removePositionListener(videoPositionListen);
     playerController.removeStatusLister(playerListener);
     _plDanmakuController.dispose();

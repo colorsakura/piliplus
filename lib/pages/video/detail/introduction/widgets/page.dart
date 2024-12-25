@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _PagesPanelState extends State<PagesPanel> {
   late final String heroTag;
   late VideoDetailController _videoDetailController;
   final ScrollController _scrollController = ScrollController();
+  StreamSubscription? _listener;
 
   @override
   void initState() {
@@ -43,7 +45,7 @@ class _PagesPanelState extends State<PagesPanel> {
     heroTag = widget.heroTag;
     _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
     pageIndex = widget.pages.indexWhere((Part e) => e.cid == cid);
-    _videoDetailController.cid.listen((int p0) {
+    _listener = _videoDetailController.cid.listen((int p0) {
       cid = p0;
       pageIndex = max(0, widget.pages.indexWhere((Part e) => e.cid == cid));
       if (!mounted) return;
@@ -61,6 +63,7 @@ class _PagesPanelState extends State<PagesPanel> {
 
   @override
   void dispose() {
+    _listener?.cancel();
     _scrollController.dispose();
     super.dispose();
   }

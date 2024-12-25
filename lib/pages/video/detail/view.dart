@@ -98,6 +98,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       context.orientation == Orientation.landscape &&
       videoDetailController.horizontalSeasonPanel;
 
+  StreamSubscription? _listenerDetail;
+  StreamSubscription? _listenerLoadingState;
+  StreamSubscription? _listenerCid;
+
   @override
   void initState() {
     super.initState();
@@ -114,14 +118,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           tag: heroTag);
     }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
-    videoIntroController.videoDetail.listen((value) {
+    _listenerDetail = videoIntroController.videoDetail.listen((value) {
       if (!context.mounted) return;
       videoPlayerServiceHandler.onVideoDetailChange(
           value, videoDetailController.cid.value);
     });
     if (videoDetailController.videoType == SearchType.media_bangumi) {
       bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
-      bangumiIntroController.loadingState.listen((value) {
+      _listenerLoadingState =
+          bangumiIntroController.loadingState.listen((value) {
         if (!context.mounted) return;
         if (value is Success) {
           videoPlayerServiceHandler.onVideoDetailChange(
@@ -130,7 +135,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           );
         }
       });
-      videoDetailController.cid.listen((p0) {
+      _listenerCid = videoDetailController.cid.listen((p0) {
         if (!context.mounted) return;
         if (bangumiIntroController.loadingState.value is Success) {
           videoPlayerServiceHandler.onVideoDetailChange(
@@ -323,6 +328,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   void dispose() {
+    _listenerDetail?.cancel();
+    _listenerLoadingState?.cancel();
+    _listenerCid?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     if (!Get.previousRoute.startsWith('/video')) {
       ScreenBrightness().resetApplicationScreenBrightness();

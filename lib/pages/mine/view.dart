@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,18 +21,25 @@ class _MinePageState extends State<MinePage> {
   final MineController mineController = Get.put(MineController())
     ..themeType.value = ThemeType.values[GStorage.themeType];
   late Future _futureBuilderFuture;
+  StreamSubscription? _listener;
 
   @override
   void initState() {
     super.initState();
     _futureBuilderFuture = mineController.queryUserInfo();
 
-    mineController.userLogin.listen((status) {
+    _listener = mineController.userLogin.listen((status) {
       if (mounted) {
         _futureBuilderFuture = mineController.queryUserInfo();
         _futureBuilderFuture.then((value) => setState(() {}));
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _listener?.cancel();
+    super.dispose();
   }
 
   Widget get _header => FittedBox(

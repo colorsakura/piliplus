@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
   late BangumiIntroController bangumiIntroController;
   late VideoDetailController videoDetailCtr;
   late int cid;
+  StreamSubscription? _listener;
 
 // 添加页面缓存
   @override
@@ -55,11 +58,17 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     bangumiIntroController =
         Get.put(BangumiIntroController(), tag: widget.heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
-    videoDetailCtr.cid.listen((int p0) {
+    _listener = videoDetailCtr.cid.listen((int p0) {
       cid = p0;
       if (!mounted) return;
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    _listener?.cancel();
+    super.dispose();
   }
 
   @override
@@ -140,6 +149,8 @@ class _BangumiInfoState extends State<BangumiInfo>
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
 
+  StreamSubscription? _listener;
+
   @override
   void initState() {
     super.initState();
@@ -149,11 +160,17 @@ class _BangumiInfoState extends State<BangumiInfo>
     bangumiItem = bangumiIntroController.bangumiItem;
     cid = widget.cid!;
     debugPrint('cid:  $cid');
-    videoDetailCtr.cid.listen((p0) {
+    _listener = videoDetailCtr.cid.listen((p0) {
       cid = p0;
       if (!mounted) return;
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    _listener?.cancel();
+    super.dispose();
   }
 
   // 收藏

@@ -33,6 +33,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   late DynamicsTabController _dynamicsTabController;
   late bool dynamicsWaterfallFlow;
   late final DynamicsController dynamicsController;
+  StreamSubscription? _listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -61,7 +62,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         searchBarStream.add(false);
       }
     });
-    dynamicsController.mid.listen((mid) {
+    _listener = dynamicsController.mid.listen((mid) {
       // debugPrint('midListen: $mid');
       _dynamicsTabController.mid = mid;
       _dynamicsTabController.scrollController.jumpTo(0);
@@ -73,6 +74,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
 
   @override
   void dispose() {
+    _listener?.cancel();
     _dynamicsTabController.scrollController.removeListener(() {});
     dynamicsController.mid.close();
     super.dispose();
