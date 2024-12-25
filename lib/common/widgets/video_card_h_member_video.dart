@@ -17,10 +17,14 @@ class VideoCardHMemberVideo extends StatelessWidget {
     required this.videoItem,
     this.longPress,
     this.longPressEnd,
+    this.onTap,
+    this.bvid,
   });
   final Item videoItem;
   final Function()? longPress;
   final Function()? longPressEnd;
+  final VoidCallback? onTap;
+  final dynamic bvid;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,10 @@ class VideoCardHMemberVideo extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onLongPress: longPress,
         onTap: () async {
+          if (onTap != null) {
+            onTap!();
+            return;
+          }
           try {
             Get.toNamed('/video?bvid=$bvid&cid=${videoItem.firstCid}',
                 arguments: {'heroTag': heroTag});
@@ -115,10 +123,15 @@ class VideoCardHMemberVideo extends StatelessWidget {
                   videoItem.title ?? '',
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
+                    fontWeight: videoItem.bvid == bvid
+                        ? FontWeight.bold
+                        : FontWeight.w400,
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     height: 1.42,
                     letterSpacing: 0.3,
+                    color: videoItem.bvid == bvid
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

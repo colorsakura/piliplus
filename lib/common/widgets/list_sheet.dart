@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -42,9 +43,7 @@ class ListSheetContent extends StatefulWidget {
 class _ListSheetContentState extends State<ListSheetContent>
     with TickerProviderStateMixin {
   late List<ItemScrollController> itemScrollController = [];
-  late int currentIndex =
-      widget.episodes!.indexWhere((dynamic e) => e.cid == widget.currentCid) ??
-          0;
+  int? currentIndex;
   late List<bool> reverse;
 
   int get _index => widget.index ?? 0;
@@ -60,10 +59,11 @@ class _ListSheetContentState extends State<ListSheetContent>
   @override
   void didUpdateWidget(ListSheetContent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    currentIndex = widget.episodes!
-            .indexWhere((dynamic e) => e.cid == widget.currentCid) ??
-        0;
+    currentIndex = _currentIndex;
   }
+
+  int get _currentIndex =>
+      max(0, widget.episodes.indexWhere((e) => e.cid == widget.currentCid));
 
   @override
   void initState() {
@@ -85,9 +85,7 @@ class _ListSheetContentState extends State<ListSheetContent>
     reverse = _isList
         ? List.generate(widget.season.sections.length, (_) => false)
         : [false];
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      itemScrollController[_index].jumpTo(index: currentIndex);
-    });
+    currentIndex = _currentIndex;
     if (widget.bvid != null && widget.season != null) {
       _favStream ??= StreamController<int>();
       () async {
@@ -98,6 +96,11 @@ class _ListSheetContentState extends State<ListSheetContent>
         }
       }();
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentIndex != null) {
+        itemScrollController[_index].jumpTo(index: currentIndex!);
+      }
+    });
   }
 
   @override
@@ -312,10 +315,12 @@ class _ListSheetContentState extends State<ListSheetContent>
                       _ctr?.animateTo(_index);
                       await Future.delayed(const Duration(milliseconds: 225));
                     }
-                    itemScrollController[_ctr?.index ?? 0].scrollTo(
-                      index: currentIndex,
-                      duration: const Duration(milliseconds: 200),
-                    );
+                    if (currentIndex != null) {
+                      itemScrollController[_ctr?.index ?? 0].scrollTo(
+                        index: currentIndex!,
+                        duration: const Duration(milliseconds: 200),
+                      );
+                    }
                   },
                 ),
                 const Spacer(),

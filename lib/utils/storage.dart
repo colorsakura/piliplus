@@ -133,6 +133,9 @@ class GStorage {
   static bool get horizontalSeasonPanel =>
       setting.get(SettingBoxKey.horizontalSeasonPanel, defaultValue: false);
 
+  static bool get horizontalMemberPage =>
+      setting.get(SettingBoxKey.horizontalMemberPage, defaultValue: false);
+
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
@@ -332,6 +335,7 @@ class SettingBoxKey {
       alwaysExapndIntroPanel = 'alwaysExapndIntroPanel',
       exapndIntroPanelH = 'exapndIntroPanelH',
       horizontalSeasonPanel = 'horizontalSeasonPanel',
+      horizontalMemberPage = 'horizontalMemberPage',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

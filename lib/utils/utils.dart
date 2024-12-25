@@ -27,9 +27,26 @@ import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as html_parser;
 
 class Utils {
   static final Random random = Random();
+
+  static Future<dynamic> getWwebid(mid) async {
+    try {
+      dynamic response =
+          await Request().get('${HttpString.spaceBaseUrl}/$mid/dynamic');
+      dom.Document document = html_parser.parse(response.data);
+      dom.Element? scriptElement =
+          document.querySelector('script#__RENDER_DATA__');
+      return jsonDecode(
+          Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
+    } catch (e) {
+      debugPrint('failed to get wwebid: $e');
+      return null;
+    }
+  }
 
   static Future afterLoginByApp(
       Map<String, dynamic> token_info, cookie_info) async {

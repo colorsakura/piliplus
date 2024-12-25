@@ -15,6 +15,7 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/intro_detail.d
     as video;
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/page.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/season.dart';
+import 'package:PiliPalaX/pages/video/detail/member/horizontal_member_page.dart';
 import 'package:PiliPalaX/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPalaX/utils/extension.dart';
@@ -1365,6 +1366,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 showAiBottomSheet: showAiBottomSheet,
                 showIntroDetail: showIntroDetail,
                 showEpisodes: showEpisodes,
+                onShowMemberPage: onShowMemberPage,
               ),
               if (needRelated && videoDetailController.showRelatedVideo) ...[
                 SliverToBoxAdapter(
@@ -1795,5 +1797,18 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         !horizontalScreen) {
       verticalScreenForTwoSeconds();
     }
+  }
+
+  void onShowMemberPage(mid) {
+    videoDetailController.childKey.currentState?.showBottomSheet(
+      (context) {
+        return HorizontalMemberPage(
+          mid: mid,
+          videoDetailController: videoDetailController,
+          videoIntroController: videoIntroController,
+        );
+      },
+      enableDrag: true,
+    );
   }
 }

@@ -10,7 +10,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/pages/mine/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
@@ -37,11 +36,13 @@ class VideoIntroPanel extends StatefulWidget {
     required this.showAiBottomSheet,
     required this.showIntroDetail,
     required this.showEpisodes,
+    required this.onShowMemberPage,
   });
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showIntroDetail;
   final Function showEpisodes;
+  final ValueChanged onShowMemberPage;
 
   @override
   State<VideoIntroPanel> createState() => _VideoIntroPanelState();
@@ -95,6 +96,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               videoIntroController.videoTags,
             ),
             showEpisodes: widget.showEpisodes,
+            onShowMemberPage: widget.onShowMemberPage,
           )
         : VideoInfo(
             //key:herotag
@@ -108,6 +110,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               videoIntroController.videoTags,
             ),
             showEpisodes: widget.showEpisodes,
+            onShowMemberPage: widget.onShowMemberPage,
           ));
   }
 }
@@ -115,19 +118,21 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
 class VideoInfo extends StatefulWidget {
   final bool loadingStatus;
   final VideoDetailData? videoDetail;
-  final String? heroTag;
+  final String heroTag;
   final Function showAiBottomSheet;
   final Function showIntroDetail;
   final Function showEpisodes;
+  final ValueChanged onShowMemberPage;
 
   const VideoInfo({
     super.key,
     this.loadingStatus = false,
     this.videoDetail,
-    this.heroTag,
+    required this.heroTag,
     required this.showAiBottomSheet,
     required this.showIntroDetail,
     required this.showEpisodes,
+    required this.onShowMemberPage,
   });
 
   @override
@@ -135,19 +140,18 @@ class VideoInfo extends StatefulWidget {
 }
 
 class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
-  // final String heroTag = Get.arguments['heroTag'];
-  late String heroTag;
   late final VideoIntroController videoIntroController;
   late final VideoDetailController videoDetailCtr;
   late final Map<dynamic, dynamic> videoItem;
 
-  final Box<dynamic> setting = GStorage.setting;
+  late final _coinKey = GlobalKey<ActionItemState>();
+  late final _favKey = GlobalKey<ActionItemState>();
 
-  late final bool loadingStatus; // 加载状态
-
-  late String memberHeroTag;
   late bool enableAi;
   bool isProcessing = false;
+
+  late final _horizontalMemberPage = GStorage.horizontalMemberPage;
+
   void Function()? handleState(Future Function() action) {
     return isProcessing
         ? null
@@ -158,19 +162,14 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           };
   }
 
-  late final _coinKey = GlobalKey<ActionItemState>();
-  late final _favKey = GlobalKey<ActionItemState>();
-
   @override
   void initState() {
     super.initState();
-    heroTag = widget.heroTag!;
-    videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
-    videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+    videoIntroController = Get.put(VideoIntroController(), tag: widget.heroTag);
+    videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
     videoItem = videoIntroController.videoItem!;
 
-    loadingStatus = widget.loadingStatus;
-    enableAi = setting.get(SettingBoxKey.enableAi, defaultValue: true);
+    enableAi = GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: true);
 
     if (videoIntroController.expandableCtr == null) {
       bool alwaysExapndIntroPanel = GStorage.alwaysExapndIntroPanel;
@@ -224,7 +223,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       return;
     }
     final bool enableDragQuickFav =
-        setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
+        GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
     // 快速收藏 &
     // 点按 收藏至默认文件夹
     // 长按选择文件夹
@@ -241,7 +240,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   // 视频介绍
   showIntroDetail() {
-    if (loadingStatus) {
+    if (widget.loadingStatus) {
       return;
     }
     feedBack();
@@ -252,16 +251,26 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   // 用户主页
   onPushMember() {
     feedBack();
-    int? mid = !loadingStatus
+    int? mid = !widget.loadingStatus
         ? widget.videoDetail?.owner?.mid
         : videoItem['owner']?.mid;
     if (mid != null) {
-      memberHeroTag = Utils.makeHeroTag(mid);
-      String face = !loadingStatus
-          ? widget.videoDetail!.owner!.face
-          : videoItem['owner'].face;
-      Get.toNamed('/member?mid=$mid',
-          arguments: {'face': face, 'heroTag': memberHeroTag});
+      if (context.orientation == Orientation.landscape &&
+          _horizontalMemberPage) {
+        widget.onShowMemberPage(mid);
+      } else {
+        // memberHeroTag = Utils.makeHeroTag(mid);
+        // String face = !loadingStatus
+        //     ? widget.videoDetail!.owner!.face
+        //     : videoItem['owner'].face;
+        Get.toNamed(
+          '/member?mid=$mid',
+          // arguments: {
+          //   'face': face,
+          //   'heroTag': memberHeroTag,
+          // },
+        );
+      }
     }
   }
 
@@ -296,7 +305,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                 children: [
                                   NetworkImgLayer(
                                     type: 'avatar',
-                                    src: loadingStatus
+                                    src: widget.loadingStatus
                                         ? videoItem['owner']?.face ?? ""
                                         : widget.videoDetail!.owner!.face,
                                     width: 30,
@@ -311,7 +320,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          loadingStatus
+                                          widget.loadingStatus
                                               ? videoItem['owner']?.name ?? ""
                                               : widget.videoDetail!.owner!.name,
                                           maxLines: 1,
@@ -347,13 +356,28 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                               width: 80,
                               alignment: Alignment.center,
                               child: GestureDetector(
-                                onTap: () => Get.toNamed(
-                                    '/member?mid=${videoItem['staff'][index].mid}',
-                                    arguments: {
-                                      'face': videoItem['staff'][index].face,
-                                      heroTag: Utils.makeHeroTag(
-                                          videoItem['staff'][index].mid),
-                                    }),
+                                onTap: () {
+                                  int? ownerMid = !widget.loadingStatus
+                                      ? widget.videoDetail?.owner?.mid
+                                      : videoItem['owner']?.mid;
+                                  if (videoItem['staff'][index].mid ==
+                                          ownerMid &&
+                                      context.orientation ==
+                                          Orientation.landscape &&
+                                      _horizontalMemberPage) {
+                                    widget.onShowMemberPage(ownerMid);
+                                  } else {
+                                    Get.toNamed(
+                                      '/member?mid=${videoItem['staff'][index].mid}',
+                                      // arguments: {
+                                      // 'face':
+                                      //     videoItem['staff'][index].face,
+                                      // 'heroTag': Utils.makeHeroTag(
+                                      //     videoItem['staff'][index].mid),
+                                      // },
+                                    );
+                                  }
+                                },
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -460,7 +484,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         statView(
                           context: context,
                           theme: 'gray',
-                          view: !loadingStatus
+                          view: !widget.loadingStatus
                               ? widget.videoDetail?.stat?.view ?? '-'
                               : videoItem['stat']?.view ?? '-',
                           size: 'medium',
@@ -469,7 +493,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         statDanMu(
                           context: context,
                           theme: 'gray',
-                          danmu: !loadingStatus
+                          danmu: !widget.loadingStatus
                               ? widget.videoDetail?.stat?.danmu ?? '-'
                               : videoItem['stat']?.danmu ?? '-',
                           size: 'medium',
@@ -477,7 +501,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         const SizedBox(width: 10),
                         Text(
                           Utils.dateFormat(
-                              !loadingStatus
+                              !widget.loadingStatus
                                   ? widget.videoDetail?.pubdate
                                   : videoItem['pubdate'],
                               formatType: 'detail'),
@@ -635,14 +659,14 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               // 点赞收藏转发 布局样式2
               if (!isHorizontal) actionGrid(context, videoIntroController),
               // 合集
-              if (!loadingStatus &&
+              if (!widget.loadingStatus &&
                   widget.videoDetail?.ugcSeason != null &&
                   (context.orientation != Orientation.landscape ||
                       (context.orientation == Orientation.landscape &&
                           videoDetailCtr.horizontalSeasonPanel.not)))
                 Obx(
                   () => SeasonPanel(
-                    heroTag: heroTag,
+                    heroTag: widget.heroTag,
                     ugcSeason: widget.videoDetail!.ugcSeason!,
                     cid: videoIntroController.lastPlayCid.value != 0
                         ? (widget.videoDetail!.pages?.isNotEmpty == true
@@ -654,7 +678,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     pages: widget.videoDetail!.pages,
                   ),
                 ),
-              if (!loadingStatus &&
+              if (!widget.loadingStatus &&
                   widget.videoDetail?.pages != null &&
                   widget.videoDetail!.pages!.length > 1 &&
                   (context.orientation != Orientation.landscape ||
@@ -662,7 +686,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                           videoDetailCtr.horizontalSeasonPanel.not))) ...[
                 Obx(
                   () => PagesPanel(
-                    heroTag: heroTag,
+                    heroTag: widget.heroTag,
                     pages: widget.videoDetail!.pages!,
                     cid: videoIntroController.lastPlayCid.value,
                     bvid: videoIntroController.bvid,
@@ -722,9 +746,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 onTap: handleState(videoIntroController.actionLikeVideo),
                 onLongPress: handleState(videoIntroController.actionOneThree),
                 selectStatus: videoIntroController.hasLike.value,
-                loadingStatus: loadingStatus,
+                loadingStatus: widget.loadingStatus,
                 semanticsLabel: '点赞',
-                text: !loadingStatus
+                text: !widget.loadingStatus
                     ? Utils.numFormat(widget.videoDetail!.stat!.like!)
                     : '-',
                 needAnim: true,
@@ -748,7 +772,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
                   onTap: handleState(videoIntroController.actionDislikeVideo),
                   selectStatus: videoIntroController.hasDislike.value,
-                  loadingStatus: loadingStatus,
+                  loadingStatus: widget.loadingStatus,
                   semanticsLabel: '点踩',
                   text: "点踩"),
             ),
@@ -765,9 +789,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 selectIcon: const Icon(FontAwesomeIcons.b),
                 onTap: handleState(videoIntroController.actionCoinVideo),
                 selectStatus: videoIntroController.hasCoin.value,
-                loadingStatus: loadingStatus,
+                loadingStatus: widget.loadingStatus,
                 semanticsLabel: '投币',
-                text: !loadingStatus
+                text: !widget.loadingStatus
                     ? Utils.numFormat(widget.videoDetail!.stat!.coin!)
                     : '-',
                 needAnim: true,
@@ -781,9 +805,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 onTap: () => showFavBottomSheet(),
                 onLongPress: () => showFavBottomSheet(type: 'longPress'),
                 selectStatus: videoIntroController.hasFav.value,
-                loadingStatus: loadingStatus,
+                loadingStatus: widget.loadingStatus,
                 semanticsLabel: '收藏',
-                text: !loadingStatus
+                text: !widget.loadingStatus
                     ? Utils.numFormat(widget.videoDetail!.stat!.favorite!)
                     : '-',
                 needAnim: true,
@@ -794,18 +818,18 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 onTap: () => videoDetailCtr.tabCtr
                     .animateTo(videoDetailCtr.tabCtr.index == 1 ? 0 : 1),
                 selectStatus: false,
-                loadingStatus: loadingStatus,
+                loadingStatus: widget.loadingStatus,
                 semanticsLabel: '评论',
-                text: !loadingStatus
+                text: !widget.loadingStatus
                     ? Utils.numFormat(widget.videoDetail!.stat!.reply!)
                     : '评论'),
             ActionItem(
                 icon: const Icon(FontAwesomeIcons.shareFromSquare),
                 onTap: () => videoIntroController.actionShareVideo(),
                 selectStatus: false,
-                loadingStatus: loadingStatus,
+                loadingStatus: widget.loadingStatus,
                 semanticsLabel: '分享',
-                text: !loadingStatus
+                text: !widget.loadingStatus
                     ? Utils.numFormat(widget.videoDetail!.stat!.share!)
                     : '分享'),
           ],
@@ -821,9 +845,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           icon: const Icon(FontAwesomeIcons.thumbsUp),
           onTap: handleState(videoIntroController.actionLikeVideo),
           selectStatus: videoIntroController.hasLike.value,
-          loadingStatus: loadingStatus,
-          text:
-              !loadingStatus ? widget.videoDetail!.stat!.like!.toString() : '-',
+          loadingStatus: widget.loadingStatus,
+          text: !widget.loadingStatus
+              ? widget.videoDetail!.stat!.like!.toString()
+              : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -832,9 +857,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           icon: const Icon(FontAwesomeIcons.b),
           onTap: handleState(videoIntroController.actionCoinVideo),
           selectStatus: videoIntroController.hasCoin.value,
-          loadingStatus: loadingStatus,
-          text:
-              !loadingStatus ? widget.videoDetail!.stat!.coin!.toString() : '-',
+          loadingStatus: widget.loadingStatus,
+          text: !widget.loadingStatus
+              ? widget.videoDetail!.stat!.coin!.toString()
+              : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -844,8 +870,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           onTap: () => showFavBottomSheet(),
           onLongPress: () => showFavBottomSheet(type: 'longPress'),
           selectStatus: videoIntroController.hasFav.value,
-          loadingStatus: loadingStatus,
-          text: !loadingStatus
+          loadingStatus: widget.loadingStatus,
+          text: !widget.loadingStatus
               ? widget.videoDetail!.stat!.favorite!.toString()
               : '-',
         ),
@@ -857,16 +883,17 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           videoDetailCtr.tabCtr.animateTo(1);
         },
         selectStatus: false,
-        loadingStatus: loadingStatus,
-        text:
-            !loadingStatus ? widget.videoDetail!.stat!.reply!.toString() : '-',
+        loadingStatus: widget.loadingStatus,
+        text: !widget.loadingStatus
+            ? widget.videoDetail!.stat!.reply!.toString()
+            : '-',
       ),
       const SizedBox(width: 8),
       ActionRowItem(
           icon: const Icon(FontAwesomeIcons.share),
           onTap: () => videoIntroController.actionShareVideo(),
           selectStatus: false,
-          loadingStatus: loadingStatus,
+          loadingStatus: widget.loadingStatus,
           // text: !loadingStatus
           //     ? widget.videoDetail!.stat!.share!.toString()
           //     : '-',

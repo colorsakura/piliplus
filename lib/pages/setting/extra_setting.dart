@@ -274,6 +274,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.horizontalSeasonPanel,
             defaultVal: false,
           ),
+          SetSwitchItem(
+            title: '横屏播放页在侧栏打开UP主页',
+            leading: const Icon(Icons.account_circle_outlined),
+            setKey: SettingBoxKey.horizontalMemberPage,
+            defaultVal: false,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,

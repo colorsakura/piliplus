@@ -1,14 +1,9 @@
-import 'dart:convert';
-
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/member.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' as html_parser;
 
 class MemberSearchController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -39,7 +34,9 @@ class MemberSearchController extends GetxController
     super.onInit();
     mid = int.parse(Get.parameters['mid']!);
     uname.value = Get.parameters['uname']!;
-    getWwebid();
+    Utils.getWwebid(mid).then((res) {
+      wwebid = res;
+    });
   }
 
   // 清空搜索
@@ -102,20 +99,6 @@ class MemberSearchController extends GetxController
       dynamicPn++;
     } else {
       dynamicState.value = LoadingState.error(res['msg']);
-    }
-  }
-
-  Future getWwebid() async {
-    try {
-      dynamic response =
-          await Request().get('${HttpString.spaceBaseUrl}/$mid/dynamic');
-      dom.Document document = html_parser.parse(response.data);
-      dom.Element? scriptElement =
-          document.querySelector('script#__RENDER_DATA__');
-      wwebid = jsonDecode(
-          Uri.decodeComponent(scriptElement?.text ?? ''))['access_id'];
-    } catch (e) {
-      debugPrint('failed to get wwebid: $e');
     }
   }
 
