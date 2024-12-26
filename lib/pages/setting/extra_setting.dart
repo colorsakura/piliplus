@@ -33,6 +33,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
   late dynamic enableSystemProxy;
   late String defaultSystemProxyHost;
   late String defaultSystemProxyPort;
+  late double danmakuLineHeight = GStorage.danmakuLineHeight;
   bool userLogin = false;
 
   Box get setting => GStorage.setting;
@@ -325,6 +326,64 @@ class _ExtraSettingState extends State<ExtraSetting> {
                           await setting.put(
                             SettingBoxKey.replyLengthLimit,
                             GlobalData().replyLengthLimit,
+                          );
+                          setState(() {});
+                        },
+                        child: Text('确定'),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          ListTile(
+            title: Text('弹幕行高', style: titleStyle),
+            subtitle: Text('默认1.6', style: subTitleStyle),
+            leading: const Icon(Icons.subtitles_outlined),
+            trailing: Text(
+              danmakuLineHeight.toString(),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            onTap: () {
+              String danmakuLineHeight = this.danmakuLineHeight.toString();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('弹幕行高', style: TextStyle(fontSize: 18)),
+                    content: TextFormField(
+                      autofocus: true,
+                      initialValue: danmakuLineHeight,
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (value) {
+                        danmakuLineHeight = value;
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Get.back();
+                          this.danmakuLineHeight = max(
+                            1.0,
+                            double.tryParse(danmakuLineHeight) ?? 1.6,
+                          );
+                          await setting.put(
+                            SettingBoxKey.danmakuLineHeight,
+                            this.danmakuLineHeight,
                           );
                           setState(() {});
                         },

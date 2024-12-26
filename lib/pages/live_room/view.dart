@@ -143,7 +143,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 opacity: plPlayerController.isOpenDanmu.value ? 1 : 0,
                 duration: const Duration(milliseconds: 100),
                 child: DanmakuScreen(
-                  createdController: (DanmakuController e) async {
+                  createdController: (DanmakuController e) {
                     plPlayerController.danmakuController =
                         _liveRoomController.controller = e;
                   },
@@ -159,6 +159,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     duration: plPlayerController.danmakuDurationVal ~/
                         plPlayerController.playbackSpeed,
                     strokeWidth: plPlayerController.strokeWidth,
+                    lineHeight: plPlayerController.danmakuLineHeight,
                   ),
                 ),
               ),

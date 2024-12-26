@@ -142,6 +142,9 @@ class GStorage {
   static int get defaultPicQa =>
       setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
 
+  static double get danmakuLineHeight =>
+      setting.get(SettingBoxKey.danmakuLineHeight, defaultValue: 1.6);
+
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
@@ -363,6 +366,7 @@ class SettingBoxKey {
       danmakuFontScaleFS = 'danmakuFontScaleFS',
       danmakuDuration = 'danmakuDuration',
       danmakuMassiveMode = 'danmakuMassiveMode',
+      danmakuLineHeight = 'danmakuLineHeight',
       strokeWidth = 'strokeWidth',
       fontWeight = 'fontWeight',
       memberTab = 'memberTab',

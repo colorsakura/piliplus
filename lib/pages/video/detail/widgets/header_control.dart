@@ -1056,6 +1056,7 @@ class _HeaderControlState extends State<HeaderControl> {
     double fontSizeFSVal = widget.controller!.fontSizeFSVal;
     double subtitleFontScale = widget.controller!.subtitleFontScale.value;
     double subtitleFontScaleFS = widget.controller!.subtitleFontScaleFS.value;
+    double danmakuLineHeight = widget.controller!.danmakuLineHeight;
     // 弹幕速度
     double danmakuDurationVal = widget.controller!.danmakuDurationVal;
     // 弹幕描边
@@ -1461,6 +1462,46 @@ class _HeaderControlState extends State<HeaderControl> {
                               danmakuController.option.copyWith(
                                   duration: danmakuDurationVal ~/
                                       widget.controller!.playbackSpeed),
+                            );
+                          } catch (_) {}
+                        },
+                      ),
+                    ),
+                  ),
+                  Text('弹幕行高 $danmakuLineHeight'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 1.0,
+                        max: 3.0,
+                        value: danmakuLineHeight,
+                        label: '$danmakuLineHeight',
+                        onChanged: (double val) {
+                          danmakuLineHeight =
+                              double.parse(val.toStringAsFixed(1));
+                          widget.controller!.danmakuLineHeight =
+                              danmakuLineHeight;
+                          widget.controller?.putDanmakuSettings();
+                          setState(() {});
+                          try {
+                            danmakuController.updateOption(
+                              danmakuController.option.copyWith(
+                                lineHeight: danmakuLineHeight,
+                              ),
                             );
                           } catch (_) {}
                         },

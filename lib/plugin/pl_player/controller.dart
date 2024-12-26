@@ -255,6 +255,7 @@ class PlPlayerController {
   late bool enableLongShowControl;
   RxDouble subtitleFontScale = (1.0).obs;
   RxDouble subtitleFontScaleFS = (1.5).obs;
+  late double danmakuLineHeight = GStorage.danmakuLineHeight;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -1281,6 +1282,7 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuDuration, danmakuDurationVal);
     setting.put(SettingBoxKey.strokeWidth, strokeWidth);
     setting.put(SettingBoxKey.fontWeight, fontWeight);
+    setting.put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
   }
 
   Future<void> dispose({String type = 'single'}) async {

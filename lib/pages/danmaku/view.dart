@@ -140,7 +140,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
           opacity: playerController.isOpenDanmu.value ? 1 : 0,
           duration: const Duration(milliseconds: 100),
           child: DanmakuScreen(
-            createdController: (DanmakuController e) async {
+            createdController: (DanmakuController e) {
               playerController.danmakuController = _controller = e;
             },
             option: DanmakuOption(
@@ -154,6 +154,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
               duration: playerController.danmakuDurationVal ~/
                   playerController.playbackSpeed,
               strokeWidth: playerController.strokeWidth,
+              lineHeight: playerController.danmakuLineHeight,
             ),
           ),
         ),
