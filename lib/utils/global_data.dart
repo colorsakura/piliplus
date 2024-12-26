@@ -1,9 +1,9 @@
 class GlobalData {
   int imgQuality = 10;
 
-  // int themeMode = 2;
-
   bool grpcReply = true;
+
+  int replyLengthLimit = 6;
 
   // 私有构造函数
   GlobalData._();

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:PiliPalaX/common/widgets/imageview.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -256,8 +257,11 @@ class ReplyItem extends StatelessWidget {
               String text = replyItem?.content?.message ?? '';
               var textPainter = TextPainter(
                 text: TextSpan(text: text),
-                maxLines:
-                    replyItem!.content!.isText! && replyLevel == '1' ? 6 : 999,
+                maxLines: replyItem!.content!.isText! &&
+                        replyLevel == '1' &&
+                        GlobalData().replyLengthLimit != 0
+                    ? GlobalData().replyLengthLimit
+                    : null,
                 textDirection: Directionality.of(context),
               )..layout(maxWidth: constraints.maxWidth);
               bool didExceedMaxLines = textPainter.didExceedMaxLines;

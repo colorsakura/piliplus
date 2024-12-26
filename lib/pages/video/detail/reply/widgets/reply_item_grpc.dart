@@ -6,6 +6,7 @@ import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -268,7 +269,10 @@ class ReplyItemGrpc extends StatelessWidget {
               );
               var textPainter = TextPainter(
                 text: TextSpan(text: text, style: style),
-                maxLines: replyLevel == '1' ? 6 : null,
+                maxLines:
+                    replyLevel == '1' && GlobalData().replyLengthLimit != 0
+                        ? GlobalData().replyLengthLimit
+                        : null,
                 textDirection: Directionality.of(context),
               )..layout(maxWidth: constraints.maxWidth);
               bool didExceedMaxLines = textPainter.didExceedMaxLines;

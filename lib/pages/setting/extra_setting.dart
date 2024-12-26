@@ -179,8 +179,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
                     content: TextFormField(
                       autofocus: true,
                       initialValue: dynamicPeriod.toString(),
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: TextInputType.numberWithOptions(),
                       onChanged: (value) {
                         dynamicPeriod = int.tryParse(value) ?? 5;
                       },
@@ -279,6 +278,63 @@ class _ExtraSettingState extends State<ExtraSetting> {
             leading: const Icon(Icons.account_circle_outlined),
             setKey: SettingBoxKey.horizontalMemberPage,
             defaultVal: false,
+          ),
+          ListTile(
+            title: Text('评论折叠行数', style: titleStyle),
+            subtitle: Text('0行为不折叠', style: subTitleStyle),
+            leading: const Icon(Icons.compress),
+            trailing: Text(
+              '${GlobalData().replyLengthLimit.toString()}行',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            onTap: () {
+              String replyLengthLimit =
+                  GlobalData().replyLengthLimit.toString();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('评论折叠行数', style: TextStyle(fontSize: 18)),
+                    content: TextFormField(
+                      autofocus: true,
+                      initialValue: replyLengthLimit,
+                      keyboardType: TextInputType.numberWithOptions(),
+                      onChanged: (value) {
+                        replyLengthLimit = value;
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                      ],
+                      decoration: InputDecoration(suffixText: '行'),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: Get.back,
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Get.back();
+                          GlobalData().replyLengthLimit =
+                              int.tryParse(replyLengthLimit) ?? 6;
+                          await setting.put(
+                            SettingBoxKey.replyLengthLimit,
+                            GlobalData().replyLengthLimit,
+                          );
+                          setState(() {});
+                        },
+                        child: Text('确定'),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
           ),
           Obx(
             () => ListTile(

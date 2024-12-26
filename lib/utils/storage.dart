@@ -136,6 +136,12 @@ class GStorage {
   static bool get horizontalMemberPage =>
       setting.get(SettingBoxKey.horizontalMemberPage, defaultValue: false);
 
+  static int get replyLengthLimit =>
+      setting.get(SettingBoxKey.replyLengthLimit, defaultValue: 6);
+
+  static int get defaultPicQa =>
+      setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
+
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
@@ -203,15 +209,10 @@ class GStorage {
     // 视频设置
     video = await Hive.openBox('video');
     // 设置全局变量
-    GlobalData().imgQuality = setting.get(
-      SettingBoxKey.defaultPicQa,
-      defaultValue: 10,
-    );
-    // GlobalData().themeMode = setting.get(
-    //   SettingBoxKey.themeMode,
-    //   defaultValue: ThemeType.system.code,
-    // );
-    GlobalData().grpcReply = grpcReply;
+    GlobalData()
+      ..imgQuality = defaultPicQa
+      ..grpcReply = grpcReply
+      ..replyLengthLimit = replyLengthLimit;
   }
 
   static Future<String> exportAllSettings() async {
@@ -341,6 +342,7 @@ class SettingBoxKey {
       exapndIntroPanelH = 'exapndIntroPanelH',
       horizontalSeasonPanel = 'horizontalSeasonPanel',
       horizontalMemberPage = 'horizontalMemberPage',
+      replyLengthLimit = 'replyLengthLimit',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
