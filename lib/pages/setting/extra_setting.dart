@@ -148,11 +148,10 @@ class _ExtraSettingState extends State<ExtraSetting> {
             leading: Stack(
               alignment: Alignment.center,
               children: [
-                const Icon(Icons.shield),
+                const Icon(Icons.shield_outlined),
                 Icon(
                   Icons.play_arrow_rounded,
-                  size: 18,
-                  color: Theme.of(context).colorScheme.surface,
+                  size: 15,
                 ),
               ],
             ),

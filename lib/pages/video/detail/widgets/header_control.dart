@@ -808,21 +808,21 @@ class _HeaderControlState extends State<HeaderControl> {
                                     videoFormat[i].quality) {
                                   return;
                                 }
+                                Get.back();
                                 final int quality = videoFormat[i].quality!;
                                 widget.videoDetailCtr!.currentVideoQa =
                                     VideoQualityCode.fromCode(quality)!;
-                                String oldQualityDesc =
-                                    VideoQualityCode.fromCode(setting.get(
-                                            SettingBoxKey.defaultVideoQa,
-                                            defaultValue:
-                                                VideoQuality.values.last.code))!
-                                        .description;
-                                setting.put(
-                                    SettingBoxKey.defaultVideoQa, quality);
-                                SmartDialog.showToast(
-                                    "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}");
                                 widget.videoDetailCtr!.updatePlayer();
-                                Get.back();
+                                // String oldQualityDesc =
+                                //     VideoQualityCode.fromCode(setting.get(
+                                //             SettingBoxKey.defaultVideoQa,
+                                //             defaultValue:
+                                //                 VideoQuality.values.last.code))!
+                                //         .description;
+                                // setting.put(
+                                //     SettingBoxKey.defaultVideoQa, quality);
+                                // SmartDialog.showToast(
+                                //     "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}");
                               },
                               // 可能包含会员解锁画质
                               enabled: i >= totalQaSam - userfulQaSam,
@@ -897,20 +897,20 @@ class _HeaderControlState extends State<HeaderControl> {
                               if (currentAudioQa.code == i.id) {
                                 return;
                               }
+                              Get.back();
                               final int quality = i.id!;
                               widget.videoDetailCtr!.currentAudioQa =
                                   AudioQualityCode.fromCode(quality)!;
-                              String oldQualityDesc = AudioQualityCode.fromCode(
-                                      setting.get(SettingBoxKey.defaultAudioQa,
-                                          defaultValue:
-                                              AudioQuality.values.last.code))!
-                                  .description;
-                              setting.put(
-                                  SettingBoxKey.defaultAudioQa, quality);
-                              SmartDialog.showToast(
-                                  "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}");
                               widget.videoDetailCtr!.updatePlayer();
-                              Get.back();
+                              // String oldQualityDesc = AudioQualityCode.fromCode(
+                              //         setting.get(SettingBoxKey.defaultAudioQa,
+                              //             defaultValue:
+                              //                 AudioQuality.values.last.code))!
+                              //     .description;
+                              // setting.put(
+                              //     SettingBoxKey.defaultAudioQa, quality);
+                              // SmartDialog.showToast(
+                              //     "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}");
                             },
                             contentPadding:
                                 const EdgeInsets.only(left: 20, right: 20),
@@ -1763,11 +1763,15 @@ class _HeaderControlState extends State<HeaderControl> {
                   icon: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Icon(Icons.shield, size: 18),
+                      Icon(
+                        Icons.shield_outlined,
+                        size: 19,
+                        color: Colors.white,
+                      ),
                       Icon(
                         Icons.play_arrow_rounded,
-                        size: 17,
-                        color: Colors.black87,
+                        size: 13,
+                        color: Colors.white,
                       ),
                     ],
                   ),

@@ -68,12 +68,13 @@ class _MainAppState extends State<MainApp>
   }
 
   void _checkDefaultSearch([bool shouldCheck = false]) {
-    if (shouldCheck &&
-        _mainController.pages[_mainController.pageController.page?.round() ?? 0]
-            is! HomePage) {
-      return;
-    }
     if (_homeController.enableSearchWord) {
+      if (shouldCheck &&
+          _mainController
+                  .pages[_mainController.pageController.page?.round() ?? 0]
+              is! HomePage) {
+        return;
+      }
       int now = DateTime.now().millisecondsSinceEpoch;
       if (now - _homeController.lateCheckAt >= 5 * 60 * 1000) {
         _homeController.lateCheckAt = now;

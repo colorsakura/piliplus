@@ -20,7 +20,9 @@ class VideoSetting extends StatefulWidget {
 class _VideoSettingState extends State<VideoSetting> {
   Box setting = GStorage.setting;
   late dynamic defaultVideoQa;
+  late dynamic defaultVideoQaCellular;
   late dynamic defaultAudioQa;
+  late dynamic defaultAudioQaCellular;
   late dynamic defaultDecode;
   late dynamic secondDecode;
   late dynamic hardwareDecoding;
@@ -30,20 +32,42 @@ class _VideoSettingState extends State<VideoSetting> {
   @override
   void initState() {
     super.initState();
-    defaultVideoQa = setting.get(SettingBoxKey.defaultVideoQa,
-        defaultValue: VideoQuality.values.last.code);
-    defaultAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
-        defaultValue: AudioQuality.values.last.code);
-    defaultDecode = setting.get(SettingBoxKey.defaultDecode,
-        defaultValue: VideoDecodeFormats.values.last.code);
-    secondDecode = setting.get(SettingBoxKey.secondDecode,
-        defaultValue: VideoDecodeFormats.values[1].code);
-    hardwareDecoding = setting.get(SettingBoxKey.hardwareDecoding,
-        defaultValue: Platform.isAndroid ? 'auto-safe' : 'auto');
-    videoSync =
-        setting.get(SettingBoxKey.videoSync, defaultValue: 'display-resample');
-    defaultCDNService = setting.get(SettingBoxKey.CDNService,
-        defaultValue: CDNService.backupUrl.code);
+    defaultVideoQa = setting.get(
+      SettingBoxKey.defaultVideoQa,
+      defaultValue: VideoQuality.values.last.code,
+    );
+    defaultVideoQaCellular = setting.get(
+      SettingBoxKey.defaultVideoQaCellular,
+      defaultValue: VideoQuality.high1080.code,
+    );
+    defaultAudioQa = setting.get(
+      SettingBoxKey.defaultAudioQa,
+      defaultValue: AudioQuality.values.last.code,
+    );
+    defaultAudioQaCellular = setting.get(
+      SettingBoxKey.defaultAudioQaCellular,
+      defaultValue: AudioQuality.k192.code,
+    );
+    defaultDecode = setting.get(
+      SettingBoxKey.defaultDecode,
+      defaultValue: VideoDecodeFormats.values.last.code,
+    );
+    secondDecode = setting.get(
+      SettingBoxKey.secondDecode,
+      defaultValue: VideoDecodeFormats.values[1].code,
+    );
+    hardwareDecoding = setting.get(
+      SettingBoxKey.hardwareDecoding,
+      defaultValue: Platform.isAndroid ? 'auto-safe' : 'auto',
+    );
+    videoSync = setting.get(
+      SettingBoxKey.videoSync,
+      defaultValue: 'display-resample',
+    );
+    defaultCDNService = setting.get(
+      SettingBoxKey.CDNService,
+      defaultValue: CDNService.backupUrl.code,
+    );
   }
 
   @override
@@ -79,26 +103,25 @@ class _VideoSettingState extends State<VideoSetting> {
             defaultVal: true,
           ),
           ListTile(
-            enabled: false,
-            onTap: null,
-            title: Text("b站定向流量支持", style: titleStyle),
+            title: Text("B站定向流量支持", style: titleStyle),
             subtitle:
-                Text("若套餐含b站定向流量，则会自动使用。可查阅运营商的流量记录确认。", style: subTitleStyle),
+                Text("若套餐含B站定向流量，则会自动使用。可查阅运营商的流量记录确认。", style: subTitleStyle),
             leading: const Icon(Icons.perm_data_setting_outlined),
             trailing: Transform.scale(
               alignment: Alignment.centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
               scale: 0.8,
               child: Switch(
-                  thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                      (Set<WidgetState> states) {
-                    if (states.isNotEmpty &&
-                        states.first == WidgetState.selected) {
-                      return const Icon(Icons.done);
-                    }
-                    return null; // All other states will use the default thumbIcon.
-                  }),
-                  value: true,
-                  onChanged: null),
+                thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                    (Set<WidgetState> states) {
+                  if (states.isNotEmpty &&
+                      states.first == WidgetState.selected) {
+                    return const Icon(Icons.lock_outline_rounded);
+                  }
+                  return null; // All other states will use the default thumbIcon.
+                }),
+                value: true,
+                onChanged: (_) {},
+              ),
             ),
           ),
           ListTile(
@@ -147,16 +170,45 @@ class _VideoSettingState extends State<VideoSetting> {
                 context: context,
                 builder: (context) {
                   return SelectDialog<int>(
-                      title: '默认画质',
-                      value: defaultVideoQa,
-                      values: VideoQuality.values.reversed.map((e) {
-                        return {'title': e.description, 'value': e.code};
-                      }).toList());
+                    title: '默认画质',
+                    value: defaultVideoQa,
+                    values: VideoQuality.values.reversed.map((e) {
+                      return {'title': e.description, 'value': e.code};
+                    }).toList(),
+                  );
                 },
               );
               if (result != null) {
                 defaultVideoQa = result;
                 setting.put(SettingBoxKey.defaultVideoQa, result);
+                setState(() {});
+              }
+            },
+          ),
+          ListTile(
+            dense: false,
+            title: Text('蜂窝网络画质', style: titleStyle),
+            leading: const Icon(Icons.video_settings_outlined),
+            subtitle: Text(
+              '当前画质：${VideoQualityCode.fromCode(defaultVideoQaCellular)!.description!}',
+              style: subTitleStyle,
+            ),
+            onTap: () async {
+              int? result = await showDialog(
+                context: context,
+                builder: (context) {
+                  return SelectDialog<int>(
+                    title: '蜂窝网络画质',
+                    value: defaultVideoQaCellular,
+                    values: VideoQuality.values.reversed.map((e) {
+                      return {'title': e.description, 'value': e.code};
+                    }).toList(),
+                  );
+                },
+              );
+              if (result != null) {
+                defaultVideoQaCellular = result;
+                setting.put(SettingBoxKey.defaultVideoQaCellular, result);
                 setState(() {});
               }
             },
@@ -174,16 +226,45 @@ class _VideoSettingState extends State<VideoSetting> {
                 context: context,
                 builder: (context) {
                   return SelectDialog<int>(
-                      title: '默认音质',
-                      value: defaultAudioQa,
-                      values: AudioQuality.values.reversed.map((e) {
-                        return {'title': e.description, 'value': e.code};
-                      }).toList());
+                    title: '默认音质',
+                    value: defaultAudioQa,
+                    values: AudioQuality.values.reversed.map((e) {
+                      return {'title': e.description, 'value': e.code};
+                    }).toList(),
+                  );
                 },
               );
               if (result != null) {
                 defaultAudioQa = result;
                 setting.put(SettingBoxKey.defaultAudioQa, result);
+                setState(() {});
+              }
+            },
+          ),
+          ListTile(
+            dense: false,
+            title: Text('蜂窝网络音质', style: titleStyle),
+            leading: const Icon(Icons.music_video_outlined),
+            subtitle: Text(
+              '当前音质：${AudioQualityCode.fromCode(defaultAudioQaCellular)!.description!}',
+              style: subTitleStyle,
+            ),
+            onTap: () async {
+              int? result = await showDialog(
+                context: context,
+                builder: (context) {
+                  return SelectDialog<int>(
+                    title: '蜂窝网络音质',
+                    value: defaultAudioQaCellular,
+                    values: AudioQuality.values.reversed.map((e) {
+                      return {'title': e.description, 'value': e.code};
+                    }).toList(),
+                  );
+                },
+              );
+              if (result != null) {
+                defaultAudioQaCellular = result;
+                setting.put(SettingBoxKey.defaultAudioQaCellular, result);
                 setState(() {});
               }
             },

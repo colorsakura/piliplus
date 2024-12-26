@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -77,29 +77,8 @@ class ApiInterceptor extends Interceptor {
       case DioExceptionType.sendTimeout:
         return '发送请求超时，请检查网络设置';
       case DioExceptionType.unknown:
-        final String res = await checkConnect();
+        final String res = (await Utils.checkConnectivity()).title;
         return '$res网络异常 ${error.error}';
-    }
-  }
-
-  static Future<String> checkConnect() async {
-    final List<ConnectivityResult> connectivityResult =
-        await Connectivity().checkConnectivity();
-    switch (connectivityResult.first) {
-      case ConnectivityResult.mobile:
-        return '流量';
-      case ConnectivityResult.wifi:
-        return 'Wi-Fi';
-      case ConnectivityResult.ethernet:
-        return '局域';
-      case ConnectivityResult.vpn:
-        return '代理';
-      case ConnectivityResult.other:
-        return '其他';
-      case ConnectivityResult.none:
-        return '无';
-      default:
-        return '';
     }
   }
 }

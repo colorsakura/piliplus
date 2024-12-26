@@ -18,6 +18,7 @@ import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
@@ -206,7 +207,7 @@ class VideoDetailController extends GetxController
   late PreferredSizeWidget headerControl;
 
   // late bool enableCDN;
-  late int? cacheVideoQa;
+  int? cacheVideoQa;
   late String cacheDecode;
   late String cacheSecondDecode;
   late int cacheAudioQa;
@@ -303,16 +304,11 @@ class VideoDetailController extends GetxController
     // CDN优化
     // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
 
-    // 预设的画质
-    cacheVideoQa = setting.get(SettingBoxKey.defaultVideoQa,
-        defaultValue: VideoQuality.values.last.code);
     // 预设的解码格式
     cacheDecode = setting.get(SettingBoxKey.defaultDecode,
         defaultValue: VideoDecodeFormats.values.last.code);
     cacheSecondDecode = setting.get(SettingBoxKey.secondDecode,
         defaultValue: VideoDecodeFormats.values[1].code);
-    cacheAudioQa = setting.get(SettingBoxKey.defaultAudioQa,
-        defaultValue: AudioQuality.hiRes.code);
     oid.value = IdUtils.bv2av(Get.parameters['bvid']!);
     enableSponsorBlock =
         setting.get(SettingBoxKey.enableSponsorBlock, defaultValue: false);
@@ -1013,6 +1009,21 @@ class VideoDetailController extends GetxController
 
   // 视频链接
   Future queryVideoUrl() async {
+    if (cacheVideoQa == null) {
+      await Utils.checkConnectivity().then((res) {
+        cacheVideoQa = res == ConnectivityResult.mobile
+            ? setting.get(SettingBoxKey.defaultVideoQaCellular,
+                defaultValue: VideoQuality.high1080.code)
+            : setting.get(SettingBoxKey.defaultVideoQa,
+                defaultValue: VideoQuality.values.last.code);
+
+        cacheAudioQa = res == ConnectivityResult.mobile
+            ? setting.get(SettingBoxKey.defaultAudioQaCellular,
+                defaultValue: AudioQuality.k192.code)
+            : setting.get(SettingBoxKey.defaultAudioQa,
+                defaultValue: AudioQuality.hiRes.code);
+      });
+    }
     var result = await VideoHttp.videoUrl(cid: cid.value, bvid: bvid);
     if (result['status']) {
       data = result['data'];
