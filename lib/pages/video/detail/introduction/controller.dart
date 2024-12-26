@@ -176,6 +176,9 @@ class VideoIntroController extends GetxController
 
   // 获取up主粉丝数
   Future queryUserStat() async {
+    if (videoDetail.value.owner == null) {
+      return;
+    }
     var result = await UserHttp.userStat(mid: videoDetail.value.owner!.mid!);
     if (result['status']) {
       userStat.value = result['data'];
@@ -766,6 +769,9 @@ class VideoIntroController extends GetxController
 
   // 设置关注分组
   void setFollowGroup() {
+    if (videoDetail.value.owner == null) {
+      return;
+    }
     Get.bottomSheet(
       GroupPanel(mid: videoDetail.value.owner!.mid!),
       isScrollControlled: true,
