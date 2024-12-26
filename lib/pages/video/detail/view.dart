@@ -1196,8 +1196,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       if (_shouldShowSeasonPanel) '播放列表',
     ];
     if (videoDetailController.tabCtr.length != tabs.length) {
-      videoDetailController.tabCtr =
-          TabController(length: tabs.length, vsync: this);
+      videoDetailController.tabCtr = TabController(
+        vsync: this,
+        length: tabs.length,
+        initialIndex: tabs.length > videoDetailController.tabCtr.length
+            ? videoDetailController.tabCtr.index
+            : 0,
+      );
     }
 
     Widget tabbar() => TabBar(
