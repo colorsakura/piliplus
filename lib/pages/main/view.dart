@@ -55,6 +55,7 @@ class _MainAppState extends State<MainApp>
   @override
   void didPopNext() {
     _mainController.checkUnreadDynamic();
+    _checkDefaultSearch(true);
     super.didPopNext();
   }
 
@@ -62,6 +63,22 @@ class _MainAppState extends State<MainApp>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _mainController.checkUnreadDynamic();
+      _checkDefaultSearch(true);
+    }
+  }
+
+  void _checkDefaultSearch([bool shouldCheck = false]) {
+    if (shouldCheck &&
+        _mainController.pages[_mainController.pageController.page?.round() ?? 0]
+            is! HomePage) {
+      return;
+    }
+    if (_homeController.enableSearchWord) {
+      int now = DateTime.now().millisecondsSinceEpoch;
+      if (now - _homeController.lateCheckAt >= 5 * 60 * 1000) {
+        _homeController.lateCheckAt = now;
+        _homeController.querySearchDefault();
+      }
     }
   }
 
@@ -80,6 +97,7 @@ class _MainAppState extends State<MainApp>
         _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
       }
       _homeController.flag = true;
+      _checkDefaultSearch();
     } else {
       _homeController.flag = false;
     }

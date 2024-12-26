@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
@@ -18,7 +17,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   final HomeController _homeController = Get.put(HomeController());
-  List videoList = [];
   late Stream<bool> stream;
 
   @override
@@ -33,13 +31,6 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
-    // 设置状态栏图标的亮度
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarIconBrightness: currentBrightness == Brightness.light
-    //       ? Brightness.dark
-    //       : Brightness.light,
-    // ));
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
       body: Column(
@@ -49,7 +40,7 @@ class _HomePageState extends State<HomePage>
               stream: _homeController.hideSearchBar
                   ? stream
                   : StreamController<bool>.broadcast().stream,
-              ctr: _homeController,
+              homeController: _homeController,
             ),
           if (_homeController.tabs.length > 1) ...[
             ...[
@@ -97,13 +88,13 @@ class _HomePageState extends State<HomePage>
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final Stream<bool>? stream;
-  final HomeController ctr;
+  final HomeController homeController;
 
   const CustomAppBar({
     super.key,
     this.height = kToolbarHeight,
     this.stream,
-    required this.ctr,
+    required this.homeController,
   });
 
   @override
@@ -124,7 +115,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             height: snapshot.data ? 52 : 0,
             padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
             child: SearchBarAndUser(
-              ctr: ctr,
+              homeController: homeController,
             ),
           ),
         );
@@ -136,18 +127,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 class SearchBarAndUser extends StatelessWidget {
   const SearchBarAndUser({
     super.key,
-    required this.ctr,
+    required this.homeController,
   });
 
-  final HomeController ctr;
+  final HomeController homeController;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SearchBar(ctr: ctr),
+        SearchBar(homeController: homeController),
         const SizedBox(width: 4),
-        Obx(() => ctr.userLogin.value
+        Obx(() => homeController.userLogin.value
             ? ClipRect(
                 child: IconButton(
                   tooltip: '消息',
@@ -160,37 +151,40 @@ class SearchBarAndUser extends StatelessWidget {
             : const SizedBox.shrink()),
         const SizedBox(width: 8),
         Semantics(
-            label: "我的",
-            child: Obx(
-              () => ctr.userLogin.value
-                  ? Stack(
-                      children: [
-                        NetworkImgLayer(
-                          type: 'avatar',
-                          width: 34,
-                          height: 34,
-                          src: ctr.userFace.value,
-                        ),
-                        Positioned.fill(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => ctr.showUserInfoDialog(context),
-                              splashColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer
-                                  .withOpacity(0.3),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(50),
-                              ),
+          label: "我的",
+          child: Obx(
+            () => homeController.userLogin.value
+                ? Stack(
+                    children: [
+                      NetworkImgLayer(
+                        type: 'avatar',
+                        width: 34,
+                        height: 34,
+                        src: homeController.userFace.value,
+                      ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () =>
+                                homeController.showUserInfoDialog(context),
+                            splashColor: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer
+                                .withOpacity(0.3),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50),
                             ),
                           ),
-                        )
-                      ],
-                    )
-                  : DefaultUser(
-                      callback: () => ctr.showUserInfoDialog(context)),
-            )),
+                        ),
+                      )
+                    ],
+                  )
+                : DefaultUser(
+                    onPressed: () => homeController.showUserInfoDialog(context),
+                  ),
+          ),
+        ),
       ],
     );
   }
@@ -209,45 +203,43 @@ class UserAndSearchVertical extends StatelessWidget {
     return Column(
       children: [
         Semantics(
-            label: "我的",
-            child: Obx(
-              () => ctr.userLogin.value
-                  ? Stack(
-                      children: [
-                        NetworkImgLayer(
-                          type: 'avatar',
-                          width: 34,
-                          height: 34,
-                          src: ctr.userFace.value,
-                        ),
-                        Positioned.fill(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => ctr.showUserInfoDialog(context),
-                              splashColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer
-                                  .withOpacity(0.3),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(50),
-                              ),
+          label: "我的",
+          child: Obx(
+            () => ctr.userLogin.value
+                ? Stack(
+                    children: [
+                      NetworkImgLayer(
+                        type: 'avatar',
+                        width: 34,
+                        height: 34,
+                        src: ctr.userFace.value,
+                      ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => ctr.showUserInfoDialog(context),
+                            splashColor: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer
+                                .withOpacity(0.3),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50),
                             ),
                           ),
-                        )
-                      ],
-                    )
-                  : DefaultUser(
-                      callback: () => ctr.showUserInfoDialog(context)),
-            )),
+                        ),
+                      )
+                    ],
+                  )
+                : DefaultUser(onPressed: () => ctr.showUserInfoDialog(context)),
+          ),
+        ),
         const SizedBox(height: 8),
         Obx(() => ctr.userLogin.value
             ? IconButton(
                 tooltip: '消息',
                 onPressed: () => Get.toNamed('/whisper'),
-                icon: const Icon(
-                  Icons.notifications_none,
-                ),
+                icon: const Icon(Icons.notifications_none),
               )
             : const SizedBox.shrink()),
         IconButton(
@@ -263,8 +255,8 @@ class UserAndSearchVertical extends StatelessWidget {
 }
 
 class DefaultUser extends StatelessWidget {
-  const DefaultUser({super.key, this.callback});
-  final Function? callback;
+  const DefaultUser({super.key, required this.onPressed});
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +271,7 @@ class DefaultUser extends StatelessWidget {
             return Theme.of(context).colorScheme.onInverseSurface;
           }),
         ),
-        onPressed: () => callback?.call(),
+        onPressed: onPressed,
         icon: Icon(
           Icons.person_rounded,
           size: 22,
@@ -339,7 +331,7 @@ class DefaultUser extends StatelessWidget {
 // }
 
 class CustomChip extends StatelessWidget {
-  final Function onTap;
+  final VoidCallback onTap;
   final String label;
   final bool selected;
   const CustomChip({
@@ -372,7 +364,7 @@ class CustomChip extends StatelessWidget {
       }),
       padding: const EdgeInsets.fromLTRB(6, 1, 6, 1),
       label: Text(label, style: chipTextStyle),
-      onPressed: () => onTap(),
+      onPressed: onTap,
       selected: selected,
       showCheckmark: false,
       visualDensity: visualDensity,
@@ -383,10 +375,10 @@ class CustomChip extends StatelessWidget {
 class SearchBar extends StatelessWidget {
   const SearchBar({
     super.key,
-    required this.ctr,
+    required this.homeController,
   });
 
-  final HomeController? ctr;
+  final HomeController homeController;
 
   @override
   Widget build(BuildContext context) {
@@ -405,7 +397,10 @@ class SearchBar extends StatelessWidget {
             splashColor: colorScheme.primaryContainer.withOpacity(0.3),
             onTap: () => Get.toNamed(
               '/search',
-              parameters: {'hintText': ctr!.defaultSearch.value},
+              parameters: {
+                if (homeController.enableSearchWord)
+                  'hintText': homeController.defaultSearch.value,
+              },
             ),
             child: Row(
               children: [
@@ -416,16 +411,19 @@ class SearchBar extends StatelessWidget {
                   semanticLabel: '搜索',
                 ),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: Obx(
-                    () => Text(
-                      ctr!.defaultSearch.value,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: colorScheme.outline),
+                if (homeController.enableSearchWord) ...[
+                  Expanded(
+                    child: Obx(
+                      () => Text(
+                        homeController.defaultSearch.value,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: colorScheme.outline),
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 2),
+                ],
               ],
             ),
           ),
