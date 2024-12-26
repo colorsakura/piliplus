@@ -11,7 +11,6 @@ class HorizontalMemberPageController extends CommonController {
   HorizontalMemberPageController({this.mid});
 
   dynamic mid;
-  dynamic name;
   dynamic wwebid;
 
   Rx<LoadingState> userState = LoadingState.loading().obs;
@@ -28,7 +27,6 @@ class HorizontalMemberPageController extends CommonController {
     wwebid ??= await Utils.getWwebid(mid);
     dynamic res = await MemberHttp.memberInfo(mid: mid, wwebid: wwebid);
     if (res['status']) {
-      name = res['data'].name;
       userState.value = LoadingState.success(res['data']);
       getMemberStat();
       queryData();

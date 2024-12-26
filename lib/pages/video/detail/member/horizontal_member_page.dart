@@ -272,10 +272,10 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                     onTap: () {
                       if (index == 0) {
                         Get.toNamed(
-                            '/fan?mid=${widget.mid}&name=${_controller.name}');
+                            '/fan?mid=${widget.mid}&name=${memberInfoModel.name}');
                       } else if (index == 2) {
                         Get.toNamed(
-                            '/follow?mid=${widget.mid}&name=${_controller.name}');
+                            '/follow?mid=${widget.mid}&name=${memberInfoModel.name}');
                       }
                     },
                   );
