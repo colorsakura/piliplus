@@ -24,7 +24,6 @@ Widget statDanMu({
       Text(
         Utils.numFormat(danmu!),
         style: TextStyle(
-          fontWeight: FontWeight.w400,
           fontSize: size == 'medium' ? 12 : 11,
           color: color,
         ),

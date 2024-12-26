@@ -149,7 +149,6 @@ class BangumiCardV extends StatelessWidget {
                   bangumiItem.title,
                   textAlign: TextAlign.start,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w400,
                     letterSpacing: 0.3,
                   ),
                   maxLines: 1,

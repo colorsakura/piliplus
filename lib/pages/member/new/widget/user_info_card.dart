@@ -155,7 +155,6 @@ class UserInfoCard extends StatelessWidget {
                 //       style: TextStyle(
                 //         height: 1,
                 //         fontSize: 12,
-                //         fontWeight: FontWeight.w500,
                 //         color: Theme.of(context).colorScheme.onSecondaryContainer,
                 //       ),
                 //       strutStyle: const StrutStyle(

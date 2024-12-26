@@ -150,7 +150,6 @@ class _MediaListPanelState extends State<MediaListPanel> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontWeight: FontWeight.w500,
                                               color: item.bvid == widget.bvid
                                                   ? Theme.of(context)
                                                       .colorScheme

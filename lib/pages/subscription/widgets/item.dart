@@ -87,7 +87,6 @@ class SubItem extends StatelessWidget {
                   subFolderItem.title!,
                   textAlign: TextAlign.start,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w400,
                     letterSpacing: 0.3,
                   ),
                 ),

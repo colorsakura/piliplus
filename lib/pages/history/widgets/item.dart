@@ -317,7 +317,6 @@ class HistoryItem extends StatelessWidget {
               videoItem.title,
               textAlign: TextAlign.start,
               style: const TextStyle(
-                fontWeight: FontWeight.w400,
                 letterSpacing: 0.3,
               ),
               maxLines: videoItem.videos > 1 ? 1 : 2,
@@ -330,7 +329,6 @@ class HistoryItem extends StatelessWidget {
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    fontWeight: FontWeight.w400,
                     color: Theme.of(context).colorScheme.outline),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

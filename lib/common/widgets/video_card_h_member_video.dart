@@ -123,9 +123,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                   videoItem.title ?? '',
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontWeight: videoItem.bvid == bvid
-                        ? FontWeight.bold
-                        : FontWeight.w400,
+                    fontWeight: videoItem.bvid == bvid ? FontWeight.bold : null,
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     height: 1.42,
                     letterSpacing: 0.3,
@@ -144,7 +142,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
                   : videoItem.publishTimeText ?? '',
               maxLines: 1,
               style: TextStyle(
-                fontWeight: FontWeight.w400,
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                 height: 1,
                 color: Theme.of(context).colorScheme.outline,

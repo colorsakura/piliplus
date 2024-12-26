@@ -80,7 +80,7 @@ class LiveCard extends StatelessWidget {
           Text(
             liveItem.title as String,
             textAlign: TextAlign.start,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            style: const TextStyle(fontSize: 13),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),

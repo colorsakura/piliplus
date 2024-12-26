@@ -272,7 +272,6 @@ class _BangumiInfoState extends State<BangumiInfo>
                                             : bangumiItem!.title!,
                                         style: const TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w400,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

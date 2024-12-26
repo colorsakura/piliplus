@@ -27,7 +27,6 @@ Widget statView({
       Text(
         Utils.numFormat(view!),
         style: TextStyle(
-          fontWeight: FontWeight.w400,
           fontSize: size == 'medium' ? 12 : 11,
           color: color,
         ),

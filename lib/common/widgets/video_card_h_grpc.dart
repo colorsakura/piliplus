@@ -150,7 +150,6 @@ class VideoCardHGrpc extends StatelessWidget {
                   videoItem.smallCoverV5.base.title,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     height: 1.42,
                     letterSpacing: 0.3,
@@ -183,7 +182,6 @@ class VideoCardHGrpc extends StatelessWidget {
                 videoItem.smallCoverV5.rightDesc1,
                 maxLines: 1,
                 style: TextStyle(
-                  fontWeight: FontWeight.w400,
                   fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                   height: 1,
                   color: Theme.of(context).colorScheme.outline,
@@ -195,7 +193,6 @@ class VideoCardHGrpc extends StatelessWidget {
               videoItem.smallCoverV5.rightDesc2,
               maxLines: 1,
               style: TextStyle(
-                fontWeight: FontWeight.w400,
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                 height: 1,
                 color: Theme.of(context).colorScheme.outline,

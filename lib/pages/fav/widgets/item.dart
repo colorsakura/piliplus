@@ -68,7 +68,6 @@ class FavItem extends StatelessWidget {
               favFolderItem.title ?? '',
               textAlign: TextAlign.start,
               style: const TextStyle(
-                fontWeight: FontWeight.w400,
                 letterSpacing: 0.3,
               ),
             ),
