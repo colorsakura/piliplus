@@ -1,19 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/pages/mine/view.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-
-Box userInfoCache = GStorage.userInfo;
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    dynamic userInfo = userInfoCache.get('userInfoCache');
+    dynamic userInfo = GStorage.userInfo.get('userInfoCache');
     return SliverAppBar(
       // forceElevated: true,
       toolbarHeight: MediaQuery.of(context).padding.top,

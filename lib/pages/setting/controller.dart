@@ -2,22 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:hive/hive.dart';
 import '../../models/common/dynamic_badge_mode.dart';
 import '../../models/common/nav_bar_config.dart';
 import '../main/index.dart';
 import 'widgets/select_dialog.dart';
 
 class SettingController extends GetxController {
-  Box userInfoCache = GStorage.userInfo;
-  Box setting = GStorage.setting;
-  Box localCache = GStorage.localCache;
-
   RxBool userLogin = false.obs;
   RxBool hiddenSettingUnlocked = false.obs;
   RxBool feedBackEnable = false.obs;
@@ -29,10 +25,12 @@ class SettingController extends GetxController {
   Rx<DynamicBadgeMode> dynamicBadgeType = DynamicBadgeMode.number.obs;
   RxInt defaultHomePage = 0.obs;
 
+  Box get setting => GStorage.setting;
+
   @override
   void onInit() {
     super.onInit();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin.value = userInfo != null;
     hiddenSettingUnlocked.value =
         setting.get(SettingBoxKey.hiddenSettingUnlocked, defaultValue: false);
@@ -71,8 +69,8 @@ class SettingController extends GetxController {
                 await CookieManager().deleteAllCookies();
                 Request.dio.options.headers['cookie'] = '';
                 // 清空本地存储的用户标识
-                userInfoCache.put('userInfoCache', null);
-                localCache.put(LocalCacheKey.accessKey,
+                GStorage.userInfo.put('userInfoCache', null);
+                GStorage.localCache.put(LocalCacheKey.accessKey,
                     {'mid': -1, 'value': '', 'refresh': ''});
                 userLogin.value = false;
                 if (Get.isRegistered<MainController>()) {

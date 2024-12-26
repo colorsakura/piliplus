@@ -25,10 +25,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-Box videoStorage = GStorage.video;
-Box setting = GStorage.setting;
-Box localCache = GStorage.localCache;
-
 class PlPlayerController {
   Player? _videoPlayerController;
   VideoController? _videoController;
@@ -116,6 +112,8 @@ class PlPlayerController {
   final RxList<Segment> viewPointList = <Segment>[].obs;
   final RxBool showVP = true.obs;
   final RxList<Segment> segmentList = <Segment>[].obs;
+
+  Box get setting => GStorage.setting;
 
   // final Durations durations;
 
@@ -236,9 +234,8 @@ class PlPlayerController {
   Rx<bool> isOpenDanmu = false.obs;
 
   /// 弹幕权重
-  ValueNotifier<int> danmakuWeight = ValueNotifier(0);
-  ValueNotifier<List<Map<String, dynamic>>> danmakuFilterRule =
-      ValueNotifier([]);
+  int danmakuWeight = 0;
+  List danmakuFilterRule = [];
   // 关联弹幕控制器
   DanmakuController? danmakuController;
   bool showDanmaku = true;
@@ -331,17 +328,16 @@ class PlPlayerController {
     await _instance?.setVolume(volumeNew, videoPlayerVolume: videoPlayerVolume);
   }
 
+  Box get video => GStorage.video;
+
   // 添加一个私有构造函数
   PlPlayerController._() {
     _videoType = videoType;
     isOpenDanmu.value =
         setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
-    danmakuWeight.value =
-        setting.get(SettingBoxKey.danmakuWeight, defaultValue: 0);
-    danmakuFilterRule.value = localCache.get(LocalCacheKey.danmakuFilterRule,
-        defaultValue: []).map<Map<String, dynamic>>((e) {
-      return Map<String, dynamic>.from(e);
-    }).toList();
+    danmakuWeight = setting.get(SettingBoxKey.danmakuWeight, defaultValue: 0);
+    danmakuFilterRule = GStorage.localCache
+        .get(LocalCacheKey.danmakuFilterRule, defaultValue: []);
     blockTypes = setting.get(SettingBoxKey.danmakuBlockType, defaultValue: []);
     showArea = setting.get(SettingBoxKey.danmakuShowArea, defaultValue: 0.5);
     // 不透明度
@@ -364,19 +360,19 @@ class PlPlayerController {
     playRepeat = PlayRepeat.values.toList().firstWhere(
           (e) =>
               e.value ==
-              videoStorage.get(VideoBoxKey.playRepeat,
+              video.get(VideoBoxKey.playRepeat,
                   defaultValue: PlayRepeat.pause.value),
         );
     _playbackSpeed.value =
-        videoStorage.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
+        video.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
     enableAutoLongPressSpeed = setting
         .get(SettingBoxKey.enableAutoLongPressSpeed, defaultValue: false);
     // 后台播放
     _continuePlayInBackground.value = setting
         .get(SettingBoxKey.continuePlayInBackground, defaultValue: false);
     if (!enableAutoLongPressSpeed) {
-      _longPressSpeed.value = videoStorage
-          .get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
+      _longPressSpeed.value =
+          video.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
     }
     enableLongShowControl =
         setting.get(SettingBoxKey.enableLongShowControl, defaultValue: false);
@@ -860,8 +856,7 @@ class PlPlayerController {
 
   // 还原默认速度
   Future<void> setDefaultSpeed() async {
-    double speed =
-        videoStorage.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
+    double speed = video.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
     await _videoPlayerController?.setRate(speed);
     _playbackSpeed.value = speed;
   }
@@ -1073,12 +1068,12 @@ class PlPlayerController {
     int index = attrs.indexOf(_videoFit.value);
     SmartDialog.showToast(videoFitType[index]['toast'],
         displayTime: const Duration(seconds: 1));
-    videoStorage.put(VideoBoxKey.cacheVideoFit, index);
+    video.put(VideoBoxKey.cacheVideoFit, index);
   }
 
   /// 读取fit
   Future<void> getVideoFit() async {
-    int fitValue = videoStorage.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
+    int fitValue = video.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
     var attr = videoFitType[fitValue]['attr'];
     // 由于none与scaleDown涉及视频原始尺寸，需要等待视频加载后再设置，否则尺寸会变为0，出现错误;
     if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
@@ -1088,7 +1083,7 @@ class PlPlayerController {
           if (status == DataStatus.loaded) {
             _dataListenerForVideoFit.cancel();
             int fitValue =
-                videoStorage.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
+                video.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
             var attr = videoFitType[fitValue]['attr'];
             if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
               _videoFit.value = attr;
@@ -1113,7 +1108,7 @@ class PlPlayerController {
   /// 读取亮度
   // Future<void> getVideoBrightness() async {
   //   double brightnessValue =
-  //       videoStorage.get(VideoBoxKey.videoBrightness, defaultValue: 0.5);
+  //       video.get(VideoBoxKey.videoBrightness, defaultValue: 0.5);
   //   setBrightness(brightnessValue);
   // }
 
@@ -1271,11 +1266,11 @@ class PlPlayerController {
 
   setPlayRepeat(PlayRepeat type) {
     playRepeat = type;
-    videoStorage.put(VideoBoxKey.playRepeat, type.value);
+    video.put(VideoBoxKey.playRepeat, type.value);
   }
 
   void putDanmakuSettings() {
-    setting.put(SettingBoxKey.danmakuWeight, danmakuWeight.value);
+    setting.put(SettingBoxKey.danmakuWeight, danmakuWeight);
     setting.put(SettingBoxKey.danmakuBlockType, blockTypes);
     setting.put(SettingBoxKey.danmakuShowArea, showArea);
     setting.put(SettingBoxKey.danmakuOpacity, opacityVal);

@@ -19,10 +19,7 @@ class RecommendSetting extends StatefulWidget {
 }
 
 class _RecommendSettingState extends State<RecommendSetting> {
-  Box setting = GStorage.setting;
-  static Box localCache = GStorage.localCache;
   late dynamic defaultRcmdType;
-  Box userInfoCache = GStorage.userInfo;
   late dynamic userInfo;
   bool userLogin = false;
   late dynamic accessKeyInfo;
@@ -31,15 +28,18 @@ class _RecommendSettingState extends State<RecommendSetting> {
   late int minLikeRatioForRecommend;
   late String banWordForRecommend;
 
+  Box get setting => GStorage.setting;
+
   @override
   void initState() {
     super.initState();
     // 首页默认推荐类型
     defaultRcmdType =
         setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'app');
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin = userInfo != null;
-    accessKeyInfo = localCache.get(LocalCacheKey.accessKey, defaultValue: null);
+    accessKeyInfo =
+        GStorage.localCache.get(LocalCacheKey.accessKey, defaultValue: null);
     // filterUnfollowedRatio = setting
     //     .get(SettingBoxKey.filterUnfollowedRatio, defaultValue: 0);
     minDurationForRcmd =

@@ -5,7 +5,6 @@ import 'package:PiliPalaX/grpc/grpc_repo.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 import '../common/constants.dart';
 import '../models/common/reply_type.dart';
 import '../models/home/rcmd/result.dart';
@@ -30,11 +29,8 @@ import 'login.dart';
 /// 返回{'status': bool, 'data': List}
 /// view层根据 status 判断渲染逻辑
 class VideoHttp {
-  static Box localCache = GStorage.localCache;
-  static Box setting = GStorage.setting;
   static bool enableRcmdDynamic =
-      setting.get(SettingBoxKey.enableRcmdDynamic, defaultValue: true);
-  static Box userInfoCache = GStorage.userInfo;
+      GStorage.setting.get(SettingBoxKey.enableRcmdDynamic, defaultValue: true);
 
   // 首页推荐视频
   static Future<LoadingState> rcmdVideoList(
@@ -76,7 +72,7 @@ class VideoHttp {
       {bool loginStatus = true, required int freshIdx}) async {
     Map<String, String> data = {
       'access_key': loginStatus
-          ? (localCache
+          ? (GStorage.localCache
                   .get(LocalCacheKey.accessKey, defaultValue: {})['value'] ??
               '')
           : '',
@@ -215,9 +211,9 @@ class VideoHttp {
     }
 
     // 免登录查看1080p
-    if ((userInfoCache.get('userInfoCache') == null ||
+    if ((GStorage.userInfo.get('userInfoCache') == null ||
             MineController.anonymity) &&
-        setting.get(SettingBoxKey.p1080, defaultValue: true)) {
+        GStorage.setting.get(SettingBoxKey.p1080, defaultValue: true)) {
       data['try_look'] = 1;
     }
 

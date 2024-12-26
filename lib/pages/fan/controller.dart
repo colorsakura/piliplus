@@ -2,11 +2,9 @@ import 'package:PiliPalaX/http/fan.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class FansController extends CommonController {
-  Box userInfoCache = GStorage.userInfo;
   int ps = 20;
   int total = 0;
   late int? mid;
@@ -17,7 +15,7 @@ class FansController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     mid = Get.parameters['mid'] != null
         ? int.parse(Get.parameters['mid']!)
         : userInfo?.mid;

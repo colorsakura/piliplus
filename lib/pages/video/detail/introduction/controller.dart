@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/http/video.dart';
@@ -60,7 +59,6 @@ class VideoIntroController extends GetxController
   RxBool hasCoin = false.obs;
   // 是否收藏
   RxBool hasFav = false.obs;
-  Box userInfoCache = GStorage.userInfo;
   bool userLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
   List addMediaIdsNew = [];
@@ -85,7 +83,7 @@ class VideoIntroController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     try {
       if (heroTag.isEmpty) {
         heroTag = Get.arguments['heroTag'];
@@ -114,8 +112,8 @@ class VideoIntroController extends GetxController
     }
     userLogin = userInfo != null;
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
-    isShowOnlineTotal =
-        setting.get(SettingBoxKey.enableOnlineTotal, defaultValue: true);
+    isShowOnlineTotal = GStorage.setting
+        .get(SettingBoxKey.enableOnlineTotal, defaultValue: true);
     startTimer();
     queryVideoIntro();
   }

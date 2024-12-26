@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/interceptor_anonymity.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
@@ -17,14 +16,13 @@ class PrivacySetting extends StatefulWidget {
 
 class _PrivacySettingState extends State<PrivacySetting> {
   bool userLogin = false;
-  Box userInfoCache = GStorage.userInfo;
   UserInfoData? userInfo;
   late bool hiddenSettingUnlocked;
 
   @override
   void initState() {
     super.initState();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin = userInfo != null;
     hiddenSettingUnlocked = GStorage.setting
         .get(SettingBoxKey.hiddenSettingUnlocked, defaultValue: false);

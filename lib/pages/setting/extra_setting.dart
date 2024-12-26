@@ -7,11 +7,11 @@ import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
 import 'package:PiliPalaX/models/common/reply_sort_type.dart';
 import 'package:PiliPalaX/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../home/index.dart';
@@ -26,7 +26,6 @@ class ExtraSetting extends StatefulWidget {
 }
 
 class _ExtraSettingState extends State<ExtraSetting> {
-  Box setting = GStorage.setting;
   final SettingController settingController = Get.put(SettingController());
   late dynamic defaultReplySort;
   late dynamic defaultDynamicType;
@@ -35,6 +34,8 @@ class _ExtraSettingState extends State<ExtraSetting> {
   late String defaultSystemProxyHost;
   late String defaultSystemProxyPort;
   bool userLogin = false;
+
+  Box get setting => GStorage.setting;
 
   @override
   void initState() {
@@ -201,8 +202,8 @@ class _ExtraSettingState extends State<ExtraSetting> {
                       TextButton(
                         onPressed: () {
                           Get.back();
-                          GStorage.setting
-                              .put(SettingBoxKey.dynamicPeriod, dynamicPeriod);
+                          setting.put(
+                              SettingBoxKey.dynamicPeriod, dynamicPeriod);
                           Get.find<MainController>().dynamicPeriod =
                               dynamicPeriod;
                         },

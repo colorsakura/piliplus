@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -9,8 +8,6 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
-// import 'package:dio_http2_adapter/dio_http2_adapter.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import '../utils/storage.dart';
 import '../utils/utils.dart';
@@ -25,8 +22,6 @@ class Request {
   static late CookieManager cookieManager;
   static late final Dio dio;
   factory Request() => _instance;
-  Box setting = GStorage.setting;
-  static Box localCache = GStorage.localCache;
   late bool enableSystemProxy;
   late String systemProxyHost;
   late String systemProxyPort;
@@ -35,7 +30,6 @@ class Request {
 
   /// 设置cookie
   static setCookie() async {
-    Box userInfoCache = GStorage.userInfo;
     final String cookiePath = await Utils.getCookiePath();
     final PersistCookieJar cookieJar = PersistCookieJar(
       ignoreExpires: true,
@@ -57,7 +51,7 @@ class Request {
         isHttpOnly: item.httpOnly,
       );
     }
-    final userInfo = userInfoCache.get('userInfoCache');
+    final userInfo = GStorage.userInfo.get('userInfoCache');
     if (userInfo != null && userInfo.mid != null) {
       final List<Cookie> cookie2 = await cookieManager.cookieJar
           .loadForRequest(Uri.parse(HttpString.tUrl));
@@ -146,12 +140,12 @@ class Request {
       headers: {},
     );
 
-    enableSystemProxy = setting.get(SettingBoxKey.enableSystemProxy,
-        defaultValue: false) as bool;
+    enableSystemProxy = GStorage.setting
+        .get(SettingBoxKey.enableSystemProxy, defaultValue: false) as bool;
     systemProxyHost =
-        setting.get(SettingBoxKey.systemProxyHost, defaultValue: '');
+        GStorage.setting.get(SettingBoxKey.systemProxyHost, defaultValue: '');
     systemProxyPort =
-        setting.get(SettingBoxKey.systemProxyPort, defaultValue: '');
+        GStorage.setting.get(SettingBoxKey.systemProxyPort, defaultValue: '');
 
     dio = Dio(options);
 

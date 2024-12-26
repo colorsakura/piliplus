@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/tab_type.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
@@ -12,7 +11,6 @@ class TabbarSetPage extends StatefulWidget {
 }
 
 class _TabbarSetPageState extends State<TabbarSetPage> {
-  Box settingStorage = GStorage.setting;
   late List defaultTabs;
   late List<String> tabbarSort;
 
@@ -20,7 +18,7 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
   void initState() {
     super.initState();
     defaultTabs = tabsConfig;
-    tabbarSort = settingStorage
+    tabbarSort = GStorage.setting
         .get(SettingBoxKey.tabbarSort,
             defaultValue: ['live', 'rcmd', 'hot', 'rank', 'bangumi'])
         .map<String>((i) => i.toString())
@@ -43,7 +41,7 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
         .where((i) => tabbarSort.contains((i['type'] as TabType).id))
         .map<String>((i) => (i['type'] as TabType).id)
         .toList();
-    settingStorage.put(SettingBoxKey.tabbarSort, sortedTabbar);
+    GStorage.setting.put(SettingBoxKey.tabbarSort, sortedTabbar);
     SmartDialog.showToast('保存成功，下次启动时生效');
   }
 

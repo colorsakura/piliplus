@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/models/user/info.dart';
 import 'package:PiliPalaX/models/user/stat.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MineController extends GetxController {
@@ -15,11 +15,12 @@ class MineController extends GetxController {
   // 用户状态 动态、关注、粉丝
   Rx<UserStat> userStat = UserStat().obs;
   RxBool userLogin = false.obs;
-  Box userInfoCache = GStorage.userInfo;
-  Box setting = GStorage.setting;
   Rx<ThemeType> themeType = ThemeType.system.obs;
+
+  static Box get setting => GStorage.setting;
+
   static bool anonymity =
-      GStorage.setting.get(SettingBoxKey.anonymity, defaultValue: false);
+      setting.get(SettingBoxKey.anonymity, defaultValue: false);
 
   ThemeType get nextThemeType =>
       ThemeType.values[(themeType.value.index + 1) % ThemeType.values.length];
@@ -28,8 +29,9 @@ class MineController extends GetxController {
   onInit() {
     super.onInit();
 
-    if (userInfoCache.get('userInfoCache') != null) {
-      userInfo.value = userInfoCache.get('userInfoCache');
+    dynamic userInfoCache = GStorage.userInfo.get('userInfoCache');
+    if (userInfoCache != null) {
+      userInfo.value = userInfoCache;
       userLogin.value = true;
     }
 
@@ -64,7 +66,7 @@ class MineController extends GetxController {
     if (res['status']) {
       if (res['data'].isLogin) {
         userInfo.value = res['data'];
-        userInfoCache.put('userInfoCache', res['data']);
+        GStorage.userInfo.put('userInfoCache', res['data']);
         userLogin.value = true;
       } else {
         resetUserInfo();
@@ -88,7 +90,7 @@ class MineController extends GetxController {
   Future resetUserInfo() async {
     userInfo.value = UserInfoData();
     userStat.value = UserStat();
-    userInfoCache.delete('userInfoCache');
+    GStorage.userInfo.delete('userInfoCache');
     userLogin.value = false;
     anonymity = false;
   }
@@ -132,8 +134,7 @@ class MineController extends GetxController {
                           TextButton(
                               onPressed: () {
                                 SmartDialog.dismiss();
-                                GStorage.setting
-                                    .put(SettingBoxKey.anonymity, true);
+                                setting.put(SettingBoxKey.anonymity, true);
                                 anonymity = true;
                                 SmartDialog.showToast('已设为永久无痕模式');
                               },
@@ -147,8 +148,7 @@ class MineController extends GetxController {
                           TextButton(
                               onPressed: () {
                                 SmartDialog.dismiss();
-                                GStorage.setting
-                                    .put(SettingBoxKey.anonymity, false);
+                                setting.put(SettingBoxKey.anonymity, false);
                                 anonymity = true;
                                 SmartDialog.showToast('已设为临时无痕模式');
                               },
@@ -165,7 +165,7 @@ class MineController extends GetxController {
             );
           });
     } else {
-      GStorage.setting.put(SettingBoxKey.anonymity, false);
+      setting.put(SettingBoxKey.anonymity, false);
       SmartDialog.show(
           clickMaskDismiss: false,
           usePenetrate: true,

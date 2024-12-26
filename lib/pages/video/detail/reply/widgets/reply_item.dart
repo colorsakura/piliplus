@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/common/reply_type.dart';
@@ -20,8 +19,6 @@ import 'package:PiliPalaX/utils/url_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import '../../../../../utils/app_scheme.dart';
 import 'zan.dart';
-
-Box setting = GStorage.setting;
 
 class ReplyItem extends StatelessWidget {
   const ReplyItem({
@@ -746,8 +743,8 @@ class ReplyItem extends StatelessWidget {
           );
         } else {
           String appUrlSchema = '';
-          final bool enableWordRe = setting.get(SettingBoxKey.enableWordRe,
-              defaultValue: false) as bool;
+          final bool enableWordRe = GStorage.setting
+              .get(SettingBoxKey.enableWordRe, defaultValue: false) as bool;
           if (content.jumpUrl[matchStr] != null &&
               !matchedStrs.contains(matchStr)) {
             appUrlSchema = content.jumpUrl[matchStr]['app_url_schema'];

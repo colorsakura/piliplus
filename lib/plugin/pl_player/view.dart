@@ -11,7 +11,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -97,7 +96,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   // final RxDouble _distance = 0.0.obs;
   final RxBool _volumeInterceptEventStream = false.obs;
 
-  Box setting = GStorage.setting;
   late FullScreenMode mode;
   late int defaultBtmProgressBehavior;
   late bool enableQuickDouble;
@@ -161,11 +159,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.headerControl = widget.headerControl;
     plPlayerController.bottomControl = widget.bottomControl;
     plPlayerController.danmuWidget = widget.danmuWidget;
-    defaultBtmProgressBehavior = setting.get(SettingBoxKey.btmProgressBehavior,
+    defaultBtmProgressBehavior = GStorage.setting.get(
+        SettingBoxKey.btmProgressBehavior,
         defaultValue: BtmProgressBehavior.values.first.code);
-    enableQuickDouble =
-        setting.get(SettingBoxKey.enableQuickDouble, defaultValue: true);
-    fullScreenGestureReverse = setting
+    enableQuickDouble = GStorage.setting
+        .get(SettingBoxKey.enableQuickDouble, defaultValue: true);
+    fullScreenGestureReverse = GStorage.setting
         .get(SettingBoxKey.fullScreenGestureReverse, defaultValue: false);
     Future.microtask(() async {
       try {

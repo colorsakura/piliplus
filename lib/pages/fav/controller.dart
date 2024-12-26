@@ -1,13 +1,11 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/user/info.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class FavController extends CommonController {
-  Box userInfoCache = GStorage.userInfo;
-  late final UserInfoData? userInfo = userInfoCache.get('userInfoCache');
+  late final UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');
   int pageSize = 10;
 
   @override

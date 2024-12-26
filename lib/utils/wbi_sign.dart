@@ -9,7 +9,7 @@ import '../http/index.dart';
 import 'storage.dart';
 
 class WbiSign {
-  static Box<dynamic> localCache = GStorage.localCache;
+  static Box get localCache => GStorage.localCache;
   final List<int> mixinKeyEncTab = <int>[
     46,
     47,
@@ -104,7 +104,7 @@ class WbiSign {
     final String queryStr = query.join('&');
     final String wbiSign =
         md5.convert(utf8.encode(queryStr + mixinKey)).toString(); // 计算 w_rid
-    return {'w_rid': wbiSign,'wts': currTime.toString()};
+    return {'w_rid': wbiSign, 'wts': currTime.toString()};
   }
 
   // 获取最新的 img_key 和 sub_key 可以从缓存中获取

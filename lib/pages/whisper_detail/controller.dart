@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/models/msg/session.dart';
 import '../../utils/feed_back.dart';
@@ -18,7 +17,6 @@ class WhisperDetailController extends GetxController {
   //表情转换图片规则
   List<dynamic>? eInfos;
   final TextEditingController replyContentController = TextEditingController();
-  Box userInfoCache = GStorage.userInfo;
 
   @override
   void onInit() {
@@ -73,7 +71,7 @@ class WhisperDetailController extends GetxController {
   }) async {
     feedBack();
     String message = replyContentController.text;
-    final userInfo = userInfoCache.get('userInfoCache');
+    final userInfo = GStorage.userInfo.get('userInfoCache');
     if (userInfo == null) {
       SmartDialog.dismiss();
       SmartDialog.showToast('请先登录');

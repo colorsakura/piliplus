@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -32,6 +33,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
   late String _blockServer;
   late bool _blockTrack;
   bool? _serverStatus;
+
+  Box get setting => GStorage.setting;
 
   @override
   void initState() {
@@ -116,8 +119,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                       Get.back();
                       _blockLimit = max(
                           0.0, double.tryParse(_textController.text) ?? 0.0);
-                      await GStorage.setting
-                          .put(SettingBoxKey.blockLimit, _blockLimit);
+                      await setting.put(SettingBoxKey.blockLimit, _blockLimit);
                       setState(() {});
                     },
                     child: Text('确定'),
@@ -180,8 +182,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     onPressed: () async {
                       Get.back();
                       _userId = Uuid().v4().replaceAll('-', '');
-                      await GStorage.setting
-                          .put(SettingBoxKey.blockUserID, _userId);
+                      await setting.put(SettingBoxKey.blockUserID, _userId);
                       setState(() {});
                     },
                     child: Text('随机'),
@@ -200,8 +201,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                       if (key.currentState?.validate() == true) {
                         Get.back();
                         _userId = _textController.text;
-                        await GStorage.setting
-                            .put(SettingBoxKey.blockUserID, _userId);
+                        await setting.put(SettingBoxKey.blockUserID, _userId);
                         setState(() {});
                       }
                     },
@@ -216,13 +216,13 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
 
   void _updateBlockToast() async {
     _blockToast = !_blockToast;
-    await GStorage.setting.put(SettingBoxKey.blockToast, _blockToast);
+    await setting.put(SettingBoxKey.blockToast, _blockToast);
     setState(() {});
   }
 
   void _updateBlockTrack() async {
     _blockTrack = !_blockTrack;
-    await GStorage.setting.put(SettingBoxKey.blockTrack, _blockTrack);
+    await setting.put(SettingBoxKey.blockTrack, _blockTrack);
     setState(() {});
   }
 
@@ -298,8 +298,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     onPressed: () async {
                       Get.back();
                       _blockServer = HttpString.sponsorBlockBaseUrl;
-                      await GStorage.setting
-                          .put(SettingBoxKey.blockServer, _blockServer);
+                      await setting.put(
+                          SettingBoxKey.blockServer, _blockServer);
                       setState(() {});
                     },
                     child: Text('重置'),
@@ -317,8 +317,8 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                     onPressed: () async {
                       Get.back();
                       _blockServer = _textController.text;
-                      await GStorage.setting
-                          .put(SettingBoxKey.blockServer, _blockServer);
+                      await setting.put(
+                          SettingBoxKey.blockServer, _blockServer);
                       setState(() {});
                     },
                     child: Text('确定'),
@@ -439,7 +439,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                       callback: (Color? color) async {
                         _blockColor[index] =
                             color ?? _blockSettings[index].first.color;
-                        await GStorage.setting.put(
+                        await setting.put(
                             SettingBoxKey.blockColor,
                             _blockColor
                                 .map((item) =>
@@ -491,7 +491,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                 initialValue: _blockSettings[index].second,
                 onSelected: (item) async {
                   _blockSettings[index].second = item;
-                  await GStorage.setting.put(SettingBoxKey.blockSettings,
+                  await setting.put(SettingBoxKey.blockSettings,
                       _blockSettings.map((item) => item.second.index).toList());
                   setState(() {});
                 },

@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/http/video.dart';
@@ -53,7 +52,6 @@ class BangumiIntroController extends CommonController {
   // 是否收藏
   RxBool hasFav = false.obs;
   dynamic videoTags;
-  Box userInfoCache = GStorage.userInfo;
   bool userLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
   List addMediaIdsNew = [];
@@ -84,7 +82,7 @@ class BangumiIntroController extends CommonController {
         // videoItem!['owner'] = args.owner;
       }
     }
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin = userInfo != null;
 
     if (userLogin && epId != null) {

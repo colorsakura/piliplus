@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/user/info.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -11,14 +10,13 @@ import '../../models/user/sub_folder.dart';
 class SubController extends GetxController {
   final ScrollController scrollController = ScrollController();
   Rx<SubFolderModelData> subFolderData = SubFolderModelData().obs;
-  Box userInfoCache = GStorage.userInfo;
   UserInfoData? userInfo;
   int currentPage = 1;
   int pageSize = 20;
   RxBool hasMore = true.obs;
 
   Future<dynamic> querySubFolder({type = 'init'}) async {
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     if (userInfo == null) {
       return {'status': false, 'msg': '账号未登录'};
     }

@@ -8,7 +8,6 @@ import 'package:PiliPalaX/pages/media/view.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import '../../models/common/dynamic_badge_mode.dart';
 import '../../models/common/nav_bar_config.dart';
@@ -19,11 +18,9 @@ class MainController extends GetxController {
 
   final StreamController<bool> bottomBarStream =
       StreamController<bool>.broadcast();
-  Box setting = GStorage.setting;
   late bool hideTabBar;
   late PageController pageController;
   int selectedIndex = 0;
-  Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
   late DynamicBadgeMode dynamicBadgeType;
   late bool checkDynamic;
@@ -36,10 +33,11 @@ class MainController extends GetxController {
     super.onInit();
     checkDynamic = GStorage.checkDynamic;
     dynamicPeriod = GStorage.dynamicPeriod;
-    hideTabBar = setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
-    dynamic userInfo = userInfoCache.get('userInfoCache');
+    hideTabBar =
+        GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
+    dynamic userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin.value = userInfo != null;
-    dynamicBadgeType = DynamicBadgeMode.values[setting.get(
+    dynamicBadgeType = DynamicBadgeMode.values[GStorage.setting.get(
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.code)];
 
@@ -85,7 +83,9 @@ class MainController extends GetxController {
     if (dynIndex == -1 ||
         !userLogin.value ||
         dynamicBadgeType == DynamicBadgeMode.hidden ||
-        !checkDynamic) return;
+        !checkDynamic) {
+      return;
+    }
     int now = DateTime.now().millisecondsSinceEpoch;
     if (now - (_lastCheckAt ?? 0) >= dynamicPeriod * 60 * 1000) {
       _lastCheckAt = now;
@@ -96,13 +96,13 @@ class MainController extends GetxController {
   void setNavBarConfig() async {
     List defaultNavTabs = [...defaultNavigationBars];
     List navBarSort =
-        setting.get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]);
+        GStorage.setting.get(SettingBoxKey.navBarSort, defaultValue: [0, 1, 2]);
     defaultNavTabs.retainWhere((item) => navBarSort.contains(item['id']));
     defaultNavTabs.sort((a, b) =>
         navBarSort.indexOf(a['id']).compareTo(navBarSort.indexOf(b['id'])));
     navigationBars.value = defaultNavTabs;
-    int defaultHomePage =
-        setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;
+    int defaultHomePage = GStorage.setting
+        .get(SettingBoxKey.defaultHomePage, defaultValue: 0) as int;
     int defaultIndex =
         navigationBars.indexWhere((item) => item['id'] == defaultHomePage);
     // 如果找不到匹配项，默认索引设置为0或其他合适的值

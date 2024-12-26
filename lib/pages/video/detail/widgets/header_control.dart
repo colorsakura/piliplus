@@ -55,8 +55,6 @@ class _HeaderControlState extends State<HeaderControl> {
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
   static const TextStyle titleStyle = TextStyle(fontSize: 14);
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
-  final Box<dynamic> localCache = GStorage.localCache;
-  final Box<dynamic> videoStorage = GStorage.video;
   double buttonSpace = 8;
   // bool isFullScreen = false;
   late String heroTag;
@@ -68,6 +66,7 @@ class _HeaderControlState extends State<HeaderControl> {
   Timer? clock;
   late String defaultCDNService;
   bool get isFullScreen => widget.controller!.isFullScreen.value;
+  Box get setting => GStorage.setting;
 
   @override
   void initState() {
@@ -1046,7 +1045,7 @@ class _HeaderControlState extends State<HeaderControl> {
       {'value': 1.0, 'label': '满屏'},
     ];
     // 智能云屏蔽
-    int danmakuWeight = widget.controller!.danmakuWeight.value;
+    int danmakuWeight = widget.controller!.danmakuWeight;
     // 显示区域
     double showArea = widget.controller!.showArea;
     // 不透明度
@@ -1116,7 +1115,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                     arguments: widget.controller)
                               },
                           child: Text(
-                              "屏蔽管理(${widget.controller!.danmakuFilterRule.value.length})")),
+                              "屏蔽管理(${widget.controller!.danmakuFilterRule.length})")),
                     ],
                   ),
                   Padding(
@@ -1143,8 +1142,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '$danmakuWeight',
                         onChanged: (double val) {
                           danmakuWeight = val.toInt();
-                          widget.controller!.danmakuWeight.value =
-                              danmakuWeight;
+                          widget.controller!.danmakuWeight = danmakuWeight;
                           widget.controller!.putDanmakuSettings();
                           setState(() {});
                         },

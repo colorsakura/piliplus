@@ -13,13 +13,11 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:mime/mime.dart';
 
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/pages/whisper_detail/controller.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/models/video/reply/emote.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../utils/storage.dart';
 import 'widget/chat_item.dart';
 
 class WhisperDetailPage extends StatefulWidget {
@@ -31,7 +29,6 @@ class WhisperDetailPage extends StatefulWidget {
 
 class _WhisperDetailPageState extends State<WhisperDetailPage> {
   final _whisperDetailController = Get.put(WhisperDetailController());
-  Box userInfoCache = GStorage.userInfo;
   late final _controller = ChatBottomPanelContainerController<PanelType>();
   late final _focusNode = FocusNode();
   PanelType _currentPanelType = PanelType.none;

@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:PiliPalaX/http/follow.dart';
 import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
 import 'package:PiliPalaX/pages/dynamics/tab/view.dart';
@@ -7,7 +5,6 @@ import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/dynamics.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/models/common/dynamics_type.dart';
@@ -34,11 +31,9 @@ class DynamicsController extends GetxController
   late List<Widget> tabsPageList;
   bool flag = false;
   RxInt initialValue = 0.obs;
-  Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
   dynamic userInfo;
   RxBool isLoadingDynamic = false.obs;
-  Box setting = GStorage.setting;
   List<UpItem> hasUpdatedUps = <UpItem>[];
   List<UpItem> allFollowedUps = <UpItem>[];
   int allFollowedUpsPage = 1;
@@ -46,15 +41,15 @@ class DynamicsController extends GetxController
 
   @override
   void onInit() {
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin.value = userInfo != null;
     super.onInit();
 
     tabController = TabController(
       length: tabsConfig.length,
       vsync: this,
-      initialIndex:
-          setting.get(SettingBoxKey.defaultDynamicType, defaultValue: 0),
+      initialIndex: GStorage.setting
+          .get(SettingBoxKey.defaultDynamicType, defaultValue: 0),
     );
     tabsPageList =
         tabsConfig.map((e) => DynamicsTabPage(dynamicsType: e['tag'])).toList();
@@ -249,8 +244,8 @@ class DynamicsController extends GetxController
       upData.value.upList = [];
       upData.value.liveUsers = LiveUsers();
     }
-    if (setting.get(SettingBoxKey.dynamicsShowAllFollowedUp,
-        defaultValue: false)) {
+    if (GStorage.setting
+        .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
       allFollowedUpsPage = 1;
       Future f1 = DynamicsHttp.followUp();
       Future f2 = FollowHttp.followings(

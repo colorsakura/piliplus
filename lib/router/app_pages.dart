@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:PiliPalaX/pages/member/new/member_page.dart';
 import 'package:PiliPalaX/pages/member/new/widget/edit_profile_page.dart';
 import 'package:PiliPalaX/pages/setting/navigation_bar_set.dart';
@@ -8,7 +6,6 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/create_fav_pag
 import 'package:PiliPalaX/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/pages/msg_feed_top/at_me/view.dart';
 import 'package:PiliPalaX/pages/msg_feed_top/reply_me/view.dart';
 import 'package:PiliPalaX/pages/msg_feed_top/like_me/view.dart';
@@ -59,9 +56,6 @@ import '../pages/video/detail/index.dart';
 import '../pages/video/detail/reply_reply/index.dart';
 import '../pages/whisper/index.dart';
 import '../pages/whisper_detail/index.dart';
-import '../utils/storage.dart';
-
-Box<dynamic> setting = GStorage.setting;
 
 class Routes {
   static final List<GetPage<dynamic>> getPages = [
@@ -187,14 +181,13 @@ class CustomGetPage extends GetPage<dynamic> {
   CustomGetPage({
     required super.name,
     required super.page,
-    this.fullscreen,
+    bool fullscreen = false,
     super.transitionDuration,
   }) : super(
           curve: Curves.linear,
           transition: Transition.native,
           showCupertinoParallax: false,
           popGesture: false,
-          fullscreenDialog: fullscreen != null && fullscreen,
+          fullscreenDialog: fullscreen,
         );
-  bool? fullscreen = false;
 }

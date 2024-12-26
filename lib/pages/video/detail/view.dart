@@ -73,8 +73,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   PlayerStatus playerStatus = PlayerStatus.playing;
   double doubleOffset = 0;
 
-  final Box<dynamic> localCache = GStorage.localCache;
-  final Box<dynamic> setting = GStorage.setting;
   late Future _futureBuilderFuture;
   // 自动退出全屏
   late bool autoExitFullscreen;
@@ -102,6 +100,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   StreamSubscription? _listenerDetail;
   StreamSubscription? _listenerLoadingState;
   StreamSubscription? _listenerCid;
+
+  Box get setting => GStorage.setting;
 
   @override
   void initState() {

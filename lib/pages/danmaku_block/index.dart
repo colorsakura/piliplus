@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 import '../../http/danmaku_block.dart';
@@ -19,7 +18,6 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
   final DanmakuBlockController _danmakuBlockController =
       Get.put(DanmakuBlockController());
   final ScrollController scrollController = ScrollController();
-  Box localCache = GStorage.localCache;
   late PlPlayerController plPlayerController;
 
   static const Map<int, String> ruleLabels = {
@@ -38,7 +36,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     List<Map<String, dynamic>> simpleRuleList = _danmakuBlockController
         .ruleTypes.values
         .expand((element) => element)
@@ -50,10 +48,10 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
       return e.toMap();
     }).toList();
     // debugPrint("simpleRuleList:$simpleRuleList");
-    localCache.put(LocalCacheKey.danmakuFilterRule, simpleRuleList);
-    plPlayerController.danmakuFilterRule.value = simpleRuleList;
-    scrollController.removeListener(() {});
+    plPlayerController.danmakuFilterRule = simpleRuleList;
     scrollController.dispose();
+    await GStorage.localCache.delete(LocalCacheKey.danmakuFilterRule);
+    GStorage.localCache.put(LocalCacheKey.danmakuFilterRule, simpleRuleList);
     super.dispose();
   }
 
@@ -80,6 +78,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
             Text(hintText),
             TextField(
               controller: textController,
+              autofocus: true,
               //decoration: InputDecoration(hintText: hintText),
             )
           ]),

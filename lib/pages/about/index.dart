@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:PiliPalaX/models/github/latest.dart';
 import 'package:PiliPalaX/pages/setting/controller.dart';
@@ -427,7 +426,6 @@ class _AboutPageState extends State<AboutPage> {
 }
 
 class AboutController extends GetxController {
-  Box setting = GStorage.setting;
   final SettingController settingController = Get.put(SettingController());
   RxString currentVersion = ''.obs;
   RxString remoteVersion = ''.obs;

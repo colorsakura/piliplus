@@ -2,7 +2,6 @@ import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/http/video.dart';
@@ -21,7 +20,6 @@ class MemberController extends GetxController {
   late Map userStat;
   RxString face = ''.obs;
   String? heroTag;
-  Box userInfoCache = GStorage.userInfo;
   late int ownerMid;
   bool specialFollowed = false;
   // 投稿列表
@@ -36,7 +34,7 @@ class MemberController extends GetxController {
   void onInit() async {
     super.onInit();
     mid = mid ?? int.parse(Get.parameters['mid']!);
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     ownerMid = userInfo != null ? userInfo.mid : -1;
     try {
       face.value = Get.arguments['face'] ?? '';

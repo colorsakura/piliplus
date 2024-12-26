@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:hive/hive.dart';
 
 class SetSelectItem extends StatefulWidget {
   final String? title;
@@ -19,11 +19,12 @@ class SetSelectItem extends StatefulWidget {
 }
 
 class _SetSelectItemState extends State<SetSelectItem> {
-  Box setting = GStorage.setting;
   late dynamic currentVal;
   late int currentIndex;
   late List menus;
   late List<PopupMenuEntry> popMenuItems;
+
+  Box get setting => GStorage.setting;
 
   @override
   void initState() {

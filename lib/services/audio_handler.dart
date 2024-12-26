@@ -1,6 +1,5 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/models/video_detail_res.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -24,7 +23,6 @@ Future<VideoPlayerServiceHandler> initAudioService() async {
 
 class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   static final List<MediaItem> _item = [];
-  Box setting = GStorage.setting;
   bool enableBackgroundPlay = true;
   // PlPlayerController player = PlPlayerController.getInstance();
 
@@ -33,8 +31,8 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   revalidateSetting() {
-    enableBackgroundPlay =
-        setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);
+    enableBackgroundPlay = GStorage.setting
+        .get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);
   }
 
   @override

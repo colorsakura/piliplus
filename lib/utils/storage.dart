@@ -142,6 +142,9 @@ class GStorage {
   static List<int> get blackMidsList => List<int>.from(GStorage.localCache
       .get(LocalCacheKey.blackMidsList, defaultValue: <int>[]));
 
+  static List get danmakuFilterRule => GStorage.localCache
+      .get(LocalCacheKey.danmakuFilterRule, defaultValue: []);
+
   static void setBlackMidsList(blackMidsList) {
     if (blackMidsList is! List<int>) return;
     GStorage.localCache.put(LocalCacheKey.blackMidsList, blackMidsList);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/follow.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/models/follow/result.dart';
@@ -11,7 +10,6 @@ import 'package:PiliPalaX/utils/storage.dart';
 /// 查看自己的关注时，可以查看分类
 /// 查看其他人的关注时，只可以看全部
 class FollowController extends GetxController with GetTickerProviderStateMixin {
-  Box userInfoCache = GStorage.userInfo;
   int pn = 1;
   int ps = 20;
   int total = 0;
@@ -27,7 +25,7 @@ class FollowController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onInit() {
     super.onInit();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     mid = Get.parameters['mid'] != null
         ? int.parse(Get.parameters['mid']!)
         : userInfo?.mid;

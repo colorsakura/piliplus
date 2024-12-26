@@ -1,9 +1,7 @@
 import 'package:PiliPalaX/pages/rank/zone/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/rank_type.dart';
-import 'package:PiliPalaX/utils/storage.dart';
 
 class RankController extends GetxController with GetTickerProviderStateMixin {
   bool flag = false;
@@ -11,7 +9,6 @@ class RankController extends GetxController with GetTickerProviderStateMixin {
   RxInt initialIndex = 0.obs;
   late TabController tabController;
   late List<Widget> tabsPageList;
-  Box setting = GStorage.setting;
   // late final StreamController<bool> searchBarStream =
   //     StreamController<bool>.broadcast();
   late bool enableGradientBg;

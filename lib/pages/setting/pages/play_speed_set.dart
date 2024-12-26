@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/pages/setting/widgets/switch_item.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:hive/hive.dart';
 
 class PlaySpeedPage extends StatefulWidget {
   const PlaySpeedPage({super.key});
@@ -45,15 +45,17 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
     },
   ];
 
+  Box get video => GStorage.video;
+
   @override
   void initState() {
     super.initState();
     // 默认倍速
     playSpeedDefault =
-        videoStorage.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
+        video.get(VideoBoxKey.playSpeedDefault, defaultValue: 1.0);
     // 默认长按倍速
     longPressSpeedDefault =
-        videoStorage.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
+        video.get(VideoBoxKey.longPressSpeedDefault, defaultValue: 3.0);
     // 倍速
     speedList = GStorage.speedList;
     enableAutoLongPressSpeed = GStorage.setting
@@ -113,7 +115,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                   Get.back();
                   speedList.add(customSpeed);
                   speedList.sort();
-                  await videoStorage.put(VideoBoxKey.speedsList, speedList);
+                  await video.put(VideoBoxKey.speedsList, speedList);
                   setState(() {});
                 }
               },
@@ -165,12 +167,11 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
     if (id == 1) {
       // 设置默认倍速
       playSpeedDefault = speed;
-      videoStorage.put(VideoBoxKey.playSpeedDefault, playSpeedDefault);
+      video.put(VideoBoxKey.playSpeedDefault, playSpeedDefault);
     } else if (id == 2) {
       // 设置默认长按倍速
       longPressSpeedDefault = speed;
-      videoStorage.put(
-          VideoBoxKey.longPressSpeedDefault, longPressSpeedDefault);
+      video.put(VideoBoxKey.longPressSpeedDefault, longPressSpeedDefault);
     } else if (id == -1) {
       if ([
         1.0,
@@ -181,7 +182,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         return;
       }
       speedList.removeAt(index);
-      await videoStorage.put(VideoBoxKey.speedsList, speedList);
+      await video.put(VideoBoxKey.speedsList, speedList);
     }
     setState(() {});
   }
@@ -194,7 +195,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         actions: [
           TextButton(
             onPressed: () async {
-              await videoStorage.delete(VideoBoxKey.speedsList);
+              await video.delete(VideoBoxKey.speedsList);
               speedList = GStorage.speedList;
               setState(() {});
             },

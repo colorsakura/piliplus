@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/danmaku/dm.pb.dart';
 import 'package:PiliPalaX/pages/danmaku/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -28,10 +27,10 @@ class PlDanmaku extends StatefulWidget {
 }
 
 class _PlDanmakuState extends State<PlDanmaku> {
-  late PlPlayerController playerController;
+  PlPlayerController get playerController => widget.playerController;
+
   late PlDanmakuController _plDanmakuController;
   DanmakuController? _controller;
-  Box setting = GStorage.setting;
   late bool enableShowDanmaku;
   int latestAddedPosition = -1;
   bool? _isFullScreen;
@@ -41,24 +40,20 @@ class _PlDanmakuState extends State<PlDanmaku> {
   @override
   void initState() {
     super.initState();
-    enableShowDanmaku =
-        setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
+    enableShowDanmaku = GStorage.setting
+        .get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
     _plDanmakuController = PlDanmakuController(
-        widget.cid,
-        widget.playerController.danmakuWeight,
-        widget.playerController.danmakuFilterRule);
-
-    if (mounted) {
-      playerController = widget.playerController;
-      if (enableShowDanmaku || playerController.isOpenDanmu.value) {
-        _plDanmakuController.initiate(
-            playerController.duration.value.inMilliseconds,
-            playerController.position.value.inMilliseconds);
-      }
-      playerController
-        ..addStatusLister(playerListener)
-        ..addPositionListener(videoPositionListen);
+      widget.cid,
+      playerController,
+    );
+    if (enableShowDanmaku || playerController.isOpenDanmu.value) {
+      _plDanmakuController.initiate(
+          playerController.duration.value.inMilliseconds,
+          playerController.position.value.inMilliseconds);
     }
+    playerController
+      ..addStatusLister(playerListener)
+      ..addPositionListener(videoPositionListen);
     _listenerDanmaku = playerController.isOpenDanmu.listen((p0) {
       if (p0 && !_plDanmakuController.initiated) {
         _plDanmakuController.initiate(

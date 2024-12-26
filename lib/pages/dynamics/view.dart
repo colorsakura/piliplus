@@ -8,10 +8,8 @@ import 'package:PiliPalaX/models/common/up_panel_position.dart';
 import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,7 +36,6 @@ class _DynamicsPageState extends State<DynamicsPage>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
   late Future _futureBuilderFutureUp;
-  Box userInfoCache = GStorage.userInfo;
   late UpPanelPosition upPanelPosition;
   StreamSubscription? _listener;
 
@@ -99,7 +96,7 @@ class _DynamicsPageState extends State<DynamicsPage>
         });
       }
     });
-    upPanelPosition = UpPanelPosition.values[setting.get(
+    upPanelPosition = UpPanelPosition.values[GStorage.setting.get(
         SettingBoxKey.upPanelPosition,
         defaultValue: UpPanelPosition.leftFixed.index)];
     debugPrint('upPanelPosition: $upPanelPosition');

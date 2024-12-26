@@ -5,7 +5,6 @@ import 'package:PiliPalaX/grpc/grpc_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPalaX/pages/dynamics/index.dart';
 import 'package:PiliPalaX/pages/home/index.dart';
@@ -31,7 +30,6 @@ class _MainAppState extends State<MainApp>
   final DynamicsController _dynamicController = Get.put(DynamicsController());
 
   int? _lastSelectTime; //上次点击时间
-  Box setting = GStorage.setting;
   late bool enableMYBar;
   late bool useSideBar;
 
@@ -41,8 +39,10 @@ class _MainAppState extends State<MainApp>
     _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
     _mainController.pageController =
         PageController(initialPage: _mainController.selectedIndex);
-    enableMYBar = setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
-    useSideBar = setting.get(SettingBoxKey.useSideBar, defaultValue: false);
+    enableMYBar =
+        GStorage.setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
+    useSideBar =
+        GStorage.setting.get(SettingBoxKey.useSideBar, defaultValue: false);
     WidgetsBinding.instance.addObserver(this);
   }
 

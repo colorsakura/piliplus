@@ -219,12 +219,13 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
 }
 
 class ColorSelectController extends GetxController {
-  Box setting = GStorage.setting;
   RxBool dynamicColor = true.obs;
   RxInt type = 0.obs;
   late final List<Map<String, dynamic>> colorThemes;
   RxInt currentColor = 0.obs;
   RxDouble currentTextScale = 1.0.obs;
+
+  Box get setting => GStorage.setting;
 
   @override
   void onInit() {

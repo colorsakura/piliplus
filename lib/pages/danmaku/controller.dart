@@ -1,15 +1,15 @@
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/models/danmaku/dm.pb.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:PiliPalaX/plugin/pl_player/controller.dart';
 
 class PlDanmakuController {
   PlDanmakuController(
-      this.cid, this.danmakuWeightNotifier, this.danmakuFilterNotifier);
+    this.cid,
+    this.plPlayerController,
+  );
   final int cid;
-  final ValueNotifier<int> danmakuWeightNotifier;
-  final ValueNotifier<List<Map<String, dynamic>>> danmakuFilterNotifier;
-  int danmakuWeight = 0;
-  List<Map<String, dynamic>> danmakuFilter = [];
+  final PlPlayerController plPlayerController;
+
   Map<int, List<DanmakuElem>> dmSegMap = {};
   // 已请求的段落标记
   List<bool> requestedSeg = [];
@@ -22,16 +22,6 @@ class PlDanmakuController {
     if (videoDuration <= 0) {
       return;
     }
-    danmakuWeightNotifier.addListener(() {
-      debugPrint(
-          "danmakuWeight changed from $danmakuWeight to ${danmakuWeightNotifier.value}");
-      danmakuWeight = danmakuWeightNotifier.value;
-    });
-    danmakuFilterNotifier.addListener(() {
-      debugPrint(
-          "danmakuFilter changed from $danmakuFilter to ${danmakuFilterNotifier.value}");
-      danmakuFilter = danmakuFilterNotifier.value;
-    });
     if (requestedSeg.isEmpty) {
       int segCount = (videoDuration / segmentLength).ceil();
       requestedSeg = List<bool>.generate(segCount, (index) => false);
@@ -40,9 +30,6 @@ class PlDanmakuController {
   }
 
   void dispose() {
-    danmakuWeightNotifier.removeListener(() {});
-    danmakuFilterNotifier.removeListener(() {});
-    danmakuFilter.clear();
     dmSegMap.clear();
     requestedSeg.clear();
   }
@@ -78,18 +65,20 @@ class PlDanmakuController {
     if (!requestedSeg[segmentIndex]) {
       queryDanmaku(segmentIndex);
     }
-    if (danmakuWeight == 0 && danmakuFilter.isEmpty) {
+    if (plPlayerController.danmakuWeight == 0 &&
+        plPlayerController.danmakuFilterRule.isEmpty) {
       return dmSegMap[progress ~/ 100];
     } else {
       return dmSegMap[progress ~/ 100]
-          ?.where((element) => element.weight >= danmakuWeight)
+          ?.where(
+              (element) => element.weight >= plPlayerController.danmakuWeight)
           .where(filterDanmaku)
           .toList();
     }
   }
 
   bool filterDanmaku(DanmakuElem elem) {
-    for (var filter in danmakuFilter) {
+    for (var filter in plPlayerController.danmakuFilterRule) {
       switch (filter['type']) {
         case 0:
           if (elem.content.contains(filter['filter'])) {

@@ -1,4 +1,4 @@
-// import 'dart:math';
+import 'package:hive/hive.dart';
 
 import 'storage.dart';
 
@@ -9,12 +9,14 @@ class RecommendFilter {
   static late bool exemptFilterForFollowed;
   static late bool applyFilterToRelatedVideos;
   static late String banWords;
+
   RecommendFilter() {
     update();
   }
 
+  static Box get setting => GStorage.setting;
+
   static void update() {
-    var setting = GStorage.setting;
     // filterUnfollowedRatio =
     //     setting.get(SettingBoxKey.filterUnfollowedRatio, defaultValue: 0);
     minDurationForRcmd =

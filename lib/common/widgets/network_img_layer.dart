@@ -1,12 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
-import '../../utils/storage.dart';
 import '../constants.dart';
-
-Box<dynamic> setting = GStorage.setting;
 
 class NetworkImgLayer extends StatelessWidget {
   const NetworkImgLayer({

@@ -3,12 +3,10 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class MediaController extends CommonController {
-  Box userInfoCache = GStorage.userInfo;
   RxBool userLogin = false.obs;
   List list = [
     {
@@ -50,7 +48,7 @@ class MediaController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     userLogin.value = userInfo != null;
 
     if (userLogin.value) {

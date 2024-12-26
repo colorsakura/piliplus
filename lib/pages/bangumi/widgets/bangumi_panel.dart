@@ -4,7 +4,6 @@ import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
@@ -35,7 +34,6 @@ class _BangumiPanelState extends State<BangumiPanel> {
   late int currentIndex;
   final ScrollController listViewScrollCtr = ScrollController();
   final ScrollController listViewScrollCtr_2 = ScrollController();
-  Box userInfoCache = GStorage.userInfo;
   dynamic userInfo;
   // 默认未开通
   int vipStatus = 0;
@@ -49,7 +47,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
     cid = widget.cid!;
     currentIndex = widget.pages.indexWhere((e) => e.cid == cid);
     scrollToIndex();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     if (userInfo != null) {
       vipStatus = userInfo.vipStatus;
     }

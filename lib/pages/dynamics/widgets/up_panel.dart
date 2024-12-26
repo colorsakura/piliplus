@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/models/dynamics/up.dart';
 import 'package:PiliPalaX/models/live/item.dart';
@@ -22,7 +21,6 @@ class _UpPanelState extends State<UpPanel> {
   int currentMid = -1;
   List<UpItem> upList = [];
   List<LiveUserItem> liveList = [];
-  Box userInfoCache = GStorage.userInfo;
   dynamic userInfo;
   bool _showLiveItems = false;
   late DynamicsController dynamicsController;
@@ -30,7 +28,7 @@ class _UpPanelState extends State<UpPanel> {
   @override
   void initState() {
     super.initState();
-    userInfo = userInfoCache.get('userInfoCache');
+    userInfo = GStorage.userInfo.get('userInfoCache');
     dynamicsController = Get.find<DynamicsController>();
   }
 

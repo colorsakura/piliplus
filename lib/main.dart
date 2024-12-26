@@ -97,9 +97,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  Box get setting => GStorage.setting;
+
   @override
   Widget build(BuildContext context) {
-    Box setting = GStorage.setting;
     // 主题色
     Color defaultColor =
         colorThemeTypes[setting.get(SettingBoxKey.customColor, defaultValue: 0)]

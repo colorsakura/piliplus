@@ -34,6 +34,7 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:PiliPalaX/utils/video_utils.dart';
+import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../../utils/id_utils.dart';
@@ -206,6 +207,8 @@ class VideoDetailController extends GetxController
   Floating? floating;
   late PreferredSizeWidget headerControl;
 
+  Box get setting => GStorage.setting;
+
   // late bool enableCDN;
   int? cacheVideoQa;
   late String cacheDecode;
@@ -285,7 +288,7 @@ class VideoDetailController extends GetxController
     hwdec.value = setting.get(SettingBoxKey.hardwareDecoding,
         defaultValue: Platform.isAndroid ? 'auto-safe' : 'auto');
     if (userInfo == null ||
-        localCache.get(LocalCacheKey.historyPause) == true) {
+        GStorage.localCache.get(LocalCacheKey.historyPause) == true) {
       enableHeart = false;
     }
     danmakuCid.value = cid.value;
