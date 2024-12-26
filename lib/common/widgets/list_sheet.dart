@@ -43,7 +43,7 @@ class ListSheetContent extends StatefulWidget {
 class _ListSheetContentState extends State<ListSheetContent>
     with TickerProviderStateMixin {
   late List<ItemScrollController> itemScrollController = [];
-  int? currentIndex;
+  late int currentIndex = _currentIndex;
   late List<bool> reverse;
 
   int get _index => widget.index ?? 0;
@@ -85,7 +85,6 @@ class _ListSheetContentState extends State<ListSheetContent>
     reverse = _isList
         ? List.generate(widget.season.sections.length, (_) => false)
         : [false];
-    currentIndex = _currentIndex;
     if (widget.bvid != null && widget.season != null) {
       _favStream ??= StreamController<int>();
       () async {
@@ -97,9 +96,9 @@ class _ListSheetContentState extends State<ListSheetContent>
       }();
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentIndex != null) {
-        itemScrollController[_index].jumpTo(index: currentIndex!);
-      }
+      try {
+        itemScrollController[_index].jumpTo(index: currentIndex);
+      } catch (_) {}
     });
   }
 
@@ -279,32 +278,36 @@ class _ListSheetContentState extends State<ListSheetContent>
                   tooltip: '跳至顶部',
                   icon: Icons.vertical_align_top,
                   onPressed: () {
-                    itemScrollController[_ctr?.index ?? 0].scrollTo(
-                      index: !reverse[_ctr?.index ?? 0]
-                          ? 0
-                          : _isList
-                              ? widget.season.sections[_ctr?.index].episodes
-                                      .length -
-                                  1
-                              : widget.episodes.length - 1,
-                      duration: const Duration(milliseconds: 200),
-                    );
+                    try {
+                      itemScrollController[_ctr?.index ?? 0].scrollTo(
+                        index: !reverse[_ctr?.index ?? 0]
+                            ? 0
+                            : _isList
+                                ? widget.season.sections[_ctr?.index].episodes
+                                        .length -
+                                    1
+                                : widget.episodes.length - 1,
+                        duration: const Duration(milliseconds: 200),
+                      );
+                    } catch (_) {}
                   },
                 ),
                 _mediumButton(
                   tooltip: '跳至底部',
                   icon: Icons.vertical_align_bottom,
                   onPressed: () {
-                    itemScrollController[_ctr?.index ?? 0].scrollTo(
-                      index: !reverse[_ctr?.index ?? 0]
-                          ? _isList
-                              ? widget.season.sections[_ctr?.index].episodes
-                                      .length -
-                                  1
-                              : widget.episodes.length - 1
-                          : 0,
-                      duration: const Duration(milliseconds: 200),
-                    );
+                    try {
+                      itemScrollController[_ctr?.index ?? 0].scrollTo(
+                        index: !reverse[_ctr?.index ?? 0]
+                            ? _isList
+                                ? widget.season.sections[_ctr?.index].episodes
+                                        .length -
+                                    1
+                                : widget.episodes.length - 1
+                            : 0,
+                        duration: const Duration(milliseconds: 200),
+                      );
+                    } catch (_) {}
                   },
                 ),
                 _mediumButton(
@@ -315,12 +318,12 @@ class _ListSheetContentState extends State<ListSheetContent>
                       _ctr?.animateTo(_index);
                       await Future.delayed(const Duration(milliseconds: 225));
                     }
-                    if (currentIndex != null) {
+                    try {
                       itemScrollController[_ctr?.index ?? 0].scrollTo(
-                        index: currentIndex!,
+                        index: currentIndex,
                         duration: const Duration(milliseconds: 200),
                       );
-                    }
+                    } catch (_) {}
                   },
                 ),
                 const Spacer(),

@@ -8,7 +8,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart';
 import 'package:PiliPalaX/pages/video/detail/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class BangumiPanel extends StatefulWidget {
   const BangumiPanel({
@@ -42,7 +41,6 @@ class _BangumiPanelState extends State<BangumiPanel> {
   int vipStatus = 0;
   late int cid;
   late final VideoDetailController videoDetailCtr;
-  final ItemScrollController itemScrollController = ItemScrollController();
   StreamSubscription? _listener;
 
   @override

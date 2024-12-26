@@ -97,10 +97,12 @@ class VideoReplyReplyController extends CommonController
             ).animate(controller!);
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               if (index != null) {
-                itemScrollCtr.jumpTo(
-                  index: hasRoot ? index! + 3 : index! + 1,
-                  alignment: 0.25,
-                );
+                try {
+                  itemScrollCtr.jumpTo(
+                    index: hasRoot ? index! + 3 : index! + 1,
+                    alignment: 0.25,
+                  );
+                } catch (_) {}
                 await Future.delayed(const Duration(milliseconds: 800));
                 await controller?.forward();
                 index = null;

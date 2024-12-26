@@ -42,7 +42,9 @@ class _MediaListPanelState extends State<MediaListPanel> {
       int index =
           widget.mediaList.indexWhere((item) => item.bvid == widget.bvid);
       if (index != -1 && index != 0) {
-        _scrollController.jumpTo(index: index);
+        try {
+          _scrollController.jumpTo(index: index);
+        } catch (_) {}
       }
     });
   }
