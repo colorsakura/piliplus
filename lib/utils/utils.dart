@@ -17,7 +17,6 @@ import 'package:PiliPalaX/pages/video/detail/introduction/widgets/group_panel.da
 import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -31,16 +30,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 
-extension ConnectivityResultExt on ConnectivityResult {
-  String get title => ['蓝牙', 'Wi-Fi', '局域', '流量', '无', '代理', '其他'][index];
-}
-
 class Utils {
   static final Random random = Random();
-
-  static Future<ConnectivityResult> checkConnectivity() async {
-    return (await Connectivity().checkConnectivity()).first;
-  }
 
   static Future<dynamic> getWwebid(mid) async {
     try {

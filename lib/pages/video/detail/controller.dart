@@ -1013,18 +1013,18 @@ class VideoDetailController extends GetxController
   // 视频链接
   Future queryVideoUrl() async {
     if (cacheVideoQa == null) {
-      await Utils.checkConnectivity().then((res) {
-        cacheVideoQa = res == ConnectivityResult.mobile
-            ? setting.get(SettingBoxKey.defaultVideoQaCellular,
-                defaultValue: VideoQuality.high1080.code)
-            : setting.get(SettingBoxKey.defaultVideoQa,
-                defaultValue: VideoQuality.values.last.code);
+      await Connectivity().checkConnectivity().then((res) {
+        cacheVideoQa = res.contains(ConnectivityResult.wifi)
+            ? setting.get(SettingBoxKey.defaultVideoQa,
+                defaultValue: VideoQuality.values.last.code)
+            : setting.get(SettingBoxKey.defaultVideoQaCellular,
+                defaultValue: VideoQuality.high1080.code);
 
-        cacheAudioQa = res == ConnectivityResult.mobile
-            ? setting.get(SettingBoxKey.defaultAudioQaCellular,
-                defaultValue: AudioQuality.k192.code)
-            : setting.get(SettingBoxKey.defaultAudioQa,
-                defaultValue: AudioQuality.hiRes.code);
+        cacheAudioQa = res.contains(ConnectivityResult.wifi)
+            ? setting.get(SettingBoxKey.defaultAudioQa,
+                defaultValue: AudioQuality.hiRes.code)
+            : setting.get(SettingBoxKey.defaultAudioQaCellular,
+                defaultValue: AudioQuality.k192.code);
       });
     }
     var result = await VideoHttp.videoUrl(cid: cid.value, bvid: bvid);
