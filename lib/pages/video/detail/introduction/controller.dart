@@ -780,7 +780,7 @@ class VideoIntroController extends GetxController
 
   // ai总结
   Future aiConclusion() async {
-    SmartDialog.showLoading(msg: '正在生产ai总结');
+    SmartDialog.showLoading(msg: '正在获取AI总结');
     final res = await VideoHttp.aiConclusion(
       bvid: bvid,
       cid: lastPlayCid.value,

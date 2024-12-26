@@ -335,14 +335,14 @@ class _ExtraSettingState extends State<ExtraSetting> {
             defaultVal: false,
           ),
           const SetSwitchItem(
-            title: '启用ai总结',
-            subTitle: '视频详情页开启ai总结',
+            title: '启用AI总结',
+            subTitle: '视频详情页开启AI总结',
             leading: Icon(Icons.engineering_outlined),
             setKey: SettingBoxKey.enableAi,
             defaultVal: true,
           ),
           const SetSwitchItem(
-            title: '消息页禁用“收到的赞”功能',
+            title: '消息页禁用"收到的赞"功能',
             subTitle: '禁止打开入口，降低网络社交依赖',
             leading: Icon(Icons.beach_access_outlined),
             setKey: SettingBoxKey.disableLikeMsg,
@@ -350,7 +350,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
           ),
           const SetSwitchItem(
             title: '默认展示评论区',
-            subTitle: '在视频详情页默认切换至评论区页（仅tab型布局）',
+            subTitle: '在视频详情页默认切换至评论区页（仅Tab型布局）',
             leading: Icon(Icons.mode_comment_outlined),
             setKey: SettingBoxKey.defaultShowComment,
             defaultVal: false,

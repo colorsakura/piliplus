@@ -97,6 +97,9 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   controller: _textController,
                   autofocus: true,
                   decoration: InputDecoration(suffixText: 's'),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[\d\.]+')),
+                  ],
                 ),
                 actions: [
                   TextButton(
@@ -541,7 +544,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
           _dividerL,
           SliverToBoxAdapter(
               child: SizedBox(
-            height: 25 + MediaQuery.paddingOf(context).bottom,
+            height: 55 + MediaQuery.paddingOf(context).bottom,
           )),
         ],
       ),
