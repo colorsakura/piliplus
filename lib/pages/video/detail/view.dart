@@ -1415,9 +1415,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       return Stack(
         children: [
           introPanel(),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
+          Positioned(
             left: 12,
             right: 12,
             bottom: MediaQuery.of(context).padding.bottom + 12,

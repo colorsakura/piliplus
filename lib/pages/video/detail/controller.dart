@@ -329,16 +329,17 @@ class VideoDetailController extends GetxController
   }
 
   void getMediaList() async {
-    if (mediaList.length >= Get.arguments['count']) {
+    if (Get.arguments['count'] != null &&
+        mediaList.length >= Get.arguments['count']) {
       return;
     }
     var res = await UserHttp.getMediaList(
-      type: _mediaType,
+      type: Get.arguments['mediaType'] ?? _mediaType,
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
       oid: mediaList.isEmpty ? null : mediaList.last.id,
       otype: mediaList.isEmpty ? null : mediaList.last.type,
-      desc: _mediaType == 2 ? false : true,
+      desc: _mediaType == 2 || Get.arguments['mediaType'] == '8' ? false : true,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {

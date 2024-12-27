@@ -27,7 +27,7 @@ class MediaListPanel extends StatefulWidget {
   final String? panelTitle;
   final String? bvid;
   final VoidCallback loadMoreMedia;
-  final int count;
+  final int? count;
 
   @override
   State<MediaListPanel> createState() => _MediaListPanelState();
@@ -84,7 +84,8 @@ class _MediaListPanelState extends State<MediaListPanel> {
                   itemBuilder: ((context, index) {
                     var item = widget.mediaList[index];
                     if (index == widget.mediaList.length - 1 &&
-                        widget.mediaList.length < widget.count) {
+                        (widget.count == null ||
+                            widget.mediaList.length < widget.count!)) {
                       widget.loadMoreMedia();
                     }
                     return InkWell(
@@ -158,6 +159,10 @@ class _MediaListPanelState extends State<MediaListPanel> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
+                                              fontWeight:
+                                                  item.bvid == widget.bvid
+                                                      ? FontWeight.bold
+                                                      : null,
                                               color: item.bvid == widget.bvid
                                                   ? Theme.of(context)
                                                       .colorScheme

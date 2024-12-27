@@ -113,7 +113,11 @@ class MemberVideoCtr extends CommonController {
               'oid': IdUtils.bv2av(element.bvid!), // TODO: continue playing
               'favTitle':
                   '$username: ${title ?? episodicButton?.text ?? '播放全部'}',
-              'count': count.value,
+              if (seriesId == null) 'count': count.value,
+              if (seasonId != null || seriesId != null)
+                'mediaType': RegExp(r'page_type=([\d]+)')
+                    .firstMatch('${episodicButton?.uri}')
+                    ?.group(1),
             },
           );
           break;
