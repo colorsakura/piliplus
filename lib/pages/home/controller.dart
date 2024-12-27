@@ -50,15 +50,19 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void onRefresh() {
-    int index = tabController.index;
-    var ctr = tabsCtrList[index];
-    ctr().onRefresh();
+    try {
+      int index = tabController.index;
+      var ctr = tabsCtrList[index];
+      ctr().onRefresh();
+    } catch (_) {}
   }
 
   void animateToTop() {
-    int index = tabController.index;
-    var ctr = tabsCtrList[index];
-    ctr().animateToTop();
+    try {
+      int index = tabController.index;
+      var ctr = tabsCtrList[index];
+      ctr().animateToTop();
+    } catch (_) {}
   }
 
   // 更新登录状态
