@@ -1415,46 +1415,44 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       return Stack(
         children: [
           introPanel(),
-          Obx(
-            () => AnimatedPositioned(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeInOut,
-              left: 12,
-              right: 12,
-              bottom: MediaQuery.of(context).padding.bottom + 12,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: videoDetailController.showMediaListPanel,
-                  borderRadius: const BorderRadius.all(Radius.circular(14)),
-                  child: Container(
-                    height: 54,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondaryContainer
-                          .withOpacity(0.95),
-                      borderRadius: const BorderRadius.all(Radius.circular(14)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.playlist_play, size: 24),
-                        const SizedBox(width: 10),
-                        Text(
-                          videoDetailController.watchLaterTitle.value,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.2,
-                          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+            left: 12,
+            right: 12,
+            bottom: MediaQuery.of(context).padding.bottom + 12,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: videoDetailController.showMediaListPanel,
+                borderRadius: const BorderRadius.all(Radius.circular(14)),
+                child: Container(
+                  height: 54,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.95),
+                    borderRadius: const BorderRadius.all(Radius.circular(14)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.playlist_play, size: 24),
+                      const SizedBox(width: 10),
+                      Text(
+                        videoDetailController.watchLaterTitle,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.2,
                         ),
-                        const Spacer(),
-                        const Icon(Icons.keyboard_arrow_up_rounded, size: 26),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      const Icon(Icons.keyboard_arrow_up_rounded, size: 26),
+                    ],
                   ),
                 ),
               ),

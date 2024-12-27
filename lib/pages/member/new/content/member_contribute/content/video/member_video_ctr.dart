@@ -1,9 +1,14 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/models/space_archive/data.dart';
+import 'package:PiliPalaX/models/space_archive/episodic_button.dart';
+import 'package:PiliPalaX/models/space_archive/item.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
+import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:PiliPalaX/utils/utils.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class MemberVideoCtr extends CommonController {
@@ -12,6 +17,8 @@ class MemberVideoCtr extends CommonController {
     required this.mid,
     required this.seasonId,
     required this.seriesId,
+    this.username,
+    this.title,
   });
 
   ContributeType type;
@@ -23,6 +30,9 @@ class MemberVideoCtr extends CommonController {
   RxString sort = 'desc'.obs;
   RxInt count = (-1).obs;
   int? next;
+  EpisodicButton? episodicButton;
+  final String? username;
+  final String? title;
 
   @override
   Future onRefresh() async {
@@ -43,6 +53,7 @@ class MemberVideoCtr extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     Data data = response.response;
+    episodicButton = data.episodicButton;
     next = data.next;
     aid = data.item?.lastOrNull?.param;
     isEnd =
@@ -79,5 +90,35 @@ class MemberVideoCtr extends CommonController {
     }
     loadingState.value = LoadingState.loading();
     onRefresh();
+  }
+
+  void toViewPlayAll() {
+    if (loadingState.value is Success) {
+      List<Item> list = (loadingState.value as Success).response;
+      for (Item element in list) {
+        if (element.firstCid == null) {
+          continue;
+        } else {
+          if (element.bvid != list.first.bvid) {
+            SmartDialog.showToast('已跳过不支持播放的视频');
+          }
+          final String heroTag = Utils.makeHeroTag(element.bvid);
+          Get.toNamed(
+            '/video?bvid=${element.bvid}&cid=${element.firstCid}',
+            arguments: {
+              'videoItem': element,
+              'heroTag': heroTag,
+              'sourceType': 'archive',
+              'mediaId': seasonId ?? seriesId ?? mid,
+              'oid': IdUtils.bv2av(element.bvid!), // TODO: continue playing
+              'favTitle':
+                  '$username: ${title ?? episodicButton?.text ?? '播放全部'}',
+              'count': count.value,
+            },
+          );
+          break;
+        }
+      }
+    }
   }
 }

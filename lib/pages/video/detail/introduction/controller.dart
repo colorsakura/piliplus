@@ -95,7 +95,13 @@ class VideoIntroController extends GetxController
         preRender = true;
         var args = Get.arguments['videoItem'];
         var keys = Get.arguments.keys.toList();
-        videoItem!['pic'] = args.pic;
+        try {
+          if (args.pic != null && args.pic != '') {
+            videoItem!['pic'] = args.pic;
+          } else if (args.cover != null && args.cover != '') {
+            videoItem!['pic'] = args.cover;
+          }
+        } catch (_) {}
         if (args.title is String) {
           videoItem!['title'] = args.title;
         } else {
@@ -693,7 +699,7 @@ class VideoIntroController extends GetxController
 
     if (videoDetailController.isPlayAll &&
         currentIndex == episodes.length - 2) {
-      videoDetailCtr.loadMoreMedia();
+      videoDetailCtr.getMediaList();
     }
 
     // 列表循环

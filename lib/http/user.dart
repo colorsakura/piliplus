@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:html/parser.dart';
 import '../common/constants.dart';
 import '../models/model_hot_video_item.dart';
 import '../models/user/fav_detail.dart';
@@ -517,7 +514,9 @@ class UserHttp {
     required int bizId,
     required int ps,
     int? oid,
-    int otype = 2,
+    int? otype,
+    bool withCurrent = false,
+    bool desc = true,
   }) async {
     var res = await Request().get(
       Api.mediaList,
@@ -525,14 +524,14 @@ class UserHttp {
         'mobi_app': 'web',
         'type': type,
         'biz_id': bizId,
-        'oid': oid ?? '',
-        'otype': otype, // video:2 // bangumi: 24
+        if (oid != null) 'oid': oid,
+        if (otype != null) 'otype': otype, // video:2 // bangumi: 24
         'ps': ps,
         'direction': false,
-        'desc': true,
+        'desc': desc,
         'sort_field': 1,
         'tid': 0,
-        'with_current': false,
+        'with_current': withCurrent,
       },
     );
     if (res.data['code'] == 0) {
@@ -551,30 +550,30 @@ class UserHttp {
   }
 
   // 解析收藏夹视频
-  static Future parseFavVideo({
-    required int mediaId,
-    required int oid,
-    required String bvid,
-  }) async {
-    var res = await Request().get(
-      'https://www.bilibili.com/list/ml$mediaId',
-      queryParameters: {
-        'oid': mediaId,
-        'bvid': bvid,
-      },
-    );
-    String scriptContent =
-        extractScriptContents(parse(res.data).body!.outerHtml)[0];
-    int startIndex = scriptContent.indexOf('{');
-    int endIndex = scriptContent.lastIndexOf('};');
-    String jsonContent = scriptContent.substring(startIndex, endIndex + 1);
-    // 解析JSON字符串为Map
-    Map<String, dynamic> jsonData = json.decode(jsonContent);
-    return {
-      'status': true,
-      'data': jsonData['resourceList']
-          .map<MediaVideoItemModel>((e) => MediaVideoItemModel.fromJson(e))
-          .toList()
-    };
-  }
+  // static Future parseFavVideo({
+  //   required int mediaId,
+  //   required int oid,
+  //   required String bvid,
+  // }) async {
+  //   var res = await Request().get(
+  //     'https://www.bilibili.com/list/ml$mediaId',
+  //     queryParameters: {
+  //       'oid': mediaId,
+  //       'bvid': bvid,
+  //     },
+  //   );
+  //   String scriptContent =
+  //       extractScriptContents(parse(res.data).body!.outerHtml)[0];
+  //   int startIndex = scriptContent.indexOf('{');
+  //   int endIndex = scriptContent.lastIndexOf('};');
+  //   String jsonContent = scriptContent.substring(startIndex, endIndex + 1);
+  //   // 解析JSON字符串为Map
+  //   Map<String, dynamic> jsonData = json.decode(jsonContent);
+  //   return {
+  //     'status': true,
+  //     'data': jsonData['resourceList']
+  //         .map<MediaVideoItemModel>((e) => MediaVideoItemModel.fromJson(e))
+  //         .toList()
+  //   };
+  // }
 }

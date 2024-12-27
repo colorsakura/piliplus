@@ -6,6 +6,7 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/video/member_video_ctr.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
+import 'package:PiliPalaX/pages/member/new/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/view.dart';
 import 'package:PiliPalaX/utils/grid.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class MemberVideo extends StatefulWidget {
     required this.mid,
     this.seasonId,
     this.seriesId,
+    this.title,
   });
 
   final ContributeType type;
@@ -26,6 +28,7 @@ class MemberVideo extends StatefulWidget {
   final int mid;
   final int? seasonId;
   final int? seriesId;
+  final String? title;
 
   @override
   State<MemberVideo> createState() => _MemberVideoState();
@@ -42,6 +45,8 @@ class _MemberVideoState extends State<MemberVideo>
       mid: widget.mid,
       seasonId: widget.seasonId,
       seriesId: widget.seriesId,
+      username: Get.find<MemberControllerNew>(tag: widget.heroTag).username,
+      title: widget.title,
     ),
     tag:
         '${widget.heroTag}${widget.type.name}${widget.seasonId}${widget.seriesId}',
@@ -72,7 +77,6 @@ class _MemberVideoState extends State<MemberVideo>
                         padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
                         color: Theme.of(context).colorScheme.surface,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Obx(
                               () => Text(
@@ -82,6 +86,33 @@ class _MemberVideoState extends State<MemberVideo>
                                 style: const TextStyle(fontSize: 13),
                               ),
                             ),
+                            if (_controller.episodicButton != null) ...[
+                              const SizedBox(width: 5),
+                              SizedBox(
+                                height: 35,
+                                child: TextButton.icon(
+                                  onPressed: _controller.toViewPlayAll,
+                                  icon: Icon(
+                                    Icons.play_circle_outline_rounded,
+                                    size: 16,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                  label: Text(
+                                    '播放全部',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ), // TODO: continue playing
+                                  // label: Text(
+                                  //     '${_controller.episodicButton?.text}'),
+                                ),
+                              ),
+                            ],
+                            const Spacer(),
                             SizedBox(
                               height: 35,
                               child: TextButton.icon(
@@ -110,7 +141,7 @@ class _MemberVideoState extends State<MemberVideo>
                                   ),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

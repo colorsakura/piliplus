@@ -83,11 +83,13 @@ class _MemberContributeState extends State<MemberContribute>
                               type: ContributeType.video,
                               heroTag: widget.heroTag,
                               mid: widget.mid,
+                              title: item.title,
                             ),
                           'charging_video' => MemberVideo(
                               type: ContributeType.charging,
                               heroTag: widget.heroTag,
                               mid: widget.mid,
+                              title: item.title,
                             ),
                           'article' => MemberArticle(
                               heroTag: widget.heroTag,
@@ -99,12 +101,14 @@ class _MemberContributeState extends State<MemberContribute>
                               heroTag: widget.heroTag,
                               mid: widget.mid,
                               seasonId: item.seasonId,
+                              title: item.title,
                             ),
                           'series' => MemberVideo(
                               type: ContributeType.series,
                               heroTag: widget.heroTag,
                               mid: widget.mid,
                               seriesId: item.seriesId,
+                              title: item.title,
                             ),
                           _ => Center(child: Text(item.title!))
                         },
@@ -118,6 +122,7 @@ class _MemberContributeState extends State<MemberContribute>
             type: ContributeType.video,
             heroTag: widget.heroTag,
             mid: widget.mid,
+            title: '视频',
           );
   }
 }

@@ -244,11 +244,16 @@ class VideoDetailController extends GetxController
   }
 
   // 页面来源 稍后再看 收藏夹
-  RxString sourceType = 'normal'.obs;
+  String sourceType = 'normal';
   late RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;
-  late RxString watchLaterTitle = ''.obs;
-  bool get isPlayAll =>
-      sourceType.value == 'watchLater' || sourceType.value == 'fav';
+  late String watchLaterTitle = '';
+  bool get isPlayAll => ['watchLater', 'fav', 'archive'].contains(sourceType);
+  int get _mediaType => switch (sourceType) {
+        'archive' => 1,
+        'watchLater' => 2,
+        'fav' => 3,
+        _ => -1,
+      };
 
   @override
   void onInit() {
@@ -258,23 +263,24 @@ class VideoDetailController extends GetxController
     if (keys.isNotEmpty) {
       if (keys.contains('videoItem')) {
         var args = Get.arguments['videoItem'];
-        if (args.pic != null && args.pic != '') {
-          videoItem['pic'] = args.pic;
-        }
+        try {
+          if (args.pic != null && args.pic != '') {
+            videoItem['pic'] = args.pic;
+          } else if (args.cover != null && args.cover != '') {
+            videoItem['pic'] = args.cover;
+          }
+        } catch (_) {}
       }
       if (keys.contains('pic')) {
         videoItem['pic'] = Get.arguments['pic'];
       }
     }
 
-    sourceType.value = Get.arguments['sourceType'] ?? 'normal';
+    sourceType = Get.arguments['sourceType'] ?? 'normal';
 
-    if (sourceType.value == 'watchLater') {
-      watchLaterTitle.value = '稍后再看';
-      fetchMediaList();
-    } else if (sourceType.value == 'fav') {
-      watchLaterTitle.value = Get.arguments['favTitle'];
-      queryFavVideoList();
+    if (sourceType != 'normal') {
+      watchLaterTitle = Get.arguments['favTitle'];
+      getMediaList();
     }
 
     bool defaultShowComment =
@@ -322,31 +328,17 @@ class VideoDetailController extends GetxController
     }
   }
 
-  // 获取稍后再看列表
-  Future fetchMediaList() async {
-    var count = Get.arguments['count'];
-    var res = await UserHttp.getMediaList(
-      type: 2,
-      bizId: userInfo.mid,
-      ps: count,
-    );
-    if (res['status']) {
-      mediaList = res['data'].reversed.toList();
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
-  }
-
-  void loadMoreMedia() async {
+  void getMediaList() async {
     if (mediaList.length >= Get.arguments['count']) {
       return;
     }
     var res = await UserHttp.getMediaList(
-      type: 3,
+      type: _mediaType,
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
-      oid: mediaList.last.id,
-      otype: mediaList.last.type ?? 2,
+      oid: mediaList.isEmpty ? null : mediaList.last.id,
+      otype: mediaList.isEmpty ? null : mediaList.last.type,
+      desc: _mediaType == 2 ? false : true,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {
@@ -364,10 +356,10 @@ class VideoDetailController extends GetxController
         (context) => MediaListPanel(
           mediaList: mediaList,
           changeMediaList: changeMediaList,
-          panelTitle: watchLaterTitle.value,
+          panelTitle: watchLaterTitle,
           bvid: bvid,
           count: Get.arguments['count'],
-          loadMoreMedia: loadMoreMedia,
+          loadMoreMedia: getMediaList,
         ),
       );
     }
@@ -400,20 +392,6 @@ class VideoDetailController extends GetxController
           ..onRefresh();
       }
     } catch (_) {}
-  }
-
-  // 获取收藏夹视频列表
-  Future queryFavVideoList() async {
-    var mediaId = Get.arguments['mediaId'];
-    var oid = Get.arguments['oid'];
-    var res = await UserHttp.parseFavVideo(
-      mediaId: mediaId,
-      oid: oid,
-      bvid: bvid,
-    );
-    if (res['status']) {
-      mediaList.value = res['data'];
-    }
   }
 
   int? _lastPos;
