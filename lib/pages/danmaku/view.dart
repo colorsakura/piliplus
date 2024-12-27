@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -100,18 +101,20 @@ class _PlDanmakuState extends State<PlDanmaku> {
         _plDanmakuController.getCurrentDanmaku(currentPosition);
 
     if (playerController.showDanmaku &&
+        _controller != null &&
         playerController.playerStatus.status.value == PlayerStatus.playing &&
-        currentDanmakuList != null &&
-        _controller != null) {
-      Color? defaultColor =
-          playerController.blockTypes.contains(6) ? Colors.white : null;
-
+        playerController.isBuffering.value.not &&
+        currentDanmakuList != null) {
       for (DanmakuElem e in currentDanmakuList) {
-        _controller!.addDanmaku(DanmakuContentItem(
-          e.content,
-          color: defaultColor ?? DmUtils.decimalToColor(e.color),
-          type: DmUtils.getPosition(e.mode),
-        ));
+        _controller!.addDanmaku(
+          DanmakuContentItem(
+            e.content,
+            color: playerController.blockTypes.contains(6)
+                ? Colors.white
+                : DmUtils.decimalToColor(e.color),
+            type: DmUtils.getPosition(e.mode),
+          ),
+        );
       }
     }
   }

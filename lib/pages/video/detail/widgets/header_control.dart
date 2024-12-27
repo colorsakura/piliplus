@@ -1491,8 +1491,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         value: danmakuLineHeight,
                         label: '$danmakuLineHeight',
                         onChanged: (double val) {
-                          danmakuLineHeight =
-                              double.parse(val.toStringAsFixed(1));
+                          danmakuLineHeight = val.toPrecision(1);
                           widget.controller!.danmakuLineHeight =
                               danmakuLineHeight;
                           widget.controller?.putDanmakuSettings();

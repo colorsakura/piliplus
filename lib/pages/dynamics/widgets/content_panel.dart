@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'rich_node_panel.dart';
 
-// ignore: must_be_immutable
 class Content extends StatelessWidget {
-  dynamic item;
-  String? source;
-  Content({
+  final dynamic item;
+  final String? source;
+  const Content({
     super.key,
     this.item,
     this.source,

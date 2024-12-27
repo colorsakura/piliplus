@@ -389,7 +389,6 @@ class VideoIntroController extends GetxController
         }
       }
     } catch (e) {
-      // ignore: avoid_print
       debugPrint(e.toString());
     }
     SmartDialog.showLoading(msg: '请求中');

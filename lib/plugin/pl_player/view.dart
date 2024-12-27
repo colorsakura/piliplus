@@ -583,6 +583,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   @override
   Widget build(BuildContext context) {
+    _listenerFS?.cancel();
     _listenerFS = isFullScreen
         ? plPlayerController.subtitleFontScaleFS.listen((value) {
             _updateSubtitle(value);

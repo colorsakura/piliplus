@@ -87,7 +87,7 @@ class _FontSizeSelectPageState extends State<FontSizeSelectPage> {
                     divisions: list.length - 1,
                     secondaryTrackValue: 1,
                     onChanged: (double val) {
-                      currentSize = double.parse(val.toStringAsFixed(2));
+                      currentSize = val.toPrecision(2);
                       setState(() {});
                     },
                   ),
