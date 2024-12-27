@@ -1,6 +1,7 @@
 import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
 import 'package:PiliPalaX/common/widgets/stat/view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
@@ -77,6 +78,9 @@ class _MediaListPanelState extends State<MediaListPanel> {
                 () => ScrollablePositionedList.builder(
                   itemScrollController: _scrollController,
                   itemCount: widget.mediaList.length,
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom + 25,
+                  ),
                   itemBuilder: ((context, index) {
                     var item = widget.mediaList[index];
                     if (index == widget.mediaList.length - 1 &&
@@ -85,11 +89,15 @@ class _MediaListPanelState extends State<MediaListPanel> {
                     }
                     return InkWell(
                       onTap: () async {
+                        if (item.type != 2) {
+                          SmartDialog.showToast('不支持播放该类型视频');
+                          return;
+                        }
                         Get.back();
                         String bvid = item.bvid!;
                         int? aid = item.id;
                         String cover = item.cover ?? '';
-                        final int cid =
+                        final int cid = item.cid ??
                             await SearchHttp.ab2c(aid: aid, bvid: bvid);
                         widget.changeMediaList?.call(bvid, cid, aid, cover);
                       },

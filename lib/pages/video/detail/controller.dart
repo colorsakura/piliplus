@@ -6,7 +6,6 @@ import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
-import 'package:PiliPalaX/common/widgets/watch_later_list.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/user.dart';
@@ -16,6 +15,7 @@ import 'package:PiliPalaX/models/video_detail_res.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
+import 'package:PiliPalaX/pages/video/detail/widgets/watch_later_list.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -346,6 +346,7 @@ class VideoDetailController extends GetxController
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
       oid: mediaList.last.id,
+      otype: mediaList.last.type ?? 2,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {

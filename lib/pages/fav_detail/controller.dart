@@ -127,22 +127,30 @@ class FavDetailController extends MultiSelectController {
 
   Future toViewPlayAll() async {
     if (loadingState.value is Success) {
-      final FavDetailItemData firstItem =
-          (loadingState.value as Success).response.first;
-      final String heroTag = Utils.makeHeroTag(firstItem.bvid);
-      Get.toNamed(
-        '/video?bvid=${firstItem.bvid}&cid=${firstItem.cid}',
-        arguments: {
-          'videoItem': firstItem,
-          'heroTag': heroTag,
-          'sourceType': 'fav',
-          'mediaId': item.value.id,
-          'oid': firstItem.id,
-          'favTitle': item.value.title,
-          // 'favInfo': favInfo,
-          'count': item.value.mediaCount,
-        },
-      );
+      List<FavDetailItemData> list = (loadingState.value as Success).response;
+      for (FavDetailItemData element in list) {
+        if (element.cid == null) {
+          continue;
+        } else {
+          if (element.bvid != list.first.bvid) {
+            SmartDialog.showToast('已跳过不支持播放的视频');
+          }
+          final String heroTag = Utils.makeHeroTag(element.bvid);
+          Get.toNamed(
+            '/video?bvid=${element.bvid}&cid=${element.cid}',
+            arguments: {
+              'videoItem': element,
+              'heroTag': heroTag,
+              'sourceType': 'fav',
+              'mediaId': item.value.id,
+              'oid': element.id,
+              'favTitle': item.value.title,
+              'count': item.value.mediaCount,
+            },
+          );
+          break;
+        }
+      }
     }
   }
 }

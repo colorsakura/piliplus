@@ -517,6 +517,7 @@ class UserHttp {
     required int bizId,
     required int ps,
     int? oid,
+    int otype = 2,
   }) async {
     var res = await Request().get(
       Api.mediaList,
@@ -525,7 +526,7 @@ class UserHttp {
         'type': type,
         'biz_id': bizId,
         'oid': oid ?? '',
-        'otype': 2,
+        'otype': otype, // video:2 // bangumi: 24
         'ps': ps,
         'direction': false,
         'desc': true,

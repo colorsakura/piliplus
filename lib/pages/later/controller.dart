@@ -167,18 +167,27 @@ class LaterController extends MultiSelectController {
   // 稍后再看播放全部
   Future toViewPlayAll() async {
     if (loadingState.value is Success) {
-      final HotVideoItemModel firstItem =
-          (loadingState.value as Success).response.first;
-      final String heroTag = Utils.makeHeroTag(firstItem.bvid);
-      Get.toNamed(
-        '/video?bvid=${firstItem.bvid}&cid=${firstItem.cid}',
-        arguments: {
-          'videoItem': firstItem,
-          'heroTag': heroTag,
-          'sourceType': 'watchLater',
-          'count': (loadingState.value as Success).response.length,
-        },
-      );
+      List<HotVideoItemModel> list = (loadingState.value as Success).response;
+      for (HotVideoItemModel item in list) {
+        if (item.cid == null) {
+          continue;
+        } else {
+          if (item.bvid != list.first.bvid) {
+            SmartDialog.showToast('已跳过不支持播放的视频');
+          }
+          final String heroTag = Utils.makeHeroTag(item.bvid);
+          Get.toNamed(
+            '/video?bvid=${item.bvid}&cid=${item.cid}',
+            arguments: {
+              'videoItem': item,
+              'heroTag': heroTag,
+              'sourceType': 'watchLater',
+              'count': (loadingState.value as Success).response.length,
+            },
+          );
+          break;
+        }
+      }
     }
   }
 }
