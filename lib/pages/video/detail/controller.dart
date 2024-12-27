@@ -333,13 +333,22 @@ class VideoDetailController extends GetxController
         mediaList.length >= Get.arguments['count']) {
       return;
     }
+    bool desc =
+        _mediaType == 2 || Get.arguments['mediaType'] == '8' ? false : true;
     var res = await UserHttp.getMediaList(
       type: Get.arguments['mediaType'] ?? _mediaType,
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
       oid: mediaList.isEmpty ? null : mediaList.last.id,
       otype: mediaList.isEmpty ? null : mediaList.last.type,
-      desc: _mediaType == 2 || Get.arguments['mediaType'] == '8' ? false : true,
+      desc:
+          Get.arguments['mediaType'] != null && Get.arguments['reverse'] == true
+              ? desc.not
+              : desc,
+      sortField:
+          Get.arguments['mediaType'] == null && Get.arguments['reverse'] == true
+              ? 2
+              : 1,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {

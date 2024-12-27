@@ -517,6 +517,7 @@ class UserHttp {
     int? otype,
     bool withCurrent = false,
     bool desc = true,
+    int sortField = 1,
   }) async {
     var res = await Request().get(
       Api.mediaList,
@@ -529,7 +530,7 @@ class UserHttp {
         'ps': ps,
         'direction': false,
         'desc': desc,
-        'sort_field': 1,
+        'sort_field': sortField,
         'tid': 0,
         'with_current': withCurrent,
       },

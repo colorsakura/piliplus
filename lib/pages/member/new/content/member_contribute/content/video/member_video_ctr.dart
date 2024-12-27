@@ -26,8 +26,8 @@ class MemberVideoCtr extends CommonController {
   int? seriesId;
   final int mid;
   String? aid;
-  RxString order = 'pubdate'.obs;
-  RxString sort = 'desc'.obs;
+  late RxString order = 'pubdate'.obs;
+  late RxString sort = 'desc'.obs;
   RxInt count = (-1).obs;
   int? next;
   EpisodicButton? episodicButton;
@@ -74,8 +74,8 @@ class MemberVideoCtr extends CommonController {
         type: type,
         mid: mid,
         aid: type == ContributeType.video ? aid : null,
-        order: order.value,
-        sort: sort.value,
+        order: type == ContributeType.video ? order.value : null,
+        sort: type == ContributeType.video ? null : sort.value,
         pn: type == ContributeType.charging ? currentPage : null,
         next: next,
         seasonId: seasonId,
@@ -118,6 +118,9 @@ class MemberVideoCtr extends CommonController {
                 'mediaType': RegExp(r'page_type=([\d]+)')
                     .firstMatch('${episodicButton?.uri}')
                     ?.group(1),
+              'reverse': type == ContributeType.video
+                  ? order.value == 'click'
+                  : sort.value == 'asc',
             },
           );
           break;
