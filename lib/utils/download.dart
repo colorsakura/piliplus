@@ -93,10 +93,19 @@ class DownloadUtils {
       if (!await checkPermissionDependOnSdkInt(context)) {
         return;
       }
+      bool dispose = false;
       for (int i = 0; i < imgList.length; i++) {
         SmartDialog.showLoading(
-            msg:
-                '正在下载原图${imgList.length > 1 ? '${i + 1}/${imgList.length}' : ''}');
+          msg:
+              '正在下载原图${imgList.length > 1 ? '${i + 1}/${imgList.length}' : ''}',
+          clickMaskDismiss: true,
+          onDismiss: () {
+            dispose = true;
+            if (i != imgList.length - 1) {
+              SmartDialog.showToast('已取消下载剩余图片');
+            }
+          },
+        );
         var response = await Request().get(
           imgList[i],
           options: Options(responseType: ResponseType.bytes),
@@ -117,9 +126,12 @@ class DownloadUtils {
           SmartDialog.dismiss();
         }
         if (result.isSuccess) {
-          await SmartDialog.showToast('「$picName」已保存 ');
+          SmartDialog.showToast('「$picName」已保存 ');
         } else {
-          await SmartDialog.showToast('保存失败，${result.errorMessage}');
+          SmartDialog.showToast('保存失败，${result.errorMessage}');
+        }
+        if (dispose) {
+          break;
         }
       }
     } catch (err) {

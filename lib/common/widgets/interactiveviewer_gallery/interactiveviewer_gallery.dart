@@ -334,7 +334,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                           onTap: () {
                             DownloadUtils.downloadImg(
                               context,
-                              widget.sources[currentIndex!],
+                              widget.sources as List<String>,
                             );
                           },
                           child: const Text("保存全部图片"),
