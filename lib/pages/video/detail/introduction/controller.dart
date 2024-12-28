@@ -124,9 +124,6 @@ class VideoIntroController extends GetxController
     queryVideoIntro();
   }
 
-  late final videoDetailController =
-      Get.find<VideoDetailController>(tag: heroTag);
-
   // 获取视频简介&分p
   Future queryVideoIntro() async {
     await queryVideoTags();
@@ -134,6 +131,8 @@ class VideoIntroController extends GetxController
     if (result['status']) {
       videoDetail.value = result['data']!;
       videoItem!['staff'] = result['data'].staff;
+      final videoDetailController =
+          Get.find<VideoDetailController>(tag: heroTag);
       if (videoDetailController.videoItem['pic'] == null ||
           videoDetailController.videoItem['pic'] == '') {
         try {
@@ -642,8 +641,7 @@ class VideoIntroController extends GetxController
     final int currentIndex =
         episodes.indexWhere((e) => e.cid == lastPlayCid.value);
     int prevIndex = currentIndex - 1;
-    final VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: heroTag);
+    final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
     final PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
     // 列表循环
@@ -665,10 +663,9 @@ class VideoIntroController extends GetxController
   bool nextPlay() {
     final List episodes = [];
     bool isPages = false;
-    final VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: heroTag);
+    final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
-    if (videoDetailController.isPlayAll) {
+    if (videoDetailCtr.isPlayAll) {
       episodes.addAll(videoDetailCtr.mediaList);
     } else if ((videoDetail.value.pages?.length ?? 0) > 1) {
       isPages = true;
@@ -697,8 +694,7 @@ class VideoIntroController extends GetxController
         episodes.indexWhere((e) => e.cid == lastPlayCid.value);
     int nextIndex = currentIndex + 1;
 
-    if (videoDetailController.isPlayAll &&
-        currentIndex == episodes.length - 2) {
+    if (videoDetailCtr.isPlayAll && currentIndex == episodes.length - 2) {
       videoDetailCtr.getMediaList();
     }
 
