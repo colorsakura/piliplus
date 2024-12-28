@@ -119,9 +119,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
-      Widget replyReplyPage() => Scaffold(
+      Widget replyReplyPage([bool automaticallyImplyLeading = true]) =>
+          Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(title: Text('评论详情')),
+            appBar: AppBar(
+              title: Text('评论详情'),
+              titleSpacing: automaticallyImplyLeading ? null : 12,
+              automaticallyImplyLeading: automaticallyImplyLeading,
+            ),
             body: VideoReplyReplyPanel(
               id: id,
               oid: oid,
@@ -141,7 +146,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,
-              child: replyReplyPage(),
+              child: replyReplyPage(false),
             ),
           );
         } else {

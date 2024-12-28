@@ -109,10 +109,13 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
-      Widget replyReplyPage() => Scaffold(
+      Widget replyReplyPage([bool automaticallyImplyLeading = true]) =>
+          Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: Text('评论详情'),
+              titleSpacing: automaticallyImplyLeading ? null : 12,
+              automaticallyImplyLeading: automaticallyImplyLeading,
             ),
             body: VideoReplyReplyPanel(
               id: id,
@@ -133,7 +136,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,
-              child: replyReplyPage(),
+              child: replyReplyPage(false),
             ),
           );
         } else {
