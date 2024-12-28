@@ -454,9 +454,9 @@ class BangumiIntroController extends CommonController {
     int currentIndex =
         episodes.indexWhere((e) => e.cid == videoDetailCtr.cid.value);
     int prevIndex = currentIndex - 1;
-    PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
+    PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
     if (prevIndex < 0) {
-      if (platRepeat == PlayRepeat.listCycle) {
+      if (playRepeat == PlayRepeat.listCycle) {
         prevIndex = episodes.length - 1;
       } else {
         return false;
@@ -476,12 +476,12 @@ class BangumiIntroController extends CommonController {
     late List episodes;
     VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
-    PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
+    PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
     if ((loadingState.value as Success).response.episodes != null) {
       episodes = (loadingState.value as Success).response.episodes!;
     } else {
-      if (platRepeat == PlayRepeat.autoPlayRelated) {
+      if (playRepeat == PlayRepeat.autoPlayRelated) {
         return playRelated();
       }
     }
@@ -490,9 +490,9 @@ class BangumiIntroController extends CommonController {
     int nextIndex = currentIndex + 1;
     // 列表循环
     if (nextIndex == episodes.length - 1) {
-      if (platRepeat == PlayRepeat.listCycle) {
+      if (playRepeat == PlayRepeat.listCycle) {
         nextIndex = 0;
-      } else if (platRepeat == PlayRepeat.autoPlayRelated) {
+      } else if (playRepeat == PlayRepeat.autoPlayRelated) {
         return playRelated();
       } else {
         return false;

@@ -641,11 +641,11 @@ class VideoIntroController extends GetxController
         episodes.indexWhere((e) => e.cid == lastPlayCid.value);
     int prevIndex = currentIndex - 1;
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
-    final PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
+    final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
     // 列表循环
     if (prevIndex < 0) {
-      if (platRepeat == PlayRepeat.listCycle) {
+      if (playRepeat == PlayRepeat.listCycle) {
         prevIndex = episodes.length - 1;
       } else {
         return false;
@@ -679,10 +679,10 @@ class VideoIntroController extends GetxController
       }
     }
 
-    final PlayRepeat platRepeat = videoDetailCtr.plPlayerController.playRepeat;
+    final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
     if (episodes.isEmpty) {
-      if (platRepeat == PlayRepeat.autoPlayRelated &&
+      if (playRepeat == PlayRepeat.autoPlayRelated &&
           videoDetailCtr.showRelatedVideo) {
         return playRelated();
       }
@@ -699,9 +699,9 @@ class VideoIntroController extends GetxController
 
     // 列表循环
     if (nextIndex >= episodes.length) {
-      if (platRepeat == PlayRepeat.listCycle) {
+      if (playRepeat == PlayRepeat.listCycle) {
         nextIndex = 0;
-      } else if (platRepeat == PlayRepeat.autoPlayRelated &&
+      } else if (playRepeat == PlayRepeat.autoPlayRelated &&
           videoDetailCtr.showRelatedVideo) {
         return playRelated();
       } else {
