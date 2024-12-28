@@ -148,19 +148,24 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: StyleString.cardSpace,
-            crossAxisSpacing: StyleString.safeSpace,
-            maxCrossAxisExtent: Grid.maxRowWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.4,
-            mainAxisExtent: 0,
+      Loading() => SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: StyleString.safeSpace,
           ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithExtentAndRatio(
+              mainAxisSpacing: StyleString.cardSpace,
+              crossAxisSpacing: StyleString.safeSpace,
+              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+              childAspectRatio: StyleString.aspectRatio * 2.4,
+              mainAxisExtent: 0,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const VideoCardHSkeleton();
+              },
+              childCount: 10,
+            ),
           ),
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true

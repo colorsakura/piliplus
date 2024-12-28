@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -225,13 +227,23 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     return Obx(
                       () => subList.isEmpty
                           ? const SliverToBoxAdapter(child: SizedBox())
-                          : SliverList(
-                              delegate:
-                                  SliverChildBuilderDelegate((context, index) {
-                                return SubVideoCardH(
-                                  videoItem: subList[index],
-                                );
-                              }, childCount: subList.length),
+                          : SliverGrid(
+                              gridDelegate:
+                                  SliverGridDelegateWithExtentAndRatio(
+                                mainAxisSpacing: StyleString.cardSpace,
+                                crossAxisSpacing: StyleString.safeSpace,
+                                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                childAspectRatio: StyleString.aspectRatio * 2.4,
+                                mainAxisExtent: 0,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                childCount: subList.length,
+                                (BuildContext context, int index) {
+                                  return SubVideoCardH(
+                                    videoItem: subList[index],
+                                  );
+                                },
+                              ),
                             ),
                     );
                   }
@@ -246,10 +258,22 @@ class _SubDetailPageState extends State<SubDetailPage> {
                 }
               } else {
                 // 骨架屏
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    return const VideoCardHSkeleton();
-                  }, childCount: 10),
+                return SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: StyleString.safeSpace),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                      mainAxisSpacing: StyleString.cardSpace,
+                      crossAxisSpacing: StyleString.safeSpace,
+                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                      childAspectRatio: StyleString.aspectRatio * 2.4,
+                      mainAxisExtent: 0,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => const VideoCardHSkeleton(),
+                      childCount: 10,
+                    ),
+                  ),
                 );
               }
             },

@@ -40,65 +40,61 @@ class SubVideoCardH extends StatelessWidget {
           'videoType': SearchType.video,
         });
       },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-                StyleString.safeSpace, 5, StyleString.safeSpace, 5),
-            child: LayoutBuilder(
-              builder: (context, boxConstraints) {
-                double width =
-                    (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
-                return SizedBox(
-                  height: width / StyleString.aspectRatio,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AspectRatio(
-                        aspectRatio: StyleString.aspectRatio,
-                        child: LayoutBuilder(
-                          builder: (context, boxConstraints) {
-                            double maxWidth = boxConstraints.maxWidth;
-                            double maxHeight = boxConstraints.maxHeight;
-                            return Stack(
-                              children: [
-                                Hero(
-                                  tag: heroTag,
-                                  child: NetworkImgLayer(
-                                    src: videoItem.cover,
-                                    width: maxWidth,
-                                    height: maxHeight,
-                                  ),
-                                ),
-                                PBadge(
-                                  text: Utils.timeFormat(videoItem.duration!),
-                                  right: 6.0,
-                                  bottom: 6.0,
-                                  type: 'gray',
-                                ),
-                                // if (videoItem.ogv != null) ...[
-                                //   PBadge(
-                                //     text: videoItem.ogv['type_name'],
-                                //     top: 6.0,
-                                //     right: 6.0,
-                                //     bottom: null,
-                                //     left: null,
-                                //   ),
-                                // ],
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      videoContent(context)
-                    ],
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+            StyleString.safeSpace, 5, StyleString.safeSpace, 5),
+        child: LayoutBuilder(
+          builder: (context, boxConstraints) {
+            double width =
+                (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
+            return SizedBox(
+              height: width / StyleString.aspectRatio,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AspectRatio(
+                    aspectRatio: StyleString.aspectRatio,
+                    child: LayoutBuilder(
+                      builder: (context, boxConstraints) {
+                        double maxWidth = boxConstraints.maxWidth;
+                        double maxHeight = boxConstraints.maxHeight;
+                        return Stack(
+                          children: [
+                            Hero(
+                              tag: heroTag,
+                              child: NetworkImgLayer(
+                                src: videoItem.cover,
+                                width: maxWidth,
+                                height: maxHeight,
+                              ),
+                            ),
+                            PBadge(
+                              text: Utils.timeFormat(videoItem.duration!),
+                              right: 6.0,
+                              bottom: 6.0,
+                              type: 'gray',
+                            ),
+                            // if (videoItem.ogv != null) ...[
+                            //   PBadge(
+                            //     text: videoItem.ogv['type_name'],
+                            //     top: 6.0,
+                            //     right: 6.0,
+                            //     bottom: null,
+                            //     left: null,
+                            //   ),
+                            // ],
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                  videoContent(context)
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -112,7 +112,7 @@ class _LaterPageState extends State<LaterPage> {
                 padding: EdgeInsets.only(
                   left: StyleString.safeSpace,
                   right: StyleString.safeSpace,
-                  bottom: MediaQuery.of(context).padding.bottom + 81,
+                  bottom: MediaQuery.of(context).padding.bottom + 85,
                 ),
                 sliver: Obx(
                   () => _buildBody(_laterController.loadingState.value),

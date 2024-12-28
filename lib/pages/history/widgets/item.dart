@@ -160,148 +160,143 @@ class HistoryItem extends StatelessWidget {
           onChoose?.call();
         }
       },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-                StyleString.safeSpace, 0, StyleString.safeSpace, 0),
-            child: LayoutBuilder(
-              builder: (context, boxConstraints) {
-                double width =
-                    (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
-                return SizedBox(
-                  height: width / StyleString.aspectRatio,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: StyleString.safeSpace,
+          vertical: StyleString.cardSpace,
+        ),
+        child: LayoutBuilder(
+          builder: (context, boxConstraints) {
+            double width =
+                (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
+            return SizedBox(
+              height: width / StyleString.aspectRatio,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
                     children: [
-                      Stack(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: StyleString.aspectRatio,
-                            child: LayoutBuilder(
-                              builder: (context, boxConstraints) {
-                                double maxWidth = boxConstraints.maxWidth;
-                                double maxHeight = boxConstraints.maxHeight;
-                                return Stack(
-                                  children: [
-                                    Hero(
-                                      tag: heroTag,
-                                      child: NetworkImgLayer(
-                                        radius: 12,
-                                        src: (videoItem.cover != ''
-                                            ? videoItem.cover
-                                            : videoItem.covers.first),
-                                        width: maxWidth,
-                                        height: maxHeight,
-                                      ),
-                                    ),
-                                    if (!BusinessType
-                                        .hiddenDurationType.hiddenDurationType
-                                        .contains(videoItem.history.business))
-                                      PBadge(
-                                        text: videoItem.progress == -1
-                                            ? '已看完'
-                                            : '${Utils.timeFormat(videoItem.progress!)}/${Utils.timeFormat(videoItem.duration!)}',
-                                        right: 6.0,
-                                        bottom: 8.0,
-                                        type: 'gray',
-                                      ),
-                                    // 右上角
-                                    if (BusinessType.showBadge.showBadge
-                                            .contains(
-                                                videoItem.history.business) ||
-                                        videoItem.history.business ==
-                                            BusinessType.live.type)
-                                      PBadge(
-                                        text: videoItem.badge,
-                                        top: 6.0,
-                                        right: 6.0,
-                                        bottom: null,
-                                        left: null,
-                                      ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                          Positioned.fill(
-                            child: AnimatedOpacity(
-                              opacity: videoItem.checked ? 1 : 0,
-                              duration: const Duration(milliseconds: 200),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.black.withOpacity(0.6),
-                                ),
-                                child: SizedBox(
-                                  width: 34,
-                                  height: 34,
-                                  child: AnimatedScale(
-                                    scale: videoItem.checked ? 1 : 0,
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    child: IconButton(
-                                      tooltip: '取消选择',
-                                      style: ButtonStyle(
-                                        padding: WidgetStateProperty.all(
-                                            EdgeInsets.zero),
-                                        backgroundColor:
-                                            WidgetStateProperty.resolveWith(
-                                          (states) {
-                                            return Theme.of(context)
-                                                .colorScheme
-                                                .surface
-                                                .withOpacity(0.8);
-                                          },
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        feedBack();
-                                        onChoose?.call();
-                                      },
-                                      icon: Icon(Icons.done_all_outlined,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
+                      AspectRatio(
+                        aspectRatio: StyleString.aspectRatio,
+                        child: LayoutBuilder(
+                          builder: (context, boxConstraints) {
+                            double maxWidth = boxConstraints.maxWidth;
+                            double maxHeight = boxConstraints.maxHeight;
+                            return Stack(
+                              children: [
+                                Hero(
+                                  tag: heroTag,
+                                  child: NetworkImgLayer(
+                                    radius: 12,
+                                    src: (videoItem.cover != ''
+                                        ? videoItem.cover
+                                        : videoItem.covers.first),
+                                    width: maxWidth,
+                                    height: maxHeight,
                                   ),
                                 ),
+                                if (!BusinessType
+                                    .hiddenDurationType.hiddenDurationType
+                                    .contains(videoItem.history.business))
+                                  PBadge(
+                                    text: videoItem.progress == -1
+                                        ? '已看完'
+                                        : '${Utils.timeFormat(videoItem.progress!)}/${Utils.timeFormat(videoItem.duration!)}',
+                                    right: 6.0,
+                                    bottom: 8.0,
+                                    type: 'gray',
+                                  ),
+                                // 右上角
+                                if (BusinessType.showBadge.showBadge
+                                        .contains(videoItem.history.business) ||
+                                    videoItem.history.business ==
+                                        BusinessType.live.type)
+                                  PBadge(
+                                    text: videoItem.badge,
+                                    top: 6.0,
+                                    right: 6.0,
+                                    bottom: null,
+                                    left: null,
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: AnimatedOpacity(
+                          opacity: videoItem.checked ? 1 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.black.withOpacity(0.6),
+                            ),
+                            child: SizedBox(
+                              width: 34,
+                              height: 34,
+                              child: AnimatedScale(
+                                scale: videoItem.checked ? 1 : 0,
+                                duration: const Duration(milliseconds: 250),
+                                curve: Curves.easeInOut,
+                                child: IconButton(
+                                  tooltip: '取消选择',
+                                  style: ButtonStyle(
+                                    padding: WidgetStateProperty.all(
+                                        EdgeInsets.zero),
+                                    backgroundColor:
+                                        WidgetStateProperty.resolveWith(
+                                      (states) {
+                                        return Theme.of(context)
+                                            .colorScheme
+                                            .surface
+                                            .withOpacity(0.8);
+                                      },
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    feedBack();
+                                    onChoose?.call();
+                                  },
+                                  icon: Icon(Icons.done_all_outlined,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                ),
                               ),
                             ),
                           ),
-                          if (videoItem.duration != null &&
-                              videoItem.duration != 0 &&
-                              videoItem.progress != 0)
-                            Positioned(
-                              left: 3,
-                              right: 3,
-                              bottom: 0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft:
-                                      Radius.circular(StyleString.imgRadius.x),
-                                  bottomRight:
-                                      Radius.circular(StyleString.imgRadius.x),
-                                ),
-                                child: LinearProgressIndicator(
-                                  value: videoItem.progress == -1
-                                      ? 100
-                                      : videoItem.progress / videoItem.duration,
-                                ),
-                              ),
-                            )
-                        ],
+                        ),
                       ),
-                      videoContent(context)
+                      if (videoItem.duration != null &&
+                          videoItem.duration != 0 &&
+                          videoItem.progress != 0)
+                        Positioned(
+                          left: 4,
+                          right: 4,
+                          bottom: 0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12),
+                            ),
+                            child: LinearProgressIndicator(
+                              value: videoItem.progress == -1
+                                  ? 100
+                                  : videoItem.progress / videoItem.duration,
+                            ),
+                          ),
+                        )
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                  videoContent(context)
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

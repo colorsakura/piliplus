@@ -289,19 +289,23 @@ class _FavDetailPageState extends State<FavDetailPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: StyleString.cardSpace,
-            crossAxisSpacing: StyleString.safeSpace,
-            maxCrossAxisExtent: Grid.maxRowWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.4,
-            mainAxisExtent: 0,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
+      Loading() => SliverPadding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithExtentAndRatio(
+              mainAxisSpacing: StyleString.cardSpace,
+              crossAxisSpacing: StyleString.safeSpace,
+              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+              childAspectRatio: StyleString.aspectRatio * 2.4,
+              mainAxisExtent: 0,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const VideoCardHSkeleton();
+              },
+              childCount: 10,
+            ),
           ),
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
@@ -356,9 +360,9 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           },
                         ),
                         Positioned(
-                          top: 0,
+                          top: 8,
                           left: 12,
-                          bottom: 0,
+                          bottom: 8,
                           child: IgnorePointer(
                             child: LayoutBuilder(
                               builder: (context, constraints) =>

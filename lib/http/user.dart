@@ -374,24 +374,25 @@ class UserHttp {
   }
 
   // 我的订阅
-  static Future userSubFolder({
+  static Future<LoadingState> userSubFolder({
     required int mid,
     required int pn,
     required int ps,
   }) async {
-    var res = await Request().get(Api.userSubFolder, queryParameters: {
-      'up_mid': mid,
-      'ps': ps,
-      'pn': pn,
-      'platform': 'web',
-    });
+    var res = await Request().get(
+      Api.userSubFolder,
+      queryParameters: {
+        'up_mid': mid,
+        'ps': ps,
+        'pn': pn,
+        'platform': 'web',
+      },
+    );
     if (res.data['code'] == 0 && res.data['data'] is Map) {
-      return {
-        'status': true,
-        'data': SubFolderModelData.fromJson(res.data['data'])
-      };
+      return LoadingState.success(
+          SubFolderModelData.fromJson(res.data['data']).list);
     } else {
-      return {'status': false, 'msg': res.data['message']};
+      return LoadingState.error(res.data['message']);
     }
   }
 

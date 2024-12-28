@@ -1,48 +1,30 @@
+import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/models/user/info.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 import '../../models/user/sub_folder.dart';
 
-class SubController extends GetxController {
-  final ScrollController scrollController = ScrollController();
-  Rx<SubFolderModelData> subFolderData = SubFolderModelData().obs;
-  UserInfoData? userInfo;
-  int currentPage = 1;
-  int pageSize = 20;
-  RxBool hasMore = true.obs;
+class SubController extends CommonController {
+  dynamic mid;
 
-  Future<dynamic> querySubFolder({type = 'init'}) async {
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    if (userInfo == null) {
-      return {'status': false, 'msg': '账号未登录'};
-    }
-    var res = await UserHttp.userSubFolder(
-      pn: currentPage,
-      ps: pageSize,
-      mid: userInfo!.mid!,
-    );
-    if (res['status']) {
-      if (type == 'init') {
-        subFolderData.value = res['data'];
-      } else {
-        if (res['data'].list.isNotEmpty) {
-          subFolderData.value.list!.addAll(res['data'].list);
-          subFolderData.update((val) {});
-        }
-      }
-      currentPage++;
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
-    return res;
+  @override
+  void onInit() {
+    super.onInit();
+    mid = GStorage.userInfo.get('userInfoCache')?.mid;
+    queryData();
   }
 
-  Future onLoad() async {
-    querySubFolder(type: 'onload');
+  @override
+  Future queryData([bool isRefresh = true]) {
+    if (mid == null) {
+      loadingState.value = LoadingState.error('账号未登录');
+      return Future.value();
+    }
+    return super.queryData(isRefresh);
   }
 
   // 取消订阅
@@ -67,8 +49,9 @@ class SubController extends GetxController {
               var res = await UserHttp.cancelSub(
                   id: subFolderItem.id!, type: subFolderItem.type!);
               if (res['status']) {
-                subFolderData.value.list!.remove(subFolderItem);
-                subFolderData.update((val) {});
+                List list = (loadingState.value as Success).response;
+                list.remove(subFolderItem);
+                loadingState.value = LoadingState.success(list);
                 SmartDialog.showToast('取消订阅成功');
               } else {
                 SmartDialog.showToast(res['msg']);
@@ -83,8 +66,9 @@ class SubController extends GetxController {
   }
 
   @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
-  }
+  Future<LoadingState> customGetData() => UserHttp.userSubFolder(
+        pn: currentPage,
+        ps: 20,
+        mid: mid,
+      );
 }
