@@ -123,54 +123,51 @@ class _DynamicsPageState extends State<DynamicsPage>
   }
 
   Widget upPanelPart() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Container(
-          //抽屉模式增加底色
-          color: upPanelPosition.index > 1
-              ? Theme.of(context).colorScheme.surface
-              : Colors.transparent,
-          width: 56,
-          child: FutureBuilder(
-            future: _futureBuilderFutureUp,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == null) {
-                  return nil;
-                }
-                // TODO: refactor
-                if (snapshot.data is! Map) {
-                  return HttpError(
-                    isSliver: false,
-                    callback: () => setState(() {
+    return Container(
+      //抽屉模式增加底色
+      color: upPanelPosition.index > 1
+          ? Theme.of(context).colorScheme.surface
+          : Colors.transparent,
+      width: 64,
+      child: FutureBuilder(
+        future: _futureBuilderFutureUp,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == null) {
+              return nil;
+            }
+            // TODO: refactor
+            if (snapshot.data is! Map) {
+              return HttpError(
+                isSliver: false,
+                callback: () => setState(() {
+                  _futureBuilderFutureUp = _dynamicsController.queryFollowUp();
+                }),
+              );
+            }
+            Map data = snapshot.data;
+            if (data['status']) {
+              return Obx(() => UpPanel(_dynamicsController.upData.value,
+                  _dynamicsController.scrollController));
+            } else {
+              return Center(
+                child: IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () {
+                    setState(() {
                       _futureBuilderFutureUp =
                           _dynamicsController.queryFollowUp();
-                    }),
-                  );
-                }
-                Map data = snapshot.data;
-                if (data['status']) {
-                  return Obx(() => UpPanel(_dynamicsController.upData.value,
-                      _dynamicsController.scrollController));
-                } else {
-                  return Center(
-                    child: IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        setState(() {
-                          _futureBuilderFutureUp =
-                              _dynamicsController.queryFollowUp();
-                        });
-                      },
-                    ),
-                  );
-                }
-              } else {
-                return nil;
-              }
-            },
-          ),
-        ));
+                    });
+                  },
+                ),
+              );
+            }
+          } else {
+            return nil;
+          }
+        },
+      ),
+    );
   }
 
   @override

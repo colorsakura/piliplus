@@ -281,7 +281,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     child: CustomScrollView(
                       controller: orientation == Orientation.portrait
                           ? _htmlRenderCtr.scrollController
-                          : ScrollController(),
+                          : null,
                       slivers: [
                         SliverPadding(
                           padding: orientation == Orientation.portrait
@@ -330,9 +330,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   ),
                   if (orientation == Orientation.landscape) ...[
                     VerticalDivider(
-                        thickness: 8,
-                        color:
-                            Theme.of(context).dividerColor.withOpacity(0.05)),
+                      thickness: 8,
+                      color: Theme.of(context).dividerColor.withOpacity(0.05),
+                    ),
                     Expanded(
                       flex: _ratio[1].toInt(),
                       child: Scaffold(

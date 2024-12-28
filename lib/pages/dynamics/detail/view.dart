@@ -317,7 +317,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     Expanded(
                       flex: _ratio[0].toInt(),
                       child: CustomScrollView(
-                        controller: ScrollController(),
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
                           SliverPadding(
