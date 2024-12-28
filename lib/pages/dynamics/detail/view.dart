@@ -115,25 +115,39 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   }
 
   // 查看二级评论
-  void replyReply(replyItem, id, isTop) {
+  void replyReply(context, replyItem, id, isTop) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
-      Get.to(
-        () => Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: Text('评论详情')),
-          body: VideoReplyReplyPanel(
-            id: id,
-            oid: oid,
-            rpid: rpid,
-            source: 'dynamic',
-            replyType: ReplyType.values[replyType],
-            firstFloor: replyItem,
-            isTop: isTop ?? false,
-          ),
-        ),
-      );
+      Widget replyReplyPage() => Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(title: Text('评论详情')),
+            body: VideoReplyReplyPanel(
+              id: id,
+              oid: oid,
+              rpid: rpid,
+              source: 'dynamic',
+              replyType: ReplyType.values[replyType],
+              firstFloor: replyItem,
+              isTop: isTop ?? false,
+            ),
+          );
+      if (this.context.orientation == Orientation.portrait) {
+        Get.to(replyReplyPage);
+      } else {
+        ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
+        if (scaffoldState != null) {
+          scaffoldState.showBottomSheet(
+            (context) => MediaQuery.removePadding(
+              context: context,
+              removeLeft: true,
+              child: replyReplyPage(),
+            ),
+          );
+        } else {
+          Get.to(replyReplyPage);
+        }
+      }
     });
   }
 
@@ -247,124 +261,136 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   },
                   icon: Transform.rotate(
                     angle: pi / 2,
-                    child: Icon(Icons.splitscreen),
+                    child: Icon(Icons.splitscreen, size: 19),
                   ),
                 ),
                 const SizedBox(width: 16),
               ]
             : null,
       ),
-      body: refreshIndicator(
-        onRefresh: () async {
-          await _dynamicDetailController.onRefresh();
-        },
-        child: Stack(
-          children: [
-            OrientationBuilder(
-              builder: (context, orientation) {
-                double padding = max(context.width / 2 - Grid.maxRowWidth, 0);
-                if (orientation == Orientation.portrait) {
-                  return CustomScrollView(
-                    controller: _dynamicDetailController.scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: DynamicPanel(
-                          item: _dynamicDetailController.item,
-                          source: 'detail',
-                        ),
-                      ),
-                      replyPersistentHeader(context),
-                      Obx(
-                        () => replyList(
-                            _dynamicDetailController.loadingState.value),
-                      ),
-                    ]
-                        .map<Widget>((e) => SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            sliver: e))
-                        .toList(),
-                  );
-                } else {
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: _ratio[0].toInt(),
-                        child: CustomScrollView(
-                          controller: ScrollController(),
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: [
-                            SliverPadding(
-                              padding: EdgeInsets.only(left: padding / 4),
-                              sliver: SliverToBoxAdapter(
-                                child: DynamicPanel(
-                                  item: _dynamicDetailController.item,
-                                  source: 'detail',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: _ratio[1].toInt(),
-                        child: CustomScrollView(
-                          controller: _dynamicDetailController.scrollController,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: [
-                            SliverPadding(
-                              padding: EdgeInsets.only(right: padding / 4),
-                              sliver: replyPersistentHeader(context),
-                            ),
-                            SliverPadding(
-                              padding: EdgeInsets.only(right: padding / 4),
-                              sliver: Obx(
-                                () => replyList(_dynamicDetailController
-                                    .loadingState.value),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
+      body: context.orientation == Orientation.portrait
+          ? refreshIndicator(
+              onRefresh: () async {
+                await _dynamicDetailController.onRefresh();
               },
-            ),
-            if (_fabAnimationCtr != null)
-              Positioned(
-                bottom: MediaQuery.of(context).padding.bottom + 14,
-                right: 14,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 2),
-                    end: const Offset(0, 0),
-                  ).animate(CurvedAnimation(
-                    parent: _fabAnimationCtr!,
-                    curve: Curves.easeInOut,
-                  )),
-                  child: FloatingActionButton(
-                    heroTag: null,
-                    onPressed: () {
-                      feedBack();
-                      dynamic oid = _dynamicDetailController.oid ??
-                          IdUtils.bv2av(Get.parameters['bvid']!);
-                      _dynamicDetailController.onReply(
-                        context,
-                        oid: oid,
-                        replyType: ReplyType.values[replyType],
-                      );
-                    },
-                    tooltip: '评论动态',
-                    child: const Icon(Icons.reply),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
+              child: _buildBody(context.orientation),
+            )
+          : _buildBody(context.orientation),
     );
   }
+
+  Widget _buildBody(Orientation orientation) => Stack(
+        children: [
+          Builder(
+            builder: (context) {
+              double padding = max(context.width / 2 - Grid.maxRowWidth, 0);
+              if (orientation == Orientation.portrait) {
+                return CustomScrollView(
+                  controller: _dynamicDetailController.scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: DynamicPanel(
+                        item: _dynamicDetailController.item,
+                        source: 'detail',
+                      ),
+                    ),
+                    replyPersistentHeader(context),
+                    Obx(
+                      () => replyList(
+                          _dynamicDetailController.loadingState.value),
+                    ),
+                  ]
+                      .map<Widget>((e) => SliverPadding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          sliver: e))
+                      .toList(),
+                );
+              } else {
+                return Row(
+                  children: [
+                    Expanded(
+                      flex: _ratio[0].toInt(),
+                      child: CustomScrollView(
+                        controller: ScrollController(),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          SliverPadding(
+                            padding: EdgeInsets.only(left: padding / 4),
+                            sliver: SliverToBoxAdapter(
+                              child: DynamicPanel(
+                                item: _dynamicDetailController.item,
+                                source: 'detail',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: _ratio[1].toInt(),
+                      child: Scaffold(
+                        body: refreshIndicator(
+                          onRefresh: () async {
+                            await _dynamicDetailController.onRefresh();
+                          },
+                          child: CustomScrollView(
+                            controller:
+                                _dynamicDetailController.scrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            slivers: [
+                              SliverPadding(
+                                padding: EdgeInsets.only(right: padding / 4),
+                                sliver: replyPersistentHeader(context),
+                              ),
+                              SliverPadding(
+                                padding: EdgeInsets.only(right: padding / 4),
+                                sliver: Obx(
+                                  () => replyList(_dynamicDetailController
+                                      .loadingState.value),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+          if (_fabAnimationCtr != null)
+            Positioned(
+              bottom: MediaQuery.of(context).padding.bottom + 14,
+              right: 14,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 2),
+                  end: const Offset(0, 0),
+                ).animate(CurvedAnimation(
+                  parent: _fabAnimationCtr!,
+                  curve: Curves.easeInOut,
+                )),
+                child: FloatingActionButton(
+                  heroTag: null,
+                  onPressed: () {
+                    feedBack();
+                    dynamic oid = _dynamicDetailController.oid ??
+                        IdUtils.bv2av(Get.parameters['bvid']!);
+                    _dynamicDetailController.onReply(
+                      context,
+                      oid: oid,
+                      replyType: ReplyType.values[replyType],
+                    );
+                  },
+                  tooltip: '评论动态',
+                  child: const Icon(Icons.reply),
+                ),
+              ),
+            ),
+        ],
+      );
 
   SliverPersistentHeader replyPersistentHeader(BuildContext context) {
     return SliverPersistentHeader(
@@ -454,7 +480,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             replyItem: loadingState.response.replies[index],
                             showReplyRow: true,
                             replyLevel: '1',
-                            replyReply: replyReply,
+                            replyReply: (replyItem, id, isTop) =>
+                                replyReply(context, replyItem, id, isTop),
                             replyType: ReplyType.values[replyType],
                             onReply: () {
                               _dynamicDetailController.onReply(
@@ -472,7 +499,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             replyItem: loadingState.response.replies[index],
                             showReplyRow: true,
                             replyLevel: '1',
-                            replyReply: replyReply,
+                            replyReply: (replyItem, id, isTop) =>
+                                replyReply(context, replyItem, id, isTop),
                             replyType: ReplyType.values[replyType],
                             onReply: () {
                               _dynamicDetailController.onReply(

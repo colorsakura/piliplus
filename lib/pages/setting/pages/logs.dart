@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../services/loggeer.dart';
 
 class LogsPage extends StatefulWidget {
@@ -72,25 +71,17 @@ class _LogsPageState extends State<LogsPage> {
   }
 
   void copyLogs() async {
-    await Clipboard.setData(ClipboardData(text: fileContent));
-    if (context.mounted) {
+    await Utils.copyText(fileContent, needToast: false);
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('复制成功')),
       );
     }
   }
 
-  void feedback() {
-    launchUrl(
-      Uri.parse('https://github.com/bggRGjQaUbCoE/PiliPalaX/issues'),
-      // 系统自带浏览器打开
-      mode: LaunchMode.externalApplication,
-    );
-  }
-
   void clearLogsHandle() async {
     if (await clearLogs()) {
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('已清空')),
         );
@@ -114,7 +105,8 @@ class _LogsPageState extends State<LogsPage> {
                   copyLogs();
                   break;
                 case 'feedback':
-                  feedback();
+                  Utils.launchURL(
+                      'https://github.com/bggRGjQaUbCoE/PiliPalaX/issues');
                   break;
                 case 'clear':
                   clearLogsHandle();
@@ -160,9 +152,7 @@ class _LogsPageState extends State<LogsPage> {
                         ),
                         TextButton.icon(
                           onPressed: () async {
-                            await Clipboard.setData(
-                              ClipboardData(text: log['body']),
-                            );
+                            await Utils.copyText(log['body'], needToast: false);
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(

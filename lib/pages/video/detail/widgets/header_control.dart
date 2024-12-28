@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:PiliPalaX/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
@@ -340,11 +341,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                           subtitle: Text(
                                               '${player.state.width}x${player.state.height}'),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "Resolution\n${player.state.width}x${player.state.height}",
-                                              ),
+                                            Utils.copyText(
+                                              'Resolution\n${player.state.width}x${player.state.height}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -355,11 +354,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                               .state.videoParams
                                               .toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "VideoParams\n${player.state.videoParams}",
-                                              ),
+                                            Utils.copyText(
+                                              'VideoParams\n${player.state.videoParams}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -370,11 +367,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                               .state.audioParams
                                               .toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "AudioParams\n${player.state.audioParams}",
-                                              ),
+                                            Utils.copyText(
+                                              'AudioParams\n${player.state.audioParams}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -384,11 +379,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                           subtitle: Text(
                                               player.state.playlist.toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "Media\n${player.state.playlist}",
-                                              ),
+                                            Utils.copyText(
+                                              'Media\n${player.state.playlist}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -399,11 +392,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                               .state.track.audio
                                               .toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "AudioTrack\n${player.state.track.audio}",
-                                              ),
+                                            Utils.copyText(
+                                              'AudioTrack\n${player.state.track.audio}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -414,11 +405,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                               .state.track.video
                                               .toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "VideoTrack\n${player.state.track.audio}",
-                                              ),
+                                            Utils.copyText(
+                                              'VideoTrack\n${player.state.track.audio}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -428,11 +417,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                             subtitle: Text(
                                                 player.state.pitch.toString()),
                                             onTap: () {
-                                              Clipboard.setData(
-                                                ClipboardData(
-                                                  text:
-                                                      "pitch\n${player.state.pitch}",
-                                                ),
+                                              Utils.copyText(
+                                                'pitch\n${player.state.pitch}',
+                                                needToast: false,
                                               );
                                             }),
                                         ListTile(
@@ -441,11 +428,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                             subtitle: Text(
                                                 player.state.rate.toString()),
                                             onTap: () {
-                                              Clipboard.setData(
-                                                ClipboardData(
-                                                  text:
-                                                      "rate\n${player.state.rate}",
-                                                ),
+                                              Utils.copyText(
+                                                'rate\n${player.state.rate}',
+                                                needToast: false,
                                               );
                                             }),
                                         ListTile(
@@ -455,11 +440,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                               .state.audioBitrate
                                               .toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "AudioBitrate\n${player.state.audioBitrate}",
-                                              ),
+                                            Utils.copyText(
+                                              'AudioBitrate\n${player.state.audioBitrate}',
+                                              needToast: false,
                                             );
                                           },
                                         ),
@@ -469,11 +452,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                           subtitle: Text(
                                               player.state.volume.toString()),
                                           onTap: () {
-                                            Clipboard.setData(
-                                              ClipboardData(
-                                                text:
-                                                    "Volume\n${player.state.volume}",
-                                              ),
+                                            Utils.copyText(
+                                              'Volume\n${player.state.volume}',
+                                              needToast: false,
                                             );
                                           },
                                         ),

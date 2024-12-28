@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -120,10 +121,9 @@ class _LoginPageState extends State<LoginPage> {
                 //     _loginPageCtr.codeInfo.value['data']?['url'] ?? "",
                 //     mode: LaunchMode.externalApplication);
                 // 复制到剪贴板
-                Clipboard.setData(ClipboardData(
-                    text: _loginPageCtr.codeInfo.value['data']?['url'] ?? ""));
-                SmartDialog.showToast('已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开',
-                    displayTime: const Duration(seconds: 5));
+                Utils.copyText(
+                    _loginPageCtr.codeInfo.value['data']?['url'] ?? '',
+                    toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开');
               },
               child: Padding(
                 padding:

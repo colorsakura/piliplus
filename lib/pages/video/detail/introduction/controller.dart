@@ -434,8 +434,7 @@ class VideoIntroController extends GetxController
                   ),
                   onTap: () {
                     Get.back();
-                    Clipboard.setData(ClipboardData(text: videoUrl));
-                    SmartDialog.showToast('已复制');
+                    Utils.copyText(videoUrl);
                   },
                 ),
                 ListTile(

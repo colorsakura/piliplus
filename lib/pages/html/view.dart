@@ -8,11 +8,10 @@ import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item_grpc.dart'
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/skeleton/video_reply.dart';
 import 'package:PiliPalaX/common/widgets/html_render.dart';
@@ -106,27 +105,41 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     }
   }
 
-  void replyReply(replyItem, id, isTop) {
+  void replyReply(context, replyItem, id, isTop) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
-      Get.to(
-        () => Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: Text('评论详情'),
-          ),
-          body: VideoReplyReplyPanel(
-            id: id,
-            oid: oid,
-            rpid: rpid,
-            source: 'dynamic',
-            replyType: ReplyType.values[type],
-            firstFloor: replyItem,
-            isTop: isTop ?? false,
-          ),
-        ),
-      );
+      Widget replyReplyPage() => Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: Text('评论详情'),
+            ),
+            body: VideoReplyReplyPanel(
+              id: id,
+              oid: oid,
+              rpid: rpid,
+              source: 'dynamic',
+              replyType: ReplyType.values[type],
+              firstFloor: replyItem,
+              isTop: isTop ?? false,
+            ),
+          );
+      if (this.context.orientation == Orientation.portrait) {
+        Get.to(replyReplyPage);
+      } else {
+        ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
+        if (scaffoldState != null) {
+          scaffoldState.showBottomSheet(
+            (context) => MediaQuery.removePadding(
+              context: context,
+              removeLeft: true,
+              child: replyReplyPage(),
+            ),
+          );
+        } else {
+          Get.to(replyReplyPage);
+        }
+      }
     });
   }
 
@@ -178,7 +191,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               },
               icon: Transform.rotate(
                 angle: pi / 2,
-                child: Icon(Icons.splitscreen),
+                child: Icon(Icons.splitscreen, size: 19),
               ),
             ),
           IconButton(
@@ -193,7 +206,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             icon: const Icon(Icons.open_in_browser_outlined, size: 19),
           ),
           PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert, size: 19),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
                 onTap: () => {
@@ -226,10 +239,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 ),
               ),
               PopupMenuItem(
-                onTap: () => {
-                  Clipboard.setData(ClipboardData(text: url)),
-                  SmartDialog.showToast('已复制'),
-                },
+                onTap: () => Utils.copyText(url),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -322,23 +332,25 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                             Theme.of(context).dividerColor.withOpacity(0.05)),
                     Expanded(
                       flex: _ratio[1].toInt(),
-                      child: CustomScrollView(
-                        controller: _htmlRenderCtr.scrollController,
-                        slivers: [
-                          SliverPadding(
-                            padding: EdgeInsets.only(right: padding / 4),
-                            sliver: SliverToBoxAdapter(
-                              child: replyHeader(),
+                      child: Scaffold(
+                        body: CustomScrollView(
+                          controller: _htmlRenderCtr.scrollController,
+                          slivers: [
+                            SliverPadding(
+                              padding: EdgeInsets.only(right: padding / 4),
+                              sliver: SliverToBoxAdapter(
+                                child: replyHeader(),
+                              ),
                             ),
-                          ),
-                          SliverPadding(
-                            padding: EdgeInsets.only(right: padding / 4),
-                            sliver: Obx(
-                              () =>
-                                  replyList(_htmlRenderCtr.loadingState.value),
+                            SliverPadding(
+                              padding: EdgeInsets.only(right: padding / 4),
+                              sliver: Obx(
+                                () => replyList(
+                                    _htmlRenderCtr.loadingState.value),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -414,7 +426,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           replyItem: loadingState.response.replies[index],
                           showReplyRow: true,
                           replyLevel: '1',
-                          replyReply: replyReply,
+                          replyReply: (replyItem, id, isTop) =>
+                              replyReply(context, replyItem, id, isTop),
                           replyType: ReplyType.values[type],
                           onReply: () {
                             _htmlRenderCtr.onReply(
@@ -431,7 +444,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           replyItem: loadingState.response.replies[index],
                           showReplyRow: true,
                           replyLevel: '1',
-                          replyReply: replyReply,
+                          replyReply: (replyItem, id, isTop) =>
+                              replyReply(context, replyItem, id, isTop),
                           replyType: ReplyType.values[type],
                           onReply: () {
                             _htmlRenderCtr.onReply(

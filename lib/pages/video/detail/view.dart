@@ -25,7 +25,6 @@ import 'package:PiliPalaX/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:floating/floating.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -164,15 +163,17 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     appbarStreamListen();
     // lifecycleListener();
     autoScreen();
-    Utils.channel.setMethodCallHandler((call) async {
-      if (call.method == 'onUserLeaveHint') {
-        if (autoPiP &&
-            plPlayerController?.playerStatus.status.value ==
-                PlayerStatus.playing) {
-          enterPip();
+    if (Platform.isAndroid) {
+      Utils.channel.setMethodCallHandler((call) async {
+        if (call.method == 'onUserLeaveHint') {
+          if (autoPiP &&
+              plPlayerController?.playerStatus.status.value ==
+                  PlayerStatus.playing) {
+            enterPip();
+          }
         }
-      }
-    });
+      });
+    }
     // _animationController = AnimationController(
     //   vsync: this,
     //   duration: const Duration(milliseconds: 300),

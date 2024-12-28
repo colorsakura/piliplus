@@ -69,7 +69,7 @@ Widget htmlRender({
     ],
     style: {
       'html': Style(
-        fontSize: FontSize(17),
+        fontSize: FontSize(16),
         lineHeight: LineHeight.percent(160),
         letterSpacing: 0.3,
       ),
@@ -105,7 +105,7 @@ Widget htmlRender({
         margin: Margins.only(bottom: 8),
       ),
       'h3,h4,h5': Style(
-        fontSize: FontSize(17),
+        fontSize: FontSize(16),
         fontWeight: FontWeight.bold,
         margin: Margins.only(bottom: 4),
       ),

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:PiliPalaX/models/video/play/url.dart';
 import 'package:PiliPalaX/pages/live_room/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/index.dart';
@@ -91,9 +90,7 @@ class _BottomControlState extends State<BottomControl> {
                   widget.controller!.hiddenControls(false);
                   try {
                     canUsePiP = await widget.floating!.isPipAvailable;
-                  } on PlatformException catch (_) {
-                    canUsePiP = false;
-                  }
+                  } catch (_) {}
                   if (canUsePiP) {
                     await widget.floating!.enable(const EnableManual());
                   } else {}

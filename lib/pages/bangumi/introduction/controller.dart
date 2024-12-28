@@ -7,7 +7,6 @@ import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
@@ -325,8 +324,7 @@ class BangumiIntroController extends CommonController {
                   ),
                   onTap: () {
                     Get.back();
-                    Clipboard.setData(ClipboardData(text: videoUrl));
-                    SmartDialog.showToast('已复制');
+                    Utils.copyText(videoUrl);
                   },
                 ),
                 ListTile(

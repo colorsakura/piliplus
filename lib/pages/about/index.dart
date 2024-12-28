@@ -310,8 +310,7 @@ class _AboutPageState extends State<AboutPage> {
                           onTap: () async {
                             Get.back();
                             String data = await GStorage.exportAllSettings();
-                            Clipboard.setData(ClipboardData(text: data));
-                            SmartDialog.showToast('已复制到剪贴板');
+                            Utils.copyText(data);
                           },
                         ),
                         ListTile(

@@ -18,7 +18,6 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/login.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:crypto/crypto.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -437,9 +436,15 @@ class Utils {
     );
   }
 
-  static void copyText(String text) {
+  static Future copyText(
+    String text, {
+    bool needToast = true,
+    String? toastText,
+  }) async {
     Clipboard.setData(ClipboardData(text: text));
-    SmartDialog.showToast('已复制');
+    if (needToast) {
+      SmartDialog.showToast(toastText ?? '已复制');
+    }
   }
 
   static launchURL(String url) async {
@@ -766,9 +771,9 @@ class Utils {
   }
 
   // 版本对比
-  static bool needUpdate(localVersion, remoteVersion) {
-    return localVersion != remoteVersion;
-  }
+  // static bool needUpdate(localVersion, remoteVersion) {
+  //   return localVersion != remoteVersion;
+  // }
 
   // 检查更新
   // static Future<bool> checkUpdate() async {
@@ -859,29 +864,26 @@ class Utils {
   // }
 
   // 下载适用于当前系统的安装包
-  static Future matchVersion(data) async {
-    await SmartDialog.dismiss();
-    // 获取设备信息
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      // [arm64-v8a]
-      String abi = androidInfo.supportedAbis.first;
-      late String downloadUrl;
-      if (data.assets.isNotEmpty) {
-        for (var i in data.assets) {
-          if (i.downloadUrl.contains(abi)) {
-            downloadUrl = i.downloadUrl;
-          }
-        }
-        // 应用外下载
-        launchUrl(
-          Uri.parse(downloadUrl),
-          mode: LaunchMode.externalApplication,
-        );
-      }
-    }
-  }
+  // static Future matchVersion(data) async {
+  //   await SmartDialog.dismiss();
+  //   // 获取设备信息
+  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //   if (Platform.isAndroid) {
+  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  //     // [arm64-v8a]
+  //     String abi = androidInfo.supportedAbis.first;
+  //     late String downloadUrl;
+  //     if (data.assets.isNotEmpty) {
+  //       for (var i in data.assets) {
+  //         if (i.downloadUrl.contains(abi)) {
+  //           downloadUrl = i.downloadUrl;
+  //         }
+  //       }
+  //       // 应用外下载
+  //       launchURL(downloadUrl);
+  //     }
+  //   }
+  // }
 
   // 时间戳转时间
   static tampToSeektime(number) {

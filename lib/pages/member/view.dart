@@ -454,10 +454,7 @@ class _MemberPageState extends State<MemberPage>
             const SizedBox(width: 5),
             GestureDetector(
               onTap: () {
-                Clipboard.setData(
-                  ClipboardData(text: _memberController.mid.toString()),
-                );
-                SmartDialog.showToast('已复制${_memberController.mid}至剪贴板');
+                Utils.copyText(_memberController.mid.toString());
               },
               child: Container(
                 padding:

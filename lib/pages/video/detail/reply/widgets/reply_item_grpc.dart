@@ -1059,9 +1059,8 @@ class ReplyItemGrpc extends StatelessWidget {
           }
           break;
         case 'copyAll':
-          await Clipboard.setData(ClipboardData(text: message));
-          SmartDialog.showToast('已复制');
           Get.back();
+          Utils.copyText(message);
           break;
         case 'copyFreedom':
           Get.back();
