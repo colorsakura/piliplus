@@ -750,24 +750,19 @@ class Utils {
   }
 
   static int findClosestNumber(int target, List<int> numbers) {
-    int minDiff = 127;
-    int? closestNumber;
-    try {
-      for (int number in numbers) {
-        int diff = target - number;
-        if (diff < 0) {
-          continue;
-        }
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestNumber = number;
-        }
-      }
-    } catch (_) {
-    } finally {
-      closestNumber ??= numbers.last;
-    }
-    return closestNumber;
+    return switch (numbers.length) {
+      0 => target,
+      1 => numbers.first,
+      _ => numbers.reduce((a, b) {
+          int diff1 = (a - target).abs();
+          int diff2 = (b - target).abs();
+          return diff1 == diff2
+              ? max(a, b)
+              : diff1 < diff2
+                  ? a
+                  : b;
+        }),
+    };
   }
 
   // 版本对比
