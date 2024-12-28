@@ -127,7 +127,8 @@ class FavDetailController extends MultiSelectController {
 
   void toViewPlayAll() {
     if (loadingState.value is Success) {
-      List<FavDetailItemData> list = (loadingState.value as Success).response;
+      List<FavDetailItemData> list = List<FavDetailItemData>.from(
+          (loadingState.value as Success).response);
       for (FavDetailItemData element in list) {
         if (element.cid == null) {
           continue;

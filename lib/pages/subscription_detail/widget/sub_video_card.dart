@@ -41,8 +41,10 @@ class SubVideoCardH extends StatelessWidget {
         });
       },
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-            StyleString.safeSpace, 5, StyleString.safeSpace, 5),
+        padding: const EdgeInsets.symmetric(
+          horizontal: StyleString.safeSpace,
+          vertical: 5,
+        ),
         child: LayoutBuilder(
           builder: (context, boxConstraints) {
             double width =

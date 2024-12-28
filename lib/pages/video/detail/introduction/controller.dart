@@ -131,16 +131,14 @@ class VideoIntroController extends GetxController
     if (result['status']) {
       videoDetail.value = result['data']!;
       videoItem!['staff'] = result['data'].staff;
-      final videoDetailController =
-          Get.find<VideoDetailController>(tag: heroTag);
-      if (videoDetailController.videoItem['pic'] == null ||
-          videoDetailController.videoItem['pic'] == '') {
-        try {
+      try {
+        final videoDetailController =
+            Get.find<VideoDetailController>(tag: heroTag);
+        if (videoDetailController.videoItem['pic'] == null ||
+            videoDetailController.videoItem['pic'] == '') {
           videoDetailController.videoItem['pic'] = result['data'].pic;
-        } catch (e) {
-          debugPrint(e.toString());
         }
-      }
+      } catch (_) {}
       if (videoDetail.value.pages != null &&
           videoDetail.value.pages!.isNotEmpty &&
           lastPlayCid.value == 0) {

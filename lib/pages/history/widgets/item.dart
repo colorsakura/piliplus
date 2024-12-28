@@ -163,7 +163,7 @@ class HistoryItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: StyleString.safeSpace,
-          vertical: StyleString.cardSpace,
+          vertical: 5,
         ),
         child: LayoutBuilder(
           builder: (context, boxConstraints) {

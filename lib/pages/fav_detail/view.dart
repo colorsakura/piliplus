@@ -360,9 +360,9 @@ class _FavDetailPageState extends State<FavDetailPage> {
                           },
                         ),
                         Positioned(
-                          top: 8,
+                          top: 5,
                           left: 12,
-                          bottom: 8,
+                          bottom: 5,
                           child: IgnorePointer(
                             child: LayoutBuilder(
                               builder: (context, constraints) =>

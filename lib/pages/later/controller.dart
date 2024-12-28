@@ -168,7 +168,8 @@ class LaterController extends MultiSelectController {
   // 稍后再看播放全部
   void toViewPlayAll() {
     if (loadingState.value is Success) {
-      List<HotVideoItemModel> list = (loadingState.value as Success).response;
+      List<HotVideoItemModel> list = List<HotVideoItemModel>.from(
+          (loadingState.value as Success).response);
       for (HotVideoItemModel item in list) {
         if (item.cid == null) {
           continue;
