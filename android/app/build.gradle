@@ -38,7 +38,7 @@ android {
     compileSdkVersion flutter.compileSdkVersion
 
     namespace 'com.example.pilipalax'
-    ndkVersion "27.0.12077973"
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
