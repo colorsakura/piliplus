@@ -33,6 +33,8 @@ import 'package:html/parser.dart' as html_parser;
 class Utils {
   static final Random random = Random();
 
+  static const channel = MethodChannel("pilipalax");
+
   static Future<dynamic> getWwebid(mid) async {
     try {
       dynamic response =

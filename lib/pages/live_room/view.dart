@@ -108,7 +108,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     ScreenBrightness().resetApplicationScreenBrightness();
     PlPlayerController.setPlayCallBack(null);
     _liveRoomController.msgStream?.close();
-    floating?.dispose();
+    // floating?.dispose();
     _node.dispose();
     plPlayerController.dispose();
     _ctr.dispose();
@@ -442,8 +442,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     });
     if (Platform.isAndroid) {
       return PiPSwitcher(
-        childWhenDisabled: childWhenDisabled,
-        childWhenEnabled: videoPlayerPanel,
+        getChildWhenDisabled: () => childWhenDisabled,
+        getChildWhenEnabled: () => videoPlayerPanel,
         floating: floating,
       );
     } else {

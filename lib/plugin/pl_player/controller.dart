@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -1291,6 +1292,7 @@ class PlPlayerController {
       return;
     }
     _playerCount.value = 0;
+    Utils.channel.setMethodCallHandler(null);
     pause();
     try {
       _timer?.cancel();

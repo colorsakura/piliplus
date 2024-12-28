@@ -70,7 +70,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late final _introController = ScrollController();
   late String heroTag;
 
-  PlayerStatus playerStatus = PlayerStatus.playing;
   double doubleOffset = 0;
 
   late Future _futureBuilderFuture;
@@ -83,11 +82,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   late bool pipNoDanmaku;
   late bool removeSafeArea;
   // late bool showStatusBarBackgroundColor;
-  final Floating floating = Floating();
+  // final Floating floating = Floating();
   // 生命周期监听
   // late final AppLifecycleListener _lifecycleListener;
   bool isShowing = true;
-  late final MethodChannel onUserLeaveHintListener;
   // StreamSubscription<Duration>? _bufferedListener;
   bool get isFullScreen => plPlayerController?.isFullScreen.value ?? false;
 
@@ -166,13 +164,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     appbarStreamListen();
     // lifecycleListener();
     autoScreen();
-    onUserLeaveHintListener = const MethodChannel("onUserLeaveHint");
-    onUserLeaveHintListener.setMethodCallHandler((call) async {
+    Utils.channel.setMethodCallHandler((call) async {
       if (call.method == 'onUserLeaveHint') {
         if (autoPiP &&
-            plPlayerController != null &&
-            playerStatus == PlayerStatus.playing) {
-          autoEnterPip();
+            plPlayerController?.playerStatus.status.value ==
+                PlayerStatus.playing) {
+          enterPip();
         }
       }
     });
@@ -234,7 +231,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   // 播放器状态监听
   void playerListener(PlayerStatus? status) async {
-    playerStatus = status!;
     if (status == PlayerStatus.completed) {
       shutdownTimerService.handleWaitingFinished();
       bool notExitFlag = false;
@@ -345,8 +341,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.positionSubscription?.cancel();
     videoIntroController.canelTimer();
     appbarStream.close();
-    floating.dispose();
-    videoDetailController.floating?.dispose();
+    // floating.dispose();
+    // videoDetailController.floating?.dispose();
     videoIntroController.videoDetail.close();
     videoDetailController.cid.close();
     if (!horizontalScreen) {
@@ -487,11 +483,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   //   }
   // }
 
-  void autoEnterPip() {
-    final String routePath = Get.currentRoute;
-
-    if (autoPiP && routePath.startsWith('/video')) {
-      floating.enable(
+  void enterPip() {
+    if (Get.currentRoute.startsWith('/video')) {
+      videoDetailController.floating?.enable(
         EnableManual(
           aspectRatio: Rational(
             videoDetailController.data.dash!.video!.first.width!,
@@ -1117,9 +1111,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Widget autoChoose(Widget childWhenDisabled) {
     if (Platform.isAndroid) {
       return PiPSwitcher(
-        childWhenDisabled: childWhenDisabled,
-        childWhenEnabled: childWhenEnabled,
-        floating: floating,
+        getChildWhenDisabled: () => childWhenDisabled,
+        getChildWhenEnabled: () => childWhenEnabled,
+        floating: videoDetailController.floating,
       );
     }
     return childWhenDisabled;

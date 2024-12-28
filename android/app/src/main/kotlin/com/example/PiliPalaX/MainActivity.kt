@@ -16,7 +16,8 @@ class MainActivity : AudioServiceActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        methodChannel = MethodChannel(flutterEngine!!.getDartExecutor()!!.getBinaryMessenger(), CHANNEL)
+
+        methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "pilipalax")
         methodChannel.setMethodCallHandler { call, result ->
             if (call.method == "back") {
                 back()
@@ -51,10 +52,6 @@ class MainActivity : AudioServiceActivity() {
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         methodChannel.invokeMethod("onUserLeaveHint", null)
-    }
-
-    companion object {
-        private const val CHANNEL = "onUserLeaveHint"
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {

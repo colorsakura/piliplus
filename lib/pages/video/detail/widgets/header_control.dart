@@ -99,7 +99,7 @@ class _HeaderControlState extends State<HeaderControl> {
 
   @override
   void dispose() {
-    widget.floating?.dispose();
+    // widget.floating?.dispose();
     // fullScreenStatusListener.cancel();
     clock?.cancel();
     super.dispose();

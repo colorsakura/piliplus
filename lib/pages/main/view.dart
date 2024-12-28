@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPalaX/grpc/grpc_client.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -155,7 +156,7 @@ class _MainAppState extends State<MainApp>
           _mainController.bottomBarStream.add(true);
         } else {
           if (Platform.isAndroid) {
-            const MethodChannel("onUserLeaveHint").invokeMethod('back');
+            Utils.channel.invokeMethod('back');
           } else {
             SystemNavigator.pop();
           }
