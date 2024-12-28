@@ -71,9 +71,7 @@ class _MainAppState extends State<MainApp>
   void _checkDefaultSearch([bool shouldCheck = false]) {
     if (_homeController.enableSearchWord) {
       if (shouldCheck &&
-          _mainController
-                  .pages[_mainController.pageController.page?.round() ?? 0]
-              is! HomePage) {
+          _mainController.pages[_mainController.selectedIndex] is! HomePage) {
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
