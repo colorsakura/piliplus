@@ -350,74 +350,75 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             ),
                           )
                         : SelfSizedHorizontalList(
-                            gapSize: 10,
+                            gapSize: 25,
                             itemCount: videoItem['staff'].length,
-                            childBuilder: (index) => Container(
-                              width: 80,
-                              alignment: Alignment.center,
-                              child: GestureDetector(
-                                onTap: () {
-                                  int? ownerMid = !widget.loadingStatus
-                                      ? widget.videoDetail?.owner?.mid
-                                      : videoItem['owner']?.mid;
-                                  if (videoItem['staff'][index].mid ==
-                                          ownerMid &&
-                                      context.orientation ==
-                                          Orientation.landscape &&
-                                      _horizontalMemberPage) {
-                                    widget.onShowMemberPage(ownerMid);
-                                  } else {
-                                    Get.toNamed(
-                                      '/member?mid=${videoItem['staff'][index].mid}',
-                                      // arguments: {
-                                      // 'face':
-                                      //     videoItem['staff'][index].face,
-                                      // 'heroTag': Utils.makeHeroTag(
-                                      //     videoItem['staff'][index].mid),
-                                      // },
-                                    );
-                                  }
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    NetworkImgLayer(
-                                      type: 'avatar',
-                                      src: videoItem['staff'][index].face,
-                                      width: 40,
-                                      height: 40,
-                                      fadeInDuration: Duration.zero,
-                                      fadeOutDuration: Duration.zero,
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      videoItem['staff'][index].name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: videoItem['staff'][index]
-                                                        .vip
-                                                        .status >
-                                                    0 &&
-                                                videoItem['staff'][index]
-                                                        .vip
-                                                        .type ==
-                                                    2
-                                            ? context.vipColor
-                                            : null,
+                            childBuilder: (index) => GestureDetector(
+                              onTap: () {
+                                int? ownerMid = !widget.loadingStatus
+                                    ? widget.videoDetail?.owner?.mid
+                                    : videoItem['owner']?.mid;
+                                if (videoItem['staff'][index].mid == ownerMid &&
+                                    context.orientation ==
+                                        Orientation.landscape &&
+                                    _horizontalMemberPage) {
+                                  widget.onShowMemberPage(ownerMid);
+                                } else {
+                                  Get.toNamed(
+                                    '/member?mid=${videoItem['staff'][index].mid}',
+                                    // arguments: {
+                                    // 'face':
+                                    //     videoItem['staff'][index].face,
+                                    // 'heroTag': Utils.makeHeroTag(
+                                    //     videoItem['staff'][index].mid),
+                                    // },
+                                  );
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  NetworkImgLayer(
+                                    type: 'avatar',
+                                    src: videoItem['staff'][index].face,
+                                    width: 40,
+                                    height: 40,
+                                    fadeInDuration: Duration.zero,
+                                    fadeOutDuration: Duration.zero,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        videoItem['staff'][index].name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: videoItem['staff'][index]
+                                                          .vip
+                                                          .status >
+                                                      0 &&
+                                                  videoItem['staff'][index]
+                                                          .vip
+                                                          .type ==
+                                                      2
+                                              ? context.vipColor
+                                              : null,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      videoItem['staff'][index].title,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
+                                      Text(
+                                        videoItem['staff'][index].title,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
