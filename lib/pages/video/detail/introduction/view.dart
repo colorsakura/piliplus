@@ -152,14 +152,12 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
 
-  void Function()? handleState(Future Function() action) {
-    return isProcessing
-        ? null
-        : () async {
-            setState(() => isProcessing = true);
-            await action();
-            setState(() => isProcessing = false);
-          };
+  void handleState(Future Function() action) async {
+    if (isProcessing.not) {
+      isProcessing = true;
+      await action();
+      isProcessing = false;
+    }
   }
 
   @override
@@ -738,8 +736,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               () => ActionItem(
                 icon: const Icon(FontAwesomeIcons.thumbsUp),
                 selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                onTap: handleState(videoIntroController.actionLikeVideo),
-                onLongPress: handleState(videoIntroController.actionOneThree),
+                onTap: () => handleState(videoIntroController.actionLikeVideo),
+                onLongPress: () =>
+                    handleState(videoIntroController.actionOneThree),
                 selectStatus: videoIntroController.hasLike.value,
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '点赞',
@@ -765,7 +764,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               () => ActionItem(
                   icon: const Icon(FontAwesomeIcons.thumbsDown),
                   selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
-                  onTap: handleState(videoIntroController.actionDislikeVideo),
+                  onTap: () =>
+                      handleState(videoIntroController.actionDislikeVideo),
                   selectStatus: videoIntroController.hasDislike.value,
                   loadingStatus: widget.loadingStatus,
                   semanticsLabel: '点踩',
@@ -782,7 +782,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 key: _coinKey,
                 icon: const Icon(FontAwesomeIcons.b),
                 selectIcon: const Icon(FontAwesomeIcons.b),
-                onTap: handleState(videoIntroController.actionCoinVideo),
+                onTap: () => handleState(videoIntroController.actionCoinVideo),
                 selectStatus: videoIntroController.hasCoin.value,
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '投币',
@@ -838,7 +838,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.thumbsUp),
-          onTap: handleState(videoIntroController.actionLikeVideo),
+          onTap: () => handleState(videoIntroController.actionLikeVideo),
           selectStatus: videoIntroController.hasLike.value,
           loadingStatus: widget.loadingStatus,
           text: !widget.loadingStatus
@@ -850,7 +850,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.b),
-          onTap: handleState(videoIntroController.actionCoinVideo),
+          onTap: () => handleState(videoIntroController.actionCoinVideo),
           selectStatus: videoIntroController.hasCoin.value,
           loadingStatus: widget.loadingStatus,
           text: !widget.loadingStatus

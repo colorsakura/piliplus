@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -136,14 +137,12 @@ class _BangumiInfoState extends State<BangumiInfo>
   late final BangumiInfoModel? bangumiItem;
   int? cid;
   bool isProcessing = false;
-  void Function()? handleState(Future Function() action) {
-    return isProcessing
-        ? null
-        : () async {
-            setState(() => isProcessing = true);
-            await action();
-            setState(() => isProcessing = false);
-          };
+  void handleState(Future Function() action) async {
+    if (isProcessing.not) {
+      isProcessing = true;
+      await action();
+      isProcessing = false;
+    }
   }
 
   late final _coinKey = GlobalKey<ActionItemState>();
@@ -447,7 +446,8 @@ class _BangumiInfoState extends State<BangumiInfo>
                   () => ActionItem(
                     icon: const Icon(FontAwesomeIcons.thumbsUp),
                     selectIcon: const Icon(FontAwesomeIcons.solidThumbsUp),
-                    onTap: handleState(bangumiIntroController.actionLikeVideo),
+                    onTap: () =>
+                        handleState(bangumiIntroController.actionLikeVideo),
                     onLongPress: bangumiIntroController.actionOneThree,
                     selectStatus: bangumiIntroController.hasLike.value,
                     loadingStatus: false,
@@ -477,7 +477,8 @@ class _BangumiInfoState extends State<BangumiInfo>
                     key: _coinKey,
                     icon: const Icon(FontAwesomeIcons.b),
                     selectIcon: const Icon(FontAwesomeIcons.b),
-                    onTap: handleState(bangumiIntroController.actionCoinVideo),
+                    onTap: () =>
+                        handleState(bangumiIntroController.actionCoinVideo),
                     selectStatus: bangumiIntroController.hasCoin.value,
                     loadingStatus: false,
                     semanticsLabel: '投币',
@@ -540,7 +541,7 @@ class _BangumiInfoState extends State<BangumiInfo>
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.thumbsUp),
-          onTap: handleState(videoIntroController.actionLikeVideo),
+          onTap: () => handleState(videoIntroController.actionLikeVideo),
           selectStatus: videoIntroController.hasLike.value,
           loadingStatus: widget.loadingStatus,
           text: !widget.loadingStatus
@@ -552,7 +553,7 @@ class _BangumiInfoState extends State<BangumiInfo>
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.b),
-          onTap: handleState(videoIntroController.actionCoinVideo),
+          onTap: () => handleState(videoIntroController.actionCoinVideo),
           selectStatus: videoIntroController.hasCoin.value,
           loadingStatus: widget.loadingStatus,
           text: !widget.loadingStatus

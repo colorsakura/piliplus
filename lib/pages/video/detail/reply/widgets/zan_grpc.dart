@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -91,14 +92,12 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   }
 
   bool isProcessing = false;
-  void Function()? handleState(Future Function() action) {
-    return isProcessing
-        ? null
-        : () async {
-            setState(() => isProcessing = true);
-            await action();
-            setState(() => isProcessing = false);
-          };
+  void handleState(Future Function() action) async {
+    if (isProcessing.not) {
+      isProcessing = true;
+      await action();
+      isProcessing = false;
+    }
   }
 
   get _style => TextButton.styleFrom(
@@ -119,7 +118,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
           height: 32,
           child: TextButton(
             style: _style,
-            onPressed: handleState(onHateReply),
+            onPressed: () => handleState(onHateReply),
             child: Icon(
               widget.replyItem.replyControl.action.toInt() == 2
                   ? FontAwesomeIcons.solidThumbsDown
@@ -138,7 +137,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
           height: 32,
           child: TextButton(
             style: _style,
-            onPressed: handleState(onLikeReply),
+            onPressed: () => handleState(onLikeReply),
             child: Row(
               children: [
                 Icon(

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -81,14 +82,12 @@ class _ZanButtonState extends State<ZanButton> {
   }
 
   bool isProcessing = false;
-  void Function()? handleState(Future Function() action) {
-    return isProcessing
-        ? null
-        : () async {
-            setState(() => isProcessing = true);
-            await action();
-            setState(() => isProcessing = false);
-          };
+  void handleState(Future Function() action) async {
+    if (isProcessing.not) {
+      isProcessing = true;
+      await action();
+      isProcessing = false;
+    }
   }
 
   @override
@@ -102,7 +101,7 @@ class _ZanButtonState extends State<ZanButton> {
         SizedBox(
           height: 32,
           child: TextButton(
-            onPressed: handleState(onHateReply),
+            onPressed: () => handleState(onHateReply),
             child: Icon(
               widget.replyItem!.action == 2
                   ? FontAwesomeIcons.solidThumbsDown
@@ -116,7 +115,7 @@ class _ZanButtonState extends State<ZanButton> {
         SizedBox(
           height: 32,
           child: TextButton(
-            onPressed: handleState(onLikeReply),
+            onPressed: () => handleState(onLikeReply),
             child: Row(
               children: [
                 Icon(
