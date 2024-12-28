@@ -160,7 +160,7 @@ class LiveMessageStream {
       required this.roomId,
       required this.uid,
       required this.servers});
-  late WebSocket socket;
+  WebSocket? socket;
   bool heartBeat = true;
   PiliLogger logger = getLogger();
   final String logTag = "LiveStreamService";
@@ -198,9 +198,9 @@ class LiveMessageStream {
 
       socket = await getSocket();
       // logger.d('$logTag ===> TCP连接建立');
-      socket.add(authPackage.marshal());
+      socket?.add(authPackage.marshal());
       // logger.d('$logTag ===> 发送认证包');
-      await for (var data in socket) {
+      await for (var data in socket!) {
         PackageHeader? header = PackageHeader.fromBytesData(data);
         if (header != null) {
           List<int> decompressedData = [];
@@ -229,7 +229,7 @@ class LiveMessageStream {
           }
         }
       }
-      socket.close();
+      socket?.close();
     } catch (e) {
       SmartDialog.showToast("弹幕地址链接失败");
       // logger.i('$logTag ===> TCP连接失败: $e');
@@ -269,7 +269,7 @@ class LiveMessageStream {
               operationCode: 2,
               seq: heartBeatCount));
       try {
-        socket.add(package.marshal());
+        socket?.add(package.marshal());
       } catch (_) {}
       heartBeatCount++;
     }
@@ -280,7 +280,7 @@ class LiveMessageStream {
   }
 
   void close() {
-    socket.close();
+    socket?.close();
     heartBeat = false;
   }
 }
