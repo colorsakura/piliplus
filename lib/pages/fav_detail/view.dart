@@ -339,20 +339,22 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               loadingState.response[index].id,
                               loadingState.response[index].type,
                             ),
-                            onTap:
-                                _favDetailController.enableMultiSelect.value.not
-                                    ? null
-                                    : () {
-                                        _favDetailController.onSelect(index);
-                                      },
-                            onLongPress: () {
-                              if (_favDetailController
-                                  .enableMultiSelect.value.not) {
-                                _favDetailController.enableMultiSelect.value =
-                                    true;
-                                _favDetailController.onSelect(index);
-                              }
-                            },
+                            onTap: _favDetailController.enableMultiSelect.value
+                                ? () {
+                                    _favDetailController.onSelect(index);
+                                  }
+                                : null,
+                            onLongPress: _favDetailController.isOwner.value
+                                ? () {
+                                    if (_favDetailController
+                                        .enableMultiSelect.value.not) {
+                                      _favDetailController
+                                          .enableMultiSelect.value = true;
+                                      _favDetailController.onSelect(index);
+                                    }
+                                  }
+                                : null,
+                            isOwner: _favDetailController.isOwner.value,
                           ),
                         ),
                         Positioned(

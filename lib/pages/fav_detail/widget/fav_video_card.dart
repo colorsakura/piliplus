@@ -20,6 +20,7 @@ class FavVideoCardH extends StatelessWidget {
   final int? searchType;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
+  final bool isOwner;
 
   const FavVideoCardH({
     super.key,
@@ -28,6 +29,7 @@ class FavVideoCardH extends StatelessWidget {
     this.searchType,
     this.onTap,
     this.onLongPress,
+    this.isOwner = false,
   });
 
   @override
@@ -211,53 +213,51 @@ class FavVideoCardH extends StatelessWidget {
                 ),
               ],
             ),
-            searchType != 1
-                ? Positioned(
-                    right: 0,
-                    bottom: -4,
-                    child: IconButton(
-                      tooltip: '取消收藏',
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: Get.context!,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('提示'),
-                              content: const Text('要取消收藏吗?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: Get.back,
-                                  child: Text(
-                                    '取消',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await callFn?.call();
-                                    Get.back();
-                                  },
-                                  child: const Text('确定取消'),
-                                )
-                              ],
-                            );
-                          },
+            if (searchType != 1 && isOwner)
+              Positioned(
+                right: 0,
+                bottom: -4,
+                child: IconButton(
+                  tooltip: '取消收藏',
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: Get.context!,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('提示'),
+                          content: const Text('要取消收藏吗?'),
+                          actions: [
+                            TextButton(
+                              onPressed: Get.back,
+                              child: Text(
+                                '取消',
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await callFn?.call();
+                                Get.back();
+                              },
+                              child: const Text('确定取消'),
+                            )
+                          ],
                         );
                       },
-                      icon: Icon(
-                        Icons.clear_outlined,
-                        color: Theme.of(context).colorScheme.outline,
-                        size: 18,
-                      ),
-                    ),
-                  )
-                : const SizedBox(),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.clear_outlined,
+                    color: Theme.of(context).colorScheme.outline,
+                    size: 18,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
