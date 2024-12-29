@@ -197,7 +197,7 @@ class VideoDetailController extends GetxController
   late AudioItem firstAudio;
   String? videoUrl;
   String? audioUrl;
-  late Duration defaultST;
+  late Duration defaultST = Duration.zero;
   // 亮度
   double? brightness;
   // 默认记录历史记录

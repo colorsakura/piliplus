@@ -75,8 +75,8 @@ class PlPlayerController {
 
   final Rx<String> _direction = 'horizontal'.obs;
 
-  final Rx<BoxFit> _videoFit = Rx(videoFitType.first['attr']);
-  final Rx<String> _videoFitDesc = Rx(videoFitType.first['desc']);
+  final Rx<BoxFit> _videoFit = Rx(videoFitType[1]['attr']);
+  final Rx<String> _videoFitDesc = Rx(videoFitType[1]['desc']);
   late StreamSubscription<DataStatus> _dataListenerForVideoFit;
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
@@ -116,12 +116,12 @@ class PlPlayerController {
   // final Durations durations;
 
   static List<Map<String, dynamic>> videoFitType = [
+    {'attr': BoxFit.fill, 'desc': '拉伸', 'toast': '拉伸至播放器尺寸，将产生变形（竖屏改为自动）'},
     {'attr': BoxFit.contain, 'desc': '自动', 'toast': '缩放至播放器尺寸，保留黑边'},
     {'attr': BoxFit.cover, 'desc': '裁剪', 'toast': '缩放至填满播放器，裁剪超出部分'},
-    {'attr': BoxFit.fill, 'desc': '拉伸', 'toast': '拉伸至播放器尺寸，将产生变形（竖屏改为自动）'},
-    {'attr': BoxFit.none, 'desc': '原始', 'toast': '不缩放，以视频原始尺寸显示'},
-    {'attr': BoxFit.fitHeight, 'desc': '等高', 'toast': '缩放至撑满播放器高度'},
     {'attr': BoxFit.fitWidth, 'desc': '等宽', 'toast': '缩放至撑满播放器宽度'},
+    {'attr': BoxFit.fitHeight, 'desc': '等高', 'toast': '缩放至撑满播放器高度'},
+    {'attr': BoxFit.none, 'desc': '原始', 'toast': '不缩放，以视频原始尺寸显示'},
     {'attr': BoxFit.scaleDown, 'desc': '限制', 'toast': '仅超出时缩小至播放器尺寸'},
   ];
 
@@ -1019,47 +1019,50 @@ class PlPlayerController {
   }
 
   /// Toggle Change the videofit accordingly
-  void toggleVideoFit() {
-    showDialog(
-      context: Get.context!,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('视频尺寸'),
-          content: StatefulBuilder(builder: (context, StateSetter setState) {
-            return Wrap(
-              alignment: WrapAlignment.start,
-              spacing: 8,
-              runSpacing: 2,
-              children: [
-                for (var i in videoFitType) ...[
-                  if (_videoFit.value == i['attr']) ...[
-                    FilledButton(
-                      onPressed: () async {
-                        _videoFit.value = i['attr'];
-                        _videoFitDesc.value = i['desc'];
-                        setVideoFit();
-                        Get.back();
-                      },
-                      child: Text(i['desc']),
-                    ),
-                  ] else ...[
-                    FilledButton.tonal(
-                      onPressed: () async {
-                        _videoFit.value = i['attr'];
-                        _videoFitDesc.value = i['desc'];
-                        setVideoFit();
-                        Get.back();
-                      },
-                      child: Text(i['desc']),
-                    ),
-                  ]
-                ]
-              ],
-            );
-          }),
-        );
-      },
-    );
+  void toggleVideoFit(BoxFit value) {
+    _videoFit.value = videoFitType[value.index]['attr'];
+    _videoFitDesc.value = videoFitType[value.index]['desc'];
+    setVideoFit();
+    // showDialog(
+    //   context: Get.context!,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: const Text('视频尺寸'),
+    //       content: StatefulBuilder(builder: (context, StateSetter setState) {
+    //         return Wrap(
+    //           alignment: WrapAlignment.start,
+    //           spacing: 8,
+    //           runSpacing: 2,
+    //           children: [
+    //             for (var i in videoFitType) ...[
+    //               if (_videoFit.value == i['attr']) ...[
+    //                 FilledButton(
+    //                   onPressed: () async {
+    //                     _videoFit.value = i['attr'];
+    //                     _videoFitDesc.value = i['desc'];
+    //                     setVideoFit();
+    //                     Get.back();
+    //                   },
+    //                   child: Text(i['desc']),
+    //                 ),
+    //               ] else ...[
+    //                 FilledButton.tonal(
+    //                   onPressed: () async {
+    //                     _videoFit.value = i['attr'];
+    //                     _videoFitDesc.value = i['desc'];
+    //                     setVideoFit();
+    //                     Get.back();
+    //                   },
+    //                   child: Text(i['desc']),
+    //                 ),
+    //               ]
+    //             ]
+    //           ],
+    //         );
+    //       }),
+    //     );
+    //   },
+    // );
   }
 
   /// 缓存fit
@@ -1073,7 +1076,7 @@ class PlPlayerController {
 
   /// 读取fit
   Future<void> getVideoFit() async {
-    int fitValue = video.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
+    int fitValue = video.get(VideoBoxKey.cacheVideoFit, defaultValue: 1);
     var attr = videoFitType[fitValue]['attr'];
     // 由于none与scaleDown涉及视频原始尺寸，需要等待视频加载后再设置，否则尺寸会变为0，出现错误;
     if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
@@ -1083,7 +1086,7 @@ class PlPlayerController {
           if (status == DataStatus.loaded) {
             _dataListenerForVideoFit.cancel();
             int fitValue =
-                video.get(VideoBoxKey.cacheVideoFit, defaultValue: 0);
+                video.get(VideoBoxKey.cacheVideoFit, defaultValue: 1);
             var attr = videoFitType[fitValue]['attr'];
             if (attr == BoxFit.none || attr == BoxFit.scaleDown) {
               _videoFit.value = attr;

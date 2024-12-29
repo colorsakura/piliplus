@@ -415,19 +415,32 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ),
 
       /// 画面比例
-      BottomControlType.fit: SizedBox(
-        width: isFullScreen ? 42 : 35,
+      BottomControlType.fit: Container(
         height: 30,
-        child: TextButton(
-          onPressed: () => plPlayerController.toggleVideoFit(),
-          style: ButtonStyle(
-            padding: WidgetStateProperty.all(EdgeInsets.zero),
-          ),
-          child: Obx(
-            () => Text(
-              plPlayerController.videoFitDEsc.value,
-              style: const TextStyle(color: Colors.white, fontSize: 13),
-            ),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.center,
+        child: PopupMenuButton<BoxFit>(
+          onSelected: (BoxFit value) {
+            plPlayerController.toggleVideoFit(value);
+          },
+          initialValue: plPlayerController.videoFit.value,
+          color: Colors.black.withOpacity(0.8),
+          itemBuilder: (BuildContext context) {
+            return BoxFit.values.map((BoxFit boxFit) {
+              return PopupMenuItem<BoxFit>(
+                height: 35,
+                padding: const EdgeInsets.only(left: 30),
+                value: boxFit,
+                child: Text(
+                  "${PlPlayerController.videoFitType[boxFit.index]['desc']}",
+                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                ),
+              );
+            }).toList();
+          },
+          child: Text(
+            "${PlPlayerController.videoFitType[plPlayerController.videoFit.value.index]['desc']}",
+            style: const TextStyle(color: Colors.white, fontSize: 13),
           ),
         ),
       ),
