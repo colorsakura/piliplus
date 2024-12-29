@@ -45,7 +45,10 @@ jobs:
           fi
 
       - name: flutter build apk
-        run: flutter build apk --release --split-per-abi
+        run: |
+          chmod +x lib/scripts/build.sh
+          lib/scripts/build.sh
+          flutter build apk --release --split-per-abi
 
       - name: 上传
         uses: actions/upload-artifact@v4

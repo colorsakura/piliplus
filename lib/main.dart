@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:PiliPalaX/build_config.dart';
 import 'package:PiliPalaX/utils/cache_manage.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/services.dart';
@@ -58,6 +59,9 @@ void main() async {
   SmartDialog.config.loading =
       SmartConfigLoading(backType: SmartBackType.normal);
   // 异常捕获 logo记录
+  final String buildConfig = '''
+Commit Hash: ${BuildConfig.commitHash}
+Build Time: ${BuildConfig.buildTime}''';
   final Catcher2Options debugConfig = Catcher2Options(
     SilentReportMode(),
     [
@@ -65,13 +69,25 @@ void main() async {
       ConsoleHandler(
         enableDeviceParameters: false,
         enableApplicationParameters: false,
+        enableCustomParameters: true,
       )
     ],
+    customParameters: {
+      'BuildConfig': buildConfig,
+    },
   );
 
   final Catcher2Options releaseConfig = Catcher2Options(
     SilentReportMode(),
-    [FileHandler(await getLogsPath())],
+    [
+      FileHandler(await getLogsPath()),
+      ConsoleHandler(
+        enableCustomParameters: true,
+      )
+    ],
+    customParameters: {
+      'BuildConfig': buildConfig,
+    },
   );
 
   Catcher2(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:PiliPalaX/build_config.dart';
 import 'package:PiliPalaX/http/constants.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -89,6 +90,17 @@ class _AboutPageState extends State<AboutPage> {
               trailing: Text(_aboutController.currentVersion.value,
                   style: subTitleStyle),
             ),
+          ),
+          ListTile(
+            title: Text(
+              '''
+Commit Hash: ${BuildConfig.commitHash}
+Build Time: ${BuildConfig.buildTime}''',
+              style: TextStyle(fontSize: 14),
+            ),
+            leading: const Icon(Icons.info_outline),
+            onTap: () => Utils.launchURL(
+                'https://github.com/bggRGjQaUbCoE/PiliPalaX/commit/${BuildConfig.commitHash}'),
           ),
           // Obx(
           //   () => ListTile(
