@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -40,6 +41,11 @@ class SubVideoCardH extends StatelessWidget {
           'videoType': SearchType.video,
         });
       },
+      onLongPress: () => imageSaveDialog(
+        context: context,
+        title: videoItem.title,
+        cover: videoItem.cover,
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: StyleString.safeSpace,

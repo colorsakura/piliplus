@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
@@ -103,6 +104,14 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                             'dynamicType': 'read'
                           });
                         },
+                        onLongPress: () => imageSaveDialog(
+                          context: context,
+                          title: (loadingState.response[index].title as List?)
+                                  ?.map((item) => item['text'])
+                                  .join() ??
+                              '',
+                          cover: loadingState.response[index].imageUrls.first,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: StyleString.safeSpace,

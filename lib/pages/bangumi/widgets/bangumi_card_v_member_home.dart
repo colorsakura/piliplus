@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/models/space_archive/item.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -63,6 +64,11 @@ class BangumiCardVMemberHome extends StatelessWidget {
           //   }
           // });
         },
+        onLongPress: () => imageSaveDialog(
+          context: context,
+          title: bangumiItem.title,
+          cover: bangumiItem.cover,
+        ),
         child: Column(
           children: [
             ClipRRect(

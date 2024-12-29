@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
@@ -30,6 +31,11 @@ class BangumiCardV extends StatelessWidget {
         //     longPressEnd!();
         //   }
         // },
+        onLongPress: () => imageSaveDialog(
+          context: context,
+          title: bangumiItem.title,
+          cover: bangumiItem.cover,
+        ),
         child: InkWell(
           onTap: () async {
             final int seasonId = bangumiItem.seasonId;

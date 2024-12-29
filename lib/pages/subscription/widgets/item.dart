@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -26,6 +27,11 @@ class SubItem extends StatelessWidget {
           'heroTag': heroTag,
           'id': subFolderItem.id.toString(),
         },
+      ),
+      onLongPress: () => imageSaveDialog(
+        context: context,
+        title: subFolderItem.title,
+        cover: subFolderItem.cover,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),

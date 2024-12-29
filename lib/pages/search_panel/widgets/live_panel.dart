@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,13 @@ class LiveItem extends StatelessWidget {
           Get.toNamed('/liveRoom?roomid=${liveItem.roomid}',
               arguments: {'liveItem': liveItem, 'heroTag': heroTag});
         },
+        onLongPress: () => imageSaveDialog(
+          context: context,
+          title:
+              (liveItem.title as List?)?.map((item) => item['text']).join() ??
+                  '',
+          cover: liveItem.cover,
+        ),
         child: Column(
           children: [
             ClipRRect(

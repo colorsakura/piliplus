@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,14 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                         onTap: () {
                           Utils.viewBangumi(seasonId: i.seasonId);
                         },
+                        onLongPress: () => imageSaveDialog(
+                          context: context,
+                          title: (i.title as List?)
+                                  ?.map((item) => item['text'])
+                                  .join() ??
+                              '',
+                          cover: i.cover,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: StyleString.safeSpace,
