@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/pages/common/multi_select_controller.dart';
 import 'package:PiliPalaX/pages/fav_search/controller.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
@@ -152,6 +153,11 @@ class HistoryItem extends StatelessWidget {
       },
       onLongPress: () {
         if (ctr is FavSearchController) {
+          imageSaveDialog(
+            context: context,
+            title: videoItem.title,
+            cover: videoItem.cover,
+          );
           return;
         }
         if (!ctr!.enableMultiSelect.value) {

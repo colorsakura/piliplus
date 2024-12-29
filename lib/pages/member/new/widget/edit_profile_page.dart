@@ -110,7 +110,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: ClipOval(
                     child: CachedNetworkImage(
-                      imageUrl: loadingState.response['face'],
+                      imageUrl:
+                          (loadingState.response['face'] as String).http2https,
                     ),
                   ),
                 ),

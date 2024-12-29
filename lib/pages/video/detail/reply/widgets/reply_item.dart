@@ -6,7 +6,6 @@ import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/badge.dart';
@@ -761,7 +760,8 @@ class ReplyItem extends StatelessWidget {
                 if (content.jumpUrl[matchStr]?['prefix_icon'] != null) ...[
                   WidgetSpan(
                     child: Image.network(
-                      content.jumpUrl[matchStr]['prefix_icon'],
+                      (content.jumpUrl[matchStr]['prefix_icon'] as String)
+                          .http2https,
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -907,7 +907,8 @@ class ReplyItem extends StatelessWidget {
               if (content.jumpUrl[patternStr]?['prefix_icon'] != null) ...[
                 WidgetSpan(
                   child: Image.network(
-                    content.jumpUrl[patternStr]['prefix_icon'],
+                    (content.jumpUrl[patternStr]['prefix_icon'] as String)
+                        .http2https,
                     height: 19,
                     color: Theme.of(context).colorScheme.primary,
                   ),

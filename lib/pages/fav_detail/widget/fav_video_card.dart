@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,17 @@ class FavVideoCardH extends StatelessWidget {
               epId != null ? SearchType.media_bangumi : SearchType.video,
         });
       },
-      onLongPress: onLongPress,
+      onLongPress: () {
+        if (onLongPress != null) {
+          onLongPress!();
+        } else {
+          imageSaveDialog(
+            context: context,
+            title: videoItem.title,
+            cover: videoItem.pic,
+          );
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: StyleString.safeSpace,

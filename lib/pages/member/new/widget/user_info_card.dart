@@ -78,7 +78,7 @@ class UserInfoCard extends StatelessWidget {
           );
         },
         child: CachedNetworkImage(
-          imageUrl: imgUrl ?? '',
+          imageUrl: imgUrl?.http2https ?? '',
           width: double.infinity,
           height: 135,
           imageBuilder: (context, imageProvider) => Container(
@@ -128,14 +128,14 @@ class UserInfoCard extends StatelessWidget {
                 if (card.vip?.vipStatus == 1) ...[
                   const SizedBox(width: 8),
                   Image.network(
-                    card.vip!.label!.image!,
+                    card.vip!.label!.image!.http2https,
                     height: 20,
                   ),
                 ],
                 if (card.nameplate?.image?.isNotEmpty == true) ...[
                   const SizedBox(width: 8),
                   Image.network(
-                    card.nameplate!.image!,
+                    card.nameplate!.image!.http2https,
                     height: 20,
                   ),
                 ],
@@ -191,7 +191,7 @@ class UserInfoCard extends StatelessWidget {
                           child: CachedNetworkImage(
                             width: 18,
                             height: 18,
-                            imageUrl: card.officialVerify!.icon!,
+                            imageUrl: card.officialVerify!.icon!.http2https,
                           ),
                         ),
                       ),

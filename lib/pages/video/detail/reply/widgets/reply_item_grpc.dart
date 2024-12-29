@@ -9,7 +9,6 @@ import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/global_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -788,7 +787,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 if (content.url[matchStr]?.hasPrefixIcon() == true) ...[
                   WidgetSpan(
                     child: Image.network(
-                      content.url[matchStr]!.prefixIcon,
+                      content.url[matchStr]!.prefixIcon.http2https,
                       height: 19,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -948,7 +947,7 @@ class ReplyItemGrpc extends StatelessWidget {
               if (content.url[patternStr]?.hasPrefixIcon() == true) ...[
                 WidgetSpan(
                   child: Image.network(
-                    content.url[patternStr]!.prefixIcon,
+                    content.url[patternStr]!.prefixIcon.http2https,
                     height: 19,
                     color: Theme.of(context).colorScheme.primary,
                   ),

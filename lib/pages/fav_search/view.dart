@@ -84,12 +84,14 @@ class _FavSearchPageState extends State<FavSearchPage> {
                             return FavVideoCardH(
                               videoItem: loadingState.response[index],
                               searchType: _favSearchCtr.type,
-                              callFn: () => _favSearchCtr.type != 1
-                                  ? _favSearchCtr.onCancelFav(
-                                      loadingState.response[index].id!,
-                                      loadingState.response[index].type,
-                                    )
-                                  : {},
+                              callFn: _favSearchCtr.type != 1
+                                  ? () {
+                                      _favSearchCtr.onCancelFav(
+                                        loadingState.response[index].id!,
+                                        loadingState.response[index].type,
+                                      );
+                                    }
+                                  : null,
                             );
                           },
                           childCount: loadingState.response.length,

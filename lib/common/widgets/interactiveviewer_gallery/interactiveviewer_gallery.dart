@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPalaX/utils/download.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -44,7 +45,7 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
   });
 
   /// The sources to show.
-  final List<T> sources;
+  final List<String> sources;
 
   /// The index of the first source in [sources] to show.
   final int initIndex;
@@ -210,8 +211,8 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   }
 
   String _getActualUrl(int index) => _thumbList[index] && _quality != 100
-      ? '${widget.sources[index]}@${_quality}q.webp'
-      : widget.sources[index];
+      ? '${widget.sources[index]}@${_quality}q.webp'.http2https
+      : widget.sources[index].http2https;
 
   @override
   Widget build(BuildContext context) {

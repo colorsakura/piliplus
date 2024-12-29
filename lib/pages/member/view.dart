@@ -4,7 +4,6 @@ import 'package:PiliPalaX/http/member.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -434,8 +433,9 @@ class _MemberPageState extends State<MemberPage>
                       .memberInfo.value.vip?.label?['img_label_uri_hans'] !=
                   '')
                 CachedNetworkImage(
-                  imageUrl: _memberController
-                      .memberInfo.value.vip!.label!['img_label_uri_hans'],
+                  imageUrl: (_memberController.memberInfo.value.vip!
+                          .label!['img_label_uri_hans'] as String)
+                      .http2https,
                   height: 20,
                   // semanticLabel:
                   //     _memberController.memberInfo.value.vip!.label!['text'],
@@ -444,8 +444,9 @@ class _MemberPageState extends State<MemberPage>
                       ?.label?['img_label_uri_hans_static'] !=
                   '')
                 CachedNetworkImage(
-                  imageUrl: _memberController.memberInfo.value.vip!
-                      .label!['img_label_uri_hans_static'],
+                  imageUrl: (_memberController.memberInfo.value.vip!
+                          .label!['img_label_uri_hans_static'] as String)
+                      .http2https,
                   height: 20,
                   // semanticLabel:
                   //     _memberController.memberInfo.value.vip!.label!['text'],

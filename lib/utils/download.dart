@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:PiliPalaX/http/init.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ class DownloadUtils {
           },
         );
         var response = await Request().get(
-          imgList[i],
+          imgList[i].http2https,
           options: Options(responseType: ResponseType.bytes),
         );
         String picName =
