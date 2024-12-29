@@ -839,7 +839,8 @@ class PlPlayerController {
     await _videoPlayerController?.setRate(speed);
     try {
       DanmakuOption currentOption = danmakuController!.option;
-      defaultDuration ??= currentOption.duration.toDouble();
+      defaultDuration ??=
+          currentOption.duration.toDouble() * _playbackSpeed.value;
       DanmakuOption updatedOption =
           currentOption.copyWith(duration: defaultDuration! ~/ speed);
       danmakuController!.updateOption(updatedOption);
