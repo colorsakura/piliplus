@@ -186,11 +186,12 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
                     padding: EdgeInsets.only(
-                        top: kTextTabBarHeight +
-                            MediaQuery.of(context).padding.top +
-                            10,
-                        left: 14,
-                        right: 20),
+                      top: kTextTabBarHeight +
+                          MediaQuery.of(context).padding.top +
+                          10,
+                      left: 14,
+                      right: 20,
+                    ),
                     child: SizedBox(
                       height: 110,
                       child: Obx(
@@ -289,36 +290,29 @@ class _FavDetailPageState extends State<FavDetailPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverPadding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              mainAxisSpacing: StyleString.cardSpace,
-              crossAxisSpacing: StyleString.safeSpace,
-              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-              childAspectRatio: StyleString.aspectRatio * 2.4,
-              mainAxisExtent: 0,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return const VideoCardHSkeleton();
-              },
-              childCount: 10,
-            ),
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: 2,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.2,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
           ),
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom),
+                bottom: MediaQuery.of(context).padding.bottom + 85,
+              ),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
+                  mainAxisSpacing: 2,
                   maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0,
+                  childAspectRatio: StyleString.aspectRatio * 2.2,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -338,26 +332,28 @@ class _FavDetailPageState extends State<FavDetailPage> {
                     }
                     return Stack(
                       children: [
-                        FavVideoCardH(
-                          videoItem: loadingState.response[index],
-                          callFn: () => _favDetailController.onCancelFav(
-                            loadingState.response[index].id,
-                            loadingState.response[index].type,
+                        Positioned.fill(
+                          child: FavVideoCardH(
+                            videoItem: loadingState.response[index],
+                            callFn: () => _favDetailController.onCancelFav(
+                              loadingState.response[index].id,
+                              loadingState.response[index].type,
+                            ),
+                            onTap:
+                                _favDetailController.enableMultiSelect.value.not
+                                    ? null
+                                    : () {
+                                        _favDetailController.onSelect(index);
+                                      },
+                            onLongPress: () {
+                              if (_favDetailController
+                                  .enableMultiSelect.value.not) {
+                                _favDetailController.enableMultiSelect.value =
+                                    true;
+                                _favDetailController.onSelect(index);
+                              }
+                            },
                           ),
-                          onTap:
-                              _favDetailController.enableMultiSelect.value.not
-                                  ? null
-                                  : () {
-                                      _favDetailController.onSelect(index);
-                                    },
-                          onLongPress: () {
-                            if (_favDetailController
-                                .enableMultiSelect.value.not) {
-                              _favDetailController.enableMultiSelect.value =
-                                  true;
-                              _favDetailController.onSelect(index);
-                            }
-                          },
                         ),
                         Positioned(
                           top: 5,

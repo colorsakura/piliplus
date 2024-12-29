@@ -135,7 +135,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 Obx(() => _buildBody(_historyController.loadingState.value)),
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 10,
+                    height: MediaQuery.of(context).padding.bottom + 80,
                   ),
                 ),
               ],
@@ -148,34 +148,25 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverPadding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: StyleString.safeSpace,
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: 2,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.2,
           ),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              mainAxisSpacing: StyleString.cardSpace,
-              crossAxisSpacing: StyleString.safeSpace,
-              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-              childAspectRatio: StyleString.aspectRatio * 2.4,
-              mainAxisExtent: 0,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return const VideoCardHSkeleton();
-              },
-              childCount: 10,
-            ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
           ),
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.cardSpace,
-                crossAxisSpacing: StyleString.safeSpace,
+                mainAxisSpacing: 2,
                 maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.4,
-                mainAxisExtent: 0,
+                childAspectRatio: StyleString.aspectRatio * 2.2,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {

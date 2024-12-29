@@ -87,18 +87,13 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
         Success() => (loadingState.response as List?)?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
-                  left: StyleString.safeSpace,
-                  right: StyleString.safeSpace,
-                  bottom: StyleString.safeSpace +
-                      MediaQuery.of(context).padding.bottom,
+                  bottom: MediaQuery.of(context).padding.bottom + 80,
                 ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.safeSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
+                    mainAxisSpacing: 2,
                     maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.4,
-                    mainAxisExtent: 0,
+                    childAspectRatio: StyleString.aspectRatio * 2.2,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {

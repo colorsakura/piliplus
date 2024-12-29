@@ -68,11 +68,11 @@ class _SearchPanelState extends State<SearchPanel>
         slivers: [
           SliverGrid(
             gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.safeSpace,
-                crossAxisSpacing: StyleString.safeSpace,
-                maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.4,
-                mainAxisExtent: 0),
+              mainAxisSpacing: 2,
+              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+              childAspectRatio: StyleString.aspectRatio *
+                  (widget.searchType == SearchType.media_bangumi ? 1.5 : 2.2),
+            ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 switch (widget.searchType) {

@@ -28,7 +28,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
   Widget build(BuildContext context) {
     super.build(context);
     return SliverPadding(
-      padding: const EdgeInsets.all(StyleString.safeSpace),
+      padding: const EdgeInsets.only(top: StyleString.safeSpace - 5),
       sliver: Obx(() => _buildBody(_relatedController.loadingState.value)),
     );
   }
@@ -46,11 +46,10 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              mainAxisSpacing: StyleString.safeSpace,
-              crossAxisSpacing: StyleString.safeSpace,
-              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-              childAspectRatio: StyleString.aspectRatio * 2.4,
-              mainAxisExtent: 0),
+            mainAxisSpacing: 2,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.2,
+          ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -61,15 +60,15 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.safeSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0),
+                mainAxisSpacing: 2,
+                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.2,
+              ),
               delegate: SliverChildBuilderDelegate((context, index) {
                 if (index == loadingState.response.length) {
                   return SizedBox(
-                      height: MediaQuery.of(context).padding.bottom);
+                    height: MediaQuery.of(context).padding.bottom,
+                  );
                 } else {
                   return Material(
                     child: VideoCardH(

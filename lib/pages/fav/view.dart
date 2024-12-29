@@ -82,23 +82,17 @@ class _FavPageState extends State<FavPage> {
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => SliverPadding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              mainAxisSpacing: StyleString.cardSpace,
-              crossAxisSpacing: StyleString.safeSpace,
-              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-              childAspectRatio: StyleString.aspectRatio * 2.4,
-              mainAxisExtent: 0,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return const VideoCardHSkeleton();
-              },
-              childCount: 10,
-            ),
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: 2,
+            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            childAspectRatio: StyleString.aspectRatio * 2.2,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return const VideoCardHSkeleton();
+            },
+            childCount: 10,
           ),
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
@@ -107,11 +101,9 @@ class _FavPageState extends State<FavPage> {
                   bottom: 80 + MediaQuery.paddingOf(context).bottom),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.cardSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
+                  mainAxisSpacing: 2,
                   maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0,
+                  childAspectRatio: StyleString.aspectRatio * 2.2,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   childCount: loadingState.response.length,

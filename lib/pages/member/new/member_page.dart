@@ -48,7 +48,9 @@ class _MemberPageNewState extends State<MemberPageNew>
 
   @override
   Widget build(BuildContext context) {
-    _userController.top ??= MediaQuery.of(context).padding.top;
+    if (_userController.top == null || _userController.top == 0) {
+      _userController.top = MediaQuery.of(context).padding.top;
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Obx(

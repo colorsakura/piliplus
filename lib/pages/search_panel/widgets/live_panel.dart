@@ -13,10 +13,10 @@ Widget searchLivePanel(BuildContext context, ctr, LoadingState loadingState) {
     Loading() => loadingWidget,
     Success() => (loadingState.response as List?)?.isNotEmpty == true
         ? GridView.builder(
-            padding: const EdgeInsets.only(
+            padding: EdgeInsets.only(
               left: StyleString.safeSpace,
               right: StyleString.safeSpace,
-              bottom: StyleString.safeSpace,
+              bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
             primary: false,
             controller: ctr!.scrollController,

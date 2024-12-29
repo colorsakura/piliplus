@@ -67,7 +67,6 @@ class MemberSeasonsPanel extends StatelessWidget {
                       crossAxisSpacing: StyleString.cardSpace,
                       maxCrossAxisExtent: Grid.maxRowWidth,
                       childAspectRatio: 0.94,
-                      mainAxisExtent: 0,
                     ),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,

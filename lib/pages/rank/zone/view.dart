@@ -74,11 +74,9 @@ class _ZonePageState extends State<ZonePage>
         slivers: [
           SliverPadding(
             // 单列布局 EdgeInsets.zero
-            padding: EdgeInsets.fromLTRB(
-              StyleString.cardSpace,
-              StyleString.safeSpace,
-              0,
-              MediaQuery.of(context).padding.bottom + 10,
+            padding: EdgeInsets.only(
+              top: StyleString.safeSpace - 5,
+              bottom: MediaQuery.of(context).padding.bottom + 80,
             ),
             sliver: Obx(
               () => _zoneController.loadingState.value is Loading
@@ -112,11 +110,9 @@ class _ZonePageState extends State<ZonePage>
   Widget _buildSkeleton() {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        mainAxisSpacing: StyleString.safeSpace,
-        crossAxisSpacing: StyleString.safeSpace,
+        mainAxisSpacing: 2,
         maxCrossAxisExtent: Grid.maxRowWidth * 2,
-        childAspectRatio: StyleString.aspectRatio * 2.4,
-        mainAxisExtent: 0,
+        childAspectRatio: StyleString.aspectRatio * 2.2,
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -130,11 +126,9 @@ class _ZonePageState extends State<ZonePage>
   Widget _buildBody(Success loadingState) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        mainAxisSpacing: StyleString.safeSpace,
-        crossAxisSpacing: StyleString.safeSpace,
+        mainAxisSpacing: 2,
         maxCrossAxisExtent: Grid.maxRowWidth * 2,
-        childAspectRatio: StyleString.aspectRatio * 2.4,
-        mainAxisExtent: 13,
+        childAspectRatio: StyleString.aspectRatio * 2.2,
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {

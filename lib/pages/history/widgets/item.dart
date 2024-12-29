@@ -274,21 +274,25 @@ class HistoryItem extends StatelessWidget {
                           videoItem.duration != 0 &&
                           videoItem.progress != 0)
                         Positioned(
-                          left: 4,
-                          right: 4,
+                          left: 0,
+                          right: 0,
                           bottom: 0,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(12),
-                              bottomRight: Radius.circular(12),
-                            ),
-                            child: LinearProgressIndicator(
-                              value: videoItem.progress == -1
-                                  ? 100
-                                  : videoItem.progress / videoItem.duration,
+                          child: ClipRect(
+                            clipper: _Clipper(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(12),
+                                bottomRight: Radius.circular(12),
+                              ),
+                              child: LinearProgressIndicator(
+                                minHeight: 12,
+                                value: videoItem.progress == -1
+                                    ? 100
+                                    : videoItem.progress / videoItem.duration,
+                              ),
                             ),
                           ),
-                        )
+                        ),
                     ],
                   ),
                   videoContent(context)
@@ -411,5 +415,17 @@ class HistoryItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _Clipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTWH(0, 8, size.width, size.height - 8);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return false;
   }
 }

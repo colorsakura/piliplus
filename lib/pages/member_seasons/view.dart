@@ -84,7 +84,6 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
                                     crossAxisSpacing: StyleString.cardSpace,
                                     maxCrossAxisExtent: Grid.maxRowWidth,
                                     childAspectRatio: 0.94,
-                                    mainAxisExtent: 0,
                                   ),
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,

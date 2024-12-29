@@ -62,33 +62,41 @@ class _FavSearchPageState extends State<FavSearchPage> {
       Loading() => errorWidget(),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? _favSearchCtr.searchType == SearchType.fav
-              ? ListView.separated(
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
+              ? CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   controller: _favSearchCtr.scrollController,
-                  itemCount: loadingState.response.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == loadingState.response.length) {
-                      _favSearchCtr.onLoadMore();
-                      return Container(
-                        height: MediaQuery.of(context).padding.bottom + 60,
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom,
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom + 80,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                          mainAxisSpacing: 2,
+                          maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                          childAspectRatio: StyleString.aspectRatio * 2.2,
                         ),
-                      );
-                    } else {
-                      return FavVideoCardH(
-                        videoItem: loadingState.response[index],
-                        searchType: _favSearchCtr.type,
-                        callFn: () => _favSearchCtr.type != 1
-                            ? _favSearchCtr.onCancelFav(
-                                loadingState.response[index].id!,
-                                loadingState.response[index].type,
-                              )
-                            : {},
-                      );
-                    }
-                  },
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            if (index == loadingState.response.length) {
+                              _favSearchCtr.onLoadMore();
+                            }
+                            return FavVideoCardH(
+                              videoItem: loadingState.response[index],
+                              searchType: _favSearchCtr.type,
+                              callFn: () => _favSearchCtr.type != 1
+                                  ? _favSearchCtr.onCancelFav(
+                                      loadingState.response[index].id!,
+                                      loadingState.response[index].type,
+                                    )
+                                  : {},
+                            );
+                          },
+                          childCount: loadingState.response.length,
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               : _favSearchCtr.searchType == SearchType.follow
                   ? ListView.builder(
@@ -106,11 +114,10 @@ class _FavSearchPageState extends State<FavSearchPage> {
                       slivers: [
                         SliverGrid(
                           gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                              mainAxisSpacing: StyleString.cardSpace,
-                              crossAxisSpacing: StyleString.safeSpace,
-                              maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                              childAspectRatio: StyleString.aspectRatio * 2.4,
-                              mainAxisExtent: 0),
+                            mainAxisSpacing: 2,
+                            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                            childAspectRatio: StyleString.aspectRatio * 2.2,
+                          ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               return HistoryItem(

@@ -94,13 +94,12 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
                             ? SliverGrid(
                                 gridDelegate:
                                     SliverGridDelegateWithExtentAndRatio(
-                                        mainAxisSpacing: StyleString.safeSpace,
-                                        crossAxisSpacing: StyleString.safeSpace,
-                                        maxCrossAxisExtent:
-                                            Grid.maxRowWidth * 2,
-                                        childAspectRatio:
-                                            StyleString.aspectRatio * 2.4,
-                                        mainAxisExtent: 0),
+                                  mainAxisSpacing: StyleString.safeSpace,
+                                  crossAxisSpacing: StyleString.safeSpace,
+                                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                  childAspectRatio:
+                                      StyleString.aspectRatio * 2.4,
+                                ),
                                 delegate: SliverChildBuilderDelegate(
                                   (BuildContext context, index) {
                                     return VideoCardH(

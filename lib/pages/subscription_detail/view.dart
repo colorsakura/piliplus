@@ -69,7 +69,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverAppBar(
-            expandedHeight: 260 - MediaQuery.of(context).padding.top,
+            expandedHeight: 215 - MediaQuery.of(context).padding.top,
             pinned: true,
             title: StreamBuilder(
               stream: titleStreamC.stream,
@@ -109,11 +109,12 @@ class _SubDetailPageState extends State<SubDetailPage> {
                   ),
                 ),
                 padding: EdgeInsets.only(
-                    top: kTextTabBarHeight +
-                        MediaQuery.of(context).padding.top +
-                        30,
-                    left: 20,
-                    right: 20),
+                  top: kTextTabBarHeight +
+                      MediaQuery.of(context).padding.top +
+                      15,
+                  left: 20,
+                  right: 20,
+                ),
                 child: SizedBox(
                   height: 200,
                   child: Row(
@@ -230,11 +231,9 @@ class _SubDetailPageState extends State<SubDetailPage> {
                           : SliverGrid(
                               gridDelegate:
                                   SliverGridDelegateWithExtentAndRatio(
-                                mainAxisSpacing: StyleString.cardSpace,
-                                crossAxisSpacing: StyleString.safeSpace,
+                                mainAxisSpacing: 2,
                                 maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                                childAspectRatio: StyleString.aspectRatio * 2.4,
-                                mainAxisExtent: 0,
+                                childAspectRatio: StyleString.aspectRatio * 2.2,
                               ),
                               delegate: SliverChildBuilderDelegate(
                                 childCount: subList.length,
@@ -258,21 +257,15 @@ class _SubDetailPageState extends State<SubDetailPage> {
                 }
               } else {
                 // 骨架屏
-                return SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: StyleString.safeSpace),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                      mainAxisSpacing: StyleString.cardSpace,
-                      crossAxisSpacing: StyleString.safeSpace,
-                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                      childAspectRatio: StyleString.aspectRatio * 2.4,
-                      mainAxisExtent: 0,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => const VideoCardHSkeleton(),
-                      childCount: 10,
-                    ),
+                return SliverGrid(
+                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: 2,
+                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.2,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => const VideoCardHSkeleton(),
+                    childCount: 10,
                   ),
                 );
               }
@@ -282,14 +275,16 @@ class _SubDetailPageState extends State<SubDetailPage> {
             child: Container(
               height: MediaQuery.of(context).padding.bottom + 60,
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom),
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
               child: Center(
                 child: Obx(
                   () => Text(
                     _subDetailController.loadingText.value,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontSize: 13),
+                      color: Theme.of(context).colorScheme.outline,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               ),

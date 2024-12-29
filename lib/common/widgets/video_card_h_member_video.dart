@@ -31,82 +31,89 @@ class VideoCardHMemberVideo extends StatelessWidget {
     final int aid = int.tryParse(videoItem.param ?? '') ?? -1;
     final String bvid = videoItem.bvid ?? '';
     final String heroTag = Utils.makeHeroTag(aid);
-    return Stack(children: [
-      InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onLongPress: longPress,
-        onTap: () async {
-          if (onTap != null) {
-            onTap!();
-            return;
-          }
-          try {
-            Get.toNamed('/video?bvid=$bvid&cid=${videoItem.firstCid}',
-                arguments: {'heroTag': heroTag});
-          } catch (err) {
-            SmartDialog.showToast(err.toString());
-          }
-        },
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints boxConstraints) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: StyleString.aspectRatio,
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints boxConstraints) {
-                      final double maxWidth = boxConstraints.maxWidth;
-                      final double maxHeight = boxConstraints.maxHeight;
-                      return Stack(
-                        children: [
-                          Hero(
-                            tag: heroTag,
-                            child: NetworkImgLayer(
-                              src: videoItem.cover,
-                              // videoItem.season?['cover'] ?? videoItem.cover,
-                              width: maxWidth,
-                              height: maxHeight,
-                            ),
-                          ),
-                          // if (videoItem.season != null)
-                          //   PBadge(
-                          //     text: '合集: ${videoItem.season?['count']}',
-                          //     right: 6.0,
-                          //     bottom: 6.0,
-                          //     type: 'gray',
-                          //   )
-                          // else
-                          if (videoItem.duration != null)
-                            PBadge(
-                              text: Utils.timeFormat(videoItem.duration),
-                              right: 6.0,
-                              bottom: 6.0,
-                              type: 'gray',
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                videoContent(context)
-              ],
-            );
+    return Stack(
+      children: [
+        InkWell(
+          onLongPress: longPress,
+          onTap: () async {
+            if (onTap != null) {
+              onTap!();
+              return;
+            }
+            try {
+              Get.toNamed('/video?bvid=$bvid&cid=${videoItem.firstCid}',
+                  arguments: {'heroTag': heroTag});
+            } catch (err) {
+              SmartDialog.showToast(err.toString());
+            }
           },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: StyleString.safeSpace,
+              vertical: 5,
+            ),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints boxConstraints) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    AspectRatio(
+                      aspectRatio: StyleString.aspectRatio,
+                      child: LayoutBuilder(
+                        builder: (BuildContext context,
+                            BoxConstraints boxConstraints) {
+                          final double maxWidth = boxConstraints.maxWidth;
+                          final double maxHeight = boxConstraints.maxHeight;
+                          return Stack(
+                            children: [
+                              Hero(
+                                tag: heroTag,
+                                child: NetworkImgLayer(
+                                  src: videoItem.cover,
+                                  // videoItem.season?['cover'] ?? videoItem.cover,
+                                  width: maxWidth,
+                                  height: maxHeight,
+                                ),
+                              ),
+                              // if (videoItem.season != null)
+                              //   PBadge(
+                              //     text: '合集: ${videoItem.season?['count']}',
+                              //     right: 6.0,
+                              //     bottom: 6.0,
+                              //     type: 'gray',
+                              //   )
+                              // else
+                              if (videoItem.duration != null)
+                                PBadge(
+                                  text: Utils.timeFormat(videoItem.duration),
+                                  right: 6.0,
+                                  bottom: 6.0,
+                                  type: 'gray',
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    videoContent(context)
+                  ],
+                );
+              },
+            ),
+          ),
         ),
-      ),
-      Positioned(
-        bottom: 0,
-        right: 0,
-        child: VideoPopupMenu(
-          size: 29,
-          iconSize: 17,
-          actions: VideoCustomActions(videoItem, context).actions,
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: VideoPopupMenu(
+            size: 29,
+            iconSize: 17,
+            actions: VideoCustomActions(videoItem, context).actions,
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget videoContent(context) {

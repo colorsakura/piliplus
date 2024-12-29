@@ -110,8 +110,6 @@ class _LaterPageState extends State<LaterPage> {
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(
-                  left: StyleString.safeSpace,
-                  right: StyleString.safeSpace,
                   bottom: MediaQuery.of(context).padding.bottom + 85,
                 ),
                 sliver: Obx(
@@ -129,11 +127,9 @@ class _LaterPageState extends State<LaterPage> {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: StyleString.safeSpace,
-            crossAxisSpacing: StyleString.safeSpace,
+            mainAxisSpacing: 2,
             maxCrossAxisExtent: Grid.maxRowWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.4,
-            mainAxisExtent: 0,
+            childAspectRatio: StyleString.aspectRatio * 2.2,
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
@@ -145,11 +141,9 @@ class _LaterPageState extends State<LaterPage> {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: StyleString.safeSpace,
-                crossAxisSpacing: StyleString.safeSpace,
+                mainAxisSpacing: 2,
                 maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.4,
-                mainAxisExtent: 0,
+                childAspectRatio: StyleString.aspectRatio * 2.2,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -172,9 +166,9 @@ class _LaterPageState extends State<LaterPage> {
                         },
                       ),
                       Positioned(
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
+                        top: 5,
+                        left: 12,
+                        bottom: 5,
                         child: IgnorePointer(
                           child: LayoutBuilder(
                             builder: (context, constraints) => AnimatedOpacity(

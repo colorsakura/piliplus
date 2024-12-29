@@ -35,18 +35,14 @@ class SearchArchive extends StatelessWidget {
                 slivers: [
                   SliverPadding(
                     padding: EdgeInsets.only(
-                      left: StyleString.safeSpace,
-                      top: StyleString.safeSpace,
-                      right: StyleString.safeSpace,
-                      bottom: 92 + MediaQuery.paddingOf(context).bottom,
+                      top: StyleString.safeSpace - 5,
+                      bottom: MediaQuery.paddingOf(context).bottom + 80,
                     ),
                     sliver: SliverGrid(
                       gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: StyleString.safeSpace,
-                        crossAxisSpacing: StyleString.safeSpace,
+                        mainAxisSpacing: 2,
                         maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.4,
-                        mainAxisExtent: 0,
+                        childAspectRatio: StyleString.aspectRatio * 2.2,
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {

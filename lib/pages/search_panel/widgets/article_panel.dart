@@ -84,11 +84,9 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                 ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                    mainAxisSpacing: StyleString.safeSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
+                    mainAxisSpacing: 2,
                     maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                    childAspectRatio: StyleString.aspectRatio * 2.4,
-                    mainAxisExtent: 0,
+                    childAspectRatio: StyleString.aspectRatio * 2.2,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -107,7 +105,9 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: StyleString.safeSpace),
+                            horizontal: StyleString.safeSpace,
+                            vertical: 5,
+                          ),
                           child: LayoutBuilder(
                             builder: (context, boxConstraints) {
                               final double width = (boxConstraints.maxWidth -

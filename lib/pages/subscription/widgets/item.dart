@@ -28,7 +28,7 @@ class SubItem extends StatelessWidget {
         },
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         child: LayoutBuilder(
           builder: (context, boxConstraints) {
             double width =

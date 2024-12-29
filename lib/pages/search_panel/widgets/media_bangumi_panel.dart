@@ -19,13 +19,10 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(
-                  bottom: StyleString.safeSpace +
-                      MediaQuery.of(context).padding.bottom,
+                  bottom: MediaQuery.of(context).padding.bottom + 80,
                 ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisSpacing: StyleString.safeSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
                     maxCrossAxisExtent: Grid.maxRowWidth * 2,
                     mainAxisExtent: 160,
                   ),

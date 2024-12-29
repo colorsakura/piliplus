@@ -161,20 +161,14 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
           slivers: [
             _buildSliverHeader,
             SliverPadding(
-              // 单列布局 EdgeInsets.zero
-              padding: EdgeInsets.fromLTRB(
-                StyleString.safeSpace,
-                StyleString.safeSpace - 5,
-                StyleString.safeSpace,
-                MediaQuery.of(context).padding.bottom + 10,
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 80,
               ),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: StyleString.safeSpace,
-                  crossAxisSpacing: StyleString.safeSpace,
+                  mainAxisSpacing: 2,
                   maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.4,
-                  mainAxisExtent: 0,
+                  childAspectRatio: StyleString.aspectRatio * 2.2,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {

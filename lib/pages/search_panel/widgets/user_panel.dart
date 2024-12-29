@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 
-import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
 
 Widget searchUserPanel(context, searchPanelCtr, LoadingState loadingState) {
@@ -79,13 +78,10 @@ Widget searchUserPanel(context, searchPanelCtr, LoadingState loadingState) {
         Success() => (loadingState.response as List?)?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
-                  bottom: StyleString.safeSpace +
-                      MediaQuery.of(context).padding.bottom,
+                  bottom: MediaQuery.of(context).padding.bottom + 80,
                 ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisSpacing: StyleString.cardSpace,
-                    crossAxisSpacing: StyleString.safeSpace,
                     maxCrossAxisExtent: Grid.maxRowWidth * 2,
                     mainAxisExtent: 56,
                   ),

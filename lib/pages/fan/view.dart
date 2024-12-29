@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 
-import '../../common/constants.dart';
 import '../../utils/grid.dart';
 import 'controller.dart';
 import 'widgets/fan_item.dart';
@@ -55,8 +54,6 @@ class _FansPageState extends State<FansPage> {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisSpacing: StyleString.cardSpace,
-                crossAxisSpacing: StyleString.safeSpace,
                 maxCrossAxisExtent: Grid.maxRowWidth * 2,
                 mainAxisExtent: 56,
               ),
