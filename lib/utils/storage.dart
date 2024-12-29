@@ -148,8 +148,8 @@ class GStorage {
   static bool get showArgueMsg =>
       setting.get(SettingBoxKey.showArgueMsg, defaultValue: true);
 
-  static List<double> get dynamicDetailRatio =>
-      setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
+  static List<double> get dynamicDetailRatio => List<double>.from(setting
+      .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
   static List<int> get blackMidsList => List<int>.from(GStorage.localCache
       .get(LocalCacheKey.blackMidsList, defaultValue: <int>[]));
