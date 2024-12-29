@@ -60,8 +60,8 @@ void main() async {
       SmartConfigLoading(backType: SmartBackType.normal);
   // 异常捕获 logo记录
   final String buildConfig = '''
-Commit Hash: ${BuildConfig.commitHash}
-Build Time: ${BuildConfig.buildTime}''';
+Build Time: ${BuildConfig.buildTime}
+Commit Hash: ${BuildConfig.commitHash}''';
   final Catcher2Options debugConfig = Catcher2Options(
     SilentReportMode(),
     [

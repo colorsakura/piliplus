@@ -94,8 +94,8 @@ class _AboutPageState extends State<AboutPage> {
           ListTile(
             title: Text(
               '''
-Commit Hash: ${BuildConfig.commitHash}
-Build Time: ${BuildConfig.buildTime}''',
+Build Time: ${BuildConfig.buildTime}
+Commit Hash: ${BuildConfig.commitHash}''',
               style: TextStyle(fontSize: 14),
             ),
             leading: const Icon(Icons.info_outline),
