@@ -42,8 +42,7 @@ class FavVideoCardH extends StatelessWidget {
         }
         String? epId;
         if (videoItem.ogv != null &&
-            (videoItem.ogv['type_name'] == '番剧' ||
-                videoItem.ogv['type_name'] == '国创')) {
+            ['番剧', '国创', '纪录片'].contains(videoItem.ogv['type_name'])) {
           videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
           dynamic seasonId = videoItem.ogv['season_id'];
           epId = videoItem.epId;
