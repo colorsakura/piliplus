@@ -395,6 +395,12 @@ class _ExtraSettingState extends State<ExtraSetting> {
               );
             },
           ),
+          SetSwitchItem(
+            title: '显示视频警告/争议信息',
+            leading: const Icon(Icons.warning_amber_rounded),
+            setKey: SettingBoxKey.showArgueMsg,
+            defaultVal: true,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,

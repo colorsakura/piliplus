@@ -145,6 +145,9 @@ class GStorage {
   static double get danmakuLineHeight =>
       setting.get(SettingBoxKey.danmakuLineHeight, defaultValue: 1.6);
 
+  static bool get showArgueMsg =>
+      setting.get(SettingBoxKey.showArgueMsg, defaultValue: true);
+
   static List<double> get dynamicDetailRatio =>
       setting.get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]);
 
@@ -346,6 +349,7 @@ class SettingBoxKey {
       horizontalSeasonPanel = 'horizontalSeasonPanel',
       horizontalMemberPage = 'horizontalMemberPage',
       replyLengthLimit = 'replyLengthLimit',
+      showArgueMsg = 'showArgueMsg',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

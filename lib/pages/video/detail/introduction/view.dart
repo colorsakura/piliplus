@@ -427,6 +427,41 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   ]
                 ],
               ),
+              if (videoIntroController.videoDetail.value.argueMsg?.isNotEmpty ==
+                      true &&
+                  videoIntroController.showArgueMsg) ...[
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  child: Text.rich(
+                    TextSpan(children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Icon(
+                          size: 17,
+                          Icons.warning_rounded,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                      ),
+                      TextSpan(
+                          text:
+                              ' ${videoIntroController.videoDetail.value.argueMsg}')
+                    ]),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                  ),
+                )
+              ],
               const SizedBox(height: 8),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,

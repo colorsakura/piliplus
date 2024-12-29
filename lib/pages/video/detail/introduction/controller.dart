@@ -80,6 +80,8 @@ class VideoIntroController extends GetxController
 
   ExpandableController? expandableCtr;
 
+  late final showArgueMsg = GStorage.showArgueMsg;
+
   @override
   void onInit() {
     super.onInit();

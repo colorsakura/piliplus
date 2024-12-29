@@ -49,6 +49,7 @@ class VideoDetailData {
   Map<String, int>? rights;
   Owner? owner;
   Stat? stat;
+  String? argueMsg;
   String? videoDynamic;
   int? cid;
   Dimension? dimension;
@@ -87,6 +88,7 @@ class VideoDetailData {
     this.rights,
     this.owner,
     this.stat,
+    this.argueMsg,
     this.videoDynamic,
     this.cid,
     this.dimension,
@@ -128,6 +130,7 @@ class VideoDetailData {
         Map.from(json["rights"]!).map((k, v) => MapEntry<String, int>(k, v));
     owner = json["owner"] == null ? null : Owner.fromJson(json["owner"]);
     stat = json["stat"] == null ? null : Stat.fromJson(json["stat"]);
+    argueMsg = json['argue_info']?['argue_msg'];
     videoDynamic = json["dynamic"];
     cid = json["cid"];
     dimension = json["dimension"] == null
@@ -485,7 +488,6 @@ class Stat {
   int? like;
   int? dislike;
   String? evaluation;
-  String? argueMsg;
 
   Stat({
     this.aid,
@@ -500,7 +502,6 @@ class Stat {
     this.like,
     this.dislike,
     this.evaluation,
-    this.argueMsg,
   });
 
   fromRawJson(String str) => Stat.fromJson(json.decode(str));
@@ -520,7 +521,6 @@ class Stat {
     like = json["like"];
     dislike = json["dislike"];
     evaluation = json["evaluation"];
-    argueMsg = json["argue_msg"];
   }
 
   Map<String, dynamic> toJson() {
@@ -538,7 +538,6 @@ class Stat {
     data["like"] = like;
     data["dislike"] = dislike;
     data["evaluation"] = evaluation;
-    data["argue_msg"] = argueMsg;
     return data;
   }
 }
