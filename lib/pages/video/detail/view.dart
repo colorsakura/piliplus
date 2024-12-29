@@ -715,7 +715,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             final double videoWidth = videoHeight * 9 / 16;
             return Row(
               children: [
-                Expanded(child: videoIntro()),
+                Expanded(
+                    child:
+                        isFullScreen ? const SizedBox.shrink() : videoIntro()),
                 SizedBox(
                   height: videoHeight,
                   width: isFullScreen ? context.width : videoWidth,
