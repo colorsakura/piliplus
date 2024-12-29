@@ -1,9 +1,9 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/popup_controller.dart';
 import 'package:PiliPalaX/http/video.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
-class RcmdController extends PopupController {
+class RcmdController extends CommonController {
   late bool enableSaveLastData;
   late String defaultRcmdType = 'app';
 

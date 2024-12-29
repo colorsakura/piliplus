@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/animated_dialog.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h.dart';
@@ -98,15 +97,6 @@ class _ZonePageState extends State<ZonePage>
     );
   }
 
-  OverlayEntry _createPopupDialog(videoItem) {
-    return OverlayEntry(
-      builder: (context) => AnimatedDialog(
-        closeFn: _zoneController.removePopupDialog,
-        videoItem: videoItem,
-      ),
-    );
-  }
-
   Widget _buildSkeleton() {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -135,12 +125,6 @@ class _ZonePageState extends State<ZonePage>
           return VideoCardH(
             videoItem: loadingState.response[index],
             showPubdate: true,
-            longPress: () {
-              _zoneController.popupDialog
-                  .add(_createPopupDialog(loadingState.response[index]));
-              Overlay.of(context).insert(_zoneController.popupDialog.last!);
-            },
-            longPressEnd: _zoneController.removePopupDialog,
           );
         },
         childCount: loadingState.response.length,

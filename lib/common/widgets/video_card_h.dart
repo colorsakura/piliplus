@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -16,24 +17,22 @@ class VideoCardH extends StatelessWidget {
   const VideoCardH({
     super.key,
     required this.videoItem,
-    this.longPress,
-    this.longPressEnd,
     this.source = 'normal',
     this.showOwner = true,
     this.showView = true,
     this.showDanmaku = true,
     this.showPubdate = false,
     this.onTap,
+    this.onLongPress,
   });
   final dynamic videoItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
   final String source;
   final bool showOwner;
   final bool showView;
   final bool showDanmaku;
   final bool showPubdate;
-  final GestureTapCallback? onTap;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,23 @@ class VideoCardH extends StatelessWidget {
                 label: item.title.isEmpty ? 'label' : item.title): item.onTap!,
         },
         child: InkWell(
-          onLongPress: longPress,
+          onLongPress: () {
+            if (onLongPress != null) {
+              onLongPress!();
+            } else {
+              imageSaveDialog(
+                context: context,
+                title: videoItem.title is String
+                    ? videoItem.title
+                    : videoItem.title is List
+                        ? (videoItem.title as List)
+                            .map((item) => item['text'])
+                            .join()
+                        : '',
+                cover: videoItem.pic,
+              );
+            }
+          },
           onTap: () async {
             if (onTap != null) {
               onTap?.call();
@@ -154,7 +169,7 @@ class VideoCardH extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (videoItem.title is String) ...[
+            if (videoItem.title is String)
               Expanded(
                 child: Text(
                   videoItem.title as String,
@@ -167,8 +182,8 @@ class VideoCardH extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ] else ...[
+              )
+            else
               Expanded(
                 child: RichText(
                   overflow: TextOverflow.ellipsis,
@@ -194,7 +209,6 @@ class VideoCardH extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
             // const Spacer(),
             // if (videoItem.rcmdReason != null &&
             //     videoItem.rcmdReason.content != '')

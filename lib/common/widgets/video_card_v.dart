@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,14 +19,10 @@ import 'video_popup_menu.dart';
 // 视频卡片 - 垂直布局
 class VideoCardV extends StatelessWidget {
   final dynamic videoItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
 
   const VideoCardV({
     super.key,
     required this.videoItem,
-    this.longPress,
-    this.longPressEnd,
   });
 
   bool isStringNumeric(String str) {
@@ -163,7 +160,11 @@ class VideoCardV extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: InkWell(
             onTap: () async => onPushDetail(heroTag),
-            onLongPress: longPress,
+            onLongPress: () => imageSaveDialog(
+              context: context,
+              title: videoItem.title,
+              cover: videoItem.pic,
+            ),
             child: Column(
               children: [
                 AspectRatio(

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPalaX/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,6 @@ class VideoCardHGrpc extends StatelessWidget {
   const VideoCardHGrpc({
     super.key,
     required this.videoItem,
-    this.longPress,
-    this.longPressEnd,
     this.source = 'normal',
     this.showOwner = true,
     this.showView = true,
@@ -21,8 +20,6 @@ class VideoCardHGrpc extends StatelessWidget {
     this.showPubdate = false,
   });
   final card.Card videoItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
   final String source;
   final bool showOwner;
   final bool showView;
@@ -50,7 +47,11 @@ class VideoCardHGrpc extends StatelessWidget {
         // },
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onLongPress: longPress,
+          onLongPress: () => imageSaveDialog(
+            context: context,
+            title: videoItem.smallCoverV5.base.title,
+            cover: videoItem.smallCoverV5.base.cover,
+          ),
           onTap: () async {
             if (type == 'ketang') {
               SmartDialog.showToast('课堂视频暂不支持播放');

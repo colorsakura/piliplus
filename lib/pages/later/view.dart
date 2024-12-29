@@ -158,7 +158,7 @@ class _LaterPageState extends State<LaterPage> {
                             : () {
                                 _laterController.onSelect(index);
                               },
-                        longPress: () {
+                        onLongPress: () {
                           if (_laterController.enableMultiSelect.value.not) {
                             _laterController.enableMultiSelect.value = true;
                             _laterController.onSelect(index);

@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
 import 'package:PiliPalaX/common/widgets/stat/view.dart';
 import 'package:PiliPalaX/common/widgets/video_popup_menu.dart';
@@ -15,14 +16,10 @@ class VideoCardHMemberVideo extends StatelessWidget {
   const VideoCardHMemberVideo({
     super.key,
     required this.videoItem,
-    this.longPress,
-    this.longPressEnd,
     this.onTap,
     this.bvid,
   });
   final Item videoItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
   final VoidCallback? onTap;
   final dynamic bvid;
 
@@ -34,7 +31,11 @@ class VideoCardHMemberVideo extends StatelessWidget {
     return Stack(
       children: [
         InkWell(
-          onLongPress: longPress,
+          onLongPress: () => imageSaveDialog(
+            context: context,
+            title: videoItem.title,
+            cover: videoItem.cover,
+          ),
           onTap: () async {
             if (onTap != null) {
               onTap!();

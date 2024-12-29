@@ -1,8 +1,8 @@
 import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/popup_controller.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/http/video.dart';
 
-class HotController extends PopupController {
+class HotController extends CommonController {
   // int idx = 0;
 
   @override

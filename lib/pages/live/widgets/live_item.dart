@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -8,14 +9,10 @@ import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 // 视频卡片 - 垂直布局
 class LiveCardV extends StatelessWidget {
   final LiveItemModel liveItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
 
   const LiveCardV({
     super.key,
     required this.liveItem,
-    this.longPress,
-    this.longPressEnd,
   });
 
   @override
@@ -29,7 +26,11 @@ class LiveCardV extends StatelessWidget {
           Get.toNamed('/liveRoom?roomid=${liveItem.roomId}',
               arguments: {'liveItem': liveItem, 'heroTag': heroTag});
         },
-        onLongPress: longPress,
+        onLongPress: () => imageSaveDialog(
+          context: context,
+          title: liveItem.title,
+          cover: liveItem.cover,
+        ),
         child: Column(
           children: [
             ClipRRect(

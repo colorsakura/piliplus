@@ -9,13 +9,9 @@ class BangumiCardVMemberHome extends StatelessWidget {
   const BangumiCardVMemberHome({
     super.key,
     required this.bangumiItem,
-    this.longPress,
-    this.longPressEnd,
   });
 
   final Item bangumiItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
 
   @override
   Widget build(BuildContext context) {

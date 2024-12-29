@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/models/space/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -10,14 +11,10 @@ import 'network_img_layer.dart';
 // 视频卡片 - 垂直布局
 class VideoCardVMemberHome extends StatelessWidget {
   final Item videoItem;
-  final Function()? longPress;
-  final Function()? longPressEnd;
 
   const VideoCardVMemberHome({
     super.key,
     required this.videoItem,
-    this.longPress,
-    this.longPressEnd,
   });
 
   void onPushDetail(heroTag) async {
@@ -147,7 +144,11 @@ class VideoCardVMemberHome extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: InkWell(
             onTap: () async => onPushDetail(heroTag),
-            onLongPress: longPress,
+            onLongPress: () => imageSaveDialog(
+              context: context,
+              title: videoItem.title,
+              cover: videoItem.cover,
+            ),
             child: Column(
               children: [
                 AspectRatio(

@@ -134,9 +134,11 @@ class DownloadUtils {
           break;
         }
       }
+      return true;
     } catch (err) {
       SmartDialog.dismiss();
       SmartDialog.showToast(err.toString());
+      return false;
     }
   }
 }

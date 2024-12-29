@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/models/common/tab_type.dart';
-import 'package:PiliPalaX/pages/common/popup_controller.dart';
+import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/live/controller.dart';
 import 'package:PiliPalaX/pages/live/widgets/live_item.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/constants.dart';
 import 'package:PiliPalaX/common/skeleton/video_card_v.dart';
-import 'package:PiliPalaX/common/widgets/animated_dialog.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/video_card_v.dart';
 import 'package:PiliPalaX/pages/home/index.dart';
@@ -31,7 +30,7 @@ class RcmdPage extends StatefulWidget {
 
 class _RcmdPageState extends State<RcmdPage>
     with AutomaticKeepAliveClientMixin {
-  late final PopupController _controller = widget.tabType == TabType.rcmd
+  late final CommonController _controller = widget.tabType == TabType.rcmd
       ? Get.put<RcmdController>(RcmdController())
       : Get.put<LiveController>(LiveController());
 
@@ -104,15 +103,6 @@ class _RcmdPageState extends State<RcmdPage>
     );
   }
 
-  OverlayEntry _createPopupDialog(videoItem) {
-    return OverlayEntry(
-      builder: (context) => AnimatedDialog(
-        closeFn: _controller.removePopupDialog,
-        videoItem: videoItem,
-      ),
-    );
-  }
-
   Widget contentGrid(LoadingState loadingState) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -135,23 +125,9 @@ class _RcmdPageState extends State<RcmdPage>
               ? widget.tabType == TabType.rcmd
                   ? VideoCardV(
                       videoItem: loadingState.response[index],
-                      longPress: () {
-                        _controller.popupDialog.add(
-                            _createPopupDialog(loadingState.response[index]));
-                        Overlay.of(context)
-                            .insert(_controller.popupDialog.last!);
-                      },
-                      longPressEnd: _controller.removePopupDialog,
                     )
                   : LiveCardV(
                       liveItem: loadingState.response[index],
-                      longPress: () {
-                        _controller.popupDialog.add(
-                            _createPopupDialog(loadingState.response[index]));
-                        Overlay.of(context)
-                            .insert(_controller.popupDialog.last!);
-                      },
-                      longPressEnd: _controller.removePopupDialog,
                     )
               : const VideoCardVSkeleton();
         },
