@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPalaX/common/constants.dart';
@@ -18,8 +19,13 @@ class FavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      onLongPress: () => imageSaveDialog(
+        context: context,
+        title: favFolderItem.title,
+        cover: favFolderItem.cover,
+      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 7, 12, 7),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         child: LayoutBuilder(
           builder: (context, boxConstraints) {
             double width =
