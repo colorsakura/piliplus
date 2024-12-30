@@ -1,5 +1,6 @@
 // 转发
 import 'package:PiliPalaX/common/widgets/imageview.dart';
+import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -227,6 +228,108 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
             ),
           )
         ],
+      );
+    // 活动
+    case 'DYNAMIC_TYPE_COMMON_SQUARE':
+      return InkWell(
+        onTap: () {
+          Get.toNamed('/webviewnew', parameters: {
+            'url': item.modules.moduleDynamic.major.common['jump_url'],
+            'type': 'url',
+            'pageTitle': item.modules.moduleDynamic.major.common['title']
+          });
+        },
+        child: Container(
+          width: double.infinity,
+          padding:
+              const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
+          color: Theme.of(context).dividerColor.withOpacity(0.08),
+          child: Row(
+            children: [
+              NetworkImgLayer(
+                width: 45,
+                height: 45,
+                src: item.modules.moduleDynamic.major.common['cover'],
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.modules.moduleDynamic.major.common['title'],
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    item.modules.moduleDynamic.major.common['desc'],
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontSize:
+                          Theme.of(context).textTheme.labelMedium!.fontSize,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    case 'DYNAMIC_TYPE_MUSIC':
+      final Map music = item.modules.moduleDynamic.major.music;
+      return InkWell(
+        onTap: () {
+          Get.toNamed('/webviewnew', parameters: {
+            'url': "https:${music['jump_url']}",
+            'type': 'url',
+            'pageTitle': music['title']
+          });
+        },
+        child: Container(
+          width: double.infinity,
+          padding:
+              const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
+          color: Theme.of(context).dividerColor.withOpacity(0.08),
+          child: Row(
+            children: [
+              NetworkImgLayer(
+                width: 45,
+                height: 45,
+                src: music['cover'],
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    music['title'],
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    music['label'],
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontSize:
+                          Theme.of(context).textTheme.labelMedium!.fontSize,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
       );
     default:
       return const SizedBox(
