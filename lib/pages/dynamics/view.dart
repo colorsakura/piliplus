@@ -14,6 +14,7 @@ import 'package:PiliPalaX/utils/feed_back.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nil/nil.dart';
 
 import 'controller.dart';
@@ -23,6 +24,12 @@ enum ReplyOption { allow, close, choose }
 
 extension ReplyOptionExtension on ReplyOption {
   String get title => ['允许评论', '关闭评论', '精选评论'][index];
+
+  IconData get iconData => [
+        MdiIcons.commentTextOutline,
+        MdiIcons.commentOffOutline,
+        MdiIcons.commentProcessingOutline,
+      ][index];
 }
 
 class DynamicsPage extends StatefulWidget {
@@ -241,21 +248,18 @@ class CreatePanel extends StatefulWidget {
 
 class _CreatePanelState extends State<CreatePanel> {
   final _ctr = TextEditingController();
-  bool _isEnable = false;
-  final _isEnableStream = StreamController<bool>();
   late final _imagePicker = ImagePicker();
-  late final _pathList = <String>[];
-  late final _pathStream = StreamController<List<String>>();
+  late final int _limit = 18;
 
+  final RxBool _isEnablePub = false.obs;
+  late final RxList<String> _pathList = <String>[].obs;
+
+  bool _isPrivate = false;
   DateTime? _publishTime;
   ReplyOption _replyOption = ReplyOption.allow;
 
-  late final int _limit = 18;
-
   @override
   void dispose() {
-    _isEnableStream.close();
-    _pathStream.close();
     _ctr.dispose();
     super.dispose();
   }
@@ -298,6 +302,7 @@ class _CreatePanelState extends State<CreatePanel> {
         }
       }
     }
+    SmartDialog.showLoading(msg: '正在发布');
     dynamic result = await MsgHttp.createDynamic(
       mid: GStorage.userInfo.get('userInfoCache')?.mid,
       rawText: _ctr.text,
@@ -306,11 +311,14 @@ class _CreatePanelState extends State<CreatePanel> {
           ? _publishTime!.millisecondsSinceEpoch ~/ 1000
           : null,
       replyOption: _replyOption,
+      privatePub: _isPrivate ? 1 : null,
     );
     if (result['status']) {
       Get.back();
+      SmartDialog.dismiss();
       SmartDialog.showToast('发布成功');
     } else {
+      SmartDialog.dismiss();
       SmartDialog.showToast(result['msg']);
     }
     // }
@@ -318,312 +326,425 @@ class _CreatePanelState extends State<CreatePanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            const SizedBox(width: 16),
-            SizedBox(
-              width: 34,
-              height: 34,
-              child: IconButton(
-                tooltip: '返回',
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  backgroundColor: WidgetStateProperty.resolveWith(
-                    (states) {
-                      return Theme.of(context).colorScheme.secondaryContainer;
-                    },
-                  ),
-                ),
-                onPressed: Get.back,
-                icon: Icon(
-                  Icons.arrow_back_outlined,
-                  size: 18,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                ),
-              ),
-            ),
-            const Spacer(),
-            const Text(
-              '发布动态',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            const Spacer(),
-            StreamBuilder(
-              initialData: false,
-              stream: _isEnableStream.stream,
-              builder: (context, snapshot) => FilledButton.tonal(
-                onPressed: snapshot.data == true ? _onCreate : null,
-                style: FilledButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  visualDensity: const VisualDensity(
-                    horizontal: -2,
-                    vertical: -2,
-                  ),
-                ),
-                child: const Text('发布'),
-              ),
-            ),
-            const SizedBox(width: 16),
-          ],
-        ),
-        const SizedBox(width: 10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: TextField(
-            controller: _ctr,
-            minLines: 4,
-            maxLines: 8,
-            autofocus: true,
-            onChanged: (value) {
-              bool isEmpty =
-                  value.replaceAll('\n', '').isEmpty && _pathList.isEmpty;
-              if (!isEmpty && !_isEnable) {
-                _isEnable = true;
-                _isEnableStream.add(true);
-              } else if (isEmpty && _isEnable) {
-                _isEnable = false;
-                _isEnableStream.add(false);
-              }
-            },
-            decoration: const InputDecoration(
-              hintText: '说点什么吧',
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                gapPadding: 0,
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(66),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _publishTime == null
-                  ? FilledButton.tonal(
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        visualDensity: const VisualDensity(
-                          horizontal: -2,
-                          vertical: -2,
-                        ),
-                      ),
-                      onPressed: () {
-                        DateTime nowDate = DateTime.now();
-                        showDatePicker(
-                          context: context,
-                          initialDate: nowDate,
-                          firstDate: nowDate,
-                          lastDate: DateTime(
-                            nowDate.year,
-                            nowDate.month,
-                            nowDate.day + 7,
-                          ),
-                        ).then(
-                          (selectedDate) {
-                            if (selectedDate != null && context.mounted) {
-                              if (selectedDate.day == nowDate.day) {
-                                SmartDialog.showToast('至少选择10分钟之后');
-                              }
-                              TimeOfDay nowTime = TimeOfDay.now();
-                              showTimePicker(
-                                context: context,
-                                initialTime: nowTime.replacing(
-                                  hour: nowTime.minute + 10 >= 60
-                                      ? (nowTime.hour + 1) % 24
-                                      : nowTime.hour,
-                                  minute: (nowTime.minute + 10) % 60,
-                                ),
-                              ).then((selectedTime) {
-                                if (selectedTime != null) {
-                                  if (selectedDate.day == nowDate.day) {
-                                    if (selectedTime.hour < nowTime.hour) {
-                                      SmartDialog.showToast('时间设置错误');
-                                      return;
-                                    } else if (selectedTime.hour ==
-                                        nowTime.hour) {
-                                      if (selectedTime.minute <
-                                          nowTime.minute + 10) {
-                                        SmartDialog.showToast('时间设置错误');
-                                        return;
-                                      }
-                                    }
-                                  }
-                                  setState(() {
-                                    _publishTime = DateTime(
-                                      selectedDate.year,
-                                      selectedDate.month,
-                                      selectedDate.day,
-                                      selectedTime.hour,
-                                      selectedTime.minute,
-                                    );
-                                  });
-                                }
-                              });
-                            }
-                          },
-                        );
+              const SizedBox(width: 16),
+              SizedBox(
+                width: 34,
+                height: 34,
+                child: IconButton(
+                  tooltip: '返回',
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    backgroundColor: WidgetStateProperty.resolveWith(
+                      (states) {
+                        return Theme.of(context).colorScheme.secondaryContainer;
                       },
-                      child: const Text('定时发布'),
-                    )
-                  : OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        visualDensity: const VisualDensity(
-                          horizontal: -2,
-                          vertical: -2,
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _publishTime = null;
-                        });
-                      },
-                      label: Text(
-                          DateFormat('yyyy-MM-dd HH:mm').format(_publishTime!)),
-                      icon: Icon(Icons.clear, size: 20),
-                      iconAlignment: IconAlignment.end,
                     ),
-              PopupMenuButton(
-                initialValue: _replyOption,
-                onSelected: (item) {
-                  setState(() {
-                    _replyOption = item;
-                  });
-                },
-                itemBuilder: (context) => ReplyOption.values
-                    .map((item) => PopupMenuItem<ReplyOption>(
-                          value: item,
-                          child: Text(item.title),
-                        ))
-                    .toList(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _replyOption.title,
-                      style: TextStyle(
-                        height: 1,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      strutStyle: StrutStyle(leading: 0, height: 1),
-                    ),
-                    Icon(
-                      size: 20,
-                      Icons.keyboard_arrow_right,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  ],
+                  ),
+                  onPressed: Get.back,
+                  icon: Icon(
+                    Icons.arrow_back_outlined,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
                 ),
-              )
+              ),
+              const Spacer(),
+              const Text(
+                '发布动态',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              Obx(
+                () => FilledButton.tonal(
+                  onPressed: _isEnablePub.value ? _onCreate : null,
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    visualDensity: const VisualDensity(
+                      horizontal: -2,
+                      vertical: -2,
+                    ),
+                  ),
+                  child: Text(_publishTime == null ? '发布' : '定时发布'),
+                ),
+              ),
+              const SizedBox(width: 16),
             ],
           ),
         ),
-        const SizedBox(height: 10),
-        StreamBuilder(
-          initialData: const [],
-          stream: _pathStream.stream,
-          builder: (context, snapshot) => SizedBox(
-            height: 75,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics(),
-              ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount:
-                  _pathList.length == _limit ? _limit : _pathList.length + 1,
-              itemBuilder: (context, index) {
-                if (_pathList.length != _limit && index == _pathList.length) {
-                  return Material(
-                    borderRadius: BorderRadius.circular(12),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        EasyThrottle.throttle(
-                            'imagePicker', const Duration(milliseconds: 500),
-                            () async {
-                          try {
-                            List<XFile> pickedFiles =
-                                await _imagePicker.pickMultiImage(
-                              limit: _limit,
-                              imageQuality: 100,
-                            );
-                            if (pickedFiles.isNotEmpty) {
-                              for (int i = 0; i < pickedFiles.length; i++) {
-                                if (_pathList.length == _limit) {
-                                  SmartDialog.showToast('最多选择$_limit张图片');
-                                  if (i != 0) {
-                                    _pathStream.add(_pathList);
+              child: TextField(
+                controller: _ctr,
+                minLines: 4,
+                maxLines: 8,
+                autofocus: true,
+                onChanged: (value) {
+                  bool isEmpty = value.trim().isEmpty && _pathList.isEmpty;
+                  if (!isEmpty && !_isEnablePub.value) {
+                    _isEnablePub.value = true;
+                  } else if (isEmpty && _isEnablePub.value) {
+                    _isEnablePub.value = false;
+                  }
+                },
+                decoration: const InputDecoration(
+                  hintText: '说点什么吧',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    gapPadding: 0,
+                  ),
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _publishTime == null
+                      ? FilledButton.tonal(
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            visualDensity: const VisualDensity(
+                              horizontal: -2,
+                              vertical: -2,
+                            ),
+                          ),
+                          onPressed: _isPrivate
+                              ? null
+                              : () {
+                                  DateTime nowDate = DateTime.now();
+                                  showDatePicker(
+                                    context: context,
+                                    initialDate: nowDate,
+                                    firstDate: nowDate,
+                                    lastDate: DateTime(
+                                      nowDate.year,
+                                      nowDate.month,
+                                      nowDate.day + 7,
+                                    ),
+                                  ).then(
+                                    (selectedDate) {
+                                      if (selectedDate != null &&
+                                          context.mounted) {
+                                        TimeOfDay nowTime = TimeOfDay.now();
+                                        showTimePicker(
+                                          context: context,
+                                          initialTime: nowTime.replacing(
+                                            hour: nowTime.minute + 6 >= 60
+                                                ? (nowTime.hour + 1) % 24
+                                                : nowTime.hour,
+                                            minute: (nowTime.minute + 6) % 60,
+                                          ),
+                                        ).then((selectedTime) {
+                                          if (selectedTime != null) {
+                                            if (selectedDate.day ==
+                                                nowDate.day) {
+                                              if (selectedTime.hour <
+                                                  nowTime.hour) {
+                                                SmartDialog.showToast(
+                                                    '时间设置错误，至少选择6分钟之后');
+                                                return;
+                                              } else if (selectedTime.hour ==
+                                                  nowTime.hour) {
+                                                if (selectedTime.minute <
+                                                    nowTime.minute + 6) {
+                                                  if (selectedDate.day ==
+                                                      nowDate.day) {
+                                                    SmartDialog.showToast(
+                                                        '时间设置错误，至少选择6分钟之后');
+                                                  }
+                                                  return;
+                                                }
+                                              }
+                                            }
+                                            setState(() {
+                                              _publishTime = DateTime(
+                                                selectedDate.year,
+                                                selectedDate.month,
+                                                selectedDate.day,
+                                                selectedTime.hour,
+                                                selectedTime.minute,
+                                              );
+                                            });
+                                          }
+                                        });
+                                      }
+                                    },
+                                  );
+                                },
+                          child: const Text('定时发布'),
+                        )
+                      : OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            visualDensity: const VisualDensity(
+                              horizontal: -2,
+                              vertical: -2,
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _publishTime = null;
+                            });
+                          },
+                          label: Text(DateFormat('yyyy-MM-dd HH:mm')
+                              .format(_publishTime!)),
+                          icon: Icon(Icons.clear, size: 20),
+                          iconAlignment: IconAlignment.end,
+                        ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PopupMenuButton(
+                        enabled: _publishTime == null,
+                        initialValue: _isPrivate,
+                        onSelected: (value) {
+                          setState(() {
+                            _isPrivate = value;
+                          });
+                        },
+                        itemBuilder: (context) => List.generate(
+                          2,
+                          (index) => PopupMenuItem<bool>(
+                            value: index == 0 ? false : true,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  size: 19,
+                                  index == 0
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(index == 0 ? '所有人可见' : '仅自己可见'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                size: 19,
+                                _isPrivate
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: _publishTime == null
+                                    ? _isPrivate
+                                        ? Theme.of(context).colorScheme.error
+                                        : Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.outline,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _isPrivate ? '仅自己可见' : '所有人可见',
+                                style: TextStyle(
+                                  height: 1,
+                                  color: _publishTime == null
+                                      ? _isPrivate
+                                          ? Theme.of(context).colorScheme.error
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                      : Theme.of(context).colorScheme.outline,
+                                ),
+                                strutStyle: StrutStyle(leading: 0, height: 1),
+                              ),
+                              Icon(
+                                size: 20,
+                                Icons.keyboard_arrow_right,
+                                color: _publishTime == null
+                                    ? _isPrivate
+                                        ? Theme.of(context).colorScheme.error
+                                        : Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.outline,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      PopupMenuButton(
+                        initialValue: _replyOption,
+                        onSelected: (item) {
+                          setState(() {
+                            _replyOption = item;
+                          });
+                        },
+                        itemBuilder: (context) => ReplyOption.values
+                            .map(
+                              (item) => PopupMenuItem<ReplyOption>(
+                                value: item,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      size: 19,
+                                      item.iconData,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(item.title),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                size: 19,
+                                _replyOption.iconData,
+                                color: _replyOption == ReplyOption.close
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _replyOption.title,
+                                style: TextStyle(
+                                  height: 1,
+                                  color: _replyOption == ReplyOption.close
+                                      ? Theme.of(context).colorScheme.error
+                                      : Theme.of(context).colorScheme.primary,
+                                ),
+                                strutStyle: StrutStyle(leading: 0, height: 1),
+                              ),
+                              Icon(
+                                size: 20,
+                                Icons.keyboard_arrow_right,
+                                color: _replyOption == ReplyOption.close
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context).colorScheme.primary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Obx(
+              () => SizedBox(
+                height: 100,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: _pathList.length == _limit
+                      ? _limit
+                      : _pathList.length + 1,
+                  itemBuilder: (context, index) {
+                    if (_pathList.length != _limit &&
+                        index == _pathList.length) {
+                      return Material(
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            EasyThrottle.throttle('imagePicker',
+                                const Duration(milliseconds: 500), () async {
+                              try {
+                                List<XFile> pickedFiles =
+                                    await _imagePicker.pickMultiImage(
+                                  limit: _limit,
+                                  imageQuality: 100,
+                                );
+                                if (pickedFiles.isNotEmpty) {
+                                  for (int i = 0; i < pickedFiles.length; i++) {
+                                    if (_pathList.length == _limit) {
+                                      SmartDialog.showToast('最多选择$_limit张图片');
+                                      break;
+                                    } else {
+                                      _pathList.add(pickedFiles[i].path);
+                                    }
                                   }
-                                  break;
-                                } else {
-                                  _pathList.add(pickedFiles[i].path);
-                                  if (i == pickedFiles.length - 1) {
-                                    _pathStream.add(_pathList);
+                                  if (_pathList.isNotEmpty &&
+                                      !_isEnablePub.value) {
+                                    _isEnablePub.value = true;
                                   }
                                 }
+                              } catch (e) {
+                                SmartDialog.showToast(e.toString());
                               }
-                              if (_pathList.isNotEmpty && !_isEnable) {
-                                _isEnable = true;
-                                _isEnableStream.add(true);
-                              }
-                            }
-                          } catch (e) {
-                            SmartDialog.showToast(e.toString());
-                          }
-                        });
-                      },
-                      child: Ink(
-                        width: 75,
-                        height: 75,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                            });
+                          },
+                          child: Ink(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                            ),
+                            child: Center(child: Icon(Icons.add, size: 35)),
+                          ),
                         ),
-                        child: Center(child: Icon(Icons.add)),
-                      ),
-                    ),
-                  );
-                } else {
-                  return GestureDetector(
-                    onTap: () {
-                      _pathList.removeAt(index);
-                      _pathStream.add(_pathList);
-                      if (_pathList.isEmpty &&
-                          _ctr.text.replaceAll('\n', '').isEmpty) {
-                        _isEnable = false;
-                        _isEnableStream.add(false);
-                      }
-                    },
-                    child: Image(
-                      height: 75,
-                      fit: BoxFit.fitHeight,
-                      filterQuality: FilterQuality.low,
-                      image: FileImage(File(_pathList[index])),
-                    ),
-                  );
-                }
-              },
-              separatorBuilder: (context, index) => const SizedBox(width: 10),
+                      );
+                    } else {
+                      return GestureDetector(
+                        onTap: () {
+                          _pathList.removeAt(index);
+                          if (_pathList.isEmpty && _ctr.text.trim().isEmpty) {
+                            _isEnablePub.value = false;
+                          }
+                        },
+                        child: Image(
+                          height: 100,
+                          fit: BoxFit.fitHeight,
+                          filterQuality: FilterQuality.low,
+                          image: FileImage(File(_pathList[index])),
+                        ),
+                      );
+                    }
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 10),
+                ),
+              ),
             ),
-          ),
+            SizedBox(
+              height: MediaQuery.paddingOf(context).bottom + 25,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

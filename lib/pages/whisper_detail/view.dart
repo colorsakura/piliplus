@@ -239,8 +239,14 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
 
   Widget _buildInputView() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      color: Theme.of(context).colorScheme.onInverseSurface,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onInverseSurface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -273,7 +279,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
                   minLines: 1,
                   maxLines: 4,
                   onChanged: (value) {
-                    bool isNotEmpty = value.replaceAll('\n', '').isNotEmpty;
+                    bool isNotEmpty = value.trim().isNotEmpty;
                     if (isNotEmpty && !_visibleSend) {
                       _visibleSend = true;
                       _enableSend.add(true);
@@ -289,7 +295,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(6),
                       gapPadding: 0,
                     ),
                     contentPadding: const EdgeInsets.all(10),
@@ -364,8 +370,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
       height = max(200, keyboardHeight);
     }
 
-    return Container(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+    return SizedBox(
       height: height,
       child: EmotePanel(
         onChoose: onChooseEmote,

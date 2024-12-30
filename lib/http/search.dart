@@ -97,7 +97,7 @@ class SearchHttp {
       if (pubEnd != null) 'pubtime_end_s': pubEnd,
     };
     var res = await Request().get(Api.searchByType, queryParameters: reqData);
-    if (res.data['code'] == 0) {
+    if (res.data['code'] is int && res.data['code'] == 0) {
       dynamic data;
       try {
         switch (searchType) {

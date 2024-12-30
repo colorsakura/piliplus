@@ -149,6 +149,7 @@ class MsgHttp {
     List? pics,
     int? publishTime,
     ReplyOption replyOption = ReplyOption.allow,
+    int? privatePub,
   }) async {
     String csrf = await Request.getCsrf();
     var res = await Request().post(
@@ -181,6 +182,10 @@ class MsgHttp {
               : pics != null
                   ? 2
                   : 1,
+          if (privatePub != null)
+            'create_option': {
+              'private_pub': privatePub,
+            },
           if (pics != null) 'pics': pics,
           "attach_card": null,
           "upload_id":

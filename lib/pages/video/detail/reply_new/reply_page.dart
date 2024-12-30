@@ -283,7 +283,7 @@ class _ReplyPageState extends State<ReplyPage>
                     autofocus: false,
                     readOnly: snapshot.data ?? false,
                     onChanged: (value) {
-                      bool isEmpty = value.replaceAll('\n', '').isEmpty;
+                      bool isEmpty = value.trim().isEmpty;
                       if (!isEmpty && !_enablePublish) {
                         _enablePublish = true;
                         _publishStream.add(true);
