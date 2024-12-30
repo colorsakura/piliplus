@@ -9,6 +9,7 @@ Widget livePanel(item, context, {floor = 1}) {
   dynamic content = item.modules.moduleDynamic.major;
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
+  InlineSpan? richNodes = richNode(item, context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -50,7 +51,7 @@ Widget livePanel(item, context, {floor = 1}) {
         const SizedBox(height: 6),
       ],
       if (floor == 2 && item.modules.moduleDynamic.desc != null) ...[
-        Text.rich(richNode(item, context)),
+        if (richNodes != null) Text.rich(richNodes),
         const SizedBox(height: 6),
       ],
       GestureDetector(

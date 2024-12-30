@@ -24,7 +24,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
     'pgc': item.modules.moduleDynamic.major.pgc
   };
   dynamic content = dynamicProperty[type];
-
+  InlineSpan? richNodes = richNode(item, context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.start,
@@ -73,7 +73,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
       //   const SizedBox(height: 6),
       // ],
       if (floor == 2 && item.modules.moduleDynamic.desc != null) ...[
-        Text.rich(richNode(item, context)),
+        if (richNodes != null) Text.rich(richNodes),
         const SizedBox(height: 6),
       ],
       Padding(

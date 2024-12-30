@@ -16,6 +16,7 @@ Widget liveRcmdPanel(item, context, {floor = 1}) {
   DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
   int liveStatus = liveRcmd.liveStatus!;
   Map watchedShow = liveRcmd.watchedShow!;
+  InlineSpan? richNodes = richNode(item, context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -56,7 +57,7 @@ Widget liveRcmdPanel(item, context, {floor = 1}) {
         const SizedBox(height: 6),
       ],
       if (floor == 2 && item.modules.moduleDynamic.desc != null) ...[
-        Text.rich(richNode(item, context)),
+        if (richNodes != null) Text.rich(richNodes),
         const SizedBox(height: 6),
       ],
       Padding(

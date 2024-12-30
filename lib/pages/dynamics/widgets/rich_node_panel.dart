@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/models/dynamics/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -6,21 +7,21 @@ import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/utils/app_scheme.dart';
 
 // 富文本
-InlineSpan richNode(item, context) {
+InlineSpan? richNode(item, context) {
   final spacer = _VerticalSpaceSpan(0.0);
   try {
     TextStyle authorStyle =
         TextStyle(color: Theme.of(context).colorScheme.primary);
     List<InlineSpan> spanChildren = [];
 
-    dynamic richTextNodes;
+    List<RichTextNodeItem>? richTextNodes;
     if (item.modules.moduleDynamic.desc != null) {
       richTextNodes = item.modules.moduleDynamic.desc.richTextNodes;
     } else if (item.modules.moduleDynamic.major != null) {
       // 动态页面 richTextNodes 层级可能与主页动态层级不同
       richTextNodes =
-          item.modules.moduleDynamic.major.opus.summary.richTextNodes;
-      if (item.modules.moduleDynamic.major.opus.title != null) {
+          item.modules.moduleDynamic.major.opus?.summary?.richTextNodes;
+      if (item.modules.moduleDynamic.major.opus?.title != null) {
         spanChildren.add(
           TextSpan(
             text: item.modules.moduleDynamic.major.opus.title + '\n',
@@ -33,7 +34,7 @@ InlineSpan richNode(item, context) {
       }
     }
     if (richTextNodes == null || richTextNodes.isEmpty) {
-      return spacer;
+      return null;
     } else {
       for (var i in richTextNodes) {
         /// fix 渲染专栏时内容会重复
@@ -96,7 +97,11 @@ InlineSpan richNode(item, context) {
               alignment: PlaceholderAlignment.middle,
               child: GestureDetector(
                 onTap: () {
-                  String url = i.origText;
+                  String? url = i.origText;
+                  if (url == null) {
+                    SmartDialog.showToast('未获取到链接');
+                    return;
+                  }
                   if (url.startsWith('//')) {
                     url = url.replaceFirst('//', 'https://');
                     PiliScheme.routePush(Uri.parse(url));
@@ -114,7 +119,7 @@ InlineSpan richNode(item, context) {
                   );
                 },
                 child: Text(
-                  i.text,
+                  i.text ?? '',
                   style: authorStyle,
                 ),
               ),
@@ -150,14 +155,14 @@ InlineSpan richNode(item, context) {
           );
         }
         // 表情
-        if (i.type == 'RICH_TEXT_NODE_TYPE_EMOJI') {
+        if (i.type == 'RICH_TEXT_NODE_TYPE_EMOJI' && i.emoji != null) {
           spanChildren.add(
             WidgetSpan(
               child: NetworkImgLayer(
-                src: i.emoji.iconUrl,
+                src: i.emoji!.iconUrl,
                 type: 'emote',
-                width: i.emoji.size * 20,
-                height: i.emoji.size * 20,
+                width: (i.emoji!.size ?? 1) * 20,
+                height: (i.emoji!.size ?? 1) * 20,
               ),
             ),
           );

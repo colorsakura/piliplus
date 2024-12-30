@@ -45,6 +45,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
   if (hasPics) {
     pics = item.modules.moduleDynamic.major.opus.pics;
   }
+  InlineSpan? richNodes = richNode(item, context);
   switch (item.type) {
     // 图文
     case 'DYNAMIC_TYPE_DRAW':
@@ -89,12 +90,13 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
             //     ),
             //   ),
             // ],
-            Text.rich(
-              richNode(item, context),
-              // 被转发状态(floor=2) 隐藏
-              maxLines: source == 'detail' && floor != 2 ? 999 : 4,
-              overflow: TextOverflow.ellipsis,
-            ),
+            if (richNodes != null)
+              Text.rich(
+                richNodes,
+                // 被转发状态(floor=2) 隐藏
+                maxLines: source == 'detail' && floor != 2 ? 999 : 4,
+                overflow: TextOverflow.ellipsis,
+              ),
             if (hasPics) ...[
               Text.rich(
                 picsNodes(pics),
@@ -180,12 +182,13 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text.rich(
-                  richNode(item, context),
-                  // 被转发状态(floor=2) 隐藏
-                  maxLines: source == 'detail' && floor != 2 ? 999 : 4,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                if (richNodes != null)
+                  Text.rich(
+                    richNodes,
+                    // 被转发状态(floor=2) 隐藏
+                    maxLines: source == 'detail' && floor != 2 ? 999 : 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
               ],
             )
           : item.modules.moduleDynamic.additional != null
