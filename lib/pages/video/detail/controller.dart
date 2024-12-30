@@ -11,7 +11,6 @@ import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/models/video/play/subtitle.dart';
-import 'package:PiliPalaX/models/video_detail_res.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
@@ -225,7 +224,6 @@ class VideoDetailController extends GetxController
   late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
   late int seasonCid = 0;
   late RxInt seasonIndex = 0.obs;
-  late RxList<EpisodeItem> episodes = <EpisodeItem>[].obs;
 
   late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;

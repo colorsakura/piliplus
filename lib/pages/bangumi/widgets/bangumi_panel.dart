@@ -127,6 +127,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                     widget.pages[currentIndex].bvid,
                     widget.pages[currentIndex].aid,
                     cid,
+                    null,
                   ),
                   child: Text(
                     widget.newEp?['desc']?.contains('连载') == true

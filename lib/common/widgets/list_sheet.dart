@@ -17,14 +17,16 @@ import '../../utils/utils.dart';
 class ListSheetContent extends StatefulWidget {
   const ListSheetContent({
     super.key,
-    this.index,
+    this.index, // tab index
     this.season,
-    required this.episodes,
+    this.episodes,
     this.bvid,
     this.aid,
     required this.currentCid,
     required this.changeFucCall,
     this.onClose,
+    this.onReverse,
+    this.showTitle,
   });
 
   final dynamic index;
@@ -35,6 +37,8 @@ class ListSheetContent extends StatefulWidget {
   final int currentCid;
   final Function changeFucCall;
   final VoidCallback? onClose;
+  final VoidCallback? onReverse;
+  final bool? showTitle;
 
   @override
   State<ListSheetContent> createState() => _ListSheetContentState();
@@ -47,10 +51,11 @@ class _ListSheetContentState extends State<ListSheetContent>
   late List<bool> reverse;
 
   int get _index => widget.index ?? 0;
-  bool get _isList =>
-      widget.season != null &&
+  late final bool _isList = widget.season != null &&
       widget.season?.sections is List &&
       widget.season.sections.length > 1;
+  dynamic get episodes =>
+      widget.episodes ?? widget.season?.sections[_index].episodes;
   TabController? _ctr;
   StreamController? _indexStream;
   int? _seasonFav;
@@ -59,11 +64,34 @@ class _ListSheetContentState extends State<ListSheetContent>
   @override
   void didUpdateWidget(ListSheetContent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    currentIndex = _currentIndex;
+    int currentIndex = _currentIndex;
+
+    void jumpToCurrent() {
+      if (this.currentIndex != currentIndex) {
+        this.currentIndex = currentIndex;
+        try {
+          itemScrollController[_index].jumpTo(index: currentIndex);
+        } catch (_) {}
+      }
+    }
+
+    // jump to current
+    if (_ctr != null && widget.index != _ctr?.index) {
+      _ctr?.animateTo(_index);
+      Future.delayed(const Duration(milliseconds: 225)).then((_) {
+        jumpToCurrent();
+      });
+    } else {
+      jumpToCurrent();
+    }
   }
 
-  int get _currentIndex =>
-      max(0, widget.episodes.indexWhere((e) => e.cid == widget.currentCid));
+  int get _currentIndex => max(
+      0,
+      _isList
+          ? widget.season.sections[_ctr?.index].episodes
+              .indexWhere((e) => e.cid == widget.currentCid)
+          : episodes.indexWhere((e) => e.cid == widget.currentCid));
 
   @override
   void initState() {
@@ -150,6 +178,7 @@ class _ListSheetContentState extends State<ListSheetContent>
         }
         SmartDialog.showToast('切换到：$title');
         widget.onClose?.call();
+        currentIndex = index;
         widget.changeFucCall(
           episode is bangumi.EpisodeItem ? episode.epId : null,
           episode.runtimeType.toString() == "EpisodeItem"
@@ -242,13 +271,15 @@ class _ListSheetContentState extends State<ListSheetContent>
         children: [
           Container(
             height: 45,
-            padding: const EdgeInsets.only(left: 14, right: 14),
+            padding: EdgeInsets.symmetric(
+                horizontal: widget.showTitle != false ? 14 : 6),
             child: Row(
               children: [
-                Text(
-                  '合集（${_isList ? widget.season.epCount : widget.episodes?.length ?? ''}）',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                if (widget.showTitle != false)
+                  Text(
+                    '合集(${_isList ? widget.season.epCount : episodes?.length ?? ''})',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 StreamBuilder(
                   stream: _favStream?.stream,
                   builder: (context, snapshot) => snapshot.hasData
@@ -286,7 +317,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                                 ? widget.season.sections[_ctr?.index].episodes
                                         .length -
                                     1
-                                : widget.episodes.length - 1,
+                                : episodes.length - 1,
                         duration: const Duration(milliseconds: 200),
                       );
                     } catch (_) {}
@@ -303,7 +334,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                                 ? widget.season.sections[_ctr?.index].episodes
                                         .length -
                                     1
-                                : widget.episodes.length - 1
+                                : episodes.length - 1
                             : 0,
                         duration: const Duration(milliseconds: 200),
                       );
@@ -326,6 +357,33 @@ class _ListSheetContentState extends State<ListSheetContent>
                     } catch (_) {}
                   },
                 ),
+                if (widget.season != null)
+                  _mediumButton(
+                    tooltip: '倒叙播放',
+                    icon: Icons.u_turn_right,
+                    onPressed: () async {
+                      // jump to current
+                      if (_ctr != null && _ctr?.index != (_index)) {
+                        _ctr?.animateTo(_index);
+                        await Future.delayed(const Duration(milliseconds: 225));
+                      }
+                      try {
+                        itemScrollController[_ctr?.index ?? 0].scrollTo(
+                          index: currentIndex,
+                          duration: const Duration(milliseconds: 200),
+                        );
+                      } catch (_) {}
+
+                      widget.onReverse?.call();
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        try {
+                          itemScrollController[_ctr?.index ?? 0].jumpTo(
+                            index: currentIndex,
+                          );
+                        } catch (_) {}
+                      });
+                    },
+                  ),
                 const Spacer(),
                 StreamBuilder(
                   stream: _indexStream?.stream,
@@ -378,7 +436,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                           index, widget.season.sections[index].episodes),
                     ),
                   )
-                : _buildBody(null, widget.episodes),
+                : _buildBody(null, episodes),
           ),
         ],
       ),

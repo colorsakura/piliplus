@@ -1505,8 +1505,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               child: Obx(
                 () => ListSheetContent(
                   index: videoDetailController.seasonIndex.value,
-                  season: videoIntroController.videoDetail.value.ugcSeason!,
-                  episodes: videoDetailController.episodes,
+                  season: videoIntroController.videoDetail.value.ugcSeason,
                   bvid: videoDetailController.bvid,
                   aid: IdUtils.bv2av(videoDetailController.bvid),
                   currentCid: videoDetailController.seasonCid,
@@ -1514,6 +1513,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           SearchType.media_bangumi
                       ? bangumiIntroController.changeSeasonOrbangu
                       : videoIntroController.changeSeasonOrbangu,
+                  showTitle: false,
+                  onReverse: onReversePlay,
                 ),
               ),
             ),
@@ -1576,14 +1577,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  showEpisodes(index, season, episodes, bvid, aid, cid) {
+  showEpisodes(index, season, episodes, bvid, aid, cid, onReverse) {
     Widget listSheetContent() => ListSheetContent(
           index: index,
           season: season,
-          episodes: episodes,
           bvid: bvid,
           aid: aid,
           currentCid: cid,
+          episodes: episodes,
           changeFucCall:
               videoDetailController.videoType == SearchType.media_bangumi
                   ? bangumiIntroController.changeSeasonOrbangu
@@ -1596,6 +1597,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               Get.back();
             }
           },
+          onReverse: () {
+            Get.back();
+            onReversePlay();
+            onReverse();
+          },
         );
     if (isFullScreen) {
       videoDetailController.bsController =
@@ -1607,6 +1613,21 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         (context) => listSheetContent(),
       );
     }
+  }
+
+  void onReversePlay() {
+    videoIntroController.videoDetail.value.ugcSeason!
+            .sections![videoDetailController.seasonIndex.value].episodes =
+        videoIntroController
+            .videoDetail
+            .value
+            .ugcSeason!
+            .sections![videoDetailController.seasonIndex.value]
+            .episodes!
+            .reversed
+            .toList();
+    videoDetailController.seasonIndex.refresh();
+    videoDetailController.cid.refresh();
   }
 
   void showViewPoints() {

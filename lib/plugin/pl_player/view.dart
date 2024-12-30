@@ -411,6 +411,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               bvid,
               IdUtils.bv2av(bvid),
               currentCid,
+              null,
             );
           },
         ),

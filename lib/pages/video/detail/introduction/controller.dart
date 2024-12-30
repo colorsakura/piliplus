@@ -127,10 +127,13 @@ class VideoIntroController extends GetxController
 
   // 获取视频简介&分p
   Future queryVideoIntro() async {
-    await queryVideoTags();
+    queryVideoTags();
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
-      videoDetail.value = result['data']!;
+      if (videoDetail.value.ugcSeason?.id == result['data']?.ugcSeason?.id) {
+        result['data']?.ugcSeason = videoDetail.value.ugcSeason;
+      }
+      videoDetail.value = result['data'];
       videoItem!['staff'] = result['data'].staff;
       try {
         final videoDetailController =

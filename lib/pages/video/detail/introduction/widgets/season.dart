@@ -32,6 +32,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
   int currentIndex = 0;
   late VideoDetailController _videoDetailController;
   StreamSubscription? _listener;
+  List<EpisodeItem> episodes = <EpisodeItem>[];
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
     /// 根据 cid 找到对应集，找到对应 episodes
     /// 有多个episodes时，只显示其中一个
     _findEpisode();
-    if (_videoDetailController.episodes.isEmpty) {
+    if (episodes.isEmpty) {
       return;
     }
 
@@ -51,14 +52,16 @@ class _SeasonPanelState extends State<SeasonPanel> {
     // episodes = widget.ugcSeason.sections!
     //     .firstWhere((e) => e.seasonId == widget.ugcSeason.id)
     //     .episodes;
-    currentIndex = _videoDetailController.episodes.indexWhere(
+    currentIndex = episodes.indexWhere(
         (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
     _listener = _videoDetailController.cid.listen((int p0) {
-      bool isPart = widget.pages?.indexWhere((item) => item.cid == p0) != -1;
-      if (isPart) return;
+      if (widget.pages != null && widget.pages!.length != 1) {
+        bool isPart = widget.pages?.indexWhere((item) => item.cid == p0) != -1;
+        if (isPart) return;
+      }
       _videoDetailController.seasonCid = p0;
       _findEpisode();
-      currentIndex = _videoDetailController.episodes.indexWhere(
+      currentIndex = episodes.indexWhere(
           (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
       if (!mounted) return;
       setState(() {});
@@ -84,7 +87,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
 
   @override
   Widget build(BuildContext context) {
-    if (_videoDetailController.episodes.isEmpty) {
+    if (episodes.isEmpty) {
       return const SizedBox();
     }
     return Builder(builder: (BuildContext context) {
@@ -105,10 +108,15 @@ class _SeasonPanelState extends State<SeasonPanel> {
                 : () => widget.showEpisodes(
                       _videoDetailController.seasonIndex.value,
                       widget.ugcSeason,
-                      _videoDetailController.episodes,
+                      null,
                       _videoDetailController.bvid,
                       null,
                       _videoDetailController.seasonCid,
+                      () {
+                        setState(() {
+                          currentIndex = episodes.length - 1 - currentIndex;
+                        });
+                      },
                     ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
@@ -130,10 +138,10 @@ class _SeasonPanelState extends State<SeasonPanel> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    '${currentIndex + 1}/${_videoDetailController.episodes.length}',
+                    '${currentIndex + 1}/${episodes.length}',
                     style: Theme.of(context).textTheme.labelMedium,
                     semanticsLabel:
-                        '第${currentIndex + 1}集，共${_videoDetailController.episodes.length}集',
+                        '第${currentIndex + 1}集，共${episodes.length}集',
                   ),
                   const SizedBox(width: 6),
                   const Icon(
@@ -156,8 +164,10 @@ class _SeasonPanelState extends State<SeasonPanel> {
       final List<EpisodeItem> episodesList = sections[i].episodes!;
       for (int j = 0; j < episodesList.length; j++) {
         if (episodesList[j].cid == _videoDetailController.seasonCid) {
-          _videoDetailController.seasonIndex.value = i;
-          _videoDetailController.episodes.value = episodesList;
+          if (_videoDetailController.seasonIndex.value != i) {
+            _videoDetailController.seasonIndex.value = i;
+          }
+          episodes = episodesList;
           break;
         }
       }
