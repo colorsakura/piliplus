@@ -239,10 +239,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         videoIntroController!.videoDetail.value.pages!.length > 1;
     bool isBangumi = bangumiIntroController?.loadingState.value is Success;
     bool anySeason = isSeason || isPage || isBangumi;
+    double widgetWidth =
+        isFullScreen && context.orientation == Orientation.landscape ? 42 : 35;
     Map<BottomControlType, Widget> videoProgressWidgets = {
       /// 上一集
       BottomControlType.pre: Container(
-        width: isFullScreen ? 42 : 35,
+        width: widgetWidth,
         height: 30,
         alignment: Alignment.center,
         child: ComBtn(
@@ -274,7 +276,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 下一集
       BottomControlType.next: Container(
-        width: isFullScreen ? 42 : 35,
+        width: widgetWidth,
         height: 30,
         alignment: Alignment.center,
         child: ComBtn(
@@ -341,7 +343,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         () => plPlayerController.viewPointList.isEmpty
             ? const SizedBox.shrink()
             : Container(
-                width: isFullScreen ? 42 : 35,
+                width: widgetWidth,
                 height: 30,
                 alignment: Alignment.center,
                 child: ComBtn(
@@ -361,7 +363,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 选集
       BottomControlType.episode: Container(
-        width: isFullScreen ? 42 : 35,
+        width: widgetWidth,
         height: 30,
         alignment: Alignment.center,
         child: ComBtn(
@@ -450,7 +452,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         () => plPlayerController.vttSubtitles.isEmpty
             ? const SizedBox.shrink()
             : SizedBox(
-                width: isFullScreen ? 42 : 35,
+                width: widgetWidth,
                 height: 30,
                 child: PopupMenuButton<int>(
                   onSelected: (int value) {
@@ -523,7 +525,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 全屏
       BottomControlType.fullscreen: SizedBox(
-        width: isFullScreen ? 42 : 35,
+        width: widgetWidth,
         height: 30,
         child: Obx(() => ComBtn(
               icon: Icon(

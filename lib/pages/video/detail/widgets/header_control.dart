@@ -123,6 +123,8 @@ class _HeaderControlState extends State<HeaderControl> {
     showModalBottomSheet(
       elevation: 0,
       context: context,
+      isScrollControlled: true,
+      clipBehavior: Clip.hardEdge,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
@@ -504,8 +506,6 @@ class _HeaderControlState extends State<HeaderControl> {
           ),
         );
       },
-      clipBehavior: Clip.hardEdge,
-      isScrollControlled: true,
     );
   }
 
@@ -1051,13 +1051,14 @@ class _HeaderControlState extends State<HeaderControl> {
     await showModalBottomSheet(
       context: context,
       elevation: 0,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
           return Container(
             width: double.infinity,
-            height: 600,
+            height: Get.height / 2,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
