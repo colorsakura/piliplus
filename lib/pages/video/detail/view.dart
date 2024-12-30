@@ -1577,7 +1577,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  showEpisodes(index, season, episodes, bvid, aid, cid, onReverse) {
+  showEpisodes(index, season, episodes, bvid, aid, cid) {
     Widget listSheetContent() => ListSheetContent(
           index: index,
           season: season,
@@ -1600,7 +1600,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           onReverse: () {
             Get.back();
             onReversePlay();
-            onReverse();
           },
         );
     if (isFullScreen) {

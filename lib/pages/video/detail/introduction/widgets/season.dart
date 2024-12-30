@@ -29,7 +29,7 @@ class SeasonPanel extends StatefulWidget {
 }
 
 class _SeasonPanelState extends State<SeasonPanel> {
-  int currentIndex = 0;
+  RxInt currentIndex = 0.obs;
   late VideoDetailController _videoDetailController;
   StreamSubscription? _listener;
   List<EpisodeItem> episodes = <EpisodeItem>[];
@@ -52,7 +52,7 @@ class _SeasonPanelState extends State<SeasonPanel> {
     // episodes = widget.ugcSeason.sections!
     //     .firstWhere((e) => e.seasonId == widget.ugcSeason.id)
     //     .episodes;
-    currentIndex = episodes.indexWhere(
+    currentIndex.value = episodes.indexWhere(
         (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
     _listener = _videoDetailController.cid.listen((int p0) {
       if (widget.pages != null && widget.pages!.length != 1) {
@@ -61,10 +61,9 @@ class _SeasonPanelState extends State<SeasonPanel> {
       }
       _videoDetailController.seasonCid = p0;
       _findEpisode();
-      currentIndex = episodes.indexWhere(
+      currentIndex.value = episodes.indexWhere(
           (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
       if (!mounted) return;
-      setState(() {});
     });
   }
 
@@ -112,11 +111,6 @@ class _SeasonPanelState extends State<SeasonPanel> {
                       _videoDetailController.bvid,
                       null,
                       _videoDetailController.seasonCid,
-                      () {
-                        setState(() {
-                          currentIndex = episodes.length - 1 - currentIndex;
-                        });
-                      },
                     ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
@@ -137,11 +131,13 @@ class _SeasonPanelState extends State<SeasonPanel> {
                     semanticLabel: "正在播放：",
                   ),
                   const SizedBox(width: 10),
-                  Text(
-                    '${currentIndex + 1}/${episodes.length}',
-                    style: Theme.of(context).textTheme.labelMedium,
-                    semanticsLabel:
-                        '第${currentIndex + 1}集，共${episodes.length}集',
+                  Obx(
+                    () => Text(
+                      '${currentIndex.value + 1}/${episodes.length}',
+                      style: Theme.of(context).textTheme.labelMedium,
+                      semanticsLabel:
+                          '第${currentIndex.value + 1}集，共${episodes.length}集',
+                    ),
                   ),
                   const SizedBox(width: 6),
                   const Icon(

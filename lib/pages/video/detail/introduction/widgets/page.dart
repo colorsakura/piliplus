@@ -102,7 +102,6 @@ class _PagesPanelState extends State<PagesPanel> {
                     widget.bvid,
                     IdUtils.bv2av(widget.bvid),
                     cid,
-                    null,
                   ),
                   child: Text(
                     '共${widget.pages.length}集',

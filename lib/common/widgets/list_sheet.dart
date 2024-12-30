@@ -64,6 +64,10 @@ class _ListSheetContentState extends State<ListSheetContent>
   @override
   void didUpdateWidget(ListSheetContent oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.showTitle != false) {
+      return;
+    }
+
     int currentIndex = _currentIndex;
 
     void jumpToCurrent() {
@@ -97,7 +101,7 @@ class _ListSheetContentState extends State<ListSheetContent>
   void initState() {
     super.initState();
     if (_isList) {
-      _indexStream ??= StreamController<int>();
+      _indexStream ??= StreamController<int>.broadcast();
       _ctr = TabController(
         vsync: this,
         length: widget.season.sections.length,
@@ -358,29 +362,22 @@ class _ListSheetContentState extends State<ListSheetContent>
                   },
                 ),
                 if (widget.season != null)
-                  _mediumButton(
-                    tooltip: '倒序播放',
-                    icon: Icons.u_turn_right,
-                    onPressed: () async {
-                      // jump to current
-                      if (_ctr != null && _ctr?.index != (_index)) {
-                        _ctr?.animateTo(_index);
-                        await Future.delayed(const Duration(milliseconds: 225));
-                      }
-                      try {
-                        itemScrollController[_ctr?.index ?? 0].scrollTo(
-                          index: currentIndex,
-                          duration: const Duration(milliseconds: 200),
-                        );
-                      } catch (_) {}
-
-                      widget.onReverse?.call();
-                    },
-                  ),
+                  if (!_isList)
+                    _reverseButton
+                  else
+                    StreamBuilder(
+                      stream: _indexStream?.stream,
+                      initialData: _index,
+                      builder: (context, snapshot) {
+                        return snapshot.data == _index
+                            ? _reverseButton
+                            : const SizedBox.shrink();
+                      },
+                    ),
                 const Spacer(),
                 StreamBuilder(
                   stream: _indexStream?.stream,
-                  initialData: 0,
+                  initialData: _index,
                   builder: (context, snapshot) => _mediumButton(
                     tooltip: reverse[snapshot.data] ? '正序' : '反序',
                     icon: !reverse[snapshot.data]
@@ -435,6 +432,28 @@ class _ListSheetContentState extends State<ListSheetContent>
       ),
     );
   }
+
+  Widget get _reverseButton => _mediumButton(
+        tooltip: '倒序播放',
+        icon: Icons.u_turn_right,
+        onPressed: () async {
+          if (widget.showTitle == false) {
+            // jump to current
+            if (_ctr != null && _ctr?.index != (_index)) {
+              _ctr?.animateTo(_index);
+              await Future.delayed(const Duration(milliseconds: 225));
+            }
+            try {
+              itemScrollController[_ctr?.index ?? 0].scrollTo(
+                index: currentIndex,
+                duration: const Duration(milliseconds: 200),
+              );
+            } catch (_) {}
+          }
+
+          widget.onReverse?.call();
+        },
+      );
 
   Widget _mediumButton({
     String? tooltip,
