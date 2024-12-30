@@ -105,7 +105,12 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                             : LastChildLayoutType.none;
                       },
                       children: (loadingState.response as List)
-                          .map((item) => DynamicPanel(item: item))
+                          .map(
+                            (item) => DynamicPanel(
+                              item: item,
+                              onRemove: _memberDynamicController.onRemove,
+                            ),
+                          )
                           .toList(),
                     )
                   : SliverCrossAxisGroup(
@@ -120,7 +125,9 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                                   _memberDynamicController.onLoadMore();
                                 }
                                 return DynamicPanel(
-                                    item: loadingState.response[index]);
+                                  item: loadingState.response[index],
+                                  onRemove: _memberDynamicController.onRemove,
+                                );
                               },
                               childCount: loadingState.response.length,
                             ),
