@@ -737,7 +737,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
         return TextButton(
           onPressed: () => videoIntroController.actionRelationMod(context),
           style: TextButton.styleFrom(
-            visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
+            visualDensity: const VisualDensity(vertical: -3),
             foregroundColor: attr != 0
                 ? t.colorScheme.outline
                 : t.colorScheme.onSecondaryContainer,

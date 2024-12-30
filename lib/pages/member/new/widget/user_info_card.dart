@@ -274,7 +274,7 @@ class UserInfoCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(
               5,
               (index) => index % 2 == 0
@@ -305,6 +305,7 @@ class UserInfoCard extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              const SizedBox(width: 20),
               if (!isOwner)
                 IconButton.outlined(
                   onPressed: () {
@@ -338,50 +339,52 @@ class UserInfoCard extends StatelessWidget {
                   ),
                 ),
               const SizedBox(width: 10),
-              FilledButton.tonal(
-                onPressed: onFollow,
-                style: FilledButton.styleFrom(
-                  backgroundColor: relation == -1 || isFollow
-                      ? Theme.of(context).colorScheme.onInverseSurface
-                      : null,
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  visualDensity: const VisualDensity(
-                    horizontal: -2,
-                    vertical: -2,
-                  ),
-                ),
-                child: Text.rich(
-                  style: TextStyle(
-                    color: relation == -1 || isFollow
-                        ? Theme.of(context).colorScheme.outline
+              Expanded(
+                child: FilledButton.tonal(
+                  onPressed: onFollow,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: relation == -1 || isFollow
+                        ? Theme.of(context).colorScheme.onInverseSurface
                         : null,
+                    visualDensity: const VisualDensity(
+                      horizontal: -2,
+                      vertical: -2,
+                    ),
                   ),
-                  TextSpan(
-                    children: [
-                      if (isFollow)
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.top,
-                          child: Icon(
-                            Icons.sort,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.outline,
+                  child: Text.rich(
+                    style: TextStyle(
+                      color: relation == -1 || isFollow
+                          ? Theme.of(context).colorScheme.outline
+                          : null,
+                    ),
+                    TextSpan(
+                      children: [
+                        if (isFollow)
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.top,
+                            child: Icon(
+                              Icons.sort,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
                           ),
+                        TextSpan(
+                          text: isOwner
+                              ? '编辑资料'
+                              : relation == -1
+                                  ? '移除黑名单'
+                                  : relation == 2
+                                      ? ' 特别关注'
+                                      : isFollow
+                                          ? ' 已关注'
+                                          : '关注',
                         ),
-                      TextSpan(
-                        text: isOwner
-                            ? '编辑资料'
-                            : relation == -1
-                                ? '移除黑名单'
-                                : relation == 2
-                                    ? ' 特别关注'
-                                    : isFollow
-                                        ? ' 已关注'
-                                        : '关注',
-                      )
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
+              const SizedBox(width: 20),
             ],
           ),
         ],
