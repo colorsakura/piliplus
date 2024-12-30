@@ -78,7 +78,7 @@ class _ListSheetContentState extends State<ListSheetContent>
     // jump to current
     if (_ctr != null && widget.index != _ctr?.index) {
       _ctr?.animateTo(_index);
-      Future.delayed(const Duration(milliseconds: 225)).then((_) {
+      Future.delayed(const Duration(milliseconds: 255)).then((_) {
         jumpToCurrent();
       });
     } else {
@@ -89,7 +89,7 @@ class _ListSheetContentState extends State<ListSheetContent>
   int get _currentIndex => max(
       0,
       _isList
-          ? widget.season.sections[_ctr?.index].episodes
+          ? widget.season.sections[_index].episodes
               .indexWhere((e) => e.cid == widget.currentCid)
           : episodes.indexWhere((e) => e.cid == widget.currentCid));
 
@@ -359,7 +359,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                 ),
                 if (widget.season != null)
                   _mediumButton(
-                    tooltip: '倒叙播放',
+                    tooltip: '倒序播放',
                     icon: Icons.u_turn_right,
                     onPressed: () async {
                       // jump to current
@@ -375,13 +375,6 @@ class _ListSheetContentState extends State<ListSheetContent>
                       } catch (_) {}
 
                       widget.onReverse?.call();
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        try {
-                          itemScrollController[_ctr?.index ?? 0].jumpTo(
-                            index: currentIndex,
-                          );
-                        } catch (_) {}
-                      });
                     },
                   ),
                 const Spacer(),
