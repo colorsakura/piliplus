@@ -669,7 +669,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               //   ),
               // ),
               // 点赞收藏转发 布局样式2
-              if (!isHorizontal) actionGrid(context, videoIntroController),
+              if (!isHorizontal) ...[
+                const SizedBox(height: 8),
+                actionGrid(context, videoIntroController),
+              ],
               // 合集
               if (!widget.loadingStatus &&
                   videoDetail.ugcSeason != null &&
