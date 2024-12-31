@@ -55,10 +55,15 @@ class _SeasonPanelState extends State<SeasonPanel> {
     currentIndex.value = episodes.indexWhere(
         (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
     _listener = _videoDetailController.cid.listen((int cid) {
-      if (widget.pages != null && widget.pages!.length != 1) {
-        bool isPart = widget.pages?.indexWhere((item) => item.cid == cid) != -1;
-        if (isPart) return;
+      if (_videoDetailController.seasonCid == cid) {
+        //refresh
+        _findEpisode();
+        currentIndex.value = episodes.indexWhere(
+            (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
+        return;
       }
+      bool isPart = widget.pages?.indexWhere((item) => item.cid == cid) != -1;
+      if (isPart) return;
       _videoDetailController.seasonCid = cid;
       _findEpisode();
       currentIndex.value = episodes.indexWhere(

@@ -27,6 +27,7 @@ class ListSheetContent extends StatefulWidget {
     this.onClose,
     this.onReverse,
     this.showTitle,
+    this.isSupportReverse,
   });
 
   final dynamic index;
@@ -39,6 +40,7 @@ class ListSheetContent extends StatefulWidget {
   final VoidCallback? onClose;
   final VoidCallback? onReverse;
   final bool? showTitle;
+  final bool? isSupportReverse;
 
   @override
   State<ListSheetContent> createState() => _ListSheetContentState();
@@ -361,7 +363,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                     } catch (_) {}
                   },
                 ),
-                if (widget.season != null)
+                if (widget.isSupportReverse == true)
                   if (!_isList)
                     _reverseButton
                   else

@@ -71,7 +71,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
       () => videoIntroController.videoDetail.value.title == null
           ? VideoInfo(
               loadingStatus: true,
-              videoDetail: videoIntroController.videoDetail.value,
+              videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
               showAiBottomSheet: widget.showAiBottomSheet,
               showIntroDetail: () => widget.showIntroDetail(
@@ -83,7 +83,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
             )
           : VideoInfo(
               loadingStatus: false,
-              videoDetail: videoIntroController.videoDetail.value,
+              videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
               showAiBottomSheet: widget.showAiBottomSheet,
               showIntroDetail: () => widget.showIntroDetail(
@@ -99,17 +99,17 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
 
 class VideoInfo extends StatefulWidget {
   final bool loadingStatus;
-  final VideoDetailData? videoDetail;
   final String heroTag;
   final Function showAiBottomSheet;
   final Function showIntroDetail;
   final Function showEpisodes;
   final ValueChanged onShowMemberPage;
+  final VideoIntroController videoIntroController;
 
   const VideoInfo({
     super.key,
     this.loadingStatus = false,
-    this.videoDetail,
+    required this.videoIntroController,
     required this.heroTag,
     required this.showAiBottomSheet,
     required this.showIntroDetail,
@@ -122,9 +122,12 @@ class VideoInfo extends StatefulWidget {
 }
 
 class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
-  late final VideoIntroController videoIntroController;
   late final VideoDetailController videoDetailCtr;
   late final Map<dynamic, dynamic> videoItem;
+
+  VideoIntroController get videoIntroController => widget.videoIntroController;
+  VideoDetailData get videoDetail =>
+      widget.videoIntroController.videoDetail.value;
 
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
@@ -145,7 +148,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    videoIntroController = Get.put(VideoIntroController(), tag: widget.heroTag);
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
     videoItem = videoIntroController.videoItem!;
 
@@ -232,7 +234,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   onPushMember() {
     feedBack();
     int? mid = !widget.loadingStatus
-        ? widget.videoDetail?.owner?.mid
+        ? videoDetail.owner?.mid
         : videoItem['owner']?.mid;
     if (mid != null) {
       if (context.orientation == Orientation.landscape &&
@@ -241,7 +243,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       } else {
         // memberHeroTag = Utils.makeHeroTag(mid);
         // String face = !loadingStatus
-        //     ? widget.videoDetail!.owner!.face
+        //     ? videoDetail.owner!.face
         //     : videoItem['owner'].face;
         Get.toNamed(
           '/member?mid=$mid',
@@ -287,7 +289,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                     type: 'avatar',
                                     src: widget.loadingStatus
                                         ? videoItem['owner']?.face ?? ""
-                                        : widget.videoDetail!.owner!.face,
+                                        : videoDetail.owner!.face,
                                     width: 30,
                                     height: 30,
                                     fadeInDuration: Duration.zero,
@@ -302,7 +304,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                         Text(
                                           widget.loadingStatus
                                               ? videoItem['owner']?.name ?? ""
-                                              : widget.videoDetail!.owner!.name,
+                                              : videoDetail.owner!.name,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -335,7 +337,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             childBuilder: (index) => GestureDetector(
                               onTap: () {
                                 int? ownerMid = !widget.loadingStatus
-                                    ? widget.videoDetail?.owner?.mid
+                                    ? videoDetail.owner?.mid
                                     : videoItem['owner']?.mid;
                                 if (videoItem['staff'][index].mid == ownerMid &&
                                     context.orientation ==
@@ -454,10 +456,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     onLongPress: () {
                       feedBack();
                       Utils.copyText(
-                          '${widget.videoDetail?.title ?? videoItem['title'] ?? ''}');
+                          '${videoDetail.title ?? videoItem['title'] ?? ''}');
                     },
                     child: Text(
-                      '${widget.videoDetail?.title ?? videoItem['title'] ?? ''}',
+                      '${videoDetail.title ?? videoItem['title'] ?? ''}',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 16),
@@ -467,10 +469,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     onLongPress: () {
                       feedBack();
                       Utils.copyText(
-                          '${widget.videoDetail?.title ?? videoItem['title'] ?? ''}');
+                          '${videoDetail.title ?? videoItem['title'] ?? ''}');
                     },
                     child: Text(
-                      widget.videoDetail?.title ?? videoItem['title'] ?? '',
+                      videoDetail.title ?? videoItem['title'] ?? '',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
@@ -495,7 +497,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                           context: context,
                           theme: 'gray',
                           view: !widget.loadingStatus
-                              ? widget.videoDetail?.stat?.view ?? '-'
+                              ? videoDetail.stat?.view ?? '-'
                               : videoItem['stat']?.view ?? '-',
                           size: 'medium',
                         ),
@@ -504,7 +506,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                           context: context,
                           theme: 'gray',
                           danmu: !widget.loadingStatus
-                              ? widget.videoDetail?.stat?.danmu ?? '-'
+                              ? videoDetail.stat?.danmu ?? '-'
                               : videoItem['stat']?.danmu ?? '-',
                           size: 'medium',
                         ),
@@ -512,7 +514,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         Text(
                           Utils.dateFormat(
                               !widget.loadingStatus
-                                  ? widget.videoDetail?.pubdate
+                                  ? videoDetail.pubdate
                                   : videoItem['pubdate'],
                               formatType: 'detail'),
                           style: TextStyle(
@@ -670,34 +672,34 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               if (!isHorizontal) actionGrid(context, videoIntroController),
               // 合集
               if (!widget.loadingStatus &&
-                  widget.videoDetail?.ugcSeason != null &&
+                  videoDetail.ugcSeason != null &&
                   (context.orientation != Orientation.landscape ||
                       (context.orientation == Orientation.landscape &&
                           videoDetailCtr.horizontalSeasonPanel.not)))
                 Obx(
                   () => SeasonPanel(
                     heroTag: widget.heroTag,
-                    ugcSeason: widget.videoDetail!.ugcSeason!,
+                    ugcSeason: videoDetail.ugcSeason!,
                     cid: videoIntroController.lastPlayCid.value != 0
-                        ? (widget.videoDetail!.pages?.isNotEmpty == true
-                            ? widget.videoDetail!.pages!.first.cid
+                        ? (videoDetail.pages?.isNotEmpty == true
+                            ? videoDetail.pages!.first.cid
                             : videoIntroController.lastPlayCid.value)
-                        : widget.videoDetail!.pages!.first.cid,
+                        : videoDetail.pages!.first.cid,
                     changeFuc: videoIntroController.changeSeasonOrbangu,
                     showEpisodes: widget.showEpisodes,
-                    pages: widget.videoDetail!.pages,
+                    pages: videoDetail.pages,
                   ),
                 ),
               if (!widget.loadingStatus &&
-                  widget.videoDetail?.pages != null &&
-                  widget.videoDetail!.pages!.length > 1 &&
+                  videoDetail.pages != null &&
+                  videoDetail.pages!.length > 1 &&
                   (context.orientation != Orientation.landscape ||
                       (context.orientation == Orientation.landscape &&
                           videoDetailCtr.horizontalSeasonPanel.not))) ...[
                 Obx(
                   () => PagesPanel(
                     heroTag: widget.heroTag,
-                    pages: widget.videoDetail!.pages!,
+                    videoDetailData: videoIntroController.videoDetail.value,
                     cid: videoIntroController.lastPlayCid.value,
                     bvid: videoIntroController.bvid,
                     changeFuc: videoIntroController.changeSeasonOrbangu,
@@ -760,7 +762,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '点赞',
                 text: !widget.loadingStatus
-                    ? Utils.numFormat(widget.videoDetail!.stat!.like!)
+                    ? Utils.numFormat(videoDetail.stat!.like!)
                     : '-',
                 needAnim: true,
                 hasOneThree: videoIntroController.hasLike.value &&
@@ -804,7 +806,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '投币',
                 text: !widget.loadingStatus
-                    ? Utils.numFormat(widget.videoDetail!.stat!.coin!)
+                    ? Utils.numFormat(videoDetail.stat!.coin!)
                     : '-',
                 needAnim: true,
               ),
@@ -820,7 +822,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '收藏',
                 text: !widget.loadingStatus
-                    ? Utils.numFormat(widget.videoDetail!.stat!.favorite!)
+                    ? Utils.numFormat(videoDetail.stat!.favorite!)
                     : '-',
                 needAnim: true,
               ),
@@ -833,7 +835,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '评论',
                 text: !widget.loadingStatus
-                    ? Utils.numFormat(widget.videoDetail!.stat!.reply!)
+                    ? Utils.numFormat(videoDetail.stat!.reply!)
                     : '评论'),
             ActionItem(
                 icon: const Icon(FontAwesomeIcons.shareFromSquare),
@@ -842,7 +844,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '分享',
                 text: !widget.loadingStatus
-                    ? Utils.numFormat(widget.videoDetail!.stat!.share!)
+                    ? Utils.numFormat(videoDetail.stat!.share!)
                     : '分享'),
           ],
         ),
@@ -858,9 +860,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           onTap: () => handleState(videoIntroController.actionLikeVideo),
           selectStatus: videoIntroController.hasLike.value,
           loadingStatus: widget.loadingStatus,
-          text: !widget.loadingStatus
-              ? widget.videoDetail!.stat!.like!.toString()
-              : '-',
+          text:
+              !widget.loadingStatus ? videoDetail.stat!.like!.toString() : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -870,9 +871,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           onTap: () => handleState(videoIntroController.actionCoinVideo),
           selectStatus: videoIntroController.hasCoin.value,
           loadingStatus: widget.loadingStatus,
-          text: !widget.loadingStatus
-              ? widget.videoDetail!.stat!.coin!.toString()
-              : '-',
+          text:
+              !widget.loadingStatus ? videoDetail.stat!.coin!.toString() : '-',
         ),
       ),
       const SizedBox(width: 8),
@@ -884,7 +884,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           selectStatus: videoIntroController.hasFav.value,
           loadingStatus: widget.loadingStatus,
           text: !widget.loadingStatus
-              ? widget.videoDetail!.stat!.favorite!.toString()
+              ? videoDetail.stat!.favorite!.toString()
               : '-',
         ),
       ),
@@ -896,9 +896,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
         },
         selectStatus: false,
         loadingStatus: widget.loadingStatus,
-        text: !widget.loadingStatus
-            ? widget.videoDetail!.stat!.reply!.toString()
-            : '-',
+        text: !widget.loadingStatus ? videoDetail.stat!.reply!.toString() : '-',
       ),
       const SizedBox(width: 8),
       ActionRowItem(
@@ -907,7 +905,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
           selectStatus: false,
           loadingStatus: widget.loadingStatus,
           // text: !loadingStatus
-          //     ? widget.videoDetail!.stat!.share!.toString()
+          //     ? videoDetail.stat!.share!.toString()
           //     : '-',
           text: '转发'),
     ]);

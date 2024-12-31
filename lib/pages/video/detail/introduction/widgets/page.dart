@@ -11,19 +11,19 @@ import '../../../../../utils/id_utils.dart';
 class PagesPanel extends StatefulWidget {
   const PagesPanel({
     super.key,
-    required this.pages,
     required this.cid,
     required this.bvid,
     required this.changeFuc,
     required this.heroTag,
     required this.showEpisodes,
+    required this.videoDetailData,
   });
-  final List<Part> pages;
   final int cid;
   final String bvid;
   final Function changeFuc;
   final String heroTag;
   final Function showEpisodes;
+  final VideoDetailData videoDetailData;
 
   @override
   State<PagesPanel> createState() => _PagesPanelState();
@@ -32,8 +32,6 @@ class PagesPanel extends StatefulWidget {
 class _PagesPanelState extends State<PagesPanel> {
   late int cid;
   late int pageIndex;
-  // final String heroTag = Get.arguments['heroTag'];
-  late final String heroTag;
   late VideoDetailController _videoDetailController;
   final ScrollController _scrollController = ScrollController();
   StreamSubscription? _listener;
@@ -42,12 +40,14 @@ class _PagesPanelState extends State<PagesPanel> {
   void initState() {
     super.initState();
     cid = widget.cid;
-    heroTag = widget.heroTag;
-    _videoDetailController = Get.find<VideoDetailController>(tag: heroTag);
-    pageIndex = widget.pages.indexWhere((Part e) => e.cid == cid);
-    _listener = _videoDetailController.cid.listen((int p0) {
-      cid = p0;
-      pageIndex = max(0, widget.pages.indexWhere((Part e) => e.cid == cid));
+    _videoDetailController =
+        Get.find<VideoDetailController>(tag: widget.heroTag);
+    pageIndex =
+        widget.videoDetailData.pages!.indexWhere((Part e) => e.cid == cid);
+    _listener = _videoDetailController.cid.listen((int cid) {
+      this.cid = cid;
+      pageIndex = max(0,
+          widget.videoDetailData.pages!.indexWhere((Part e) => e.cid == cid));
       if (!mounted) return;
       const double itemWidth = 150; // 每个列表项的宽度
       final double targetOffset = min((pageIndex * itemWidth) - (itemWidth / 2),
@@ -80,7 +80,7 @@ class _PagesPanelState extends State<PagesPanel> {
               const Text('视频选集 '),
               Expanded(
                 child: Text(
-                  ' 正在播放：${widget.pages[pageIndex].pagePart}',
+                  ' 正在播放：${widget.videoDetailData.pages![pageIndex].pagePart}',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 12,
@@ -98,13 +98,13 @@ class _PagesPanelState extends State<PagesPanel> {
                   onPressed: () => widget.showEpisodes(
                     null,
                     null,
-                    widget.pages,
+                    widget.videoDetailData.pages!,
                     widget.bvid,
                     IdUtils.bv2av(widget.bvid),
                     cid,
                   ),
                   child: Text(
-                    '共${widget.pages.length}集',
+                    '共${widget.videoDetailData.pages!.length}集',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),
@@ -118,14 +118,14 @@ class _PagesPanelState extends State<PagesPanel> {
           child: ListView.builder(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
-            itemCount: widget.pages.length,
+            itemCount: widget.videoDetailData.pages!.length,
             itemExtent: 150,
             itemBuilder: (BuildContext context, int i) {
               bool isCurrentIndex = pageIndex == i;
               return Container(
                 width: 150,
                 margin: EdgeInsets.only(
-                  right: i != widget.pages.length - 1 ? 10 : 0,
+                  right: i != widget.videoDetailData.pages!.length - 1 ? 10 : 0,
                 ),
                 child: Material(
                   color: Theme.of(context).colorScheme.onInverseSurface,
@@ -136,7 +136,7 @@ class _PagesPanelState extends State<PagesPanel> {
                       widget.changeFuc(
                         null,
                         widget.bvid,
-                        widget.pages[i].cid,
+                        widget.videoDetailData.pages![i].cid,
                         IdUtils.bv2av(widget.bvid),
                         null,
                       )
@@ -157,7 +157,7 @@ class _PagesPanelState extends State<PagesPanel> {
                           ],
                           Expanded(
                               child: Text(
-                            widget.pages[i].pagePart!,
+                            widget.videoDetailData.pages![i].pagePart!,
                             maxLines: 1,
                             style: TextStyle(
                                 fontSize: 13,

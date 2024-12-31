@@ -1470,7 +1470,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: PagesPanel(
                   heroTag: heroTag,
-                  pages: videoIntroController.videoDetail.value.pages!,
+                  videoDetailData: videoIntroController.videoDetail.value,
                   cid: videoIntroController.lastPlayCid.value,
                   bvid: videoIntroController.bvid,
                   changeFuc: videoIntroController.changeSeasonOrbangu,
@@ -1516,10 +1516,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       ? bangumiIntroController.changeSeasonOrbangu
                       : videoIntroController.changeSeasonOrbangu,
                   showTitle: false,
+                  isSupportReverse: videoDetailController.videoType !=
+                      SearchType.media_bangumi,
                   onReverse: () {
                     onReversePlay(
-                      videoDetailController.bvid,
-                      IdUtils.bv2av(videoDetailController.bvid),
+                      bvid: videoDetailController.bvid,
+                      aid: IdUtils.bv2av(videoDetailController.bvid),
+                      isSeason: true,
                     );
                   },
                 ),
@@ -1592,6 +1595,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           aid: aid,
           currentCid: cid,
           episodes: episodes,
+          isSupportReverse:
+              videoDetailController.videoType != SearchType.media_bangumi,
           changeFucCall:
               videoDetailController.videoType == SearchType.media_bangumi
                   ? bangumiIntroController.changeSeasonOrbangu
@@ -1606,7 +1611,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           },
           onReverse: () {
             Get.back();
-            onReversePlay(bvid, aid);
+            onReversePlay(
+              bvid: bvid,
+              aid: aid,
+              isSeason: season != null,
+            );
           },
         );
     if (isFullScreen) {
@@ -1621,38 +1630,64 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
   }
 
-  void onReversePlay(bvid, aid) {
-    videoIntroController.videoDetail.value.ugcSeason!
-            .sections![videoDetailController.seasonIndex.value].episodes =
-        videoIntroController
-            .videoDetail
-            .value
-            .ugcSeason!
-            .sections![videoDetailController.seasonIndex.value]
-            .episodes!
-            .reversed
-            .toList();
+  void onReversePlay({
+    required dynamic bvid,
+    required dynamic aid,
+    required bool isSeason,
+  }) {
+    void changeEpisode(episode) {
+      videoIntroController.changeSeasonOrbangu(
+        episode is bangumi.EpisodeItem ? episode.epId : null,
+        episode.runtimeType.toString() == "EpisodeItem" ? episode.bvid : bvid,
+        episode.cid,
+        episode.runtimeType.toString() == "EpisodeItem" ? episode.aid : aid,
+        episode is video.EpisodeItem
+            ? episode.arc?.pic
+            : episode is bangumi.EpisodeItem
+                ? episode.cover
+                : null,
+      );
+    }
 
-    if (videoDetailController.reverseFromFirst.not) {
-      // keep current episode
-      videoDetailController.seasonIndex.refresh();
-      videoDetailController.cid.refresh();
+    if (isSeason) {
+      // reverse season
+      videoIntroController.videoDetail.value.ugcSeason!
+              .sections![videoDetailController.seasonIndex.value].episodes =
+          videoIntroController
+              .videoDetail
+              .value
+              .ugcSeason!
+              .sections![videoDetailController.seasonIndex.value]
+              .episodes!
+              .reversed
+              .toList();
+
+      if (videoDetailController.reverseFromFirst.not) {
+        // keep current episode
+        videoDetailController.seasonIndex.refresh();
+        videoDetailController.cid.refresh();
+      } else {
+        // switch to first episode
+        dynamic episode = videoIntroController.videoDetail.value.ugcSeason!
+            .sections![videoDetailController.seasonIndex.value].episodes!.first;
+        if (episode.cid != videoDetailController.cid.value) {
+          changeEpisode(episode);
+        }
+      }
     } else {
-      // switch to first episode
-      dynamic episode = videoIntroController.videoDetail.value.ugcSeason!
-          .sections![videoDetailController.seasonIndex.value].episodes!.first;
-      if (episode.cid != videoDetailController.cid.value) {
-        videoIntroController.changeSeasonOrbangu(
-          episode is bangumi.EpisodeItem ? episode.epId : null,
-          episode.runtimeType.toString() == "EpisodeItem" ? episode.bvid : bvid,
-          episode.cid,
-          episode.runtimeType.toString() == "EpisodeItem" ? episode.aid : aid,
-          episode is video.EpisodeItem
-              ? episode.arc?.pic
-              : episode is bangumi.EpisodeItem
-                  ? episode.cover
-                  : null,
-        );
+      // reverse part
+      videoIntroController.videoDetail.value.pages =
+          videoIntroController.videoDetail.value.pages!.reversed.toList();
+      videoIntroController.lastPlayCid.refresh();
+      if (videoDetailController.reverseFromFirst.not) {
+        // keep current episode
+        videoDetailController.cid.refresh();
+      } else {
+        // switch to first episode
+        dynamic episode = videoIntroController.videoDetail.value.pages!.first;
+        if (episode.cid != videoDetailController.cid.value) {
+          changeEpisode(episode);
+        }
       }
     }
   }

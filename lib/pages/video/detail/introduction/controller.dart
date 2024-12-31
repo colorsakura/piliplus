@@ -131,7 +131,12 @@ class VideoIntroController extends GetxController
     var result = await VideoHttp.videoIntro(bvid: bvid);
     if (result['status']) {
       if (videoDetail.value.ugcSeason?.id == result['data']?.ugcSeason?.id) {
+        // keep reversed season
         result['data']?.ugcSeason = videoDetail.value.ugcSeason;
+      }
+      if (videoDetail.value.cid == result['data']?.cid) {
+        // keep reversed pages
+        result['data']?.pages = videoDetail.value.pages;
       }
       videoDetail.value = result['data'];
       videoItem!['staff'] = result['data'].staff;
