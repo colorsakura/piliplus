@@ -26,7 +26,6 @@ class AnonymityInterceptor extends Interceptor {
     Api.getSeasonDetailApi,
   ];
 
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (MineController.anonymity) {
@@ -39,7 +38,7 @@ class AnonymityInterceptor extends Interceptor {
         if (uri.lastIndexOf('/') >= index + i.length) continue;
         //SmartDialog.showToast('触发无痕模式\n\n$i\n\n${options.uri}');
         options.headers[HttpHeaders.cookieHeader] = "";
-        if(options.data != null && options.data.csrf != null) {
+        if (options.data != null && options.data.csrf != null) {
           options.data.csrf = "";
         }
         break;

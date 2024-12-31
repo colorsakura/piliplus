@@ -145,16 +145,14 @@ class VideoCardV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String heroTag = Utils.makeHeroTag(videoItem.id);
-    List<VideoCustomAction> actions =
-        VideoCustomActions(videoItem, context).actions;
     return Stack(children: [
       Semantics(
         label: Utils.videoItemSemantics(videoItem),
         excludeSemantics: true,
-        customSemanticsActions: <CustomSemanticsAction, void Function()>{
-          for (var item in actions)
-            CustomSemanticsAction(label: item.title): item.onTap!,
-        },
+        // customSemanticsActions: <CustomSemanticsAction, void Function()>{
+        //   for (var item in actions)
+        //     CustomSemanticsAction(label: item.title): item.onTap!,
+        // },
         child: Card(
           clipBehavior: Clip.hardEdge,
           margin: EdgeInsets.zero,
@@ -204,13 +202,14 @@ class VideoCardV extends StatelessWidget {
       ),
       if (videoItem.goto == 'av')
         Positioned(
-            right: -5,
-            bottom: -2,
-            child: VideoPopupMenu(
-              size: 29,
-              iconSize: 17,
-              actions: actions,
-            )),
+          right: -5,
+          bottom: -2,
+          child: VideoPopupMenu(
+            size: 29,
+            iconSize: 17,
+            videoItem: videoItem,
+          ),
+        ),
     ]);
   }
 

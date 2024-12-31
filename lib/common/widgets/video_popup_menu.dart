@@ -270,14 +270,14 @@ class VideoCustomActions {
 class VideoPopupMenu extends StatelessWidget {
   final double? size;
   final double? iconSize;
-  final List<VideoCustomAction> actions;
   final double menuItemHeight = 45;
+  final dynamic videoItem;
 
   const VideoPopupMenu({
     super.key,
     required this.size,
     required this.iconSize,
-    required this.actions,
+    required this.videoItem,
   });
 
   @override
@@ -295,7 +295,8 @@ class VideoPopupMenu extends StatelessWidget {
         ),
         position: PopupMenuPosition.under,
         onSelected: (String type) {},
-        itemBuilder: (BuildContext context) => actions.map((e) {
+        itemBuilder: (BuildContext context) =>
+            VideoCustomActions(videoItem, context).actions.map((e) {
           return PopupMenuItem<String>(
             value: e.value,
             height: menuItemHeight,

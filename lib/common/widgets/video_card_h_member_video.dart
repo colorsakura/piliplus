@@ -110,7 +110,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
           child: VideoPopupMenu(
             size: 29,
             iconSize: 17,
-            actions: VideoCustomActions(videoItem, context).actions,
+            videoItem: videoItem,
           ),
         ),
       ],
