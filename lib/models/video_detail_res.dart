@@ -69,6 +69,8 @@ class VideoDetailData {
   bool? needJumpBv;
   String? epId;
   List<Staff>? staff;
+  late bool isPageReversed;
+  late bool isSeasonReversed;
 
   VideoDetailData({
     this.bvid,
@@ -107,6 +109,8 @@ class VideoDetailData {
     this.needJumpBv,
     this.epId,
     this.staff,
+    this.isPageReversed = false,
+    this.isSeasonReversed = false,
   });
 
   VideoDetailData.fromJson(Map<String, dynamic> json) {
@@ -163,6 +167,8 @@ class VideoDetailData {
     if (json['redirect_url'] != null) {
       epId = resolveEpId(json['redirect_url']);
     }
+    isPageReversed = false;
+    isSeasonReversed = false;
   }
 
   String resolveEpId(url) {

@@ -133,10 +133,12 @@ class VideoIntroController extends GetxController
       if (videoDetail.value.ugcSeason?.id == result['data']?.ugcSeason?.id) {
         // keep reversed season
         result['data']?.ugcSeason = videoDetail.value.ugcSeason;
+        result['data']?.isSeasonReversed = videoDetail.value.isSeasonReversed;
       }
       if (videoDetail.value.cid == result['data']?.cid) {
         // keep reversed pages
         result['data']?.pages = videoDetail.value.pages;
+        result['data']?.isPageReversed = videoDetail.value.isPageReversed;
       }
       videoDetail.value = result['data'];
       videoItem!['staff'] = result['data'].staff;

@@ -66,7 +66,7 @@ class _FollowListState extends State<FollowList> {
                           if (index == list.length) {
                             return Container(
                               height:
-                                  MediaQuery.of(context).padding.bottom + 60,
+                                  MediaQuery.of(context).padding.bottom + 80,
                               padding: EdgeInsets.only(
                                   bottom:
                                       MediaQuery.of(context).padding.bottom),

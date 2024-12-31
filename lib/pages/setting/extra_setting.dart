@@ -404,7 +404,7 @@ class _ExtraSettingState extends State<ExtraSetting> {
           SetSwitchItem(
             title: '分P/合集：倒序播放从首集开始播放',
             subTitle: '开启则自动切换为倒序首集，否则保持当前集',
-            leading: const Icon(Icons.u_turn_right),
+            leading: Icon(MdiIcons.sort),
             setKey: SettingBoxKey.reverseFromFirst,
             defaultVal: true,
           ),

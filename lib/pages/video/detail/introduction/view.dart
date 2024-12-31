@@ -82,6 +82,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               onShowMemberPage: widget.onShowMemberPage,
             )
           : VideoInfo(
+              key: ValueKey(widget.heroTag),
               loadingStatus: false,
               videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
@@ -109,12 +110,12 @@ class VideoInfo extends StatefulWidget {
   const VideoInfo({
     super.key,
     this.loadingStatus = false,
-    required this.videoIntroController,
     required this.heroTag,
     required this.showAiBottomSheet,
     required this.showIntroDetail,
     required this.showEpisodes,
     required this.onShowMemberPage,
+    required this.videoIntroController,
   });
 
   @override
@@ -642,10 +643,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
               Obx(
                 () => videoIntroController.queryVideoIntroData.value["status"]
-                    ? const SizedBox()
+                    ? const SizedBox.shrink()
                     : Center(
                         child: TextButton.icon(
                           icon: const Icon(Icons.refresh),
@@ -676,19 +676,13 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   (context.orientation != Orientation.landscape ||
                       (context.orientation == Orientation.landscape &&
                           videoDetailCtr.horizontalSeasonPanel.not)))
-                Obx(
-                  () => SeasonPanel(
-                    heroTag: widget.heroTag,
-                    ugcSeason: videoDetail.ugcSeason!,
-                    cid: videoIntroController.lastPlayCid.value != 0
-                        ? (videoDetail.pages?.isNotEmpty == true
-                            ? videoDetail.pages!.first.cid
-                            : videoIntroController.lastPlayCid.value)
-                        : videoDetail.pages!.first.cid,
-                    changeFuc: videoIntroController.changeSeasonOrbangu,
-                    showEpisodes: widget.showEpisodes,
-                    pages: videoDetail.pages,
-                  ),
+                SeasonPanel(
+                  heroTag: widget.heroTag,
+                  ugcSeason: videoDetail.ugcSeason!,
+                  changeFuc: videoIntroController.changeSeasonOrbangu,
+                  showEpisodes: widget.showEpisodes,
+                  pages: videoDetail.pages,
+                  videoIntroController: videoIntroController,
                 ),
               if (!widget.loadingStatus &&
                   videoDetail.pages != null &&
@@ -696,15 +690,12 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   (context.orientation != Orientation.landscape ||
                       (context.orientation == Orientation.landscape &&
                           videoDetailCtr.horizontalSeasonPanel.not))) ...[
-                Obx(
-                  () => PagesPanel(
-                    heroTag: widget.heroTag,
-                    videoDetailData: videoIntroController.videoDetail.value,
-                    cid: videoIntroController.lastPlayCid.value,
-                    bvid: videoIntroController.bvid,
-                    changeFuc: videoIntroController.changeSeasonOrbangu,
-                    showEpisodes: widget.showEpisodes,
-                  ),
+                PagesPanel(
+                  heroTag: widget.heroTag,
+                  videoIntroController: videoIntroController,
+                  bvid: videoIntroController.bvid,
+                  changeFuc: videoIntroController.changeSeasonOrbangu,
+                  showEpisodes: widget.showEpisodes,
                 ),
               ],
             ],

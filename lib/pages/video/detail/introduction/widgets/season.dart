@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/models/video_detail_res.dart';
@@ -9,20 +11,20 @@ class SeasonPanel extends StatefulWidget {
   const SeasonPanel({
     super.key,
     required this.ugcSeason,
-    this.cid,
     required this.changeFuc,
     required this.heroTag,
     required this.showEpisodes,
     required this.pages,
     this.onTap,
+    required this.videoIntroController,
   });
   final UgcSeason ugcSeason;
-  final int? cid;
   final Function changeFuc;
   final String heroTag;
   final Function showEpisodes;
   final List<Part>? pages;
   final bool? onTap;
+  final VideoIntroController videoIntroController;
 
   @override
   State<SeasonPanel> createState() => _SeasonPanelState();
@@ -34,12 +36,26 @@ class _SeasonPanelState extends State<SeasonPanel> {
   StreamSubscription? _listener;
   List<EpisodeItem> episodes = <EpisodeItem>[];
 
+  VideoIntroController get videoIntroController => widget.videoIntroController;
+  VideoDetailData get videoDetail =>
+      widget.videoIntroController.videoDetail.value;
+
   @override
   void initState() {
     super.initState();
     _videoDetailController =
-        Get.find<VideoDetailController>(tag: widget.heroTag)
-          ..seasonCid = widget.cid!;
+        Get.find<VideoDetailController>(tag: widget.heroTag);
+
+    _videoDetailController.seasonCid =
+        videoIntroController.lastPlayCid.value != 0
+            ? (videoDetail.pages?.isNotEmpty == true
+                ? videoDetail.isPageReversed
+                    ? videoDetail.pages!.last.cid
+                    : videoDetail.pages!.first.cid
+                : videoIntroController.lastPlayCid.value)
+            : videoDetail.isPageReversed
+                ? videoDetail.pages!.last.cid
+                : videoDetail.pages!.first.cid;
 
     /// 根据 cid 找到对应集，找到对应 episodes
     /// 有多个episodes时，只显示其中一个
@@ -55,16 +71,12 @@ class _SeasonPanelState extends State<SeasonPanel> {
     currentIndex.value = episodes.indexWhere(
         (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
     _listener = _videoDetailController.cid.listen((int cid) {
-      if (_videoDetailController.seasonCid == cid) {
-        //refresh
-        _findEpisode();
-        currentIndex.value = episodes.indexWhere(
-            (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
-        return;
+      if (_videoDetailController.seasonCid != cid) {
+        bool isPart = widget.pages?.indexWhere((item) => item.cid == cid) != -1;
+        if (isPart.not) {
+          _videoDetailController.seasonCid = cid;
+        }
       }
-      bool isPart = widget.pages?.indexWhere((item) => item.cid == cid) != -1;
-      if (isPart) return;
-      _videoDetailController.seasonCid = cid;
       _findEpisode();
       currentIndex.value = episodes.indexWhere(
           (EpisodeItem e) => e.cid == _videoDetailController.seasonCid);
@@ -99,7 +111,6 @@ class _SeasonPanelState extends State<SeasonPanel> {
           top: 8,
           left: 2,
           right: 2,
-          bottom: 2,
         ),
         child: Material(
           color: Theme.of(context).colorScheme.onInverseSurface,

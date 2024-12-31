@@ -28,6 +28,7 @@ class ListSheetContent extends StatefulWidget {
     this.onReverse,
     this.showTitle,
     this.isSupportReverse,
+    this.isReversed,
   });
 
   final dynamic index;
@@ -41,6 +42,7 @@ class ListSheetContent extends StatefulWidget {
   final VoidCallback? onReverse;
   final bool? showTitle;
   final bool? isSupportReverse;
+  final bool? isReversed;
 
   @override
   State<ListSheetContent> createState() => _ListSheetContentState();
@@ -381,10 +383,10 @@ class _ListSheetContentState extends State<ListSheetContent>
                   stream: _indexStream?.stream,
                   initialData: _index,
                   builder: (context, snapshot) => _mediumButton(
-                    tooltip: reverse[snapshot.data] ? '正序' : '反序',
+                    tooltip: reverse[snapshot.data] ? '顺序' : '倒序',
                     icon: !reverse[snapshot.data]
-                        ? MdiIcons.sortAscending
-                        : MdiIcons.sortDescending,
+                        ? MdiIcons.sortNumericAscending
+                        : MdiIcons.sortNumericDescending,
                     onPressed: () {
                       setState(() {
                         reverse[_ctr?.index ?? 0] = !reverse[_ctr?.index ?? 0];
@@ -436,8 +438,10 @@ class _ListSheetContentState extends State<ListSheetContent>
   }
 
   Widget get _reverseButton => _mediumButton(
-        tooltip: '倒序播放',
-        icon: Icons.u_turn_right,
+        tooltip: widget.isReversed == true ? '正序播放' : '倒序播放',
+        icon: widget.isReversed == true
+            ? MdiIcons.sortDescending
+            : MdiIcons.sortAscending,
         onPressed: () async {
           if (widget.showTitle == false) {
             // jump to current
@@ -479,7 +483,7 @@ class _ListSheetContentState extends State<ListSheetContent>
   Widget _buildBody(i, episodes) => Material(
         child: ScrollablePositionedList.separated(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + 20,
+            bottom: MediaQuery.of(context).padding.bottom + 80,
           ),
           reverse: reverse[i ?? 0],
           itemCount: episodes.length,

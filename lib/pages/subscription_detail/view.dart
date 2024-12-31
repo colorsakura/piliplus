@@ -228,20 +228,27 @@ class _SubDetailPageState extends State<SubDetailPage> {
                     return Obx(
                       () => subList.isEmpty
                           ? const SliverToBoxAdapter(child: SizedBox())
-                          : SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithExtentAndRatio(
-                                mainAxisSpacing: 2,
-                                maxCrossAxisExtent: Grid.maxRowWidth * 2,
-                                childAspectRatio: StyleString.aspectRatio * 2.2,
+                          : SliverPadding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.paddingOf(context).bottom + 80,
                               ),
-                              delegate: SliverChildBuilderDelegate(
-                                childCount: subList.length,
-                                (BuildContext context, int index) {
-                                  return SubVideoCardH(
-                                    videoItem: subList[index],
-                                  );
-                                },
+                              sliver: SliverGrid(
+                                gridDelegate:
+                                    SliverGridDelegateWithExtentAndRatio(
+                                  mainAxisSpacing: 2,
+                                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                  childAspectRatio:
+                                      StyleString.aspectRatio * 2.2,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                  childCount: subList.length,
+                                  (BuildContext context, int index) {
+                                    return SubVideoCardH(
+                                      videoItem: subList[index],
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                     );
@@ -271,25 +278,6 @@ class _SubDetailPageState extends State<SubDetailPage> {
               }
             },
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: MediaQuery.of(context).padding.bottom + 60,
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
-              child: Center(
-                child: Obx(
-                  () => Text(
-                    _subDetailController.loadingText.value,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

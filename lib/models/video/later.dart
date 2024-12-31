@@ -31,6 +31,7 @@ class MediaVideoItemModel {
     this.forbidFav,
     this.moreType,
     this.businessOid,
+    this.isReversed = false,
   });
 
   int? id;
@@ -64,6 +65,7 @@ class MediaVideoItemModel {
   bool? forbidFav;
   int? moreType;
   int? businessOid;
+  bool isReversed;
 
   factory MediaVideoItemModel.fromJson(Map<String, dynamic> json) =>
       MediaVideoItemModel(
@@ -101,6 +103,7 @@ class MediaVideoItemModel {
         forbidFav: json["forbid_fav"],
         moreType: json["more_type"],
         businessOid: json["business_oid"],
+        isReversed: false,
       );
 }
 

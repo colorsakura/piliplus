@@ -222,7 +222,7 @@ class VideoDetailController extends GetxController
       videoType == SearchType.video ? _showVideoReply : _showBangumiReply;
 
   late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
-  late int seasonCid = 0;
+  int? seasonCid;
   late RxInt seasonIndex = 0.obs;
   late final reverseFromFirst = GStorage.reverseFromFirst;
 
