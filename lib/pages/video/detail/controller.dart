@@ -329,7 +329,10 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void getMediaList([bool isReverse = false]) async {
+  void getMediaList({
+    bool isReverse = false,
+    bool isLoadPrevious = false,
+  }) async {
     if (isReverse.not &&
         Get.arguments['count'] != null &&
         mediaList.length >= Get.arguments['count']) {
@@ -339,10 +342,31 @@ class VideoDetailController extends GetxController
       type: Get.arguments['mediaType'] ?? _mediaType,
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
-      oid: isReverse || mediaList.isEmpty ? null : mediaList.last.id,
-      otype: isReverse || mediaList.isEmpty ? null : mediaList.last.type,
+      direction: isLoadPrevious ? true : false,
+      oid: isReverse
+          ? null
+          : mediaList.isEmpty
+              ? _mediaType == 1 &&
+                      Get.arguments['mediaType'] == null // member archive
+                  ? Get.arguments['oid']
+                  : null
+              : isLoadPrevious
+                  ? mediaList.first.id
+                  : mediaList.last.id,
+      otype: isReverse
+          ? null
+          : mediaList.isEmpty
+              ? null
+              : isLoadPrevious
+                  ? mediaList.first.type
+                  : mediaList.last.type,
       desc: _mediaDesc,
       sortField: Get.arguments['sortField'] ?? 1,
+      withCurrent: mediaList.isEmpty &&
+              _mediaType == 1 &&
+              Get.arguments['mediaType'] == null
+          ? true // init && member archive
+          : false,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {
@@ -364,6 +388,8 @@ class VideoDetailController extends GetxController
               }
             }
           } catch (_) {}
+        } else if (isLoadPrevious) {
+          mediaList.insertAll(0, res['data']);
         } else {
           mediaList.addAll(res['data']);
         }
@@ -379,7 +405,12 @@ class VideoDetailController extends GetxController
       childKey.currentState?.showBottomSheet(
         (context) => MediaListPanel(
           mediaList: mediaList,
-          changeMediaList: changeMediaList,
+          changeMediaList: (bvid, cid, aid, cover) {
+            try {
+              Get.find<VideoIntroController>(tag: heroTag)
+                  .changeSeasonOrbangu(null, bvid, cid, aid, cover);
+            } catch (_) {}
+          },
           panelTitle: watchLaterTitle,
           getBvId: () => bvid,
           count: Get.arguments['count'],
@@ -387,8 +418,13 @@ class VideoDetailController extends GetxController
           desc: _mediaDesc,
           onReverse: () {
             _mediaDesc = !_mediaDesc;
-            getMediaList(true);
+            getMediaList(isReverse: true);
           },
+          loadPrevious: Get.arguments['isContinuePlaying'] == true
+              ? () {
+                  getMediaList(isLoadPrevious: true);
+                }
+              : null,
         ),
       );
     }
@@ -1851,6 +1887,16 @@ class VideoDetailController extends GetxController
           plPlayerController.showVP.value = showVP = true;
         }
       }
+    }
+  }
+
+  void updateMediaListHistory(aid) {
+    if (Get.arguments['sortField'] != null) {
+      VideoHttp.medialistHistory(
+        desc: _mediaDesc ? 1 : 0,
+        oid: aid,
+        upperMid: Get.arguments['mediaId'],
+      );
     }
   }
 }

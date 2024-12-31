@@ -556,6 +556,7 @@ class VideoIntroController extends GetxController
     // 重新获取视频资源
     final VideoDetailController videoDetailCtr =
         Get.find<VideoDetailController>(tag: heroTag);
+    videoDetailCtr.updateMediaListHistory(aid);
     videoDetailCtr.vttSubtitlesIndex = null;
     videoDetailCtr.bvid = bvid;
     videoDetailCtr.oid.value = aid ?? IdUtils.bv2av(bvid);
@@ -673,12 +674,13 @@ class VideoIntroController extends GetxController
     bool isPages = false;
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
-    if (videoDetailCtr.isPlayAll) {
-      episodes.addAll(videoDetailCtr.mediaList);
-    } else if ((videoDetail.value.pages?.length ?? 0) > 1) {
+    // part -> playall -> season
+    if ((videoDetail.value.pages?.length ?? 0) > 1) {
       isPages = true;
       final List<Part> pages = videoDetail.value.pages!;
       episodes.addAll(pages);
+    } else if (videoDetailCtr.isPlayAll) {
+      episodes.addAll(videoDetailCtr.mediaList);
     } else if (videoDetail.value.ugcSeason != null) {
       final UgcSeason ugcSeason = videoDetail.value.ugcSeason!;
       final List<SectionItem> sections = ugcSeason.sections!;

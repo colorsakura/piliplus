@@ -137,7 +137,7 @@ class SearchHttp {
     }
   }
 
-  static Future<int> ab2c({int? aid, String? bvid}) async {
+  static Future<int> ab2c({dynamic aid, dynamic bvid}) async {
     Map<String, dynamic> data = {};
     if (aid != null) {
       data['aid'] = aid;

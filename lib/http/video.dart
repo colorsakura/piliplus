@@ -755,6 +755,19 @@ class VideoHttp {
     });
   }
 
+  static Future medialistHistory({
+    required int desc,
+    required dynamic oid,
+    required dynamic upperMid,
+  }) async {
+    await Request().post(Api.mediaListHistory, queryParameters: {
+      'desc': desc,
+      'oid': oid,
+      'upper_mid': upperMid,
+      'csrf': await Request.getCsrf(),
+    });
+  }
+
   // 添加追番
   static Future bangumiAdd({int? seasonId}) async {
     var res = await Request().post(Api.bangumiAdd, queryParameters: {

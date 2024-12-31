@@ -99,16 +99,13 @@ class _MemberVideoState extends State<MemberVideo>
                                         Theme.of(context).colorScheme.secondary,
                                   ),
                                   label: Text(
-                                    '播放全部',
+                                    _controller.episodicButton?.text ?? '播放全部',
                                     style: TextStyle(
-                                      fontSize: 13,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .secondary,
                                     ),
-                                  ), // TODO: continue playing
-                                  // label: Text(
-                                  //     '${_controller.episodicButton?.text}'),
+                                  ),
                                 ),
                               ),
                             ],

@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/member.dart';
+import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/models/space_archive/data.dart';
 import 'package:PiliPalaX/models/space_archive/episodic_button.dart';
 import 'package:PiliPalaX/models/space_archive/item.dart';
@@ -93,9 +94,42 @@ class MemberVideoCtr extends CommonController {
     onRefresh();
   }
 
-  void toViewPlayAll() {
+  void toViewPlayAll() async {
     if (loadingState.value is Success) {
       List<Item> list = (loadingState.value as Success).response;
+
+      if (episodicButton?.text == '继续播放') {
+        dynamic oid = RegExp(r'oid=([\d]+)')
+            .firstMatch('${episodicButton?.uri}')
+            ?.group(1);
+        dynamic bvid = IdUtils.av2bv(int.tryParse(oid) ?? 0);
+        dynamic cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
+        Get.toNamed(
+          '/video?bvid=$bvid&cid=$cid',
+          arguments: {
+            'heroTag': Utils.makeHeroTag(oid),
+            'sourceType': 'archive',
+            'mediaId': seasonId ?? seriesId ?? mid,
+            'oid': oid,
+            'favTitle': '$username: ${title ?? episodicButton?.text ?? '播放全部'}',
+            if (seriesId == null) 'count': count.value,
+            if (seasonId != null || seriesId != null)
+              'mediaType': RegExp(r'page_type=([\d]+)')
+                  .firstMatch('${episodicButton?.uri}')
+                  ?.group(1),
+            'desc': RegExp(r'desc=([\d]+)')
+                    .firstMatch('${episodicButton?.uri}')
+                    ?.group(1) ==
+                '1',
+            'sortField': RegExp(r'sort_field=([\d]+)')
+                .firstMatch('${episodicButton?.uri}')
+                ?.group(1),
+            'isContinuePlaying': true,
+          },
+        );
+        return;
+      }
+
       for (Item element in list) {
         if (element.firstCid == null) {
           continue;
@@ -103,7 +137,6 @@ class MemberVideoCtr extends CommonController {
           if (element.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
-          final String heroTag = Utils.makeHeroTag(element.bvid);
           bool desc = seasonId != null ? false : true;
           desc = (seasonId != null || seriesId != null) &&
                   (type == ContributeType.video
@@ -115,10 +148,10 @@ class MemberVideoCtr extends CommonController {
             '/video?bvid=${element.bvid}&cid=${element.firstCid}',
             arguments: {
               'videoItem': element,
-              'heroTag': heroTag,
+              'heroTag': Utils.makeHeroTag(element.bvid),
               'sourceType': 'archive',
               'mediaId': seasonId ?? seriesId ?? mid,
-              'oid': IdUtils.bv2av(element.bvid!), // TODO: continue playing
+              'oid': IdUtils.bv2av(element.bvid!),
               'favTitle':
                   '$username: ${title ?? episodicButton?.text ?? '播放全部'}',
               if (seriesId == null) 'count': count.value,
@@ -127,10 +160,8 @@ class MemberVideoCtr extends CommonController {
                     .firstMatch('${episodicButton?.uri}')
                     ?.group(1),
               'desc': desc,
-              'sortField':
-                  type == ContributeType.video && order.value == 'click'
-                      ? 2
-                      : 1,
+              if (type == ContributeType.video)
+                'sortField': order.value == 'click' ? 2 : 1,
             },
           );
           break;

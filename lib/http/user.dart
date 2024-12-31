@@ -514,11 +514,12 @@ class UserHttp {
     required dynamic type,
     required int bizId,
     required int ps,
-    int? oid,
+    dynamic oid,
     int? otype,
     bool withCurrent = false,
     bool desc = true,
-    int sortField = 1,
+    dynamic sortField = 1,
+    bool direction = false,
   }) async {
     var res = await Request().get(
       Api.mediaList,
@@ -529,7 +530,7 @@ class UserHttp {
         if (oid != null) 'oid': oid,
         if (otype != null) 'otype': otype, // video:2 // bangumi: 24
         'ps': ps,
-        'direction': false,
+        'direction': direction,
         'desc': desc,
         'sort_field': sortField,
         'tid': 0,

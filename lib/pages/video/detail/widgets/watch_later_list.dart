@@ -24,6 +24,7 @@ class MediaListPanel extends StatefulWidget {
     required this.count,
     required this.desc,
     required this.onReverse,
+    required this.loadPrevious,
   });
 
   final List<MediaVideoItemModel> mediaList;
@@ -34,6 +35,7 @@ class MediaListPanel extends StatefulWidget {
   final int? count;
   final bool? desc;
   final VoidCallback onReverse;
+  final Function? loadPrevious;
 
   @override
   State<MediaListPanel> createState() => _MediaListPanelState();
@@ -89,152 +91,152 @@ class _MediaListPanelState extends State<MediaListPanel> {
           Expanded(
             child: Material(
               color: Theme.of(context).colorScheme.surface,
-              child: Obx(
-                () => ScrollablePositionedList.builder(
-                  itemScrollController: _scrollController,
-                  itemCount: widget.mediaList.length,
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.paddingOf(context).bottom + 25,
-                  ),
-                  itemBuilder: ((context, index) {
-                    var item = widget.mediaList[index];
-                    if (index == widget.mediaList.length - 1 &&
-                        (widget.count == null ||
-                            widget.mediaList.length < widget.count!)) {
-                      widget.loadMoreMedia();
-                    }
-                    return InkWell(
-                      onTap: () async {
-                        if (item.type != 2) {
-                          SmartDialog.showToast('不支持播放该类型视频');
-                          return;
-                        }
-                        Get.back();
-                        String bvid = item.bvid!;
-                        int? aid = item.id;
-                        String cover = item.cover ?? '';
-                        final int cid = item.cid ??
-                            await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                        widget.changeMediaList?.call(bvid, cid, aid, cover);
+              child: widget.loadPrevious != null
+                  ? RefreshIndicator(
+                      onRefresh: () async {
+                        await widget.loadPrevious!();
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 8,
-                        ),
-                        child: LayoutBuilder(
-                          builder: (context, boxConstraints) {
-                            const double width = 120;
-                            return Container(
-                              constraints: const BoxConstraints(minHeight: 88),
-                              height: width / StyleString.aspectRatio,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  AspectRatio(
-                                    aspectRatio: StyleString.aspectRatio,
-                                    child: LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints boxConstraints) {
-                                        final double maxWidth =
-                                            boxConstraints.maxWidth;
-                                        final double maxHeight =
-                                            boxConstraints.maxHeight;
-                                        return Stack(
-                                          children: [
-                                            NetworkImgLayer(
-                                              src: item.cover ?? '',
-                                              width: maxWidth,
-                                              height: maxHeight,
-                                            ),
-                                            PBadge(
-                                              text: Utils.timeFormat(
-                                                  item.duration!),
-                                              right: 6.0,
-                                              bottom: 6.0,
-                                              type: 'gray',
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 6, 0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            item.title as String,
-                                            textAlign: TextAlign.start,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontWeight:
-                                                  item.bvid == widget.getBvId()
-                                                      ? FontWeight.bold
-                                                      : null,
-                                              color:
-                                                  item.bvid == widget.getBvId()
-                                                      ? Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
-                                                      : null,
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          Text(
-                                            item.upper?.name as String,
-                                            style: TextStyle(
-                                              fontSize: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium!
-                                                  .fontSize,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Row(
-                                            children: [
-                                              statView(
-                                                context: context,
-                                                theme: 'gray',
-                                                view: item.cntInfo!['play']
-                                                    as int,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              statDanMu(
-                                                context: context,
-                                                theme: 'gray',
-                                                danmu: item.cntInfo!['danmaku']
-                                                    as int,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
+                      child: _buildList,
+                    )
+                  : _buildList,
             ),
           ),
         ],
       ),
     );
   }
+
+  Widget get _buildList => Obx(
+        () => ScrollablePositionedList.builder(
+          itemScrollController: _scrollController,
+          itemCount: widget.mediaList.length,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.paddingOf(context).bottom + 80,
+          ),
+          itemBuilder: ((context, index) {
+            var item = widget.mediaList[index];
+            if (index == widget.mediaList.length - 1 &&
+                (widget.count == null ||
+                    widget.mediaList.length < widget.count!)) {
+              widget.loadMoreMedia();
+            }
+            return InkWell(
+              onTap: () async {
+                if (item.type != 2) {
+                  SmartDialog.showToast('不支持播放该类型视频');
+                  return;
+                }
+                Get.back();
+                String bvid = item.bvid!;
+                int? aid = item.id;
+                String cover = item.cover ?? '';
+                final int cid =
+                    item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
+                widget.changeMediaList?.call(bvid, cid, aid, cover);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
+                child: LayoutBuilder(
+                  builder: (context, boxConstraints) {
+                    const double width = 120;
+                    return Container(
+                      constraints: const BoxConstraints(minHeight: 88),
+                      height: width / StyleString.aspectRatio,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          AspectRatio(
+                            aspectRatio: StyleString.aspectRatio,
+                            child: LayoutBuilder(
+                              builder: (BuildContext context,
+                                  BoxConstraints boxConstraints) {
+                                final double maxWidth = boxConstraints.maxWidth;
+                                final double maxHeight =
+                                    boxConstraints.maxHeight;
+                                return Stack(
+                                  children: [
+                                    NetworkImgLayer(
+                                      src: item.cover ?? '',
+                                      width: maxWidth,
+                                      height: maxHeight,
+                                    ),
+                                    PBadge(
+                                      text: Utils.timeFormat(item.duration!),
+                                      right: 6.0,
+                                      bottom: 6.0,
+                                      type: 'gray',
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.title as String,
+                                    textAlign: TextAlign.start,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: item.bvid == widget.getBvId()
+                                          ? FontWeight.bold
+                                          : null,
+                                      color: item.bvid == widget.getBvId()
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : null,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    item.upper?.name as String,
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .fontSize,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Row(
+                                    children: [
+                                      statView(
+                                        context: context,
+                                        theme: 'gray',
+                                        view: item.cntInfo!['play'] as int,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      statDanMu(
+                                        context: context,
+                                        theme: 'gray',
+                                        danmu: item.cntInfo!['danmaku'] as int,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+        ),
+      );
 }
