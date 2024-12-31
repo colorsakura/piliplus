@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/video.dart';
 import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
@@ -291,7 +292,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                 StreamBuilder(
                   stream: _favStream?.stream,
                   builder: (context, snapshot) => snapshot.hasData
-                      ? _mediumButton(
+                      ? mediumButton(
                           tooltip: _seasonFav == 1 ? '取消订阅' : '订阅',
                           icon: _seasonFav == 1
                               ? Icons.notifications_off_outlined
@@ -313,7 +314,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                         )
                       : const SizedBox.shrink(),
                 ),
-                _mediumButton(
+                mediumButton(
                   tooltip: '跳至顶部',
                   icon: Icons.vertical_align_top,
                   onPressed: () {
@@ -331,7 +332,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                     } catch (_) {}
                   },
                 ),
-                _mediumButton(
+                mediumButton(
                   tooltip: '跳至底部',
                   icon: Icons.vertical_align_bottom,
                   onPressed: () {
@@ -349,7 +350,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                     } catch (_) {}
                   },
                 ),
-                _mediumButton(
+                mediumButton(
                   tooltip: '跳至当前',
                   icon: Icons.my_location,
                   onPressed: () async {
@@ -382,7 +383,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                 StreamBuilder(
                   stream: _indexStream?.stream,
                   initialData: _index,
-                  builder: (context, snapshot) => _mediumButton(
+                  builder: (context, snapshot) => mediumButton(
                     tooltip: reverse[snapshot.data] ? '顺序' : '倒序',
                     icon: !reverse[snapshot.data]
                         ? MdiIcons.sortNumericAscending
@@ -395,7 +396,7 @@ class _ListSheetContentState extends State<ListSheetContent>
                   ),
                 ),
                 if (widget.onClose != null)
-                  _mediumButton(
+                  mediumButton(
                     tooltip: '关闭',
                     icon: Icons.close,
                     onPressed: widget.onClose,
@@ -437,7 +438,7 @@ class _ListSheetContentState extends State<ListSheetContent>
     );
   }
 
-  Widget get _reverseButton => _mediumButton(
+  Widget get _reverseButton => mediumButton(
         tooltip: widget.isReversed == true ? '正序播放' : '倒序播放',
         icon: widget.isReversed == true
             ? MdiIcons.sortDescending
@@ -460,25 +461,6 @@ class _ListSheetContentState extends State<ListSheetContent>
           widget.onReverse?.call();
         },
       );
-
-  Widget _mediumButton({
-    String? tooltip,
-    IconData? icon,
-    VoidCallback? onPressed,
-  }) {
-    return SizedBox(
-      width: 34,
-      height: 34,
-      child: IconButton(
-        tooltip: tooltip,
-        icon: Icon(icon),
-        style: ButtonStyle(
-          padding: WidgetStateProperty.all(EdgeInsets.zero),
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
 
   Widget _buildBody(i, episodes) => Material(
         child: ScrollablePositionedList.separated(

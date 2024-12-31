@@ -187,6 +187,7 @@ class LaterController extends MultiSelectController {
               'count': list.length,
               'favTitle': '稍后再看',
               'mediaId': GStorage.userInfo.get('userInfoCache')?.mid,
+              'desc': false,
             },
           );
           break;

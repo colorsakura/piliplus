@@ -6,6 +6,7 @@ import 'package:PiliPalaX/models/space_archive/item.dart';
 import 'package:PiliPalaX/pages/common/common_controller.dart';
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -103,6 +104,13 @@ class MemberVideoCtr extends CommonController {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
           final String heroTag = Utils.makeHeroTag(element.bvid);
+          bool desc = seasonId != null ? false : true;
+          desc = (seasonId != null || seriesId != null) &&
+                  (type == ContributeType.video
+                      ? order.value == 'click'
+                      : sort.value == 'asc')
+              ? desc.not
+              : desc;
           Get.toNamed(
             '/video?bvid=${element.bvid}&cid=${element.firstCid}',
             arguments: {
@@ -118,9 +126,11 @@ class MemberVideoCtr extends CommonController {
                 'mediaType': RegExp(r'page_type=([\d]+)')
                     .firstMatch('${episodicButton?.uri}')
                     ?.group(1),
-              'reverse': type == ContributeType.video
-                  ? order.value == 'click'
-                  : sort.value == 'asc',
+              'desc': desc,
+              'sortField':
+                  type == ContributeType.video && order.value == 'click'
+                      ? 2
+                      : 1,
             },
           );
           break;

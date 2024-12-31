@@ -244,6 +244,7 @@ class VideoDetailController extends GetxController
 
   // 页面来源 稍后再看 收藏夹
   String sourceType = 'normal';
+  late bool _mediaDesc = false;
   late RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;
   late String watchLaterTitle = '';
   bool get isPlayAll => ['watchLater', 'fav', 'archive'].contains(sourceType);
@@ -279,6 +280,7 @@ class VideoDetailController extends GetxController
 
     if (sourceType != 'normal') {
       watchLaterTitle = Get.arguments['favTitle'];
+      _mediaDesc = Get.arguments['desc'];
       getMediaList();
     }
 
@@ -327,31 +329,44 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void getMediaList() async {
-    if (Get.arguments['count'] != null &&
+  void getMediaList([bool isReverse = false]) async {
+    if (isReverse.not &&
+        Get.arguments['count'] != null &&
         mediaList.length >= Get.arguments['count']) {
       return;
     }
-    bool desc =
-        _mediaType == 2 || Get.arguments['mediaType'] == '8' ? false : true;
     var res = await UserHttp.getMediaList(
       type: Get.arguments['mediaType'] ?? _mediaType,
       bizId: Get.arguments['mediaId'] ?? -1,
       ps: 20,
-      oid: mediaList.isEmpty ? null : mediaList.last.id,
-      otype: mediaList.isEmpty ? null : mediaList.last.type,
-      desc:
-          Get.arguments['mediaType'] != null && Get.arguments['reverse'] == true
-              ? desc.not
-              : desc,
-      sortField:
-          Get.arguments['mediaType'] == null && Get.arguments['reverse'] == true
-              ? 2
-              : 1,
+      oid: isReverse || mediaList.isEmpty ? null : mediaList.last.id,
+      otype: isReverse || mediaList.isEmpty ? null : mediaList.last.type,
+      desc: _mediaDesc,
+      sortField: Get.arguments['sortField'] ?? 1,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {
-        mediaList.addAll(res['data']);
+        if (isReverse) {
+          mediaList.value = res['data'];
+          try {
+            for (MediaVideoItemModel item in mediaList) {
+              if (item.cid == null) {
+                continue;
+              } else {
+                Get.find<VideoIntroController>(tag: heroTag)
+                    .changeSeasonOrbangu(
+                  null,
+                  mediaList.first.bvid,
+                  mediaList.first.cid,
+                  mediaList.first.aid,
+                  mediaList.first.cover,
+                );
+              }
+            }
+          } catch (_) {}
+        } else {
+          mediaList.addAll(res['data']);
+        }
       }
     } else {
       SmartDialog.showToast(res['msg']);
@@ -366,9 +381,14 @@ class VideoDetailController extends GetxController
           mediaList: mediaList,
           changeMediaList: changeMediaList,
           panelTitle: watchLaterTitle,
-          bvid: bvid,
+          getBvId: () => bvid,
           count: Get.arguments['count'],
           loadMoreMedia: getMediaList,
+          desc: _mediaDesc,
+          onReverse: () {
+            _mediaDesc = !_mediaDesc;
+            getMediaList(true);
+          },
         ),
       );
     }

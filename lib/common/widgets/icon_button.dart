@@ -28,3 +28,22 @@ Widget iconButton({
     ),
   );
 }
+
+Widget mediumButton({
+  String? tooltip,
+  IconData? icon,
+  VoidCallback? onPressed,
+}) {
+  return SizedBox(
+    width: 34,
+    height: 34,
+    child: IconButton(
+      tooltip: tooltip,
+      icon: Icon(icon),
+      style: ButtonStyle(
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
+      ),
+      onPressed: onPressed,
+    ),
+  );
+}

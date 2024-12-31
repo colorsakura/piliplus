@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
 import 'package:PiliPalaX/common/widgets/stat/view.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/utils/utils.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MediaListPanel extends StatefulWidget {
@@ -17,17 +19,21 @@ class MediaListPanel extends StatefulWidget {
     required this.mediaList,
     this.changeMediaList,
     this.panelTitle,
-    this.bvid,
+    required this.getBvId,
     required this.loadMoreMedia,
     required this.count,
+    required this.desc,
+    required this.onReverse,
   });
 
   final List<MediaVideoItemModel> mediaList;
   final Function? changeMediaList;
   final String? panelTitle;
-  final String? bvid;
+  final Function getBvId;
   final VoidCallback loadMoreMedia;
   final int? count;
+  final bool? desc;
+  final VoidCallback onReverse;
 
   @override
   State<MediaListPanel> createState() => _MediaListPanelState();
@@ -41,7 +47,7 @@ class _MediaListPanelState extends State<MediaListPanel> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       int index =
-          widget.mediaList.indexWhere((item) => item.bvid == widget.bvid);
+          widget.mediaList.indexWhere((item) => item.bvid == widget.getBvId());
       if (index != -1 && index != 0) {
         try {
           _scrollController.jumpTo(index: index);
@@ -64,8 +70,17 @@ class _MediaListPanelState extends State<MediaListPanel> {
             titleSpacing: 16,
             title: Text(widget.panelTitle ?? '稍后再看'),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.close, size: 20),
+              if (widget.desc != null)
+                mediumButton(
+                  tooltip: widget.desc == true ? '顺序播放' : '倒序播放',
+                  icon: widget.desc == true
+                      ? MdiIcons.sortAscending
+                      : MdiIcons.sortDescending,
+                  onPressed: widget.onReverse,
+                ),
+              mediumButton(
+                tooltip: '关闭',
+                icon: Icons.close,
                 onPressed: Get.back,
               ),
               const SizedBox(width: 14),
@@ -160,14 +175,15 @@ class _MediaListPanelState extends State<MediaListPanel> {
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontWeight:
-                                                  item.bvid == widget.bvid
+                                                  item.bvid == widget.getBvId()
                                                       ? FontWeight.bold
                                                       : null,
-                                              color: item.bvid == widget.bvid
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                  : null,
+                                              color:
+                                                  item.bvid == widget.getBvId()
+                                                      ? Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                      : null,
                                             ),
                                           ),
                                           const Spacer(),
