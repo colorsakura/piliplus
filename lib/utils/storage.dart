@@ -148,6 +148,9 @@ class GStorage {
   static bool get showArgueMsg =>
       setting.get(SettingBoxKey.showArgueMsg, defaultValue: true);
 
+  static bool get reverseFromFirst =>
+      setting.get(SettingBoxKey.reverseFromFirst, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -350,6 +353,7 @@ class SettingBoxKey {
       horizontalMemberPage = 'horizontalMemberPage',
       replyLengthLimit = 'replyLengthLimit',
       showArgueMsg = 'showArgueMsg',
+      reverseFromFirst = 'reverseFromFirst',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

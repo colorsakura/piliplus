@@ -112,8 +112,8 @@ class _SubDetailPageState extends State<SubDetailPage> {
                   top: kTextTabBarHeight +
                       MediaQuery.of(context).padding.top +
                       15,
-                  left: 20,
-                  right: 20,
+                  left: 12,
+                  right: 12,
                 ),
                 child: SizedBox(
                   height: 200,

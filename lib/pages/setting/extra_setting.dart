@@ -401,10 +401,17 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.showArgueMsg,
             defaultVal: true,
           ),
+          SetSwitchItem(
+            title: '倒序播放从首集开始播放',
+            subTitle: '开启则自动切换为倒序首集，否则保持当前集',
+            leading: const Icon(Icons.u_turn_right),
+            setKey: SettingBoxKey.reverseFromFirst,
+            defaultVal: true,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,
-              onTap: () => settingController.onOpenFeedBack(),
+              onTap: settingController.onOpenFeedBack,
               leading: const Icon(Icons.vibration_outlined),
               title: Text('震动反馈', style: titleStyle),
               subtitle: Text('请确定手机设置中已开启震动反馈', style: subTitleStyle),

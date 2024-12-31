@@ -224,6 +224,7 @@ class VideoDetailController extends GetxController
   late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
   late int seasonCid = 0;
   late RxInt seasonIndex = 0.obs;
+  late final reverseFromFirst = GStorage.reverseFromFirst;
 
   late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;

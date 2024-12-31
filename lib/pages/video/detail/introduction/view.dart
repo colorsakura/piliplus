@@ -50,10 +50,7 @@ class VideoIntroPanel extends StatefulWidget {
 
 class _VideoIntroPanelState extends State<VideoIntroPanel>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  late String heroTag;
   late VideoIntroController videoIntroController;
-  VideoDetailData? videoDetail;
-  StreamSubscription? _listener;
 
   // 添加页面缓存
   @override
@@ -63,55 +60,40 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
   void initState() {
     super.initState();
 
-    /// fix 全屏时参数丢失
-    // if (Get.arguments != null) {
-    //   heroTag = Get.arguments['heroTag'];
-    // }
-    heroTag = widget.heroTag;
-    videoIntroController = Get.put(VideoIntroController(), tag: heroTag)
-      ..heroTag = heroTag;
-    // _futureBuilderFuture = videoIntroController.queryVideoIntro();
-    _listener = videoIntroController.videoDetail.listen((value) {
-      videoDetail = value;
-    });
-  }
-
-  @override
-  void dispose() {
-    _listener?.cancel();
-    super.dispose();
+    videoIntroController = Get.put(VideoIntroController(), tag: widget.heroTag)
+      ..heroTag = widget.heroTag;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Obx(() => videoIntroController.videoDetail.value.title == null
-        ? VideoInfo(
-            loadingStatus: true,
-            videoDetail: videoDetail,
-            heroTag: heroTag,
-            showAiBottomSheet: widget.showAiBottomSheet,
-            showIntroDetail: () => widget.showIntroDetail(
-              videoDetail,
-              videoIntroController.videoTags,
+    return Obx(
+      () => videoIntroController.videoDetail.value.title == null
+          ? VideoInfo(
+              loadingStatus: true,
+              videoDetail: videoIntroController.videoDetail.value,
+              heroTag: widget.heroTag,
+              showAiBottomSheet: widget.showAiBottomSheet,
+              showIntroDetail: () => widget.showIntroDetail(
+                videoIntroController.videoDetail.value,
+                videoIntroController.videoTags,
+              ),
+              showEpisodes: widget.showEpisodes,
+              onShowMemberPage: widget.onShowMemberPage,
+            )
+          : VideoInfo(
+              loadingStatus: false,
+              videoDetail: videoIntroController.videoDetail.value,
+              heroTag: widget.heroTag,
+              showAiBottomSheet: widget.showAiBottomSheet,
+              showIntroDetail: () => widget.showIntroDetail(
+                videoIntroController.videoDetail.value,
+                videoIntroController.videoTags,
+              ),
+              showEpisodes: widget.showEpisodes,
+              onShowMemberPage: widget.onShowMemberPage,
             ),
-            showEpisodes: widget.showEpisodes,
-            onShowMemberPage: widget.onShowMemberPage,
-          )
-        : VideoInfo(
-            //key:herotag
-            key: ValueKey(heroTag),
-            loadingStatus: false,
-            videoDetail: videoIntroController.videoDetail.value,
-            heroTag: heroTag,
-            showAiBottomSheet: widget.showAiBottomSheet,
-            showIntroDetail: () => widget.showIntroDetail(
-              videoIntroController.videoDetail.value,
-              videoIntroController.videoTags,
-            ),
-            showEpisodes: widget.showEpisodes,
-            onShowMemberPage: widget.onShowMemberPage,
-          ));
+    );
   }
 }
 

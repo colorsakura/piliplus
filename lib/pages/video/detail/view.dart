@@ -44,6 +44,8 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPalaX/services/service_locator.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
+import 'package:PiliPalaX/models/video_detail_res.dart' as video;
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../../services/shutdown_timer_service.dart';
@@ -1514,7 +1516,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       ? bangumiIntroController.changeSeasonOrbangu
                       : videoIntroController.changeSeasonOrbangu,
                   showTitle: false,
-                  onReverse: onReversePlay,
+                  onReverse: () {
+                    onReversePlay(
+                      videoDetailController.bvid,
+                      IdUtils.bv2av(videoDetailController.bvid),
+                    );
+                  },
                 ),
               ),
             ),
@@ -1599,7 +1606,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           },
           onReverse: () {
             Get.back();
-            onReversePlay();
+            onReversePlay(bvid, aid);
           },
         );
     if (isFullScreen) {
@@ -1614,7 +1621,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
   }
 
-  void onReversePlay() {
+  void onReversePlay(bvid, aid) {
     videoIntroController.videoDetail.value.ugcSeason!
             .sections![videoDetailController.seasonIndex.value].episodes =
         videoIntroController
@@ -1625,8 +1632,29 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             .episodes!
             .reversed
             .toList();
-    videoDetailController.seasonIndex.refresh();
-    videoDetailController.cid.refresh();
+
+    if (videoDetailController.reverseFromFirst.not) {
+      // keep current episode
+      videoDetailController.seasonIndex.refresh();
+      videoDetailController.cid.refresh();
+    } else {
+      // switch to first episode
+      dynamic episode = videoIntroController.videoDetail.value.ugcSeason!
+          .sections![videoDetailController.seasonIndex.value].episodes!.first;
+      if (episode.cid != videoDetailController.cid.value) {
+        videoIntroController.changeSeasonOrbangu(
+          episode is bangumi.EpisodeItem ? episode.epId : null,
+          episode.runtimeType.toString() == "EpisodeItem" ? episode.bvid : bvid,
+          episode.cid,
+          episode.runtimeType.toString() == "EpisodeItem" ? episode.aid : aid,
+          episode is video.EpisodeItem
+              ? episode.arc?.pic
+              : episode is bangumi.EpisodeItem
+                  ? episode.cover
+                  : null,
+        );
+      }
+    }
   }
 
   void showViewPoints() {

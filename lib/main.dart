@@ -59,7 +59,7 @@ void main() async {
   SmartDialog.config.loading =
       SmartConfigLoading(backType: SmartBackType.normal);
   // 异常捕获 logo记录
-  final String buildConfig = '''
+  final String buildConfig = '''\n
 Build Time: ${BuildConfig.buildTime}
 Commit Hash: ${BuildConfig.commitHash}''';
   final Catcher2Options debugConfig = Catcher2Options(
