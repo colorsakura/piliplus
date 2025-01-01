@@ -92,6 +92,9 @@ class PlPlayerController {
   // 记录历史记录
   String _bvid = '';
   int _cid = 0;
+  dynamic _epid;
+  dynamic _seasonId;
+  dynamic _subType;
   int _heartDuration = 0;
   bool _enableHeart = true;
 
@@ -458,6 +461,9 @@ class PlPlayerController {
     int cid = 0,
     // 历史记录开关
     bool enableHeart = true,
+    dynamic epid,
+    dynamic seasonId,
+    dynamic subType,
   }) async {
     try {
       this.dataSource = dataSource;
@@ -476,6 +482,9 @@ class PlPlayerController {
       _direction.value = direction ?? 'horizontal';
       _bvid = bvid;
       _cid = cid;
+      _epid = epid;
+      _seasonId = seasonId;
+      _subType = subType;
       _enableHeart = enableHeart;
 
       if (_videoPlayerController != null &&
@@ -1267,6 +1276,9 @@ class PlPlayerController {
     bool isManual = false,
     dynamic bvid,
     dynamic cid,
+    dynamic epid,
+    dynamic seasonId,
+    dynamic subType,
   }) async {
     if (!_enableHeart || MineController.anonymity.value || progress == 0) {
       return;
@@ -1287,6 +1299,9 @@ class PlPlayerController {
         bvid: bvid ?? _bvid,
         cid: cid ?? _cid,
         progress: isComplete ? -1 : progress,
+        epid: epid ?? _epid,
+        seasonId: seasonId ?? _seasonId,
+        subType: subType ?? _subType,
       );
       return;
     }
@@ -1297,6 +1312,9 @@ class PlPlayerController {
         bvid: bvid ?? _bvid,
         cid: cid ?? _cid,
         progress: progress,
+        epid: epid ?? _epid,
+        seasonId: seasonId ?? _seasonId,
+        subType: subType ?? _subType,
       );
     }
   }

@@ -410,7 +410,7 @@ class Utils {
       dynamic pic = episode?.cover;
       dynamic heroTag = Utils.makeHeroTag(cid);
       Utils.toDupNamed(
-        '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${episode?.epId}',
+        '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${episode?.epId}&type=${result['data'].type}',
         arguments: {
           'pic': pic,
           'heroTag': heroTag,

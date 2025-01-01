@@ -739,18 +739,23 @@ class VideoHttp {
   }
 
   // 视频播放进度
-  static Future heartBeat({bvid, cid, progress, realtime}) async {
+  static Future heartBeat({
+    bvid,
+    cid,
+    progress,
+    epid,
+    seasonId,
+    subType,
+  }) async {
     await Request().post(Api.heartBeat, queryParameters: {
       // 'aid': aid,
       'bvid': bvid,
       'cid': cid,
-      // 'epid': '',
-      // 'sid': '',
-      // 'mid': '',
+      if (epid != null) 'epid': epid,
+      if (seasonId != null) 'sid': seasonId,
+      if (epid != null) 'type': 4,
+      if (subType != null) 'sub_type': subType,
       'played_time': progress,
-      // 'realtime': realtime,
-      // 'type': '',
-      // 'sub_type': '',
       'csrf': await Request.getCsrf(),
     });
   }

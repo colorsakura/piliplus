@@ -255,6 +255,10 @@ class VideoDetailController extends GetxController
         _ => -1,
       };
 
+  late dynamic epId = Get.parameters['epId'];
+  late dynamic seasonId = Get.parameters['seasonId'];
+  late dynamic subType = Get.parameters['type'];
+
   @override
   void onInit() {
     super.onInit();
@@ -1042,6 +1046,9 @@ class VideoDetailController extends GetxController
       cid: cid.value,
       enableHeart: enableHeart,
       autoplay: autoplay ?? autoPlay.value,
+      epid: videoType == SearchType.media_bangumi ? epId : null,
+      seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
+      subType: videoType == SearchType.media_bangumi ? subType : null,
     );
 
     _initSkip();

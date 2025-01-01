@@ -373,7 +373,8 @@ class BangumiIntroController extends CommonController {
   Future changeSeasonOrbangu(epId, bvid, cid, aid, cover) async {
     // 重新获取视频资源
     VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
+        Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
+          ..epId = epId;
     this.epId = epId;
     this.bvid = bvid;
     videoDetailCtr.bvid = bvid;

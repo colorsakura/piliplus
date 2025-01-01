@@ -328,6 +328,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       isManual: true,
       bvid: videoDetailController.bvid,
       cid: videoDetailController.cid.value,
+      epid: videoDetailController.videoType == SearchType.media_bangumi
+          ? videoDetailController.epId
+          : null,
+      seasonId: videoDetailController.videoType == SearchType.media_bangumi
+          ? videoDetailController.seasonId
+          : null,
+      subType: videoDetailController.videoType == SearchType.media_bangumi
+          ? videoDetailController.subType
+          : null,
     );
   }
 
