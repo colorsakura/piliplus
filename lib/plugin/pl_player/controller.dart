@@ -274,22 +274,20 @@ class PlPlayerController {
         backgroundColor: Colors.black.withOpacity(subtitleBgOpaticy),
       );
 
-  void updateSubtitleStyle([double? value]) {
-    key.currentState?.update(
-      subtitleViewConfiguration: SubtitleViewConfiguration(
-        style: subTitleStyle.copyWith(
-            fontSize: 16 *
-                (value ??
-                    (isFullScreen.value
-                        ? subtitleFontScaleFS
-                        : subtitleFontScale))),
+  SubtitleViewConfiguration get subtitleViewConfiguration =>
+      SubtitleViewConfiguration(
+        style: subTitleStyle,
         padding: EdgeInsets.only(
           left: subtitlePaddingH.toDouble(),
           right: subtitlePaddingH.toDouble(),
           bottom: subtitlePaddingB.toDouble(),
         ),
         textScaleFactor: MediaQuery.textScalerOf(Get.context!).scale(1),
-      ),
+      );
+
+  void updateSubtitleStyle() {
+    key.currentState?.update(
+      subtitleViewConfiguration: subtitleViewConfiguration,
     );
   }
 

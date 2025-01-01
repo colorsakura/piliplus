@@ -720,11 +720,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   !plPlayerController.continuePlayInBackground.value,
               resumeUponEnteringForegroundMode: true,
               // 字幕尺寸调节
-              subtitleViewConfiguration: SubtitleViewConfiguration(
-                style: plPlayerController.subTitleStyle,
-                padding: const EdgeInsets.all(24.0),
-                textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
-              ),
+              subtitleViewConfiguration:
+                  plPlayerController.subtitleViewConfiguration,
               fit: plPlayerController.videoFit.value,
             ),
           ),
