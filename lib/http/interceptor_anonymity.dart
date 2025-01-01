@@ -24,6 +24,8 @@ class AnonymityInterceptor extends Interceptor {
     Api.dynamicDetail,
     Api.aiConclusion,
     Api.getSeasonDetailApi,
+    Api.liveRoomDmToken,
+    Api.liveRoomDmPrefetch,
   ];
 
   @override

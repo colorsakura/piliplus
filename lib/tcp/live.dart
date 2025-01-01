@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:PiliPalaX/pages/mine/controller.dart';
 import 'package:PiliPalaX/services/loggeer.dart';
 import 'package:brotli/brotli.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -190,7 +191,10 @@ class LiveMessageStream {
       Future<WebSocket> getSocket() async {
         for (final server in servers) {
           try {
-            return await WebSocket.connect(server);
+            return await WebSocket.connect(
+              server,
+              headers: MineController.anonymity.value ? {'cookie': ''} : null,
+            );
           } catch (_) {}
         }
         throw Exception("all servers connect failed");
