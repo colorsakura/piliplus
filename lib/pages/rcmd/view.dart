@@ -84,7 +84,10 @@ class _RcmdPageState extends State<RcmdPage>
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(
-              padding: const EdgeInsets.only(top: StyleString.cardSpace),
+              padding: EdgeInsets.only(
+                top: StyleString.cardSpace,
+                bottom: MediaQuery.paddingOf(context).bottom,
+              ),
               sliver: Obx(
                 () => _controller.loadingState.value is Loading ||
                         _controller.loadingState.value is Success

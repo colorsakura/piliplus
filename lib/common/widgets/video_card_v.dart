@@ -246,7 +246,8 @@ class VideoCardV extends StatelessWidget {
                     size: 'small',
                     type: 'line',
                     fs: 9,
-                  )
+                  ),
+                  const SizedBox(width: 2),
                 ],
                 if (videoItem.rcmdReason != null) ...[
                   PBadge(
@@ -254,7 +255,8 @@ class VideoCardV extends StatelessWidget {
                     stack: 'normal',
                     size: 'small',
                     type: 'color',
-                  )
+                  ),
+                  const SizedBox(width: 2),
                 ],
                 if (videoItem.goto == 'picture') ...[
                   const PBadge(
@@ -263,7 +265,8 @@ class VideoCardV extends StatelessWidget {
                     size: 'small',
                     type: 'line',
                     fs: 9,
-                  )
+                  ),
+                  const SizedBox(width: 2),
                 ],
                 if (videoItem.isFollowed == 1) ...[
                   const PBadge(
@@ -271,7 +274,8 @@ class VideoCardV extends StatelessWidget {
                     stack: 'normal',
                     size: 'small',
                     type: 'color',
-                  )
+                  ),
+                  const SizedBox(width: 2),
                 ],
                 Expanded(
                   flex: 1,
@@ -306,7 +310,7 @@ class VideoCardV extends StatelessWidget {
           view: videoItem.stat.view,
           goto: videoItem.goto,
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: 4),
         if (videoItem.goto != 'picture')
           statDanMu(
             context: context,

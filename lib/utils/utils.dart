@@ -477,7 +477,10 @@ class Utils {
       return '00:00';
     }
     if (number is String) {
-      return number;
+      number = int.tryParse(number) ?? number;
+      if (number is String) {
+        return number;
+      }
     }
     if (number >= 100000000) {
       return '${(number / 100000000).toStringAsFixed(1)}亿';
