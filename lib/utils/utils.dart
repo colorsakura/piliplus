@@ -595,7 +595,9 @@ class Utils {
     return date.contains("年")
         ? RegExp(r'\d+')
             .allMatches(date)
-            .map((match) => match.group(0))
+            .map((match) => match.group(0)?.length == 4
+                ? match.group(0)!.substring(2)
+                : match.group(0))
             .join('-')
         : date;
     // if (date.contains("年")) return '${date.split("年").first}年';
