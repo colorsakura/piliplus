@@ -33,7 +33,7 @@ class MediaListPanel extends StatefulWidget {
   final Function getBvId;
   final VoidCallback loadMoreMedia;
   final int? count;
-  final bool? desc;
+  final bool desc;
   final VoidCallback onReverse;
   final Function? loadPrevious;
 
@@ -43,10 +43,12 @@ class MediaListPanel extends StatefulWidget {
 
 class _MediaListPanelState extends State<MediaListPanel> {
   final _scrollController = ItemScrollController();
+  late RxBool desc;
 
   @override
   void initState() {
     super.initState();
+    desc = widget.desc.obs;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       int index =
           widget.mediaList.indexWhere((item) => item.bvid == widget.getBvId());
@@ -72,14 +74,18 @@ class _MediaListPanelState extends State<MediaListPanel> {
             titleSpacing: 16,
             title: Text(widget.panelTitle ?? '稍后再看'),
             actions: [
-              if (widget.desc != null)
-                mediumButton(
-                  tooltip: widget.desc == true ? '顺序播放' : '倒序播放',
-                  icon: widget.desc == true
+              Obx(
+                () => mediumButton(
+                  tooltip: desc.value ? '顺序播放' : '倒序播放',
+                  icon: desc.value
                       ? MdiIcons.sortAscending
                       : MdiIcons.sortDescending,
-                  onPressed: widget.onReverse,
+                  onPressed: () {
+                    widget.onReverse();
+                    desc.value = !desc.value;
+                  },
                 ),
+              ),
               mediumButton(
                 tooltip: '关闭',
                 icon: Icons.close,
