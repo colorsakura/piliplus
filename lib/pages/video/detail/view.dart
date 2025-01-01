@@ -1236,7 +1236,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             if (text == '评论') {
               return Tab(
                 text:
-                    '评论${_videoReplyController.count.value == -1 ? '' : ' ${_videoReplyController.count.value}'}',
+                    '评论${_videoReplyController.count.value == -1 ? '' : ' ${Utils.numFormat(_videoReplyController.count.value)}'}',
               );
             } else {
               return Tab(text: text);

@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -134,7 +135,7 @@ class _ZanButtonState extends State<ZanButton> {
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Text(
-                    widget.replyItem!.like.toString(),
+                    Utils.numFormat(widget.replyItem!.like),
                     key: ValueKey<int>(widget.replyItem!.like!),
                     style: TextStyle(
                       color: widget.replyItem!.action == 1 ? primary : color,

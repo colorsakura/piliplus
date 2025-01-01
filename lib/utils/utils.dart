@@ -482,16 +482,21 @@ class Utils {
         return number;
       }
     }
-    if (number >= 100000000) {
-      return '${(number / 100000000).toStringAsFixed(1)}亿';
-    } else if (number > 10000) {
-      double result = number / 10000;
+
+    String format(first, second) {
+      double result = number / first;
       String format = result.toStringAsFixed(1);
       if (format.endsWith('.0')) {
-        return '${result.toInt()}万';
+        return '${result.toInt()}$second';
       } else {
-        return '$format万';
+        return '$format$second';
       }
+    }
+
+    if (number >= 100000000) {
+      return format(100000000, '亿');
+    } else if (number >= 10000) {
+      return format(10000, '万');
     } else {
       return number.toString();
     }
