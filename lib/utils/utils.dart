@@ -589,8 +589,14 @@ class Utils {
   }
 
   static String shortenChineseDateString(String date) {
-    if (date.contains("年")) return '${date.split("年").first}年';
-    return date;
+    return date.contains("年")
+        ? RegExp(r'\d+')
+            .allMatches(date)
+            .map((match) => match.group(0))
+            .join('-')
+        : date;
+    // if (date.contains("年")) return '${date.split("年").first}年';
+    // return date;
   }
 
   // 完全相对时间显示
