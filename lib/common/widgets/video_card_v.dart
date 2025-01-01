@@ -1,7 +1,6 @@
 import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:PiliPalaX/http/search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import '../../models/home/rcmd/result.dart';
@@ -19,10 +18,12 @@ import 'video_popup_menu.dart';
 // 视频卡片 - 垂直布局
 class VideoCardV extends StatelessWidget {
   final dynamic videoItem;
+  final VoidCallback? onRemove;
 
   const VideoCardV({
     super.key,
     required this.videoItem,
+    this.onRemove,
   });
 
   bool isStringNumeric(String str) {
@@ -208,6 +209,7 @@ class VideoCardV extends StatelessWidget {
             size: 29,
             iconSize: 17,
             videoItem: videoItem,
+            onRemove: onRemove,
           ),
         ),
     ]);

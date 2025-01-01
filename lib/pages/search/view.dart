@@ -217,9 +217,9 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                 children: _searchController.historyList
                     .map(
                       (item) => SearchText(
-                        searchText: item,
-                        onSelect: _searchController.onClickKeyword,
-                        onLongSelect: _searchController.onLongSelect,
+                        text: item,
+                        onTap: _searchController.onClickKeyword,
+                        onLongPress: _searchController.onLongSelect,
                       ),
                     )
                     .toList(),

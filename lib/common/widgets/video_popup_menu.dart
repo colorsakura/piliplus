@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -23,7 +24,9 @@ class VideoCustomActions {
   dynamic videoItem;
   BuildContext context;
   late List<VideoCustomAction> actions;
-  VideoCustomActions(this.videoItem, this.context) {
+  VoidCallback? onRemove;
+
+  VideoCustomActions(this.videoItem, this.context, [this.onRemove]) {
     actions = [
       if ((videoItem.bvid as String?)?.isNotEmpty == true)
         VideoCustomAction(
@@ -82,12 +85,10 @@ class VideoCustomActions {
               return;
             }
             Widget actionButton(DislikeReason? r, FeedbackReason? f) {
-              return ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0, vertical: 0.0),
-                ),
-                onPressed: () async {
+              return SearchText(
+                text: r?.name ?? f?.name ?? '未知',
+                onTap: (_) async {
+                  Get.back();
                   SmartDialog.showLoading(msg: '正在提交');
                   var res = await VideoHttp.feedDislike(
                     reasonId: r?.id,
@@ -97,10 +98,12 @@ class VideoCustomActions {
                   );
                   SmartDialog.dismiss();
                   SmartDialog.showToast(
-                      res['status'] ? (r?.toast ?? f?.toast) : res['msg']);
-                  Get.back();
+                    res['status'] ? (r?.toast ?? f?.toast) : res['msg'],
+                  );
+                  if (res['status']) {
+                    onRemove?.call();
+                  }
                 },
-                child: Text(r?.name ?? f?.name ?? '未知'),
               );
             }
 
@@ -108,53 +111,57 @@ class VideoCustomActions {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('请选择'),
                   content: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (tp.dislikeReasons != null)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text('我不想看'),
-                          ),
-                        if (tp.dislikeReasons != null)
+                        if (tp.dislikeReasons != null) ...[
+                          Text('我不想看'),
+                          const SizedBox(height: 5),
                           Wrap(
-                            spacing: 5.0,
-                            runSpacing: 2.0,
+                            spacing: 8.0,
+                            runSpacing: 8.0,
                             children: tp.dislikeReasons!.map((item) {
                               return actionButton(item, null);
                             }).toList(),
                           ),
-                        if (tp.feedbacks != null)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text('反馈'),
-                          ),
-                        if (tp.feedbacks != null)
+                        ],
+                        if (tp.feedbacks != null) ...[
+                          const SizedBox(height: 5),
+                          Text('反馈'),
+                          const SizedBox(height: 5),
                           Wrap(
-                            spacing: 5.0,
-                            runSpacing: 2.0,
+                            spacing: 8.0,
+                            runSpacing: 8.0,
                             children: tp.feedbacks!.map((item) {
                               return actionButton(null, item);
                             }).toList(),
                           ),
-                        //分割线
+                        ],
                         const Divider(),
-                        ElevatedButton(
-                          onPressed: () async {
-                            SmartDialog.showLoading(msg: '正在提交');
-                            var res = await VideoHttp.feedDislikeCancel(
-                              // reasonId: r?.id,
-                              // feedbackId: f?.id,
-                              id: v.param!,
-                              goto: v.goto!,
-                            );
-                            SmartDialog.dismiss();
-                            SmartDialog.showToast(
-                                res['status'] ? "成功" : res['msg']);
-                            Get.back();
-                          },
-                          child: const Text("撤销"),
+                        Center(
+                          child: FilledButton.tonal(
+                            onPressed: () async {
+                              SmartDialog.showLoading(msg: '正在提交');
+                              var res = await VideoHttp.feedDislikeCancel(
+                                // reasonId: r?.id,
+                                // feedbackId: f?.id,
+                                id: v.param!,
+                                goto: v.goto!,
+                              );
+                              SmartDialog.dismiss();
+                              SmartDialog.showToast(
+                                  res['status'] ? "成功" : res['msg']);
+                              Get.back();
+                            },
+                            style: FilledButton.styleFrom(
+                              visualDensity: VisualDensity(
+                                horizontal: -2,
+                                vertical: -2,
+                              ),
+                            ),
+                            child: const Text("撤销"),
+                          ),
                         ),
                       ],
                     ),
@@ -167,7 +174,6 @@ class VideoCustomActions {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('点踩该视频？'),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -178,20 +184,28 @@ class VideoCustomActions {
                           spacing: 5.0,
                           runSpacing: 2.0,
                           children: [
-                            ElevatedButton(
+                            FilledButton.tonal(
                               onPressed: () async {
+                                Get.back();
                                 SmartDialog.showLoading(msg: '正在提交');
                                 var res = await VideoHttp.dislikeVideo(
                                     bvid: videoItem.bvid as String, type: true);
                                 SmartDialog.dismiss();
                                 SmartDialog.showToast(
-                                    res['status'] ? "点踩成功" : res['msg']);
-                                Get.back();
+                                  res['status'] ? "点踩成功" : res['msg'],
+                                );
                               },
+                              style: FilledButton.styleFrom(
+                                visualDensity: VisualDensity(
+                                  horizontal: -2,
+                                  vertical: -2,
+                                ),
+                              ),
                               child: const Text("点踩"),
                             ),
-                            ElevatedButton(
+                            FilledButton.tonal(
                               onPressed: () async {
+                                Get.back();
                                 SmartDialog.showLoading(msg: '正在提交');
                                 var res = await VideoHttp.dislikeVideo(
                                     bvid: videoItem.bvid as String,
@@ -199,8 +213,13 @@ class VideoCustomActions {
                                 SmartDialog.dismiss();
                                 SmartDialog.showToast(
                                     res['status'] ? "取消踩" : res['msg']);
-                                Get.back();
                               },
+                              style: FilledButton.styleFrom(
+                                visualDensity: VisualDensity(
+                                  horizontal: -2,
+                                  vertical: -2,
+                                ),
+                              ),
                               child: const Text("撤销"),
                             ),
                           ],
@@ -272,12 +291,14 @@ class VideoPopupMenu extends StatelessWidget {
   final double? iconSize;
   final double menuItemHeight = 45;
   final dynamic videoItem;
+  final VoidCallback? onRemove;
 
   const VideoPopupMenu({
     super.key,
     required this.size,
     required this.iconSize,
     required this.videoItem,
+    this.onRemove,
   });
 
   @override
@@ -296,7 +317,7 @@ class VideoPopupMenu extends StatelessWidget {
         position: PopupMenuPosition.under,
         onSelected: (String type) {},
         itemBuilder: (BuildContext context) =>
-            VideoCustomActions(videoItem, context).actions.map((e) {
+            VideoCustomActions(videoItem, context, onRemove).actions.map((e) {
           return PopupMenuItem<String>(
             value: e.value,
             height: menuItemHeight,

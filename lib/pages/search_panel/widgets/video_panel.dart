@@ -255,10 +255,10 @@ class VideoPanelController extends GetxController {
         builder: (context, setState) {
           Widget dateWidget([bool isFirst = true]) {
             return SearchText(
-              searchText:
+              text:
                   DateFormat('yyyy-MM-dd').format(isFirst ? pubBegin : pubEnd),
               textAlign: TextAlign.center,
-              onSelect: (text) {
+              onTap: (text) {
                 showDatePicker(
                   context: context,
                   initialDate: isFirst ? pubBegin : pubEnd,
@@ -303,7 +303,7 @@ class VideoPanelController extends GetxController {
                   }
                 });
               },
-              onLongSelect: (_) {},
+              onLongPress: (_) {},
               bgColor: currentPubTimeFilterval == -1 &&
                       (isFirst ? customPubBegin : customPubEnd)
                   ? Theme.of(context).colorScheme.secondaryContainer
@@ -337,8 +337,8 @@ class VideoPanelController extends GetxController {
                     children: pubTimeFiltersList
                         .map(
                           (item) => SearchText(
-                            searchText: item['label'],
-                            onSelect: (text) async {
+                            text: item['label'],
+                            onTap: (text) async {
                               Get.back();
                               currentPubTimeFilterval = item['value'];
                               SmartDialog.dismiss();
@@ -379,7 +379,7 @@ class VideoPanelController extends GetxController {
                               await ctr.onRefresh();
                               SmartDialog.dismiss();
                             },
-                            onLongSelect: (_) {},
+                            onLongPress: (_) {},
                             bgColor: item['value'] == currentPubTimeFilterval
                                 ? Theme.of(context)
                                     .colorScheme
@@ -416,8 +416,8 @@ class VideoPanelController extends GetxController {
                     children: timeFiltersList
                         .map(
                           (item) => SearchText(
-                            searchText: item['label'],
-                            onSelect: (text) async {
+                            text: item['label'],
+                            onTap: (text) async {
                               Get.back();
                               currentTimeFilterval = item['value'];
                               SmartDialog.dismiss();
@@ -430,7 +430,7 @@ class VideoPanelController extends GetxController {
                               await ctr.onRefresh();
                               SmartDialog.dismiss();
                             },
-                            onLongSelect: (_) {},
+                            onLongPress: (_) {},
                             bgColor: item['value'] == currentTimeFilterval
                                 ? Theme.of(context)
                                     .colorScheme
@@ -454,8 +454,8 @@ class VideoPanelController extends GetxController {
                     children: zoneFiltersList
                         .map(
                           (item) => SearchText(
-                            searchText: item['label'],
-                            onSelect: (text) async {
+                            text: item['label'],
+                            onTap: (text) async {
                               Get.back();
                               currentZoneFilterval = item['value'];
                               SmartDialog.dismiss();
@@ -468,7 +468,7 @@ class VideoPanelController extends GetxController {
                               await ctr.onRefresh();
                               SmartDialog.dismiss();
                             },
-                            onLongSelect: (_) {},
+                            onLongPress: (_) {},
                             bgColor: item['value'] == currentZoneFilterval
                                 ? Theme.of(context)
                                     .colorScheme

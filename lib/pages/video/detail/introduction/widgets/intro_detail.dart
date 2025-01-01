@@ -86,10 +86,10 @@ class IntroDetail extends StatelessWidget {
                             .map(
                               (item) => SearchText(
                                 fontSize: 13,
-                                searchText: item['tag_name'],
-                                onSelect: (_) => Get.toNamed('/searchResult',
+                                text: item['tag_name'],
+                                onTap: (_) => Get.toNamed('/searchResult',
                                     parameters: {'keyword': item['tag_name']}),
-                                onLongSelect: (_) =>
+                                onLongPress: (_) =>
                                     Utils.copyText(item['tag_name']),
                               ),
                             )

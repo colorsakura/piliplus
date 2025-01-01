@@ -283,8 +283,8 @@ class ArticlePanelController extends GetxController {
                 children: orderFiltersList
                     .map(
                       (item) => SearchText(
-                        searchText: item['label'],
-                        onSelect: (_) async {
+                        text: item['label'],
+                        onTap: (_) async {
                           Get.back();
                           currentOrderFilterval.value = item['value'];
                           SmartDialog.dismiss();
@@ -297,7 +297,7 @@ class ArticlePanelController extends GetxController {
                           await ctr.onRefresh();
                           SmartDialog.dismiss();
                         },
-                        onLongSelect: (_) {},
+                        onLongPress: (_) {},
                         bgColor: item['value'] == currentOrderFilterval.value
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
@@ -317,8 +317,8 @@ class ArticlePanelController extends GetxController {
                 children: zoneFiltersList
                     .map(
                       (item) => SearchText(
-                        searchText: item['label'],
-                        onSelect: (_) async {
+                        text: item['label'],
+                        onTap: (_) async {
                           Get.back();
                           currentZoneFilterval.value = item['value'];
                           SmartDialog.dismiss();
@@ -331,7 +331,7 @@ class ArticlePanelController extends GetxController {
                           await ctr.onRefresh();
                           SmartDialog.dismiss();
                         },
-                        onLongSelect: (_) {},
+                        onLongPress: (_) {},
                         bgColor: item['value'] == currentZoneFilterval.value
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : null,

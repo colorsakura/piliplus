@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 class SearchText extends StatelessWidget {
-  final String? searchText;
-  final Function? onSelect;
-  final Function? onLongSelect;
+  final String text;
+  final ValueChanged<String>? onTap;
+  final ValueChanged<String>? onLongPress;
   final double? fontSize;
   final Color? bgColor;
   final Color? textColor;
   final TextAlign? textAlign;
+
   const SearchText({
     super.key,
-    this.searchText,
-    this.onSelect,
-    this.onLongSelect,
+    required this.text,
+    this.onTap,
+    this.onLongPress,
     this.fontSize,
     this.bgColor,
     this.textColor,
@@ -28,17 +29,17 @@ class SearchText extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: InkWell(
           onTap: () {
-            onSelect?.call(searchText);
+            onTap?.call(text);
           },
           onLongPress: () {
-            onLongSelect?.call(searchText);
+            onLongPress?.call(text);
           },
           borderRadius: BorderRadius.circular(6),
           child: Padding(
             padding:
                 const EdgeInsets.only(top: 5, bottom: 5, left: 11, right: 11),
             child: Text(
-              searchText!,
+              text,
               textAlign: textAlign,
               style: TextStyle(
                 fontSize: fontSize,

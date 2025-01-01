@@ -128,6 +128,10 @@ class _RcmdPageState extends State<RcmdPage>
               ? widget.tabType == TabType.rcmd
                   ? VideoCardV(
                       videoItem: loadingState.response[index],
+                      onRemove: () {
+                        _controller.loadingState.value = LoadingState.success(
+                            (loadingState.response as List)..removeAt(index));
+                      },
                     )
                   : LiveCardV(
                       liveItem: loadingState.response[index],
