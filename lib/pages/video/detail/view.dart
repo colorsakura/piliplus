@@ -954,7 +954,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         ? bangumiIntroController
                         : null,
                 headerControl: HeaderControl(
-                  controller: plPlayerController,
+                  controller: plPlayerController!,
                   videoDetailCtr: videoDetailController,
                   heroTag: heroTag,
                 ),

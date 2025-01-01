@@ -33,14 +33,14 @@ import 'package:marquee/marquee.dart';
 
 class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
   const HeaderControl({
-    this.controller,
-    this.videoDetailCtr,
+    required this.controller,
+    required this.videoDetailCtr,
     this.floating,
     required this.heroTag,
     super.key,
   });
-  final PlPlayerController? controller;
-  final VideoDetailController? videoDetailCtr;
+  final PlPlayerController controller;
+  final VideoDetailController videoDetailCtr;
   final Floating? floating;
   final String heroTag;
 
@@ -52,32 +52,24 @@ class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HeaderControlState extends State<HeaderControl> {
-  late PlayUrlModel videoInfo;
+  PlayUrlModel get videoInfo => widget.videoDetailCtr.data;
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
   static const TextStyle titleStyle = TextStyle(fontSize: 14);
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
   double buttonSpace = 8;
-  // bool isFullScreen = false;
-  late String heroTag;
+  String get heroTag => widget.heroTag;
   late VideoIntroController videoIntroController;
   late VideoDetailData videoDetail;
-  // late StreamSubscription<bool> fullScreenStatusListener;
   late bool horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
   late String defaultCDNService;
-  bool get isFullScreen => widget.controller!.isFullScreen.value;
+  bool get isFullScreen => widget.controller.isFullScreen.value;
   Box get setting => GStorage.setting;
 
   @override
   void initState() {
     super.initState();
-    videoInfo = widget.videoDetailCtr!.data;
-    // listenFullScreenStatus();
-    heroTag = widget.heroTag;
-    // if (Get.arguments != null && Get.arguments['heroTag'] != null) {
-    //   heroTag = Get.arguments['heroTag'];
-    // }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
@@ -85,23 +77,8 @@ class _HeaderControlState extends State<HeaderControl> {
         defaultValue: CDNService.backupUrl.code);
   }
 
-  // void listenFullScreenStatus() {
-  //   fullScreenStatusListener = widget
-  //       .videoDetailCtr!.plPlayerController.isFullScreen
-  //       .listen((bool status) {
-  //     isFullScreen = status;
-
-  //     /// TODO setState() called after dispose()
-  //     if (mounted) {
-  //       setState(() {});
-  //     }
-  //   });
-  // }
-
   @override
   void dispose() {
-    // widget.floating?.dispose();
-    // fullScreenStatusListener.cancel();
     clock?.cancel();
     super.dispose();
   }
@@ -190,13 +167,13 @@ class _HeaderControlState extends State<HeaderControl> {
                         //     ),
                         //   ),
                         // ),
-                        // if (widget.videoDetailCtr?.userInfo != null)
+                        // if (widget.videoDetailCtr.userInfo != null)
                         ListTile(
                           dense: true,
                           onTap: () async {
                             Get.back();
                             final res = await UserHttp.toViewLater(
-                                bvid: widget.videoDetailCtr!.bvid);
+                                bvid: widget.videoDetailCtr.bvid);
                             SmartDialog.showToast(res['msg']);
                           },
                           leading:
@@ -214,7 +191,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           dense: true,
                           onTap: () => {
                             Get.back(),
-                            widget.videoDetailCtr!.queryVideoUrl()
+                            widget.videoDetailCtr.queryVideoUrl()
                           },
                           leading: const Icon(Icons.refresh_outlined, size: 20),
                           title: const Text('重载视频', style: titleStyle),
@@ -249,7 +226,7 @@ class _HeaderControlState extends State<HeaderControl> {
                               SmartDialog.showToast(
                                   '已设置为 ${CDNServiceCode.fromCode(result)!.description}，正在重载视频');
                               setState(() {});
-                              widget.videoDetailCtr!.queryVideoUrl();
+                              widget.videoDetailCtr.queryVideoUrl();
                             }
                           },
                         ),
@@ -258,7 +235,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           onTap: () {
                             Get.back();
                             Player? player =
-                                widget.controller?.videoPlayerController;
+                                widget.controller.videoPlayerController;
                             if (player == null) {
                               SmartDialog.showToast('播放器未初始化');
                               return;
@@ -278,17 +255,17 @@ class _HeaderControlState extends State<HeaderControl> {
                               const Icon(Icons.play_circle_outline, size: 20),
                           title: const Text('选择画质', style: titleStyle),
                           subtitle: Text(
-                              '当前画质 ${widget.videoDetailCtr!.currentVideoQa.description}',
+                              '当前画质 ${widget.videoDetailCtr.currentVideoQa.description}',
                               style: subTitleStyle),
                         ),
-                        if (widget.videoDetailCtr!.currentAudioQa != null)
+                        if (widget.videoDetailCtr.currentAudioQa != null)
                           ListTile(
                             dense: true,
                             onTap: () => {Get.back(), showSetAudioQa()},
                             leading: const Icon(Icons.album_outlined, size: 20),
                             title: const Text('选择音质', style: titleStyle),
                             subtitle: Text(
-                                '当前音质 ${widget.videoDetailCtr!.currentAudioQa!.description}',
+                                '当前音质 ${widget.videoDetailCtr.currentAudioQa!.description}',
                                 style: subTitleStyle),
                           ),
                         ListTile(
@@ -298,7 +275,7 @@ class _HeaderControlState extends State<HeaderControl> {
                               const Icon(Icons.av_timer_outlined, size: 20),
                           title: const Text('解码格式', style: titleStyle),
                           subtitle: Text(
-                              '当前解码格式 ${widget.videoDetailCtr!.currentDecodeFormats.description}',
+                              '当前解码格式 ${widget.videoDetailCtr.currentDecodeFormats.description}',
                               style: subTitleStyle),
                         ),
                         ListTile(
@@ -307,7 +284,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           leading: const Icon(Icons.repeat, size: 20),
                           title: const Text('播放顺序', style: titleStyle),
                           subtitle: Text(
-                              widget.controller!.playRepeat.description,
+                              widget.controller.playRepeat.description,
                               style: subTitleStyle),
                         ),
                         ListTile(
@@ -323,7 +300,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           leading: const Icon(Icons.info_outline, size: 20),
                           onTap: () {
                             Player? player =
-                                widget.controller?.videoPlayerController;
+                                widget.controller.videoPlayerController;
                             if (player == null) {
                               SmartDialog.showToast('播放器未初始化');
                               return;
@@ -483,14 +460,14 @@ class _HeaderControlState extends State<HeaderControl> {
                         ListTile(
                           dense: true,
                           onTap: () {
-                            if (widget.videoDetailCtr?.userInfo == null) {
+                            if (widget.videoDetailCtr.userInfo == null) {
                               SmartDialog.showToast('账号未登录');
                               return;
                             }
                             Get.back();
                             Get.toNamed('/webviewnew', parameters: {
                               'url':
-                                  'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr!.bvid)}&bvid=${widget.videoDetailCtr!.bvid}'
+                                  'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr.bvid)}&bvid=${widget.videoDetailCtr.bvid}'
                             });
                           },
                           leading: const Icon(Icons.error_outline, size: 20),
@@ -713,7 +690,7 @@ class _HeaderControlState extends State<HeaderControl> {
       return;
     }
     final List<FormatItem> videoFormat = videoInfo.supportFormats!;
-    final VideoQuality currentVideoQa = widget.videoDetailCtr!.currentVideoQa;
+    final VideoQuality currentVideoQa = widget.videoDetailCtr.currentVideoQa;
 
     /// 总质量分类
     final int totalQaSam = videoFormat.length;
@@ -790,9 +767,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                 }
                                 Get.back();
                                 final int quality = videoFormat[i].quality!;
-                                widget.videoDetailCtr!.currentVideoQa =
+                                widget.videoDetailCtr.currentVideoQa =
                                     VideoQualityCode.fromCode(quality)!;
-                                widget.videoDetailCtr!.updatePlayer();
+                                widget.videoDetailCtr.updatePlayer();
                                 // String oldQualityDesc =
                                 //     VideoQualityCode.fromCode(setting.get(
                                 //             SettingBoxKey.defaultVideoQa,
@@ -837,7 +814,7 @@ class _HeaderControlState extends State<HeaderControl> {
 
   /// 选择音质
   void showSetAudioQa() {
-    final AudioQuality currentAudioQa = widget.videoDetailCtr!.currentAudioQa!;
+    final AudioQuality currentAudioQa = widget.videoDetailCtr.currentAudioQa!;
     final List<AudioItem> audio = videoInfo.dash!.audio!;
     showModalBottomSheet(
       context: context,
@@ -879,9 +856,9 @@ class _HeaderControlState extends State<HeaderControl> {
                               }
                               Get.back();
                               final int quality = i.id!;
-                              widget.videoDetailCtr!.currentAudioQa =
+                              widget.videoDetailCtr.currentAudioQa =
                                   AudioQualityCode.fromCode(quality)!;
-                              widget.videoDetailCtr!.updatePlayer();
+                              widget.videoDetailCtr.updatePlayer();
                               // String oldQualityDesc = AudioQualityCode.fromCode(
                               //         setting.get(SettingBoxKey.defaultAudioQa,
                               //             defaultValue:
@@ -924,8 +901,8 @@ class _HeaderControlState extends State<HeaderControl> {
   void showSetDecodeFormats() {
     // 当前选中的解码格式
     final VideoDecodeFormats currentDecodeFormats =
-        widget.videoDetailCtr!.currentDecodeFormats;
-    final VideoItem firstVideo = widget.videoDetailCtr!.firstVideo;
+        widget.videoDetailCtr.currentDecodeFormats;
+    final VideoItem firstVideo = widget.videoDetailCtr.firstVideo;
     // 当前视频可用的解码格式
     final List<FormatItem> videoFormat = videoInfo.supportFormats!;
     final List? list = videoFormat
@@ -974,9 +951,9 @@ class _HeaderControlState extends State<HeaderControl> {
                               if (i.startsWith(currentDecodeFormats.code)) {
                                 return;
                               }
-                              widget.videoDetailCtr!.currentDecodeFormats =
+                              widget.videoDetailCtr.currentDecodeFormats =
                                   VideoDecodeFormatsCode.fromString(i)!;
-                              widget.videoDetailCtr!.updatePlayer();
+                              widget.videoDetailCtr.updatePlayer();
                               Get.back();
                             },
                             contentPadding:
@@ -1017,7 +994,7 @@ class _HeaderControlState extends State<HeaderControl> {
       {'value': 4, 'label': '底部'},
       {'value': 6, 'label': '彩色'},
     ];
-    final List blockTypes = widget.controller!.blockTypes;
+    final List blockTypes = widget.controller.blockTypes;
     // 显示区域
     final List<Map<String, dynamic>> showAreas = [
       {'value': 0.25, 'label': '1/4屏'},
@@ -1026,28 +1003,30 @@ class _HeaderControlState extends State<HeaderControl> {
       {'value': 1.0, 'label': '满屏'},
     ];
     // 智能云屏蔽
-    int danmakuWeight = widget.controller!.danmakuWeight;
+    int danmakuWeight = widget.controller.danmakuWeight;
     // 显示区域
-    double showArea = widget.controller!.showArea;
+    double showArea = widget.controller.showArea;
     // 不透明度
-    double opacityVal = widget.controller!.opacityVal;
+    double opacityVal = widget.controller.opacityVal;
     // 字体大小
-    double fontSizeVal = widget.controller!.fontSizeVal;
+    double fontSizeVal = widget.controller.fontSizeVal;
     // 全屏字体大小
-    double fontSizeFSVal = widget.controller!.fontSizeFSVal;
-    double subtitleFontScale = widget.controller!.subtitleFontScale.value;
-    double subtitleFontScaleFS = widget.controller!.subtitleFontScaleFS.value;
-    double danmakuLineHeight = widget.controller!.danmakuLineHeight;
+    double fontSizeFSVal = widget.controller.fontSizeFSVal;
+    double subtitleFontScale = widget.controller.subtitleFontScale;
+    double subtitleFontScaleFS = widget.controller.subtitleFontScaleFS;
+    double danmakuLineHeight = widget.controller.danmakuLineHeight;
     // 弹幕速度
-    double danmakuDurationVal = widget.controller!.danmakuDurationVal;
+    double danmakuDurationVal = widget.controller.danmakuDurationVal;
     // 弹幕描边
-    double strokeWidth = widget.controller!.strokeWidth;
+    double strokeWidth = widget.controller.strokeWidth;
     // 字体粗细
-    int fontWeight = widget.controller!.fontWeight;
-    bool massiveMode = widget.controller!.massiveMode;
+    int fontWeight = widget.controller.fontWeight;
+    bool massiveMode = widget.controller.massiveMode;
+    int subtitlePaddingH = widget.controller.subtitlePaddingH;
+    int subtitlePaddingB = widget.controller.subtitlePaddingB;
 
-    final DanmakuController danmakuController =
-        widget.controller!.danmakuController!;
+    final DanmakuController? danmakuController =
+        widget.controller.danmakuController;
     await showModalBottomSheet(
       context: context,
       elevation: 0,
@@ -1068,9 +1047,8 @@ class _HeaderControlState extends State<HeaderControl> {
               left: 12,
               top: 12,
               right: 12,
-              bottom:
-                  (widget.controller?.isFullScreen.value == true ? 70 : 12) +
-                      MediaQuery.paddingOf(context).bottom,
+              bottom: (widget.controller.isFullScreen.value == true ? 70 : 12) +
+                  MediaQuery.paddingOf(context).bottom,
             ),
             padding: const EdgeInsets.only(left: 14, right: 14),
             child: SingleChildScrollView(
@@ -1098,7 +1076,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                     arguments: widget.controller)
                               },
                           child: Text(
-                              "屏蔽管理(${widget.controller!.danmakuFilterRule.length})")),
+                              "屏蔽管理(${widget.controller.danmakuFilterRule.length})")),
                     ],
                   ),
                   Padding(
@@ -1125,8 +1103,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '$danmakuWeight',
                         onChanged: (double val) {
                           danmakuWeight = val.toInt();
-                          widget.controller!.danmakuWeight = danmakuWeight;
-                          widget.controller!.putDanmakuSettings();
+                          widget.controller
+                            ..danmakuWeight = danmakuWeight
+                            ..putDanmakuSettings();
                           setState(() {});
                         },
                       ),
@@ -1148,11 +1127,12 @@ class _HeaderControlState extends State<HeaderControl> {
                               } else {
                                 blockTypes.add(i['value']);
                               }
-                              widget.controller!.blockTypes = blockTypes;
-                              widget.controller?.putDanmakuSettings();
+                              widget.controller
+                                ..blockTypes = blockTypes
+                                ..putDanmakuSettings();
                               setState(() {});
                               try {
-                                danmakuController.updateOption(
+                                danmakuController?.updateOption(
                                   danmakuController.option.copyWith(
                                     hideTop: blockTypes.contains(5),
                                     hideBottom: blockTypes.contains(4),
@@ -1179,11 +1159,12 @@ class _HeaderControlState extends State<HeaderControl> {
                           ActionRowLineItem(
                             onTap: () {
                               showArea = i['value'];
-                              widget.controller!.showArea = showArea;
-                              widget.controller?.putDanmakuSettings();
+                              widget.controller
+                                ..showArea = showArea
+                                ..putDanmakuSettings();
                               setState(() {});
                               try {
-                                danmakuController.updateOption(
+                                danmakuController?.updateOption(
                                   danmakuController.option
                                       .copyWith(area: i['value']),
                                 );
@@ -1205,10 +1186,10 @@ class _HeaderControlState extends State<HeaderControl> {
                     setKey: SettingBoxKey.danmakuMassiveMode,
                     onChanged: (value) {
                       massiveMode = value;
-                      widget.controller!.massiveMode = value;
+                      widget.controller.massiveMode = value;
                       setState(() {});
                       try {
-                        danmakuController.updateOption(
+                        danmakuController?.updateOption(
                           danmakuController.option.copyWith(massiveMode: value),
                         );
                       } catch (_) {}
@@ -1239,11 +1220,12 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '${opacityVal * 100}%',
                         onChanged: (double val) {
                           opacityVal = val;
-                          widget.controller!.opacityVal = opacityVal;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..opacityVal = opacityVal
+                            ..putDanmakuSettings();
                           setState(() {});
                           try {
-                            danmakuController.updateOption(
+                            danmakuController?.updateOption(
                               danmakuController.option.copyWith(opacity: val),
                             );
                           } catch (_) {}
@@ -1276,11 +1258,12 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '${fontWeight + 1}',
                         onChanged: (double val) {
                           fontWeight = val.toInt();
-                          widget.controller!.fontWeight = fontWeight;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..fontWeight = fontWeight
+                            ..putDanmakuSettings();
                           setState(() {});
                           try {
-                            danmakuController.updateOption(
+                            danmakuController?.updateOption(
                               danmakuController.option
                                   .copyWith(fontWeight: fontWeight),
                             );
@@ -1314,11 +1297,12 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '$strokeWidth',
                         onChanged: (double val) {
                           strokeWidth = val;
-                          widget.controller!.strokeWidth = val;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..strokeWidth = val
+                            ..putDanmakuSettings();
                           setState(() {});
                           try {
-                            danmakuController.updateOption(
+                            danmakuController?.updateOption(
                               danmakuController.option
                                   .copyWith(strokeWidth: val),
                             );
@@ -1352,12 +1336,13 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '${(fontSizeVal * 100).toStringAsFixed(1)}%',
                         onChanged: (double val) {
                           fontSizeVal = val;
-                          widget.controller!.fontSizeVal = fontSizeVal;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..fontSizeVal = fontSizeVal
+                            ..putDanmakuSettings();
                           setState(() {});
-                          if (widget.controller?.isFullScreen.value == false) {
+                          if (widget.controller.isFullScreen.value == false) {
                             try {
-                              danmakuController.updateOption(
+                              danmakuController?.updateOption(
                                 danmakuController.option.copyWith(
                                   fontSize: (15 * fontSizeVal).toDouble(),
                                 ),
@@ -1393,12 +1378,13 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '${(fontSizeFSVal * 100).toStringAsFixed(1)}%',
                         onChanged: (double val) {
                           fontSizeFSVal = val;
-                          widget.controller!.fontSizeFSVal = fontSizeFSVal;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..fontSizeFSVal = fontSizeFSVal
+                            ..putDanmakuSettings();
                           setState(() {});
-                          if (widget.controller?.isFullScreen.value == true) {
+                          if (widget.controller.isFullScreen.value == true) {
                             try {
-                              danmakuController.updateOption(
+                              danmakuController?.updateOption(
                                 danmakuController.option.copyWith(
                                   fontSize: (15 * fontSizeFSVal).toDouble(),
                                 ),
@@ -1435,15 +1421,15 @@ class _HeaderControlState extends State<HeaderControl> {
                         onChanged: (double val) {
                           danmakuDurationVal =
                               (pow(val, 4) as double).toPrecision(2);
-                          widget.controller!.danmakuDurationVal =
-                              danmakuDurationVal;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..danmakuDurationVal = danmakuDurationVal
+                            ..putDanmakuSettings();
                           setState(() {});
                           try {
-                            danmakuController.updateOption(
+                            danmakuController?.updateOption(
                               danmakuController.option.copyWith(
                                   duration: danmakuDurationVal ~/
-                                      widget.controller!.playbackSpeed),
+                                      widget.controller.playbackSpeed),
                             );
                           } catch (_) {}
                         },
@@ -1474,12 +1460,12 @@ class _HeaderControlState extends State<HeaderControl> {
                         label: '$danmakuLineHeight',
                         onChanged: (double val) {
                           danmakuLineHeight = val.toPrecision(1);
-                          widget.controller!.danmakuLineHeight =
-                              danmakuLineHeight;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..danmakuLineHeight = danmakuLineHeight
+                            ..putDanmakuSettings();
                           setState(() {});
                           try {
-                            danmakuController.updateOption(
+                            danmakuController?.updateOption(
                               danmakuController.option.copyWith(
                                 lineHeight: danmakuLineHeight,
                               ),
@@ -1516,9 +1502,10 @@ class _HeaderControlState extends State<HeaderControl> {
                             '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
                         onChanged: (double val) {
                           subtitleFontScale = val;
-                          widget.controller!.subtitleFontScale.value =
-                              subtitleFontScale;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..subtitleFontScale = subtitleFontScale
+                            ..updateSubtitleStyle()
+                            ..putDanmakuSettings();
                           setState(() {});
                         },
                       ),
@@ -1551,9 +1538,78 @@ class _HeaderControlState extends State<HeaderControl> {
                             '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
                         onChanged: (double val) {
                           subtitleFontScaleFS = val;
-                          widget.controller!.subtitleFontScaleFS.value =
-                              subtitleFontScaleFS;
-                          widget.controller?.putDanmakuSettings();
+                          widget.controller
+                            ..subtitleFontScaleFS = subtitleFontScaleFS
+                            ..updateSubtitleStyle()
+                            ..putDanmakuSettings();
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
+                  Text('字幕左右边距 $subtitlePaddingH'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max: 100,
+                        value: subtitlePaddingH.toDouble(),
+                        divisions: 100,
+                        label: '$subtitlePaddingH',
+                        onChanged: (double val) {
+                          subtitlePaddingH = val.round();
+                          widget.controller
+                            ..subtitlePaddingH = subtitlePaddingH
+                            ..updateSubtitleStyle()
+                            ..putDanmakuSettings();
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
+                  Text('字幕底部边距 $subtitlePaddingB'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max: 100,
+                        value: subtitlePaddingB.toDouble(),
+                        divisions: 100,
+                        label: '$subtitlePaddingB',
+                        onChanged: (double val) {
+                          subtitlePaddingB = val.round();
+                          widget.controller
+                            ..subtitlePaddingB = subtitlePaddingB
+                            ..updateSubtitleStyle()
+                            ..putDanmakuSettings();
                           setState(() {});
                         },
                       ),
@@ -1605,13 +1661,13 @@ class _HeaderControlState extends State<HeaderControl> {
                           ListTile(
                             dense: true,
                             onTap: () {
-                              widget.controller!.setPlayRepeat(i);
+                              widget.controller.setPlayRepeat(i);
                               Get.back();
                             },
                             contentPadding:
                                 const EdgeInsets.only(left: 20, right: 20),
                             title: Text(i.description),
-                            trailing: widget.controller!.playRepeat == i
+                            trailing: widget.controller.playRepeat == i
                                 ? Icon(
                                     Icons.done,
                                     color:
@@ -1643,7 +1699,7 @@ class _HeaderControlState extends State<HeaderControl> {
 
   @override
   Widget build(BuildContext context) {
-    final plPlayerController = widget.controller!;
+    final plPlayerController = widget.controller;
     // final bool isLandscape =
     //     MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -1669,11 +1725,11 @@ class _HeaderControlState extends State<HeaderControl> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  if (widget.videoDetailCtr?.bsController != null) {
-                    widget.videoDetailCtr?.bsController!.close();
-                    widget.videoDetailCtr?.bsController = null;
+                  if (widget.videoDetailCtr.bsController != null) {
+                    widget.videoDetailCtr.bsController!.close();
+                    widget.videoDetailCtr.bsController = null;
                   } else if (isFullScreen) {
-                    widget.controller!.triggerFullScreen(status: false);
+                    widget.controller.triggerFullScreen(status: false);
                   } else if (MediaQuery.of(context).orientation ==
                           Orientation.landscape &&
                       !horizontalScreen) {
@@ -1770,7 +1826,7 @@ class _HeaderControlState extends State<HeaderControl> {
             //   ),
             //   fuc: () => _.screenshot(),
             // ),
-            if (widget.videoDetailCtr?.enableSponsorBlock == true)
+            if (widget.videoDetailCtr.enableSponsorBlock == true)
               SizedBox(
                 width: 42,
                 height: 34,
@@ -1779,7 +1835,7 @@ class _HeaderControlState extends State<HeaderControl> {
                   style: ButtonStyle(
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
-                  onPressed: () => widget.videoDetailCtr?.onBlock(context),
+                  onPressed: () => widget.videoDetailCtr.onBlock(context),
                   icon: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -1798,7 +1854,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 ),
               ),
             Obx(
-              () => widget.videoDetailCtr?.segmentList.isNotEmpty == true
+              () => widget.videoDetailCtr.segmentList.isNotEmpty == true
                   ? SizedBox(
                       width: 42,
                       height: 34,
@@ -1808,7 +1864,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           padding: WidgetStateProperty.all(EdgeInsets.zero),
                         ),
                         onPressed: () =>
-                            widget.videoDetailCtr?.showSBDetail(context),
+                            widget.videoDetailCtr.showSBDetail(context),
                         icon: Icon(
                           MdiIcons.advertisements,
                           size: 19,
@@ -1826,7 +1882,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),
-                onPressed: widget.videoDetailCtr?.showShootDanmakuSheet,
+                onPressed: widget.videoDetailCtr.showShootDanmakuSheet,
                 icon: const Icon(
                   Icons.comment_outlined,
                   size: 19,
@@ -1875,7 +1931,7 @@ class _HeaderControlState extends State<HeaderControl> {
                   onPressed: () async {
                     bool canUsePiP = widget.floating != null &&
                         await widget.floating!.isPipAvailable;
-                    widget.controller!.hiddenControls(false);
+                    widget.controller.hiddenControls(false);
                     if (canUsePiP) {
                       bool enableBackgroundPlay = setting.get(
                           SettingBoxKey.enableBackgroundPlay,
@@ -1945,8 +2001,8 @@ class _HeaderControlState extends State<HeaderControl> {
                         await Future.delayed(const Duration(seconds: 3), () {});
                       }
                       final Rational aspectRatio = Rational(
-                        widget.videoDetailCtr!.data.dash!.video!.first.width!,
-                        widget.videoDetailCtr!.data.dash!.video!.first.height!,
+                        widget.videoDetailCtr.data.dash!.video!.first.width!,
+                        widget.videoDetailCtr.data.dash!.video!.first.height!,
                       );
                       if (!context.mounted) return;
                       await widget.floating!.enable(EnableManual(

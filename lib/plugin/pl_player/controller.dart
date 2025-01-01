@@ -251,12 +251,46 @@ class PlPlayerController {
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
   late bool enableLongShowControl;
-  RxDouble subtitleFontScale = (1.0).obs;
-  RxDouble subtitleFontScaleFS = (1.5).obs;
+  double subtitleFontScale = 1.0;
+  double subtitleFontScaleFS = 1.5;
   late double danmakuLineHeight = GStorage.danmakuLineHeight;
+  late int subtitlePaddingH = GStorage.subtitlePaddingH;
+  late int subtitlePaddingB = GStorage.subtitlePaddingB;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
+
+  final GlobalKey<VideoState> key = GlobalKey<VideoState>();
+
+  TextStyle get subTitleStyle => TextStyle(
+        height: 1.5,
+        fontSize:
+            16 * (isFullScreen.value ? subtitleFontScaleFS : subtitleFontScale),
+        letterSpacing: 0.1,
+        wordSpacing: 0.1,
+        color: Colors.white,
+        fontWeight: FontWeight.normal,
+        backgroundColor: Color(0xaa000000),
+      );
+
+  void updateSubtitleStyle([double? value]) {
+    key.currentState?.update(
+      subtitleViewConfiguration: SubtitleViewConfiguration(
+        style: subTitleStyle.copyWith(
+            fontSize: 16 *
+                (value ??
+                    (isFullScreen.value
+                        ? subtitleFontScaleFS
+                        : subtitleFontScale))),
+        padding: EdgeInsets.only(
+          left: subtitlePaddingH.toDouble(),
+          right: subtitlePaddingH.toDouble(),
+          bottom: subtitlePaddingB.toDouble(),
+        ),
+        textScaleFactor: MediaQuery.textScalerOf(Get.context!).scale(1),
+      ),
+    );
+  }
 
   void updateSliderPositionSecond() {
     int newSecond = _sliderPosition.value.inSeconds;
@@ -346,8 +380,8 @@ class PlPlayerController {
         setting.get(SettingBoxKey.danmakuFontScale, defaultValue: 1.0);
     // 全屏字体大小
     fontSizeFSVal = GStorage.danmakuFontScaleFS;
-    subtitleFontScale.value = GStorage.subtitleFontScale;
-    subtitleFontScaleFS.value = GStorage.subtitleFontScaleFS;
+    subtitleFontScale = GStorage.subtitleFontScale;
+    subtitleFontScaleFS = GStorage.subtitleFontScaleFS;
     massiveMode = GStorage.danmakuMassiveMode;
     // 弹幕时间
     danmakuDurationVal =
@@ -1154,6 +1188,7 @@ class PlPlayerController {
 
   void toggleFullScreen(bool val) {
     _isFullScreen.value = val;
+    updateSubtitleStyle();
   }
 
   // 全屏
@@ -1279,12 +1314,14 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuOpacity, opacityVal);
     setting.put(SettingBoxKey.danmakuFontScale, fontSizeVal);
     setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFSVal);
-    setting.put(SettingBoxKey.subtitleFontScale, subtitleFontScale.value);
-    setting.put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS.value);
+    setting.put(SettingBoxKey.subtitleFontScale, subtitleFontScale);
+    setting.put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS);
     setting.put(SettingBoxKey.danmakuDuration, danmakuDurationVal);
     setting.put(SettingBoxKey.strokeWidth, strokeWidth);
     setting.put(SettingBoxKey.fontWeight, fontWeight);
     setting.put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
+    setting.put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH);
+    setting.put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB);
   }
 
   Future<void> dispose({String type = 'single'}) async {

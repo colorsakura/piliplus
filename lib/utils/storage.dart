@@ -151,6 +151,12 @@ class GStorage {
   static bool get reverseFromFirst =>
       setting.get(SettingBoxKey.reverseFromFirst, defaultValue: true);
 
+  static int get subtitlePaddingH =>
+      setting.get(SettingBoxKey.subtitlePaddingH, defaultValue: 24);
+
+  static int get subtitlePaddingB =>
+      setting.get(SettingBoxKey.subtitlePaddingB, defaultValue: 24);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -354,6 +360,8 @@ class SettingBoxKey {
       replyLengthLimit = 'replyLengthLimit',
       showArgueMsg = 'showArgueMsg',
       reverseFromFirst = 'reverseFromFirst',
+      subtitlePaddingH = 'subtitlePaddingH',
+      subtitlePaddingB = 'subtitlePaddingB',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

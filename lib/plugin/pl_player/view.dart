@@ -78,7 +78,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late BangumiIntroController? bangumiIntroController;
 
   final GlobalKey _playerKey = GlobalKey();
-  final GlobalKey<VideoState> _key = GlobalKey<VideoState>();
 
   final RxBool _mountSeekBackwardButton = false.obs;
   final RxBool _mountSeekForwardButton = false.obs;
@@ -146,7 +145,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   StreamSubscription? _listener;
-  StreamSubscription? _listenerFS;
 
   @override
   void initState() {
@@ -226,7 +224,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   @override
   void dispose() {
     _listener?.cancel();
-    _listenerFS?.cancel();
     animationController.dispose();
     FlutterVolumeController.removeListener();
     super.dispose();
@@ -573,39 +570,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   bool get isFullScreen => plPlayerController.isFullScreen.value;
 
-  TextStyle get subTitleStyle => TextStyle(
-        height: 1.5,
-        fontSize: 16 *
-            (isFullScreen
-                ? plPlayerController.subtitleFontScaleFS.value
-                : plPlayerController.subtitleFontScale.value),
-        letterSpacing: 0.1,
-        wordSpacing: 0.1,
-        color: Colors.white,
-        fontWeight: FontWeight.normal,
-        backgroundColor: Color(0xaa000000),
-      );
-
-  void _updateSubtitle(double value) {
-    _key.currentState?.update(
-      subtitleViewConfiguration: SubtitleViewConfiguration(
-        style: subTitleStyle.copyWith(fontSize: 16 * value),
-        padding: const EdgeInsets.all(24.0),
-        textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    _listenerFS?.cancel();
-    _listenerFS = isFullScreen
-        ? plPlayerController.subtitleFontScaleFS.listen((value) {
-            _updateSubtitle(value);
-          })
-        : _listenerFS = plPlayerController.subtitleFontScale.listen((value) {
-            _updateSubtitle(value);
-          });
     final Color colorTheme = Theme.of(context).colorScheme.primary;
     const TextStyle textStyle = TextStyle(
       color: Colors.white,
@@ -747,7 +713,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               _gestureType = null;
             },
             child: Video(
-              key: _key,
+              key: plPlayerController.key,
               controller: videoController,
               controls: NoVideoControls,
               pauseUponEnteringBackgroundMode:
@@ -755,7 +721,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               resumeUponEnteringForegroundMode: true,
               // 字幕尺寸调节
               subtitleViewConfiguration: SubtitleViewConfiguration(
-                style: subTitleStyle,
+                style: plPlayerController.subTitleStyle,
                 padding: const EdgeInsets.all(24.0),
                 textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
               ),
