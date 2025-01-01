@@ -4,6 +4,7 @@ import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/msg.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -111,7 +112,12 @@ class _ActionPanelState extends State<ActionPanel> {
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               foregroundColor: Theme.of(context).colorScheme.outline,
             ),
-            label: Text(widget.item!.modules.moduleStat.forward!.count ?? '转发'),
+            label: Text(
+              widget.item!.modules.moduleStat.forward!.count != null
+                  ? Utils.numFormat(
+                      widget.item!.modules.moduleStat.forward!.count)
+                  : '转发',
+            ),
           ),
         ),
         Expanded(
@@ -129,7 +135,12 @@ class _ActionPanelState extends State<ActionPanel> {
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               foregroundColor: Theme.of(context).colorScheme.outline,
             ),
-            label: Text(widget.item!.modules.moduleStat.comment!.count ?? '评论'),
+            label: Text(
+              widget.item!.modules.moduleStat.comment!.count != null
+                  ? Utils.numFormat(
+                      widget.item!.modules.moduleStat.comment!.count)
+                  : '评论',
+            ),
           ),
         ),
         Expanded(
@@ -157,7 +168,10 @@ class _ActionPanelState extends State<ActionPanel> {
                 return ScaleTransition(scale: animation, child: child);
               },
               child: Text(
-                widget.item!.modules.moduleStat.like!.count ?? '点赞',
+                widget.item!.modules.moduleStat.like!.count != null
+                    ? Utils.numFormat(
+                        widget.item!.modules.moduleStat.like!.count)
+                    : '点赞',
                 key: ValueKey<String>(
                     widget.item!.modules.moduleStat.like!.count ?? '点赞'),
                 style: TextStyle(
