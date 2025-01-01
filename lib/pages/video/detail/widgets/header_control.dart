@@ -1024,6 +1024,7 @@ class _HeaderControlState extends State<HeaderControl> {
     bool massiveMode = widget.controller.massiveMode;
     int subtitlePaddingH = widget.controller.subtitlePaddingH;
     int subtitlePaddingB = widget.controller.subtitlePaddingB;
+    double subtitleBgOpaticy = widget.controller.subtitleBgOpaticy;
 
     final DanmakuController? danmakuController =
         widget.controller.danmakuController;
@@ -1457,7 +1458,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         min: 1.0,
                         max: 3.0,
                         value: danmakuLineHeight,
-                        label: '$danmakuLineHeight',
+                        // label: '$danmakuLineHeight',
                         onChanged: (double val) {
                           danmakuLineHeight = val.toPrecision(1);
                           widget.controller
@@ -1608,6 +1609,39 @@ class _HeaderControlState extends State<HeaderControl> {
                           subtitlePaddingB = val.round();
                           widget.controller
                             ..subtitlePaddingB = subtitlePaddingB
+                            ..updateSubtitleStyle()
+                            ..putDanmakuSettings();
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
+                  Text('字幕背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 6,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackShape: MSliderTrackShape(),
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeTrackColor: Theme.of(context).colorScheme.primary,
+                        trackHeight: 10,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6.0),
+                      ),
+                      child: Slider(
+                        min: 0,
+                        max: 1,
+                        value: subtitleBgOpaticy,
+                        // label: '${(subtitleBgOpaticy * 100).toInt()}%',
+                        onChanged: (double val) {
+                          subtitleBgOpaticy = val.toPrecision(2);
+                          widget.controller
+                            ..subtitleBgOpaticy = subtitleBgOpaticy
                             ..updateSubtitleStyle()
                             ..putDanmakuSettings();
                           setState(() {});

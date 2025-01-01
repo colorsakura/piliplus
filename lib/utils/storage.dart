@@ -157,6 +157,9 @@ class GStorage {
   static int get subtitlePaddingB =>
       setting.get(SettingBoxKey.subtitlePaddingB, defaultValue: 24);
 
+  static double get subtitleBgOpaticy =>
+      setting.get(SettingBoxKey.subtitleBgOpaticy, defaultValue: 0.67);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -362,6 +365,7 @@ class SettingBoxKey {
       reverseFromFirst = 'reverseFromFirst',
       subtitlePaddingH = 'subtitlePaddingH',
       subtitlePaddingB = 'subtitlePaddingB',
+      subtitleBgOpaticy = 'subtitleBgOpaticy',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

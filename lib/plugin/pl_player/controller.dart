@@ -256,6 +256,7 @@ class PlPlayerController {
   late double danmakuLineHeight = GStorage.danmakuLineHeight;
   late int subtitlePaddingH = GStorage.subtitlePaddingH;
   late int subtitlePaddingB = GStorage.subtitlePaddingB;
+  late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -270,7 +271,7 @@ class PlPlayerController {
         wordSpacing: 0.1,
         color: Colors.white,
         fontWeight: FontWeight.normal,
-        backgroundColor: Color(0xaa000000),
+        backgroundColor: Colors.black.withOpacity(subtitleBgOpaticy),
       );
 
   void updateSubtitleStyle([double? value]) {
@@ -1322,6 +1323,7 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
     setting.put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH);
     setting.put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB);
+    setting.put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy);
   }
 
   Future<void> dispose({String type = 'single'}) async {
