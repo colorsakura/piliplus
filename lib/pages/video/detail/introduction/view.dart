@@ -523,7 +523,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             color: t.colorScheme.outline,
                           ),
                         ),
-                        if (MineController.anonymity) ...<Widget>[
+                        if (MineController.anonymity.value) ...<Widget>[
                           const SizedBox(width: 10),
                           Icon(
                             MdiIcons.incognito,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/widgets/reply_item.dart';
@@ -398,7 +399,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   SliverPersistentHeader replyPersistentHeader(BuildContext context) {
     return SliverPersistentHeader(
-      delegate: _MySliverPersistentHeaderDelegate(
+      delegate: CustomSliverPersistentHeaderDelegate(
         child: Container(
           color: Theme.of(context).colorScheme.surface,
           height: 45,
@@ -529,35 +530,5 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         ),
       LoadingState() => throw UnimplementedError(),
     };
-  }
-}
-
-class _MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double _minExtent = 45;
-  final double _maxExtent = 45;
-  final Widget child;
-
-  _MySliverPersistentHeaderDelegate({required this.child});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    //创建child子组件
-    //shrinkOffset：child偏移值minExtent~maxExtent
-    //overlapsContent：SliverPersistentHeader覆盖其他子组件返回true，否则返回false
-    return child;
-  }
-
-  //SliverPersistentHeader最大高度
-  @override
-  double get maxExtent => _maxExtent;
-
-  //SliverPersistentHeader最小高度
-  @override
-  double get minExtent => _minExtent;
-
-  @override
-  bool shouldRebuild(covariant _MySliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }

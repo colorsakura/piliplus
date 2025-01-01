@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
 import 'package:PiliPalaX/common/widgets/video_card_h_member_video.dart';
@@ -7,7 +8,6 @@ import 'package:PiliPalaX/pages/member/new/content/member_contribute/content/vid
 import 'package:PiliPalaX/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPalaX/pages/member/new/controller.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/view.dart';
 import 'package:PiliPalaX/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,7 +71,8 @@ class _MemberVideoState extends State<MemberVideo>
                   SliverPersistentHeader(
                     pinned: false,
                     floating: true,
-                    delegate: MySliverPersistentHeaderDelegate(
+                    delegate: CustomSliverPersistentHeaderDelegate(
+                      extent: 40,
                       child: Container(
                         height: 40,
                         padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),

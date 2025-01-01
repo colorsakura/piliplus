@@ -212,7 +212,7 @@ class VideoHttp {
 
     // 免登录查看1080p
     if ((GStorage.userInfo.get('userInfoCache') == null ||
-            MineController.anonymity) &&
+            MineController.anonymity.value) &&
         GStorage.setting.get(SettingBoxKey.p1080, defaultValue: true)) {
       data['try_look'] = 1;
     }

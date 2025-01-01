@@ -65,13 +65,13 @@ class _MinePageState extends State<MinePage> {
                 tapTargetSize:
                     MaterialTapTargetSize.shrinkWrap, // the '2023' part
               ),
-              tooltip: "${MineController.anonymity ? '退出' : '进入'}无痕模式",
+              tooltip: "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
               onPressed: () {
                 MineController.onChangeAnonymity(context);
                 setState(() {});
               },
               icon: Icon(
-                MineController.anonymity
+                MineController.anonymity.value
                     ? MdiIcons.incognito
                     : MdiIcons.incognitoOff,
                 size: 24,

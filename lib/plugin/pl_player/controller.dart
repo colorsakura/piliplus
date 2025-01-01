@@ -1234,7 +1234,7 @@ class PlPlayerController {
     dynamic bvid,
     dynamic cid,
   }) async {
-    if (!_enableHeart || MineController.anonymity || progress == 0) {
+    if (!_enableHeart || MineController.anonymity.value || progress == 0) {
       return;
     } else if (playerStatus.status.value == PlayerStatus.paused) {
       if (isManual.not) {

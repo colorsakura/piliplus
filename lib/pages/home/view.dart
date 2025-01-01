@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:PiliPalaX/pages/mine/controller.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -155,6 +157,7 @@ class SearchBarAndUser extends StatelessWidget {
           child: Obx(
             () => homeController.userLogin.value
                 ? Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       NetworkImgLayer(
                         type: 'avatar',
@@ -177,7 +180,31 @@ class SearchBarAndUser extends StatelessWidget {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Positioned(
+                        right: -6,
+                        bottom: -6,
+                        child: Obx(() => MineController.anonymity.value
+                            ? IgnorePointer(
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    size: 16,
+                                    MdiIcons.incognito,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink()),
+                      ),
                     ],
                   )
                 : DefaultUser(

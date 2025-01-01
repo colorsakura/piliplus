@@ -19,8 +19,8 @@ class MineController extends GetxController {
 
   static Box get setting => GStorage.setting;
 
-  static bool anonymity =
-      setting.get(SettingBoxKey.anonymity, defaultValue: false);
+  static RxBool anonymity =
+      (setting.get(SettingBoxKey.anonymity, defaultValue: false) as bool).obs;
 
   ThemeType get nextThemeType =>
       ThemeType.values[(themeType.value.index + 1) % ThemeType.values.length];
@@ -92,12 +92,12 @@ class MineController extends GetxController {
     userStat.value = UserStat();
     GStorage.userInfo.delete('userInfoCache');
     userLogin.value = false;
-    anonymity = false;
+    anonymity.value = false;
   }
 
   static onChangeAnonymity(BuildContext context) {
-    anonymity = !anonymity;
-    if (anonymity) {
+    anonymity.value = !anonymity.value;
+    if (anonymity.value) {
       SmartDialog.show(
         clickMaskDismiss: false,
         usePenetrate: true,
@@ -140,7 +140,7 @@ class MineController extends GetxController {
                           onPressed: () {
                             SmartDialog.dismiss();
                             setting.put(SettingBoxKey.anonymity, true);
-                            anonymity = true;
+                            anonymity.value = true;
                             SmartDialog.showToast('已设为永久无痕模式');
                           },
                           child: Text(
@@ -154,7 +154,7 @@ class MineController extends GetxController {
                         onPressed: () {
                           SmartDialog.dismiss();
                           setting.put(SettingBoxKey.anonymity, false);
-                          anonymity = true;
+                          anonymity.value = true;
                           SmartDialog.showToast('已设为临时无痕模式');
                         },
                         child: Text(

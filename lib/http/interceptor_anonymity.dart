@@ -28,7 +28,7 @@ class AnonymityInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (MineController.anonymity) {
+    if (MineController.anonymity.value) {
       String uri = options.uri.toString();
       for (var i in anonymityList) {
         // 如果请求的url包含无痕列表中的url，则清空cookie

@@ -273,10 +273,10 @@ class VideoCustomActions {
           );
         }),
       VideoCustomAction(
-          "${MineController.anonymity ? '退出' : '进入'}无痕模式",
+          "${MineController.anonymity.value ? '退出' : '进入'}无痕模式",
           'anonymity',
           Icon(
-            MineController.anonymity
+            MineController.anonymity.value
                 ? MdiIcons.incognitoOff
                 : MdiIcons.incognito,
             size: 16,

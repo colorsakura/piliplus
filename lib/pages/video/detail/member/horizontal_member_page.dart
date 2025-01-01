@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPalaX/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
@@ -8,8 +9,6 @@ import 'package:PiliPalaX/models/member/info.dart';
 import 'package:PiliPalaX/pages/video/detail/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/member/controller.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
-    show MySliverPersistentHeaderDelegate;
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/grid.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -111,7 +110,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     return SliverPersistentHeader(
       pinned: false,
       floating: true,
-      delegate: MySliverPersistentHeaderDelegate(
+      delegate: CustomSliverPersistentHeaderDelegate(
+        extent: 40,
         child: Container(
           height: 40,
           padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),

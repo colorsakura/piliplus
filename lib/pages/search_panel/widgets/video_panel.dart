@@ -1,9 +1,8 @@
+import 'package:PiliPalaX/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPalaX/common/widgets/http_error.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
-import 'package:PiliPalaX/pages/video/detail/reply/view.dart'
-    show MySliverPersistentHeaderDelegate;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -23,7 +22,8 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
       SliverPersistentHeader(
         pinned: false,
         floating: true,
-        delegate: MySliverPersistentHeaderDelegate(
+        delegate: CustomSliverPersistentHeaderDelegate(
+          extent: 34,
           child: Container(
             height: 34,
             color: Theme.of(context).colorScheme.surface,
