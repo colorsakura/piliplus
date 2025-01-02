@@ -200,7 +200,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           IconButton(
             tooltip: '用内置浏览器打开',
             onPressed: () {
-              Get.toNamed('/webviewnew', parameters: {
+              Get.toNamed('/webview', parameters: {
                 'url': url.startsWith('http') ? url : 'https:$url',
                 'type': 'url',
                 'pageTitle': title,
@@ -226,7 +226,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               ),
               PopupMenuItem(
                 onTap: () => {
-                  Get.toNamed('/webviewnew', parameters: {
+                  Get.toNamed('/webview', parameters: {
                     'url': url.startsWith('http') ? url : 'https:$url',
                     'type': 'url',
                     'pageTitle': title,

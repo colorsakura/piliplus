@@ -625,7 +625,7 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
               recognizer: TapGestureRecognizer()..onTap = () {}
               // Get.toNamed(
-              //       '/webviewnew',
+              //       '/webview',
               //       parameters: {
               //         'url': content.vote['url'],
               //         'type': 'vote',
@@ -837,7 +837,7 @@ class ReplyItemGrpc extends StatelessWidget {
                           //   );
                           // } else {
                           //   Get.toNamed(
-                          //     '/webviewnew',
+                          //     '/webview',
                           //     parameters: {
                           //       'url': redirectUrl,
                           //       'type': 'url',
@@ -865,7 +865,7 @@ class ReplyItemGrpc extends StatelessWidget {
                             );
                           } else {
                             Get.toNamed(
-                              '/webviewnew',
+                              '/webview',
                               parameters: {
                                 'url': redirectUrl,
                                 'type': 'url',
@@ -875,7 +875,7 @@ class ReplyItemGrpc extends StatelessWidget {
                           }
                         } else {
                           Get.toNamed(
-                            '/webviewnew',
+                            '/webview',
                             parameters: {
                               'url': matchStr,
                               'type': 'url',
@@ -917,7 +917,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => Get.toNamed(
-                        '/webviewnew',
+                        '/webview',
                         parameters: {'url': matchStr},
                       ),
               ),
@@ -961,7 +961,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     Get.toNamed(
-                      '/webviewnew',
+                      '/webview',
                       parameters: {
                         'url': patternStr,
                         'type': 'url',
@@ -1022,7 +1022,7 @@ class ReplyItemGrpc extends StatelessWidget {
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () => Get.toNamed(
-                  '/webviewnew',
+                  '/webview',
                   parameters: {
                     'url': content.richText.note.clickUrl,
                     'type': 'note',
@@ -1047,7 +1047,7 @@ class ReplyItemGrpc extends StatelessWidget {
         case 'report':
           Get.back();
           dynamic result = await Get.toNamed(
-            '/webviewnew',
+            '/webview',
             parameters: {
               'url':
                   'https://www.bilibili.com/h5/comment/report?mid=${item.mid}&oid=${item.oid}&pageType=1&rpid=${item.id}&platform=android',

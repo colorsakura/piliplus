@@ -97,7 +97,7 @@ class PiliScheme {
         if (path.startsWith('/detail')) {
           var opusId = path.split('/').last;
           Utils.toDupNamed(
-            '/webviewnew',
+            '/webview',
             parameters: {
               'url': 'https://www.bilibili.com/opus/$opusId',
               'type': 'url',
@@ -160,7 +160,7 @@ class PiliScheme {
         void getToOpusWeb() {
           var opusId = path.split('/').last;
           Utils.toDupNamed(
-            '/webviewnew',
+            '/webview',
             parameters: {
               'url': 'https://m.bilibili.com/dynamic/$opusId',
               'type': 'url',
@@ -200,7 +200,7 @@ class PiliScheme {
         debugPrint('$value');
         SmartDialog.showToast('未知路径:$value，请截图反馈给开发者');
         //Utils.toDupNamed(
-        //   '/webviewnew',
+        //   '/webview',
         //   parameters: {
         //     'url': value.dataString ?? "",
         //     'type': 'url',
@@ -345,7 +345,7 @@ class PiliScheme {
         );
       } else {
         Utils.toDupNamed(
-          '/webviewnew',
+          '/webview',
           parameters: {'url': redirectUrl, 'type': 'url', 'pageTitle': ''},
         );
       }
@@ -355,7 +355,7 @@ class PiliScheme {
     List<String> pathPart = path.split('/');
     if (pathPart.length < 3) {
       Utils.toDupNamed(
-        '/webviewnew',
+        '/webview',
         parameters: {'url': value.toString()},
       );
       return;
@@ -415,7 +415,7 @@ class PiliScheme {
         } else {
           SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
           Utils.toDupNamed(
-            '/webviewnew',
+            '/webview',
             parameters: {
               'url': value.toString(),
               'type': 'url',

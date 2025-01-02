@@ -168,7 +168,7 @@ class IntroDetail extends StatelessWidget {
                     // 处理点击事件
                     try {
                       Get.toNamed(
-                        '/webviewnew',
+                        '/webview',
                         parameters: {
                           'url': match.group(0)!,
                           'type': 'url',

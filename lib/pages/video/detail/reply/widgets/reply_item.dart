@@ -599,7 +599,7 @@ class ReplyItem extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () => Get.toNamed(
-                    '/webviewnew',
+                    '/webview',
                     parameters: {
                       'url': content.vote['url'],
                       'type': 'vote',
@@ -811,7 +811,7 @@ class ReplyItem extends StatelessWidget {
                           //   );
                           // } else {
                           //   Get.toNamed(
-                          //     '/webviewnew',
+                          //     '/webview',
                           //     parameters: {
                           //       'url': redirectUrl,
                           //       'type': 'url',
@@ -839,7 +839,7 @@ class ReplyItem extends StatelessWidget {
                             );
                           } else {
                             Get.toNamed(
-                              '/webviewnew',
+                              '/webview',
                               parameters: {
                                 'url': redirectUrl,
                                 'type': 'url',
@@ -849,7 +849,7 @@ class ReplyItem extends StatelessWidget {
                           }
                         } else {
                           Get.toNamed(
-                            '/webviewnew',
+                            '/webview',
                             parameters: {
                               'url': matchStr,
                               'type': 'url',
@@ -922,7 +922,7 @@ class ReplyItem extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     Get.toNamed(
-                      '/webviewnew',
+                      '/webview',
                       parameters: {
                         'url': patternStr,
                         'type': 'url',
@@ -971,7 +971,7 @@ class ReplyItem extends StatelessWidget {
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () => Get.toNamed(
-                  '/webviewnew',
+                  '/webview',
                   parameters: {
                     'url': content.richText['note']['click_url'],
                     'type': 'note',
@@ -998,7 +998,7 @@ class MorePanel extends StatelessWidget {
       case 'report':
         Get.back();
         dynamic result = await Get.toNamed(
-          '/webviewnew',
+          '/webview',
           parameters: {
             'url':
                 'https://www.bilibili.com/h5/comment/report?mid=${item.mid}&oid=${item.oid}&pageType=1&rpid=${item.rpid}&platform=android',

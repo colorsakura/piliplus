@@ -50,7 +50,8 @@ class _PagesPanelState extends State<PagesPanel> {
       if (!mounted) return;
       setState(() {});
       const double itemWidth = 150; // 每个列表项的宽度
-      final double targetOffset = min((pageIndex * itemWidth) - (itemWidth / 2),
+      final double targetOffset = (pageIndex * itemWidth - itemWidth / 2).clamp(
+          _scrollController.position.minScrollExtent,
           _scrollController.position.maxScrollExtent);
       // 滑动至目标位置
       _scrollController.animateTo(

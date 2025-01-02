@@ -465,7 +465,7 @@ class _HeaderControlState extends State<HeaderControl> {
                               return;
                             }
                             Get.back();
-                            Get.toNamed('/webviewnew', parameters: {
+                            Get.toNamed('/webview', parameters: {
                               'url':
                                   'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr.bvid)}&bvid=${widget.videoDetailCtr.bvid}'
                             });

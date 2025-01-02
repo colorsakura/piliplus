@@ -936,7 +936,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     // 处理点击事件
                     try {
                       Get.toNamed(
-                        '/webviewnew',
+                        '/webview',
                         parameters: {
                           'url': match.group(0)!,
                           'type': 'url',

@@ -312,7 +312,7 @@ class ChatItem extends StatelessWidget {
                             }
                           } else {
                             SmartDialog.showToast('未匹配到 BV 号');
-                            Get.toNamed('/webviewnew',
+                            Get.toNamed('/webview',
                                 arguments: {'url': i['jump_url']});
                           }
                         },

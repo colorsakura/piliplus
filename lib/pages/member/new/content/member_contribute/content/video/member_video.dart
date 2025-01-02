@@ -102,6 +102,7 @@ class _MemberVideoState extends State<MemberVideo>
                                   label: Text(
                                     _controller.episodicButton?.text ?? '播放全部',
                                     style: TextStyle(
+                                      fontSize: 13,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .secondary,

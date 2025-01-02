@@ -33,7 +33,6 @@ class BangumiPanel extends StatefulWidget {
 class _BangumiPanelState extends State<BangumiPanel> {
   late int currentIndex;
   final ScrollController listViewScrollCtr = ScrollController();
-  final ScrollController listViewScrollCtr_2 = ScrollController();
   dynamic userInfo;
   // 默认未开通
   int vipStatus = 0;
@@ -66,7 +65,6 @@ class _BangumiPanelState extends State<BangumiPanel> {
   void dispose() {
     _listener?.cancel();
     listViewScrollCtr.dispose();
-    listViewScrollCtr_2.dispose();
     super.dispose();
   }
 
@@ -88,8 +86,12 @@ class _BangumiPanelState extends State<BangumiPanel> {
   void scrollToIndex() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 在回调函数中获取更新后的状态
-      listViewScrollCtr.animateTo(currentIndex * 150,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+      listViewScrollCtr.animateTo(
+        (currentIndex * 150.0).clamp(listViewScrollCtr.position.minScrollExtent,
+            listViewScrollCtr.position.maxScrollExtent),
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
@@ -149,7 +151,9 @@ class _BangumiPanelState extends State<BangumiPanel> {
             itemBuilder: (BuildContext context, int i) {
               return Container(
                 width: 150,
-                margin: const EdgeInsets.only(right: 10),
+                margin: EdgeInsets.only(
+                  right: i == widget.pages.length - 1 ? 0 : 10,
+                ),
                 child: Material(
                   color: Theme.of(context).colorScheme.onInverseSurface,
                   borderRadius: BorderRadius.circular(6),

@@ -59,7 +59,7 @@ class _WhisperPageState extends State<WhisperPage> {
                 color: Theme.of(context).colorScheme.primary),
             tooltip: '用浏览器打开',
             onPressed: () {
-              Get.toNamed('/webviewnew', parameters: {
+              Get.toNamed('/webview', parameters: {
                 'url': 'https://message.bilibili.com',
                 'type': 'whisper',
                 'pageTitle': '消息中心',

@@ -54,7 +54,7 @@ class UrlUtils {
       );
     } else {
       await Get.toNamed(
-        '/webviewnew',
+        '/webview',
         parameters: {
           'url': redirectUrl,
           'type': 'url',

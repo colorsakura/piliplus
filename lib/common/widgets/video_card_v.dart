@@ -133,7 +133,7 @@ class VideoCardV extends StatelessWidget {
       default:
         SmartDialog.showToast(videoItem.goto);
         Get.toNamed(
-          '/webviewnew',
+          '/webview',
           parameters: {
             'url': videoItem.uri,
             'type': 'url',

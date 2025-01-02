@@ -273,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                             dense: false,
                             onTap: () async {
                               Get.back();
-                              Get.toNamed('/webviewnew', parameters: {
+                              Get.toNamed('/webview', parameters: {
                                 'url':
                                     'https://passport.bilibili.com/h5-app/passport/login/findPassword',
                                 'type': 'url',
@@ -291,7 +291,7 @@ class _LoginPageState extends State<LoginPage> {
                             dense: false,
                             onTap: () async {
                               Get.back();
-                              Get.toNamed('/webviewnew', parameters: {
+                              Get.toNamed('/webview', parameters: {
                                 'url':
                                     'https://passport.bilibili.com/pc/passport/findPassword',
                                 'type': 'url',

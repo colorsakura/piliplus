@@ -45,7 +45,7 @@ class HistoryItem extends StatelessWidget {
           //     // videoItem.history.oid ??
           //     await SearchHttp.ab2c(aid: aid, bvid: bvid);
           // Get.toNamed(
-          //   '/webviewnew',
+          //   '/webview',
           //   parameters: {
           //     'url': 'https://www.bilibili.com/read/cv$cid',
           //     'type': 'note',

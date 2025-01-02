@@ -115,7 +115,7 @@ class DynamicsController extends GetxController
           });
         } else {
           Utils.toDupNamed(
-            '/webviewnew',
+            '/webview',
             parameters: {
               'url': 'https:$url',
               'type': 'note',

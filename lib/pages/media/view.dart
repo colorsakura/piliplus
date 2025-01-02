@@ -187,7 +187,7 @@ class _MediaPageState extends State<MediaPage>
         ),
         SizedBox(
           height: MediaQuery.paddingOf(context).bottom + 100,
-        )
+        ),
       ],
     );
   }

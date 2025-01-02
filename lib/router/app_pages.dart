@@ -66,7 +66,7 @@ class Routes {
     // 视频详情
     CustomGetPage(name: '/video', page: () => const VideoDetailPage()),
     //
-    CustomGetPage(name: '/webviewnew', page: () => const WebviewPageNew()),
+    CustomGetPage(name: '/webview', page: () => const WebviewPageNew()),
     // 设置
     CustomGetPage(name: '/setting', page: () => const SettingPage()),
     //

@@ -42,7 +42,7 @@ class MineController extends GetxController {
   onLogin() async {
     if (!userLogin.value) {
       // Get.toNamed(
-      //   '/webviewnew',
+      //   '/webview',
       //   parameters: {
       //     'url': 'https://passport.bilibili.com/h5-app/passport/login',
       //     'type': 'login',

@@ -233,7 +233,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
     case 'DYNAMIC_TYPE_COMMON_SQUARE':
       return InkWell(
         onTap: () {
-          Get.toNamed('/webviewnew', parameters: {
+          Get.toNamed('/webview', parameters: {
             'url': item.modules.moduleDynamic.major.common['jump_url'],
             'type': 'url',
             'pageTitle': item.modules.moduleDynamic.major.common['title']
@@ -284,7 +284,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
       final Map music = item.modules.moduleDynamic.major.music;
       return InkWell(
         onTap: () {
-          Get.toNamed('/webviewnew', parameters: {
+          Get.toNamed('/webview', parameters: {
             'url': "https:${music['jump_url']}",
             'type': 'url',
             'pageTitle': music['title']

@@ -1043,7 +1043,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             if (videoDetailController.userInfo == null) {
                               SmartDialog.showToast('账号未登录');
                             } else {
-                              Get.toNamed('/webviewnew', parameters: {
+                              Get.toNamed('/webview', parameters: {
                                 'url':
                                     'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
                               });

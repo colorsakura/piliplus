@@ -108,7 +108,7 @@ InlineSpan? richNode(item, context) {
                     return;
                   }
                   Get.toNamed(
-                    '/webviewnew',
+                    '/webview',
                     parameters: {
                       'url': url.startsWith('//')
                           ? "https://${url.split('//').last}"
@@ -136,7 +136,7 @@ InlineSpan? richNode(item, context) {
                   try {
                     String dynamicId = item.basic['comment_id_str'];
                     Get.toNamed(
-                      '/webviewnew',
+                      '/webview',
                       parameters: {
                         'url':
                             'https://t.bilibili.com/vote/h5/index/#/result?vote_id=${i.rid}&dynamic_id=$dynamicId&isWeb=1',
