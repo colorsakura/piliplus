@@ -238,7 +238,7 @@ class VideoHttp {
         if (epid != null) {
           data = PlayUrlModel.fromJson(res.data['result']['video_info'])
             ..lastPlayTime = res.data['result']['play_view_business_info']
-                ['user_status']['watch_progress']['last_time'];
+                ['user_status']['watch_progress']['current_watch_progress'];
         } else {
           data = PlayUrlModel.fromJson(res.data['data']);
         }
