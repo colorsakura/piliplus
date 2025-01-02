@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPalaX/utils/storage.dart';
+import 'package:get/get.dart';
 
 class SetSwitchItem extends StatefulWidget {
   final String? title;
@@ -43,7 +44,45 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
   }
 
   void switchChange(value) async {
+    if (widget.setKey == SettingBoxKey.badCertificateCallback &&
+        (value ?? !val)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            '确定禁用 SSL 证书验证？',
+            style: TextStyle(fontSize: 18),
+          ),
+          content: const Text('禁用容易受到中间人攻击'),
+          actions: [
+            TextButton(
+              onPressed: Get.back,
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                await GStorage.setting
+                    .put(SettingBoxKey.badCertificateCallback, true);
+                val = true;
+                SmartDialog.showToast('重启生效');
+                setState(() {});
+              },
+              child: const Text('确认'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
     val = value ?? !val;
+
     await GStorage.setting.put(widget.setKey, val);
     // if (widget.setKey == SettingBoxKey.autoUpdate && value == true) {
     //   Utils.checkUpdate();

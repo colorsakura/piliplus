@@ -408,6 +408,13 @@ class _ExtraSettingState extends State<ExtraSetting> {
             setKey: SettingBoxKey.reverseFromFirst,
             defaultVal: true,
           ),
+          SetSwitchItem(
+            title: '禁用 SSL 证书验证',
+            subTitle: '谨慎开启，禁用容易受到中间人攻击',
+            leading: Icon(Icons.security),
+            needReboot: true,
+            setKey: SettingBoxKey.badCertificateCallback,
+          ),
           Obx(
             () => ListTile(
               enableFeedback: true,

@@ -160,6 +160,9 @@ class GStorage {
   static double get subtitleBgOpaticy =>
       setting.get(SettingBoxKey.subtitleBgOpaticy, defaultValue: 0.67);
 
+  static bool get badCertificateCallback =>
+      setting.get(SettingBoxKey.badCertificateCallback, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -366,6 +369,7 @@ class SettingBoxKey {
       subtitlePaddingH = 'subtitlePaddingH',
       subtitlePaddingB = 'subtitlePaddingB',
       subtitleBgOpaticy = 'subtitleBgOpaticy',
+      badCertificateCallback = 'badCertificateCallback',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

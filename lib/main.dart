@@ -52,6 +52,9 @@ void main() async {
       ],
     );
   }
+  if (GStorage.badCertificateCallback) {
+    HttpOverrides.global = _CustomHttpOverrides();
+  }
   await setupServiceLocator();
   Request();
   await Request.setCookie();
@@ -273,5 +276,14 @@ class MyApp extends StatelessWidget {
         refreshBackgroundColor: colorScheme.onSecondary,
       ),
     );
+  }
+}
+
+class _CustomHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
