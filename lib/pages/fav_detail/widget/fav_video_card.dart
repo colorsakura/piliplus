@@ -62,7 +62,7 @@ class FavVideoCardH extends StatelessWidget {
         Map<String, String> parameters = {
           'bvid': bvid,
           'cid': videoItem.cid.toString(),
-          'epId': epId ?? '',
+          if (epId?.isNotEmpty == true) 'epId': epId!,
         };
         // if (seasonId != null) {
         //   parameters['seasonId'] = seasonId.toString();
