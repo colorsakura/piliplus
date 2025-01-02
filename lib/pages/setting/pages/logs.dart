@@ -71,7 +71,7 @@ class _LogsPageState extends State<LogsPage> {
   }
 
   void copyLogs() async {
-    await Utils.copyText(fileContent, needToast: false);
+    await Utils.copyText('```\n$fileContent\n```', needToast: false);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('复制成功')),
@@ -152,7 +152,8 @@ class _LogsPageState extends State<LogsPage> {
                         ),
                         TextButton.icon(
                           onPressed: () async {
-                            await Utils.copyText(log['body'], needToast: false);
+                            await Utils.copyText('```\n${log['body']}\n```',
+                                needToast: false);
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
