@@ -490,7 +490,7 @@ class BangumiIntroController extends CommonController {
         episodes.indexWhere((e) => e.cid == videoDetailCtr.cid.value);
     int nextIndex = currentIndex + 1;
     // 列表循环
-    if (nextIndex == episodes.length - 1) {
+    if (nextIndex >= episodes.length) {
       if (playRepeat == PlayRepeat.listCycle) {
         nextIndex = 0;
       } else if (playRepeat == PlayRepeat.autoPlayRelated) {
