@@ -551,6 +551,10 @@ class BangumiIntroController extends CommonController {
           scriptContent['props']['pageProps']['followState']['isFollowed'];
       followStatus.value =
           scriptContent['props']['pageProps']['followState']['followStatus'];
+      // int progress = scriptContent['props']['pageProps']['dehydratedState']
+      //             ['queries'][0]['state']['data']['result']
+      //         ['play_view_business_info']['user_status']['watch_progress']
+      //     ['current_watch_progress'];
     }
   }
 }

@@ -1078,7 +1078,12 @@ class VideoDetailController extends GetxController
                 defaultValue: AudioQuality.k192.code);
       });
     }
-    var result = await VideoHttp.videoUrl(cid: cid.value, bvid: bvid);
+    var result = await VideoHttp.videoUrl(
+      cid: cid.value,
+      bvid: bvid,
+      epid: epId,
+      seasonId: seasonId,
+    );
     if (result['status']) {
       data = result['data'];
       if (enableSponsorBlock) {

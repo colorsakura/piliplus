@@ -195,20 +195,24 @@ class VideoHttp {
   }
 
   // 视频流
-  static Future videoUrl(
-      {int? avid, String? bvid, required int cid, int? qn}) async {
+  static Future videoUrl({
+    int? avid,
+    String? bvid,
+    required int cid,
+    int? qn,
+    dynamic epid,
+    dynamic seasonId,
+  }) async {
     Map<String, dynamic> data = {
+      if (avid != null) 'avid': avid,
+      if (bvid != null) 'bvid': bvid,
+      if (epid != null) 'ep_id': epid,
+      if (seasonId != null) 'season_id': seasonId,
       'cid': cid,
       'qn': qn ?? 80,
       // 获取所有格式的视频
       'fnval': 4048,
     };
-    if (avid != null) {
-      data['avid'] = avid;
-    }
-    if (bvid != null) {
-      data['bvid'] = bvid;
-    }
 
     // 免登录查看1080p
     if ((GStorage.userInfo.get('userInfoCache') == null ||
@@ -226,11 +230,21 @@ class VideoHttp {
     });
 
     try {
-      var res = await Request().get(Api.videoUrl, queryParameters: params);
+      var res = epid != null
+          ? await Request().get(Api.bangumiVideoUrl, queryParameters: params)
+          : await Request().get(Api.videoUrl, queryParameters: params);
       if (res.data['code'] == 0) {
+        late PlayUrlModel data;
+        if (epid != null) {
+          data = PlayUrlModel.fromJson(res.data['result']['video_info'])
+            ..lastPlayTime = res.data['result']['play_view_business_info']
+                ['user_status']['watch_progress']['last_time'];
+        } else {
+          data = PlayUrlModel.fromJson(res.data['data']);
+        }
         return {
           'status': true,
-          'data': PlayUrlModel.fromJson(res.data['data'])
+          'data': data,
         };
       } else {
         return {

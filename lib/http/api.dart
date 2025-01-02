@@ -19,8 +19,8 @@ class Api {
   static const String videoUrl = '/x/player/wbi/playurl';
 
   // 番剧视频流
-  // https://api.bilibili.com/pgc/player/web/playurl?cid=104236640&bvid=BV13t411n7ex
-  static const String bangumiVideoUrl = '/pgc/player/web/playurl';
+  // https://api.bilibili.com/pgc/player/web/v2/playurl?cid=104236640&bvid=BV13t411n7ex
+  static const String bangumiVideoUrl = '/pgc/player/web/v2/playurl';
 
   // 字幕
   // aid, cid

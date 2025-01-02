@@ -34,6 +34,14 @@ class Utils {
 
   static const channel = MethodChannel("pilipalax");
 
+  static void showCopyTextDialog(text) {
+    Get.dialog(
+      AlertDialog(
+        content: SelectableText('$text'),
+      ),
+    );
+  }
+
   static Future<dynamic> getWwebid(mid) async {
     try {
       dynamic response =
