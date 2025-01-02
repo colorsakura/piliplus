@@ -71,7 +71,7 @@ class HistoryItem extends StatelessWidget {
           } else {
             SmartDialog.showToast('直播未开播');
           }
-        } else if (videoItem.badge == '番剧' ||
+        } else if (videoItem.history?.business == 'pgc' ||
             videoItem.tagName.contains('动画')) {
           /// hack
           var bvid = videoItem.history.bvid;
