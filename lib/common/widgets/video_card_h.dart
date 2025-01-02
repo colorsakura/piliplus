@@ -185,6 +185,7 @@ class VideoCardH extends StatelessWidget {
                 child: RichText(
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
+                  textScaler: MediaQuery.textScalerOf(context),
                   text: TextSpan(
                     children: [
                       for (final i in videoItem.title) ...[

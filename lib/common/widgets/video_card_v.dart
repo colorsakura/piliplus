@@ -325,6 +325,7 @@ class VideoCardV extends StatelessWidget {
               flex: 0,
               child: RichText(
                 maxLines: 1,
+                textScaler: MediaQuery.textScalerOf(context),
                 text: TextSpan(
                     style: TextStyle(
                       fontSize:
@@ -347,6 +348,7 @@ class VideoCardV extends StatelessWidget {
               flex: 0,
               child: RichText(
                 maxLines: 1,
+                textScaler: MediaQuery.textScalerOf(context),
                 text: TextSpan(
                     style: TextStyle(
                       fontSize:

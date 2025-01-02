@@ -164,6 +164,9 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                                           children: [
                                             RichText(
                                               maxLines: 2,
+                                              textScaler:
+                                                  MediaQuery.textScalerOf(
+                                                      context),
                                               text: TextSpan(
                                                 children: [
                                                   for (var i in loadingState

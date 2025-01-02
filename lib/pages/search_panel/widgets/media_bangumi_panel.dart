@@ -78,6 +78,8 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                                     RichText(
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
+                                      textScaler:
+                                          MediaQuery.textScalerOf(context),
                                       text: TextSpan(
                                         style: TextStyle(
                                             color: Theme.of(context)
@@ -88,13 +90,10 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                                             TextSpan(
                                               text: i['text'],
                                               style: TextStyle(
-                                                fontSize:
-                                                    MediaQuery.textScalerOf(
-                                                            context)
-                                                        .scale(Theme.of(context)
-                                                            .textTheme
-                                                            .titleSmall!
-                                                            .fontSize!),
+                                                fontSize: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall!
+                                                    .fontSize!,
                                                 fontWeight: FontWeight.bold,
                                                 color: i['type'] == 'em'
                                                     ? Theme.of(context)
