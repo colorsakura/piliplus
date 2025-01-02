@@ -8,6 +8,7 @@ import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/models/video/play/subtitle.dart';
@@ -162,12 +163,10 @@ class VideoDetailController extends GetxController
   /// tabs相关配置
   int tabInitialIndex = 0;
   late TabController tabCtr;
-  RxList<String> tabs = <String>['简介', '评论'].obs;
 
   // 请求返回的视频信息
   late PlayUrlModel data;
-  // 请求状态
-  RxBool isLoading = false.obs;
+  Rx<LoadingState> videoState = LoadingState.loading().obs;
 
   /// 播放器配置 画质 音质 解码格式
   late VideoQuality currentVideoQa;
@@ -175,8 +174,6 @@ class VideoDetailController extends GetxController
   late VideoDecodeFormats currentDecodeFormats;
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
   RxBool autoPlay = true.obs;
-  // 视频资源是否有效
-  RxBool isEffective = true.obs;
   // 封面图的展示
   RxBool isShowCover = true.obs;
   // 硬解
@@ -1061,8 +1058,13 @@ class VideoDetailController extends GetxController
     plPlayerController.headerControl = headerControl;
   }
 
+  bool isQuerying = false;
   // 视频链接
   Future queryVideoUrl() async {
+    if (isQuerying) {
+      return;
+    }
+    isQuerying = true;
     if (cacheVideoQa == null) {
       await Connectivity().checkConnectivity().then((res) {
         cacheVideoQa = res.contains(ConnectivityResult.wifi)
@@ -1226,7 +1228,8 @@ class VideoDetailController extends GetxController
         SmartDialog.showToast("错误（${result['code']}）：${result['msg']}");
       }
     }
-    return result;
+    isQuerying = false;
+    videoState.value = LoadingState.success(null);
   }
 
   List<PostSegmentModel>? list;

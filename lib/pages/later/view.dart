@@ -221,10 +221,9 @@ class _LaterPageState extends State<LaterPage> {
                         ),
                       ),
                       Positioned(
-                        right: 0,
+                        right: 12,
                         bottom: 0,
                         child: iconButton(
-                          size: 30,
                           tooltip: '移除',
                           context: context,
                           onPressed: () {

@@ -230,9 +230,9 @@ class VideoHttp {
     });
 
     try {
-      var res = epid != null
-          ? await Request().get(Api.bangumiVideoUrl, queryParameters: params)
-          : await Request().get(Api.videoUrl, queryParameters: params);
+      var res = await Request().get(
+          epid != null ? Api.bangumiVideoUrl : Api.videoUrl,
+          queryParameters: params);
       if (res.data['code'] == 0) {
         late PlayUrlModel data;
         if (epid != null) {

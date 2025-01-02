@@ -372,7 +372,7 @@ class HistoryItem extends StatelessWidget {
                     icon: Icon(
                       Icons.more_vert_outlined,
                       color: Theme.of(context).colorScheme.outline,
-                      size: 14,
+                      size: 18,
                     ),
                     position: PopupMenuPosition.under,
                     // constraints: const BoxConstraints(maxHeight: 35),

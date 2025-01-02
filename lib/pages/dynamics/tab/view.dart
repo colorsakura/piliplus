@@ -90,8 +90,10 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
       onRefresh: () async {
         dynamicsWaterfallFlow = GStorage.setting
             .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
-        await _dynamicsTabController.onRefresh();
-        await dynamicsController.queryFollowUp();
+        await Future.wait([
+          _dynamicsTabController.onRefresh(),
+          dynamicsController.queryFollowUp(),
+        ]);
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

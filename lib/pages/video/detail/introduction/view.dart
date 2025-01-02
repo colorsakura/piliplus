@@ -653,6 +653,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             videoIntroController
                                 .queryVideoIntroData.value["status"] = true;
                             videoIntroController.queryVideoIntro();
+                            if (videoDetailCtr.videoUrl.isNullOrEmpty &&
+                                videoDetailCtr.isQuerying.not) {
+                              videoDetailCtr.queryVideoUrl();
+                            }
                           },
                           label: const Text("点此重新加载"),
                         ),

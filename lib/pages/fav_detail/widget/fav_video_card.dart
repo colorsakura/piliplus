@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/image_save.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -215,12 +216,13 @@ class FavVideoCardH extends StatelessWidget {
             if (searchType != 1 && isOwner)
               Positioned(
                 right: 0,
-                bottom: -4,
-                child: IconButton(
+                bottom: 0,
+                child: iconButton(
+                  context: context,
+                  icon: Icons.clear,
                   tooltip: '取消收藏',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
+                  iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  bgColor: Colors.transparent,
                   onPressed: () {
                     showDialog(
                       context: Get.context!,
@@ -250,11 +252,6 @@ class FavVideoCardH extends StatelessWidget {
                       },
                     );
                   },
-                  icon: Icon(
-                    Icons.clear_outlined,
-                    color: Theme.of(context).colorScheme.outline,
-                    size: 18,
-                  ),
                 ),
               ),
           ],

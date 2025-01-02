@@ -53,6 +53,10 @@ extension StringExt on String {
   String get http2https => replaceFirst(RegExp("^http://"), "https://");
 }
 
+extension StringNullExt on String? {
+  bool get isNullOrEmpty => this == null || this!.isEmpty;
+}
+
 extension BoolExt on bool {
   bool get not => !this;
 }

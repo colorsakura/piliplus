@@ -62,8 +62,10 @@ class _BangumiPageState extends State<BangumiPage>
     super.build(context);
     return refreshIndicator(
       onRefresh: () async {
-        await _bangumiController.onRefresh();
-        await _bangumiController.queryBangumiFollow();
+        await Future.wait([
+          _bangumiController.onRefresh(),
+          _bangumiController.queryBangumiFollow(),
+        ]);
       },
       child: CustomScrollView(
         controller: _bangumiController.scrollController,
@@ -76,8 +78,7 @@ class _BangumiPageState extends State<BangumiPage>
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: StyleString.safeSpace, bottom: 10, left: 16),
+                      padding: const EdgeInsets.only(left: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -99,7 +100,8 @@ class _BangumiPageState extends State<BangumiPage>
                       ),
                     ),
                     SizedBox(
-                      height: Grid.maxRowWidth * 1,
+                      height: Grid.maxRowWidth / 2 / 0.75 +
+                          MediaQuery.textScalerOf(context).scale(50),
                       child: Obx(
                         () => _buildFollowBody(
                             _bangumiController.followState.value),
@@ -143,13 +145,13 @@ class _BangumiPageState extends State<BangumiPage>
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 // 行间距
-                mainAxisSpacing: StyleString.cardSpace - 2,
+                mainAxisSpacing: StyleString.cardSpace,
                 // 列间距
                 crossAxisSpacing: StyleString.cardSpace,
                 // 最大宽度
                 maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
-                childAspectRatio: 0.65,
-                mainAxisExtent: MediaQuery.textScalerOf(context).scale(60),
+                childAspectRatio: 0.75,
+                mainAxisExtent: MediaQuery.textScalerOf(context).scale(50),
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
@@ -180,7 +182,6 @@ class _BangumiPageState extends State<BangumiPage>
       itemBuilder: (context, index) {
         return Container(
           width: Grid.maxRowWidth / 2,
-          height: Grid.maxRowWidth * 1,
           margin: EdgeInsets.only(
             left: StyleString.safeSpace,
             right: index == loadingState.response.length - 1

@@ -257,7 +257,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

@@ -220,64 +220,64 @@ Widget videoContent(BuildContext context, Item videoItem) {
               ),
             ],
           ),
-          const Spacer(),
+          // const Spacer(),
           // const SizedBox(height: 2),
           // VideoStat(
           //   videoItem: videoItem,
           // ),
-          Row(
-            children: [
-              // if (videoItem.goto == 'bangumi') ...[
-              //   PBadge(
-              //     text: videoItem.bangumiBadge,
-              //     stack: 'normal',
-              //     size: 'small',
-              //     type: 'line',
-              //     fs: 9,
-              //   )
-              // ],
-              // if (videoItem.rcmdReason != null) ...[
-              //   PBadge(
-              //     text: videoItem.rcmdReason,
-              //     stack: 'normal',
-              //     size: 'small',
-              //     type: 'color',
-              //   )
-              // ],
-              if (videoItem.goto == 'picture') ...[
-                const PBadge(
-                  text: '动态',
-                  stack: 'normal',
-                  size: 'small',
-                  type: 'line',
-                  fs: 9,
-                )
-              ],
-              // if (videoItem.isFollowed == 1) ...[
-              //   const PBadge(
-              //     text: '已关注',
-              //     stack: 'normal',
-              //     size: 'small',
-              //     type: 'color',
-              //   )
-              // ],
-              Expanded(
-                flex: 1,
-                child: Text(
-                  videoItem.author ?? '',
-                  // semanticsLabel: "Up主：${videoItem.owner.name}",
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                    height: 1.5,
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ),
-              if (videoItem.goto == 'av') const SizedBox(width: 10)
-            ],
-          ),
+          // Row(
+          //   children: [
+          // if (videoItem.goto == 'bangumi') ...[
+          //   PBadge(
+          //     text: videoItem.bangumiBadge,
+          //     stack: 'normal',
+          //     size: 'small',
+          //     type: 'line',
+          //     fs: 9,
+          //   )
+          // ],
+          // if (videoItem.rcmdReason != null) ...[
+          //   PBadge(
+          //     text: videoItem.rcmdReason,
+          //     stack: 'normal',
+          //     size: 'small',
+          //     type: 'color',
+          //   )
+          // ],
+          // if (videoItem.goto == 'picture') ...[
+          //   const PBadge(
+          //     text: '动态',
+          //     stack: 'normal',
+          //     size: 'small',
+          //     type: 'line',
+          //     fs: 9,
+          //   )
+          // ],
+          // if (videoItem.isFollowed == 1) ...[
+          //   const PBadge(
+          //     text: '已关注',
+          //     stack: 'normal',
+          //     size: 'small',
+          //     type: 'color',
+          //   )
+          // ],
+          // Expanded(
+          //   flex: 1,
+          //   child: Text(
+          //     videoItem.author ?? '',
+          //     // semanticsLabel: "Up主：${videoItem.owner.name}",
+          //     maxLines: 1,
+          //     overflow: TextOverflow.clip,
+          //     style: TextStyle(
+          //       height: 1.5,
+          //       fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+          //       color: Theme.of(context).colorScheme.outline,
+          //     ),
+          //   ),
+          // ),
+          // if (videoItem.goto == 'av') const SizedBox(width: 10)
+          // ],
+          // ),
         ],
       ),
     ),

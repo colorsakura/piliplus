@@ -64,9 +64,9 @@ class _MemberBangumiState extends State<MemberBangumi>
                         mainAxisSpacing: StyleString.cardSpace,
                         crossAxisSpacing: StyleString.cardSpace,
                         maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
-                        childAspectRatio: 0.65,
+                        childAspectRatio: 0.75,
                         mainAxisExtent:
-                            MediaQuery.textScalerOf(context).scale(60),
+                            MediaQuery.textScalerOf(context).scale(30),
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {

@@ -79,7 +79,7 @@ class BangumiCardVMemberHome extends StatelessWidget {
                 bottomRight: StyleString.imgRadius,
               ),
               child: AspectRatio(
-                aspectRatio: 0.65,
+                aspectRatio: 0.75,
                 child: LayoutBuilder(builder: (context, boxConstraints) {
                   final double maxWidth = boxConstraints.maxWidth;
                   final double maxHeight = boxConstraints.maxHeight;

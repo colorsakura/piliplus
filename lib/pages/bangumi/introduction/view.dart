@@ -82,7 +82,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
     return switch (loadingState) {
       Loading() => BangumiInfo(
           heroTag: widget.heroTag,
-          loadingStatus: true,
+          isLoading: true,
           bangumiDetail: null,
           cid: cid,
           showEpisodes: widget.showEpisodes,
@@ -90,7 +90,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
         ),
       Success() => BangumiInfo(
           heroTag: widget.heroTag,
-          loadingStatus: false,
+          isLoading: false,
           bangumiDetail: loadingState.response,
           cid: cid,
           showEpisodes: widget.showEpisodes,
@@ -111,7 +111,7 @@ class _BangumiIntroPanelState extends State<BangumiIntroPanel>
 class BangumiInfo extends StatefulWidget {
   const BangumiInfo({
     super.key,
-    this.loadingStatus = false,
+    this.isLoading = false,
     this.bangumiDetail,
     this.cid,
     required this.showEpisodes,
@@ -119,7 +119,7 @@ class BangumiInfo extends StatefulWidget {
     required this.heroTag,
   });
 
-  final bool loadingStatus;
+  final bool isLoading;
   final BangumiInfoModel? bangumiDetail;
   final int? cid;
   final Function showEpisodes;
@@ -219,11 +219,13 @@ class _BangumiInfoState extends State<BangumiInfo>
         MediaQuery.of(context).orientation == Orientation.landscape;
     return SliverPadding(
       padding: EdgeInsets.only(
-          left: StyleString.safeSpace,
-          right: StyleString.safeSpace,
-          top: isLandscape ? 10 : 20),
+        left: StyleString.safeSpace,
+        right: StyleString.safeSpace,
+        top: StyleString.safeSpace,
+        bottom: StyleString.safeSpace + MediaQuery.paddingOf(context).bottom,
+      ),
       sliver: SliverToBoxAdapter(
-        child: !widget.loadingStatus || bangumiItem != null
+        child: !widget.isLoading || bangumiItem != null
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -232,19 +234,33 @@ class _BangumiInfoState extends State<BangumiInfo>
                     children: [
                       Stack(
                         children: [
-                          NetworkImgLayer(
-                            width: isLandscape ? 160 : 105,
-                            height: isLandscape ? 105 : 160,
-                            src: !widget.loadingStatus
-                                ? widget.bangumiDetail!.cover!
-                                : bangumiItem!.cover!,
-                            semanticsLabel: '封面',
+                          GestureDetector(
+                            onTap: () => context.imageView(
+                              imgList: [
+                                !widget.isLoading
+                                    ? widget.bangumiDetail!.cover!
+                                    : bangumiItem!.cover!
+                              ],
+                            ),
+                            child: Hero(
+                              tag: !widget.isLoading
+                                  ? widget.bangumiDetail!.cover!
+                                  : bangumiItem!.cover!,
+                              child: NetworkImgLayer(
+                                width: isLandscape ? 115 / 0.75 : 115,
+                                height: isLandscape ? 115 : 115 / 0.75,
+                                src: !widget.isLoading
+                                    ? widget.bangumiDetail!.cover!
+                                    : bangumiItem!.cover!,
+                                semanticsLabel: '封面',
+                              ),
+                            ),
                           ),
                           if (bangumiItem != null &&
                               bangumiItem!.rating != null)
                             PBadge(
                               text:
-                                  '评分 ${!widget.loadingStatus ? widget.bangumiDetail!.rating!['score']! : bangumiItem!.rating!['score']!}',
+                                  '评分 ${!widget.isLoading ? widget.bangumiDetail!.rating!['score']! : bangumiItem!.rating!['score']!}',
                               top: null,
                               right: 6,
                               bottom: 6,
@@ -254,19 +270,20 @@ class _BangumiInfoState extends State<BangumiInfo>
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: InkWell(
+                        child: GestureDetector(
                           onTap: showIntroDetail,
                           child: SizedBox(
-                            height: isLandscape ? 103 : 158,
+                            height: isLandscape ? 115 : 115 / 0.75,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        !widget.loadingStatus
+                                        !widget.isLoading
                                             ? widget.bangumiDetail!.title!
                                             : bangumiItem!.title!,
                                         style: const TextStyle(
@@ -280,8 +297,12 @@ class _BangumiInfoState extends State<BangumiInfo>
                                     Obx(
                                       () => FilledButton.tonal(
                                         style: FilledButton.styleFrom(
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
+                                            horizontal: 20,
+                                            vertical: 10,
+                                          ),
                                           visualDensity: const VisualDensity(
                                             horizontal: -2,
                                             vertical: -2,
@@ -330,7 +351,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                                     statView(
                                       context: context,
                                       theme: 'gray',
-                                      view: !widget.loadingStatus
+                                      view: !widget.isLoading
                                           ? widget.bangumiDetail!.stat!['views']
                                           : bangumiItem!.stat!['views'],
                                       size: 'medium',
@@ -339,7 +360,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                                     statDanMu(
                                       context: context,
                                       theme: 'gray',
-                                      danmu: !widget.loadingStatus
+                                      danmu: !widget.isLoading
                                           ? widget
                                               .bangumiDetail!.stat!['danmakus']
                                           : bangumiItem!.stat!['danmakus'],
@@ -372,7 +393,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                                       t: t),
                                 const Spacer(),
                                 Text(
-                                  '简介：${!widget.loadingStatus ? widget.bangumiDetail!.evaluate! : bangumiItem!.evaluate!}',
+                                  '简介：${!widget.isLoading ? widget.bangumiDetail!.evaluate! : bangumiItem!.evaluate!}',
                                   maxLines: isLandscape ? 2 : 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -401,7 +422,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                   // 点赞收藏转发 布局样式2
                   actionGrid(context, bangumiIntroController),
                   // 番剧分p
-                  if ((!widget.loadingStatus &&
+                  if ((!widget.isLoading &&
                           widget.bangumiDetail!.episodes!.isNotEmpty) ||
                       bangumiItem != null &&
                           bangumiItem!.episodes!.isNotEmpty) ...[
@@ -452,7 +473,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                     selectStatus: bangumiIntroController.hasLike.value,
                     loadingStatus: false,
                     semanticsLabel: '点赞',
-                    text: !widget.loadingStatus
+                    text: !widget.isLoading
                         ? Utils.numFormat(widget.bangumiDetail!.stat!['likes']!)
                         : Utils.numFormat(
                             bangumiItem!.stat!['likes']!,
@@ -482,7 +503,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                     selectStatus: bangumiIntroController.hasCoin.value,
                     loadingStatus: false,
                     semanticsLabel: '投币',
-                    text: !widget.loadingStatus
+                    text: !widget.isLoading
                         ? Utils.numFormat(widget.bangumiDetail!.stat!['coins']!)
                         : Utils.numFormat(
                             bangumiItem!.stat!['coins']!,
@@ -499,7 +520,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                     selectStatus: bangumiIntroController.hasFav.value,
                     loadingStatus: false,
                     semanticsLabel: '收藏',
-                    text: !widget.loadingStatus
+                    text: !widget.isLoading
                         ? Utils.numFormat(
                             widget.bangumiDetail!.stat!['favorite']!)
                         : Utils.numFormat(
@@ -515,7 +536,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                   selectStatus: false,
                   loadingStatus: false,
                   semanticsLabel: '评论',
-                  text: !widget.loadingStatus
+                  text: !widget.isLoading
                       ? Utils.numFormat(widget.bangumiDetail!.stat!['reply']!)
                       : Utils.numFormat(bangumiItem!.stat!['reply']!),
                 ),
@@ -525,7 +546,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                     selectStatus: false,
                     loadingStatus: false,
                     semanticsLabel: '转发',
-                    text: !widget.loadingStatus
+                    text: !widget.isLoading
                         ? Utils.numFormat(widget.bangumiDetail!.stat!['share']!)
                         : Utils.numFormat(bangumiItem!.stat!['share']!)),
               ],
@@ -543,8 +564,8 @@ class _BangumiInfoState extends State<BangumiInfo>
           icon: const Icon(FontAwesomeIcons.thumbsUp),
           onTap: () => handleState(videoIntroController.actionLikeVideo),
           selectStatus: videoIntroController.hasLike.value,
-          loadingStatus: widget.loadingStatus,
-          text: !widget.loadingStatus
+          loadingStatus: widget.isLoading,
+          text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['likes']!.toString()
               : '-',
         ),
@@ -555,8 +576,8 @@ class _BangumiInfoState extends State<BangumiInfo>
           icon: const Icon(FontAwesomeIcons.b),
           onTap: () => handleState(videoIntroController.actionCoinVideo),
           selectStatus: videoIntroController.hasCoin.value,
-          loadingStatus: widget.loadingStatus,
-          text: !widget.loadingStatus
+          loadingStatus: widget.isLoading,
+          text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['coins']!.toString()
               : '-',
         ),
@@ -567,8 +588,8 @@ class _BangumiInfoState extends State<BangumiInfo>
           icon: const Icon(FontAwesomeIcons.heart),
           onTap: () => showFavBottomSheet(),
           selectStatus: videoIntroController.hasFav.value,
-          loadingStatus: widget.loadingStatus,
-          text: !widget.loadingStatus
+          loadingStatus: widget.isLoading,
+          text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['favorite']!.toString()
               : '-',
         ),
@@ -580,8 +601,8 @@ class _BangumiInfoState extends State<BangumiInfo>
           videoDetailCtr.tabCtr.animateTo(1);
         },
         selectStatus: false,
-        loadingStatus: widget.loadingStatus,
-        text: !widget.loadingStatus
+        loadingStatus: widget.isLoading,
+        text: !widget.isLoading
             ? widget.bangumiDetail!.stat!['reply']!.toString()
             : '-',
       ),
@@ -590,7 +611,7 @@ class _BangumiInfoState extends State<BangumiInfo>
           icon: const Icon(FontAwesomeIcons.share),
           onTap: () => videoIntroController.actionShareVideo(),
           selectStatus: false,
-          loadingStatus: widget.loadingStatus,
+          loadingStatus: widget.isLoading,
           text: '转发'),
     ]);
   }
@@ -666,7 +687,7 @@ class AreasAndPubTime extends StatelessWidget {
     return Row(
       children: [
         Text(
-          !widget.loadingStatus
+          !widget.isLoading
               ? (widget.bangumiDetail!.areas!.isNotEmpty
                   ? widget.bangumiDetail!.areas!.first['name']
                   : '')
@@ -680,7 +701,7 @@ class AreasAndPubTime extends StatelessWidget {
         ),
         const SizedBox(width: 6),
         Text(
-          !widget.loadingStatus
+          !widget.isLoading
               ? widget.bangumiDetail!.publish!['pub_time_show']
               : bangumiItem!.publish!['pub_time_show'],
           style: TextStyle(
@@ -708,7 +729,7 @@ class NewEpDesc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      !widget.loadingStatus
+      !widget.isLoading
           ? widget.bangumiDetail!.newEp!['desc']
           : bangumiItem!.newEp!['desc'],
       style: TextStyle(

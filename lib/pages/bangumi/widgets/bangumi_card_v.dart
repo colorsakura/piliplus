@@ -83,14 +83,9 @@ class BangumiCardV extends StatelessWidget {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: StyleString.imgRadius,
-                  topRight: StyleString.imgRadius,
-                  bottomLeft: StyleString.imgRadius,
-                  bottomRight: StyleString.imgRadius,
-                ),
+                borderRadius: const BorderRadius.all(StyleString.imgRadius),
                 child: AspectRatio(
-                  aspectRatio: 0.65,
+                  aspectRatio: 0.75,
                   child: LayoutBuilder(builder: (context, boxConstraints) {
                     final double maxWidth = boxConstraints.maxWidth;
                     final double maxHeight = boxConstraints.maxHeight;
@@ -106,11 +101,12 @@ class BangumiCardV extends StatelessWidget {
                         ),
                         if (bangumiItem.badge != null)
                           PBadge(
-                              text: bangumiItem.badge,
-                              top: 6,
-                              right: 6,
-                              bottom: null,
-                              left: null),
+                            text: bangumiItem.badge,
+                            top: 6,
+                            right: 6,
+                            bottom: null,
+                            left: null,
+                          ),
                         if (bangumiItem.order != null)
                           PBadge(
                             text: bangumiItem.order,

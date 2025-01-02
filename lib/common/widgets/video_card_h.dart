@@ -145,7 +145,7 @@ class VideoCardH extends StatelessWidget {
       if (source == 'normal')
         Positioned(
           bottom: 0,
-          right: 0,
+          right: 12,
           child: VideoPopupMenu(
             size: 29,
             iconSize: 17,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -146,7 +147,8 @@ class VideoIntroController extends GetxController
         final videoDetailController =
             Get.find<VideoDetailController>(tag: heroTag);
         if (videoDetailController.videoItem['pic'] == null ||
-            videoDetailController.videoItem['pic'] == '') {
+            videoDetailController.videoItem['pic'] == '' ||
+            videoDetailController.videoUrl.isNullOrEmpty) {
           videoDetailController.videoItem['pic'] = result['data'].pic;
         }
       } catch (_) {}

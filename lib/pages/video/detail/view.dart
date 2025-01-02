@@ -73,7 +73,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   double doubleOffset = 0;
 
-  late Future _futureBuilderFuture;
   // 自动退出全屏
   late bool autoExitFullscreen;
   late bool autoPlayEnable;
@@ -194,7 +193,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   // 获取视频资源，初始化播放器
   Future<void> videoSourceInit() async {
-    _futureBuilderFuture = videoDetailController.queryVideoUrl();
+    videoDetailController.queryVideoUrl();
     if (videoDetailController.showReply) {
       _videoReplyController.queryData();
     }
@@ -289,6 +288,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         videoDetailController.audioUrl == null) {
       // SmartDialog.showToast('not initialized');
       debugPrint('not initialized');
+      if (videoDetailController.isQuerying.not) {
+        videoDetailController.queryVideoUrl();
+      }
       return;
     }
     plPlayerController = videoDetailController.plPlayerController;
@@ -985,8 +987,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Widget get manualPlayerWidget => Obx(
         () => Visibility(
-          visible: videoDetailController.isShowCover.value &&
-              videoDetailController.isEffective.value,
+          visible: videoDetailController.isShowCover.value,
           child: Stack(
             children: [
               Positioned(
@@ -1084,42 +1085,35 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         ),
       );
 
-  Widget get plPlayer => FutureBuilder(
-        future: _futureBuilderFuture,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData && snapshot.data['status']) {
-            return Obx(
-              () => !videoDetailController.autoPlay.value ||
-                      plPlayerController == null ||
-                      plPlayerController!.videoController == null
-                  ? nil
-                  : PLVideoPlayer(
-                      plPlayerController: plPlayerController!,
-                      videoIntroController:
-                          videoDetailController.videoType == SearchType.video
-                              ? videoIntroController
-                              : null,
-                      bangumiIntroController: videoDetailController.videoType ==
-                              SearchType.media_bangumi
-                          ? bangumiIntroController
-                          : null,
-                      headerControl: videoDetailController.headerControl,
-                      danmuWidget: Obx(
-                        () => PlDanmaku(
-                          key: Key(videoDetailController.danmakuCid.value
-                              .toString()),
-                          cid: videoDetailController.danmakuCid.value,
-                          playerController: plPlayerController!,
-                        ),
+  Widget get plPlayer => Obx(
+        () => videoDetailController.videoState.value is! Success
+            ? nil
+            : !videoDetailController.autoPlay.value ||
+                    plPlayerController == null ||
+                    plPlayerController!.videoController == null
+                ? nil
+                : PLVideoPlayer(
+                    plPlayerController: plPlayerController!,
+                    videoIntroController:
+                        videoDetailController.videoType == SearchType.video
+                            ? videoIntroController
+                            : null,
+                    bangumiIntroController: videoDetailController.videoType ==
+                            SearchType.media_bangumi
+                        ? bangumiIntroController
+                        : null,
+                    headerControl: videoDetailController.headerControl,
+                    danmuWidget: Obx(
+                      () => PlDanmaku(
+                        key: Key(
+                            videoDetailController.danmakuCid.value.toString()),
+                        cid: videoDetailController.danmakuCid.value,
+                        playerController: plPlayerController!,
                       ),
-                      showEpisodes: showEpisodes,
-                      showViewPoints: showViewPoints,
                     ),
-            );
-          } else {
-            return const SizedBox();
-          }
-        },
+                    showEpisodes: showEpisodes,
+                    showViewPoints: showViewPoints,
+                  ),
       );
 
   Widget autoChoose(Widget childWhenDisabled) {

@@ -71,8 +71,10 @@ class _WhisperPageState extends State<WhisperPage> {
       ),
       body: refreshIndicator(
         onRefresh: () async {
-          await _whisperController.queryMsgFeedUnread();
-          await _whisperController.onRefresh();
+          await Future.wait([
+            _whisperController.queryMsgFeedUnread(),
+            _whisperController.onRefresh(),
+          ]);
         },
         child: SingleChildScrollView(
           controller: _scrollController,

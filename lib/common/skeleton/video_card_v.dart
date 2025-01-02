@@ -45,6 +45,17 @@ class VideoCardVSkeleton extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 12),
                   color: Theme.of(context).colorScheme.onInverseSurface,
                 ),
+                Container(
+                  width: 110,
+                  height: 13,
+                  margin: const EdgeInsets.only(bottom: 5),
+                  color: Theme.of(context).colorScheme.onInverseSurface,
+                ),
+                Container(
+                  width: 75,
+                  height: 13,
+                  color: Theme.of(context).colorScheme.onInverseSurface,
+                ),
               ],
             ),
           ),
