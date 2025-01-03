@@ -1502,7 +1502,7 @@ List<SettingsModel> get extraSettings => [
           style: Theme.of(Get.context!).textTheme.titleSmall,
         ),
         onTap: (setState) {
-          dynamic danmakuLineHeight = GStorage.danmakuLineHeight.toString();
+          String danmakuLineHeight = GStorage.danmakuLineHeight.toString();
           showDialog(
             context: Get.context!,
             builder: (context) {
@@ -1532,13 +1532,13 @@ List<SettingsModel> get extraSettings => [
                   TextButton(
                     onPressed: () async {
                       Get.back();
-                      danmakuLineHeight = max(
-                        1.0,
-                        double.tryParse(danmakuLineHeight) ?? 1.6,
-                      );
                       await GStorage.setting.put(
                         SettingBoxKey.danmakuLineHeight,
-                        danmakuLineHeight,
+                        max(
+                          1.0,
+                          double.tryParse(danmakuLineHeight)?.toPrecision(1) ??
+                              1.6,
+                        ),
                       );
                       setState();
                     },
