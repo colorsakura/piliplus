@@ -164,13 +164,14 @@ class ChatItem extends StatelessWidget {
                   SmartDialog.showLoading();
                   var bvid = content["bvid"];
                   final int cid = await SearchHttp.ab2c(bvid: bvid);
-                  final String heroTag = Utils.makeHeroTag(bvid);
                   SmartDialog.dismiss<dynamic>().then(
-                    (e) => Get.toNamed<dynamic>('/video?bvid=$bvid&cid=$cid',
-                        arguments: <String, String?>{
-                          'pic': content['thumb'],
-                          'heroTag': heroTag,
-                        }),
+                    (e) => Get.toNamed<dynamic>(
+                      '/video?bvid=$bvid&cid=$cid',
+                      arguments: <String, String?>{
+                        'pic': content['thumb'],
+                        'heroTag': Utils.makeHeroTag(bvid),
+                      },
+                    ),
                   );
                 },
                 child: NetworkImgLayer(
@@ -211,13 +212,14 @@ class ChatItem extends StatelessWidget {
                     SmartDialog.showLoading();
                     var bvid = content["bvid"];
                     final int cid = await SearchHttp.ab2c(bvid: bvid);
-                    final String heroTag = Utils.makeHeroTag(bvid);
-                    SmartDialog.dismiss<dynamic>().then(
-                      (e) => Get.toNamed<dynamic>('/video?bvid=$bvid&cid=$cid',
-                          arguments: <String, String?>{
-                            'pic': content['thumb'],
-                            'heroTag': heroTag,
-                          }),
+                    SmartDialog.dismiss().then(
+                      (_) => Get.toNamed(
+                        '/video?bvid=$bvid&cid=$cid',
+                        arguments: {
+                          'pic': content['thumb'],
+                          'heroTag': Utils.makeHeroTag(bvid),
+                        },
+                      ),
                     );
                   } catch (err) {
                     SmartDialog.dismiss();
@@ -297,13 +299,12 @@ class ChatItem extends StatelessWidget {
                             try {
                               SmartDialog.showLoading();
                               final int cid = await SearchHttp.ab2c(bvid: bvid);
-                              final String heroTag = Utils.makeHeroTag(bvid);
                               SmartDialog.dismiss<dynamic>().then(
                                 (e) => Get.toNamed<dynamic>(
                                     '/video?bvid=$bvid&cid=$cid',
                                     arguments: <String, String?>{
                                       'pic': i['cover_url'],
-                                      'heroTag': heroTag,
+                                      'heroTag': Utils.makeHeroTag(bvid),
                                     }),
                               );
                             } catch (err) {

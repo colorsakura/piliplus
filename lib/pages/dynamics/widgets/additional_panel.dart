@@ -1,3 +1,4 @@
+import 'package:PiliPalaX/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -34,8 +35,13 @@ Widget addWidget(item, context, type, {floor = 1}) {
             String cover = dynamicProperty[type].cover;
             try {
               int cid = await SearchHttp.ab2c(bvid: bvid);
-              Get.toNamed('/video?bvid=$bvid&cid=$cid',
-                  arguments: {'pic': cover, 'heroTag': bvid});
+              Get.toNamed(
+                '/video?bvid=$bvid&cid=$cid',
+                arguments: {
+                  'pic': cover,
+                  'heroTag': Utils.makeHeroTag(bvid),
+                },
+              );
             } catch (err) {
               SmartDialog.showToast(err.toString());
             }

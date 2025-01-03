@@ -177,12 +177,11 @@ class LaterController extends MultiSelectController {
           if (item.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
-          final String heroTag = Utils.makeHeroTag(item.bvid);
           Get.toNamed(
             '/video?bvid=${item.bvid}&cid=${item.cid}',
             arguments: {
               'videoItem': item,
-              'heroTag': heroTag,
+              'heroTag': Utils.makeHeroTag(item.bvid),
               'sourceType': 'watchLater',
               'count': list.length,
               'favTitle': '稍后再看',

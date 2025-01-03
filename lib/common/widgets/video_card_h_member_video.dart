@@ -27,7 +27,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
   Widget build(BuildContext context) {
     final int aid = int.tryParse(videoItem.param ?? '') ?? -1;
     final String bvid = videoItem.bvid ?? '';
-    final String heroTag = Utils.makeHeroTag(aid);
     return Stack(
       children: [
         InkWell(
@@ -42,8 +41,12 @@ class VideoCardHMemberVideo extends StatelessWidget {
               return;
             }
             try {
-              Get.toNamed('/video?bvid=$bvid&cid=${videoItem.firstCid}',
-                  arguments: {'heroTag': heroTag});
+              Get.toNamed(
+                '/video?bvid=$bvid&cid=${videoItem.firstCid}',
+                arguments: {
+                  'heroTag': Utils.makeHeroTag(aid),
+                },
+              );
             } catch (err) {
               SmartDialog.showToast(err.toString());
             }
@@ -68,14 +71,11 @@ class VideoCardHMemberVideo extends StatelessWidget {
                           final double maxHeight = boxConstraints.maxHeight;
                           return Stack(
                             children: [
-                              Hero(
-                                tag: heroTag,
-                                child: NetworkImgLayer(
-                                  src: videoItem.cover,
-                                  // videoItem.season?['cover'] ?? videoItem.cover,
-                                  width: maxWidth,
-                                  height: maxHeight,
-                                ),
+                              NetworkImgLayer(
+                                src: videoItem.cover,
+                                // videoItem.season?['cover'] ?? videoItem.cover,
+                                width: maxWidth,
+                                height: maxHeight,
                               ),
                               // if (videoItem.season != null)
                               //   PBadge(

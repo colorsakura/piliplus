@@ -17,7 +17,6 @@ class MemberSeasonsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(seasonItem.aid);
     return Card(
       elevation: 0,
       clipBehavior: Clip.hardEdge,
@@ -26,8 +25,13 @@ class MemberSeasonsItem extends StatelessWidget {
         onTap: () async {
           int cid =
               await SearchHttp.ab2c(aid: seasonItem.aid, bvid: seasonItem.bvid);
-          Get.toNamed('/video?bvid=${seasonItem.bvid}&cid=$cid',
-              arguments: {'videoItem': seasonItem, 'heroTag': heroTag});
+          Get.toNamed(
+            '/video?bvid=${seasonItem.bvid}&cid=$cid',
+            arguments: {
+              'videoItem': seasonItem,
+              'heroTag': Utils.makeHeroTag(seasonItem.aid)
+            },
+          );
         },
         child: Column(
           children: [
@@ -38,13 +42,10 @@ class MemberSeasonsItem extends StatelessWidget {
                 double maxHeight = boxConstraints.maxHeight;
                 return Stack(
                   children: [
-                    Hero(
-                      tag: heroTag,
-                      child: NetworkImgLayer(
-                        src: seasonItem.pic,
-                        width: maxWidth,
-                        height: maxHeight,
-                      ),
+                    NetworkImgLayer(
+                      src: seasonItem.pic,
+                      width: maxWidth,
+                      height: maxHeight,
                     ),
                     if (seasonItem.pubdate != null)
                       PBadge(

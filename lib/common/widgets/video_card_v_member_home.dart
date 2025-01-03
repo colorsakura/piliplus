@@ -64,11 +64,14 @@ class VideoCardVMemberHome extends StatelessWidget {
       // break;
       case 'av':
         String bvid = videoItem.bvid ?? '';
-        Get.toNamed('/video?bvid=$bvid&cid=${videoItem.firstCid}', arguments: {
-          // 'videoItem': videoItem,
-          'pic': videoItem.cover,
-          'heroTag': heroTag,
-        });
+        Get.toNamed(
+          '/video?bvid=$bvid&cid=${videoItem.firstCid}',
+          arguments: {
+            // 'videoItem': videoItem,
+            'pic': videoItem.cover,
+            'heroTag': heroTag,
+          },
+        );
         break;
       // 动态
       // case 'picture':
@@ -128,7 +131,6 @@ class VideoCardVMemberHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(videoItem.bvid);
     // List<VideoCustomAction> actions =
     //     VideoCustomActions(videoItem, context).actions;
     return Stack(children: [
@@ -143,7 +145,7 @@ class VideoCardVMemberHome extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           margin: EdgeInsets.zero,
           child: InkWell(
-            onTap: () async => onPushDetail(heroTag),
+            onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.bvid)),
             onLongPress: () => imageSaveDialog(
               context: context,
               title: videoItem.title,
@@ -158,13 +160,10 @@ class VideoCardVMemberHome extends StatelessWidget {
                     double maxHeight = boxConstraints.maxHeight;
                     return Stack(
                       children: [
-                        Hero(
-                          tag: heroTag,
-                          child: NetworkImgLayer(
-                            src: videoItem.cover,
-                            width: maxWidth,
-                            height: maxHeight,
-                          ),
+                        NetworkImgLayer(
+                          src: videoItem.cover,
+                          width: maxWidth,
+                          height: maxHeight,
                         ),
                         if ((videoItem.duration ?? -1) > 0)
                           PBadge(

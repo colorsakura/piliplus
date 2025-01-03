@@ -59,13 +59,6 @@ class VideoCardHGrpc extends StatelessWidget {
             }
             try {
               PiliScheme.routePush(Uri.parse(videoItem.smallCoverV5.base.uri));
-              // final int cid =
-              //     videoItem.smallCoverV5.base.playerArgs.cid.toInt() ??
-              //         await SearchHttp.ab2c(aid: aid, bvid: bvid);
-              // Get.toNamed('/video?bvid=$bvid&cid=$cid',
-              //     arguments: {'heroTag': heroTag});
-              // Get.toNamed('/video?bvid=$bvid&cid=$cid',
-              //     arguments: {'videoItem': videoItem, 'heroTag': heroTag});
             } catch (err) {
               SmartDialog.showToast(err.toString());
             }

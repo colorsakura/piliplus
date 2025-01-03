@@ -89,8 +89,13 @@ class DynamicsController extends GetxController
         String cover = item.modules.moduleDynamic.major.archive.cover;
         try {
           int cid = await SearchHttp.ab2c(bvid: bvid);
-          Utils.toDupNamed('/video?bvid=$bvid&cid=$cid',
-              arguments: {'pic': cover, 'heroTag': bvid});
+          Utils.toDupNamed(
+            '/video?bvid=$bvid&cid=$cid',
+            arguments: {
+              'pic': cover,
+              'heroTag': Utils.makeHeroTag(bvid),
+            },
+          );
         } catch (err) {
           SmartDialog.showToast(err.toString());
         }
@@ -162,8 +167,13 @@ class DynamicsController extends GetxController
         String bvid = IdUtils.av2bv(aid);
         String cover = ugcSeason.cover!;
         int cid = await SearchHttp.ab2c(bvid: bvid);
-        Utils.toDupNamed('/video?bvid=$bvid&cid=$cid',
-            arguments: {'pic': cover, 'heroTag': bvid});
+        Utils.toDupNamed(
+          '/video?bvid=$bvid&cid=$cid',
+          arguments: {
+            'pic': cover,
+            'heroTag': Utils.makeHeroTag(bvid),
+          },
+        );
         break;
 
       /// 番剧查看

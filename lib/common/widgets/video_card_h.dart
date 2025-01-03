@@ -41,7 +41,6 @@ class VideoCardH extends StatelessWidget {
     try {
       type = videoItem.type;
     } catch (_) {}
-    final String heroTag = Utils.makeHeroTag(aid);
     return Stack(children: [
       Semantics(
         label: Utils.videoItemSemantics(videoItem),
@@ -81,8 +80,13 @@ class VideoCardH extends StatelessWidget {
             try {
               final int cid =
                   videoItem.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
-              Get.toNamed('/video?bvid=$bvid&cid=$cid',
-                  arguments: {'videoItem': videoItem, 'heroTag': heroTag});
+              Get.toNamed(
+                '/video?bvid=$bvid&cid=$cid',
+                arguments: {
+                  'videoItem': videoItem,
+                  'heroTag': Utils.makeHeroTag(aid)
+                },
+              );
             } catch (err) {
               SmartDialog.showToast(err.toString());
             }
@@ -105,13 +109,10 @@ class VideoCardH extends StatelessWidget {
                       final double maxHeight = boxConstraints.maxHeight;
                       return Stack(
                         children: [
-                          Hero(
-                            tag: heroTag,
-                            child: NetworkImgLayer(
-                              src: videoItem.pic as String,
-                              width: maxWidth,
-                              height: maxHeight,
-                            ),
+                          NetworkImgLayer(
+                            src: videoItem.pic as String,
+                            width: maxWidth,
+                            height: maxHeight,
                           ),
                           if (videoItem.duration != 0)
                             PBadge(

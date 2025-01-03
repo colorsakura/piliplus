@@ -73,7 +73,6 @@ class SearchPanelController extends CommonController {
     }
     if (matchKeys.isNotEmpty && searchType == SearchType.video ||
         aid.toString() == keyword) {
-      String heroTag = Utils.makeHeroTag(bvid);
       int cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
       if (matchKeys.isNotEmpty &&
               matchKeys.first == 'BV' &&
@@ -84,7 +83,10 @@ class SearchPanelController extends CommonController {
           aid.toString() == keyword) {
         Get.toNamed(
           '/video?bvid=$bvid&cid=$cid',
-          arguments: {'videoItem': resultList.first, 'heroTag': heroTag},
+          arguments: {
+            'videoItem': resultList.first,
+            'heroTag': Utils.makeHeroTag(bvid),
+          },
         );
       }
     }

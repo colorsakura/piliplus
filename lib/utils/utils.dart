@@ -416,12 +416,11 @@ class Utils {
       dynamic bvid = episode?.bvid;
       dynamic cid = episode?.cid;
       dynamic pic = episode?.cover;
-      dynamic heroTag = Utils.makeHeroTag(cid);
       Utils.toDupNamed(
         '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${episode?.epId}&type=${result['data'].type}',
         arguments: {
           'pic': pic,
-          'heroTag': heroTag,
+          'heroTag': Utils.makeHeroTag(cid),
           'videoType': SearchType.media_bangumi,
           'bangumiItem': result['data'],
         },

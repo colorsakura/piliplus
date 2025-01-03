@@ -32,7 +32,6 @@ class HistoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     int aid = videoItem.history.oid;
     String bvid = videoItem.history.bvid ?? IdUtils.av2bv(aid);
-    String heroTag = Utils.makeHeroTag(aid);
     return InkWell(
       onTap: () async {
         if (ctr is MultiSelectController && ctr!.enableMultiSelect.value) {
@@ -79,26 +78,19 @@ class HistoryItem extends StatelessWidget {
             var result = await VideoHttp.videoIntro(bvid: bvid);
             if (result['status']) {
               String bvid = result['data'].bvid!;
-              int cid = result['data'].cid!;
-              // String pic = result['data'].pic!;
-              String heroTag = Utils.makeHeroTag(cid);
               var epid = result['data'].epId;
               if (epid != null) {
                 Utils.viewBangumi(epId: epid);
-                // Get.toNamed(
-                //   '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${result['data'].epId}',
-                //   arguments: {
-                //     'pic': pic,
-                //     'heroTag': heroTag,
-                //     'videoType': SearchType.media_bangumi,
-                //   },
-                // );
               } else {
                 int cid = videoItem.history.cid ??
-                    // videoItem.history.oid ??
                     await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                Get.toNamed('/video?bvid=$bvid&cid=$cid',
-                    arguments: {'heroTag': heroTag, 'pic': videoItem.cover});
+                Get.toNamed(
+                  '/video?bvid=$bvid&cid=$cid',
+                  arguments: {
+                    'heroTag': Utils.makeHeroTag(cid),
+                    'pic': videoItem.cover,
+                  },
+                );
               }
             } else {
               SmartDialog.showToast(result['msg']);
@@ -147,8 +139,13 @@ class HistoryItem extends StatelessWidget {
           int cid = videoItem.history.cid ??
               // videoItem.history.oid ??
               await SearchHttp.ab2c(aid: aid, bvid: bvid);
-          Get.toNamed('/video?bvid=$bvid&cid=$cid',
-              arguments: {'heroTag': heroTag, 'pic': videoItem.cover});
+          Get.toNamed(
+            '/video?bvid=$bvid&cid=$cid',
+            arguments: {
+              'heroTag': Utils.makeHeroTag(aid),
+              'pic': videoItem.cover,
+            },
+          );
         }
       },
       onLongPress: () {
@@ -191,16 +188,13 @@ class HistoryItem extends StatelessWidget {
                             double maxHeight = boxConstraints.maxHeight;
                             return Stack(
                               children: [
-                                Hero(
-                                  tag: heroTag,
-                                  child: NetworkImgLayer(
-                                    radius: 12,
-                                    src: (videoItem.cover != ''
-                                        ? videoItem.cover
-                                        : videoItem.covers.first),
-                                    width: maxWidth,
-                                    height: maxHeight,
-                                  ),
+                                NetworkImgLayer(
+                                  radius: 12,
+                                  src: (videoItem.cover != ''
+                                      ? videoItem.cover
+                                      : videoItem.covers.first),
+                                  width: maxWidth,
+                                  height: maxHeight,
                                 ),
                                 if (!BusinessType
                                     .hiddenDurationType.hiddenDurationType

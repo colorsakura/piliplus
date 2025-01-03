@@ -258,7 +258,9 @@ class SearchDynamic extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           '/video?bvid=${IdUtils.av2bv(json['aid'])}&cid=${json['cid']}',
-          arguments: {'heroTag': Utils.makeHeroTag(json['aid'])},
+          arguments: {
+            'heroTag': Utils.makeHeroTag(json['aid']),
+          },
         );
       },
       title: Text(

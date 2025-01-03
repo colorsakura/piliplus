@@ -26,7 +26,6 @@ class SubVideoCardH extends StatelessWidget {
   Widget build(BuildContext context) {
     int id = videoItem.id!;
     String bvid = videoItem.bvid!;
-    String heroTag = Utils.makeHeroTag(id);
     return InkWell(
       onTap: () async {
         int cid = await SearchHttp.ab2c(bvid: bvid);
@@ -35,11 +34,15 @@ class SubVideoCardH extends StatelessWidget {
           'cid': cid.toString(),
         };
 
-        Get.toNamed('/video', parameters: parameters, arguments: {
-          'videoItem': videoItem,
-          'heroTag': heroTag,
-          'videoType': SearchType.video,
-        });
+        Get.toNamed(
+          '/video',
+          parameters: parameters,
+          arguments: {
+            'videoItem': videoItem,
+            'heroTag': Utils.makeHeroTag(id),
+            'videoType': SearchType.video,
+          },
+        );
       },
       onLongPress: () => imageSaveDialog(
         context: context,
@@ -69,13 +72,10 @@ class SubVideoCardH extends StatelessWidget {
                         double maxHeight = boxConstraints.maxHeight;
                         return Stack(
                           children: [
-                            Hero(
-                              tag: heroTag,
-                              child: NetworkImgLayer(
-                                src: videoItem.cover,
-                                width: maxWidth,
-                                height: maxHeight,
-                              ),
+                            NetworkImgLayer(
+                              src: videoItem.cover,
+                              width: maxWidth,
+                              height: maxHeight,
                             ),
                             PBadge(
                               text: Utils.timeFormat(videoItem.duration!),

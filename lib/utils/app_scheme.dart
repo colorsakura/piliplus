@@ -239,12 +239,11 @@ class PiliScheme {
       SmartDialog.showLoading<dynamic>(msg: '获取中...');
       final int cid = await SearchHttp.ab2c(bvid: bvidVal, aid: aidVal);
       SmartDialog.dismiss();
-      final String heroTag = Utils.makeHeroTag(aid);
       Utils.toDupNamed(
         '/video?bvid=$bvid&cid=$cid',
         arguments: <String, String?>{
           'pic': null,
-          'heroTag': heroTag,
+          'heroTag': Utils.makeHeroTag(aid),
         },
       );
     } catch (e) {

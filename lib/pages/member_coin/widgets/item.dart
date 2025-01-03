@@ -18,7 +18,6 @@ class MemberCoinsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(coinItem.aid);
     return Card(
       elevation: 0,
       clipBehavior: Clip.hardEdge,
@@ -27,8 +26,13 @@ class MemberCoinsItem extends StatelessWidget {
         onTap: () async {
           int cid =
               await SearchHttp.ab2c(aid: coinItem.aid, bvid: coinItem.bvid);
-          Get.toNamed('/video?bvid=${coinItem.bvid}&cid=$cid',
-              arguments: {'videoItem': coinItem, 'heroTag': heroTag});
+          Get.toNamed(
+            '/video?bvid=${coinItem.bvid}&cid=$cid',
+            arguments: {
+              'videoItem': coinItem,
+              'heroTag': Utils.makeHeroTag(coinItem.aid)
+            },
+          );
         },
         child: Column(
           children: [

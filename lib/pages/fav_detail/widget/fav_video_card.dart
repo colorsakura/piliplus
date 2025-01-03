@@ -37,7 +37,6 @@ class FavVideoCardH extends StatelessWidget {
   Widget build(BuildContext context) {
     int id = videoItem.id;
     String bvid = videoItem.bvid ?? IdUtils.av2bv(id);
-    String heroTag = Utils.makeHeroTag(id);
     return InkWell(
       onTap: () async {
         if (onTap != null) {
@@ -68,12 +67,16 @@ class FavVideoCardH extends StatelessWidget {
         // if (seasonId != null) {
         //   parameters['seasonId'] = seasonId.toString();
         // }
-        Get.toNamed('/video', parameters: parameters, arguments: {
-          'videoItem': videoItem,
-          'heroTag': heroTag,
-          'videoType':
-              epId != null ? SearchType.media_bangumi : SearchType.video,
-        });
+        Get.toNamed(
+          '/video',
+          parameters: parameters,
+          arguments: {
+            'videoItem': videoItem,
+            'heroTag': Utils.makeHeroTag(id),
+            'videoType':
+                epId != null ? SearchType.media_bangumi : SearchType.video,
+          },
+        );
       },
       onLongPress: () {
         if (onLongPress != null) {
@@ -109,13 +112,10 @@ class FavVideoCardH extends StatelessWidget {
                         double maxHeight = boxConstraints.maxHeight;
                         return Stack(
                           children: [
-                            Hero(
-                              tag: heroTag,
-                              child: NetworkImgLayer(
-                                src: videoItem.pic,
-                                width: maxWidth,
-                                height: maxHeight,
-                              ),
+                            NetworkImgLayer(
+                              src: videoItem.pic,
+                              width: maxWidth,
+                              height: maxHeight,
                             ),
                             PBadge(
                               text: Utils.timeFormat(videoItem.duration!),

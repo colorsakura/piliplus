@@ -43,12 +43,11 @@ class UrlUtils {
     if (matchRes.containsKey('BV')) {
       final String bv = matchRes['BV'];
       final int cid = await SearchHttp.ab2c(bvid: bv);
-      final String heroTag = Utils.makeHeroTag(bv);
       await Get.toNamed(
         '/video?bvid=$bv&cid=$cid',
         arguments: <String, String?>{
           'pic': '',
-          'heroTag': heroTag,
+          'heroTag': Utils.makeHeroTag(bv),
         },
         preventDuplicates: false,
       );

@@ -81,11 +81,14 @@ class VideoCardV extends StatelessWidget {
         if (cid == -1) {
           cid = await SearchHttp.ab2c(aid: videoItem.aid, bvid: bvid);
         }
-        Get.toNamed('/video?bvid=$bvid&cid=$cid', arguments: {
-          // 'videoItem': videoItem,
-          'pic': videoItem.pic,
-          'heroTag': heroTag,
-        });
+        Get.toNamed(
+          '/video?bvid=$bvid&cid=$cid',
+          arguments: {
+            // 'videoItem': videoItem,
+            'pic': videoItem.pic,
+            'heroTag': heroTag,
+          },
+        );
         break;
       // 动态
       case 'picture':
@@ -145,7 +148,6 @@ class VideoCardV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(videoItem.id);
     return Stack(children: [
       Semantics(
         label: Utils.videoItemSemantics(videoItem),
@@ -158,7 +160,7 @@ class VideoCardV extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           margin: EdgeInsets.zero,
           child: InkWell(
-            onTap: () async => onPushDetail(heroTag),
+            onTap: () => onPushDetail(Utils.makeHeroTag(videoItem.id)),
             onLongPress: () => imageSaveDialog(
               context: context,
               title: videoItem.title,
@@ -173,13 +175,10 @@ class VideoCardV extends StatelessWidget {
                     double maxHeight = boxConstraints.maxHeight;
                     return Stack(
                       children: [
-                        Hero(
-                          tag: heroTag,
-                          child: NetworkImgLayer(
-                            src: videoItem.pic,
-                            width: maxWidth,
-                            height: maxHeight,
-                          ),
+                        NetworkImgLayer(
+                          src: videoItem.pic,
+                          width: maxWidth,
+                          height: maxHeight,
                         ),
                         if (videoItem.duration > 0)
                           PBadge(

@@ -1087,7 +1087,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Widget get plPlayer => Obx(
         () => videoDetailController.videoState.value is! Success
-            ? nil
+            ? const SizedBox.shrink()
             : !videoDetailController.autoPlay.value ||
                     plPlayerController == null ||
                     plPlayerController!.videoController == null

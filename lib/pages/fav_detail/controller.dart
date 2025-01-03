@@ -136,12 +136,11 @@ class FavDetailController extends MultiSelectController {
           if (element.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
-          final String heroTag = Utils.makeHeroTag(element.bvid);
           Get.toNamed(
             '/video?bvid=${element.bvid}&cid=${element.cid}',
             arguments: {
               'videoItem': element,
-              'heroTag': heroTag,
+              'heroTag': Utils.makeHeroTag(element.bvid),
               'sourceType': 'fav',
               'mediaId': item.value.id,
               'oid': element.id,
