@@ -2,10 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/http/constants.dart';
+import 'package:PiliPalaX/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPalaX/models/common/theme_type.dart';
+import 'package:PiliPalaX/models/common/up_panel_position.dart';
+import 'package:PiliPalaX/models/video/play/CDN.dart';
+import 'package:PiliPalaX/models/video/play/quality.dart';
+import 'package:PiliPalaX/models/video/play/subtitle.dart';
 import 'package:PiliPalaX/pages/member/new/controller.dart' show MemberTabType;
 import 'package:PiliPalaX/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType;
+import 'package:PiliPalaX/plugin/pl_player/models/bottom_progress_behavior.dart';
+import 'package:PiliPalaX/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -65,6 +72,120 @@ class GStorage {
             : item.color)
         .toList();
   }
+
+  static bool get hiddenSettingUnlocked =>
+      setting.get(SettingBoxKey.hiddenSettingUnlocked, defaultValue: false);
+
+  static bool get feedBackEnable =>
+      setting.get(SettingBoxKey.feedBackEnable, defaultValue: false);
+
+  static double get toastOpacity =>
+      setting.get(SettingBoxKey.defaultToastOp, defaultValue: 1.0);
+
+  static int get picQuality =>
+      setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
+
+  static ThemeType get themeType => ThemeType.values[GStorage.themeTypeInt];
+
+  static DynamicBadgeMode get dynamicBadgeType =>
+      DynamicBadgeMode.values[setting.get(
+        SettingBoxKey.dynamicBadgeMode,
+        defaultValue: DynamicBadgeMode.number.code,
+      )];
+
+  static int get defaultHomePage =>
+      setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0);
+
+  static int get previewQ =>
+      setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
+
+  static double get maxRowWidth =>
+      setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0);
+
+  static UpPanelPosition get upPanelPosition =>
+      UpPanelPosition.values[setting.get(SettingBoxKey.upPanelPosition,
+          defaultValue: UpPanelPosition.leftFixed.index)];
+
+  static int get defaultFullScreenMode =>
+      setting.get(SettingBoxKey.fullScreenMode,
+          defaultValue: FullScreenMode.values.first.code);
+
+  static int get defaultBtmProgressBehavior =>
+      setting.get(SettingBoxKey.btmProgressBehavior,
+          defaultValue: BtmProgressBehavior.values.first.code);
+
+  static String get defaultSubtitlePreference =>
+      setting.get(SettingBoxKey.subtitlePreference,
+          defaultValue: SubtitlePreference.values.first.code);
+
+  static int get defaultVideoQa => setting.get(
+        SettingBoxKey.defaultVideoQa,
+        defaultValue: VideoQuality.values.last.code,
+      );
+
+  static int get defaultVideoQaCellular => setting.get(
+        SettingBoxKey.defaultVideoQaCellular,
+        defaultValue: VideoQuality.high1080.code,
+      );
+
+  static int get defaultAudioQa => setting.get(
+        SettingBoxKey.defaultAudioQa,
+        defaultValue: AudioQuality.values.last.code,
+      );
+
+  static int get defaultAudioQaCellular => setting.get(
+        SettingBoxKey.defaultAudioQaCellular,
+        defaultValue: AudioQuality.k192.code,
+      );
+
+  static String get defaultDecode => setting.get(
+        SettingBoxKey.defaultDecode,
+        defaultValue: VideoDecodeFormats.values.last.code,
+      );
+
+  static String get secondDecode => setting.get(
+        SettingBoxKey.secondDecode,
+        defaultValue: VideoDecodeFormats.values[1].code,
+      );
+
+  static String get hardwareDecoding => setting.get(
+        SettingBoxKey.hardwareDecoding,
+        defaultValue: Platform.isAndroid ? 'auto-safe' : 'auto',
+      );
+
+  static String get videoSync => setting.get(
+        SettingBoxKey.videoSync,
+        defaultValue: 'display-resample',
+      );
+
+  static String get defaultCDNService => setting.get(
+        SettingBoxKey.CDNService,
+        defaultValue: CDNService.backupUrl.code,
+      );
+
+  static int get minDurationForRcmd =>
+      setting.get(SettingBoxKey.minDurationForRcmd, defaultValue: 0);
+
+  static String get banWordForRecommend =>
+      setting.get(SettingBoxKey.banWordForRecommend, defaultValue: '');
+
+  static int get minLikeRatioForRecommend =>
+      setting.get(SettingBoxKey.minLikeRatioForRecommend, defaultValue: 0);
+
+  static String get defaultRcmdType =>
+      setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'app');
+
+  static String get defaultSystemProxyHost =>
+      setting.get(SettingBoxKey.systemProxyHost, defaultValue: '');
+
+  static String get defaultSystemProxyPort =>
+      setting.get(SettingBoxKey.systemProxyPort, defaultValue: '');
+
+  static int get defaultReplySort =>
+      setting.get(SettingBoxKey.replySortType, defaultValue: 1);
+
+  static int get defaultDynamicType =>
+      setting.get(SettingBoxKey.defaultDynamicType, defaultValue: 0);
 
   static double get blockLimit =>
       setting.get(SettingBoxKey.blockLimit, defaultValue: 0.0);
@@ -183,11 +304,11 @@ class GStorage {
   static MemberTabType get memberTab => MemberTabType
       .values[setting.get(SettingBoxKey.memberTab, defaultValue: 0)];
 
-  static int get themeType =>
+  static int get themeTypeInt =>
       setting.get(SettingBoxKey.themeMode, defaultValue: ThemeType.system.code);
 
   static ThemeMode get themeMode {
-    return switch (themeType) {
+    return switch (themeTypeInt) {
       0 => ThemeMode.light,
       1 => ThemeMode.dark,
       _ => ThemeMode.system

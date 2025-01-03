@@ -6,6 +6,7 @@ Widget iconButton({
   required IconData icon,
   required VoidCallback? onPressed,
   double size = 36,
+  double? iconSize,
   Color? bgColor,
   Color? iconColor,
 }) {
@@ -17,7 +18,7 @@ Widget iconButton({
       onPressed: onPressed,
       icon: Icon(
         icon,
-        size: size / 2,
+        size: iconSize ?? size / 2,
         color: iconColor ?? Theme.of(context).colorScheme.onSecondaryContainer,
       ),
       style: IconButton.styleFrom(

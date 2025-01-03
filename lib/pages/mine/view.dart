@@ -19,7 +19,7 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   final MineController mineController = Get.put(MineController())
-    ..themeType.value = ThemeType.values[GStorage.themeType];
+    ..themeType.value = ThemeType.values[GStorage.themeTypeInt];
   late Future _futureBuilderFuture;
   StreamSubscription? _listener;
 

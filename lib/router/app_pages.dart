@@ -1,7 +1,9 @@
 import 'package:PiliPalaX/pages/member/new/member_page.dart';
 import 'package:PiliPalaX/pages/member/new/widget/edit_profile_page.dart';
 import 'package:PiliPalaX/pages/setting/navigation_bar_set.dart';
+import 'package:PiliPalaX/pages/setting/search_page.dart';
 import 'package:PiliPalaX/pages/setting/sponsor_block_page.dart';
+import 'package:PiliPalaX/pages/setting/view.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/widgets/create_fav_page.dart';
 import 'package:PiliPalaX/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,6 @@ import '../pages/msg_feed_top/sys_msg/view.dart';
 import '../pages/search/index.dart';
 import '../pages/search_result/index.dart';
 import '../pages/setting/extra_setting.dart';
-import '../pages/setting/index.dart';
 import '../pages/setting/pages/color_select.dart';
 import '../pages/setting/pages/display_mode.dart';
 import '../pages/setting/pages/font_size_select.dart';
@@ -174,6 +175,8 @@ class Routes {
     // navigation bar
     CustomGetPage(
         name: '/navbarSetting', page: () => const NavigationBarSetPage()),
+    CustomGetPage(
+        name: '/settingsSearch', page: () => const SettingsSearchPage()),
   ];
 }
 

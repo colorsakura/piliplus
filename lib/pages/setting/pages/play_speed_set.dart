@@ -217,13 +217,12 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
               ),
             ),
             ListTile(
-              dense: false,
               title: const Text('默认倍速'),
               subtitle: Text(playSpeedDefault.toString()),
             ),
             SetSwitchItem(
               title: '动态长按倍速',
-              subTitle: '根据默认倍速长按时自动双倍',
+              subtitle: '根据默认倍速长按时自动双倍',
               setKey: SettingBoxKey.enableAutoLongPressSpeed,
               defaultVal: enableAutoLongPressSpeed,
               onChanged: (val) {
@@ -237,7 +236,6 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
             ),
             if (!enableAutoLongPressSpeed)
               ListTile(
-                dense: false,
                 title: const Text('默认长按倍速'),
                 subtitle: Text(longPressSpeedDefault.toString()),
               ),

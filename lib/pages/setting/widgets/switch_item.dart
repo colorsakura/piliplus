@@ -5,19 +5,19 @@ import 'package:get/get.dart';
 
 class SetSwitchItem extends StatefulWidget {
   final String? title;
-  final String? subTitle;
+  final String? subtitle;
   final String? setKey;
   final bool? defaultVal;
   final ValueChanged<bool>? onChanged;
   final bool? needReboot;
   final Widget? leading;
-  final GestureTapCallback? onTap;
+  final Function? onTap;
   final EdgeInsetsGeometry? contentPadding;
   final TextStyle? titleStyle;
 
   const SetSwitchItem({
     this.title,
-    this.subTitle,
+    this.subtitle,
     this.setKey,
     this.defaultVal,
     this.onChanged,
@@ -113,8 +113,8 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
       onTap: () =>
           widget.onTap != null ? widget.onTap?.call() : switchChange(null),
       title: Text(widget.title!, style: titleStyle),
-      subtitle: widget.subTitle != null
-          ? Text(widget.subTitle!, style: subTitleStyle)
+      subtitle: widget.subtitle != null
+          ? Text(widget.subtitle!, style: subTitleStyle)
           : null,
       leading: widget.leading,
       trailing: Transform.scale(

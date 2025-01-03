@@ -11,7 +11,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:PiliPalaX/models/github/latest.dart';
-import 'package:PiliPalaX/pages/setting/controller.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import '../../utils/cache_manage.dart';
@@ -437,7 +436,6 @@ Commit Hash: ${BuildConfig.commitHash}''',
 }
 
 class AboutController extends GetxController {
-  final SettingController settingController = Get.put(SettingController());
   RxString currentVersion = ''.obs;
   RxString remoteVersion = ''.obs;
   LatestDataModel? remoteAppInfo;

@@ -97,7 +97,6 @@ class _SetSelectItemState extends State<SetSelectItem> {
         .copyWith(color: Theme.of(context).colorScheme.outline);
     return ListTile(
       onTap: () {},
-      dense: false,
       title: Text(widget.title!),
       subtitle: Text(
         '当前${widget.title!} $currentVal',
