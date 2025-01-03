@@ -160,6 +160,9 @@ class GStorage {
   static double get subtitleBgOpaticy =>
       setting.get(SettingBoxKey.subtitleBgOpaticy, defaultValue: 0.67);
 
+  static double get subtitleBgStroke =>
+      setting.get(SettingBoxKey.subtitleBgStroke, defaultValue: 0.0);
+
   static bool get badCertificateCallback =>
       setting.get(SettingBoxKey.badCertificateCallback, defaultValue: false);
 
@@ -369,6 +372,7 @@ class SettingBoxKey {
       subtitlePaddingH = 'subtitlePaddingH',
       subtitlePaddingB = 'subtitlePaddingB',
       subtitleBgOpaticy = 'subtitleBgOpaticy',
+      subtitleBgStroke = 'subtitleBgStroke',
       badCertificateCallback = 'badCertificateCallback',
 
       // Sponsor Block

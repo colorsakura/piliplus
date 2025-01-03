@@ -148,7 +148,8 @@ class VideoIntroController extends GetxController
             Get.find<VideoDetailController>(tag: heroTag);
         if (videoDetailController.videoItem['pic'] == null ||
             videoDetailController.videoItem['pic'] == '' ||
-            videoDetailController.videoUrl.isNullOrEmpty) {
+            (videoDetailController.videoUrl.isNullOrEmpty &&
+                videoDetailController.isQuerying.not)) {
           videoDetailController.videoItem['pic'] = result['data'].pic;
         }
       } catch (_) {}
