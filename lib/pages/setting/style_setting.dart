@@ -31,7 +31,6 @@ class _StyleSettingState extends State<StyleSetting> {
   final ColorSelectController colorSelectController =
       Get.put(ColorSelectController());
 
-  late ThemeType _tempThemeValue;
   late double maxRowWidth;
   late UpPanelPosition upPanelPosition;
 
@@ -40,7 +39,6 @@ class _StyleSettingState extends State<StyleSetting> {
   @override
   void initState() {
     super.initState();
-    _tempThemeValue = settingController.themeType.value;
     maxRowWidth =
         setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0) as double;
     upPanelPosition = UpPanelPosition.values[setting.get(
@@ -299,14 +297,13 @@ class _StyleSettingState extends State<StyleSetting> {
                 builder: (context) {
                   return SelectDialog<ThemeType>(
                       title: '主题模式',
-                      value: _tempThemeValue,
+                      value: settingController.themeType.value,
                       values: ThemeType.values.map((e) {
                         return {'title': e.description, 'value': e};
                       }).toList());
                 },
               );
               if (result != null) {
-                _tempThemeValue = result;
                 settingController.themeType.value = result;
                 setting.put(SettingBoxKey.themeMode, result.index);
                 Get.forceAppUpdate();

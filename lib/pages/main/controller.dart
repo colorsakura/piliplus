@@ -109,9 +109,9 @@ class MainController extends GetxController {
     selectedIndex = defaultIndex != -1 ? defaultIndex : 0;
     pages = navigationBars
         .map<Widget>((e) => switch (e['id']) {
-              0 => HomePage(),
-              1 => DynamicsPage(),
-              2 => MediaPage(),
+              0 => const HomePage(),
+              1 => const DynamicsPage(),
+              2 => const MediaPage(),
               _ => throw UnimplementedError(),
             })
         .toList();

@@ -41,7 +41,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   @override
   void initState() {
     super.initState();
-    dynamicsController = Get.find<DynamicsController>();
+    dynamicsController = Get.put(DynamicsController());
     _dynamicsTabController = Get.put(
       DynamicsTabController(dynamicsType: widget.dynamicsType)
         ..mid = dynamicsController.mid.value,
