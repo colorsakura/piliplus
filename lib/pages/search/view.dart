@@ -1,5 +1,6 @@
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPalaX/models/search/suggest.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
@@ -92,7 +93,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                           top: 9,
                           bottom: 9,
                         ),
-                        child: item.textRich,
+                        child: highlightText(context, item.textRich),
                       ),
                     ),
                   )

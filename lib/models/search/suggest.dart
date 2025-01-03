@@ -29,16 +29,16 @@ class SearchSuggestItem {
   String? value;
   String? term;
   int? spid;
-  Widget? textRich;
+  dynamic textRich;
 
   SearchSuggestItem.fromJson(Map<String, dynamic> json, String inputTerm) {
     value = json['value'];
     term = json['term'];
-    textRich = highlightText(json['name']);
+    textRich = json['name'];
   }
 }
 
-Widget highlightText(String str) {
+Widget highlightText(BuildContext context, String str) {
   // 创建正则表达式，匹配 <em class="suggest_high_light">...</em> 格式的文本
   RegExp regex = RegExp(r'<em class="suggest_high_light">(.*?)<\/em>');
 
@@ -72,7 +72,7 @@ Widget highlightText(String str) {
       text: highlightedText,
       style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Theme.of(Get.context!).colorScheme.primary),
+          color: Theme.of(context).colorScheme.primary),
     ));
 
     // 更新当前索引位置
@@ -86,7 +86,7 @@ Widget highlightText(String str) {
     // 将剩余的普通文本部分添加到 children 列表中
     children.add(TextSpan(
       text: remainingText,
-      style: DefaultTextStyle.of(Get.context!).style,
+      style: DefaultTextStyle.of(context).style,
     ));
   }
 
