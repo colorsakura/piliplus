@@ -31,6 +31,6 @@ class CustomSliverPersistentHeaderDelegate
   @override
   bool shouldRebuild(
       covariant CustomSliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }
