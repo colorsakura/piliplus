@@ -134,10 +134,10 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 floating: true,
                 delegate: CustomSliverPersistentHeaderDelegate(
                   extent: 40,
+                  bgColor: Theme.of(context).colorScheme.surface,
                   child: Container(
                     height: 40,
                     padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-                    color: Theme.of(context).colorScheme.surface,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

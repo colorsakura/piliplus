@@ -11,35 +11,35 @@ extension BusinessTypeExtension on DynamicsType {
   String get labels => ['全部', '投稿', '番剧', '专栏', 'UP'][index];
 }
 
-List tabsConfig = [
-  {
-    'tag': 'all',
-    'value': DynamicsType.all,
-    'label': '全部',
-    'enabled': true,
-  },
-  {
-    'tag': 'video',
-    'value': DynamicsType.video,
-    'label': '投稿',
-    'enabled': true,
-  },
-  {
-    'tag': 'pgc',
-    'value': DynamicsType.pgc,
-    'label': '番剧',
-    'enabled': true,
-  },
-  {
-    'tag': 'article',
-    'value': DynamicsType.article,
-    'label': '专栏',
-    'enabled': true,
-  },
-  {
-    'tag': 'up',
-    'value': DynamicsType.up,
-    'label': 'UP',
-    'enabled': true,
-  },
-];
+List get tabsConfig => [
+      {
+        'tag': 'all',
+        'value': DynamicsType.all,
+        'label': '全部',
+        'enabled': true,
+      },
+      {
+        'tag': 'video',
+        'value': DynamicsType.video,
+        'label': '投稿',
+        'enabled': true,
+      },
+      {
+        'tag': 'pgc',
+        'value': DynamicsType.pgc,
+        'label': '番剧',
+        'enabled': true,
+      },
+      {
+        'tag': 'article',
+        'value': DynamicsType.article,
+        'label': '专栏',
+        'enabled': true,
+      },
+      {
+        'tag': 'up',
+        'value': DynamicsType.up,
+        'label': 'UP',
+        'enabled': true,
+      },
+    ];

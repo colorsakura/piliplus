@@ -24,9 +24,9 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
         floating: true,
         delegate: CustomSliverPersistentHeaderDelegate(
           extent: 34,
+          bgColor: Theme.of(context).colorScheme.surface,
           child: Container(
             height: 34,
-            color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [

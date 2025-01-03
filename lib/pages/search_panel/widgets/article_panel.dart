@@ -28,9 +28,9 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
         floating: true,
         delegate: CustomSliverPersistentHeaderDelegate(
           extent: 40,
+          bgColor: Theme.of(context).colorScheme.surface,
           child: Container(
             height: 40,
-            color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.only(left: 25, right: 12),
             child: Row(
               children: [

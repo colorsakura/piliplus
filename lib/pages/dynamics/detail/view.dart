@@ -400,8 +400,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   SliverPersistentHeader replyPersistentHeader(BuildContext context) {
     return SliverPersistentHeader(
       delegate: CustomSliverPersistentHeaderDelegate(
+        bgColor: Theme.of(context).colorScheme.surface,
         child: Container(
-          color: Theme.of(context).colorScheme.surface,
           height: 45,
           padding: const EdgeInsets.only(left: 12, right: 6),
           child: Row(
