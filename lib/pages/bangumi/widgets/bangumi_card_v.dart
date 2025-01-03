@@ -20,110 +20,98 @@ class BangumiCardV extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
-      child: GestureDetector(
-        // onLongPress: () {
-        //   if (longPress != null) {
-        //     longPress!();
-        //   }
-        // },
-        // onLongPressEnd: (details) {
-        //   if (longPressEnd != null) {
-        //     longPressEnd!();
-        //   }
-        // },
+      child: InkWell(
         onLongPress: () => imageSaveDialog(
           context: context,
           title: bangumiItem.title,
           cover: bangumiItem.cover,
         ),
-        child: InkWell(
-          onTap: () async {
-            final int seasonId = bangumiItem.seasonId;
-            Utils.viewBangumi(seasonId: seasonId);
-            // SmartDialog.showLoading(msg: '获取中...');
-            // final res = await SearchHttp.bangumiInfo(seasonId: seasonId);
-            // SmartDialog.dismiss().then((value) {
-            //   if (res['status']) {
-            //     if (res['data'].episodes.isEmpty) {
-            //       SmartDialog.showToast('资源加载失败');
-            //       return;
-            //     }
-            //     EpisodeItem episode = res['data'].episodes.first;
-            //     int? epId = res['data'].userStatus?.progress?.lastEpId;
-            //     if (epId == null) {
-            //       epId = episode.epId;
-            //     } else {
-            //       for (var item in res['data'].episodes) {
-            //         if (item.epId == epId) {
-            //           episode = item;
-            //           break;
-            //         }
-            //       }
-            //     }
-            //     String bvid = episode.bvid!;
-            //     int cid = episode.cid!;
-            //     String pic = episode.cover!;
-            //     // debugPrint('epId');
-            //     // debugPrint(epId);
-            //     String heroTag = Utils.makeHeroTag(cid);
-            //     Get.toNamed(
-            //       '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
-            //       arguments: {
-            //         'pic': pic,
-            //         'heroTag': heroTag,
-            //         'videoType': SearchType.media_bangumi,
-            //         'bangumiItem': res['data'],
-            //       },
-            //     );
-            //   } else {
-            //     SmartDialog.showToast(res['msg']);
-            //   }
-            // });
-          },
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(StyleString.imgRadius),
-                child: AspectRatio(
-                  aspectRatio: 0.75,
-                  child: LayoutBuilder(builder: (context, boxConstraints) {
-                    final double maxWidth = boxConstraints.maxWidth;
-                    final double maxHeight = boxConstraints.maxHeight;
-                    return Stack(
-                      children: [
-                        Hero(
-                          tag: heroTag,
-                          child: NetworkImgLayer(
-                            src: bangumiItem.cover,
-                            width: maxWidth,
-                            height: maxHeight,
-                          ),
+        onTap: () async {
+          final int seasonId = bangumiItem.seasonId;
+          Utils.viewBangumi(seasonId: seasonId);
+          // SmartDialog.showLoading(msg: '获取中...');
+          // final res = await SearchHttp.bangumiInfo(seasonId: seasonId);
+          // SmartDialog.dismiss().then((value) {
+          //   if (res['status']) {
+          //     if (res['data'].episodes.isEmpty) {
+          //       SmartDialog.showToast('资源加载失败');
+          //       return;
+          //     }
+          //     EpisodeItem episode = res['data'].episodes.first;
+          //     int? epId = res['data'].userStatus?.progress?.lastEpId;
+          //     if (epId == null) {
+          //       epId = episode.epId;
+          //     } else {
+          //       for (var item in res['data'].episodes) {
+          //         if (item.epId == epId) {
+          //           episode = item;
+          //           break;
+          //         }
+          //       }
+          //     }
+          //     String bvid = episode.bvid!;
+          //     int cid = episode.cid!;
+          //     String pic = episode.cover!;
+          //     // debugPrint('epId');
+          //     // debugPrint(epId);
+          //     String heroTag = Utils.makeHeroTag(cid);
+          //     Get.toNamed(
+          //       '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
+          //       arguments: {
+          //         'pic': pic,
+          //         'heroTag': heroTag,
+          //         'videoType': SearchType.media_bangumi,
+          //         'bangumiItem': res['data'],
+          //       },
+          //     );
+          //   } else {
+          //     SmartDialog.showToast(res['msg']);
+          //   }
+          // });
+        },
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.all(StyleString.imgRadius),
+              child: AspectRatio(
+                aspectRatio: 0.75,
+                child: LayoutBuilder(builder: (context, boxConstraints) {
+                  final double maxWidth = boxConstraints.maxWidth;
+                  final double maxHeight = boxConstraints.maxHeight;
+                  return Stack(
+                    children: [
+                      Hero(
+                        tag: heroTag,
+                        child: NetworkImgLayer(
+                          src: bangumiItem.cover,
+                          width: maxWidth,
+                          height: maxHeight,
                         ),
-                        if (bangumiItem.badge != null)
-                          PBadge(
-                            text: bangumiItem.badge,
-                            top: 6,
-                            right: 6,
-                            bottom: null,
-                            left: null,
-                          ),
-                        if (bangumiItem.order != null)
-                          PBadge(
-                            text: bangumiItem.order,
-                            top: null,
-                            right: null,
-                            bottom: 6,
-                            left: 6,
-                            type: 'gray',
-                          ),
-                      ],
-                    );
-                  }),
-                ),
+                      ),
+                      if (bangumiItem.badge != null)
+                        PBadge(
+                          text: bangumiItem.badge,
+                          top: 6,
+                          right: 6,
+                          bottom: null,
+                          left: null,
+                        ),
+                      if (bangumiItem.order != null)
+                        PBadge(
+                          text: bangumiItem.order,
+                          top: null,
+                          right: null,
+                          bottom: 6,
+                          left: 6,
+                          type: 'gray',
+                        ),
+                    ],
+                  );
+                }),
               ),
-              bagumiContent(context)
-            ],
-          ),
+            ),
+            bagumiContent(context)
+          ],
         ),
       ),
     );
