@@ -724,7 +724,7 @@ class VideoDetailController extends GetxController
     SmartDialog.showToast(
       msg,
       alignment:
-          plPlayerController.isFullScreen.value ? Alignment(-0.9, 0.5) : null,
+          plPlayerController.isFullScreen.value ? Alignment(0, 0.7) : null,
     );
   }
 
@@ -789,7 +789,6 @@ class VideoDetailController extends GetxController
                 second: _convert(item['segment'][1]),
               ),
               skipType: skipType,
-              hasSkipped: false,
             );
           },
         ).toList());
@@ -838,8 +837,7 @@ class VideoDetailController extends GetxController
               } else if (item.skipType == SkipType.skipManually) {
                 listData.insert(0, item);
                 listKey.currentState?.insertItem(0);
-                skipTimer ??=
-                    Timer.periodic(const Duration(milliseconds: 2500), (_) {
+                skipTimer ??= Timer.periodic(const Duration(seconds: 3), (_) {
                   if (listData.isNotEmpty) {
                     onRemoveItem(listData.length - 1, listData.last);
                   } else {
@@ -857,7 +855,8 @@ class VideoDetailController extends GetxController
   }
 
   void onRemoveItem(int index, SegmentModel item) {
-    EasyThrottle.throttle('onRemoveItem', const Duration(seconds: 1), () {
+    EasyThrottle.throttle('onRemoveItem', const Duration(milliseconds: 500),
+        () {
       try {
         listData.removeAt(index);
         listKey.currentState?.removeItem(
@@ -881,10 +880,11 @@ class VideoDetailController extends GetxController
           child: SearchText(
             bgColor: Theme.of(Get.context!)
                 .colorScheme
-                .onInverseSurface
-                .withOpacity(0.7),
+                .secondaryContainer
+                .withOpacity(0.8),
+            textColor: Theme.of(Get.context!).colorScheme.onSecondaryContainer,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            fontSize: 13,
+            fontSize: 14,
             text: '跳过: ${item.segmentType.shortTitle}',
             onTap: (_) {
               onSkip(item);
