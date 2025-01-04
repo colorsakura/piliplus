@@ -13,6 +13,7 @@ import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/models/video/play/subtitle.dart';
 import 'package:PiliPalaX/models/video_detail_res.dart';
+import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
@@ -21,6 +22,7 @@ import 'package:PiliPalaX/utils/extension.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -109,10 +111,16 @@ extension SegmentTypeExt on SegmentType {
       ][index];
 }
 
-enum SkipType { alwaysSkip, skipOnce, showOnly, disable }
+enum SkipType { alwaysSkip, skipOnce, skipManually, showOnly, disable }
 
 extension SkipTypeExt on SkipType {
-  String get title => ['总是跳过', '跳过一次', '仅显示', '禁用'][index];
+  String get title => [
+        '总是跳过',
+        '跳过一次',
+        '手动跳过',
+        '仅显示',
+        '禁用',
+      ][index];
 }
 
 class SegmentModel {
@@ -122,14 +130,14 @@ class SegmentModel {
     required this.segmentType,
     required this.segment,
     required this.skipType,
-    required this.hasSkipped,
+    this.hasSkipped,
   });
   // ignore: non_constant_identifier_names
   String UUID;
   SegmentType segmentType;
   Pair<int, int> segment;
   SkipType skipType;
-  bool hasSkipped;
+  bool? hasSkipped;
 }
 
 class PostSegmentModel {
@@ -470,6 +478,10 @@ class VideoDetailController extends GetxController
   List<Segment>? _segmentProgressList;
   Color _getColor(SegmentType segment) =>
       _blockColor?[segment.index] ?? segment.color;
+
+  Timer? skipTimer;
+  late final listKey = GlobalKey<AnimatedListState>();
+  late final listData = <SegmentModel>[];
 
   Future _vote(String uuid, int type) async {
     Request()
@@ -817,33 +829,91 @@ class VideoDetailController extends GetxController
             // debugPrint(
             //     '${position.inSeconds},,${item.segment.first},,${item.segment.second},,${item.skipType.name},,${item.hasSkipped}');
             if (item.segment.first == position.inSeconds) {
-              if (item.skipType == SkipType.alwaysSkip ||
-                  (item.skipType == SkipType.skipOnce && !item.hasSkipped)) {
-                try {
-                  plPlayerController.danmakuController?.clear();
-                  await plPlayerController.videoPlayerController
-                      ?.seek(Duration(seconds: item.segment.second));
-                  item.hasSkipped = true;
-                  if (GStorage.blockToast) {
-                    _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
+              if (item.skipType == SkipType.alwaysSkip) {
+                onSkip(item);
+              } else if (item.skipType == SkipType.skipOnce &&
+                  item.hasSkipped != true) {
+                item.hasSkipped = true;
+                onSkip(item);
+              } else if (item.skipType == SkipType.skipManually) {
+                listData.insert(0, item);
+                listKey.currentState?.insertItem(0);
+                skipTimer ??=
+                    Timer.periodic(const Duration(milliseconds: 2500), (_) {
+                  if (listData.isNotEmpty) {
+                    onRemoveItem(listData.length - 1, listData.last);
+                  } else {
+                    skipTimer?.cancel();
+                    skipTimer = null;
                   }
-                  if (GStorage.blockTrack) {
-                    Request().post(
-                      '${GStorage.blockServer}/api/viewedVideoSponsorTime',
-                      queryParameters: {'UUID': item.UUID},
-                      options: _options,
-                    );
-                  }
-                } catch (e) {
-                  debugPrint('failed to skip: $e');
-                  _showBlockToast('${item.segmentType.shortTitle}片段跳过失败');
-                }
+                });
               }
               break;
             }
           }
         }
       });
+    }
+  }
+
+  void onRemoveItem(int index, SegmentModel item) {
+    EasyThrottle.throttle('onRemoveItem', const Duration(seconds: 1), () {
+      try {
+        listData.removeAt(index);
+        listKey.currentState?.removeItem(
+          index,
+          (context, animation) => buildItem(item, animation),
+        );
+      } catch (_) {}
+    });
+  }
+
+  Widget buildItem(SegmentModel item, Animation<double> animation) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: Offset(-1, 0),
+          end: Offset(0, 0),
+        ).animate(animation),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: SearchText(
+            bgColor: Theme.of(Get.context!)
+                .colorScheme
+                .onInverseSurface
+                .withOpacity(0.7),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            fontSize: 13,
+            text: '跳过: ${item.segmentType.shortTitle}',
+            onTap: (_) {
+              onSkip(item);
+              onRemoveItem(listData.indexOf(item), item);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void onSkip(SegmentModel item) async {
+    try {
+      plPlayerController.danmakuController?.clear();
+      await plPlayerController.videoPlayerController
+          ?.seek(Duration(seconds: item.segment.second));
+      if (GStorage.blockToast) {
+        _showBlockToast('已跳过${item.segmentType.shortTitle}片段');
+      }
+      if (GStorage.blockTrack) {
+        Request().post(
+          '${GStorage.blockServer}/api/viewedVideoSponsorTime',
+          queryParameters: {'UUID': item.UUID},
+          options: _options,
+        );
+      }
+    } catch (e) {
+      debugPrint('failed to skip: $e');
+      _showBlockToast('${item.segmentType.shortTitle}片段跳过失败');
     }
   }
 

@@ -346,6 +346,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     _listenerDetail?.cancel();
     _listenerLoadingState?.cancel();
     _listenerCid?.cancel();
+
+    videoDetailController.skipTimer?.cancel();
+    videoDetailController.skipTimer = null;
+
     WidgetsBinding.instance.removeObserver(this);
     if (!Get.previousRoute.startsWith('/video')) {
       ScreenBrightness().resetApplicationScreenBrightness();
@@ -1358,7 +1362,27 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               ),
             ),
             manualPlayerWidget,
-          ]
+          ],
+
+          if (videoDetailController.enableSponsorBlock)
+            Align(
+              alignment: Alignment(-0.9, 0.5),
+              child: SizedBox(
+                width: MediaQuery.textScalerOf(context).scale(120),
+                child: AnimatedList(
+                  key: videoDetailController.listKey,
+                  reverse: true,
+                  shrinkWrap: true,
+                  initialItemCount: videoDetailController.listData.length,
+                  itemBuilder: (context, index, animation) {
+                    return videoDetailController.buildItem(
+                      videoDetailController.listData[index],
+                      animation,
+                    );
+                  },
+                ),
+              ),
+            ),
         ],
       );
 
