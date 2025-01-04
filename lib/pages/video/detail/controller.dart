@@ -1538,7 +1538,7 @@ class VideoDetailController extends GetxController
                                                         fontSize: 14,
                                                         color: Theme.of(context)
                                                             .colorScheme
-                                                            .primary,
+                                                            .secondary,
                                                       ),
                                                       strutStyle: StrutStyle(
                                                         height: 1,
@@ -1554,7 +1554,7 @@ class VideoDetailController extends GetxController
                                                           .scale(14),
                                                       color: Theme.of(context)
                                                           .colorScheme
-                                                          .primary,
+                                                          .secondary,
                                                     ),
                                                   ],
                                                 ),
@@ -1605,7 +1605,7 @@ class VideoDetailController extends GetxController
                                                         fontSize: 14,
                                                         color: Theme.of(context)
                                                             .colorScheme
-                                                            .primary,
+                                                            .secondary,
                                                       ),
                                                       strutStyle: StrutStyle(
                                                         height: 1,
@@ -1621,7 +1621,7 @@ class VideoDetailController extends GetxController
                                                           .scale(14),
                                                       color: Theme.of(context)
                                                           .colorScheme
-                                                          .primary,
+                                                          .secondary,
                                                     ),
                                                   ],
                                                 ),

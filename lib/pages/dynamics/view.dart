@@ -332,52 +332,64 @@ class _CreatePanelState extends State<CreatePanel> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(66),
         child: Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 16),
-          child: Row(
+          padding: const EdgeInsets.all(16),
+          child: Stack(
             children: [
-              const SizedBox(width: 16),
-              SizedBox(
-                width: 34,
-                height: 34,
-                child: IconButton(
-                  tooltip: '返回',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    backgroundColor: WidgetStateProperty.resolveWith(
-                      (states) {
-                        return Theme.of(context).colorScheme.secondaryContainer;
-                      },
+              Positioned(
+                top: 0,
+                left: 0,
+                bottom: 0,
+                child: SizedBox(
+                  width: 34,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '返回',
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                      backgroundColor: WidgetStateProperty.resolveWith(
+                        (states) {
+                          return Theme.of(context)
+                              .colorScheme
+                              .secondaryContainer;
+                        },
+                      ),
                     ),
-                  ),
-                  onPressed: Get.back,
-                  icon: Icon(
-                    Icons.arrow_back_outlined,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    onPressed: Get.back,
+                    icon: Icon(
+                      Icons.arrow_back_outlined,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
                   ),
                 ),
               ),
-              const Spacer(),
-              const Text(
-                '发布动态',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              const Spacer(),
-              Obx(
-                () => FilledButton.tonal(
-                  onPressed: _isEnablePub.value ? _onCreate : null,
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    visualDensity: const VisualDensity(
-                      horizontal: -2,
-                      vertical: -2,
-                    ),
-                  ),
-                  child: Text(_publishTime == null ? '发布' : '定时发布'),
+              Center(
+                child: const Text(
+                  '发布动态',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(width: 16),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Obx(
+                  () => FilledButton.tonal(
+                    onPressed: _isEnablePub.value ? _onCreate : null,
+                    style: FilledButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      visualDensity: const VisualDensity(
+                        horizontal: -2,
+                        vertical: -2,
+                      ),
+                    ),
+                    child: Text(_publishTime == null ? '发布' : '定时发布'),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -521,78 +533,6 @@ class _CreatePanelState extends State<CreatePanel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       PopupMenuButton(
-                        enabled: _publishTime == null,
-                        initialValue: _isPrivate,
-                        onSelected: (value) {
-                          setState(() {
-                            _isPrivate = value;
-                          });
-                        },
-                        itemBuilder: (context) => List.generate(
-                          2,
-                          (index) => PopupMenuItem<bool>(
-                            value: index == 0 ? false : true,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  size: 19,
-                                  index == 0
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(index == 0 ? '所有人可见' : '仅自己可见'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                size: 19,
-                                _isPrivate
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: _publishTime == null
-                                    ? _isPrivate
-                                        ? Theme.of(context).colorScheme.error
-                                        : Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.outline,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                _isPrivate ? '仅自己可见' : '所有人可见',
-                                style: TextStyle(
-                                  height: 1,
-                                  color: _publishTime == null
-                                      ? _isPrivate
-                                          ? Theme.of(context).colorScheme.error
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                      : Theme.of(context).colorScheme.outline,
-                                ),
-                                strutStyle: StrutStyle(leading: 0, height: 1),
-                              ),
-                              Icon(
-                                size: 20,
-                                Icons.keyboard_arrow_right,
-                                color: _publishTime == null
-                                    ? _isPrivate
-                                        ? Theme.of(context).colorScheme.error
-                                        : Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.outline,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      PopupMenuButton(
                         initialValue: _replyOption,
                         onSelected: (item) {
                           setState(() {
@@ -627,7 +567,7 @@ class _CreatePanelState extends State<CreatePanel> {
                                 _replyOption.iconData,
                                 color: _replyOption == ReplyOption.close
                                     ? Theme.of(context).colorScheme.error
-                                    : Theme.of(context).colorScheme.primary,
+                                    : Theme.of(context).colorScheme.secondary,
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -636,7 +576,7 @@ class _CreatePanelState extends State<CreatePanel> {
                                   height: 1,
                                   color: _replyOption == ReplyOption.close
                                       ? Theme.of(context).colorScheme.error
-                                      : Theme.of(context).colorScheme.primary,
+                                      : Theme.of(context).colorScheme.secondary,
                                 ),
                                 strutStyle: StrutStyle(leading: 0, height: 1),
                               ),
@@ -645,7 +585,73 @@ class _CreatePanelState extends State<CreatePanel> {
                                 Icons.keyboard_arrow_right,
                                 color: _replyOption == ReplyOption.close
                                     ? Theme.of(context).colorScheme.error
-                                    : Theme.of(context).colorScheme.primary,
+                                    : Theme.of(context).colorScheme.secondary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      PopupMenuButton(
+                        initialValue: _isPrivate,
+                        onSelected: (value) {
+                          setState(() {
+                            _isPrivate = value;
+                          });
+                        },
+                        itemBuilder: (context) => List.generate(
+                          2,
+                          (index) => PopupMenuItem<bool>(
+                            enabled: _publishTime != null && index == 1
+                                ? false
+                                : true,
+                            value: index == 0 ? false : true,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  size: 19,
+                                  index == 0
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(index == 0 ? '所有人可见' : '仅自己可见'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                size: 19,
+                                _isPrivate
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: _isPrivate
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context).colorScheme.secondary,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _isPrivate ? '仅自己可见' : '所有人可见',
+                                style: TextStyle(
+                                  height: 1,
+                                  color: _isPrivate
+                                      ? Theme.of(context).colorScheme.error
+                                      : Theme.of(context).colorScheme.secondary,
+                                ),
+                                strutStyle: StrutStyle(leading: 0, height: 1),
+                              ),
+                              Icon(
+                                size: 20,
+                                Icons.keyboard_arrow_right,
+                                color: _isPrivate
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context).colorScheme.secondary,
                               ),
                             ],
                           ),

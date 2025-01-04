@@ -286,49 +286,66 @@ class _RepostPanelState extends State<RepostPanel> {
               ],
             ),
           if (_isMax)
-            Row(
-              children: [
-                const SizedBox(width: 16),
-                SizedBox(
-                  width: 34,
-                  height: 34,
-                  child: IconButton(
-                    tooltip: '返回',
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      backgroundColor:
-                          WidgetStateProperty.resolveWith((states) {
-                        return Theme.of(context).colorScheme.secondaryContainer;
-                      }),
-                    ),
-                    onPressed: Get.back,
-                    icon: Icon(
-                      Icons.arrow_back_outlined,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                const Text(
-                  '转发动态',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                FilledButton.tonal(
-                  onPressed: _onRepost,
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    visualDensity: const VisualDensity(
-                      horizontal: -2,
-                      vertical: -2,
+            SizedBox(
+              height: 34,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 16,
+                    top: 0,
+                    child: SizedBox(
+                      width: 34,
+                      height: 34,
+                      child: IconButton(
+                        tooltip: '返回',
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                          backgroundColor:
+                              WidgetStateProperty.resolveWith((states) {
+                            return Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer;
+                          }),
+                        ),
+                        onPressed: Get.back,
+                        icon: Icon(
+                          Icons.arrow_back_outlined,
+                          size: 18,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                      ),
                     ),
                   ),
-                  child: const Text('转发'),
-                ),
-                const SizedBox(width: 16),
-              ],
+                  Center(
+                    child: const Text(
+                      '转发动态',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Positioned(
+                    right: 16,
+                    top: 0,
+                    child: FilledButton.tonal(
+                      onPressed: _onRepost,
+                      style: FilledButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        visualDensity: const VisualDensity(
+                          horizontal: -2,
+                          vertical: -2,
+                        ),
+                      ),
+                      child: const Text('转发'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

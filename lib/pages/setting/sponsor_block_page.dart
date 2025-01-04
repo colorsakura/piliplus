@@ -451,32 +451,89 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   ),
                 );
               },
-              title: Text.rich(
-                TextSpan(
-                  children: [
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: Container(
-                        height: MediaQuery.textScalerOf(context).scale(15),
-                        width: 10,
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _blockColor[index],
-                          ),
-                        ),
-                      ),
-                      style: TextStyle(fontSize: 14),
-                    ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text.rich(
                     TextSpan(
-                      text: ' ${_blockSettings[index].first.title}',
-                      style: TextStyle(fontSize: 14),
+                      children: [
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Container(
+                            height: MediaQuery.textScalerOf(context).scale(15),
+                            width: 10,
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _blockColor[index],
+                              ),
+                            ),
+                          ),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        TextSpan(
+                          text: ' ${_blockSettings[index].first.title}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  PopupMenuButton(
+                    initialValue: _blockSettings[index].second,
+                    onSelected: (item) async {
+                      _blockSettings[index].second = item;
+                      await setting.put(
+                          SettingBoxKey.blockSettings,
+                          _blockSettings
+                              .map((item) => item.second.index)
+                              .toList());
+                      setState(() {});
+                    },
+                    itemBuilder: (context) => SkipType.values
+                        .map((item) => PopupMenuItem<SkipType>(
+                              value: item,
+                              child: Text(item.title),
+                            ))
+                        .toList(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _blockSettings[index].second.title,
+                            style: TextStyle(
+                              height: 1,
+                              fontSize: 14,
+                              color: _blockSettings[index].second ==
+                                      SkipType.disable
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .outline
+                                      .withOpacity(0.7)
+                                  : Theme.of(context).colorScheme.secondary,
+                            ),
+                            strutStyle: StrutStyle(height: 1, leading: 0),
+                          ),
+                          Icon(
+                            MdiIcons.unfoldMoreHorizontal,
+                            size: MediaQuery.textScalerOf(context).scale(14),
+                            color:
+                                _blockSettings[index].second == SkipType.disable
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .outline
+                                        .withOpacity(0.7)
+                                    : Theme.of(context).colorScheme.secondary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
               subtitle: Text(
                 _blockSettings[index].first.description,
@@ -485,48 +542,6 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                   color: _blockSettings[index].second == SkipType.disable
                       ? null
                       : Theme.of(context).colorScheme.outline,
-                ),
-              ),
-              trailing: PopupMenuButton(
-                initialValue: _blockSettings[index].second,
-                onSelected: (item) async {
-                  _blockSettings[index].second = item;
-                  await setting.put(SettingBoxKey.blockSettings,
-                      _blockSettings.map((item) => item.second.index).toList());
-                  setState(() {});
-                },
-                itemBuilder: (context) => SkipType.values
-                    .map((item) => PopupMenuItem<SkipType>(
-                          value: item,
-                          child: Text(item.title),
-                        ))
-                    .toList(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        _blockSettings[index].second.title,
-                        style: TextStyle(
-                          height: 1,
-                          fontSize: 14,
-                          color:
-                              _blockSettings[index].second == SkipType.disable
-                                  ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context).colorScheme.primary,
-                        ),
-                        strutStyle: StrutStyle(height: 1, leading: 0),
-                      ),
-                      Icon(
-                        MdiIcons.unfoldMoreHorizontal,
-                        size: MediaQuery.textScalerOf(context).scale(14),
-                        color: _blockSettings[index].second == SkipType.disable
-                            ? Theme.of(context).colorScheme.error
-                            : Theme.of(context).colorScheme.primary,
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),

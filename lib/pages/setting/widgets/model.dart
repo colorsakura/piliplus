@@ -7,6 +7,7 @@ import 'package:PiliPalaX/models/common/dynamics_type.dart';
 import 'package:PiliPalaX/models/common/nav_bar_config.dart';
 import 'package:PiliPalaX/models/common/rcmd_type.dart';
 import 'package:PiliPalaX/models/common/reply_sort_type.dart';
+import 'package:PiliPalaX/models/common/theme_type.dart';
 import 'package:PiliPalaX/models/common/up_panel_position.dart';
 import 'package:PiliPalaX/models/video/play/CDN.dart';
 import 'package:PiliPalaX/models/video/play/quality.dart';
@@ -348,31 +349,32 @@ List<SettingsModel> get styleSettings => [
           ),
         ),
       ),
-      // SettingsModel(
-      //   settingsType: SettingsType.normal,
-      //   onTap: (setState) async {
-      //     ThemeType? result = await showDialog(
-      //       context: Get.context!,
-      //       builder: (context) {
-      //         return SelectDialog<ThemeType>(
-      //             title: '主题模式',
-      //             value: GStorage.themeType,
-      //             values: ThemeType.values.map(
-      //               (e) {
-      //                 return {'title': e.description, 'value': e};
-      //               },
-      //             ).toList());
-      //       },
-      //     );
-      //     if (result != null) {
-      //       GStorage.setting.put(SettingBoxKey.themeMode, result.index);
-      //       Get.forceAppUpdate();
-      //     }
-      //   },
-      //   leading: const Icon(Icons.flashlight_on_outlined),
-      //   title: '主题模式',
-      //   getSubtitle: () => '当前模式：${GStorage.themeType.description}',
-      // ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        onTap: (setState) async {
+          ThemeType? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return SelectDialog<ThemeType>(
+                  title: '主题模式',
+                  value: GStorage.themeType,
+                  values: ThemeType.values.map(
+                    (e) {
+                      return {'title': e.description, 'value': e};
+                    },
+                  ).toList());
+            },
+          );
+          if (result != null) {
+            GStorage.setting.put(SettingBoxKey.themeMode, result.index);
+            Get.put(ColorSelectController()).themeType.value = result;
+            Get.forceAppUpdate();
+          }
+        },
+        leading: const Icon(Icons.flashlight_on_outlined),
+        title: '主题模式',
+        getSubtitle: () => '当前模式：${GStorage.themeType.description}',
+      ),
       SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) => Get.toNamed('/colorSetting'),
