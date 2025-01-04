@@ -19,6 +19,7 @@ import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/url_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import '../../../../../utils/app_scheme.dart';
+import 'package:html/parser.dart' show parse;
 
 class ReplyItemGrpc extends StatelessWidget {
   const ReplyItemGrpc({
@@ -640,13 +641,13 @@ class ReplyItemGrpc extends StatelessWidget {
       });
       message = message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
     }
-    message = message
-        .replaceAll('&amp;', '&')
-        .replaceAll('&lt;', '<')
-        .replaceAll('&gt;', '>')
-        .replaceAll('&quot;', '"')
-        .replaceAll('&apos;', "'")
-        .replaceAll('&nbsp;', ' ');
+    message = parse(message).body?.text ?? message;
+    // .replaceAll('&amp;', '&')
+    // .replaceAll('&lt;', '<')
+    // .replaceAll('&gt;', '>')
+    // .replaceAll('&quot;', '"')
+    // .replaceAll('&apos;', "'")
+    // .replaceAll('&nbsp;', ' ');
     // 构建正则表达式
     final List<String> specialTokens = [
       ...content.emote.keys,
@@ -666,7 +667,7 @@ class ReplyItemGrpc extends StatelessWidget {
     if (jumpUrlKeysList.isNotEmpty) {
       patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
     }
-    patternStr += r'|https://b23\.tv/[a-zA-Z0-9]{7}';
+    patternStr += r'|https?://\S+\b';
     final RegExp pattern = RegExp(patternStr);
     List<String> matchedStrs = [];
     void addPlainTextSpan(str) {
@@ -908,7 +909,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   },
               ),
             );
-          } else if (matchStr.startsWith('https://b23.tv/')) {
+          } else if (RegExp(r'https?://\S+\b').hasMatch(matchStr)) {
             spanChildren.add(
               TextSpan(
                 text: ' $matchStr ',

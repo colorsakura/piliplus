@@ -19,6 +19,7 @@ import 'package:PiliPalaX/utils/url_utils.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import '../../../../../utils/app_scheme.dart';
 import 'zan.dart';
+import 'package:html/parser.dart' show parse;
 
 class ReplyItem extends StatelessWidget {
   const ReplyItem({
@@ -614,13 +615,13 @@ class ReplyItem extends StatelessWidget {
       });
       message = message.replaceAll(RegExp(r"\{vote:\d+?\}"), "");
     }
-    message = message
-        .replaceAll('&amp;', '&')
-        .replaceAll('&lt;', '<')
-        .replaceAll('&gt;', '>')
-        .replaceAll('&quot;', '"')
-        .replaceAll('&apos;', "'")
-        .replaceAll('&nbsp;', ' ');
+    message = parse(message).body?.text ?? message;
+    // .replaceAll('&amp;', '&')
+    // .replaceAll('&lt;', '<')
+    // .replaceAll('&gt;', '>')
+    // .replaceAll('&quot;', '"')
+    // .replaceAll('&apos;', "'")
+    // .replaceAll('&nbsp;', ' ');
     // 构建正则表达式
     final List<String> specialTokens = [
       ...content.emote.keys,
@@ -640,6 +641,7 @@ class ReplyItem extends StatelessWidget {
     if (jumpUrlKeysList.isNotEmpty) {
       patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
     }
+    patternStr += r'|https?://\S+\b';
     final RegExp pattern = RegExp(patternStr);
     List<String> matchedStrs = [];
     void addPlainTextSpan(str) {
@@ -880,6 +882,20 @@ class ReplyItem extends StatelessWidget {
                     Get.toNamed('/searchResult',
                         parameters: {'keyword': topic});
                   },
+              ),
+            );
+          } else if (RegExp(r'https?://\S+\b').hasMatch(matchStr)) {
+            spanChildren.add(
+              TextSpan(
+                text: ' $matchStr ',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => Get.toNamed(
+                        '/webview',
+                        parameters: {'url': matchStr},
+                      ),
               ),
             );
           } else {
