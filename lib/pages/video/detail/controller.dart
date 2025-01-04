@@ -12,6 +12,7 @@ import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/video/later.dart';
 import 'package:PiliPalaX/models/video/play/subtitle.dart';
+import 'package:PiliPalaX/models/video_detail_res.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
@@ -1869,8 +1870,59 @@ class VideoDetailController extends GetxController
     // if (!res["status"]) {
     //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
     // }
-
     if (res['status']) {
+      try {
+        VideoIntroController videoIntroController =
+            Get.find<VideoIntroController>(tag: heroTag);
+        if ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1 &&
+            res['last_play_cid'] != null &&
+            res['last_play_cid'] != 0) {
+          if (res['last_play_cid'] != cid.value) {
+            int index = videoIntroController.videoDetail.value.pages!
+                .indexWhere((item) => item.cid == res['last_play_cid']);
+            if (index != -1) {
+              SmartDialog.showAttach(
+                targetContext: childKey.currentContext,
+                alignment: Alignment.topCenter,
+                maskColor: Colors.transparent,
+                displayTime: Duration(seconds: 4),
+                builder: (context) => GestureDetector(
+                  onTap: () {
+                    SmartDialog.dismiss();
+                    Part part =
+                        videoIntroController.videoDetail.value.pages![index];
+                    videoIntroController.changeSeasonOrbangu(
+                      null,
+                      bvid,
+                      part.cid,
+                      IdUtils.bv2av(bvid),
+                      null,
+                    );
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    margin: const EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '上次看到第${index + 1}P，点击跳转',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
+        }
+      } catch (_) {}
+
       vttSubtitlesIndex = 0;
       if (res["data"] is List && res["data"].isNotEmpty) {
         var result = await VideoHttp.vttSubtitles(res["data"]);

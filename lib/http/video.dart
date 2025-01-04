@@ -918,6 +918,8 @@ class VideoHttp {
         'status': true,
         'data': subtitlesJson,
         'view_points': data['view_points'],
+        // 'last_play_time': data['last_play_time'],
+        'last_play_cid': data['last_play_cid'],
       };
     } else {
       return {'status': false, 'data': [], 'msg': res.data['message']};

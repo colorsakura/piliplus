@@ -30,7 +30,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:nil/nil.dart';
 import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
 import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/models/common/search_type.dart';
@@ -1091,7 +1090,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             : !videoDetailController.autoPlay.value ||
                     plPlayerController == null ||
                     plPlayerController!.videoController == null
-                ? nil
+                ? const SizedBox.shrink()
                 : PLVideoPlayer(
                     plPlayerController: plPlayerController!,
                     videoIntroController:
