@@ -924,7 +924,7 @@ class VideoDetailController extends GetxController
     bool isPlaying =
         plPlayerController.playerStatus.status.value == PlayerStatus.playing;
     if (isPlaying) {
-      plPlayerController.pause();
+      await plPlayerController.pause();
     }
     await Navigator.of(Get.context!).push(
       GetDialogRoute(
@@ -935,8 +935,11 @@ class VideoDetailController extends GetxController
             progress: plPlayerController.position.value.inMilliseconds,
             savedDanmaku: savedDanmaku,
             onSaveDanmaku: (danmaku) => savedDanmaku = danmaku,
-            callback: (danmakuModel) {
+            callback: (danmakuModel) async {
               savedDanmaku = null;
+              if (isPlaying) {
+                await plPlayerController.play();
+              }
               plPlayerController.danmakuController?.addDanmaku(danmakuModel);
             },
           );
@@ -957,9 +960,6 @@ class VideoDetailController extends GetxController
         },
       ),
     );
-    if (isPlaying) {
-      plPlayerController.play();
-    }
   }
 
   /// 更新画质、音质
