@@ -530,8 +530,12 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
       widget.callback(
         DanmakuContentItem(
           _textController.text,
-          color: Colors.white,
-          type: DanmakuItemType.scroll,
+          color: _color.value,
+          type: switch (_mode.value) {
+            5 => DanmakuItemType.top,
+            4 => DanmakuItemType.bottom,
+            _ => DanmakuItemType.scroll,
+          },
           selfSend: true,
         ),
       );
@@ -575,6 +579,7 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
           ),
         ),
         content: SlideColorPicker(
+          showResetBtn: false,
           color: _color.value,
           callback: (Color? color) {
             if (color != null) {
