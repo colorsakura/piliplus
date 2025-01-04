@@ -6,7 +6,6 @@ import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/common/widgets/loading_widget.dart';
 import 'package:PiliPalaX/common/widgets/pair.dart';
 import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
-import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/http/init.dart';
 import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/http/user.dart';
@@ -17,9 +16,9 @@ import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
 import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/related/controller.dart';
 import 'package:PiliPalaX/pages/video/detail/reply/controller.dart';
+import 'package:PiliPalaX/pages/video/detail/widgets/send_danmaku_panel.dart';
 import 'package:PiliPalaX/pages/video/detail/widgets/watch_later_list.dart';
 import 'package:PiliPalaX/utils/extension.dart';
-import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -37,6 +36,7 @@ import 'package:PiliPalaX/plugin/pl_player/index.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 import 'package:PiliPalaX/utils/utils.dart';
 import 'package:PiliPalaX/utils/video_utils.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -917,80 +917,49 @@ class VideoDetailController extends GetxController
     }
   }
 
+  String? savedDanmaku;
+
   /// 发送弹幕
-  void showShootDanmakuSheet() {
-    final TextEditingController textController = TextEditingController();
-    bool isSending = false; // 追踪是否正在发送
-    showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        // TODO: 支持更多类型和颜色的弹幕
-        return AlertDialog(
-          title: const Text('发送弹幕'),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return TextField(
-              controller: textController,
-              autofocus: true,
-            );
-          }),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              return TextButton(
-                onPressed: isSending
-                    ? null
-                    : () async {
-                        final String msg = textController.text;
-                        if (msg.isEmpty) {
-                          SmartDialog.showToast('弹幕内容不能为空');
-                          return;
-                        } else if (msg.length > 100) {
-                          SmartDialog.showToast('弹幕内容不能超过100个字符');
-                          return;
-                        }
-                        isSending = true; // 开始发送，更新状态
-                        //修改按钮文字
-                        // SmartDialog.showToast('弹幕发送中,\n$msg');
-                        final dynamic res = await DanmakaHttp.shootDanmaku(
-                          oid: cid.value,
-                          msg: textController.text,
-                          bvid: bvid,
-                          progress:
-                              plPlayerController.position.value.inMilliseconds,
-                          type: 1,
-                        );
-                        isSending = false; // 发送结束，更新状态
-                        if (res['status']) {
-                          SmartDialog.showToast('发送成功');
-                          // 发送成功，自动预览该弹幕，避免重新请求
-                          // TODO: 暂停状态下预览弹幕仍会移动与计时，可考虑添加到dmSegList或其他方式实现
-                          plPlayerController.danmakuController
-                              ?.addDanmaku(DanmakuContentItem(
-                            msg,
-                            color: Colors.white,
-                            type: DanmakuItemType.scroll,
-                            selfSend: true,
-                          ));
-                          Get.back();
-                        } else {
-                          SmartDialog.showToast('发送失败，错误信息为${res['msg']}');
-                        }
-                      },
-                child: Text(isSending ? '发送中...' : '发送'),
-              );
-            })
-          ],
-        );
-      },
+  void showShootDanmakuSheet() async {
+    bool isPlaying =
+        plPlayerController.playerStatus.status.value == PlayerStatus.playing;
+    if (isPlaying) {
+      plPlayerController.pause();
+    }
+    await Navigator.of(Get.context!).push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return SendDanmakuPanel(
+            cid: cid.value,
+            bvid: bvid,
+            progress: plPlayerController.position.value.inMilliseconds,
+            savedDanmaku: savedDanmaku,
+            onSaveDanmaku: (danmaku) => savedDanmaku = danmaku,
+            callback: (danmakuModel) {
+              savedDanmaku = null;
+              plPlayerController.danmakuController?.addDanmaku(danmakuModel);
+            },
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.linear;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
     );
+    if (isPlaying) {
+      plPlayerController.play();
+    }
   }
 
   /// 更新画质、音质

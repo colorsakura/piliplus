@@ -372,15 +372,18 @@ class BangumiIntroController extends CommonController {
   // 修改分P或番剧分集
   Future changeSeasonOrbangu(epId, bvid, cid, aid, cover) async {
     // 重新获取视频资源
-    VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
-          ..epId = epId;
     this.epId = epId;
     this.bvid = bvid;
-    videoDetailCtr.bvid = bvid;
-    videoDetailCtr.cid.value = cid;
-    videoDetailCtr.danmakuCid.value = cid;
-    videoDetailCtr.queryVideoUrl();
+
+    final videoDetailCtr =
+        Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
+          ..vttSubtitlesIndex = null
+          ..savedDanmaku = null
+          ..epId = epId
+          ..bvid = bvid
+          ..cid.value = cid
+          ..danmakuCid.value = cid
+          ..queryVideoUrl();
     if (cover is String && cover.isNotEmpty) {
       videoDetailCtr.videoItem['pic'] = cover;
     }

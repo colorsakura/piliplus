@@ -29,8 +29,8 @@ class DanmakaHttp {
     int type = 1, //弹幕类选择(1：视频弹幕 2：漫画弹幕)
     required int oid, // 视频cid
     required String msg, //弹幕文本(长度小于 100 字符)
-    int mode =
-        1, // 弹幕类型(1：滚动弹幕 4：底端弹幕 5：顶端弹幕 6：逆向弹幕(不能使用） 7：高级弹幕 8：代码弹幕（不能使用） 9：BAS弹幕（pool必须为2）)
+    // 弹幕类型(1：滚动弹幕 4：底端弹幕 5：顶端弹幕 6：逆向弹幕(不能使用） 7：高级弹幕 8：代码弹幕（不能使用） 9：BAS弹幕（pool必须为2）)
+    int mode = 1,
     // String? aid,// 稿件avid
     // String? bvid,// bvid与aid必须有一个
     required String bvid,
@@ -47,7 +47,6 @@ class DanmakaHttp {
     // 构建参数对象
     // assert(aid != null || bvid != null);
     // assert(csrf != null || access_key != null);
-    assert(msg.length < 100);
     // 构建参数对象
     var params = <String, dynamic>{
       'type': type,

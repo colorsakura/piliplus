@@ -557,18 +557,18 @@ class VideoIntroController extends GetxController
   // 修改分P或番剧分集
   Future changeSeasonOrbangu(epid, bvid, cid, aid, cover) async {
     // 重新获取视频资源
-    final VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: heroTag);
-    videoDetailCtr.updateMediaListHistory(aid);
-    videoDetailCtr.vttSubtitlesIndex = null;
-    videoDetailCtr.bvid = bvid;
-    videoDetailCtr.oid.value = aid ?? IdUtils.bv2av(bvid);
-    videoDetailCtr.cid.value = cid;
+    final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag)
+      ..updateMediaListHistory(aid)
+      ..vttSubtitlesIndex = null
+      ..savedDanmaku = null
+      ..bvid = bvid
+      ..oid.value = aid ?? IdUtils.bv2av(bvid)
+      ..cid.value = cid
+      ..danmakuCid.value = cid
+      ..queryVideoUrl();
     if (cover is String && cover.isNotEmpty) {
       videoDetailCtr.videoItem['pic'] = cover;
     }
-    videoDetailCtr.danmakuCid.value = cid;
-    videoDetailCtr.queryVideoUrl();
 
     // 重新请求相关视频
     if (videoDetailCtr.showRelatedVideo) {

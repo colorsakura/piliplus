@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ToolbarIconButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Icon icon;
   final bool selected;
-  final String tooltip;
+  final String? tooltip;
 
   const ToolbarIconButton({
     super.key,
-    required this.onPressed,
+    this.onPressed,
     required this.icon,
     required this.selected,
-    required this.tooltip,
+    this.tooltip,
   });
 
   @override
