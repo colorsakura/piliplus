@@ -38,6 +38,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 extension SettingsModelExt on SettingsModel {
   Widget get widget => switch (settingsType) {
+        SettingsType.divider => const Divider(height: 1),
         SettingsType.normal => NormalItem(
             title: title,
             getTitle: getTitle,
@@ -104,7 +105,7 @@ class SettingsModel {
   });
 }
 
-enum SettingsType { normal, sw1tch }
+enum SettingsType { normal, sw1tch, divider }
 
 List<SettingsModel> get styleSettings => [
       SettingsModel(
@@ -1045,6 +1046,7 @@ List<SettingsModel> get recommendSettings => [
         defaultVal: false,
         needReboot: true,
       ),
+      SettingsModel(settingsType: SettingsType.divider),
       SettingsModel(
         settingsType: SettingsType.normal,
         leading: const Icon(Icons.thumb_up_outlined),
