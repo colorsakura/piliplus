@@ -1575,6 +1575,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '显示继续播放分P提示',
+        leading: Icon(Icons.local_parking),
+        setKey: SettingBoxKey.continuePlayingPart,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

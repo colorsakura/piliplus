@@ -287,6 +287,9 @@ class GStorage {
   static bool get badCertificateCallback =>
       setting.get(SettingBoxKey.badCertificateCallback, defaultValue: false);
 
+  static bool get continuePlayingPart =>
+      setting.get(SettingBoxKey.continuePlayingPart, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -495,6 +498,7 @@ class SettingBoxKey {
       subtitleBgOpaticy = 'subtitleBgOpaticy',
       subtitleBgStroke = 'subtitleBgStroke',
       badCertificateCallback = 'badCertificateCallback',
+      continuePlayingPart = 'continuePlayingPart',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
