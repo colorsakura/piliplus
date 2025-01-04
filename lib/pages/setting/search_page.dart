@@ -55,9 +55,10 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
                 ...styleSettings,
               ]
                   .where((item) =>
-                      (item.title ?? item.getTitle?.call())
-                          ?.toLowerCase()
-                          .contains(value.toLowerCase()) ||
+                      item.settingsType != SettingsType.divider &&
+                          (item.title ?? item.getTitle?.call())
+                              ?.toLowerCase()
+                              .contains(value.toLowerCase()) ||
                       item.subtitle
                               ?.toLowerCase()
                               .contains(value.toLowerCase()) ==
