@@ -25,7 +25,7 @@ class CustomToast extends StatelessWidget {
         msg,
         style: TextStyle(
           fontSize: 13,
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
         ),
       ),
     );
