@@ -229,13 +229,15 @@ class VideoHttp {
       'web_location': 1550101,
     });
 
+    late final isLogin = GStorage.isLogin;
+
     try {
       var res = await Request().get(
-          epid != null ? Api.bangumiVideoUrl : Api.videoUrl,
+          epid != null && isLogin ? Api.bangumiVideoUrl : Api.videoUrl,
           queryParameters: params);
       if (res.data['code'] == 0) {
         late PlayUrlModel data;
-        if (epid != null) {
+        if (epid != null && isLogin) {
           data = PlayUrlModel.fromJson(res.data['result']['video_info'])
             ..lastPlayTime = res.data['result']['play_view_business_info']
                 ['user_status']['watch_progress']['current_watch_progress'];
