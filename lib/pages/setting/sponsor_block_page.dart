@@ -716,8 +716,8 @@ class _SlideColorPickerState extends State<SlideColorPicker> {
                     '重置',
                   ),
                 ),
-                const Spacer(),
               ],
+              const Spacer(),
               TextButton(
                 onPressed: Get.back,
                 child: Text(

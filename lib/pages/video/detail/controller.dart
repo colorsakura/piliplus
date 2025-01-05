@@ -926,7 +926,7 @@ class VideoDetailController extends GetxController
     if (isPlaying) {
       await plPlayerController.pause();
     }
-    Navigator.of(Get.context!).push(
+    await Navigator.of(Get.context!).push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return SendDanmakuPanel(
@@ -937,9 +937,6 @@ class VideoDetailController extends GetxController
             onSaveDanmaku: (danmaku) => savedDanmaku = danmaku,
             callback: (danmakuModel) async {
               savedDanmaku = null;
-              if (isPlaying) {
-                await plPlayerController.play();
-              }
               plPlayerController.danmakuController?.addDanmaku(danmakuModel);
             },
           );
@@ -960,6 +957,9 @@ class VideoDetailController extends GetxController
         },
       ),
     );
+    if (isPlaying) {
+      plPlayerController.play();
+    }
   }
 
   /// 更新画质、音质
