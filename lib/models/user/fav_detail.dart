@@ -47,7 +47,7 @@ class FavDetailItemData {
     this.stat,
     this.cid,
     this.epId,
-    required this.checked,
+    this.checked,
   });
 
   int? id;
@@ -70,7 +70,7 @@ class FavDetailItemData {
   Stat? stat;
   int? cid;
   String? epId;
-  late bool checked;
+  bool? checked;
 
   FavDetailItemData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -95,7 +95,6 @@ class FavDetailItemData {
     if (json['link'] != null && json['link'].contains('/bangumi')) {
       epId = resolveEpId(json['link']);
     }
-    checked = false;
   }
 
   String resolveEpId(url) {

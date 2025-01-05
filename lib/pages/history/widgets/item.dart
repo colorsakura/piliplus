@@ -226,7 +226,7 @@ class HistoryItem extends StatelessWidget {
                       ),
                       Positioned.fill(
                         child: AnimatedOpacity(
-                          opacity: videoItem.checked ? 1 : 0,
+                          opacity: videoItem.checked == true ? 1 : 0,
                           duration: const Duration(milliseconds: 200),
                           child: Container(
                             alignment: Alignment.center,
@@ -238,7 +238,7 @@ class HistoryItem extends StatelessWidget {
                               width: 34,
                               height: 34,
                               child: AnimatedScale(
-                                scale: videoItem.checked ? 1 : 0,
+                                scale: videoItem.checked == true ? 1 : 0,
                                 duration: const Duration(milliseconds: 250),
                                 curve: Curves.easeInOut,
                                 child: IconButton(

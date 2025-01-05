@@ -172,7 +172,7 @@ class _LaterPageState extends State<LaterPage> {
                         child: IgnorePointer(
                           child: LayoutBuilder(
                             builder: (context, constraints) => AnimatedOpacity(
-                              opacity: videoItem.checked ? 1 : 0,
+                              opacity: videoItem.checked == true ? 1 : 0,
                               duration: const Duration(milliseconds: 200),
                               child: Container(
                                 alignment: Alignment.center,
@@ -187,7 +187,7 @@ class _LaterPageState extends State<LaterPage> {
                                   width: 34,
                                   height: 34,
                                   child: AnimatedScale(
-                                    scale: videoItem.checked ? 1 : 0,
+                                    scale: videoItem.checked == true ? 1 : 0,
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.easeInOut,
                                     child: IconButton(

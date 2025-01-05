@@ -9,8 +9,8 @@ abstract class MultiSelectController extends CommonController {
 
   onSelect(int index) {
     List list = (loadingState.value as Success).response;
-    list[index].checked = !list[index].checked;
-    checkedCount.value = list.where((item) => item.checked).length;
+    list[index].checked = !(list[index]?.checked ?? false);
+    checkedCount.value = list.where((item) => item.checked == true).length;
     loadingState.value = LoadingState.success(list);
     if (checkedCount.value == 0) {
       enableMultiSelect.value = false;

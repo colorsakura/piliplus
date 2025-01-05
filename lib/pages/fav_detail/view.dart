@@ -365,9 +365,10 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             child: LayoutBuilder(
                               builder: (context, constraints) =>
                                   AnimatedOpacity(
-                                opacity: loadingState.response[index].checked
-                                    ? 1
-                                    : 0,
+                                opacity:
+                                    loadingState.response[index].checked == true
+                                        ? 1
+                                        : 0,
                                 duration: const Duration(milliseconds: 200),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -382,10 +383,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                     width: 34,
                                     height: 34,
                                     child: AnimatedScale(
-                                      scale:
-                                          loadingState.response[index].checked
-                                              ? 1
-                                              : 0,
+                                      scale: loadingState
+                                                  .response[index].checked ==
+                                              true
+                                          ? 1
+                                          : 0,
                                       duration:
                                           const Duration(milliseconds: 250),
                                       curve: Curves.easeInOut,

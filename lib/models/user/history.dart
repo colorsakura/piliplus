@@ -85,7 +85,7 @@ class HisListItem {
     this.kid,
     this.tagName,
     this.liveStatus,
-    required this.checked,
+    this.checked,
   });
 
   String? title;
@@ -112,7 +112,7 @@ class HisListItem {
   int? kid;
   String? tagName;
   int? liveStatus;
-  late bool checked;
+  bool? checked;
   void isFullScreen;
 
   HisListItem.fromJson(Map<String, dynamic> json) {
@@ -140,7 +140,6 @@ class HisListItem {
     kid = json['kid'];
     tagName = json['tag_name'];
     liveStatus = json['live_status'];
-    checked = false;
   }
 }
 

@@ -135,7 +135,7 @@ class LaterController extends MultiSelectController {
               onPressed: () async {
                 Get.back();
                 _onDelete(((loadingState.value as Success).response as List)
-                    .where((e) => e.checked)
+                    .where((e) => e.checked == true)
                     .toList());
               },
               child: const Text('确认'),

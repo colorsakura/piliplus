@@ -27,7 +27,7 @@ class HotVideoItemModel {
     this.seasontype,
     this.isOgv,
     this.rcmdReason,
-    required this.checked,
+    this.checked,
     this.pgcLabel,
     this.redirectUrl,
   });
@@ -57,7 +57,7 @@ class HotVideoItemModel {
   int? seasontype;
   bool? isOgv;
   RcmdReason? rcmdReason;
-  late bool checked;
+  bool? checked;
   String? pgcLabel;
   String? redirectUrl;
 
@@ -89,7 +89,6 @@ class HotVideoItemModel {
     rcmdReason = json['rcmd_reason'] != '' && json['rcmd_reason'] != null
         ? RcmdReason.fromJson(json['rcmd_reason'])
         : null;
-    checked = false;
     pgcLabel = json['pgc_label'];
     redirectUrl = json['redirect_url'];
   }

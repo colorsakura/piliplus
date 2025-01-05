@@ -97,7 +97,7 @@ class FavDetailController extends MultiSelectController {
               onPressed: () async {
                 Get.back();
                 List list = ((loadingState.value as Success).response as List)
-                    .where((e) => e.checked)
+                    .where((e) => e.checked == true)
                     .toList();
                 dynamic result = await VideoHttp.delFav(
                   ids: list.map((item) => '${item.id}:${item.type}').toList(),
