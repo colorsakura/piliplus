@@ -117,7 +117,13 @@ class WhisperController extends GetxController {
         if (accountInfo != null) {
           i.accountInfo = accountInfo;
         }
-        if (i.talkerId == 844424930131966) {
+        if (i.talkerId == 0) {
+          i.accountInfo = AccountListModel(
+            name: '客服消息',
+            face:
+                'https://i0.hdslb.com/bfs/activity-plat/static/20230809/f87fc7ea98282a4dd48ec7743044b0bf/OWdoP9ZXAX.png',
+          );
+        } else if (i.talkerId == 844424930131966) {
           i.accountInfo = AccountListModel(
             name: 'UP主小助手',
             face:

@@ -244,14 +244,17 @@ class _WhisperPageState extends State<WhisperPage> {
                                       Get.toNamed(
                                         '/whisperDetail',
                                         parameters: {
-                                          'talkerId': sessionList[i]
-                                              .talkerId
-                                              .toString(),
-                                          'name':
-                                              sessionList[i].accountInfo.name,
-                                          'face':
-                                              sessionList[i].accountInfo.face,
-                                          if (sessionList[i].accountInfo.mid !=
+                                          'talkerId':
+                                              '${sessionList[i].talkerId}',
+                                          'name': sessionList[i]
+                                                  .accountInfo
+                                                  ?.name ??
+                                              '',
+                                          'face': sessionList[i]
+                                                  .accountInfo
+                                                  ?.face ??
+                                              '',
+                                          if (sessionList[i].accountInfo?.mid !=
                                               null)
                                             'mid': sessionList[i]
                                                 .accountInfo
@@ -281,16 +284,18 @@ class _WhisperPageState extends State<WhisperPage> {
                                     ),
                                     title: Text(
                                         sessionList[i].accountInfo?.name ?? ""),
-                                    subtitle: Text(content,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium!
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline)),
+                                    subtitle: Text(
+                                      '$content',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline),
+                                    ),
                                     trailing: Text(
                                       Utils.dateFormat(
                                           sessionList[i].lastMsg.timestamp,
