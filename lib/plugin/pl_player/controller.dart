@@ -445,7 +445,7 @@ class PlPlayerController {
     // 默认不循环
     PlaylistMode looping = PlaylistMode.none,
     // 初始化播放位置
-    Duration seekTo = Duration.zero,
+    Duration? seekTo,
     // 初始化播放速度
     double speed = 1.0,
     // 硬件加速
@@ -500,7 +500,8 @@ class PlPlayerController {
           dataSource, _looping, enableHA, hwdec, width, height);
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
-      _position.value = _sliderPosition.value = _buffered.value = seekTo;
+      _position.value =
+          _sliderPosition.value = _buffered.value = seekTo ?? Duration.zero;
       updateDurationSecond();
       updatePositionSecond();
       updateBufferedSecond();
@@ -512,7 +513,7 @@ class PlPlayerController {
       if (!_listenersInitialized) {
         startListeners();
       }
-      await _initializePlayer(seekTo: seekTo);
+      await _initializePlayer(seekTo: seekTo ?? Duration.zero);
       setSubtitle(this.vttSubtitlesIndex.value);
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;

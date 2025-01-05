@@ -170,7 +170,6 @@ class VideoDetailController extends GetxController
   SearchType videoType = Get.arguments['videoType'] ?? SearchType.video;
 
   /// tabs相关配置
-  int tabInitialIndex = 0;
   late TabController tabCtr;
 
   // 请求返回的视频信息
@@ -194,7 +193,6 @@ class VideoDetailController extends GetxController
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final childKey = GlobalKey<ScaffoldState>();
 
-  RxString bgCover = ''.obs;
   PlPlayerController plPlayerController = PlPlayerController.getInstance()
     ..setCurrBrightness(-1.0);
 
@@ -202,13 +200,13 @@ class VideoDetailController extends GetxController
   late AudioItem firstAudio;
   String? videoUrl;
   String? audioUrl;
-  late Duration defaultST = Duration.zero;
+  Duration? defaultST;
+  Duration? playedTime;
   // 亮度
   double? brightness;
   // 默认记录历史记录
   bool enableHeart = true;
   dynamic userInfo;
-  late bool isFirstTime = true;
   Floating? floating;
   late PreferredSizeWidget headerControl;
 
@@ -966,7 +964,7 @@ class VideoDetailController extends GetxController
   /// TODO 继续进度播放
   updatePlayer() {
     isShowCover.value = false;
-    defaultST = plPlayerController.position.value;
+    playedTime = plPlayerController.position.value;
     plPlayerController.removeListeners();
     plPlayerController.isBuffering.value = false;
     plPlayerController.buffered.value = Duration.zero;
@@ -1069,7 +1067,7 @@ class VideoDetailController extends GetxController
       // 硬解
       enableHA: enableHA.value,
       hwdec: hwdec.value,
-      seekTo: seekToTime ?? defaultST,
+      seekTo: seekToTime ?? defaultST ?? playedTime,
       duration: duration ?? data.timeLength == null
           ? null
           : Duration(milliseconds: data.timeLength!),
@@ -1096,6 +1094,10 @@ class VideoDetailController extends GetxController
 
     /// 开启自动全屏时，在player初始化完成后立即传入headerControl
     plPlayerController.headerControl = headerControl;
+
+    if (defaultST != null) {
+      defaultST = null;
+    }
   }
 
   bool isQuerying = false;
@@ -1128,6 +1130,7 @@ class VideoDetailController extends GetxController
     );
     if (result['status']) {
       data = result['data'];
+
       if (enableSponsorBlock) {
         await _querySponsorBlock();
       }
@@ -1153,12 +1156,16 @@ class VideoDetailController extends GetxController
           isShowCover.value = false;
           await playerInit();
         }
-        return result;
+        videoState.value = LoadingState.success(null);
+        isQuerying = false;
+        return;
       }
       if (data.dash == null) {
         SmartDialog.showToast('视频资源不存在');
         isShowCover.value = false;
-        return result;
+        videoState.value = LoadingState.success(null);
+        isQuerying = false;
+        return;
       }
       final List<VideoItem> allVideosList = data.dash!.video!;
       // debugPrint("allVideosList:${allVideosList}");
@@ -2010,5 +2017,30 @@ class VideoDetailController extends GetxController
         upperMid: Get.arguments['mediaId'],
       );
     }
+  }
+
+  void makeHeartBeat() {
+    if (enableHeart && playedTime != null) {
+      plPlayerController.makeHeartBeat(
+        data.timeLength != null
+            ? (data.timeLength! - playedTime!.inMilliseconds).abs() <= 1000
+                ? -1
+                : playedTime!.inSeconds
+            : playedTime!.inSeconds,
+        type: 'status',
+        isManual: true,
+        bvid: bvid,
+        cid: cid.value,
+        epid: videoType == SearchType.media_bangumi ? epId : null,
+        seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
+        subType: videoType == SearchType.media_bangumi ? subType : null,
+      );
+    }
+  }
+
+  @override
+  void onClose() {
+    tabCtr.dispose();
+    super.onClose();
   }
 }

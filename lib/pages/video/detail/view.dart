@@ -199,15 +199,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
-      plPlayerController!.addPositionListener(positionListener);
+      if (videoDetailController.enableHeart) {
+        plPlayerController!.addPositionListener(positionListener);
+      }
       await plPlayerController!.autoEnterFullscreen();
     }
   }
 
   void positionListener(Duration position) {
-    if (position.inSeconds != videoDetailController.defaultST.inSeconds) {
-      videoDetailController.defaultST = position;
-    }
+    videoDetailController.playedTime = position;
   }
 
   @override
@@ -296,7 +296,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit(autoplay: true);
     plPlayerController!.addStatusLister(playerListener);
-    plPlayerController!.addPositionListener(positionListener);
+    if (videoDetailController.enableHeart) {
+      plPlayerController!.addPositionListener(positionListener);
+    }
     await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
   }
@@ -321,25 +323,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   //     },
   //   );
   // }
-
-  void _makeHeartBeat() {
-    plPlayerController!.makeHeartBeat(
-      videoDetailController.defaultST.inSeconds,
-      type: 'status',
-      isManual: true,
-      bvid: videoDetailController.bvid,
-      cid: videoDetailController.cid.value,
-      epid: videoDetailController.videoType == SearchType.media_bangumi
-          ? videoDetailController.epId
-          : null,
-      seasonId: videoDetailController.videoType == SearchType.media_bangumi
-          ? videoDetailController.seasonId
-          : null,
-      subType: videoDetailController.videoType == SearchType.media_bangumi
-          ? videoDetailController.subType
-          : null,
-    );
-  }
 
   @override
   void dispose() {
@@ -368,9 +351,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     shutdownTimerService.handleWaitingFinished();
     // _bufferedListener?.cancel();
     if (plPlayerController != null) {
-      _makeHeartBeat();
+      videoDetailController.makeHeartBeat();
       plPlayerController!.removeStatusLister(playerListener);
-      plPlayerController!.removePositionListener(positionListener);
+      if (videoDetailController.enableHeart) {
+        plPlayerController!.removePositionListener(positionListener);
+      }
       plPlayerController!.dispose();
     } else {
       PlPlayerController.updatePlayCount();
@@ -405,12 +390,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.brightness = plPlayerController?.brightness.value;
     // }
     if (plPlayerController != null) {
-      _makeHeartBeat();
+      videoDetailController.makeHeartBeat();
       videoDetailController.vttSubtitlesIndex =
           plPlayerController!.vttSubtitlesIndex.value;
       videoDetailController.showVP = plPlayerController!.showVP.value;
       plPlayerController!.removeStatusLister(playerListener);
-      plPlayerController!.removePositionListener(positionListener);
+      if (videoDetailController.enableHeart) {
+        plPlayerController!.removePositionListener(positionListener);
+      }
       plPlayerController!.pause();
     }
     isShowing = false;
@@ -442,7 +429,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       }
     }
     super.didPopNext();
-    videoDetailController.isFirstTime = false;
     // final bool autoplay = autoPlayEnable;
     videoDetailController.autoPlay.value =
         !videoDetailController.isShowCover.value;
@@ -479,7 +465,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       AutoOrientation.fullAutoMode();
     });
     plPlayerController?.addStatusLister(playerListener);
-    plPlayerController?.addPositionListener(positionListener);
+    if (videoDetailController.enableHeart) {
+      plPlayerController?.addPositionListener(positionListener);
+    }
   }
 
   @override
