@@ -839,6 +839,9 @@ class PlPlayerController {
     // if (position >= duration.value) {
     //   position = duration.value - const Duration(milliseconds: 100);
     // }
+    if (_playerCount.value == 0) {
+      return;
+    }
     if (position < Duration.zero) {
       position = Duration.zero;
     }
@@ -861,10 +864,17 @@ class PlPlayerController {
       _timerForSeek =
           Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
         //_timerForSeek = null;
-        if (duration.value.inSeconds != 0) {
-          await _videoPlayerController?.stream.buffer.first;
-          danmakuController?.clear();
-          await _videoPlayerController?.seek(position);
+        if (_playerCount.value == 0) {
+          _timerForSeek?.cancel();
+          _timerForSeek = null;
+        } else if (duration.value.inSeconds != 0) {
+          try {
+            await _videoPlayerController?.stream.buffer.first;
+            danmakuController?.clear();
+            await _videoPlayerController?.seek(position);
+          } catch (e) {
+            debugPrint('seek failed: $e');
+          }
           // if (playerStatus.status.value == PlayerStatus.paused) {
           //   play();
           // }
