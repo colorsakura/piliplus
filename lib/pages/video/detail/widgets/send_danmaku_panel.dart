@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/icon_button.dart';
 import 'package:PiliPalaX/http/danmaku.dart';
 import 'package:PiliPalaX/pages/setting/sponsor_block_page.dart'
     show SlideColorPicker;
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/toolbar_icon_button.dart';
 
 class SendDanmakuPanel extends StatefulWidget {
   final dynamic cid;
@@ -229,12 +229,20 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
       height = max(height, keyboardHeight);
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          ),
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 12),
             Row(
               children: [
                 const Text('弹幕字号', style: TextStyle(fontSize: 15)),
@@ -265,6 +273,7 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
                 _buildColorPanel,
               ],
             ),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -369,7 +378,7 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      padding: const EdgeInsets.only(left: 16, top: 2, right: 16),
+      padding: const EdgeInsets.only(left: 8, top: 2, right: 8),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
@@ -380,7 +389,8 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
       child: Row(
         children: [
           Obx(
-            () => ToolbarIconButton(
+            () => iconButton(
+              context: context,
               tooltip: '弹幕样式',
               onPressed: () {
                 if (_selectKeyboard.value) {
@@ -391,8 +401,12 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
                   updatePanelType(PanelType.keyboard);
                 }
               },
-              icon: const Icon(Icons.text_format, size: 22),
-              selected: _selectKeyboard.value.not,
+              bgColor: Colors.transparent,
+              iconSize: 24,
+              icon: Icons.text_format,
+              iconColor: _selectKeyboard.value.not
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(width: 12),
@@ -430,10 +444,13 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
                       }
                     },
                     focusNode: _focusNode,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: "输入弹幕内容",
                       border: InputBorder.none,
-                      hintStyle: TextStyle(fontSize: 15),
+                      hintStyle: TextStyle(
+                        fontSize: 15,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
@@ -443,11 +460,16 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
           ),
           const SizedBox(width: 12),
           Obx(
-            () => ToolbarIconButton(
+            () => iconButton(
+              context: context,
               tooltip: '发送',
-              selected: _enablePublish.value,
+              bgColor: Colors.transparent,
+              iconSize: 22,
+              iconColor: _enablePublish.value
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outline,
               onPressed: _enablePublish.value ? onSendDanmaku : null,
-              icon: const Icon(size: 22, Icons.send),
+              icon: Icons.send,
             ),
           )
         ],
