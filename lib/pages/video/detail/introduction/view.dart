@@ -152,7 +152,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
     videoItem = videoIntroController.videoItem!;
 
-    enableAi = GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: true);
+    enableAi =
+        GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: false);
 
     if (videoIntroController.expandableCtr == null) {
       bool alwaysExapndIntroPanel = GStorage.alwaysExapndIntroPanel;

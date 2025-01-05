@@ -642,7 +642,7 @@ List<SettingsModel> get playSettings => [
         subtitle: '展示同时在看人数',
         leading: Icon(Icons.people_outlined),
         setKey: SettingBoxKey.enableOnlineTotal,
-        defaultVal: true,
+        defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.normal,
@@ -1636,7 +1636,7 @@ List<SettingsModel> get extraSettings => [
         subtitle: '视频详情页开启AI总结',
         leading: Icon(Icons.engineering_outlined),
         setKey: SettingBoxKey.enableAi,
-        defaultVal: true,
+        defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
