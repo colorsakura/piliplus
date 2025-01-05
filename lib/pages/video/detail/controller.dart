@@ -57,7 +57,7 @@ enum SegmentType {
 }
 
 extension SegmentTypeExt on SegmentType {
-  /// from https://github.com/hanydd/BilibiliSponsorBlock/*/public/_locales/zh_CN/messages.json
+  /// from https://github.com/hanydd/BilibiliSponsorBlock/blob/master/public/_locales/zh_CN/messages.json
   String get title => [
         '赞助广告', //sponsor
         '无偿/自我推广', //selfpromo
@@ -68,7 +68,7 @@ extension SegmentTypeExt on SegmentType {
         '音乐:非音乐部分', //music_offtopic
         '精彩时刻/重点', //poi_highlight
         '离题闲聊/玩笑', //filler
-        '品牌合作', //exclusive_access
+        '柔性推广/品牌合作', //exclusive_access
       ][index];
 
   String get shortTitle => [
