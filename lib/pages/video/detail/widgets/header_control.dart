@@ -1025,7 +1025,6 @@ class _HeaderControlState extends State<HeaderControl> {
     int subtitlePaddingH = widget.controller.subtitlePaddingH;
     int subtitlePaddingB = widget.controller.subtitlePaddingB;
     double subtitleBgOpaticy = widget.controller.subtitleBgOpaticy;
-    double subtitleBgStroke = widget.controller.subtitleBgStroke;
 
     final DanmakuController? danmakuController =
         widget.controller.danmakuController;
@@ -1643,40 +1642,6 @@ class _HeaderControlState extends State<HeaderControl> {
                           subtitleBgOpaticy = val.toPrecision(2);
                           widget.controller
                             ..subtitleBgOpaticy = subtitleBgOpaticy
-                            ..updateSubtitleStyle()
-                            ..putDanmakuSettings();
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  ),
-                  Text('字幕背景边框粗细(背景不透明度为0时启用) $subtitleBgStroke'),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 0,
-                      bottom: 6,
-                      left: 10,
-                      right: 10,
-                    ),
-                    child: SliderTheme(
-                      data: SliderThemeData(
-                        trackShape: MSliderTrackShape(),
-                        thumbColor: Theme.of(context).colorScheme.primary,
-                        activeTrackColor: Theme.of(context).colorScheme.primary,
-                        trackHeight: 10,
-                        thumbShape: const RoundSliderThumbShape(
-                            enabledThumbRadius: 6.0),
-                      ),
-                      child: Slider(
-                        min: 0,
-                        max: 3,
-                        divisions: 6,
-                        value: subtitleBgStroke,
-                        label: '$subtitleBgStroke',
-                        onChanged: (double val) {
-                          subtitleBgStroke = val;
-                          widget.controller
-                            ..subtitleBgStroke = subtitleBgStroke
                             ..updateSubtitleStyle()
                             ..putDanmakuSettings();
                           setState(() {});

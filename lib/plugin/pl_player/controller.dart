@@ -260,17 +260,11 @@ class PlPlayerController {
   late int subtitlePaddingH = GStorage.subtitlePaddingH;
   late int subtitlePaddingB = GStorage.subtitlePaddingB;
   late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
-  late double subtitleBgStroke = GStorage.subtitleBgStroke;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
 
   final GlobalKey<VideoState> key = GlobalKey<VideoState>();
-
-  Paint get subtitleBg => Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = subtitleBgStroke
-    ..color = Colors.black;
 
   TextStyle get subTitleStyle => TextStyle(
         height: 1.5,
@@ -280,11 +274,7 @@ class PlPlayerController {
         wordSpacing: 0.1,
         color: Colors.white,
         fontWeight: FontWeight.normal,
-        background:
-            subtitleBgOpaticy == 0 && subtitleBgStroke != 0 ? subtitleBg : null,
-        backgroundColor: subtitleBgOpaticy == 0
-            ? null
-            : Colors.black.withOpacity(subtitleBgOpaticy),
+        backgroundColor: Colors.black.withOpacity(subtitleBgOpaticy),
       );
 
   SubtitleViewConfiguration get subtitleViewConfiguration =>
@@ -1350,7 +1340,6 @@ class PlPlayerController {
     setting.put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH);
     setting.put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB);
     setting.put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy);
-    setting.put(SettingBoxKey.subtitleBgStroke, subtitleBgStroke);
   }
 
   Future<void> dispose({String type = 'single'}) async {
