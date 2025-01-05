@@ -55,7 +55,7 @@ class AccountListModel {
     mid = json['mid'];
     name = json['name'] ?? '';
     sex = json['sex'];
-    face = json['face'];
+    face = json['face'] ?? json['pic_url'];
     sign = json['sign'];
     rank = json['rank'];
     level = json['level'];

@@ -47,6 +47,7 @@ class SessionList {
     this.liveStatus,
     this.bizMsgUnreadCount,
     // this.userLabel,
+    this.accountInfo,
   });
 
   int? talkerId;
@@ -105,6 +106,9 @@ class SessionList {
     liveStatus = json["live_status"];
     bizMsgUnreadCount = json["biz_msg_unread_count"];
     // userLabel = json["user_label"];
+    accountInfo = json['account_info'] == null
+        ? null
+        : AccountListModel.fromJson(json['account_info']);
   }
 }
 
