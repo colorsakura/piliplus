@@ -40,15 +40,13 @@ class MediaController extends CommonController {
           }),
     },
   ];
-  dynamic userInfo;
-  int? mid;
+  dynamic mid;
   RxInt count = (-1).obs;
 
   @override
   void onInit() {
     super.onInit();
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    userLogin.value = userInfo != null;
+    userLogin.value = GStorage.isLogin;
 
     if (userLogin.value) {
       queryData();
@@ -57,9 +55,7 @@ class MediaController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    if (currentPage == 1) {
-      count.value = response.response.count;
-    }
+    count.value = response.response.count;
     loadingState.value = response;
     return true;
   }

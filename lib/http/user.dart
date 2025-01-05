@@ -48,7 +48,7 @@ class UserHttp {
   static Future<LoadingState> userfavFolder({
     required int pn,
     required int ps,
-    required int mid,
+    required dynamic mid,
   }) async {
     var res = await Request().get(Api.userFavFolder, queryParameters: {
       'pn': pn,
