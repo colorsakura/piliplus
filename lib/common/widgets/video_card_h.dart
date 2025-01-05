@@ -1,4 +1,5 @@
 import 'package:PiliPalaX/common/widgets/image_save.dart';
+import 'package:PiliPalaX/models/model_hot_video_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -77,7 +78,8 @@ class VideoCardH extends StatelessWidget {
               SmartDialog.showToast('课堂视频暂不支持播放');
               return;
             }
-            if (videoItem.pgcLabel?.isNotEmpty == true &&
+            if (videoItem is HotVideoItemModel &&
+                videoItem.pgcLabel?.isNotEmpty == true &&
                 videoItem.redirectUrl?.isNotEmpty == true) {
               String? id = RegExp(r'(ep|ss)\d+')
                   .firstMatch(videoItem.redirectUrl)
@@ -128,7 +130,8 @@ class VideoCardH extends StatelessWidget {
                             width: maxWidth,
                             height: maxHeight,
                           ),
-                          if (videoItem.pgcLabel?.isNotEmpty == true)
+                          if (videoItem is HotVideoItemModel &&
+                              videoItem.pgcLabel?.isNotEmpty == true)
                             PBadge(
                               text: videoItem.pgcLabel,
                               top: 6.0,
