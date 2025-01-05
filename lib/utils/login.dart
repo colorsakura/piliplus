@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:PiliPalaX/http/loading_state.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,11 @@ import 'package:uuid/uuid.dart';
 class LoginUtils {
   static Future refreshLoginStatus(bool status) async {
     try {
-      // 更改我的页面登录状态
+      // logout
       if (status.not) {
+        // 更改我的页面登录状态
         await Get.find<MineController>().resetUserInfo();
+        Get.find<MediaController>().loadingState.value = LoadingState.loading();
       }
 
       // 更改主页登录状态
@@ -25,8 +28,6 @@ class LoginUtils {
       Get.find<MineController>().userLogin.value = status;
 
       Get.find<DynamicsController>().userLogin.value = status;
-
-      Get.find<MediaController>().userLogin.value = status;
     } catch (err) {
       // SmartDialog.showToast('refreshLoginStatus error: ${err.toString()}');
       debugPrint('refreshLoginStatus error: $err');

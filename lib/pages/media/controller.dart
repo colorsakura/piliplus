@@ -6,7 +6,6 @@ import 'package:PiliPalaX/http/user.dart';
 import 'package:PiliPalaX/utils/storage.dart';
 
 class MediaController extends CommonController {
-  RxBool userLogin = false.obs;
   List list = [
     // {
     //   'icon': Icons.file_download_outlined,
@@ -46,9 +45,8 @@ class MediaController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    userLogin.value = GStorage.isLogin;
-
-    if (userLogin.value) {
+    mid = GStorage.userInfo.get('userInfoCache')?.mid;
+    if (mid != null) {
       queryData();
     }
   }
@@ -64,6 +62,6 @@ class MediaController extends CommonController {
   Future<LoadingState> customGetData() => UserHttp.userfavFolder(
         pn: 1,
         ps: 5,
-        mid: mid ?? GStorage.userInfo.get('userInfoCache')?.mid,
+        mid: mid,
       );
 }

@@ -105,11 +105,13 @@ class Utils {
           '端」推荐');
       await GStorage.userInfo.put('userInfoCache', result['data']);
       try {
-        final HomeController homeCtr = Get.find<HomeController>();
-        homeCtr.updateLoginStatus(true);
-        homeCtr.userFace.value = result['data'].face;
-        final MediaController mediaCtr = Get.find<MediaController>();
-        mediaCtr.mid = result['data'].mid;
+        Get.find<HomeController>()
+          ..updateLoginStatus(true)
+          ..userFace.value = result['data'].face;
+
+        Get.find<MediaController>()
+          ..mid = result['data'].mid
+          ..onRefresh();
       } catch (_) {}
       await LoginUtils.refreshLoginStatus(true);
     } else {

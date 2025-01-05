@@ -20,7 +20,6 @@ class MediaPage extends StatefulWidget {
 class _MediaPageState extends State<MediaPage>
     with AutomaticKeepAliveClientMixin {
   late MediaController mediaController;
-  StreamSubscription? _listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -32,9 +31,6 @@ class _MediaPageState extends State<MediaPage>
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
 
-    _listener = mediaController.userLogin.listen((status) {
-      mediaController.onReload();
-    });
     mediaController.scrollController.addListener(
       () {
         final ScrollDirection direction =
@@ -50,7 +46,6 @@ class _MediaPageState extends State<MediaPage>
 
   @override
   void dispose() {
-    _listener?.cancel();
     mediaController.scrollController.removeListener(() {});
     super.dispose();
   }
@@ -112,16 +107,18 @@ class _MediaPageState extends State<MediaPage>
                 ),
               ),
             ],
-            Obx(() => mediaController.userLogin.value
-                ? favFolder(mediaController, context)
-                : const SizedBox(height: 0))
+            Obx(
+              () => mediaController.loadingState.value is Loading
+                  ? const SizedBox.shrink()
+                  : favFolder(),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget favFolder(mediaController, context) {
+  Widget favFolder() {
     return Column(
       children: [
         Divider(
@@ -172,7 +169,7 @@ class _MediaPageState extends State<MediaPage>
           ),
           trailing: IconButton(
             tooltip: '刷新',
-            onPressed: mediaController.onReload,
+            onPressed: mediaController.onRefresh,
             icon: const Icon(
               Icons.refresh,
               size: 20,
