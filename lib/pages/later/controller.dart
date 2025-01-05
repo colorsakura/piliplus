@@ -171,7 +171,7 @@ class LaterController extends MultiSelectController {
       List<HotVideoItemModel> list = List<HotVideoItemModel>.from(
           (loadingState.value as Success).response);
       for (HotVideoItemModel item in list) {
-        if (item.cid == null) {
+        if (item.cid == null || item.pgcLabel?.isNotEmpty == true) {
           continue;
         } else {
           if (item.bvid != list.first.bvid) {

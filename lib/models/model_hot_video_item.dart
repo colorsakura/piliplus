@@ -28,6 +28,8 @@ class HotVideoItemModel {
     this.isOgv,
     this.rcmdReason,
     required this.checked,
+    this.pgcLabel,
+    this.redirectUrl,
   });
 
   int? aid;
@@ -56,6 +58,8 @@ class HotVideoItemModel {
   bool? isOgv;
   RcmdReason? rcmdReason;
   late bool checked;
+  String? pgcLabel;
+  String? redirectUrl;
 
   HotVideoItemModel.fromJson(Map<String, dynamic> json) {
     aid = json["aid"];
@@ -86,6 +90,8 @@ class HotVideoItemModel {
         ? RcmdReason.fromJson(json['rcmd_reason'])
         : null;
     checked = false;
+    pgcLabel = json['pgc_label'];
+    redirectUrl = json['redirect_url'];
   }
 }
 

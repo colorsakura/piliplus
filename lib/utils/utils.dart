@@ -401,12 +401,11 @@ class Utils {
       // epId episode -> progress episode -> first episode
       EpisodeItem? episode;
       if (epId != null) {
-        EpisodeItem? e = (result['data'].episodes as List).firstWhereOrNull(
-          (item) => item.epId == epId,
+        episode = (result['data'].episodes as List).firstWhereOrNull(
+          (item) {
+            return item.epId.toString() == epId.toString();
+          },
         );
-        if (e != null) {
-          episode = e;
-        }
       }
       episode ??= (result['data'].episodes as List).firstWhereOrNull(
             (item) =>

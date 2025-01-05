@@ -77,6 +77,20 @@ class VideoCardH extends StatelessWidget {
               SmartDialog.showToast('课堂视频暂不支持播放');
               return;
             }
+            if (videoItem.pgcLabel?.isNotEmpty == true &&
+                videoItem.redirectUrl?.isNotEmpty == true) {
+              String? id = RegExp(r'(ep|ss)\d+')
+                  .firstMatch(videoItem.redirectUrl)
+                  ?.group(0);
+              if (id != null) {
+                Utils.viewBangumi(
+                  seasonId:
+                      id.startsWith('ss') ? id.replaceFirst('ss', '') : null,
+                  epId: id.startsWith('ep') ? id.replaceFirst('ep', '') : null,
+                );
+              }
+              return;
+            }
             try {
               final int cid =
                   videoItem.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
@@ -114,6 +128,12 @@ class VideoCardH extends StatelessWidget {
                             width: maxWidth,
                             height: maxHeight,
                           ),
+                          if (videoItem.pgcLabel?.isNotEmpty == true)
+                            PBadge(
+                              text: videoItem.pgcLabel,
+                              top: 6.0,
+                              right: 6.0,
+                            ),
                           if (videoItem.duration != 0)
                             PBadge(
                               text: Utils.timeFormat(videoItem.duration!),
