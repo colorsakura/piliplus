@@ -235,13 +235,17 @@ class _BangumiInfoState extends State<BangumiInfo>
                       Stack(
                         children: [
                           GestureDetector(
-                            onTap: () => context.imageView(
-                              imgList: [
-                                !widget.isLoading
-                                    ? widget.bangumiDetail!.cover!
-                                    : bangumiItem!.cover!
-                              ],
-                            ),
+                            onTap: () {
+                              videoDetailCtr.onViewImage();
+                              context.imageView(
+                                imgList: [
+                                  !widget.isLoading
+                                      ? widget.bangumiDetail!.cover!
+                                      : bangumiItem!.cover!
+                                ],
+                                onDismissed: videoDetailCtr.onDismissed,
+                              );
+                            },
                             child: Hero(
                               tag: !widget.isLoading
                                   ? widget.bangumiDetail!.cover!
