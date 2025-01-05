@@ -558,8 +558,11 @@ class VideoIntroController extends GetxController
   Future changeSeasonOrbangu(epid, bvid, cid, aid, cover) async {
     // 重新获取视频资源
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag)
+      ..plPlayerController.pause()
       ..makeHeartBeat()
       ..playedTime = null
+      ..videoUrl = null
+      ..audioUrl = null
       ..updateMediaListHistory(aid)
       ..vttSubtitlesIndex = null
       ..savedDanmaku = null

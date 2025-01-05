@@ -199,9 +199,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
-      if (videoDetailController.enableHeart) {
-        plPlayerController!.addPositionListener(positionListener);
-      }
+      plPlayerController!.addPositionListener(positionListener);
       await plPlayerController!.autoEnterFullscreen();
     }
   }
@@ -296,9 +294,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit(autoplay: true);
     plPlayerController!.addStatusLister(playerListener);
-    if (videoDetailController.enableHeart) {
-      plPlayerController!.addPositionListener(positionListener);
-    }
+    plPlayerController!.addPositionListener(positionListener);
     await plPlayerController!.autoEnterFullscreen();
     videoDetailController.autoPlay.value = true;
   }
@@ -353,9 +349,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (plPlayerController != null) {
       videoDetailController.makeHeartBeat();
       plPlayerController!.removeStatusLister(playerListener);
-      if (videoDetailController.enableHeart) {
-        plPlayerController!.removePositionListener(positionListener);
-      }
+      plPlayerController!.removePositionListener(positionListener);
       plPlayerController!.dispose();
     } else {
       PlPlayerController.updatePlayCount();
@@ -395,9 +389,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           plPlayerController!.vttSubtitlesIndex.value;
       videoDetailController.showVP = plPlayerController!.showVP.value;
       plPlayerController!.removeStatusLister(playerListener);
-      if (videoDetailController.enableHeart) {
-        plPlayerController!.removePositionListener(positionListener);
-      }
+      plPlayerController!.removePositionListener(positionListener);
       plPlayerController!.pause();
     }
     isShowing = false;
@@ -465,9 +457,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       AutoOrientation.fullAutoMode();
     });
     plPlayerController?.addStatusLister(playerListener);
-    if (videoDetailController.enableHeart) {
-      plPlayerController?.addPositionListener(positionListener);
-    }
+    plPlayerController?.addPositionListener(positionListener);
   }
 
   @override

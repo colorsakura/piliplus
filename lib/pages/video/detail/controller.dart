@@ -1162,7 +1162,8 @@ class VideoDetailController extends GetxController
       }
       if (data.dash == null) {
         SmartDialog.showToast('视频资源不存在');
-        isShowCover.value = false;
+        autoPlay.value = false;
+        isShowCover.value = true;
         videoState.value = LoadingState.success(null);
         isQuerying = false;
         return;
@@ -1265,8 +1266,9 @@ class VideoDetailController extends GetxController
         await playerInit();
       }
     } else {
+      autoPlay.value = false;
+      isShowCover.value = true;
       if (result['code'] == -404) {
-        isShowCover.value = false;
         SmartDialog.showToast('视频不存在或已被删除');
       }
       if (result['code'] == 87008) {
