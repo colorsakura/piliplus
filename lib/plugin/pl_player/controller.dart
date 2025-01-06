@@ -464,6 +464,7 @@ class PlPlayerController {
     dynamic epid,
     dynamic seasonId,
     dynamic subType,
+    VoidCallback? callback,
   }) async {
     try {
       this.dataSource = dataSource;
@@ -498,6 +499,7 @@ class PlPlayerController {
       // 配置Player 音轨、字幕等等
       _videoPlayerController = await _createVideoController(
           dataSource, _looping, enableHA, hwdec, width, height);
+      callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
       _position.value =
@@ -601,15 +603,14 @@ class PlPlayerController {
       await pp.setProperty("blend-subtitles", "video");
     }
 
-    _videoController = _videoController ??
-        VideoController(
-          player,
-          configuration: VideoControllerConfiguration(
-            enableHardwareAcceleration: enableHA,
-            androidAttachSurfaceAfterVideoParameters: false,
-            hwdec: enableHA ? hwdec : null,
-          ),
-        );
+    _videoController ??= VideoController(
+      player,
+      configuration: VideoControllerConfiguration(
+        enableHardwareAcceleration: enableHA,
+        androidAttachSurfaceAfterVideoParameters: false,
+        hwdec: enableHA ? hwdec : null,
+      ),
+    );
 
     player.setPlaylistMode(looping);
     if (dataSource.type == DataSourceType.asset) {

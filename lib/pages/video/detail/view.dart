@@ -293,9 +293,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     plPlayerController = videoDetailController.plPlayerController;
     videoDetailController.isShowCover.value = false;
-    await videoDetailController.playerInit(autoplay: true);
     videoDetailController.autoPlay.value = true;
-    videoDetailController.videoState.value = LoadingState.success(null);
+    await videoDetailController.playerInit(autoplay: true);
     plPlayerController!.addStatusLister(playerListener);
     plPlayerController!.addPositionListener(positionListener);
     await plPlayerController!.autoEnterFullscreen();

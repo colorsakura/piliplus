@@ -1090,6 +1090,11 @@ class VideoDetailController extends GetxController
       epid: videoType == SearchType.media_bangumi ? epId : null,
       seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
       subType: videoType == SearchType.media_bangumi ? subType : null,
+      callback: () {
+        if (videoState.value is! Success) {
+          videoState.value = LoadingState.success(null);
+        }
+      },
     );
 
     _initSkip();
@@ -1162,7 +1167,6 @@ class VideoDetailController extends GetxController
         if (autoPlay.value) {
           isShowCover.value = false;
           await playerInit();
-          videoState.value = LoadingState.success(null);
         }
         isQuerying = false;
         return;
@@ -1271,7 +1275,6 @@ class VideoDetailController extends GetxController
       if (autoPlay.value) {
         isShowCover.value = false;
         await playerInit();
-        videoState.value = LoadingState.success(null);
       }
     } else {
       autoPlay.value = false;
