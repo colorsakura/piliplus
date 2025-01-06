@@ -124,8 +124,8 @@ class VideoInfo extends StatefulWidget {
 
 class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   late final VideoDetailController videoDetailCtr;
-  late final Map<dynamic, dynamic> videoItem;
 
+  Map get videoItem => videoIntroController.videoItem;
   VideoIntroController get videoIntroController => widget.videoIntroController;
   VideoDetailData get videoDetail =>
       widget.videoIntroController.videoDetail.value;
@@ -133,7 +133,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
 
-  late bool enableAi;
   bool isProcessing = false;
 
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
@@ -150,10 +149,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
-    videoItem = videoIntroController.videoItem!;
-
-    enableAi =
-        GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: false);
 
     if (videoIntroController.expandableCtr == null) {
       bool alwaysExapndIntroPanel = GStorage.alwaysExapndIntroPanel;
@@ -547,7 +542,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
-                  if (enableAi)
+                  if (videoIntroController.enableAi)
                     Positioned(
                       right: 10,
                       top: 0,

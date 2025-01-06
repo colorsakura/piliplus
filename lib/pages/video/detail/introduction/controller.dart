@@ -37,7 +37,7 @@ class VideoIntroController extends GetxController
   bool preRender = false;
 
   // 视频详情 上个页面传入
-  Map? videoItem = {};
+  Map videoItem = {};
 
   // 请求状态
   RxBool isLoading = false.obs;
@@ -81,6 +81,8 @@ class VideoIntroController extends GetxController
   ExpandableController? expandableCtr;
 
   late final showArgueMsg = GStorage.showArgueMsg;
+  late final enableAi =
+      GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: false);
 
   @override
   void onInit() {
@@ -99,23 +101,23 @@ class VideoIntroController extends GetxController
         var keys = Get.arguments.keys.toList();
         try {
           if (args.pic != null && args.pic != '') {
-            videoItem!['pic'] = args.pic;
+            videoItem['pic'] = args.pic;
           } else if (args.cover != null && args.cover != '') {
-            videoItem!['pic'] = args.cover;
+            videoItem['pic'] = args.cover;
           }
         } catch (_) {}
         if (args.title is String) {
-          videoItem!['title'] = args.title;
+          videoItem['title'] = args.title;
         } else {
           String str = '';
           for (Map map in args.title) {
             str += map['text'];
           }
-          videoItem!['title'] = str;
+          videoItem['title'] = str;
         }
-        videoItem!['stat'] = keys.contains('stat') ? args.stat : null;
-        videoItem!['pubdate'] = keys.contains('pubdate') ? args.pubdate : null;
-        videoItem!['owner'] = keys.contains('owner') ? args.owner : null;
+        videoItem['stat'] = keys.contains('stat') ? args.stat : null;
+        videoItem['pubdate'] = keys.contains('pubdate') ? args.pubdate : null;
+        videoItem['owner'] = keys.contains('owner') ? args.owner : null;
       }
     }
     userLogin = userInfo != null;
@@ -142,7 +144,7 @@ class VideoIntroController extends GetxController
         result['data']?.isPageReversed = videoDetail.value.isPageReversed;
       }
       videoDetail.value = result['data'];
-      videoItem!['staff'] = result['data'].staff;
+      videoItem['staff'] = result['data'].staff;
       try {
         final videoDetailController =
             Get.find<VideoDetailController>(tag: heroTag);
@@ -258,6 +260,10 @@ class VideoIntroController extends GetxController
       SmartDialog.showToast('账号未登录');
       return;
     }
+    if (videoDetail.value.stat?.like == null) {
+      // not init
+      return;
+    }
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
       // hasLike.value = result["data"] == 1 ? true : false;
@@ -301,6 +307,10 @@ class VideoIntroController extends GetxController
   }
 
   void coinVideo(int coin) async {
+    if (videoDetail.value.stat?.coin == null) {
+      // not init
+      return;
+    }
     var res = await VideoHttp.coinVideo(bvid: bvid, multiply: coin);
     if (res['status']) {
       SmartDialog.showToast('投币成功');
