@@ -347,57 +347,53 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     child: videoItem['staff'] == null
                         ? GestureDetector(
                             onTap: onPushMember,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 1, horizontal: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  NetworkImgLayer(
-                                    type: 'avatar',
-                                    src: widget.loadingStatus
-                                        ? videoItem['owner']?.face ?? ""
-                                        : videoDetail.owner!.face,
-                                    width: 30,
-                                    height: 30,
-                                    fadeInDuration: Duration.zero,
-                                    fadeOutDuration: Duration.zero,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          widget.loadingStatus
-                                              ? videoItem['owner']?.name ?? ""
-                                              : videoDetail.owner!.name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                NetworkImgLayer(
+                                  type: 'avatar',
+                                  src: widget.loadingStatus
+                                      ? videoItem['owner']?.face ?? ""
+                                      : videoDetail.owner!.face,
+                                  width: 35,
+                                  height: 35,
+                                  fadeInDuration: Duration.zero,
+                                  fadeOutDuration: Duration.zero,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.loadingStatus
+                                            ? videoItem['owner']?.name ?? ""
+                                            : videoDetail.owner!.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          // color: t.colorScheme.primary,
+                                        ),
+                                        // semanticsLabel: "UP主：${owner.name}",
+                                      ),
+                                      const SizedBox(height: 0),
+                                      Obx(
+                                        () => Text(
+                                          '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝',
                                           style: TextStyle(
                                             fontSize: 12,
-                                            // color: t.colorScheme.primary,
-                                          ),
-                                          // semanticsLabel: "UP主：${owner.name}",
-                                        ),
-                                        const SizedBox(height: 0),
-                                        Obx(
-                                          () => Text(
-                                            '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: t.colorScheme.outline,
-                                            ),
+                                            color: t.colorScheme.outline,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                  followButton(context, t),
-                                ],
-                              ),
+                                ),
+                                followButton(context, t),
+                              ],
                             ),
                           )
                         : SelfSizedHorizontalList(
@@ -430,8 +426,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                   NetworkImgLayer(
                                     type: 'avatar',
                                     src: videoItem['staff'][index].face,
-                                    width: 40,
-                                    height: 40,
+                                    width: 35,
+                                    height: 35,
                                     fadeInDuration: Duration.zero,
                                     fadeOutDuration: Duration.zero,
                                   ),
@@ -446,6 +442,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
+                                          fontSize: 13,
                                           color: videoItem['staff'][index]
                                                           .vip
                                                           .status >
