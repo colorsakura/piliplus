@@ -1120,6 +1120,7 @@ class VideoDetailController extends GetxController
     if (autoPlay.value && videoUrl != null && audioUrl != null) {
       isShowCover.value = false;
       await playerInit();
+      videoState.value = LoadingState.success(null);
     }
     isQuerying = false;
   }
@@ -1175,7 +1176,9 @@ class VideoDetailController extends GetxController
         //   isShowCover.value = false;
         //   await playerInit();
         // }
-        videoState.value = LoadingState.success(null);
+        if (autoPlay.value.not) {
+          videoState.value = LoadingState.success(null);
+        }
         return;
       }
 
@@ -1288,7 +1291,9 @@ class VideoDetailController extends GetxController
       //   isShowCover.value = false;
       //   await playerInit();
       // }
-      videoState.value = LoadingState.success(null);
+      if (autoPlay.value.not) {
+        videoState.value = LoadingState.success(null);
+      }
     } else {
       autoPlay.value = false;
       isShowCover.value = true;

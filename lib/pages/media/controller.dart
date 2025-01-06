@@ -59,9 +59,12 @@ class MediaController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.userfavFolder(
-        pn: 1,
-        ps: 5,
-        mid: mid,
-      );
+  Future<LoadingState> customGetData() {
+    mid ??= GStorage.userInfo.get('userInfoCache')?.mid;
+    return UserHttp.userfavFolder(
+      pn: 1,
+      ps: 5,
+      mid: mid,
+    );
+  }
 }
