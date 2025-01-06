@@ -1303,6 +1303,9 @@ class PlPlayerController {
     }
     bool isComplete = playerStatus.status.value == PlayerStatus.completed ||
         type == 'completed';
+    if ((duration.value - position.value).inMilliseconds > 1000) {
+      isComplete = false;
+    }
     // 播放状态变化时，更新
 
     if (type == 'status' || type == 'completed') {

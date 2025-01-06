@@ -2022,7 +2022,10 @@ class VideoDetailController extends GetxController
   }
 
   void makeHeartBeat() {
-    if (enableHeart && playedTime != null) {
+    if (enableHeart &&
+        plPlayerController.playerStatus.status.value !=
+            PlayerStatus.completed &&
+        playedTime != null) {
       plPlayerController.makeHeartBeat(
         data.timeLength != null
             ? (data.timeLength! - playedTime!.inMilliseconds).abs() <= 1000
