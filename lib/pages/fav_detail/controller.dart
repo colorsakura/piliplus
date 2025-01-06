@@ -105,11 +105,15 @@ class FavDetailController extends MultiSelectController {
                 );
                 if (result['status']) {
                   List dataList = (loadingState.value as Success).response;
-                  Set remainList = dataList.toSet().difference(list.toSet());
+                  List remainList =
+                      dataList.toSet().difference(list.toSet()).toList();
                   item.value.mediaCount = item.value.mediaCount! - list.length;
                   item.refresh();
-                  loadingState.value =
-                      LoadingState.success(remainList.toList());
+                  if (remainList.isNotEmpty) {
+                    loadingState.value = LoadingState.success(remainList);
+                  } else {
+                    onReload();
+                  }
                   SmartDialog.showToast('取消收藏');
                   checkedCount.value = 0;
                   enableMultiSelect.value = false;

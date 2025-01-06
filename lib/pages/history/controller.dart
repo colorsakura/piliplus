@@ -145,10 +145,15 @@ class HistoryController extends MultiSelectController {
     }).toList();
     dynamic response = await UserHttp.delHistory(kidList);
     if (response['status']) {
-      Set remainList = ((loadingState.value as Success).response as List)
+      List remainList = ((loadingState.value as Success).response as List)
           .toSet()
-          .difference(result.toSet());
-      loadingState.value = LoadingState.success(remainList.toList());
+          .difference(result.toSet())
+          .toList();
+      if (remainList.isNotEmpty) {
+        loadingState.value = LoadingState.success(remainList);
+      } else {
+        onReload();
+      }
       if (enableMultiSelect.value) {
         checkedCount.value = 0;
         enableMultiSelect.value = false;
