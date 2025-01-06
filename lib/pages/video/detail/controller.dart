@@ -1902,6 +1902,7 @@ class VideoDetailController extends GetxController
           SettingBoxKey.subtitlePreference,
           defaultValue: SubtitlePreference.values.first.code,
         );
+        vttSubtitlesIndex = 0;
         if (preference == 'on') {
           vttSubtitlesIndex = 1;
         } else if (preference == 'withoutAi') {
@@ -1915,9 +1916,11 @@ class VideoDetailController extends GetxController
         }
         if (plPlayerController.vttSubtitles.isEmpty) {
           plPlayerController.vttSubtitles.value = _vttSubtitles;
-          plPlayerController.vttSubtitlesIndex.value = vttSubtitlesIndex!;
-          if (vttSubtitlesIndex != 0) {
-            plPlayerController.setSubtitle(vttSubtitlesIndex!);
+          if (vttSubtitlesIndex != null) {
+            plPlayerController.vttSubtitlesIndex.value = vttSubtitlesIndex!;
+            if (vttSubtitlesIndex != 0) {
+              plPlayerController.setSubtitle(vttSubtitlesIndex!);
+            }
           }
         }
       }
@@ -1988,7 +1991,6 @@ class VideoDetailController extends GetxController
         } catch (_) {}
       }
 
-      vttSubtitlesIndex = 0;
       if (res["data"] is List && res["data"].isNotEmpty) {
         var result = await VideoHttp.vttSubtitles(res["data"]);
         if (result != null) {

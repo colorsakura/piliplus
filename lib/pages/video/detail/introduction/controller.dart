@@ -719,7 +719,7 @@ class VideoIntroController extends GetxController
     }
 
     final int currentIndex =
-        episodes.indexWhere((e) => e.cid == lastPlayCid.value);
+        episodes.indexWhere((e) => e.cid == videoDetailCtr.cid.value);
     int nextIndex = currentIndex + 1;
 
     if (videoDetailCtr.isPlayAll && currentIndex == episodes.length - 2) {
