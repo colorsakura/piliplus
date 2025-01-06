@@ -137,7 +137,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
 
-  Widget get _buildVideoTitle => videoDetailCtr.enableSponsorBlock
+  Widget _buildVideoTitle([bool isExpand = false]) => videoDetailCtr
+          .enableSponsorBlock
       ? Obx(
           () => Text.rich(
             TextSpan(
@@ -196,15 +197,15 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     text: '${videoDetail.title ?? videoItem['title'] ?? ''}'),
               ],
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            maxLines: isExpand ? null : 2,
+            overflow: isExpand ? null : TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 16),
           ),
         )
       : Text(
           '${videoDetail.title ?? videoItem['title'] ?? ''}',
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
+          maxLines: isExpand ? null : 2,
+          overflow: isExpand ? null : TextOverflow.ellipsis,
           style: const TextStyle(fontSize: 16),
         );
 
@@ -526,7 +527,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       Utils.copyText(
                           '${videoDetail.title ?? videoItem['title'] ?? ''}');
                     },
-                    child: _buildVideoTitle,
+                    child: _buildVideoTitle(),
                   ),
                   expanded: GestureDetector(
                     onLongPress: () {
@@ -534,7 +535,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       Utils.copyText(
                           '${videoDetail.title ?? videoItem['title'] ?? ''}');
                     },
-                    child: _buildVideoTitle,
+                    child: _buildVideoTitle(true),
                   ),
                   theme: const ExpandableThemeData(
                     animationDuration: Duration(milliseconds: 300),
