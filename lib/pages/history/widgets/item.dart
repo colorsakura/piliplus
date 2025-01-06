@@ -373,7 +373,8 @@ class HistoryItem extends StatelessWidget {
                     onSelected: (String type) {},
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
-                      if (videoItem.badge != '番剧' &&
+                      if (videoItem.history?.business != 'pgc' &&
+                          videoItem.badge != '番剧' &&
                           !videoItem.tagName.contains('动画') &&
                           videoItem.history.business != 'live' &&
                           !videoItem.history.business.contains('article'))
