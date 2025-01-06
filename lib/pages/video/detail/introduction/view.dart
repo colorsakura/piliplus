@@ -137,6 +137,77 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
 
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
 
+  Widget get _buildVideoTitle => videoDetailCtr.enableSponsorBlock
+      ? Obx(
+          () => Text.rich(
+            TextSpan(
+              children: [
+                if (videoDetailCtr.videoLabel.value.isNotEmpty) ...[
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Icon(
+                                Icons.shield_outlined,
+                                size:
+                                    MediaQuery.textScalerOf(context).scale(16),
+                              ),
+                              Icon(
+                                Icons.play_arrow_rounded,
+                                size:
+                                    MediaQuery.textScalerOf(context).scale(12),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            videoDetailCtr.videoLabel.value,
+                            strutStyle: StrutStyle(leading: 0, height: 1),
+                            style: TextStyle(
+                              height: 1,
+                              fontSize: 13,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  TextSpan(text: ' '),
+                ],
+                TextSpan(
+                    text: '${videoDetail.title ?? videoItem['title'] ?? ''}'),
+              ],
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 16),
+          ),
+        )
+      : Text(
+          '${videoDetail.title ?? videoItem['title'] ?? ''}',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 16),
+        );
+
   void handleState(Future Function() action) async {
     if (isProcessing.not) {
       isProcessing = true;
@@ -455,12 +526,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       Utils.copyText(
                           '${videoDetail.title ?? videoItem['title'] ?? ''}');
                     },
-                    child: Text(
-                      '${videoDetail.title ?? videoItem['title'] ?? ''}',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                    child: _buildVideoTitle,
                   ),
                   expanded: GestureDetector(
                     onLongPress: () {
@@ -468,10 +534,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                       Utils.copyText(
                           '${videoDetail.title ?? videoItem['title'] ?? ''}');
                     },
-                    child: Text(
-                      videoDetail.title ?? videoItem['title'] ?? '',
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                    child: _buildVideoTitle,
                   ),
                   theme: const ExpandableThemeData(
                     animationDuration: Duration(milliseconds: 300),

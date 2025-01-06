@@ -476,6 +476,7 @@ class VideoDetailController extends GetxController
   List<Segment>? _segmentProgressList;
   Color _getColor(SegmentType segment) =>
       _blockColor?[segment.index] ?? segment.color;
+  late RxString videoLabel = ''.obs;
 
   Timer? skipTimer;
   late final listKey = GlobalKey<AnimatedListState>();
@@ -747,6 +748,7 @@ class VideoDetailController extends GetxController
       },
       options: _options,
     );
+    videoLabel.value = '';
     segmentList.clear();
     _segmentProgressList = null;
     _handleSBData(result);
@@ -772,6 +774,10 @@ class VideoDetailController extends GetxController
           (item) {
             SegmentType segmentType =
                 SegmentType.values[list.indexOf(item['category'])];
+            if (item['segment'][0] == 0 && item['segment'][1] == 0) {
+              videoLabel.value +=
+                  '${videoLabel.value.isNotEmpty ? '/' : ''}${segmentType.title}';
+            }
             SkipType skipType = _blockSettings![segmentType.index].second;
             if (skipType != SkipType.showOnly) {
               if (item['segment'][1] == item['segment'][0] ||
