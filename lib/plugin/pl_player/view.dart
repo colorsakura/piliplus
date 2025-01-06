@@ -712,17 +712,21 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               _initialFocalPoint = Offset.zero;
               _gestureType = null;
             },
-            child: Video(
-              key: plPlayerController.key,
-              controller: videoController,
-              controls: NoVideoControls,
-              pauseUponEnteringBackgroundMode:
-                  !plPlayerController.continuePlayInBackground.value,
-              resumeUponEnteringForegroundMode: true,
-              // 字幕尺寸调节
-              subtitleViewConfiguration:
-                  plPlayerController.subtitleViewConfiguration,
-              fit: plPlayerController.videoFit.value,
+            child: Transform.flip(
+              flipX: plPlayerController.flipX.value,
+              flipY: plPlayerController.flipY.value,
+              child: Video(
+                key: plPlayerController.key,
+                controller: videoController,
+                controls: NoVideoControls,
+                pauseUponEnteringBackgroundMode:
+                    !plPlayerController.continuePlayInBackground.value,
+                resumeUponEnteringForegroundMode: true,
+                // 字幕尺寸调节
+                subtitleViewConfiguration:
+                    plPlayerController.subtitleViewConfiguration,
+                fit: plPlayerController.videoFit.value,
+              ),
             ),
           ),
         ),

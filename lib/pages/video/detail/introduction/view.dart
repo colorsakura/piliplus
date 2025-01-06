@@ -165,6 +165,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                 Icons.shield_outlined,
                                 size:
                                     MediaQuery.textScalerOf(context).scale(16),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
                               ),
                               Icon(
                                 Icons.play_arrow_rounded,

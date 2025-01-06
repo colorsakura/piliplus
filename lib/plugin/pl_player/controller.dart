@@ -81,7 +81,13 @@ class PlPlayerController {
   late StreamSubscription<DataStatus> _dataListenerForEnterFullscreen;
 
   /// 后台播放
-  final Rx<bool> _continuePlayInBackground = false.obs;
+  late final Rx<bool> _continuePlayInBackground = false.obs;
+
+  late final Rx<bool> _onlyPlayAudio = false.obs;
+
+  late final Rx<bool> _flipX = false.obs;
+
+  late final Rx<bool> _flipY = false.obs;
 
   ///
   final Rx<bool> _isSliderMoving = false.obs;
@@ -211,6 +217,14 @@ class PlPlayerController {
 
   /// 后台播放
   Rx<bool> get continuePlayInBackground => _continuePlayInBackground;
+
+  /// 听视频
+  Rx<bool> get onlyPlayAudio => _onlyPlayAudio;
+
+  /// 镜像
+  Rx<bool> get flipX => _flipX;
+
+  Rx<bool> get flipY => _flipY;
 
   /// 是否长按倍速
   Rx<bool> get doubleSpeedStatus => _doubleSpeedStatus;
@@ -1428,5 +1442,17 @@ class PlPlayerController {
     } else {
       _instance?._playerCount.value -= 1;
     }
+  }
+
+  void setContinuePlayInBackground() {
+    _continuePlayInBackground.value = !_continuePlayInBackground.value;
+    setting.put(SettingBoxKey.continuePlayInBackground,
+        _continuePlayInBackground.value);
+  }
+
+  void setOnlyPlayAudio() {
+    _onlyPlayAudio.value = !_onlyPlayAudio.value;
+    videoPlayerController?.setVideoTrack(
+        _onlyPlayAudio.value ? VideoTrack.no() : VideoTrack.auto());
   }
 }

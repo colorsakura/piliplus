@@ -99,20 +99,24 @@ class MenuRow extends StatelessWidget {
 class ActionRowLineItem extends StatelessWidget {
   const ActionRowLineItem({
     super.key,
-    this.selectStatus,
+    required this.selectStatus,
     this.onTap,
     this.text,
     this.loadingStatus = false,
+    this.iconData,
+    this.icon,
   });
-  final bool? selectStatus;
+  final bool selectStatus;
   final Function? onTap;
   final bool? loadingStatus;
   final String? text;
+  final IconData? iconData;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selectStatus!
+      color: selectStatus
           ? Theme.of(context).colorScheme.secondaryContainer
           : Colors.transparent,
       borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -127,7 +131,7 @@ class ActionRowLineItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(30)),
             border: Border.all(
-              color: selectStatus!
+              color: selectStatus
                   ? Colors.transparent
                   : Theme.of(context).colorScheme.secondaryContainer,
             ),
@@ -135,6 +139,16 @@ class ActionRowLineItem extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (iconData != null)
+                Icon(
+                  iconData,
+                  size: 13,
+                  color: selectStatus
+                      ? Theme.of(context).colorScheme.onSecondaryContainer
+                      : Theme.of(context).colorScheme.outline,
+                )
+              else if (icon != null)
+                icon!,
               AnimatedOpacity(
                 opacity: loadingStatus! ? 0 : 1,
                 duration: const Duration(milliseconds: 200),
@@ -142,7 +156,7 @@ class ActionRowLineItem extends StatelessWidget {
                   text!,
                   style: TextStyle(
                       fontSize: 13,
-                      color: selectStatus!
+                      color: selectStatus
                           ? Theme.of(context).colorScheme.onSecondaryContainer
                           : Theme.of(context).colorScheme.outline),
                 ),

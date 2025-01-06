@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPalaX/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPalaX/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPalaX/utils/extension.dart';
 import 'package:PiliPalaX/utils/id_utils.dart';
@@ -230,24 +231,71 @@ class _HeaderControlState extends State<HeaderControl> {
                             }
                           },
                         ),
-                        ListTile(
-                          dense: true,
-                          onTap: () {
-                            Get.back();
-                            Player? player =
-                                widget.controller.videoPlayerController;
-                            if (player == null) {
-                              SmartDialog.showToast('播放器未初始化');
-                              return;
-                            }
-                            var pp = player.platform as NativePlayer;
-                            pp.setProperty("video", "no");
+                        SelfSizedHorizontalList(
+                          itemCount: 4,
+                          gapSize: 10,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          childBuilder: (index) {
+                            return switch (index) {
+                              0 => Obx(
+                                  () => ActionRowLineItem(
+                                    iconData: Icons.flip,
+                                    onTap: () {
+                                      widget.controller.flipX.value =
+                                          !widget.controller.flipX.value;
+                                    },
+                                    text: " 左右翻转 ",
+                                    selectStatus: widget.controller.flipX.value,
+                                  ),
+                                ),
+                              1 => Obx(
+                                  () => ActionRowLineItem(
+                                    icon: Transform.rotate(
+                                      angle: pi / 2,
+                                      child: Icon(
+                                        Icons.flip,
+                                        size: 13,
+                                        color: widget.controller.flipY.value
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      widget.controller.flipY.value =
+                                          !widget.controller.flipY.value;
+                                    },
+                                    text: " 上下翻转 ",
+                                    selectStatus: widget.controller.flipY.value,
+                                  ),
+                                ),
+                              2 => Obx(
+                                  () => ActionRowLineItem(
+                                    iconData: Icons.headphones,
+                                    onTap: widget.controller.setOnlyPlayAudio,
+                                    text: " 听视频 ",
+                                    selectStatus:
+                                        widget.controller.onlyPlayAudio.value,
+                                  ),
+                                ),
+                              3 => Obx(
+                                  () => ActionRowLineItem(
+                                    iconData: Icons.play_circle_outline,
+                                    onTap: widget
+                                        .controller.setContinuePlayInBackground,
+                                    text: " 后台播放 ",
+                                    selectStatus: widget.controller
+                                        .continuePlayInBackground.value,
+                                  ),
+                                ),
+                              int() => throw UnimplementedError(),
+                            };
                           },
-                          leading:
-                              const Icon(Icons.headphones_outlined, size: 20),
-                          title: const Text('听视频（需返回首页才能终止该状态）',
-                              style: titleStyle),
                         ),
+
                         ListTile(
                           dense: true,
                           onTap: () => {Get.back(), showSetVideoQa()},
