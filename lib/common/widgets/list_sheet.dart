@@ -79,15 +79,17 @@ class _ListSheetContentState extends State<ListSheetContent>
       if (this.currentIndex != currentIndex) {
         this.currentIndex = currentIndex;
         try {
-          itemScrollController[_index].jumpTo(index: currentIndex);
+          itemScrollController[_index].jumpTo(
+            index: currentIndex,
+          );
         } catch (_) {}
       }
     }
 
     // jump to current
     if (_ctr != null && widget.index != _ctr?.index) {
-      _ctr?.animateTo(_index);
-      Future.delayed(const Duration(milliseconds: 255)).then((_) {
+      _ctr?.animateTo(_index, duration: const Duration(milliseconds: 200));
+      Future.delayed(const Duration(milliseconds: 300)).then((_) {
         jumpToCurrent();
       });
     } else {
