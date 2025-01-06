@@ -294,10 +294,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     plPlayerController = videoDetailController.plPlayerController;
     videoDetailController.isShowCover.value = false;
     await videoDetailController.playerInit(autoplay: true);
+    videoDetailController.autoPlay.value = true;
+    videoDetailController.videoState.value = LoadingState.success(null);
     plPlayerController!.addStatusLister(playerListener);
     plPlayerController!.addPositionListener(positionListener);
     await plPlayerController!.autoEnterFullscreen();
-    videoDetailController.autoPlay.value = true;
   }
 
   // // 生命周期监听
@@ -1071,8 +1072,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         () => videoDetailController.videoState.value is! Success
             ? const SizedBox.shrink()
             : !videoDetailController.autoPlay.value ||
-                    plPlayerController == null ||
-                    plPlayerController!.videoController == null
+                    plPlayerController?.videoController == null
                 ? const SizedBox.shrink()
                 : PLVideoPlayer(
                     plPlayerController: plPlayerController!,
