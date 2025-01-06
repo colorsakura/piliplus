@@ -284,8 +284,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.videoUrl == null ||
         videoDetailController.audioUrl == null) {
       // SmartDialog.showToast('not initialized');
-      debugPrint('not initialized');
+      debugPrint('handlePlay: videoUrl/audioUrl not initialized');
       if (videoDetailController.isQuerying.not) {
+        videoDetailController.autoPlay.value = true;
         videoDetailController.queryVideoUrl();
       }
       return;
