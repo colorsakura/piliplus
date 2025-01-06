@@ -1113,6 +1113,18 @@ class VideoDetailController extends GetxController
       return;
     }
     isQuerying = true;
+    await Future.wait([
+      if (enableSponsorBlock) _querySponsorBlock(),
+      _actualQuery(),
+    ]);
+    if (autoPlay.value && videoUrl != null && audioUrl != null) {
+      isShowCover.value = false;
+      await playerInit();
+    }
+    isQuerying = false;
+  }
+
+  Future _actualQuery() async {
     if (cacheVideoQa == null) {
       await Connectivity().checkConnectivity().then((res) {
         cacheVideoQa = res.contains(ConnectivityResult.wifi)
@@ -1128,7 +1140,7 @@ class VideoDetailController extends GetxController
                 defaultValue: AudioQuality.k192.code);
       });
     }
-    var result = await VideoHttp.videoUrl(
+    dynamic result = await VideoHttp.videoUrl(
       cid: cid.value,
       bvid: bvid,
       epid: epId,
@@ -1137,15 +1149,14 @@ class VideoDetailController extends GetxController
     if (result['status']) {
       data = result['data'];
 
-      if (enableSponsorBlock) {
-        await _querySponsorBlock();
-      }
       if (data.acceptDesc!.isNotEmpty && data.acceptDesc!.contains('试看')) {
         SmartDialog.showToast(
           '该视频为专属视频，仅提供试看',
           displayTime: const Duration(seconds: 3),
         );
       }
+
+      /// #1
       if (data.dash == null && data.durl != null) {
         videoUrl = data.durl!.first.url!;
         audioUrl = '';
@@ -1158,22 +1169,26 @@ class VideoDetailController extends GetxController
             quality: VideoQualityCode.fromCode(data.quality!)!);
         currentDecodeFormats = VideoDecodeFormatsCode.fromString('avc1')!;
         currentVideoQa = VideoQualityCode.fromCode(data.quality!)!;
-        if (autoPlay.value) {
-          isShowCover.value = false;
-          await playerInit();
-        }
+
+        /// await sponsorblock
+        // if (autoPlay.value) {
+        //   isShowCover.value = false;
+        //   await playerInit();
+        // }
         videoState.value = LoadingState.success(null);
-        isQuerying = false;
         return;
       }
+
+      /// #2
       if (data.dash == null) {
         SmartDialog.showToast('视频资源不存在');
         autoPlay.value = false;
         isShowCover.value = true;
-        videoState.value = LoadingState.success(null);
-        isQuerying = false;
+        videoState.value = LoadingState.error('视频资源不存在');
         return;
       }
+
+      /// #3
       final List<VideoItem> allVideosList = data.dash!.video!;
       // debugPrint("allVideosList:${allVideosList}");
       // 当前可播放的最高质量视频
@@ -1267,13 +1282,17 @@ class VideoDetailController extends GetxController
       }
       //
       defaultST = Duration(milliseconds: data.lastPlayTime!);
-      if (autoPlay.value) {
-        isShowCover.value = false;
-        await playerInit();
-      }
+
+      /// await sponsorblock
+      // if (autoPlay.value) {
+      //   isShowCover.value = false;
+      //   await playerInit();
+      // }
+      videoState.value = LoadingState.success(null);
     } else {
       autoPlay.value = false;
       isShowCover.value = true;
+      videoState.value = LoadingState.error(result['msg']);
       if (result['code'] == -404) {
         SmartDialog.showToast('视频不存在或已被删除');
       }
@@ -1283,8 +1302,6 @@ class VideoDetailController extends GetxController
         SmartDialog.showToast("错误（${result['code']}）：${result['msg']}");
       }
     }
-    isQuerying = false;
-    videoState.value = LoadingState.success(null);
   }
 
   List<PostSegmentModel>? list;

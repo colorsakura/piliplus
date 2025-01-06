@@ -281,14 +281,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   /// 未开启自动播放时触发播放
   Future<void> handlePlay() async {
+    if (videoDetailController.isQuerying) {
+      debugPrint('handlePlay: querying');
+      return;
+    }
     if (videoDetailController.videoUrl == null ||
         videoDetailController.audioUrl == null) {
-      // SmartDialog.showToast('not initialized');
       debugPrint('handlePlay: videoUrl/audioUrl not initialized');
-      if (videoDetailController.isQuerying.not) {
-        videoDetailController.autoPlay.value = true;
-        videoDetailController.queryVideoUrl();
-      }
+      videoDetailController.queryVideoUrl();
       return;
     }
     plPlayerController = videoDetailController.plPlayerController;

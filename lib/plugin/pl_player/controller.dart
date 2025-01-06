@@ -500,11 +500,9 @@ class PlPlayerController {
           dataSource, _looping, enableHA, hwdec, width, height);
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
-      _position.value =
-          _sliderPosition.value = _buffered.value = seekTo ?? Duration.zero;
+      _position.value = _sliderPosition.value = seekTo ?? Duration.zero;
       updateDurationSecond();
       updatePositionSecond();
-      updateBufferedSecond();
       updateSliderPositionSecond();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
@@ -855,7 +853,11 @@ class PlPlayerController {
         await _videoPlayerController?.stream.buffer.first;
       }
       danmakuController?.clear();
-      await _videoPlayerController?.seek(position);
+      try {
+        await _videoPlayerController?.seek(position);
+      } catch (e) {
+        debugPrint('seek failed: $e');
+      }
       // if (playerStatus.stopped) {
       //   play();
       // }
