@@ -267,15 +267,16 @@ class ReplyItemGrpc extends StatelessWidget {
                 height: 1.75,
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               );
-              var textPainter = TextPainter(
-                text: TextSpan(text: text, style: style),
-                maxLines:
-                    replyLevel == '1' && GlobalData().replyLengthLimit != 0
-                        ? GlobalData().replyLengthLimit
-                        : null,
-                textDirection: Directionality.of(context),
-              )..layout(maxWidth: constraints.maxWidth);
-              bool didExceedMaxLines = textPainter.didExceedMaxLines;
+              TextPainter? textPainter;
+              bool? didExceedMaxLines;
+              if (replyLevel == '1' && GlobalData().replyLengthLimit != 0) {
+                textPainter = TextPainter(
+                  text: TextSpan(text: text, style: style),
+                  maxLines: GlobalData().replyLengthLimit,
+                  textDirection: Directionality.of(context),
+                )..layout(maxWidth: constraints.maxWidth);
+                didExceedMaxLines = textPainter.didExceedMaxLines;
+              }
               return Semantics(
                 label: text,
                 child: Text.rich(

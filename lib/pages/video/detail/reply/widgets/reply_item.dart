@@ -255,23 +255,24 @@ class ReplyItem extends StatelessWidget {
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               String text = replyItem?.content?.message ?? '';
-              var textPainter = TextPainter(
-                text: TextSpan(text: text),
-                maxLines: replyItem!.content!.isText! &&
-                        replyLevel == '1' &&
-                        GlobalData().replyLengthLimit != 0
-                    ? GlobalData().replyLengthLimit
-                    : null,
-                textDirection: Directionality.of(context),
-              )..layout(maxWidth: constraints.maxWidth);
-              bool didExceedMaxLines = textPainter.didExceedMaxLines;
+              TextStyle style = TextStyle(
+                height: 1.75,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              );
+              TextPainter? textPainter;
+              bool? didExceedMaxLines;
+              if (replyLevel == '1' && GlobalData().replyLengthLimit != 0) {
+                textPainter = TextPainter(
+                  text: TextSpan(text: text, style: style),
+                  maxLines: GlobalData().replyLengthLimit,
+                  textDirection: Directionality.of(context),
+                )..layout(maxWidth: constraints.maxWidth);
+                didExceedMaxLines = textPainter.didExceedMaxLines;
+              }
               return Semantics(
                 label: text,
                 child: Text.rich(
-                  style: TextStyle(
-                      height: 1.75,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize),
+                  style: style,
                   TextSpan(
                     children: [
                       if (replyItem!.isTop!) ...[
@@ -296,13 +297,6 @@ class ReplyItem extends StatelessWidget {
                         textPainter,
                         didExceedMaxLines,
                       ),
-                      if (didExceedMaxLines)
-                        TextSpan(
-                          text: '\n查看更多',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
                     ],
                   ),
                 ),
@@ -952,6 +946,18 @@ class ReplyItem extends StatelessWidget {
         }
       }
     }
+
+    if (didExceedMaxLines == true) {
+      spanChildren.add(
+        TextSpan(
+          text: '\n查看更多',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      );
+    }
+
     // 图片渲染
     if (content.pictures.isNotEmpty) {
       spanChildren.add(const TextSpan(text: '\n'));
