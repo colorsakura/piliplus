@@ -1,7 +1,7 @@
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/msg.dart';
-import 'package:PiliPalaX/models/msg/msgfeed_at_me.dart';
+import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
 
 class AtMeController extends GetxController {
   RxList<AtMeItems> msgFeedAtMeList = <AtMeItems>[].obs;
@@ -40,5 +40,4 @@ class AtMeController extends GetxController {
     cursorTime = -1;
     queryMsgFeedAtMe();
   }
-
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:PiliPalaX/models/dynamics/article_content_model.dart';
+import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;

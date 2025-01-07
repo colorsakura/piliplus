@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/grpc/grpc_repo.dart';
-import 'package:PiliPalaX/http/common.dart';
-import 'package:PiliPalaX/pages/dynamics/view.dart';
-import 'package:PiliPalaX/pages/home/view.dart';
-import 'package:PiliPalaX/pages/media/view.dart';
-import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/common.dart';
+import 'package:PiliPlus/pages/dynamics/view.dart';
+import 'package:PiliPlus/pages/home/view.dart';
+import 'package:PiliPlus/pages/media/view.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import '../../models/common/dynamic_badge_mode.dart';
 import '../../models/common/nav_bar_config.dart';
 

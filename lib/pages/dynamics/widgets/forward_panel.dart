@@ -1,10 +1,10 @@
 // 转发
-import 'package:PiliPalaX/common/widgets/imageview.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../models/dynamics/result.dart';
 import 'additional_panel.dart';

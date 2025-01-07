@@ -1,10 +1,10 @@
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/reply_controller.dart';
-import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/reply_controller.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/html.dart';
-import 'package:PiliPalaX/http/reply.dart';
+import 'package:PiliPlus/http/html.dart';
+import 'package:PiliPlus/http/reply.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
 
 class DynamicDetailController extends ReplyController {

@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/grpc/app/dynamic/v1/dynamic.pbgrpc.dart' as v1;
-import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pbgrpc.dart' as v2;
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pbgrpc.dart';
-import 'package:PiliPalaX/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
-import 'package:PiliPalaX/grpc/app/show/popular/v1/popular.pbgrpc.dart';
+import 'package:PiliPlus/grpc/app/dynamic/v1/dynamic.pbgrpc.dart' as v1;
+import 'package:PiliPlus/grpc/app/dynamic/v2/dynamic.pbgrpc.dart' as v2;
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pbgrpc.dart';
+import 'package:PiliPlus/grpc/app/playeronline/v1/playeronline.pbgrpc.dart';
+import 'package:PiliPlus/grpc/app/show/popular/v1/popular.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
 
 class GrpcClient {

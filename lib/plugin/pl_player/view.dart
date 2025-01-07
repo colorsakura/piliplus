@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
-import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,12 +14,12 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:PiliPalaX/plugin/pl_player/controller.dart';
-import 'package:PiliPalaX/plugin/pl_player/models/duration.dart';
-import 'package:PiliPalaX/plugin/pl_player/models/fullscreen_mode.dart';
-import 'package:PiliPalaX/plugin/pl_player/utils.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/plugin/pl_player/controller.dart';
+import 'package:PiliPlus/plugin/pl_player/models/duration.dart';
+import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
+import 'package:PiliPlus/plugin/pl_player/utils.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 

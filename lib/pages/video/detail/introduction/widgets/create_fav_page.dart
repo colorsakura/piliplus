@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/http/msg.dart';
-import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';

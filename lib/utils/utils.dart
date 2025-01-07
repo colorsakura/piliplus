@@ -2,21 +2,21 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/http/init.dart';
-import 'package:PiliPalaX/http/member.dart';
-import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/bangumi/info.dart';
-import 'package:PiliPalaX/models/common/search_type.dart';
-import 'package:PiliPalaX/pages/home/controller.dart';
-import 'package:PiliPalaX/pages/media/controller.dart';
-import 'package:PiliPalaX/pages/video/detail/introduction/widgets/group_panel.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/utils/login.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/bangumi/info.dart';
+import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
+import 'package:PiliPlus/pages/media/controller.dart';
+import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/login.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +32,7 @@ import 'package:html/parser.dart' as html_parser;
 class Utils {
   static final Random random = Random();
 
-  static const channel = MethodChannel("pilipalax");
+  static const channel = MethodChannel("PiliPlus");
 
   static void showCopyTextDialog(text) {
     Get.dialog(
@@ -837,7 +837,7 @@ class Utils {
   //                       onPressed: () {
   //                         launchUrl(
   //                           Uri.parse(
-  //                               "https://github.com/bggRGjQaUbCoE/PiliPalaX/commits/main/"),
+  //                               "https://github.com/bggRGjQaUbCoE/PiliPlus/commits/main/"),
   //                           mode: LaunchMode.externalApplication,
   //                         );
   //                       },

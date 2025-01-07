@@ -1,7 +1,7 @@
-import 'package:PiliPalaX/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPalaX/common/widgets/stat/danmu.dart';
-import 'package:PiliPalaX/common/widgets/stat/view.dart';
+import 'package:PiliPlus/common/widgets/stat/danmu.dart';
+import 'package:PiliPlus/common/widgets/stat/view.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/utils.dart';

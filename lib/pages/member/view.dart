@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/http/member.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/pages/member/index.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/pages/member/index.dart';
+import 'package:PiliPlus/utils/utils.dart';
 
 import 'widgets/conis.dart';
 import 'widgets/profile.dart';

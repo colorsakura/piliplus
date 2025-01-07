@@ -1,10 +1,10 @@
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 import '../../models/user/sub_folder.dart';
 

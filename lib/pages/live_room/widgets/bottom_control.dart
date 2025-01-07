@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPalaX/models/video/play/url.dart';
-import 'package:PiliPalaX/pages/live_room/index.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
+import 'package:PiliPlus/models/video/play/url.dart';
+import 'package:PiliPlus/pages/live_room/index.dart';
+import 'package:PiliPlus/plugin/pl_player/index.dart';
 
 class BottomControl extends StatefulWidget implements PreferredSizeWidget {
   final PlPlayerController? controller;

@@ -1,11 +1,11 @@
-import 'package:PiliPalaX/models/dynamics/result.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/utils/app_scheme.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 
 // 富文本
 InlineSpan? richNode(item, context) {

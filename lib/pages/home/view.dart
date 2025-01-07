@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/pages/mine/controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './controller.dart';
 

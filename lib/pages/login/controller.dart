@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/icon_button.dart';
-import 'package:PiliPalaX/http/init.dart';
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/login.dart';
+import 'package:PiliPlus/http/login.dart';
 import 'package:gt3_flutter_plugin/gt3_flutter_plugin.dart';
-import 'package:PiliPalaX/models/login/index.dart';
+import 'package:PiliPlus/models/login/index.dart';
 
 class LoginPageController extends GetxController
     with GetSingleTickerProviderStateMixin {

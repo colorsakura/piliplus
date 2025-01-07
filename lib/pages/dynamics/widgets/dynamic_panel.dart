@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/dynamics/index.dart';
+import 'package:PiliPlus/pages/dynamics/index.dart';
 import 'action_panel.dart';
 import 'author_panel.dart';
 import 'content_panel.dart';

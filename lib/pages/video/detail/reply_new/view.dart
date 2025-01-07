@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/models/video/reply/emote.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
-import 'package:PiliPalaX/pages/emote/index.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/video/reply/emote.dart';
+import 'package:PiliPlus/models/video/reply/item.dart';
+import 'package:PiliPlus/pages/emote/index.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 
 import 'toolbar_icon_button.dart';
 

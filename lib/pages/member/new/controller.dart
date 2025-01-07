@@ -1,10 +1,10 @@
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/http/member.dart';
-import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/space/tab2.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/space/tab2.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';

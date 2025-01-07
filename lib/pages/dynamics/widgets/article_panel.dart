@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../common/constants.dart';
 import 'pic_panel.dart';

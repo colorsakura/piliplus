@@ -1,6 +1,6 @@
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/msg.dart';
+import 'package:PiliPlus/http/msg.dart';
 
 import '../../../models/msg/msgfeed_reply_me.dart';
 
@@ -14,7 +14,8 @@ class ReplyMeController extends GetxController {
   Future queryMsgFeedReplyMe() async {
     if (isLoading) return;
     isLoading = true;
-    var res = await MsgHttp.msgFeedReplyMe(cursor: cursor, cursorTime: cursorTime);
+    var res =
+        await MsgHttp.msgFeedReplyMe(cursor: cursor, cursorTime: cursorTime);
     isLoading = false;
     if (res['status']) {
       MsgFeedReplyMe data = MsgFeedReplyMe.fromJson(res['data']);
@@ -41,5 +42,4 @@ class ReplyMeController extends GetxController {
     cursorTime = -1;
     queryMsgFeedReplyMe();
   }
-
 }

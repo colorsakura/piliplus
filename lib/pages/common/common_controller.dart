@@ -1,5 +1,5 @@
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

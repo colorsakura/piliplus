@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:PiliPalaX/common/widgets/loading_widget.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import '../../../services/loggeer.dart';
 
@@ -36,7 +36,7 @@ class _LogsPageState extends State<LogsPage> {
       return item
           .replaceAll(
               '============================== CATCHER 2 LOG ==============================',
-              'PiliPalaX错误日志\n********************')
+              'PiliPlus错误日志\n********************')
           .replaceAll('DEVICE INFO', '设备信息')
           .replaceAll('APP INFO', '应用信息')
           .replaceAll('ERROR', '错误信息')
@@ -106,7 +106,7 @@ class _LogsPageState extends State<LogsPage> {
                   break;
                 case 'feedback':
                   Utils.launchURL(
-                      'https://github.com/bggRGjQaUbCoE/PiliPalaX/issues');
+                      'https://github.com/bggRGjQaUbCoE/PiliPlus/issues');
                   break;
                 case 'clear':
                   clearLogsHandle();

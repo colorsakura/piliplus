@@ -1,20 +1,20 @@
-import 'package:PiliPalaX/http/follow.dart';
-import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
-import 'package:PiliPalaX/pages/dynamics/tab/view.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/http/follow.dart';
+import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
+import 'package:PiliPlus/pages/dynamics/tab/view.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/dynamics.dart';
-import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/models/common/dynamics_type.dart';
-import 'package:PiliPalaX/models/dynamics/result.dart';
-import 'package:PiliPalaX/models/dynamics/up.dart';
-import 'package:PiliPalaX/models/live/item.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/utils/id_utils.dart';
-import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/http/dynamics.dart';
+import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/common/dynamics_type.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models/dynamics/up.dart';
+import 'package:PiliPlus/models/live/item.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 
 import '../../models/follow/result.dart';
 

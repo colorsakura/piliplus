@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:PiliPalaX/common/widgets/pair.dart';
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/http/index.dart';
-import 'package:PiliPalaX/pages/video/detail/controller.dart'
+import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/index.dart';
+import 'package:PiliPlus/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType, SkipTypeExt;
-import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

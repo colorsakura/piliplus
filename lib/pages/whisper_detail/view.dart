@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/http/msg.dart';
-import 'package:PiliPalaX/pages/emote/view.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/pages/emote/view.dart';
+import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:chat_bottom_container/panel_container.dart';
 import 'package:chat_bottom_container/typedef.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +13,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:mime/mime.dart';
 
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/pages/whisper_detail/controller.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/models/video/reply/emote.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/pages/whisper_detail/controller.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/models/video/reply/emote.dart';
 import 'package:image_picker/image_picker.dart';
 import 'widget/chat_item.dart';
 

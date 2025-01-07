@@ -1,10 +1,10 @@
-import 'package:PiliPalaX/pages/rank/index.dart';
+import 'package:PiliPlus/pages/rank/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/bangumi/index.dart';
-import 'package:PiliPalaX/pages/hot/index.dart';
-import 'package:PiliPalaX/pages/live/index.dart';
-import 'package:PiliPalaX/pages/rcmd/index.dart';
+import 'package:PiliPlus/pages/bangumi/index.dart';
+import 'package:PiliPlus/pages/hot/index.dart';
+import 'package:PiliPlus/pages/live/index.dart';
+import 'package:PiliPlus/pages/rcmd/index.dart';
 
 enum TabType { live, rcmd, hot, rank, bangumi }
 

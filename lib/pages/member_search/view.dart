@@ -1,5 +1,5 @@
-import 'package:PiliPalaX/pages/member_search/search_archive.dart';
-import 'package:PiliPalaX/pages/member_search/search_dynamic.dart';
+import 'package:PiliPlus/pages/member_search/search_archive.dart';
+import 'package:PiliPlus/pages/member_search/search_dynamic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller.dart';

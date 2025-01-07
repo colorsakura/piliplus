@@ -1,12 +1,12 @@
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:PiliPalaX/http/reply.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:PiliPlus/http/reply.dart';
+import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/video/reply/item.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 
 class ZanButton extends StatefulWidget {
   const ZanButton({
@@ -25,7 +25,7 @@ class ZanButton extends StatefulWidget {
 class _ZanButtonState extends State<ZanButton> {
   Future onHateReply() async {
     feedBack();
-    // SmartDialog.showLoading(msg: 'pilipala ...');
+    // SmartDialog.showLoading(msg: 'piliplus ...');
     final ReplyItemModel replyItem = widget.replyItem!;
     final int oid = replyItem.oid!;
     final int rpid = replyItem.rpid!;
@@ -58,7 +58,7 @@ class _ZanButtonState extends State<ZanButton> {
   // 评论点赞
   Future onLikeReply() async {
     feedBack();
-    // SmartDialog.showLoading(msg: 'pilipala ...');
+    // SmartDialog.showLoading(msg: 'piliplus ...');
     final ReplyItemModel replyItem = widget.replyItem!;
     final int oid = replyItem.oid!;
     final int rpid = replyItem.rpid!;

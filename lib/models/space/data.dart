@@ -13,7 +13,7 @@ import 'series.dart';
 import 'setting.dart';
 import 'tab.dart';
 import 'tab2.dart';
-import 'package:PiliPalaX/models/space_article/data.dart' as space;
+import 'package:PiliPlus/models/space_article/data.dart' as space;
 
 part 'data.g.dart';
 

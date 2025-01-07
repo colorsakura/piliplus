@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
-import 'package:PiliPalaX/grpc/grpc_repo.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPlus/grpc/app/card/v1/card.pb.dart' as card;
+import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../common/constants.dart';

@@ -8,7 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPalaX/utils/id_utils.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import '../utils/storage.dart';
 import '../utils/utils.dart';
 import 'api.dart';

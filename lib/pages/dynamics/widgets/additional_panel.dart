@@ -1,9 +1,9 @@
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/http/search.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/http/search.dart';
 
 /// TODO 点击跳转
 Widget addWidget(item, context, type, {floor = 1}) {

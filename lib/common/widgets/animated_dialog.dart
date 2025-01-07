@@ -1,5 +1,5 @@
-import 'package:PiliPalaX/common/widgets/no_splash_factory.dart';
-import 'package:PiliPalaX/common/widgets/overlay_pop.dart';
+import 'package:PiliPlus/common/widgets/no_splash_factory.dart';
+import 'package:PiliPlus/common/widgets/overlay_pop.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedDialog extends StatefulWidget {

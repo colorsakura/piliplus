@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:PiliPalaX/grpc/app/card/v1/card.pb.dart' as card;
+import 'package:PiliPlus/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../utils/download.dart';

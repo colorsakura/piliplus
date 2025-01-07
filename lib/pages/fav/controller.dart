@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/http/user.dart';
-import 'package:PiliPalaX/models/user/info.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/models/user/info.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class FavController extends CommonController {
   late final UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');

@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:PiliPlus/plugin/pl_player/index.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 
 import '../../../common/widgets/audio_video_progress_bar.dart';
 

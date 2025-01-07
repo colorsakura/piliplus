@@ -1,7 +1,7 @@
-import 'package:PiliPalaX/pages/main/controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:PiliPalaX/utils/login.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/login.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';

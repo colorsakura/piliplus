@@ -1,6 +1,6 @@
 // 内容
-import 'package:PiliPalaX/common/widgets/imageview.dart';
-import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart';
+import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/grpc/app/dynamic/v2/dynamic.pb.dart';
 import 'package:flutter/material.dart';
 
 import 'rich_node_panel.dart';

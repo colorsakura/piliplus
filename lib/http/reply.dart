@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPalaX/grpc/grpc_repo.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 import '../models/video/reply/data.dart';

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:PiliPalaX/build_config.dart';
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/services/loggeer.dart';
+import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/services/loggeer.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:PiliPalaX/models/github/latest.dart';
-import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/models/github/latest.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import '../../utils/cache_manage.dart';
 
 class AboutPage extends StatefulWidget {
@@ -25,7 +25,7 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   final AboutController _aboutController = Get.put(AboutController());
   static const String _sourceCodeUrl =
-      'https://github.com/bggRGjQaUbCoE/PiliPalaX';
+      'https://github.com/bggRGjQaUbCoE/PiliPlus';
   static const String _originSourceCodeUrl =
       'https://github.com/guozhigq/pilipala';
   static const String _upstreamUrl = 'https://github.com/orz12/PiliPalaX';
@@ -59,7 +59,7 @@ class _AboutPageState extends State<AboutPage> {
             )),
           ),
           ListTile(
-            title: Text('PiliPalaX',
+            title: Text('PiliPlus',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -99,7 +99,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             ),
             leading: const Icon(Icons.info_outline),
             onTap: () => Utils.launchURL(
-                'https://github.com/bggRGjQaUbCoE/PiliPalaX/commit/${BuildConfig.commitHash}'),
+                'https://github.com/bggRGjQaUbCoE/PiliPlus/commit/${BuildConfig.commitHash}'),
           ),
           // Obx(
           //   () => ListTile(

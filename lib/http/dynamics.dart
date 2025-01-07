@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 
 import '../models/dynamics/result.dart';
 import '../models/dynamics/up.dart';

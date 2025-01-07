@@ -1,9 +1,9 @@
-import 'package:PiliPalaX/grpc/app/dynamic/v2/dynamic.pb.dart';
-import 'package:PiliPalaX/pages/dynamics/widgets/author_panel_grpc.dart';
-import 'package:PiliPalaX/pages/dynamics/widgets/content_panel_grpc.dart';
+import 'package:PiliPlus/grpc/app/dynamic/v2/dynamic.pb.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/author_panel_grpc.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/content_panel_grpc.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/dynamics/index.dart';
+import 'package:PiliPlus/pages/dynamics/index.dart';
 
 class DynamicPanelGrpc extends StatelessWidget {
   final DynamicItem item;

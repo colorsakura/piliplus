@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/models/danmaku/dm.pb.dart';
-import 'package:PiliPalaX/pages/danmaku/index.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
-import 'package:PiliPalaX/utils/danmaku.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/models/danmaku/dm.pb.dart';
+import 'package:PiliPlus/pages/danmaku/index.dart';
+import 'package:PiliPlus/plugin/pl_player/index.dart';
+import 'package:PiliPlus/utils/danmaku.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 /// 传入播放器控制器，监听播放进度，加载对应弹幕
 class PlDanmaku extends StatefulWidget {

@@ -1,13 +1,13 @@
-import 'package:PiliPalaX/common/widgets/icon_button.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/history/view.dart' show AppBarWidget;
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/common/widgets/video_card_h.dart';
-import 'package:PiliPalaX/pages/later/index.dart';
+import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/video_card_h.dart';
+import 'package:PiliPlus/pages/later/index.dart';
 
 import '../../common/constants.dart';
 import '../../utils/grid.dart';

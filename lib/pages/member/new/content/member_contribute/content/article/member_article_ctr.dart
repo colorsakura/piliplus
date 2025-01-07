@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/http/member.dart';
-import 'package:PiliPalaX/models/space_article/data.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/models/space_article/data.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 
 class MemberArticleCtr extends CommonController {
   MemberArticleCtr({

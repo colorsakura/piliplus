@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:PiliPalaX/http/init.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -117,8 +117,8 @@ class DownloadUtils {
           Uint8List.fromList(response.data),
           quality: 100,
           fileName: picName,
-          // 保存到 PiliPalaX文件夹
-          androidRelativePath: "Pictures/PiliPalaX",
+          // 保存到 PiliPlus文件夹
+          androidRelativePath: "Pictures/PiliPlus",
           skipIfExists: false,
         );
         // SmartDialog.dismiss();

@@ -1,24 +1,24 @@
 <div align="center">
-    <img width="200" height="200" src="https://github.com/orz12/pilipala/blob/main/assets/images/logo/logo_android.png">
+    <img width="200" height="200" src="https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/assets/images/logo/logo_android.png">
 </div>
 
 
 
 <div align="center">
-    <h1>PiliPalaX</h1>
+    <h1>PiliPlus</h1>
 <div align="center">
     
-![GitHub repo size](https://img.shields.io/github/repo-size/bggRGjQaUbCoE/PiliPalaX) 
-![GitHub Repo stars](https://img.shields.io/github/stars/bggRGjQaUbCoE/PiliPalaX) 
-![GitHub all releases](https://img.shields.io/github/downloads/bggRGjQaUbCoE/PiliPalaX/total) 
+![GitHub repo size](https://img.shields.io/github/repo-size/bggRGjQaUbCoE/PiliPlus) 
+![GitHub Repo stars](https://img.shields.io/github/stars/bggRGjQaUbCoE/PiliPlus) 
+![GitHub all releases](https://img.shields.io/github/downloads/bggRGjQaUbCoE/PiliPlus/total) 
 </div>
     <p>使用Flutter开发的BiliBili第三方客户端</p>
     
-<img src="https://github.com/orz12/pilipala/blob/main/assets/screenshots/510shots_so.png" width="32%" alt="home" />
-<img src="https://github.com/orz12/pilipala/blob/main/assets/screenshots/174shots_so.png" width="32%" alt="home" />
-<img src="https://github.com/orz12/pilipala/blob/main/assets/screenshots/850shots_so.png" width="32%" alt="home" />
+<img src="https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/assets/screenshots/510shots_so.png" width="32%" alt="home" />
+<img src="https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/assets/screenshots/174shots_so.png" width="32%" alt="home" />
+<img src="https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/assets/screenshots/850shots_so.png" width="32%" alt="home" />
 <br/>
-<img src="https://github.com/orz12/pilipala/blob/main/assets/screenshots/main_screen.png" width="96%" alt="home" />
+<img src="https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/assets/screenshots/main_screen.png" width="96%" alt="home" />
 <br/>
 </div>
 
@@ -186,9 +186,10 @@
 
 ## 声明
 
-此项目（PiliPalaX）是个人为了兴趣而开发, 仅用于学习和测试，请于下载后24小时内删除。
+此项目（PiliPlus）是个人为了兴趣而开发, 仅用于学习和测试，请于下载后24小时内删除。
 所用API皆从官方网站收集, 不提供任何破解内容。
 在此致敬原作者：[guozhigq/pilipala](https://github.com/guozhigq/pilipala)
+在此致敬上游作者：[orz12/PiliPalaX](https://github.com/orz12/PiliPalaX)
 本仓库做了更激进的修改，感谢原作者的开源精神。
 
 感谢使用

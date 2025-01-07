@@ -1,6 +1,6 @@
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/msg.dart';
+import 'package:PiliPlus/http/msg.dart';
 import '../../../models/msg/msgfeed_like_me.dart';
 
 class LikeMeController extends GetxController {
@@ -14,17 +14,18 @@ class LikeMeController extends GetxController {
   Future queryMsgFeedLikeMe() async {
     if (isLoading) return;
     isLoading = true;
-    var res = await MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
+    var res =
+        await MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
     isLoading = false;
     if (res['status']) {
       MsgFeedLikeMe data = MsgFeedLikeMe.fromJson(res['data']);
       isEnd = data.total?.cursor?.isEnd ?? false;
       if (cursor == -1) {
-        msgFeedLikeMeLatestList.assignAll(data.latest?.items??[]);
-        msgFeedLikeMeTotalList.assignAll(data.total?.items??[]);
+        msgFeedLikeMeLatestList.assignAll(data.latest?.items ?? []);
+        msgFeedLikeMeTotalList.assignAll(data.total?.items ?? []);
       } else {
-        msgFeedLikeMeLatestList.addAll(data.latest?.items??[]);
-        msgFeedLikeMeTotalList.addAll(data.total?.items??[]);
+        msgFeedLikeMeLatestList.addAll(data.latest?.items ?? []);
+        msgFeedLikeMeTotalList.addAll(data.total?.items ?? []);
       }
       cursor = data.total?.cursor?.id ?? -1;
       cursorTime = data.total?.cursor?.time ?? -1;
@@ -43,5 +44,4 @@ class LikeMeController extends GetxController {
     cursorTime = -1;
     queryMsgFeedLikeMe();
   }
-
 }

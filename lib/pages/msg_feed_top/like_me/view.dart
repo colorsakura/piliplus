@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 
 import '../../../models/msg/msgfeed_like_me.dart';
 import '../../../utils/app_scheme.dart';

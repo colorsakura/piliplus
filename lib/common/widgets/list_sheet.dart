@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/icon_button.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/bangumi/info.dart' as bangumi;
-import 'package:PiliPalaX/models/video_detail_res.dart' as video;
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
+import 'package:PiliPlus/models/video_detail_res.dart' as video;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

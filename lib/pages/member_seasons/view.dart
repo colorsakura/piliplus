@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/constants.dart';
+import 'package:PiliPlus/common/constants.dart';
 import '../../utils/grid.dart';
 import 'controller.dart';
 import 'widgets/item.dart';

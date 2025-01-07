@@ -1,12 +1,12 @@
-import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/loading_widget.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/follow/widgets/follow_item.dart';
-import 'package:PiliPalaX/pages/history/widgets/item.dart';
-import 'package:PiliPalaX/utils/grid.dart';
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
+import 'package:PiliPlus/pages/history/widgets/item.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/fav_detail/widget/fav_video_card.dart';
+import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 
 import 'controller.dart';
 

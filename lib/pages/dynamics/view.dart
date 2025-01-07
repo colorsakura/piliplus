@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/http/msg.dart';
-import 'package:PiliPalaX/models/common/dynamics_type.dart';
-import 'package:PiliPalaX/models/common/up_panel_position.dart';
-import 'package:PiliPalaX/pages/dynamics/tab/controller.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/common/dynamics_type.dart';
+import 'package:PiliPlus/models/common/up_panel_position.dart';
+import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

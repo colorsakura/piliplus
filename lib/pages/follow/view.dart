@@ -1,5 +1,5 @@
-import 'package:PiliPalaX/pages/fav_search/view.dart' show SearchType;
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller.dart';

@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/dynamics/index.dart';
-import 'package:PiliPalaX/pages/home/index.dart';
-import 'package:PiliPalaX/pages/media/index.dart';
-import 'package:PiliPalaX/pages/mine/index.dart';
+import 'package:PiliPlus/pages/dynamics/index.dart';
+import 'package:PiliPlus/pages/home/index.dart';
+import 'package:PiliPlus/pages/media/index.dart';
+import 'package:PiliPlus/pages/mine/index.dart';
 import 'package:uuid/uuid.dart';
 
 class LoginUtils {

@@ -1,9 +1,9 @@
-import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/search.dart';
-import 'package:PiliPalaX/models/search/suggest.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/http/search.dart';
+import 'package:PiliPlus/models/search/suggest.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class SSearchController extends GetxController {
   final searchFocusNode = FocusNode();

@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:flutter/material.dart';
 
 Widget picWidget(item, context) {

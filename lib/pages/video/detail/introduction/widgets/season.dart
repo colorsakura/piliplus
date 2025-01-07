@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/pages/video/detail/introduction/controller.dart';
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/models/video_detail_res.dart';
-import 'package:PiliPalaX/pages/video/detail/index.dart';
+import 'package:PiliPlus/models/video_detail_res.dart';
+import 'package:PiliPlus/pages/video/detail/index.dart';
 
 class SeasonPanel extends StatefulWidget {
   const SeasonPanel({

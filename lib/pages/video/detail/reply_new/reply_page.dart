@@ -2,20 +2,20 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:PiliPalaX/http/msg.dart';
-import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/models/video/reply/emote.dart';
-import 'package:PiliPalaX/pages/emote/index.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/pages/emote/view.dart';
-import 'package:PiliPalaX/pages/video/detail/reply_new/toolbar_icon_button.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/models/video/reply/emote.dart';
+import 'package:PiliPlus/pages/emote/index.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/pages/emote/view.dart';
+import 'package:PiliPlus/pages/video/detail/reply_new/toolbar_icon_button.dart';
 import 'package:image_picker/image_picker.dart';
 
 enum PanelType { none, keyboard, emoji }

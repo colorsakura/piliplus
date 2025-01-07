@@ -1,13 +1,13 @@
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPalaX/grpc/grpc_repo.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/models/video/reply/item.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
-import 'package:PiliPalaX/utils/global_data.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/video/reply/item.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/reply.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
+import 'package:PiliPlus/http/reply.dart';
+import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class VideoReplyReplyController extends CommonController

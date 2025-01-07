@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:PiliPalaX/common/widgets/icon_button.dart';
-import 'package:PiliPalaX/http/danmaku.dart';
-import 'package:PiliPalaX/pages/setting/sponsor_block_page.dart'
+import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/http/danmaku.dart';
+import 'package:PiliPlus/pages/setting/sponsor_block_page.dart'
     show SlideColorPicker;
-import 'package:PiliPalaX/pages/video/detail/reply_new/reply_page.dart'
+import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart'
     show PanelType;
-import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
-import 'package:PiliPalaX/common/widgets/http_error.dart';
-import 'package:PiliPalaX/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/pages/setting/widgets/model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

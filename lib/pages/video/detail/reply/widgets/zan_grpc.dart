@@ -1,12 +1,12 @@
-import 'package:PiliPalaX/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:PiliPalaX/http/reply.dart';
-import 'package:PiliPalaX/models/common/reply_type.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
+import 'package:PiliPlus/http/reply.dart';
+import 'package:PiliPlus/models/common/reply_type.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
 
 class ZanButtonGrpc extends StatefulWidget {
@@ -26,7 +26,7 @@ class ZanButtonGrpc extends StatefulWidget {
 class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   Future onHateReply() async {
     feedBack();
-    // SmartDialog.showLoading(msg: 'pilipala ...');
+    // SmartDialog.showLoading(msg: 'piliplus ...');
     final int oid = widget.replyItem.oid.toInt();
     final int rpid = widget.replyItem.id.toInt();
     // 1 已点赞 2 不喜欢 0 未操作
@@ -61,7 +61,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
   // 评论点赞
   Future onLikeReply() async {
     feedBack();
-    // SmartDialog.showLoading(msg: 'pilipala ...');
+    // SmartDialog.showLoading(msg: 'piliplus ...');
     final int oid = widget.replyItem.oid.toInt();
     final int rpid = widget.replyItem.id.toInt();
     // 1 已点赞 2 不喜欢 0 未操作

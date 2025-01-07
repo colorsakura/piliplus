@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:PiliPalaX/grpc/grpc_client.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/grpc/grpc_client.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/models/common/dynamic_badge_mode.dart';
-import 'package:PiliPalaX/pages/dynamics/index.dart';
-import 'package:PiliPalaX/pages/home/index.dart';
-import 'package:PiliPalaX/utils/event_bus.dart';
-import 'package:PiliPalaX/utils/feed_back.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
+import 'package:PiliPlus/pages/dynamics/index.dart';
+import 'package:PiliPlus/pages/home/index.dart';
+import 'package:PiliPlus/utils/event_bus.dart';
+import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import './controller.dart';
 
 class MainApp extends StatefulWidget {

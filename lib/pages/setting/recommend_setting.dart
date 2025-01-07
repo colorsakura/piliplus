@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/pages/setting/widgets/model.dart';
 import 'package:flutter/material.dart';
 
 class RecommendSetting extends StatelessWidget {

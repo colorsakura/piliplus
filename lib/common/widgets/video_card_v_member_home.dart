@@ -1,5 +1,5 @@
-import 'package:PiliPalaX/common/widgets/image_save.dart';
-import 'package:PiliPalaX/models/space/item.dart';
+import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/models/space/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';

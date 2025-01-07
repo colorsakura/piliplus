@@ -1,24 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:PiliPalaX/common/widgets/pair.dart';
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/models/common/dynamic_badge_mode.dart';
-import 'package:PiliPalaX/models/common/theme_type.dart';
-import 'package:PiliPalaX/models/common/up_panel_position.dart';
-import 'package:PiliPalaX/models/video/play/CDN.dart';
-import 'package:PiliPalaX/models/video/play/quality.dart';
-import 'package:PiliPalaX/models/video/play/subtitle.dart';
-import 'package:PiliPalaX/pages/member/new/controller.dart' show MemberTabType;
-import 'package:PiliPalaX/pages/video/detail/controller.dart'
+import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/theme_type.dart';
+import 'package:PiliPlus/models/common/up_panel_position.dart';
+import 'package:PiliPlus/models/video/play/CDN.dart';
+import 'package:PiliPlus/models/video/play/quality.dart';
+import 'package:PiliPlus/models/video/play/subtitle.dart';
+import 'package:PiliPlus/pages/member/new/controller.dart' show MemberTabType;
+import 'package:PiliPlus/pages/video/detail/controller.dart'
     show SegmentType, SegmentTypeExt, SkipType;
-import 'package:PiliPalaX/plugin/pl_player/models/bottom_progress_behavior.dart';
-import 'package:PiliPalaX/plugin/pl_player/models/fullscreen_mode.dart';
+import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
+import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:PiliPalaX/models/model_owner.dart';
-import 'package:PiliPalaX/models/search/hot.dart';
-import 'package:PiliPalaX/models/user/info.dart';
+import 'package:PiliPlus/models/model_owner.dart';
+import 'package:PiliPlus/models/search/hot.dart';
+import 'package:PiliPlus/models/user/info.dart';
 import 'global_data.dart';
 import 'package:uuid/uuid.dart';
 

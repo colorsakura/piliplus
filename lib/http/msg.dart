@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/pages/dynamics/view.dart' show ReplyOption;
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/pages/dynamics/view.dart' show ReplyOption;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 

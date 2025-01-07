@@ -1,11 +1,11 @@
-import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/skeleton/video_card_h.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/subscription/widgets/item.dart';
-import 'package:PiliPalaX/utils/grid.dart';
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/subscription/widgets/item.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'controller.dart';
 
 class SubPage extends StatefulWidget {

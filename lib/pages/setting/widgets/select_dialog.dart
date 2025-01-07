@@ -1,9 +1,9 @@
-import 'package:PiliPalaX/http/video.dart';
-import 'package:PiliPalaX/models/video/play/CDN.dart';
-import 'package:PiliPalaX/models/video/play/url.dart';
-import 'package:PiliPalaX/utils/extension.dart';
-import 'package:PiliPalaX/utils/storage.dart';
-import 'package:PiliPalaX/utils/video_utils.dart';
+import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/video/play/CDN.dart';
+import 'package:PiliPlus/models/video/play/url.dart';
+import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';

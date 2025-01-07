@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/models/space/space_tag_bottom.dart';
+import 'package:PiliPlus/models/space/space_tag_bottom.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'achieve.dart';

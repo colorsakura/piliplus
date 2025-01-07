@@ -1,4 +1,4 @@
-import 'package:PiliPalaX/models/space_archive/item.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'season.g.dart';

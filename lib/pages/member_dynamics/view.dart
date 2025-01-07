@@ -1,9 +1,9 @@
-import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/pages/member_dynamics/index.dart';
-import 'package:PiliPalaX/utils/utils.dart';
+import 'package:PiliPlus/pages/member_dynamics/index.dart';
+import 'package:PiliPlus/utils/utils.dart';
 
 import '../../common/constants.dart';
 import '../../common/widgets/http_error.dart';

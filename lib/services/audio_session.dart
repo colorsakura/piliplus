@@ -1,5 +1,5 @@
 import 'package:audio_session/audio_session.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
+import 'package:PiliPlus/plugin/pl_player/index.dart';
 
 class AudioSessionHandler {
   late AudioSession session;
@@ -49,7 +49,7 @@ class AudioSessionHandler {
             break;
           case AudioInterruptionType.pause:
             if (_playInterrupted) PlPlayerController.playIfExists();
-              //player.play();
+            //player.play();
             break;
           case AudioInterruptionType.unknown:
             break;

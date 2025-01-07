@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/constants.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/models/common/theme_type.dart';
-import 'package:PiliPalaX/models/user/info.dart';
+import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/models/common/theme_type.dart';
+import 'package:PiliPlus/models/user/info.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'controller.dart';
 
@@ -54,7 +54,7 @@ class _MinePageState extends State<MinePage> {
             ),
             const SizedBox(width: 5),
             Text(
-              'PiliPalaX',
+              'PiliPlus',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(width: 30),

@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/http/fan.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/common/common_controller.dart';
+import 'package:PiliPlus/http/fan.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class FansController extends CommonController {
   int ps = 20;

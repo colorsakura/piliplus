@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/common/widgets/network_img_layer.dart';
-import 'package:PiliPalaX/pages/mine/view.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/pages/mine/view.dart';
+import 'package:PiliPlus/utils/storage.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -26,7 +26,7 @@ class HomeAppBar extends StatelessWidget {
               children: [
                 AppBar(
                   title: const Text(
-                    'PiLiPaLa',
+                    'PiLiPlus',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

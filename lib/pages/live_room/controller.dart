@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:PiliPalaX/models/live/danmu_info.dart';
-import 'package:PiliPalaX/tcp/live.dart';
-import 'package:PiliPalaX/utils/danmaku.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/models/live/danmu_info.dart';
+import 'package:PiliPlus/tcp/live.dart';
+import 'package:PiliPlus/utils/danmaku.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/http/constants.dart';
-import 'package:PiliPalaX/http/live.dart';
-import 'package:PiliPalaX/models/live/room_info.dart';
-import 'package:PiliPalaX/plugin/pl_player/index.dart';
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/live.dart';
+import 'package:PiliPlus/models/live/room_info.dart';
+import 'package:PiliPlus/plugin/pl_player/index.dart';
 import '../../models/live/room_info_h5.dart';
 import '../../utils/video_utils.dart';
 

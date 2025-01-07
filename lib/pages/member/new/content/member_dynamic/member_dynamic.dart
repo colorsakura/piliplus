@@ -1,8 +1,8 @@
-import 'package:PiliPalaX/common/widgets/loading_widget.dart';
-import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
-import 'package:PiliPalaX/http/loading_state.dart';
-import 'package:PiliPalaX/pages/dynamics/widgets/dynamic_panel_grpc.dart';
-import 'package:PiliPalaX/pages/member/new/content/member_dynamic/member_dynamic_ctr.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel_grpc.dart';
+import 'package:PiliPlus/pages/member/new/content/member_dynamic/member_dynamic_ctr.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

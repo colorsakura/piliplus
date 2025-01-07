@@ -1,6 +1,6 @@
-import 'package:PiliPalaX/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/pages/setting/widgets/model.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPalaX/services/service_locator.dart';
+import 'package:PiliPlus/services/service_locator.dart';
 
 class PlaySetting extends StatefulWidget {
   const PlaySetting({super.key});

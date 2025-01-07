@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:PiliPalaX/build_config.dart';
-import 'package:PiliPalaX/utils/cache_manage.dart';
+import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -11,18 +11,18 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPalaX/common/widgets/custom_toast.dart';
-import 'package:PiliPalaX/http/init.dart';
-import 'package:PiliPalaX/models/common/color_type.dart';
-import 'package:PiliPalaX/pages/video/detail/index.dart';
-import 'package:PiliPalaX/router/app_pages.dart';
-import 'package:PiliPalaX/pages/main/view.dart';
-import 'package:PiliPalaX/services/service_locator.dart';
-import 'package:PiliPalaX/utils/app_scheme.dart';
-import 'package:PiliPalaX/utils/data.dart';
-import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPlus/common/widgets/custom_toast.dart';
+import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/models/common/color_type.dart';
+import 'package:PiliPlus/pages/video/detail/index.dart';
+import 'package:PiliPlus/router/app_pages.dart';
+import 'package:PiliPlus/pages/main/view.dart';
+import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:media_kit/media_kit.dart'; // Provides [Player], [Media], [Playlist] etc.
-import 'package:PiliPalaX/utils/recommend_filter.dart';
+import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:catcher_2/catcher_2.dart';
 import './services/loggeer.dart';
 
@@ -181,7 +181,7 @@ class MyApp extends StatelessWidget {
         // PaintingBinding.instance.imageCache.maximumSizeBytes = 1000 << 20;
         return GetMaterialApp(
           // showSemanticsDebugger: true,
-          title: 'PiliPalaX',
+          title: 'PiliPlus',
           theme: _getThemeData(
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,

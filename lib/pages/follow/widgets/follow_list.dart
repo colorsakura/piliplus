@@ -1,10 +1,10 @@
-import 'package:PiliPalaX/common/widgets/loading_widget.dart';
-import 'package:PiliPalaX/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPalaX/models/follow/result.dart';
-import 'package:PiliPalaX/pages/follow/index.dart';
+import 'package:PiliPlus/models/follow/result.dart';
+import 'package:PiliPlus/pages/follow/index.dart';
 
 import 'follow_item.dart';
 
