@@ -766,6 +766,14 @@ List<SettingsModel> get videoSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: 'CDN 测速',
+        leading: const Icon(Icons.speed),
+        subtitle: '测速通过加载视频实现，注意流量消耗',
+        setKey: SettingBoxKey.cdnSpeedTest,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         title: '音频不跟随 CDN 设置',
         subtitle: '直接采用备用 URL，可解决部分视频无声',
         leading: Icon(MdiIcons.musicNotePlus),

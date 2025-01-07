@@ -1,4 +1,12 @@
+import 'package:PiliPalaX/http/video.dart';
+import 'package:PiliPalaX/models/video/play/CDN.dart';
+import 'package:PiliPalaX/models/video/play/url.dart';
+import 'package:PiliPalaX/utils/extension.dart';
+import 'package:PiliPalaX/utils/storage.dart';
+import 'package:PiliPalaX/utils/video_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
 
 class SelectDialog<T> extends StatefulWidget {
   final T value;
@@ -17,11 +25,75 @@ class SelectDialog<T> extends StatefulWidget {
 
 class _SelectDialogState<T> extends State<SelectDialog<T>> {
   late T _tempValue;
+  late List _cdnResList;
+  late final cdnSpeedTest = GStorage.cdnSpeedTest;
 
   @override
   void initState() {
     super.initState();
     _tempValue = widget.value;
+    if (widget.title == 'CDN 设置' && cdnSpeedTest) {
+      _cdnResList = List.generate(widget.values.length, (_) => null);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        try {
+          dynamic result = await VideoHttp.videoUrl(
+            cid: 196018899,
+            bvid: 'BV1fK4y1t7hj',
+          );
+          if (result['status']) {
+            VideoItem videoItem = result['data'].dash.video.first;
+
+            for (CDNService item in CDNService.values) {
+              if (mounted.not) {
+                break;
+              }
+              String videoUrl = VideoUtils.getCdnUrl(videoItem, item.code);
+              Dio dio = Dio()
+                ..options.headers['referer'] = 'https://www.bilibili.com/';
+              int maxSize = 8 * 1024 * 1024;
+              int downloaded = 0;
+              Stopwatch stopwatch = Stopwatch()..start();
+              try {
+                await dio.get(
+                  videoUrl,
+                  onReceiveProgress: (int count, int total) {
+                    downloaded += count;
+                    if (stopwatch.elapsedMilliseconds > 15 * 1000) {
+                      stopwatch.stop();
+                      dio.close(force: true);
+                    }
+                    if (downloaded >= maxSize) {
+                      stopwatch.stop();
+                      dio.close(force: true);
+                      _cdnResList[item.index] =
+                          (maxSize / stopwatch.elapsedMilliseconds / 1000)
+                              .toPrecision(2);
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    }
+                  },
+                );
+              } catch (e) {
+                stopwatch.stop();
+                if (_cdnResList[item.index] == null) {
+                  _cdnResList[item.index] = '测速失败: $e';
+                  if (mounted) {
+                    setState(() {});
+                  }
+                }
+              }
+              if (stopwatch.isRunning) {
+                stopwatch.stop();
+              }
+            }
+          }
+        } catch (e) {
+          debugPrint('failed to check: $e');
+        }
+      });
+    }
   }
 
   @override
@@ -39,22 +111,31 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
         return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              for (var i in widget.values) ...[
-                RadioListTile(
-                  dense: true,
-                  value: i['value'],
-                  title: Text(i['title'], style: titleStyle),
-                  groupValue: _tempValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _tempValue = value as T;
-                    });
-                    Navigator.pop(context, _tempValue);
-                  },
-                ),
-              ]
-            ],
+            children: List.generate(
+              widget.values.length,
+              (index) => RadioListTile(
+                dense: true,
+                value: widget.values[index]['value'],
+                title: Text(widget.values[index]['title'], style: titleStyle),
+                subtitle: widget.title == 'CDN 设置' && cdnSpeedTest
+                    ? Text(
+                        _cdnResList[index] is double
+                            ? '${_cdnResList[index]} MB/s'
+                            : _cdnResList[index] is String
+                                ? _cdnResList[index]
+                                : '---',
+                        style: TextStyle(fontSize: 13),
+                      )
+                    : null,
+                groupValue: _tempValue,
+                onChanged: (value) {
+                  setState(() {
+                    _tempValue = value as T;
+                  });
+                  Navigator.pop(context, _tempValue);
+                },
+              ),
+            ),
           ),
         );
       }),

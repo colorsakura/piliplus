@@ -12,10 +12,10 @@ class VideoUtils {
         RegExp(r'^https?://\d{1,3}\.\d{1,3}').hasMatch(url);
   }
 
-  static String getCdnUrl(dynamic item) {
+  static String getCdnUrl(dynamic item, [defaultCDNService]) {
     String? backupUrl;
     String? videoUrl;
-    String defaultCDNService = GStorage.setting
+    defaultCDNService ??= GStorage.setting
         .get(SettingBoxKey.CDNService, defaultValue: CDNService.backupUrl.code);
     if (item is AudioItem) {
       if (GStorage.setting

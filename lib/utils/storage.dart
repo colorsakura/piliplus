@@ -287,6 +287,9 @@ class GStorage {
   static bool get continuePlayingPart =>
       setting.get(SettingBoxKey.continuePlayingPart, defaultValue: true);
 
+  static bool get cdnSpeedTest =>
+      setting.get(SettingBoxKey.cdnSpeedTest, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -495,6 +498,7 @@ class SettingBoxKey {
       subtitleBgOpaticy = 'subtitleBgOpaticy',
       badCertificateCallback = 'badCertificateCallback',
       continuePlayingPart = 'continuePlayingPart',
+      cdnSpeedTest = 'cdnSpeedTest',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
