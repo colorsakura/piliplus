@@ -1014,7 +1014,9 @@ class VideoHttp {
       List<int> blackMidsList = GStorage.blackMidsList;
       for (var i in res.data['data']['list']) {
         if (!blackMidsList.contains(i['owner']['mid']) &&
-            !RecommendFilter.filterTitle(i['title'])) {
+            !RecommendFilter.filterTitle(i['title']) &&
+            !RecommendFilter.filterLikeRatio(
+                i['stat']['like'], i['stat']['view'])) {
           list.add(HotVideoItemModel.fromJson(i));
         }
       }
