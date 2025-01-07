@@ -234,6 +234,7 @@ class UserAndSearchVertical extends StatelessWidget {
           child: Obx(
             () => ctr.userLogin.value
                 ? Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       NetworkImgLayer(
                         type: 'avatar',
@@ -255,7 +256,31 @@ class UserAndSearchVertical extends StatelessWidget {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Positioned(
+                        right: -6,
+                        bottom: -6,
+                        child: Obx(() => MineController.anonymity.value
+                            ? IgnorePointer(
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    size: 16,
+                                    MdiIcons.incognito,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink()),
+                      ),
                     ],
                   )
                 : DefaultUser(onPressed: () => ctr.showUserInfoDialog(context)),
