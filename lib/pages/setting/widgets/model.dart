@@ -235,11 +235,11 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.dynamicBadgeMode, result.code);
+            GStorage.setting.put(SettingBoxKey.dynamicBadgeMode, result.index);
             MainController mainController = Get.put(MainController());
-            mainController.dynamicBadgeType =
-                DynamicBadgeMode.values[result.code];
-            if (mainController.dynamicBadgeType != DynamicBadgeMode.hidden) {
+            mainController.dynamicBadgeMode =
+                DynamicBadgeMode.values[result.index];
+            if (mainController.dynamicBadgeMode != DynamicBadgeMode.hidden) {
               mainController.getUnreadDynamic();
             }
             SmartDialog.showToast('设置成功');
@@ -249,6 +249,68 @@ List<SettingsModel> get styleSettings => [
         title: '动态未读标记',
         leading: const Icon(Icons.motion_photos_on_outlined),
         getSubtitle: () => '当前标记样式：${GStorage.dynamicBadgeType.description}',
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        onTap: (setState) async {
+          DynamicBadgeMode? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return SelectDialog<DynamicBadgeMode>(
+                title: '消息未读标记',
+                value: GStorage.msgBadgeMode,
+                values: DynamicBadgeMode.values.map((e) {
+                  return {'title': e.description, 'value': e};
+                }).toList(),
+              );
+            },
+          );
+          if (result != null) {
+            GStorage.setting.put(SettingBoxKey.msgBadgeMode, result.index);
+            MainController mainController = Get.put(MainController());
+            mainController.msgBadgeMode = DynamicBadgeMode.values[result.index];
+            if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
+              mainController.queryUnreadMsg();
+            } else {
+              mainController.msgUnReadCount.value = '';
+            }
+            SmartDialog.showToast('设置成功');
+            setState();
+          }
+        },
+        title: '消息未读标记',
+        leading: const Icon(Icons.notifications_active_outlined),
+        getSubtitle: () => '当前标记样式：${GStorage.msgBadgeMode.description}',
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        onTap: (setState) async {
+          MsgUnReadType? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return SelectDialog<MsgUnReadType>(
+                title: '消息未读类型',
+                value: GStorage.msgUnReadType,
+                values: MsgUnReadType.values.map((e) {
+                  return {'title': e.title, 'value': e};
+                }).toList(),
+              );
+            },
+          );
+          if (result != null) {
+            GStorage.setting.put(SettingBoxKey.msgUnReadType, result.index);
+            MainController mainController = Get.put(MainController());
+            mainController.msgUnReadType = MsgUnReadType.values[result.index];
+            if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
+              mainController.queryUnreadMsg();
+            }
+            SmartDialog.showToast('设置成功');
+            setState();
+          }
+        },
+        title: '消息未读类型',
+        leading: const Icon(Icons.notifications_active_outlined),
+        getSubtitle: () => '当前消息类型：${GStorage.msgUnReadType.title}',
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:PiliPlus/grpc/grpc_repo.dart';
+import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/common.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/media/view.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -21,40 +24,135 @@ class MainController extends GetxController {
   late bool hideTabBar;
   late PageController pageController;
   int selectedIndex = 0;
-  RxBool userLogin = false.obs;
-  late DynamicBadgeMode dynamicBadgeType;
-  late bool checkDynamic;
-  late int dynamicPeriod;
-  int? _lastCheckAt;
-  int? dynIndex;
+  RxBool isLogin = false.obs;
+
+  late DynamicBadgeMode dynamicBadgeMode;
+  late bool checkDynamic = GStorage.checkDynamic;
+  late int dynamicPeriod = GStorage.dynamicPeriod;
+  late int _lastCheckDynamicAt = 0;
+  late int dynIndex = -1;
+
+  late int homeIndex = -1;
+  late DynamicBadgeMode msgBadgeMode = GStorage.msgBadgeMode;
+  late MsgUnReadType msgUnReadType = GStorage.msgUnReadType;
+  late final RxString msgUnReadCount = ''.obs;
+  late int lastCheckUnreadAt = 0;
 
   @override
   void onInit() {
     super.onInit();
-    checkDynamic = GStorage.checkDynamic;
-    dynamicPeriod = GStorage.dynamicPeriod;
     hideTabBar =
         GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
-    dynamic userInfo = GStorage.userInfo.get('userInfoCache');
-    userLogin.value = userInfo != null;
-    dynamicBadgeType = DynamicBadgeMode.values[GStorage.setting.get(
+    isLogin.value = GStorage.isLogin;
+    dynamicBadgeMode = DynamicBadgeMode.values[GStorage.setting.get(
         SettingBoxKey.dynamicBadgeMode,
-        defaultValue: DynamicBadgeMode.number.code)];
+        defaultValue: DynamicBadgeMode.number.index)];
 
     setNavBarConfig();
-    if (dynamicBadgeType != DynamicBadgeMode.hidden) {
-      dynIndex = navigationBars.indexWhere((e) => e['id'] == 1);
+
+    dynIndex = navigationBars.indexWhere((e) => e['id'] == 1);
+    if (dynamicBadgeMode != DynamicBadgeMode.hidden) {
       if (dynIndex != -1) {
         if (checkDynamic) {
-          _lastCheckAt = DateTime.now().millisecondsSinceEpoch;
+          _lastCheckDynamicAt = DateTime.now().millisecondsSinceEpoch;
         }
         getUnreadDynamic();
       }
     }
+
+    homeIndex = navigationBars.indexWhere((e) => e['id'] == 0);
+    if (msgBadgeMode != DynamicBadgeMode.hidden) {
+      if (homeIndex != -1) {
+        lastCheckUnreadAt = DateTime.now().millisecondsSinceEpoch;
+        queryUnreadMsg();
+      }
+    }
+  }
+
+  Future queryUnreadMsg() async {
+    if (isLogin.value.not || homeIndex == -1) {
+      return;
+    }
+    try {
+      bool shouldCheckPM = msgUnReadType == MsgUnReadType.pm ||
+          msgUnReadType == MsgUnReadType.all;
+      bool shouldCheckFeed = msgUnReadType != MsgUnReadType.pm ||
+          msgUnReadType == MsgUnReadType.all;
+      List res = await Future.wait([
+        if (shouldCheckPM) _queryPMUnread(),
+        if (shouldCheckFeed) _queryMsgFeedUnread(),
+      ]);
+      dynamic count = 0;
+      if (shouldCheckPM && res.firstOrNull?['status'] == true) {
+        count = (res.first['data'] as int?) ?? 0;
+      }
+      if ((shouldCheckPM.not && res.firstOrNull?['status'] == true) ||
+          (shouldCheckPM && res.getOrNull(1)?['status'] == true)) {
+        int index = shouldCheckPM.not ? 0 : 1;
+        count += (switch (msgUnReadType) {
+              MsgUnReadType.pm => 0,
+              MsgUnReadType.reply => res[index]['data']['reply'],
+              MsgUnReadType.at => res[index]['data']['at'],
+              MsgUnReadType.like => res[index]['data']['like'],
+              MsgUnReadType.sysMsg => res[index]['data']['sys_msg'],
+              MsgUnReadType.all => res[index]['data']['reply'] +
+                  res[index]['data']['at'] +
+                  res[index]['data']['like'] +
+                  res[index]['data']['sys_msg'],
+            } as int?) ??
+            0;
+      }
+      count = count == 0
+          ? ''
+          : count > 99
+              ? '99+'
+              : count.toString();
+      if (msgUnReadCount.value == count) {
+        msgUnReadCount.refresh();
+      } else {
+        msgUnReadCount.value = count;
+      }
+    } catch (e) {
+      debugPrint('failed to get unread count: $e');
+    }
+  }
+
+  Future _queryPMUnread() async {
+    dynamic res = await Request().get(Api.msgUnread);
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': ((res.data['data']?['unfollow_unread'] as int?) ?? 0) +
+            ((res.data['data']?['follow_unread'] as int?) ?? 0),
+      };
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  Future _queryMsgFeedUnread() async {
+    if (isLogin.value.not) {
+      return;
+    }
+    dynamic res = await Request().get(Api.msgFeedUnread);
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': res.data['data'],
+      };
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
   }
 
   void getUnreadDynamic() async {
-    if (!userLogin.value || dynIndex == -1) {
+    if (!isLogin.value || dynIndex == -1) {
       return;
     }
     if (GlobalData().grpcReply) {
@@ -73,22 +171,21 @@ class MainController extends GetxController {
   }
 
   void setCount([int count = 0]) async {
-    dynIndex ??= navigationBars.indexWhere((e) => e['id'] == 1);
-    if (dynIndex == -1 || navigationBars[dynIndex!]['count'] == count) return;
-    navigationBars[dynIndex!]['count'] = count; // 修改 count 属性为新的值
+    if (dynIndex == -1 || navigationBars[dynIndex]['count'] == count) return;
+    navigationBars[dynIndex]['count'] = count; // 修改 count 属性为新的值
     navigationBars.refresh();
   }
 
   void checkUnreadDynamic() {
     if (dynIndex == -1 ||
-        !userLogin.value ||
-        dynamicBadgeType == DynamicBadgeMode.hidden ||
+        !isLogin.value ||
+        dynamicBadgeMode == DynamicBadgeMode.hidden ||
         !checkDynamic) {
       return;
     }
     int now = DateTime.now().millisecondsSinceEpoch;
-    if (now - (_lastCheckAt ?? 0) >= dynamicPeriod * 60 * 1000) {
-      _lastCheckAt = now;
+    if (now - _lastCheckDynamicAt >= dynamicPeriod * 60 * 1000) {
+      _lastCheckDynamicAt = now;
       getUnreadDynamic();
     }
   }

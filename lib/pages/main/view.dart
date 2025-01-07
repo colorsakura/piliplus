@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/grpc/grpc_client.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +14,7 @@ import 'package:PiliPlus/pages/home/index.dart';
 import 'package:PiliPlus/utils/event_bus.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './controller.dart';
 
 class MainApp extends StatefulWidget {
@@ -27,8 +30,8 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp>
     with SingleTickerProviderStateMixin, RouteAware, WidgetsBindingObserver {
   final MainController _mainController = Get.put(MainController());
-  final HomeController _homeController = Get.put(HomeController());
-  final DynamicsController _dynamicController = Get.put(DynamicsController());
+  late final _homeController = Get.put(HomeController());
+  late final _dynamicController = Get.put(DynamicsController());
 
   int? _lastSelectTime; //上次点击时间
   late bool enableMYBar;
@@ -57,6 +60,7 @@ class _MainAppState extends State<MainApp>
   void didPopNext() {
     _mainController.checkUnreadDynamic();
     _checkDefaultSearch(true);
+    _checkUnread(true);
     super.didPopNext();
   }
 
@@ -65,19 +69,36 @@ class _MainAppState extends State<MainApp>
     if (state == AppLifecycleState.resumed) {
       _mainController.checkUnreadDynamic();
       _checkDefaultSearch(true);
+      _checkUnread(true);
     }
   }
 
   void _checkDefaultSearch([bool shouldCheck = false]) {
-    if (_homeController.enableSearchWord) {
+    if (_mainController.homeIndex != -1 && _homeController.enableSearchWord) {
       if (shouldCheck &&
           _mainController.pages[_mainController.selectedIndex] is! HomePage) {
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - _homeController.lateCheckAt >= 5 * 60 * 1000) {
-        _homeController.lateCheckAt = now;
+      if (now - _homeController.lateCheckSearchAt >= 5 * 60 * 1000) {
+        _homeController.lateCheckSearchAt = now;
         _homeController.querySearchDefault();
+      }
+    }
+  }
+
+  void _checkUnread([bool shouldCheck = false]) {
+    if (_mainController.isLogin.value &&
+        _mainController.homeIndex != -1 &&
+        _mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
+      if (shouldCheck &&
+          _mainController.pages[_mainController.selectedIndex] is! HomePage) {
+        return;
+      }
+      int now = DateTime.now().millisecondsSinceEpoch;
+      if (now - _mainController.lastCheckUnreadAt >= 5 * 60 * 1000) {
+        _mainController.lastCheckUnreadAt = now;
+        _mainController.queryUnreadMsg();
       }
     }
   }
@@ -98,24 +119,10 @@ class _MainAppState extends State<MainApp>
       }
       _homeController.flag = true;
       _checkDefaultSearch();
+      _checkUnread();
     } else {
       _homeController.flag = false;
     }
-
-    // if (currentPage is RankPage) {
-    //   if (_rankController.flag) {
-    //     // 单击返回顶部 双击并刷新
-    //     if (DateTime.now().millisecondsSinceEpoch - _lastSelectTime! < 500) {
-    //       _rankController.onRefresh();
-    //     } else {
-    //       _rankController.animateToTop();
-    //     }
-    //     _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
-    //   }
-    //   _rankController.flag = true;
-    // } else {
-    //   _rankController.flag = false;
-    // }
 
     if (currentPage is DynamicsPage) {
       if (_dynamicController.flag) {
@@ -172,8 +179,8 @@ class _MainAppState extends State<MainApp>
               children: [
                 if (useSideBar) ...[
                   SizedBox(
-                    width: context.width * 0.0387 +
-                        36.801 +
+                    width: context.width * 0.04 +
+                        40 +
                         MediaQuery.of(context).padding.left,
                     child: Obx(
                       () => _mainController.navigationBars.length > 1
@@ -184,8 +191,7 @@ class _MainAppState extends State<MainApp>
                               selectedIndex: _mainController.selectedIndex,
                               onDestinationSelected: setIndex,
                               labelType: NavigationRailLabelType.none,
-                              leading:
-                                  UserAndSearchVertical(ctr: _homeController),
+                              leading: userAndSearchVertical,
                               destinations: _mainController.navigationBars
                                   .map((e) => NavigationRailDestination(
                                         icon: _buildIcon(
@@ -211,8 +217,7 @@ class _MainAppState extends State<MainApp>
                               constraints: BoxConstraints(
                                 minWidth: context.width * 0.0286 + 28.56,
                               ),
-                              child:
-                                  UserAndSearchVertical(ctr: _homeController),
+                              child: userAndSearchVertical,
                             ),
                     ),
                   ),
@@ -352,10 +357,10 @@ class _MainAppState extends State<MainApp>
     required Widget icon,
   }) =>
       id == 1 &&
-              _mainController.dynamicBadgeType != DynamicBadgeMode.hidden &&
+              _mainController.dynamicBadgeMode != DynamicBadgeMode.hidden &&
               count > 0
           ? Badge(
-              label: _mainController.dynamicBadgeType == DynamicBadgeMode.number
+              label: _mainController.dynamicBadgeMode == DynamicBadgeMode.number
                   ? Text(count.toString())
                   : null,
               padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
@@ -367,4 +372,119 @@ class _MainAppState extends State<MainApp>
               child: icon,
             )
           : icon;
+
+  Widget get userAndSearchVertical {
+    return Column(
+      children: [
+        Semantics(
+          label: "我的",
+          child: Obx(
+            () => _homeController.userLogin.value
+                ? Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      NetworkImgLayer(
+                        type: 'avatar',
+                        width: 34,
+                        height: 34,
+                        src: _homeController.userFace.value,
+                      ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () =>
+                                _homeController.showUserInfoDialog(context),
+                            splashColor: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer
+                                .withOpacity(0.3),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: -6,
+                        bottom: -6,
+                        child: Obx(() => MineController.anonymity.value
+                            ? IgnorePointer(
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    size: 16,
+                                    MdiIcons.incognito,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink()),
+                      ),
+                    ],
+                  )
+                : DefaultUser(
+                    onPressed: () =>
+                        _homeController.showUserInfoDialog(context)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Obx(
+          () => _homeController.userLogin.value
+              ? Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      tooltip: '消息',
+                      onPressed: () {
+                        Get.toNamed('/whisper');
+                        _mainController.msgUnReadCount.value = '';
+                      },
+                      icon: const Icon(
+                        Icons.notifications_none,
+                      ),
+                    ),
+                    if (_mainController.msgBadgeMode !=
+                            DynamicBadgeMode.hidden &&
+                        _mainController.msgUnReadCount.value.isNotEmpty)
+                      Positioned(
+                        top: _mainController.msgBadgeMode ==
+                                DynamicBadgeMode.number
+                            ? 8
+                            : 12,
+                        left: _mainController.msgBadgeMode ==
+                                DynamicBadgeMode.number
+                            ? 24
+                            : 32,
+                        child: Badge(
+                          label: _mainController.msgBadgeMode ==
+                                  DynamicBadgeMode.number
+                              ? Text(_mainController.msgUnReadCount.value
+                                  .toString())
+                              : null,
+                        ),
+                      ),
+                  ],
+                )
+              : const SizedBox.shrink(),
+        ),
+        IconButton(
+          icon: const Icon(
+            Icons.search_outlined,
+            semanticLabel: '搜索',
+          ),
+          onPressed: () => Get.toNamed('/search'),
+        ),
+      ],
+    );
+  }
 }

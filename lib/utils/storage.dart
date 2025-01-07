@@ -90,7 +90,18 @@ class GStorage {
   static DynamicBadgeMode get dynamicBadgeType =>
       DynamicBadgeMode.values[setting.get(
         SettingBoxKey.dynamicBadgeMode,
-        defaultValue: DynamicBadgeMode.number.code,
+        defaultValue: DynamicBadgeMode.number.index,
+      )];
+
+  static DynamicBadgeMode get msgBadgeMode =>
+      DynamicBadgeMode.values[setting.get(
+        SettingBoxKey.msgBadgeMode,
+        defaultValue: DynamicBadgeMode.number.index,
+      )];
+
+  static MsgUnReadType get msgUnReadType => MsgUnReadType.values[setting.get(
+        SettingBoxKey.msgUnReadType,
+        defaultValue: MsgUnReadType.pm.index,
       )];
 
   static int get defaultHomePage =>
@@ -551,6 +562,8 @@ class SettingBoxKey {
       hideTabBar = 'hideTabBar', // 收起底栏
       tabbarSort = 'tabbarSort', // 首页tabbar
       dynamicBadgeMode = 'dynamicBadgeMode',
+      msgBadgeMode = 'msgBadgeMode',
+      msgUnReadType = 'msgUnReadType',
       hiddenSettingUnlocked = 'hiddenSettingUnlocked',
       enableGradientBg = 'enableGradientBg',
       navBarSort = 'navBarSort';

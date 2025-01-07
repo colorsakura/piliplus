@@ -4,6 +4,8 @@ extension DynamicBadgeModeDesc on DynamicBadgeMode {
   String get description => ['隐藏', '红点', '数字'][index];
 }
 
-extension DynamicBadgeModeCode on DynamicBadgeMode {
-  int get code => [0, 1, 2][index];
+enum MsgUnReadType { pm, reply, at, like, sysMsg, all }
+
+extension MsgUnReadTypeExt on MsgUnReadType {
+  String get title => ['私信', '回复我的', '@我', '收到的赞', '系统通知', '全部'][index];
 }

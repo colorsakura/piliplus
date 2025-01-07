@@ -28,6 +28,9 @@ extension ListExt<T> on List<T>? {
     if (isNullOrEmpty) {
       return null;
     }
+    if (index < 0 || index >= this!.length) {
+      return null;
+    }
     return this![index];
   }
 

@@ -27,7 +27,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   late bool enableSearchWord;
   late RxString defaultSearch = ''.obs;
-  late int lateCheckAt = 0;
+  late int lateCheckSearchAt = 0;
 
   @override
   void onInit() {
@@ -40,7 +40,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     enableSearchWord = GStorage.setting
         .get(SettingBoxKey.enableSearchWord, defaultValue: true);
     if (enableSearchWord) {
-      lateCheckAt = DateTime.now().millisecondsSinceEpoch;
+      lateCheckSearchAt = DateTime.now().millisecondsSinceEpoch;
       querySearchDefault();
     }
     useSideBar =

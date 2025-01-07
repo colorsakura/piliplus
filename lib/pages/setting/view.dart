@@ -125,7 +125,7 @@ class SettingPage extends StatelessWidget {
                                   if (Get.isRegistered<MainController>()) {
                                     MainController mainController =
                                         Get.find<MainController>();
-                                    mainController.userLogin.value = false;
+                                    mainController.isLogin.value = false;
                                   }
                                   await LoginUtils.refreshLoginStatus(false);
                                   Get.back();
