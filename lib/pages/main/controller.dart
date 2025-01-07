@@ -23,7 +23,7 @@ class MainController extends GetxController {
       StreamController<bool>.broadcast();
   late bool hideTabBar;
   late PageController pageController;
-  int selectedIndex = 0;
+  RxInt selectedIndex = 0.obs;
   RxBool isLogin = false.obs;
 
   late DynamicBadgeMode dynamicBadgeMode;
@@ -203,7 +203,7 @@ class MainController extends GetxController {
     int defaultIndex =
         navigationBars.indexWhere((item) => item['id'] == defaultHomePage);
     // 如果找不到匹配项，默认索引设置为0或其他合适的值
-    selectedIndex = defaultIndex != -1 ? defaultIndex : 0;
+    selectedIndex.value = defaultIndex != -1 ? defaultIndex : 0;
     pages = navigationBars
         .map<Widget>((e) => switch (e['id']) {
               0 => const HomePage(),

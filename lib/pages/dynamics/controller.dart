@@ -29,7 +29,6 @@ class DynamicsController extends GetxController
   late TabController tabController;
   RxList<int> tempBannedList = <int>[].obs;
   late List<Widget> tabsPageList;
-  bool flag = false;
   RxInt initialValue = 0.obs;
   RxBool userLogin = false.obs;
   dynamic userInfo;

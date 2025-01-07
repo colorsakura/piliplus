@@ -33,7 +33,7 @@ class _MainAppState extends State<MainApp>
   late final _homeController = Get.put(HomeController());
   late final _dynamicController = Get.put(DynamicsController());
 
-  int? _lastSelectTime; //上次点击时间
+  late int _lastSelectTime = 0; //上次点击时间
   late bool enableMYBar;
   late bool useSideBar;
 
@@ -42,7 +42,7 @@ class _MainAppState extends State<MainApp>
     super.initState();
     _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
     _mainController.pageController =
-        PageController(initialPage: _mainController.selectedIndex);
+        PageController(initialPage: _mainController.selectedIndex.value);
     enableMYBar =
         GStorage.setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar =
@@ -76,7 +76,8 @@ class _MainAppState extends State<MainApp>
   void _checkDefaultSearch([bool shouldCheck = false]) {
     if (_mainController.homeIndex != -1 && _homeController.enableSearchWord) {
       if (shouldCheck &&
-          _mainController.pages[_mainController.selectedIndex] is! HomePage) {
+          _mainController.pages[_mainController.selectedIndex.value]
+              is! HomePage) {
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
@@ -92,7 +93,8 @@ class _MainAppState extends State<MainApp>
         _mainController.homeIndex != -1 &&
         _mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
       if (shouldCheck &&
-          _mainController.pages[_mainController.selectedIndex] is! HomePage) {
+          _mainController.pages[_mainController.selectedIndex.value]
+              is! HomePage) {
         return;
       }
       int now = DateTime.now().millisecondsSinceEpoch;
@@ -105,39 +107,35 @@ class _MainAppState extends State<MainApp>
 
   void setIndex(int value) async {
     feedBack();
-    _mainController.pageController.jumpToPage(value);
-    var currentPage = _mainController.pages[value];
-    if (currentPage is HomePage) {
-      if (_homeController.flag) {
-        // 单击返回顶部 双击并刷新
-        if (DateTime.now().millisecondsSinceEpoch - _lastSelectTime! < 500) {
-          _homeController.onRefresh();
-        } else {
-          _homeController.animateToTop();
-        }
-        _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
-      }
-      _homeController.flag = true;
-      _checkDefaultSearch();
-      _checkUnread();
-    } else {
-      _homeController.flag = false;
-    }
 
-    if (currentPage is DynamicsPage) {
-      if (_dynamicController.flag) {
-        // 单击返回顶部 双击并刷新
-        if (DateTime.now().millisecondsSinceEpoch - _lastSelectTime! < 500) {
-          _dynamicController.onRefresh();
-        } else {
-          _dynamicController.animateToTop();
-        }
-        _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
+    if (value != _mainController.selectedIndex.value) {
+      _mainController.selectedIndex.value = value;
+      _mainController.pageController.jumpToPage(value);
+      dynamic currentPage = _mainController.pages[value];
+      if (currentPage is HomePage) {
+        _checkDefaultSearch();
+        _checkUnread();
+      } else if (currentPage is DynamicsPage) {
+        _mainController.setCount();
       }
-      _dynamicController.flag = true;
-      _mainController.setCount();
     } else {
-      _dynamicController.flag = false;
+      dynamic currentPage = _mainController.pages[value];
+
+      if (currentPage is HomePage) {
+        _homeController.animateToTop();
+      } else if (currentPage is DynamicsPage) {
+        _dynamicController.animateToTop();
+      }
+
+      int now = DateTime.now().millisecondsSinceEpoch;
+      if (now - _lastSelectTime < 500) {
+        if (currentPage is HomePage) {
+          _homeController.onRefresh();
+        } else if (currentPage is DynamicsPage) {
+          _dynamicController.onRefresh();
+        }
+      }
+      _lastSelectTime = now;
     }
   }
 
@@ -156,7 +154,7 @@ class _MainAppState extends State<MainApp>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
-        if (_mainController.selectedIndex != 0) {
+        if (_mainController.selectedIndex.value != 0) {
           setIndex(0);
           _mainController.bottomBarStream.add(true);
         } else {
@@ -188,7 +186,8 @@ class _MainAppState extends State<MainApp>
                               groupAlignment: 1,
                               minWidth: context.width * 0.0286 + 28.56,
                               backgroundColor: Colors.transparent,
-                              selectedIndex: _mainController.selectedIndex,
+                              selectedIndex:
+                                  _mainController.selectedIndex.value,
                               onDestinationSelected: setIndex,
                               labelType: NavigationRailLabelType.none,
                               leading: userAndSearchVertical,
@@ -226,7 +225,7 @@ class _MainAppState extends State<MainApp>
                     () => _mainController.navigationBars.length > 1
                         ? NavigationRail(
                             onDestinationSelected: setIndex,
-                            selectedIndex: _mainController.selectedIndex,
+                            selectedIndex: _mainController.selectedIndex.value,
                             destinations: _mainController.navigationBars
                                 .map(
                                   (e) => NavigationRailDestination(
@@ -258,10 +257,6 @@ class _MainAppState extends State<MainApp>
                   child: PageView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _mainController.pageController,
-                    onPageChanged: (index) {
-                      _mainController.selectedIndex = index;
-                      setState(() {});
-                    },
                     children: _mainController.pages,
                   ),
                 ),
@@ -286,7 +281,7 @@ class _MainAppState extends State<MainApp>
                                     ? NavigationBar(
                                         onDestinationSelected: setIndex,
                                         selectedIndex:
-                                            _mainController.selectedIndex,
+                                            _mainController.selectedIndex.value,
                                         destinations:
                                             _mainController.navigationBars.map(
                                           (e) {
@@ -312,7 +307,7 @@ class _MainAppState extends State<MainApp>
                                 () => _mainController.navigationBars.length > 1
                                     ? BottomNavigationBar(
                                         currentIndex:
-                                            _mainController.selectedIndex,
+                                            _mainController.selectedIndex.value,
                                         onTap: setIndex,
                                         iconSize: 16,
                                         selectedFontSize: 12,

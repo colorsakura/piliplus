@@ -10,7 +10,6 @@ import '../../utils/feed_back.dart';
 import '../mine/view.dart';
 
 class HomeController extends GetxController with GetTickerProviderStateMixin {
-  bool flag = true;
   late RxList tabs = [].obs;
   late TabController tabController;
   late List tabsCtrList;
