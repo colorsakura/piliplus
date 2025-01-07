@@ -465,12 +465,14 @@ class _MainAppState extends State<MainApp>
                                 DynamicBadgeMode.number
                             ? 24
                             : 32,
-                        child: Badge(
-                          label: _mainController.msgBadgeMode ==
-                                  DynamicBadgeMode.number
-                              ? Text(_mainController.msgUnReadCount.value
-                                  .toString())
-                              : null,
+                        child: IgnorePointer(
+                          child: Badge(
+                            label: _mainController.msgBadgeMode ==
+                                    DynamicBadgeMode.number
+                                ? Text(_mainController.msgUnReadCount.value
+                                    .toString())
+                                : null,
+                          ),
                         ),
                       ),
                   ],
