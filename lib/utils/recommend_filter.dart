@@ -43,15 +43,21 @@ class RecommendFilter {
     if (videoItem.duration > 0 && videoItem.duration < minDurationForRcmd) {
       return true;
     }
-    if (videoItem.stat.view is int &&
-        videoItem.stat.view > -1 &&
-        videoItem.stat.like is int &&
-        videoItem.stat.like > -1 &&
-        videoItem.stat.like * 100 <
-            minLikeRatioForRecommend * videoItem.stat.view) {
+    if (filterLikeRatio(videoItem.stat.like, videoItem.stat.view)) {
       return true;
     }
     if (filterTitle(videoItem.title)) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool filterLikeRatio(like, view) {
+    if (view is int &&
+        view > -1 &&
+        like is int &&
+        like > -1 &&
+        like * 100 < minLikeRatioForRecommend * view) {
       return true;
     }
     return false;
