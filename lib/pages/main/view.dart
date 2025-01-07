@@ -463,7 +463,7 @@ class _MainAppState extends State<MainApp>
                             : 12,
                         left: _mainController.msgBadgeMode ==
                                 DynamicBadgeMode.number
-                            ? 24
+                            ? 22
                             : 32,
                         child: IgnorePointer(
                           child: Badge(
