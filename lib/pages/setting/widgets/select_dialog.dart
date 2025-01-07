@@ -53,22 +53,20 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 ..options.headers['referer'] = 'https://www.bilibili.com/';
               int maxSize = 8 * 1024 * 1024;
               int downloaded = 0;
-              Stopwatch stopwatch = Stopwatch()..start();
+              int start = DateTime.now().millisecondsSinceEpoch;
               try {
                 await dio.get(
                   videoUrl,
                   onReceiveProgress: (int count, int total) {
                     downloaded += count;
-                    if (stopwatch.elapsedMilliseconds > 15 * 1000) {
-                      stopwatch.stop();
+                    int now = DateTime.now().millisecondsSinceEpoch;
+                    if (now - start > 15 * 1000) {
                       dio.close(force: true);
                     }
                     if (downloaded >= maxSize) {
-                      stopwatch.stop();
                       dio.close(force: true);
                       _cdnResList[item.index] =
-                          (maxSize / stopwatch.elapsedMilliseconds / 1000)
-                              .toPrecision(2);
+                          (maxSize / (now - start) / 1000).toPrecision(2);
                       if (mounted) {
                         setState(() {});
                       }
@@ -76,16 +74,12 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                   },
                 );
               } catch (e) {
-                stopwatch.stop();
                 if (_cdnResList[item.index] == null) {
                   _cdnResList[item.index] = '测速失败: $e';
                   if (mounted) {
                     setState(() {});
                   }
                 }
-              }
-              if (stopwatch.isRunning) {
-                stopwatch.stop();
               }
             }
           }
