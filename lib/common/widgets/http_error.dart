@@ -7,6 +7,7 @@ class HttpError extends StatelessWidget {
     this.errMsg,
     this.callback,
     this.btnText,
+    this.extraWidget,
     super.key,
   });
 
@@ -14,6 +15,7 @@ class HttpError extends StatelessWidget {
   final String? errMsg;
   final Function()? callback;
   final String? btnText;
+  final Widget? extraWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +46,13 @@ class HttpError extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
+          if (extraWidget != null) ...[
+            const SizedBox(height: 10),
+            extraWidget!,
+            const SizedBox(height: 5),
+          ],
           if (callback != null) ...[
-            const SizedBox(height: 20),
+            if (extraWidget == null) const SizedBox(height: 20),
             FilledButton.tonal(
               onPressed: callback,
               style: ButtonStyle(

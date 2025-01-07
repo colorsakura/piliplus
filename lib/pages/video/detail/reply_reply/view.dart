@@ -394,6 +394,27 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
             HttpError(
               errMsg: loadingState.errMsg,
               callback: _videoReplyReplyController.onReload,
+              extraWidget: GlobalData().grpcReply
+                  ? FilledButton.tonal(
+                      onPressed: () {
+                        GlobalData().grpcReply = false;
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.resolveWith((states) {
+                          return Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withAlpha(20);
+                        }),
+                      ),
+                      child: Text(
+                        '暂时关闭gRPC加载评论',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
+                    )
+                  : null,
             )
           ],
         ),
