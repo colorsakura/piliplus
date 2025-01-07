@@ -531,6 +531,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               ? FilledButton.tonal(
                   onPressed: () {
                     GlobalData().grpcReply = false;
+                    _dynamicDetailController.onReload();
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.resolveWith((states) {

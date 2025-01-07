@@ -299,6 +299,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               ? FilledButton.tonal(
                   onPressed: () {
                     GlobalData().grpcReply = false;
+                    _videoReplyController.onReload();
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.resolveWith((states) {

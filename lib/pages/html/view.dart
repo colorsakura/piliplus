@@ -472,6 +472,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               ? FilledButton.tonal(
                   onPressed: () {
                     GlobalData().grpcReply = false;
+                    _htmlRenderCtr.onReload();
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.resolveWith((states) {
