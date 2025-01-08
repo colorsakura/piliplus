@@ -24,9 +24,6 @@ jobs:
           channel: stable
           flutter-version-file: pubspec.yaml
 
-      - name: Set up xcode
-        uses: BoundfoxStudios/action-xcode-select@v1
-
       - name: 更新版本号
         run: |
           version_name=$(yq e '.version' pubspec.yaml | cut -d "+" -f 1)
