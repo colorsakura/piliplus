@@ -133,24 +133,26 @@ class _MinePageState extends State<MinePage> {
             GestureDetector(
               onTap: _mineController.onLogin,
               child: ClipOval(
-                child: Container(
-                  width: 70,
-                  height: 70,
-                  color: Theme.of(context).colorScheme.onInverseSurface,
-                  child: Center(
-                    child: _mineController.userInfo.value.face != null
-                        ? NetworkImgLayer(
-                            src: _mineController.userInfo.value.face,
-                            semanticsLabel: '头像',
-                            width: 70,
-                            height: 70,
-                          )
-                        : Image.asset(
-                            'assets/images/noface.jpeg',
-                            semanticLabel: "默认头像",
-                          ),
-                  ),
-                ),
+                child: _mineController.userInfo.value.face != null
+                    ? NetworkImgLayer(
+                        src: _mineController.userInfo.value.face,
+                        semanticsLabel: '头像',
+                        width: 50,
+                        height: 50,
+                      )
+                    : Container(
+                        width: 50,
+                        height: 50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.onInverseSurface,
+                        ),
+                        child: Image.asset(
+                          'assets/images/noface.jpeg',
+                          semanticLabel: "默认头像",
+                        ),
+                      ),
               ),
             ),
             const SizedBox(width: 16),
@@ -166,7 +168,10 @@ class _MinePageState extends State<MinePage> {
                       children: [
                         Text(
                           _mineController.userInfo.value.uname ?? '点击头像登录',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(height: 1),
                         ),
                         const SizedBox(width: 4),
                         Image.asset(
@@ -243,15 +248,18 @@ class _MinePageState extends State<MinePage> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  LinearProgressIndicator(
-                    minHeight: 2,
-                    value: levelInfo != null
-                        ? (levelInfo.currentExp! / levelInfo.nextExp!)
-                        : 0,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.inversePrimary,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.primary),
+                  SizedBox(
+                    height: 2,
+                    child: LinearProgressIndicator(
+                      minHeight: 2,
+                      value: levelInfo != null
+                          ? (levelInfo.currentExp! / levelInfo.nextExp!)
+                          : 0,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.inversePrimary,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.primary),
+                    ),
                   ),
                 ],
               ),
@@ -303,20 +311,12 @@ class _MinePageState extends State<MinePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
-                      child: Text(
-                        (_mineController.userStat.value.following ?? '-')
-                            .toString(),
-                        key: ValueKey<String>(_mineController
-                            .userStat.value.following
-                            .toString()),
-                        style: style,
-                      ),
+                    Text(
+                      (_mineController.userStat.value.following ?? '-')
+                          .toString(),
+                      key: ValueKey<String>(
+                          _mineController.userStat.value.following.toString()),
+                      style: style,
                     ),
                     const SizedBox(height: 8),
                     Text(
