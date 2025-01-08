@@ -813,7 +813,11 @@ class Utils {
       DateTime latest = DateTime.parse(res.data[0]['created_at']);
       DateTime current = DateTime.parse('${BuildConfig.buildTime}Z');
       current = current.copyWith(hour: current.hour - 8);
-      if (current.compareTo(latest) < 0) {
+      if (current.compareTo(latest) >= 0) {
+        if (isAuto.not) {
+          SmartDialog.showToast('已是最新版本');
+        }
+      } else {
         SmartDialog.show(
           animationType: SmartAnimationType.centerFade_otherSlide,
           builder: (context) {
