@@ -306,7 +306,7 @@ class UserInfoCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(width: 20),
-              if (!isOwner)
+              if (!isOwner) ...[
                 IconButton.outlined(
                   onPressed: () {
                     if (GStorage.userInfo.get('userInfoCache') != null) {
@@ -338,7 +338,8 @@ class UserInfoCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              const SizedBox(width: 10),
+                const SizedBox(width: 10),
+              ],
               Expanded(
                 child: FilledButton.tonal(
                   onPressed: onFollow,
