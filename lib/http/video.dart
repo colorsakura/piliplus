@@ -133,6 +133,7 @@ class VideoHttp {
         'bili-http-engine': 'cronet',
       }),
     );
+    Utils.showCopyTextDialog(jsonEncode(res.data));
     if (res.data['code'] == 0) {
       List<RecVideoItemAppModel> list = [];
       List<int> blackMidsList = GStorage.blackMidsList;

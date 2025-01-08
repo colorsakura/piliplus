@@ -282,20 +282,13 @@ class _MinePageState extends State<MinePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
-                      child: Text(
-                        (_mineController.userStat.value.dynamicCount ?? '-')
-                            .toString(),
-                        key: ValueKey<String>(_mineController
-                            .userStat.value.dynamicCount
-                            .toString()),
-                        style: style,
-                      ),
+                    Text(
+                      (_mineController.userStat.value.dynamicCount ?? '-')
+                          .toString(),
+                      key: ValueKey<String>(_mineController
+                          .userStat.value.dynamicCount
+                          .toString()),
+                      style: style,
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -333,19 +326,12 @@ class _MinePageState extends State<MinePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
-                      child: Text(
-                        (_mineController.userStat.value.follower ?? '-')
-                            .toString(),
-                        key: ValueKey<String>(
-                            _mineController.userStat.value.follower.toString()),
-                        style: style,
-                      ),
+                    Text(
+                      (_mineController.userStat.value.follower ?? '-')
+                          .toString(),
+                      key: ValueKey<String>(
+                          _mineController.userStat.value.follower.toString()),
+                      style: style,
                     ),
                     const SizedBox(height: 8),
                     Text(
