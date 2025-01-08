@@ -90,43 +90,29 @@ class _HomePageState extends State<HomePage>
         const SizedBox(width: 4),
         Obx(
           () => _homeController.isLogin.value
-              ? Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    IconButton(
-                      tooltip: '消息',
-                      onPressed: () {
-                        Get.toNamed('/whisper');
-                        _mainController.msgUnReadCount.value = '';
-                      },
-                      icon: const Icon(
-                        Icons.notifications_none,
-                      ),
+              ? Badge(
+                  isLabelVisible:
+                      _mainController.msgBadgeMode != DynamicBadgeMode.hidden &&
+                          _mainController.msgUnReadCount.value.isNotEmpty,
+                  alignment:
+                      _mainController.msgBadgeMode == DynamicBadgeMode.number
+                          ? Alignment(0, -0.5)
+                          : Alignment(0.5, -0.5),
+                  label: _mainController.msgBadgeMode ==
+                              DynamicBadgeMode.number &&
+                          _mainController.msgUnReadCount.value.isNotEmpty
+                      ? Text(_mainController.msgUnReadCount.value.toString())
+                      : null,
+                  child: IconButton(
+                    tooltip: '消息',
+                    onPressed: () {
+                      Get.toNamed('/whisper');
+                      _mainController.msgUnReadCount.value = '';
+                    },
+                    icon: const Icon(
+                      Icons.notifications_none,
                     ),
-                    if (_mainController.msgBadgeMode !=
-                            DynamicBadgeMode.hidden &&
-                        _mainController.msgUnReadCount.value.isNotEmpty)
-                      Positioned(
-                        top: _mainController.msgBadgeMode ==
-                                DynamicBadgeMode.number
-                            ? 8
-                            : 12,
-                        left: _mainController.msgBadgeMode ==
-                                DynamicBadgeMode.number
-                            ? 22
-                            : 32,
-                        child: IgnorePointer(
-                          child: Badge(
-                            label: _mainController.msgBadgeMode ==
-                                    DynamicBadgeMode.number
-                                ? Text(_mainController.msgUnReadCount.value
-                                    .toString())
-                                : null,
-                          ),
-                        ),
-                      ),
-                  ],
+                  ),
                 )
               : const SizedBox.shrink(),
         ),
