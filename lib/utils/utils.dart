@@ -16,6 +16,7 @@ import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/login.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -793,12 +794,14 @@ class Utils {
   }
 
   // 检查更新
-  static Future checkUpdate() async {
+  static Future checkUpdate([bool isAuto = true]) async {
     SmartDialog.dismiss();
     try {
       dynamic res = await Request().get(Api.latestApp, extra: {'ua': 'mob'});
       if (res.data.isEmpty) {
-        SmartDialog.showToast('检查更新失败，GitHub接口未返回数据，请检查网络');
+        if (isAuto.not) {
+          SmartDialog.showToast('检查更新失败，GitHub接口未返回数据，请检查网络');
+        }
         return;
       }
       DateTime latest = DateTime.parse(res.data[0]['created_at']);

@@ -83,7 +83,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
           Obx(
             () => ListTile(
-              onTap: Utils.checkUpdate,
+              onTap: () => Utils.checkUpdate(false),
               onLongPress: () =>
                   Utils.copyText(_aboutController.currentVersion.value),
               title: const Text('当前版本'),

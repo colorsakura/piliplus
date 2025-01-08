@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +47,9 @@ class ApiInterceptor extends Interceptor {
     // 屏蔽弹幕、心跳、人数请求的错误提示
     if (!url.contains('heartbeat') &&
         !url.contains('seg.so') &&
-        !url.contains('online/total')) {
+        !url.contains('online/total') &&
+        !url.contains('github') &&
+        (!url.contains('skipSegments') && err.requestOptions.method != 'GET')) {
       SmartDialog.showToast(
         await dioError(err) + url,
         displayType: SmartToastType.onlyRefresh,
