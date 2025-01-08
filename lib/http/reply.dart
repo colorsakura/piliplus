@@ -109,22 +109,23 @@ class ReplyHttp {
                 .hasMatch(mainListReply.upTop.content.message)) {
           mainListReply.clearUpTop();
         }
-      }
-      // replies
-      if (mainListReply.replies.isNotEmpty) {
-        mainListReply.replies.removeWhere((item) {
-          bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
-              .hasMatch(item.content.message);
-          // remove subreplies
-          if (hasMatch.not) {
-            if (item.replies.isNotEmpty) {
-              item.replies.removeWhere((item) =>
-                  RegExp(banWordForReply, caseSensitive: false)
-                      .hasMatch(item.content.message));
+
+        // replies
+        if (mainListReply.replies.isNotEmpty) {
+          mainListReply.replies.removeWhere((item) {
+            bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
+                .hasMatch(item.content.message);
+            // remove subreplies
+            if (hasMatch.not) {
+              if (item.replies.isNotEmpty) {
+                item.replies.removeWhere((item) =>
+                    RegExp(banWordForReply, caseSensitive: false)
+                        .hasMatch(item.content.message));
+              }
             }
-          }
-          return hasMatch;
-        });
+            return hasMatch;
+          });
+        }
       }
       return LoadingState.success(mainListReply);
     } else {
