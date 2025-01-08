@@ -831,7 +831,7 @@ List<SettingsModel> get videoSettings => [
         settingsType: SettingsType.sw1tch,
         title: 'CDN 测速',
         leading: const Icon(Icons.speed),
-        subtitle: '测速通过加载视频实现，注意流量消耗',
+        subtitle: '测速通过模拟加载视频实现，注意流量消耗，结果仅供参考',
         setKey: SettingBoxKey.cdnSpeedTest,
         defaultVal: true,
       ),
