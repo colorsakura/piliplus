@@ -9,6 +9,7 @@ import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/media/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -41,6 +42,9 @@ class MainController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (GStorage.autoUpdate) {
+      Utils.checkUpdate();
+    }
     hideTabBar =
         GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
     isLogin.value = GStorage.isLogin;

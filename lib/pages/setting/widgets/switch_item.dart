@@ -84,9 +84,6 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
     val = value ?? !val;
 
     await GStorage.setting.put(widget.setKey, val);
-    // if (widget.setKey == SettingBoxKey.autoUpdate && value == true) {
-    //   Utils.checkUpdate();
-    // }
     widget.onChanged?.call(val);
     if (widget.needReboot == true) {
       SmartDialog.showToast('重启生效');

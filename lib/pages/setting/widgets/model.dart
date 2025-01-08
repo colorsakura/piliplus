@@ -29,6 +29,7 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1885,5 +1886,18 @@ List<SettingsModel> get extraSettings => [
         leading: Icon(Icons.auto_delete_outlined),
         setKey: SettingBoxKey.autoClearCache,
         defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '检查更新',
+        subtitle: '每次启动时检查是否需要更新',
+        leading: const Icon(Icons.system_update_alt_outlined),
+        setKey: SettingBoxKey.autoUpdate,
+        defaultVal: true,
+        onChanged: (val) {
+          if (val) {
+            Utils.checkUpdate();
+          }
+        },
       ),
     ];
