@@ -67,7 +67,8 @@ class RecommendFilter {
     if (exemptFilterForFollowed && isFollowed == true) {
       return false;
     }
-    if (banWords.isNotEmpty && RegExp(banWords).hasMatch(title)) {
+    if (banWords.isNotEmpty &&
+        RegExp(banWords, caseSensitive: false).hasMatch(title)) {
       return true;
     }
     return false;

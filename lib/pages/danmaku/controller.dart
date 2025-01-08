@@ -86,7 +86,8 @@ class PlDanmakuController {
           }
           break;
         case 1:
-          if (RegExp(filter['filter']).hasMatch(elem.content)) {
+          if (RegExp(filter['filter'], caseSensitive: false)
+              .hasMatch(elem.content)) {
             return false;
           }
           break;

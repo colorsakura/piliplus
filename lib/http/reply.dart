@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
@@ -49,7 +50,44 @@ class ReplyHttp {
             options: options,
           );
     if (res.data['code'] == 0) {
-      return LoadingState.success(ReplyData.fromJson(res.data['data']));
+      ReplyData replyData = ReplyData.fromJson(res.data['data']);
+      String banWordForReply = GStorage.banWordForReply;
+      if (banWordForReply.isNotEmpty) {
+        // topReplies
+        if (replyData.topReplies?.isNotEmpty == true) {
+          replyData.topReplies!.removeWhere((item) {
+            bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
+                .hasMatch(item.content?.message ?? '');
+            // remove subreplies
+            if (hasMatch.not) {
+              if (item.replies?.isNotEmpty == true) {
+                item.replies!.removeWhere((item) =>
+                    RegExp(banWordForReply, caseSensitive: false)
+                        .hasMatch(item.content?.message ?? ''));
+              }
+            }
+            return hasMatch;
+          });
+        }
+
+        // replies
+        if (replyData.replies?.isNotEmpty == true) {
+          replyData.replies!.removeWhere((item) {
+            bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
+                .hasMatch(item.content?.message ?? '');
+            // remove subreplies
+            if (hasMatch.not) {
+              if (item.replies?.isNotEmpty == true) {
+                item.replies!.removeWhere((item) =>
+                    RegExp(banWordForReply, caseSensitive: false)
+                        .hasMatch(item.content?.message ?? ''));
+              }
+            }
+            return hasMatch;
+          });
+        }
+      }
+      return LoadingState.success(replyData);
     } else {
       return LoadingState.error(res.data['message']);
     }
@@ -62,7 +100,33 @@ class ReplyHttp {
   }) async {
     dynamic res = await GrpcRepo.mainList(type: type, oid: oid, cursor: cursor);
     if (res['status']) {
-      return LoadingState.success(res['data']);
+      MainListReply mainListReply = res['data'];
+      String banWordForReply = GStorage.banWordForReply;
+      if (banWordForReply.isNotEmpty) {
+        // upTop
+        if (mainListReply.hasUpTop() &&
+            RegExp(banWordForReply, caseSensitive: false)
+                .hasMatch(mainListReply.upTop.content.message)) {
+          mainListReply.clearUpTop();
+        }
+      }
+      // replies
+      if (mainListReply.replies.isNotEmpty) {
+        mainListReply.replies.removeWhere((item) {
+          bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
+              .hasMatch(item.content.message);
+          // remove subreplies
+          if (hasMatch.not) {
+            if (item.replies.isNotEmpty) {
+              item.replies.removeWhere((item) =>
+                  RegExp(banWordForReply, caseSensitive: false)
+                      .hasMatch(item.content.message));
+            }
+          }
+          return hasMatch;
+        });
+      }
+      return LoadingState.success(mainListReply);
     } else {
       return LoadingState.error(
           '${res['msg'].startsWith('gRPC Error') ? '如无法加载评论：\n关闭代理\n或设置中关闭使用gRPC加载评论\n\n' : ''}${res['msg']}');
@@ -93,30 +157,18 @@ class ReplyHttp {
       options: options,
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(ReplyReplyData.fromJson(res.data['data']));
+      ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);
+      String banWordForReply = GStorage.banWordForReply;
+      if (banWordForReply.isNotEmpty) {
+        if (replyData.replies?.isNotEmpty == true) {
+          replyData.replies!.removeWhere((item) =>
+              RegExp(banWordForReply, caseSensitive: false)
+                  .hasMatch(item.content?.message ?? ''));
+        }
+      }
+      return LoadingState.success(replyData);
     } else {
       return LoadingState.error(res.data['message']);
-    }
-  }
-
-  static Future<LoadingState> dialogListGrpc({
-    int type = 1,
-    required int oid,
-    required int root,
-    required int rpid,
-    required CursorReq cursor,
-  }) async {
-    dynamic res = await GrpcRepo.dialogList(
-      type: type,
-      oid: oid,
-      root: root,
-      rpid: rpid,
-      cursor: cursor,
-    );
-    if (res['status']) {
-      return LoadingState.success(res['data']);
-    } else {
-      return LoadingState.error(res['msg']);
     }
   }
 
@@ -135,7 +187,46 @@ class ReplyHttp {
       cursor: cursor,
     );
     if (res['status']) {
-      return LoadingState.success(res['data']);
+      DetailListReply detailListReply = res['data'];
+      String banWordForReply = GStorage.banWordForReply;
+      if (banWordForReply.isNotEmpty) {
+        if (detailListReply.root.replies.isNotEmpty) {
+          detailListReply.root.replies.removeWhere((item) =>
+              RegExp(banWordForReply, caseSensitive: false)
+                  .hasMatch(item.content.message));
+        }
+      }
+      return LoadingState.success(detailListReply);
+    } else {
+      return LoadingState.error(res['msg']);
+    }
+  }
+
+  static Future<LoadingState> dialogListGrpc({
+    int type = 1,
+    required int oid,
+    required int root,
+    required int rpid,
+    required CursorReq cursor,
+  }) async {
+    dynamic res = await GrpcRepo.dialogList(
+      type: type,
+      oid: oid,
+      root: root,
+      rpid: rpid,
+      cursor: cursor,
+    );
+    if (res['status']) {
+      DialogListReply dialogListReply = res['data'];
+      String banWordForReply = GStorage.banWordForReply;
+      if (banWordForReply.isNotEmpty) {
+        if (dialogListReply.replies.isNotEmpty) {
+          dialogListReply.replies.removeWhere((item) =>
+              RegExp(banWordForReply, caseSensitive: false)
+                  .hasMatch(item.content.message));
+        }
+      }
+      return LoadingState.success(dialogListReply);
     } else {
       return LoadingState.error(res['msg']);
     }

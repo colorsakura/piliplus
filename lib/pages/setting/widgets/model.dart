@@ -1155,8 +1155,7 @@ List<SettingsModel> get recommendSettings => [
           return banWordForRecommend.isEmpty ? "点击添加" : banWordForRecommend;
         },
         onTap: (setState) async {
-          final TextEditingController textController =
-              TextEditingController(text: GStorage.banWordForRecommend);
+          String banWordForRecommend = GStorage.banWordForRecommend;
           await showDialog(
             context: Get.context!,
             builder: (context) {
@@ -1170,16 +1169,17 @@ List<SettingsModel> get recommendSettings => [
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('使用|隔开，如：尝试|测试'),
-                    TextField(
+                    TextFormField(
                       autofocus: true,
-                      controller: textController,
+                      initialValue: banWordForRecommend,
                       textInputAction: TextInputAction.newline,
                       minLines: 1,
                       maxLines: 4,
+                      onChanged: (value) => banWordForRecommend = value,
                     )
                   ],
                 ),
-                actions: <Widget>[
+                actions: [
                   TextButton(
                     onPressed: Get.back,
                     child: Text(
@@ -1192,9 +1192,9 @@ List<SettingsModel> get recommendSettings => [
                     child: const Text('保存'),
                     onPressed: () async {
                       Get.back();
-                      GStorage.setting.put(
+                      await GStorage.setting.put(
                         SettingBoxKey.banWordForRecommend,
-                        textController.text,
+                        banWordForRecommend,
                       );
                       setState();
                       RecommendFilter.update();
@@ -1661,6 +1661,66 @@ List<SettingsModel> get extraSettings => [
         leading: Icon(Icons.photo_outlined),
         setKey: SettingBoxKey.horizontalPreview,
         defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        leading: const Icon(Icons.filter_alt_outlined),
+        title: '评论关键词过滤',
+        getSubtitle: () {
+          String banWordForReply = GStorage.banWordForReply;
+          return banWordForReply.isEmpty ? "点击添加" : banWordForReply;
+        },
+        onTap: (setState) async {
+          String banWordForReply = GStorage.banWordForReply;
+          await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text(
+                  '评论关键词过滤',
+                  style: TextStyle(fontSize: 18),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('使用|隔开，如：尝试|测试'),
+                    TextFormField(
+                      autofocus: true,
+                      initialValue: banWordForReply,
+                      textInputAction: TextInputAction.newline,
+                      minLines: 1,
+                      maxLines: 4,
+                      onChanged: (value) => banWordForReply = value,
+                    )
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: Get.back,
+                    child: Text(
+                      '取消',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                    ),
+                  ),
+                  TextButton(
+                    child: const Text('保存'),
+                    onPressed: () async {
+                      Get.back();
+                      await GStorage.setting.put(
+                        SettingBoxKey.banWordForReply,
+                        banWordForReply,
+                      );
+                      setState();
+                      SmartDialog.showToast('已保存');
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
