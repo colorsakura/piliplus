@@ -811,8 +811,8 @@ class Utils {
         return;
       }
       DateTime latest = DateTime.parse(res.data[0]['created_at']);
-      latest = latest.copyWith(hour: latest.hour + 8);
-      DateTime current = DateTime.parse(BuildConfig.buildTime);
+      DateTime current = DateTime.parse('${BuildConfig.buildTime}Z');
+      current = current.copyWith(hour: current.hour - 8);
       if (current.compareTo(latest) < 0) {
         SmartDialog.show(
           animationType: SmartAnimationType.centerFade_otherSlide,
