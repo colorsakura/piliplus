@@ -1,5 +1,4 @@
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
-import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
@@ -54,21 +53,21 @@ class VideoReplyReplyController extends CommonController
 
   @override
   Future queryData([bool isRefresh = true]) async {
-    if (GlobalData().grpcReply &&
-        !isDialogue &&
-        currentPage == 1 &&
-        !hasRoot &&
-        firstFloor == null &&
-        rpid != null) {
-      await GrpcRepo.replyInfo(
-        rpid: rpid!,
-      ).then((res) {
-        if (res['status'] && (res['data']?.mid ?? -1) > 0) {
-          firstFloor = res['data'];
-          hasRoot = true;
-        }
-      });
-    }
+    // if (GlobalData().grpcReply &&
+    //     !isDialogue &&
+    //     currentPage == 1 &&
+    //     !hasRoot &&
+    //     firstFloor == null &&
+    //     rpid != null) {
+    //   await GrpcRepo.replyInfo(
+    //     rpid: rpid!,
+    //   ).then((res) {
+    //     if (res['status'] && (res['data']?.mid ?? -1) > 0) {
+    //       firstFloor = res['data'];
+    //       hasRoot = true;
+    //     }
+    //   });
+    // }
     return super.queryData(isRefresh);
   }
 
@@ -82,8 +81,12 @@ class VideoReplyReplyController extends CommonController
   bool customHandleResponse(Success response) {
     if (GlobalData().grpcReply) {
       dynamic replies = response.response;
-      if (replies is DetailListReply && cursor == null) {
+      // reply2Reply // isDialogue.not
+      if (replies is DetailListReply) {
         count.value = replies.root.count.toInt();
+        if (cursor == null && firstFloor == null) {
+          firstFloor = replies.root;
+        }
         if (id != null) {
           index = replies.root.replies
               .map((item) => item.id.toInt())
