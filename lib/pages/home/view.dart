@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage>
         searchBar,
         const SizedBox(width: 4),
         Obx(
-          () => _homeController.userLogin.value
+          () => _homeController.isLogin.value
               ? Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage>
         Semantics(
           label: "我的",
           child: Obx(
-            () => _homeController.userLogin.value
+            () => _homeController.isLogin.value
                 ? Stack(
                     clipBehavior: Clip.none,
                     children: [

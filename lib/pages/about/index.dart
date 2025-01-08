@@ -241,14 +241,14 @@ Commit Hash: ${BuildConfig.commitHash}''',
                           'cookies': cookies,
                         });
                         Utils.copyText('$res');
-                        if (context.mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              content: SelectableText('$res'),
-                            ),
-                          );
-                        }
+                        // if (context.mounted) {
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (context) => AlertDialog(
+                        //       content: SelectableText('$res'),
+                        //     ),
+                        //   );
+                        // }
                       },
                     ),
                     ListTile(

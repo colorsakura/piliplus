@@ -374,7 +374,7 @@ class _MainAppState extends State<MainApp>
         Semantics(
           label: "我的",
           child: Obx(
-            () => _homeController.userLogin.value
+            () => _homeController.isLogin.value
                 ? Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -433,7 +433,7 @@ class _MainAppState extends State<MainApp>
         ),
         const SizedBox(height: 8),
         Obx(
-          () => _homeController.userLogin.value
+          () => _homeController.isLogin.value
               ? Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,

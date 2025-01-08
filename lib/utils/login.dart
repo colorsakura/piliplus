@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/models/common/dynamics_type.dart';
+import 'package:PiliPlus/models/user/info.dart';
+import 'package:PiliPlus/models/user/stat.dart';
+import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/dynamics/index.dart';
 import 'package:PiliPlus/pages/home/index.dart';
@@ -13,25 +16,40 @@ import 'package:PiliPlus/pages/mine/index.dart';
 import 'package:uuid/uuid.dart';
 
 class LoginUtils {
-  static Future refreshLoginStatus(bool status) async {
+  static Future onLogout() async {
+    await GStorage.userInfo.delete('userInfoCache');
+
     try {
-      // logout
-      if (status.not) {
-        // 更改我的页面登录状态
-        await Get.find<MineController>().resetUserInfo();
-        Get.find<MediaController>().loadingState.value = LoadingState.loading();
+      Get.find<MineController>()
+        ..userInfo.value = UserInfoData()
+        ..userStat.value = UserStat()
+        ..isLogin.value = false;
+      MineController.anonymity.value = false;
+    } catch (_) {}
+
+    try {
+      Get.find<HomeController>()
+        ..isLogin.value = false
+        ..userFace.value = '';
+    } catch (_) {}
+
+    try {
+      Get.find<DynamicsController>()
+        ..isLogin.value = false
+        ..onRefresh();
+    } catch (_) {}
+
+    try {
+      Get.find<MediaController>()
+        ..mid = null
+        ..loadingState.value = LoadingState.loading();
+    } catch (_) {}
+
+    try {
+      for (int i = 0; i < tabsConfig.length; i++) {
+        Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag']).onRefresh();
       }
-
-      // 更改主页登录状态
-      Get.find<HomeController>().updateLoginStatus(status);
-
-      Get.find<MineController>().userLogin.value = status;
-
-      Get.find<DynamicsController>().userLogin.value = status;
-    } catch (err) {
-      // SmartDialog.showToast('refreshLoginStatus error: ${err.toString()}');
-      debugPrint('refreshLoginStatus error: $err');
-    }
+    } catch (_) {}
   }
 
   static String buvid() {

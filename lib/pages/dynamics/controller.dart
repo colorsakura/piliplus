@@ -30,8 +30,9 @@ class DynamicsController extends GetxController
   RxList<int> tempBannedList = <int>[].obs;
   late List<Widget> tabsPageList;
   RxInt initialValue = 0.obs;
-  RxBool userLogin = false.obs;
-  dynamic userInfo;
+  RxBool isLogin = false.obs;
+  dynamic ownerMid;
+  dynamic face;
   RxBool isLoadingDynamic = false.obs;
   List<UpItem> hasUpdatedUps = <UpItem>[];
   List<UpItem> allFollowedUps = <UpItem>[];
@@ -40,9 +41,12 @@ class DynamicsController extends GetxController
 
   @override
   void onInit() {
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    userLogin.value = userInfo != null;
     super.onInit();
+
+    dynamic userInfo = GStorage.userInfo.get('userInfoCache');
+    ownerMid = userInfo?.mid;
+    face = userInfo?.face;
+    isLogin.value = userInfo != null;
 
     tabController = TabController(
       length: tabsConfig.length,
@@ -52,9 +56,7 @@ class DynamicsController extends GetxController
     );
     tabsPageList =
         tabsConfig.map((e) => DynamicsTabPage(dynamicsType: e['tag'])).toList();
-  }
 
-  void refreshNotifier() {
     queryFollowUp();
   }
 
@@ -223,7 +225,7 @@ class DynamicsController extends GetxController
       return;
     }
     var res = await FollowHttp.followings(
-      vmid: userInfo.mid,
+      vmid: ownerMid,
       pn: allFollowedUpsPage,
       ps: 50,
       orderType: 'attention',
@@ -246,9 +248,11 @@ class DynamicsController extends GetxController
   }
 
   Future queryFollowUp({type = 'init'}) async {
-    if (!userLogin.value) {
-      return {'status': false, 'msg': '账号未登录'};
+    if (!isLogin.value) {
+      upData.value.errMsg = '账号未登录';
+      upData.refresh();
     }
+    upData.value.errMsg = null;
     if (type == 'init') {
       upData.value.upList = [];
       upData.value.liveUsers = LiveUsers();
@@ -258,13 +262,16 @@ class DynamicsController extends GetxController
       allFollowedUpsPage = 1;
       Future f1 = DynamicsHttp.followUp();
       Future f2 = FollowHttp.followings(
-          vmid: userInfo.mid,
-          pn: allFollowedUpsPage,
-          ps: 50,
-          orderType: 'attention');
+        vmid: ownerMid,
+        pn: allFollowedUpsPage,
+        ps: 50,
+        orderType: 'attention',
+      );
       List<dynamic> ress = await Future.wait([f1, f2]);
       if (!ress[0]['status']) {
         SmartDialog.showToast("获取关注动态失败：${ress[0]['msg']}");
+        upData.value.errMsg = ress[0]['msg'];
+        upData.refresh();
       } else {
         upData.value.liveUsers = ress[0]['data'].liveUsers;
         hasUpdatedUps = ress[0]['data'].upList!;
@@ -286,16 +293,18 @@ class DynamicsController extends GetxController
       }
       upData.value.upList =
           allFollowedUpsTotal > 0 ? allFollowedUps : hasUpdatedUps;
-      return ress[0];
-    }
-    var res = await DynamicsHttp.followUp();
-    if (res['status']) {
-      upData.value = res['data'];
-      if (upData.value.upList!.isEmpty) {
-        mid.value = -1;
+    } else {
+      var res = await DynamicsHttp.followUp();
+      if (res['status']) {
+        upData.value = res['data'];
+        if (upData.value.upList!.isEmpty) {
+          mid.value = -1;
+        }
+      } else {
+        upData.value.errMsg = res['msg'];
+        upData.refresh();
       }
     }
-    return res;
   }
 
   onSelectUp(mid) async {
@@ -308,8 +317,8 @@ class DynamicsController extends GetxController
   }
 
   onRefresh() async {
+    queryFollowUp();
     await Future.wait(<Future>[
-      queryFollowUp(),
       Get.find<DynamicsTabController>(
               tag: tabsConfig[tabController.index]['tag'])
           .onRefresh()

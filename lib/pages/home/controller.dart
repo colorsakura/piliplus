@@ -14,7 +14,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   late TabController tabController;
   late List tabsCtrList;
   late List<Widget> tabsPageList;
-  RxBool userLogin = false.obs;
+  RxBool isLogin = false.obs;
   RxString userFace = ''.obs;
   dynamic userInfo;
   late final StreamController<bool> searchBarStream =
@@ -32,7 +32,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   void onInit() {
     super.onInit();
     userInfo = GStorage.userInfo.get('userInfoCache');
-    userLogin.value = userInfo != null;
+    isLogin.value = userInfo != null;
     userFace.value = userInfo != null ? userInfo.face : '';
     hideSearchBar =
         GStorage.setting.get(SettingBoxKey.hideSearchBar, defaultValue: true);
@@ -62,14 +62,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       var ctr = tabsCtrList[index];
       ctr().animateToTop();
     } catch (_) {}
-  }
-
-  // 更新登录状态
-  Future updateLoginStatus(val) async {
-    userInfo = await GStorage.userInfo.get('userInfoCache');
-    userLogin.value = val ?? false;
-    if (val) return;
-    userFace.value = userInfo != null ? userInfo.face : '';
   }
 
   void setTabConfig() async {

@@ -51,7 +51,7 @@ class BangumiIntroController extends CommonController {
   // 是否收藏
   RxBool hasFav = false.obs;
   dynamic videoTags;
-  bool userLogin = false;
+  bool isLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
   List addMediaIdsNew = [];
   List delMediaIdsNew = [];
@@ -82,9 +82,9 @@ class BangumiIntroController extends CommonController {
       }
     }
     userInfo = GStorage.userInfo.get('userInfoCache');
-    userLogin = userInfo != null;
+    isLogin = userInfo != null;
 
-    if (userLogin && epId != null) {
+    if (isLogin && epId != null) {
       // // 获取点赞状态
       // queryHasLikeVideo();
       // // 获取投币状态
@@ -96,7 +96,7 @@ class BangumiIntroController extends CommonController {
 
     queryData();
 
-    if (userLogin && seasonId != null) {
+    if (isLogin && seasonId != null) {
       queryIsFollowed();
     }
   }
@@ -404,7 +404,7 @@ class BangumiIntroController extends CommonController {
       } catch (_) {}
     }
 
-    if (userLogin) {
+    if (isLogin) {
       queryBangumiLikeCoinFav();
     }
   }

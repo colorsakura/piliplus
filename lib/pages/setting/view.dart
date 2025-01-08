@@ -127,7 +127,7 @@ class SettingPage extends StatelessWidget {
                                         Get.find<MainController>();
                                     mainController.isLogin.value = false;
                                   }
-                                  await LoginUtils.refreshLoginStatus(false);
+                                  await LoginUtils.onLogout();
                                   Get.back();
                                 },
                                 child: const Text('确认'),

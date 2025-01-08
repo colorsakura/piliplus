@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
@@ -15,7 +14,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:nil/nil.dart';
 
 import 'controller.dart';
 import 'widgets/up_panel.dart';
@@ -42,9 +40,7 @@ class DynamicsPage extends StatefulWidget {
 class _DynamicsPageState extends State<DynamicsPage>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
-  late Future _futureBuilderFutureUp;
   late UpPanelPosition upPanelPosition;
-  StreamSubscription? _listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -64,7 +60,7 @@ class _DynamicsPageState extends State<DynamicsPage>
               }),
             ),
             onPressed: () {
-              if (GStorage.isLogin) {
+              if (_dynamicsController.isLogin.value) {
                 showModalBottomSheet(
                   context: context,
                   useSafeArea: true,
@@ -85,24 +81,6 @@ class _DynamicsPageState extends State<DynamicsPage>
   @override
   void initState() {
     super.initState();
-    _futureBuilderFutureUp = _dynamicsController.queryFollowUp();
-    // _dynamicsController.tabController =
-    //     TabController(vsync: this, length: DynamicsType.values.length);
-    // ..addListener(() {
-    //   if (!_dynamicsController.tabController.indexIsChanging) {
-    //     // if (!mounted) return;
-    //     // debugPrint('indexChanging: ${_dynamicsController.tabController.index}');
-    //     _dynamicsController
-    //         .onSelectType(_dynamicsController.tabController.index);
-    //   }
-    // });
-    _listener = _dynamicsController.userLogin.listen((status) {
-      if (mounted) {
-        setState(() {
-          _futureBuilderFutureUp = _dynamicsController.queryFollowUp();
-        });
-      }
-    });
     upPanelPosition = UpPanelPosition.values[GStorage.setting.get(
         SettingBoxKey.upPanelPosition,
         defaultValue: UpPanelPosition.leftFixed.index)];
@@ -123,7 +101,6 @@ class _DynamicsPageState extends State<DynamicsPage>
 
   @override
   void dispose() {
-    _listener?.cancel();
     _dynamicsController.tabController.removeListener(() {});
     _dynamicsController.scrollController.removeListener(() {});
     super.dispose();
@@ -136,41 +113,25 @@ class _DynamicsPageState extends State<DynamicsPage>
           ? Theme.of(context).colorScheme.surface
           : Colors.transparent,
       width: 64,
-      child: FutureBuilder(
-        future: _futureBuilderFutureUp,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == null) {
-              return nil;
-            }
-            // TODO: refactor
-            if (snapshot.data is! Map) {
-              return HttpError(
-                isSliver: false,
-                callback: () => setState(() {
-                  _futureBuilderFutureUp = _dynamicsController.queryFollowUp();
-                }),
-              );
-            }
-            Map data = snapshot.data;
-            if (data['status']) {
-              return Obx(() => UpPanel(_dynamicsController.upData.value,
-                  _dynamicsController.scrollController));
-            } else {
-              return Center(
-                child: IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: () {
-                    setState(() {
-                      _futureBuilderFutureUp =
-                          _dynamicsController.queryFollowUp();
-                    });
-                  },
-                ),
-              );
-            }
+      child: Obx(
+        () {
+          if (_dynamicsController.upData.value.upList == null &&
+              _dynamicsController.upData.value.liveUsers == null) {
+            return const SizedBox.shrink();
+          } else if (_dynamicsController.upData.value.errMsg != null) {
+            return Center(
+              child: IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  _dynamicsController.queryFollowUp();
+                },
+              ),
+            );
           } else {
-            return nil;
+            return UpPanel(
+              key: ValueKey(_dynamicsController.upData.value),
+              dynamicsController: _dynamicsController,
+            );
           }
         },
       ),

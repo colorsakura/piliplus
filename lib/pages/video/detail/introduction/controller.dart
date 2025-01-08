@@ -59,7 +59,7 @@ class VideoIntroController extends GetxController
   RxBool hasCoin = false.obs;
   // 是否收藏
   RxBool hasFav = false.obs;
-  bool userLogin = false;
+  bool isLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
   List addMediaIdsNew = [];
   List delMediaIdsNew = [];
@@ -120,7 +120,7 @@ class VideoIntroController extends GetxController
         videoItem['owner'] = keys.contains('owner') ? args.owner : null;
       }
     }
-    userLogin = userInfo != null;
+    isLogin = userInfo != null;
     lastPlayCid.value = int.parse(Get.parameters['cid']!);
     isShowOnlineTotal = GStorage.setting
         .get(SettingBoxKey.enableOnlineTotal, defaultValue: false);
@@ -171,7 +171,7 @@ class VideoIntroController extends GetxController
           "${result['code']} ${result['msg']} ${result['data']}");
     }
     queryVideoIntroData.value = result;
-    if (userLogin) {
+    if (isLogin) {
       // 获取点赞状态
       queryHasLikeVideo();
       // 获取投币状态

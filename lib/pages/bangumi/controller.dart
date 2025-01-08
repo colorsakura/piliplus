@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/storage.dart';
 
 class BangumiController extends CommonController {
   bool isLoadingMore = true;
-  RxBool userLogin = false.obs;
+  RxBool isLogin = false.obs;
   late int mid;
   dynamic userInfo;
 
@@ -19,7 +19,7 @@ class BangumiController extends CommonController {
     if (userInfo != null) {
       mid = userInfo.mid;
     }
-    userLogin.value = userInfo != null;
+    isLogin.value = userInfo != null;
 
     queryData();
     queryBangumiFollow();

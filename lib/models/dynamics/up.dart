@@ -4,6 +4,7 @@ class FollowUpModel {
     this.upList,
   });
 
+  String? errMsg;
   LiveUsers? liveUsers;
   List<UpItem>? upList;
 

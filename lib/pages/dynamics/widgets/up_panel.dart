@@ -1,17 +1,19 @@
+import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
 import 'package:PiliPlus/models/live/item.dart';
-import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 class UpPanel extends StatefulWidget {
-  final FollowUpModel? upData;
-  final ScrollController scrollController;
-  const UpPanel(this.upData, this.scrollController, {super.key});
+  final DynamicsController dynamicsController;
+  const UpPanel({
+    required this.dynamicsController,
+    super.key,
+  });
 
   @override
   State<UpPanel> createState() => _UpPanelState();
@@ -19,27 +21,21 @@ class UpPanel extends StatefulWidget {
 
 class _UpPanelState extends State<UpPanel> {
   int currentMid = -1;
-  List<UpItem> upList = [];
-  List<LiveUserItem> liveList = [];
-  dynamic userInfo;
+  List<UpItem> get upList =>
+      widget.dynamicsController.upData.value.upList ?? <UpItem>[];
+  List<LiveUserItem> get liveList =>
+      widget.dynamicsController.upData.value.liveUsers?.items ??
+      <LiveUserItem>[];
   bool _showLiveItems = false;
-  late DynamicsController dynamicsController;
-
-  @override
-  void initState() {
-    super.initState();
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    dynamicsController = Get.find<DynamicsController>();
-  }
 
   @override
   Widget build(BuildContext context) {
-    upList = widget.upData!.upList!;
-    liveList = widget.upData!.liveUsers?.items ?? [];
-    // return const SizedBox();
+    if (widget.dynamicsController.isLogin.value.not) {
+      return const SizedBox.shrink();
+    }
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
-      controller: widget.scrollController,
+      controller: widget.dynamicsController.scrollController,
       slivers: [
         SliverToBoxAdapter(
           child: SizedBox(
@@ -93,9 +89,9 @@ class _UpPanelState extends State<UpPanel> {
               upItemBuild(UpItem(face: '', uname: '全部动态', mid: -1), 0),
               upItemBuild(
                 UpItem(
-                  face: userInfo?.face,
                   uname: '我',
-                  mid: userInfo?.mid,
+                  face: widget.dynamicsController.face,
+                  mid: widget.dynamicsController.ownerMid,
                 ),
                 1,
               ),
@@ -120,8 +116,9 @@ class _UpPanelState extends State<UpPanel> {
         if (data.type == 'up') {
           currentMid = data.mid;
           // dynamicsController.mid.value = data.mid;
-          dynamicsController.upInfo.value = data;
-          dynamicsController.onSelectUp(data.mid);
+          widget.dynamicsController
+            ..upInfo.value = data
+            ..onSelectUp(data.mid);
           // int liveLen = liveList.length;
           // int upLen = upList.length;
           // double itemWidth = contentWidth + itemPadding.horizontal;

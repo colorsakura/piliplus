@@ -74,7 +74,7 @@ class _BangumiPageState extends State<BangumiPage>
           SliverToBoxAdapter(
             child: Obx(
               () => Visibility(
-                visible: _bangumiController.userLogin.value,
+                visible: _bangumiController.isLogin.value,
                 child: Column(
                   children: [
                     Padding(

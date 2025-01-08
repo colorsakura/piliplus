@@ -14,14 +14,13 @@ class MineController extends GetxController {
   Rx<UserInfoData> userInfo = UserInfoData().obs;
   // 用户状态 动态、关注、粉丝
   Rx<UserStat> userStat = UserStat().obs;
-  RxBool userLogin = false.obs;
+
+  RxBool isLogin = false.obs;
+
   Rx<ThemeType> themeType = ThemeType.system.obs;
-
   static Box get setting => GStorage.setting;
-
   static RxBool anonymity =
       (setting.get(SettingBoxKey.anonymity, defaultValue: false) as bool).obs;
-
   ThemeType get nextThemeType =>
       ThemeType.values[(themeType.value.index + 1) % ThemeType.values.length];
 
@@ -32,23 +31,12 @@ class MineController extends GetxController {
     dynamic userInfoCache = GStorage.userInfo.get('userInfoCache');
     if (userInfoCache != null) {
       userInfo.value = userInfoCache;
-      userLogin.value = true;
+      isLogin.value = true;
     }
-
-    // themeType.value = ThemeType.values[GlobalData().themeMode];
-    // anonymity = setting.get(SettingBoxKey.anonymity, defaultValue: false);
   }
 
   onLogin() async {
-    if (!userLogin.value) {
-      // Get.toNamed(
-      //   '/webview',
-      //   parameters: {
-      //     'url': 'https://passport.bilibili.com/h5-app/passport/login',
-      //     'type': 'login',
-      //     'pageTitle': '登录bilibili',
-      //   },
-      // );
+    if (!isLogin.value) {
       Get.toNamed('/loginPage', preventDuplicates: false);
     } else {
       int mid = userInfo.value.mid!;
@@ -59,7 +47,7 @@ class MineController extends GetxController {
   }
 
   Future queryUserInfo() async {
-    if (!userLogin.value) {
+    if (!isLogin.value) {
       return {'status': false};
     }
     var res = await UserHttp.userInfo();
@@ -67,12 +55,9 @@ class MineController extends GetxController {
       if (res['data'].isLogin) {
         userInfo.value = res['data'];
         GStorage.userInfo.put('userInfoCache', res['data']);
-        userLogin.value = true;
-      } else {
-        resetUserInfo();
+        isLogin.value = true;
       }
     } else {
-      // resetUserInfo();
       SmartDialog.showToast(res['msg']);
     }
     await queryUserStatOwner();
@@ -85,14 +70,6 @@ class MineController extends GetxController {
       userStat.value = res['data'];
     }
     return res;
-  }
-
-  Future resetUserInfo() async {
-    userInfo.value = UserInfoData();
-    userStat.value = UserStat();
-    GStorage.userInfo.delete('userInfoCache');
-    userLogin.value = false;
-    anonymity.value = false;
   }
 
   static onChangeAnonymity(BuildContext context) {
@@ -216,7 +193,7 @@ class MineController extends GetxController {
   }
 
   pushFollow() {
-    if (!userLogin.value) {
+    if (!isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -224,7 +201,7 @@ class MineController extends GetxController {
   }
 
   pushFans() {
-    if (!userLogin.value) {
+    if (!isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }
@@ -232,7 +209,7 @@ class MineController extends GetxController {
   }
 
   pushDynamic() {
-    if (!userLogin.value) {
+    if (!isLogin.value) {
       SmartDialog.showToast('账号未登录');
       return;
     }

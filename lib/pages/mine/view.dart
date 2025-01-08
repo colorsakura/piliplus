@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,29 +16,9 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> {
-  final MineController mineController = Get.put(MineController())
-    ..themeType.value = ThemeType.values[GStorage.themeTypeInt];
-  late Future _futureBuilderFuture;
-  StreamSubscription? _listener;
-
-  @override
-  void initState() {
-    super.initState();
-    _futureBuilderFuture = mineController.queryUserInfo();
-
-    _listener = mineController.userLogin.listen((status) {
-      if (mounted) {
-        _futureBuilderFuture = mineController.queryUserInfo();
-        _futureBuilderFuture.then((value) => setState(() {}));
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _listener?.cancel();
-    super.dispose();
-  }
+  final MineController _mineController = Get.put(MineController())
+    ..themeType.value = ThemeType.values[GStorage.themeTypeInt]
+    ..queryUserInfo();
 
   Widget get _header => FittedBox(
         child: Row(
@@ -85,14 +63,14 @@ class _MinePageState extends State<MinePage> {
                 tapTargetSize:
                     MaterialTapTargetSize.shrinkWrap, // the '2023' part
               ),
-              tooltip: '切换至${switch (mineController.nextThemeType) {
+              tooltip: '切换至${switch (_mineController.nextThemeType) {
                 ThemeType.light => '浅色',
                 ThemeType.dark => '深色',
                 ThemeType.system => '跟随系统',
               }}主题',
-              onPressed: mineController.onChangeTheme,
+              onPressed: _mineController.onChangeTheme,
               icon: Icon(
-                switch (mineController.themeType.value) {
+                switch (_mineController.themeType.value) {
                   ThemeType.light => MdiIcons.weatherSunny,
                   ThemeType.dark => MdiIcons.weatherNight,
                   ThemeType.system => MdiIcons.themeLightDark,
@@ -132,25 +110,13 @@ class _MinePageState extends State<MinePage> {
           const SizedBox(height: 8),
           _header,
           const SizedBox(height: 10),
-          FutureBuilder(
-            future: _futureBuilderFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == null || !snapshot.data['status']) {
-                  return userInfoBuild(mineController, context);
-                }
-                return Obx(() => userInfoBuild(mineController, context));
-              } else {
-                return userInfoBuild(mineController, context);
-              }
-            },
-          ),
+          Obx(userInfoBuild),
         ],
       ),
     );
   }
 
-  Widget userInfoBuild(_mineController, context) {
+  Widget userInfoBuild() {
     LevelInfo? levelInfo = _mineController.userInfo.value.levelInfo;
     TextStyle style = TextStyle(
       fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,

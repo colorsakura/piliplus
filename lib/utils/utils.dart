@@ -13,12 +13,13 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
+import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/login.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -109,15 +110,30 @@ class Utils {
           '端」推荐');
       await GStorage.userInfo.put('userInfoCache', result['data']);
       try {
-        Get.find<HomeController>()
-          ..updateLoginStatus(true)
-          ..userFace.value = result['data'].face;
+        Get.find<MineController>()
+          ..isLogin.value = true
+          ..queryUserInfo();
+      } catch (_) {}
 
+      try {
+        Get.find<HomeController>()
+          ..isLogin.value = true
+          ..userFace.value = result['data'].face;
+      } catch (_) {}
+
+      try {
+        Get.find<DynamicsController>()
+          ..isLogin.value = true
+          ..ownerMid = result['data'].mid
+          ..face = result['data'].face
+          ..onRefresh();
+      } catch (_) {}
+
+      try {
         Get.find<MediaController>()
           ..mid = result['data'].mid
           ..onRefresh();
       } catch (_) {}
-      await LoginUtils.refreshLoginStatus(true);
     } else {
       // 获取用户信息失败
       SmartDialog.showNotify(
