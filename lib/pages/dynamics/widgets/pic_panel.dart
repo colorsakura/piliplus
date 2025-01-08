@@ -1,7 +1,7 @@
 import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:flutter/material.dart';
 
-Widget picWidget(item, context) {
+Widget picWidget(item, context, callback) {
   String type = item.modules.moduleDynamic.major.type;
   if (type == 'MAJOR_TYPE_OPUS') {
     /// fix 图片跟rich_node_panel重复
@@ -20,6 +20,7 @@ Widget picWidget(item, context) {
             ),
           )
           .toList(),
+      callback: callback,
     ),
   );
 }

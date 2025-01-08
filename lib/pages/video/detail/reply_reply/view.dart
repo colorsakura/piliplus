@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -57,6 +58,10 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
 
   dynamic get firstFloor =>
       widget.firstFloor ?? _videoReplyReplyController.firstFloor;
+
+  bool get _horizontalPreview =>
+      context.orientation == Orientation.landscape &&
+      _videoReplyReplyController.horizontalPreview;
 
   @override
   void initState() {
@@ -174,6 +179,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                       isTop: widget.isTop,
                                       onViewImage: widget.onViewImage,
                                       onDismissed: widget.onDismissed,
+                                      callback: _getImageCallback,
                                     )
                                   : ReplyItem(
                                       replyItem: firstFloor,
@@ -186,6 +192,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                                       },
                                       onViewImage: widget.onViewImage,
                                       onDismissed: widget.onDismissed,
+                                      callback: _getImageCallback,
                                     );
                             } else if (index == 1) {
                               return Divider(
@@ -270,6 +277,23 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
           ],
         ),
       );
+
+  get _getImageCallback => _horizontalPreview
+      ? (imgList, index) {
+          _key.currentState?.showBottomSheet(
+            (context) {
+              return InteractiveviewerGallery(
+                sources: imgList,
+                initIndex: index,
+                setStatusBar: false,
+              );
+            },
+            enableDrag: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          );
+        }
+      : null;
 
   void _onReply(dynamic item, int index) {
     dynamic oid = item?.oid.toInt();
@@ -457,6 +481,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
             },
             onViewImage: widget.onViewImage,
             onDismissed: widget.onDismissed,
+            callback: _getImageCallback,
           )
         : ReplyItem(
             replyItem: replyItem,
@@ -477,6 +502,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
             },
             onViewImage: widget.onViewImage,
             onDismissed: widget.onDismissed,
+            callback: _getImageCallback,
           );
   }
 

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/list_sheet.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -93,6 +94,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)) &&
       context.orientation == Orientation.landscape &&
       videoDetailController.horizontalSeasonPanel;
+
+  bool get _horizontalPreview =>
+      context.orientation == Orientation.landscape &&
+      videoDetailController.horizontalPreview;
 
   StreamSubscription? _listenerDetail;
   StreamSubscription? _listenerLoadingState;
@@ -1543,6 +1548,22 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           replyReply: replyReply,
           onViewImage: videoDetailController.onViewImage,
           onDismissed: videoDetailController.onDismissed,
+          callback: _horizontalPreview
+              ? (imgList, index) {
+                  videoDetailController.childKey.currentState?.showBottomSheet(
+                    (context) {
+                      return InteractiveviewerGallery(
+                        sources: imgList,
+                        initIndex: index,
+                        setStatusBar: false,
+                      );
+                    },
+                    enableDrag: false,
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                  );
+                }
+              : null,
         ),
       );
 

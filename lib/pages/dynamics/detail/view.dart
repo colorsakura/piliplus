@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
@@ -50,6 +51,29 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   bool isOpusId = false;
 
   late final List<double> _ratio = GStorage.dynamicDetailRatio;
+
+  bool get _horizontalPreview =>
+      context.orientation == Orientation.landscape &&
+      _dynamicDetailController.horizontalPreview;
+
+  late final _key = GlobalKey<ScaffoldState>();
+
+  get _getImageCallback => _horizontalPreview
+      ? (imgList, index) {
+          _key.currentState?.showBottomSheet(
+            (context) {
+              return InteractiveviewerGallery(
+                sources: imgList,
+                initIndex: index,
+                setStatusBar: false,
+              );
+            },
+            enableDrag: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          );
+        }
+      : null;
 
   @override
   void initState() {
@@ -299,6 +323,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       child: DynamicPanel(
                         item: _dynamicDetailController.item,
                         source: 'detail',
+                        callback: _getImageCallback,
                       ),
                     ),
                     replyPersistentHeader(context),
@@ -326,6 +351,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                               child: DynamicPanel(
                                 item: _dynamicDetailController.item,
                                 source: 'detail',
+                                callback: _getImageCallback,
                               ),
                             ),
                           ),
@@ -335,6 +361,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     Expanded(
                       flex: _ratio[1].toInt(),
                       child: Scaffold(
+                        key: _key,
                         body: refreshIndicator(
                           onRefresh: () async {
                             await _dynamicDetailController.onRefresh();
@@ -499,6 +526,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             isTop:
                                 _dynamicDetailController.hasUpTop && index == 0,
                             upMid: loadingState.response.subjectControl.upMid,
+                            callback: _getImageCallback,
                           )
                         : ReplyItem(
                             replyItem: loadingState.response.replies[index],
@@ -515,6 +543,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                               );
                             },
                             onDelete: _dynamicDetailController.onMDelete,
+                            callback: _getImageCallback,
                           );
                   }
                 },

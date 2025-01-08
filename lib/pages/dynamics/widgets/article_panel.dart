@@ -4,7 +4,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import '../../../common/constants.dart';
 import 'pic_panel.dart';
 
-Widget articlePanel(item, context, {floor = 1}) {
+Widget articlePanel(item, context, callback, {floor = 1}) {
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
   return Padding(
@@ -52,7 +52,7 @@ Widget articlePanel(item, context, {floor = 1}) {
           ),
           const SizedBox(height: 2),
         ],
-        picWidget(item, context)
+        picWidget(item, context, callback)
       ],
     ),
   );

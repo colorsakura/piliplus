@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/article_content.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
@@ -43,6 +44,29 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   late AnimationController fabAnimationCtr;
 
   late final List<double> _ratio = GStorage.dynamicDetailRatio;
+
+  bool get _horizontalPreview =>
+      context.orientation == Orientation.landscape &&
+      _htmlRenderCtr.horizontalPreview;
+
+  late final _key = GlobalKey<ScaffoldState>();
+
+  get _getImageCallback => _horizontalPreview
+      ? (imgList, index) {
+          _key.currentState?.showBottomSheet(
+            (context) {
+              return InteractiveviewerGallery(
+                sources: imgList,
+                initIndex: index,
+                setStatusBar: false,
+              );
+            },
+            enableDrag: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          );
+        }
+      : null;
 
   @override
   void initState() {
@@ -336,6 +360,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     Expanded(
                       flex: _ratio[1].toInt(),
                       child: Scaffold(
+                        key: _key,
                         body: CustomScrollView(
                           controller: _htmlRenderCtr.scrollController,
                           slivers: [
@@ -442,6 +467,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           onDelete: _htmlRenderCtr.onMDelete,
                           isTop: _htmlRenderCtr.hasUpTop && index == 0,
                           upMid: loadingState.response.subjectControl.upMid,
+                          callback: _getImageCallback,
                         )
                       : ReplyItem(
                           replyItem: loadingState.response.replies[index],
@@ -458,6 +484,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                             );
                           },
                           onDelete: _htmlRenderCtr.onMDelete,
+                          callback: _getImageCallback,
                         );
                 }
               },
@@ -534,11 +561,12 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_htmlRenderCtr.response['uname'],
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleSmall!.fontSize,
-                    )),
+                Text(
+                  _htmlRenderCtr.response['uname'],
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                  ),
+                ),
                 Text(
                   _htmlRenderCtr.response['updateTime'],
                   style: TextStyle(
@@ -561,6 +589,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   ? articleContent(
                       context: context,
                       list: _htmlRenderCtr.response['content'],
+                      callback: _getImageCallback,
                     )
                   : SliverToBoxAdapter(
                       child: LayoutBuilder(
@@ -568,6 +597,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           context: context,
                           htmlContent: _htmlRenderCtr.response['content'],
                           constrainedWidth: constraints.maxWidth,
+                          callback: _getImageCallback,
                         ),
                       ),
                     )

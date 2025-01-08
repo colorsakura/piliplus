@@ -9,6 +9,7 @@ Widget htmlRender({
   int? imgCount,
   List<String>? imgList,
   required double constrainedWidth,
+  Function(List<String>, int)? callback,
 }) {
   return SelectionArea(
       child: Html(
@@ -49,9 +50,13 @@ Widget htmlRender({
               tag: imgUrl,
               child: GestureDetector(
                 onTap: () {
-                  context.imageView(
-                    imgList: [imgUrl],
-                  );
+                  if (callback != null) {
+                    callback([imgUrl], 0);
+                  } else {
+                    context.imageView(
+                      imgList: [imgUrl],
+                    );
+                  }
                 },
                 child: NetworkImgLayer(
                   width: isEmote ? 22 : constrainedWidth,

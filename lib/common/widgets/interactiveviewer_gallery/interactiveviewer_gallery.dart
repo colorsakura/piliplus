@@ -42,7 +42,10 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
     this.minScale = 1.0,
     this.onPageChanged,
     this.onDismissed,
+    this.setStatusBar,
   });
+
+  final bool? setStatusBar;
 
   /// The sources to show.
   final List<String> sources;
@@ -108,7 +111,9 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
       });
 
     currentIndex = widget.initIndex;
-    setStatusBar();
+    if (widget.setStatusBar != false) {
+      setStatusBar();
+    }
   }
 
   setStatusBar() async {
@@ -125,8 +130,10 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _pageController?.dispose();
     _animationController.removeListener(() {});
     _animationController.dispose();
-    if (Platform.isIOS || Platform.isAndroid) {
-      StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+    if (widget.setStatusBar != false) {
+      if (Platform.isIOS || Platform.isAndroid) {
+        StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+      }
     }
     for (int index = 0; index < widget.sources.length; index++) {
       CachedNetworkImageProvider(_getActualUrl(index)).evict();

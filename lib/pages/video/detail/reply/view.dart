@@ -24,6 +24,7 @@ class VideoReplyPanel extends StatefulWidget {
   final Function replyReply;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
+  final Function(List<String>, int)? callback;
 
   const VideoReplyPanel({
     super.key,
@@ -35,6 +36,7 @@ class VideoReplyPanel extends StatefulWidget {
     required this.replyReply,
     this.onViewImage,
     this.onDismissed,
+    this.callback,
   });
 
   @override
@@ -264,6 +266,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             getTag: () => heroTag,
                             onViewImage: widget.onViewImage,
                             onDismissed: widget.onDismissed,
+                            callback: widget.callback,
                           )
                         : ReplyItem(
                             replyItem: loadingState.response.replies[index],
@@ -282,6 +285,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             onViewImage: widget.onViewImage,
                             onDismissed: widget.onDismissed,
                             getTag: () => heroTag,
+                            callback: widget.callback,
                           );
                   }
                 },

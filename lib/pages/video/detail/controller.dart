@@ -246,7 +246,9 @@ class VideoDetailController extends GetxController
     imageStatus = false;
   }
 
-  // 页面来源 稍后再看 收藏夹
+  late final horizontalPreview = GStorage.horizontalPreview;
+
+// 页面来源 稍后再看 收藏夹
   String sourceType = 'normal';
   late bool _mediaDesc = false;
   late RxList<MediaVideoItemModel> mediaList = <MediaVideoItemModel>[].obs;

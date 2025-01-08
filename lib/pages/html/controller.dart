@@ -2,6 +2,7 @@ import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/html.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -16,6 +17,8 @@ class HtmlRenderController extends ReplyController {
   int? floor;
 
   RxBool loaded = false.obs;
+
+  late final horizontalPreview = GStorage.horizontalPreview;
 
   @override
   void onInit() {

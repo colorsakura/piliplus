@@ -15,7 +15,7 @@ import 'pic_panel.dart';
 import 'rich_node_panel.dart';
 import 'video_panel.dart';
 
-InlineSpan picsNodes(List<OpusPicsModel> pics) {
+InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
   return WidgetSpan(
     child: LayoutBuilder(
       builder: (context, constraints) => imageview(
@@ -29,12 +29,13 @@ InlineSpan picsNodes(List<OpusPicsModel> pics) {
               ),
             )
             .toList(),
+        callback: callback,
       ),
     ),
   );
 }
 
-Widget forWard(item, context, ctr, source, {floor = 1}) {
+Widget forWard(item, context, ctr, source, callback, {floor = 1}) {
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
 
@@ -100,7 +101,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
               ),
             if (hasPics) ...[
               Text.rich(
-                picsNodes(pics),
+                picsNodes(pics, callback),
                 // semanticsLabel: '动态图片',
               ),
             ],
@@ -110,7 +111,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
             padding: floor == 2
                 ? EdgeInsets.zero
                 : const EdgeInsets.only(left: 12, right: 12),
-            child: picWidget(item, context),
+            child: picWidget(item, context, callback),
           ),
 
           /// 附加内容 商品信息、直播预约等等
@@ -129,7 +130,7 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
     // 文章
     case 'DYNAMIC_TYPE_ARTICLE':
       return item is ItemOrigModel
-          ? articlePanel(item, context, floor: floor)
+          ? articlePanel(item, context, callback, floor: floor)
           : const SizedBox.shrink();
     // return Container(
     //     padding:
@@ -144,7 +145,8 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
           padding:
               const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 8),
           color: Theme.of(context).dividerColor.withOpacity(0.08),
-          child: forWard(item.orig, context, ctr, source, floor: floor + 1),
+          child: forWard(item.orig, context, ctr, source, callback,
+              floor: floor + 1),
         ),
       );
     // 直播

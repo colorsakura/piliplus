@@ -8,6 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 Widget articleContent({
   required BuildContext context,
   required List<ArticleContentModel> list,
+  Function(List<String>, int)? callback,
 }) {
   List<String>? imgList = list
       .where((item) => item.pic != null)
@@ -59,10 +60,17 @@ Widget articleContent({
             tag: item.pic!.pics!.first.url!,
             child: GestureDetector(
               onTap: () {
-                context.imageView(
-                  initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
-                  imgList: imgList,
-                );
+                if (callback != null) {
+                  callback(
+                    imgList,
+                    imgList.indexOf(item.pic!.pics!.first.url!),
+                  );
+                } else {
+                  context.imageView(
+                    initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
+                    imgList: imgList,
+                  );
+                }
               },
               child: NetworkImgLayer(
                 width: constraints.maxWidth,

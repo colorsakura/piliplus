@@ -1657,6 +1657,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '横屏在侧栏打开图片预览',
+        leading: Icon(Icons.photo_outlined),
+        setKey: SettingBoxKey.horizontalPreview,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

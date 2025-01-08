@@ -35,6 +35,7 @@ class ReplyItem extends StatelessWidget {
     this.onViewImage,
     this.onDismissed,
     this.getTag,
+    this.callback,
   });
   final ReplyItemModel? replyItem;
   final String? replyLevel;
@@ -47,6 +48,7 @@ class ReplyItem extends StatelessWidget {
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function? getTag;
+  final Function(List<String>, int)? callback;
 
   @override
   Widget build(BuildContext context) {
@@ -975,8 +977,9 @@ class ReplyItem extends StatelessWidget {
                     ),
                   )
                   .toList(),
-              onViewImage,
-              onDismissed,
+              onViewImage: onViewImage,
+              onDismissed: onDismissed,
+              callback: callback,
             ),
           ),
         ),

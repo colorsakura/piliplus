@@ -10,11 +10,13 @@ class DynamicPanel extends StatelessWidget {
   final dynamic item;
   final String? source;
   final Function? onRemove;
+  final Function(List<String>, int)? callback;
 
   DynamicPanel({
     required this.item,
     this.source,
     this.onRemove,
+    this.callback,
     super.key,
   });
 
@@ -58,8 +60,8 @@ class DynamicPanel extends StatelessWidget {
               ),
               if (item!.modules!.moduleDynamic!.desc != null ||
                   item!.modules!.moduleDynamic!.major != null)
-                Content(item: item, source: source),
-              forWard(item, context, _dynamicsController, source),
+                content(context, item, source, callback),
+              forWard(item, context, _dynamicsController, source, callback),
               const SizedBox(height: 2),
               if (source == null) ActionPanel(item: item),
             ],

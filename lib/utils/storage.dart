@@ -304,6 +304,9 @@ class GStorage {
   static bool get autoUpdate =>
       GStorage.setting.get(SettingBoxKey.autoUpdate, defaultValue: true);
 
+  static bool get horizontalPreview => GStorage.setting
+      .get(SettingBoxKey.horizontalPreview, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -513,6 +516,7 @@ class SettingBoxKey {
       badCertificateCallback = 'badCertificateCallback',
       continuePlayingPart = 'continuePlayingPart',
       cdnSpeedTest = 'cdnSpeedTest',
+      horizontalPreview = 'horizontalPreview',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

@@ -25,10 +25,11 @@ class ImageModel {
 
 Widget imageview(
   double maxWidth,
-  List<ImageModel> picArr, [
+  List<ImageModel> picArr, {
   VoidCallback? onViewImage,
   ValueChanged<int>? onDismissed,
-]) {
+  Function(List<String>, int)? callback,
+}) {
   double imageWidth = (maxWidth - 2 * 5) / 3;
   double imageHeight = imageWidth;
   if (picArr.length == 1) {
@@ -59,12 +60,16 @@ Widget imageview(
       tag: picArr[index].url,
       child: GestureDetector(
         onTap: () {
-          onViewImage?.call();
-          context.imageView(
-            initialPage: index,
-            imgList: picArr.map((item) => item.url).toList(),
-            onDismissed: onDismissed,
-          );
+          if (callback != null) {
+            callback(picArr.map((item) => item.url).toList(), index);
+          } else {
+            onViewImage?.call();
+            context.imageView(
+              initialPage: index,
+              imgList: picArr.map((item) => item.url).toList(),
+              onDismissed: onDismissed,
+            );
+          }
         },
         child: Stack(
           alignment: Alignment.center,

@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -37,11 +38,13 @@ class VideoReplyReplyController extends CommonController
   RxInt count = (-1).obs;
   int? upMid;
 
+  dynamic firstFloor;
+
   int? index;
   AnimationController? controller;
   Animation<Color?>? colorAnimation;
 
-  dynamic firstFloor;
+  late final horizontalPreview = GStorage.horizontalPreview;
 
   @override
   void onInit() {

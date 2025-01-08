@@ -2,6 +2,7 @@ import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/html.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -13,6 +14,8 @@ class DynamicDetailController extends ReplyController {
   int? type;
   dynamic item;
   int? floor;
+
+  late final horizontalPreview = GStorage.horizontalPreview;
 
   @override
   void onInit() {
