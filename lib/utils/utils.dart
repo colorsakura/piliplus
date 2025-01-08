@@ -798,6 +798,9 @@ class Utils {
       0 => target,
       1 => numbers.first,
       _ => numbers.reduce((a, b) {
+          if (b > target) {
+            return a;
+          }
           int diff1 = (a - target).abs();
           int diff2 = (b - target).abs();
           return diff1 == diff2
