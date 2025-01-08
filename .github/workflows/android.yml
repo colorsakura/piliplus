@@ -33,6 +33,19 @@ jobs:
           channel: stable
           flutter-version-file: pubspec.yaml
 
+      - name: 修复3.24的stable显示中文不正确问题 // from orz12
+        run: |
+            version=$(grep -m 1 'flutter:' pubspec.yaml | awk '{print $2}')
+            if [ "$(echo "$version < 3.27.0" | awk '{print ($1 < $2)}')" -eq 1 ]; then
+              cd $FLUTTER_ROOT
+              git config --global user.name "orz12"
+              git config --global user.email "orz12@test.com"
+              git cherry-pick d4124bd --strategy-option theirs
+              # flutter precache
+              flutter --version
+              cd -
+            fi
+
       - name: 下载项目依赖
         run: flutter pub get
 
