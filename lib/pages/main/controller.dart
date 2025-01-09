@@ -35,7 +35,7 @@ class MainController extends GetxController {
 
   late int homeIndex = -1;
   late DynamicBadgeMode msgBadgeMode = GStorage.msgBadgeMode;
-  late MsgUnReadType msgUnReadType = GStorage.msgUnReadType;
+  late List<MsgUnReadType> msgUnReadTypes = GStorage.msgUnReadTypeV2;
   late final RxString msgUnReadCount = ''.obs;
   late int lastCheckUnreadAt = 0;
 
@@ -77,11 +77,14 @@ class MainController extends GetxController {
     if (isLogin.value.not || homeIndex == -1) {
       return;
     }
+    if (msgUnReadTypes.isEmpty) {
+      msgUnReadCount.value = '';
+      return;
+    }
     try {
-      bool shouldCheckPM = msgUnReadType == MsgUnReadType.pm ||
-          msgUnReadType == MsgUnReadType.all;
-      bool shouldCheckFeed = msgUnReadType != MsgUnReadType.pm ||
-          msgUnReadType == MsgUnReadType.all;
+      bool shouldCheckPM = msgUnReadTypes.contains(MsgUnReadType.pm);
+      bool shouldCheckFeed =
+          ([...msgUnReadTypes]..remove(MsgUnReadType.pm)).isNotEmpty;
       List res = await Future.wait([
         if (shouldCheckPM) _queryPMUnread(),
         if (shouldCheckFeed) _queryMsgFeedUnread(),
@@ -93,18 +96,18 @@ class MainController extends GetxController {
       if ((shouldCheckPM.not && res.firstOrNull?['status'] == true) ||
           (shouldCheckPM && res.getOrNull(1)?['status'] == true)) {
         int index = shouldCheckPM.not ? 0 : 1;
-        count += (switch (msgUnReadType) {
-              MsgUnReadType.pm => 0,
-              MsgUnReadType.reply => res[index]['data']['reply'],
-              MsgUnReadType.at => res[index]['data']['at'],
-              MsgUnReadType.like => res[index]['data']['like'],
-              MsgUnReadType.sysMsg => res[index]['data']['sys_msg'],
-              MsgUnReadType.all => res[index]['data']['reply'] +
-                  res[index]['data']['at'] +
-                  res[index]['data']['like'] +
-                  res[index]['data']['sys_msg'],
-            } as int?) ??
-            0;
+        if (msgUnReadTypes.contains(MsgUnReadType.reply)) {
+          count += (res[index]['data']['reply'] as int?) ?? 0;
+        }
+        if (msgUnReadTypes.contains(MsgUnReadType.at)) {
+          count += (res[index]['data']['at'] as int?) ?? 0;
+        }
+        if (msgUnReadTypes.contains(MsgUnReadType.like)) {
+          count += (res[index]['data']['like'] as int?) ?? 0;
+        }
+        if (msgUnReadTypes.contains(MsgUnReadType.sysMsg)) {
+          count += (res[index]['data']['sys_msg'] as int?) ?? 0;
+        }
       }
       count = count == 0
           ? ''

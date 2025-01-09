@@ -93,8 +93,6 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle titleStyle = Theme.of(context).textTheme.titleMedium!;
-
     return AlertDialog(
       clipBehavior: Clip.hardEdge,
       title: Text(
@@ -111,7 +109,10 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
               (index) => RadioListTile(
                 dense: true,
                 value: widget.values[index]['value'],
-                title: Text(widget.values[index]['title'], style: titleStyle),
+                title: Text(
+                  widget.values[index]['title'],
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
                 subtitle: widget.title == 'CDN 设置' && cdnSpeedTest
                     ? Text(
                         _cdnResList[index] is double

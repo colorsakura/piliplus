@@ -17,6 +17,7 @@ import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/member/new/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/setting/pages/color_select.dart';
+import 'package:PiliPlus/pages/setting/widgets/multi_select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/normal_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/slide_dialog.dart';
@@ -286,12 +287,12 @@ List<SettingsModel> get styleSettings => [
       SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) async {
-          MsgUnReadType? result = await showDialog(
+          List<MsgUnReadType>? result = await showDialog(
             context: Get.context!,
             builder: (context) {
-              return SelectDialog<MsgUnReadType>(
+              return MultiSelectDialog<MsgUnReadType>(
                 title: '消息未读类型',
-                value: GStorage.msgUnReadType,
+                initValues: GStorage.msgUnReadTypeV2,
                 values: MsgUnReadType.values.map((e) {
                   return {'title': e.title, 'value': e};
                 }).toList(),
@@ -299,9 +300,10 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.msgUnReadType, result.index);
+            GStorage.setting.put(SettingBoxKey.msgUnReadTypeV2,
+                result.map((item) => item.index).toList()..sort());
             MainController mainController = Get.put(MainController());
-            mainController.msgUnReadType = MsgUnReadType.values[result.index];
+            mainController.msgUnReadTypes = result;
             if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
               mainController.queryUnreadMsg();
             }
@@ -311,7 +313,8 @@ List<SettingsModel> get styleSettings => [
         },
         title: '消息未读类型',
         leading: const Icon(Icons.notifications_active_outlined),
-        getSubtitle: () => '当前消息类型：${GStorage.msgUnReadType.title}',
+        getSubtitle: () =>
+            '当前消息类型：${GStorage.msgUnReadTypeV2.map((item) => item.title).join('、')}',
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

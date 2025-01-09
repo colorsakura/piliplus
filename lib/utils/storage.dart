@@ -99,10 +99,11 @@ class GStorage {
         defaultValue: DynamicBadgeMode.number.index,
       )];
 
-  static MsgUnReadType get msgUnReadType => MsgUnReadType.values[setting.get(
-        SettingBoxKey.msgUnReadType,
-        defaultValue: MsgUnReadType.pm.index,
-      )];
+  static List<MsgUnReadType> get msgUnReadTypeV2 => List<int>.from(setting.get(
+        SettingBoxKey.msgUnReadTypeV2,
+        defaultValue:
+            List<int>.generate(MsgUnReadType.values.length, (index) => index),
+      )).map((index) => MsgUnReadType.values[index]).toList();
 
   static int get defaultHomePage =>
       setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0);
@@ -574,7 +575,8 @@ class SettingBoxKey {
       tabbarSort = 'tabbarSort', // 首页tabbar
       dynamicBadgeMode = 'dynamicBadgeMode',
       msgBadgeMode = 'msgBadgeMode',
-      msgUnReadType = 'msgUnReadType',
+      // msgUnReadType = 'msgUnReadType',
+      msgUnReadTypeV2 = 'msgUnReadTypeV2',
       hiddenSettingUnlocked = 'hiddenSettingUnlocked',
       enableGradientBg = 'enableGradientBg',
       navBarSort = 'navBarSort';
