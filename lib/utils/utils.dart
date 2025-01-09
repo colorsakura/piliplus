@@ -794,9 +794,10 @@ class Utils {
   }
 
   static int findClosestNumber(int target, List<int> numbers) {
-    return numbers
-        .where((number) => number <= target)
-        .reduce((a, b) => a > b ? a : b);
+    List<int> filterNums = numbers.where((number) => number <= target).toList();
+    return filterNums.isNotEmpty
+        ? filterNums.reduce((a, b) => a > b ? a : b)
+        : numbers.reduce((a, b) => a > b ? b : a);
   }
 
   // 检查更新
