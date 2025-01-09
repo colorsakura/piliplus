@@ -79,18 +79,8 @@ class VideoCardH extends StatelessWidget {
               return;
             }
             if (videoItem is HotVideoItemModel &&
-                // videoItem.pgcLabel?.isNotEmpty == true &&
                 videoItem.redirectUrl?.isNotEmpty == true) {
-              String? id = RegExp(r'(ep|ss)\d+')
-                  .firstMatch(videoItem.redirectUrl)
-                  ?.group(0);
-              if (id != null) {
-                bool isSeason = id.startsWith('ss');
-                id = id.substring(2);
-                Utils.viewBangumi(
-                  seasonId: isSeason ? id : null,
-                  epId: isSeason ? null : id,
-                );
+              if (Utils.viewPgcFromUri(videoItem.redirectUrl!)) {
                 return;
               }
             }

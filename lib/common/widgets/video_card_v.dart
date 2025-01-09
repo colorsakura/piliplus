@@ -35,10 +35,10 @@ class VideoCardV extends StatelessWidget {
     String goto = videoItem.goto;
     switch (goto) {
       case 'bangumi':
-        if (videoItem.bangumiBadge == '电影') {
-          SmartDialog.showToast('暂不支持电影观看');
-          return;
-        }
+        // if (videoItem.bangumiBadge == '电影') {
+        //   SmartDialog.showToast('暂不支持电影观看');
+        //   return;
+        // }
         Utils.viewBangumi(epId: videoItem.param);
         // SmartDialog.showLoading(msg: '资源获取中');
         // var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);

@@ -39,6 +39,20 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
+  static bool viewPgcFromUri(String uri) {
+    String? id = RegExp(r'(ep|ss)\d+').firstMatch(uri)?.group(0);
+    if (id != null) {
+      bool isSeason = id.startsWith('ss');
+      id = id.substring(2);
+      Utils.viewBangumi(
+        seasonId: isSeason ? id : null,
+        epId: isSeason ? null : id,
+      );
+      return true;
+    }
+    return false;
+  }
+
   static void showCopyTextDialog(text) {
     Get.dialog(
       AlertDialog(

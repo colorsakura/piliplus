@@ -20,13 +20,13 @@ class VideoCardVMemberHome extends StatelessWidget {
   void onPushDetail(heroTag) async {
     String goto = videoItem.goto ?? '';
     switch (goto) {
-      // case 'bangumi':
-      //   if (videoItem.bangumiBadge == '电影') {
-      //     SmartDialog.showToast('暂不支持电影观看');
-      //     return;
-      //   }
-      //   int epId = videoItem.param;
-      //   Utils.viewBangumi(epId: epId);
+      case 'bangumi':
+        //   if (videoItem.bangumiBadge == '电影') {
+        //     SmartDialog.showToast('暂不支持电影观看');
+        //     return;
+        //   }
+        //   int epId = videoItem.param;
+        Utils.viewBangumi(epId: videoItem.param);
 
       // SmartDialog.showLoading(msg: '资源获取中');
       // var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);
@@ -63,6 +63,11 @@ class VideoCardVMemberHome extends StatelessWidget {
       // }
       // break;
       case 'av':
+        if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
+          if (Utils.viewPgcFromUri(videoItem.uri!)) {
+            return;
+          }
+        }
         String bvid = videoItem.bvid ?? '';
         Get.toNamed(
           '/video?bvid=$bvid&cid=${videoItem.firstCid}',

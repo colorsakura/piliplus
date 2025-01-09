@@ -40,6 +40,11 @@ class VideoCardHMemberVideo extends StatelessWidget {
               onTap!();
               return;
             }
+            if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
+              if (Utils.viewPgcFromUri(videoItem.uri!)) {
+                return;
+              }
+            }
             try {
               Get.toNamed(
                 '/video?bvid=$bvid&cid=${videoItem.firstCid}',
