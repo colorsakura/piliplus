@@ -61,7 +61,15 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                                     src: i.cover,
                                   ),
                                   PBadge(
-                                    text: i.mediaType == 1 ? '番剧' : '国创',
+                                    text: switch (i.mediaType) {
+                                      1 => '番剧',
+                                      2 => '电影',
+                                      3 => '纪录片',
+                                      4 => '国创',
+                                      5 => '电视剧',
+                                      7 => '综艺',
+                                      _ => 'type: ${i.mediaType}',
+                                    },
                                     top: 6.0,
                                     right: 4.0,
                                     bottom: null,
