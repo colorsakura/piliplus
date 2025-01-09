@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/follow.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/dynamics/tab/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -89,6 +90,20 @@ class DynamicsController extends GetxController
             arguments: {'item': item, 'floor': floor});
         break;
       case 'DYNAMIC_TYPE_AV':
+        if (item.modules.moduleDynamic.major.archive.type == 2) {
+          if (item.modules.moduleDynamic.major.archive.jumpUrl
+              .startsWith('//')) {
+            item.modules.moduleDynamic.major.archive.jumpUrl =
+                'https:${item.modules.moduleDynamic.major.archive.jumpUrl}';
+          }
+          String? redirectUrl = await UrlUtils.parseRedirectUrl(
+              item.modules.moduleDynamic.major.archive.jumpUrl);
+          if (redirectUrl != null) {
+            Utils.viewPgcFromUri(redirectUrl);
+            return;
+          }
+        }
+
         String bvid = item.modules.moduleDynamic.major.archive.bvid;
         String cover = item.modules.moduleDynamic.major.archive.cover;
         try {

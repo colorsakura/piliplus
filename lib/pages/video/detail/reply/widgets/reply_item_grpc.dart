@@ -822,7 +822,8 @@ class ReplyItemGrpc extends StatelessWidget {
                           });
                         } else {
                           final String redirectUrl =
-                              await UrlUtils.parseRedirectUrl(matchStr);
+                              (await UrlUtils.parseRedirectUrl(matchStr)) ??
+                                  matchStr;
                           // if (redirectUrl == matchStr) {
                           //   Clipboard.setData(ClipboardData(text: matchStr));
                           //   SmartDialog.showToast('地址可能有误');
@@ -856,7 +857,8 @@ class ReplyItemGrpc extends StatelessWidget {
                               parameters: {'keyword': title});
                         } else if (matchStr.startsWith('https://b23.tv')) {
                           final String redirectUrl =
-                              await UrlUtils.parseRedirectUrl(matchStr);
+                              (await UrlUtils.parseRedirectUrl(matchStr)) ??
+                                  matchStr;
                           final String pathSegment =
                               Uri.parse(redirectUrl).path;
                           final String lastPathSegment =

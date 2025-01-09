@@ -318,7 +318,8 @@ class PiliScheme {
       return;
     } else if (host == 'b23.tv') {
       final String fullPath = 'https://$host$path';
-      final String redirectUrl = await UrlUtils.parseRedirectUrl(fullPath);
+      final String redirectUrl =
+          (await UrlUtils.parseRedirectUrl(fullPath)) ?? fullPath;
       final String pathSegment = Uri.parse(redirectUrl).path;
       final String lastPathSegment = pathSegment.split('/').last;
       final RegExp avRegex = RegExp(r'^[aA][vV]\d+', caseSensitive: false);

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -362,7 +363,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   // 图片分享
   void onShareImg(String imgUrl) async {
     SmartDialog.showLoading();
-    var response = await Dio()
+    var response = await Request()
         .get(imgUrl, options: Options(responseType: ResponseType.bytes));
     final temp = await getTemporaryDirectory();
     SmartDialog.dismiss();
