@@ -883,19 +883,27 @@ class VideoDetailController extends GetxController
         ).animate(animation),
         child: Padding(
           padding: const EdgeInsets.only(top: 5),
-          child: SearchText(
-            bgColor: Theme.of(Get.context!)
-                .colorScheme
-                .secondaryContainer
-                .withOpacity(0.8),
-            textColor: Theme.of(Get.context!).colorScheme.onSecondaryContainer,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            fontSize: 14,
-            text: '跳过: ${item.segmentType.shortTitle}',
-            onTap: (_) {
-              onSkip(item);
-              onRemoveItem(listData.indexOf(item), item);
+          child: GestureDetector(
+            onHorizontalDragUpdate: (DragUpdateDetails details) {
+              if (details.delta.dx < 0) {
+                onRemoveItem(listData.indexOf(item), item);
+              }
             },
+            child: SearchText(
+              bgColor: Theme.of(Get.context!)
+                  .colorScheme
+                  .secondaryContainer
+                  .withOpacity(0.8),
+              textColor:
+                  Theme.of(Get.context!).colorScheme.onSecondaryContainer,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              fontSize: 14,
+              text: '跳过: ${item.segmentType.shortTitle}',
+              onTap: (_) {
+                onSkip(item);
+                onRemoveItem(listData.indexOf(item), item);
+              },
+            ),
           ),
         ),
       ),

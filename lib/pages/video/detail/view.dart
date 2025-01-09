@@ -1348,11 +1348,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           ],
 
           if (videoDetailController.enableSponsorBlock)
-            Align(
-              alignment: Alignment(-0.9, 0.5),
+            Positioned(
+              left: 16,
+              bottom: isFullScreen ? max(75, Get.height * 0.25) : 75,
               child: SizedBox(
                 width: MediaQuery.textScalerOf(context).scale(120),
                 child: AnimatedList(
+                  padding: EdgeInsets.zero,
                   key: videoDetailController.listKey,
                   reverse: true,
                   shrinkWrap: true,
