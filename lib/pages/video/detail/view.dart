@@ -1347,7 +1347,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             manualPlayerWidget,
           ],
 
-          if (videoDetailController.enableSponsorBlock)
+          if (videoDetailController.enableSponsorBlock ||
+              videoDetailController.continuePlayingPart)
             Positioned(
               left: 16,
               bottom: isFullScreen ? max(75, Get.height * 0.25) : 75,
@@ -1368,6 +1369,35 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 ),
               ),
             ),
+
+          // for debug
+          // Positioned(
+          //   right: 16,
+          //   bottom: 75,
+          //   child: FilledButton.tonal(
+          //     onPressed: () {
+          //       videoDetailController.onAddItem(
+          //         SegmentModel(
+          //           UUID: '',
+          //           segmentType: SegmentType.sponsor,
+          //           segment: Pair(first: 0, second: 0),
+          //           skipType: SkipType.alwaysSkip,
+          //         ),
+          //       );
+          //     },
+          //     child: Text('skip'),
+          //   ),
+          // ),
+          // Positioned(
+          //   right: 16,
+          //   bottom: 120,
+          //   child: FilledButton.tonal(
+          //     onPressed: () {
+          //       videoDetailController.onAddItem(2);
+          //     },
+          //     child: Text('index'),
+          //   ),
+          // ),
         ],
       );
 

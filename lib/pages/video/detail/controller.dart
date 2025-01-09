@@ -482,7 +482,7 @@ class VideoDetailController extends GetxController
 
   Timer? skipTimer;
   late final listKey = GlobalKey<AnimatedListState>();
-  late final listData = <SegmentModel>[];
+  late final List listData = [];
 
   Future _vote(String uuid, int type) async {
     Request()
@@ -841,16 +841,7 @@ class VideoDetailController extends GetxController
                 item.hasSkipped = true;
                 onSkip(item);
               } else if (item.skipType == SkipType.skipManually) {
-                listData.insert(0, item);
-                listKey.currentState?.insertItem(0);
-                skipTimer ??= Timer.periodic(const Duration(seconds: 3), (_) {
-                  if (listData.isNotEmpty) {
-                    onRemoveItem(listData.length - 1, listData.last);
-                  } else {
-                    skipTimer?.cancel();
-                    skipTimer = null;
-                  }
-                });
+                onAddItem(item);
               }
               break;
             }
@@ -860,7 +851,20 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void onRemoveItem(int index, SegmentModel item) {
+  void onAddItem(item) {
+    listData.insert(0, item);
+    listKey.currentState?.insertItem(0);
+    skipTimer ??= Timer.periodic(const Duration(seconds: 4), (_) {
+      if (listData.isNotEmpty) {
+        onRemoveItem(listData.length - 1, listData.last);
+      } else {
+        skipTimer?.cancel();
+        skipTimer = null;
+      }
+    });
+  }
+
+  void onRemoveItem(int index, item) {
     EasyThrottle.throttle('onRemoveItem', const Duration(milliseconds: 500),
         () {
       try {
@@ -873,7 +877,7 @@ class VideoDetailController extends GetxController
     });
   }
 
-  Widget buildItem(SegmentModel item, Animation<double> animation) {
+  Widget buildItem(item, Animation<double> animation) {
     return Align(
       alignment: Alignment.centerLeft,
       child: SlideTransition(
@@ -898,10 +902,33 @@ class VideoDetailController extends GetxController
                   Theme.of(Get.context!).colorScheme.onSecondaryContainer,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               fontSize: 14,
-              text: '跳过: ${item.segmentType.shortTitle}',
+              text: item is SegmentModel
+                  ? '跳过: ${item.segmentType.shortTitle}'
+                  : '上次看到第${item + 1}P，点击跳转',
               onTap: (_) {
-                onSkip(item);
-                onRemoveItem(listData.indexOf(item), item);
+                if (item is int) {
+                  try {
+                    VideoIntroController videoIntroController =
+                        Get.find<VideoIntroController>(tag: heroTag);
+                    Part part =
+                        videoIntroController.videoDetail.value.pages![item];
+                    videoIntroController.changeSeasonOrbangu(
+                      null,
+                      bvid,
+                      part.cid,
+                      IdUtils.bv2av(bvid),
+                      null,
+                    );
+                    SmartDialog.showToast('已跳至第${item + 1}P');
+                  } catch (e) {
+                    debugPrint('$e');
+                    SmartDialog.showToast('跳转失败');
+                  }
+                  onRemoveItem(listData.indexOf(item), item);
+                } else if (item is SegmentModel) {
+                  onSkip(item);
+                  onRemoveItem(listData.indexOf(item), item);
+                }
               },
             ),
           ),
@@ -1957,44 +1984,7 @@ class VideoDetailController extends GetxController
               int index = videoIntroController.videoDetail.value.pages!
                   .indexWhere((item) => item.cid == res['last_play_cid']);
               if (index != -1) {
-                SmartDialog.showAttach(
-                  targetContext: childKey.currentContext,
-                  alignment: Alignment.topCenter,
-                  maskColor: Colors.transparent,
-                  displayTime: Duration(seconds: 4),
-                  builder: (context) => GestureDetector(
-                    onTap: () {
-                      SmartDialog.dismiss();
-                      Part part =
-                          videoIntroController.videoDetail.value.pages![index];
-                      videoIntroController.changeSeasonOrbangu(
-                        null,
-                        bvid,
-                        part.cid,
-                        IdUtils.bv2av(bvid),
-                        null,
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      margin: const EdgeInsets.only(bottom: 15),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        '上次看到第${index + 1}P，点击跳转',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                onAddItem(index);
               }
             }
           }
