@@ -87,30 +87,35 @@ class _MemberVideoState extends State<MemberVideo>
                                 style: const TextStyle(fontSize: 13),
                               ),
                             ),
-                            if (_controller.episodicButton != null) ...[
-                              const SizedBox(width: 5),
-                              SizedBox(
-                                height: 35,
-                                child: TextButton.icon(
-                                  onPressed: _controller.toViewPlayAll,
-                                  icon: Icon(
-                                    Icons.play_circle_outline_rounded,
-                                    size: 16,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
-                                  label: Text(
-                                    _controller.episodicButton?.text ?? '播放全部',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            Obx(
+                              () => _controller.episodicButton.value.uri != null
+                                  ? Container(
+                                      height: 35,
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: TextButton.icon(
+                                        onPressed: _controller.toViewPlayAll,
+                                        icon: Icon(
+                                          Icons.play_circle_outline_rounded,
+                                          size: 16,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                        label: Text(
+                                          _controller
+                                                  .episodicButton.value.text ??
+                                              '播放全部',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
                             const Spacer(),
                             SizedBox(
                               height: 35,

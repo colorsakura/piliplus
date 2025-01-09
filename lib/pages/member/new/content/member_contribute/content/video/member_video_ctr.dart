@@ -32,7 +32,7 @@ class MemberVideoCtr extends CommonController {
   late RxString sort = 'desc'.obs;
   RxInt count = (-1).obs;
   int? next;
-  EpisodicButton? episodicButton;
+  Rx<EpisodicButton> episodicButton = EpisodicButton().obs;
   final String? username;
   final String? title;
 
@@ -55,7 +55,8 @@ class MemberVideoCtr extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     Data data = response.response;
-    episodicButton = data.episodicButton;
+    episodicButton.value = data.episodicButton ?? EpisodicButton();
+    episodicButton.refresh();
     next = data.next;
     aid = data.item?.lastOrNull?.param;
     isEnd =
@@ -98,9 +99,9 @@ class MemberVideoCtr extends CommonController {
     if (loadingState.value is Success) {
       List<Item> list = (loadingState.value as Success).response;
 
-      if (episodicButton?.text == '继续播放') {
+      if (episodicButton.value.text == '继续播放') {
         dynamic oid = RegExp(r'oid=([\d]+)')
-            .firstMatch('${episodicButton?.uri}')
+            .firstMatch('${episodicButton.value.uri}')
             ?.group(1);
         dynamic bvid = IdUtils.av2bv(int.tryParse(oid) ?? 0);
         dynamic cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
@@ -111,18 +112,19 @@ class MemberVideoCtr extends CommonController {
             'sourceType': 'archive',
             'mediaId': seasonId ?? seriesId ?? mid,
             'oid': oid,
-            'favTitle': '$username: ${title ?? episodicButton?.text ?? '播放全部'}',
+            'favTitle':
+                '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
             if (seriesId == null) 'count': count.value,
             if (seasonId != null || seriesId != null)
               'mediaType': RegExp(r'page_type=([\d]+)')
-                  .firstMatch('${episodicButton?.uri}')
+                  .firstMatch('${episodicButton.value.uri}')
                   ?.group(1),
             'desc': RegExp(r'desc=([\d]+)')
-                    .firstMatch('${episodicButton?.uri}')
+                    .firstMatch('${episodicButton.value.uri}')
                     ?.group(1) ==
                 '1',
             'sortField': RegExp(r'sort_field=([\d]+)')
-                .firstMatch('${episodicButton?.uri}')
+                .firstMatch('${episodicButton.value.uri}')
                 ?.group(1),
             'isContinuePlaying': true,
           },
@@ -153,11 +155,11 @@ class MemberVideoCtr extends CommonController {
               'mediaId': seasonId ?? seriesId ?? mid,
               'oid': IdUtils.bv2av(element.bvid!),
               'favTitle':
-                  '$username: ${title ?? episodicButton?.text ?? '播放全部'}',
+                  '$username: ${title ?? episodicButton.value.text ?? '播放全部'}',
               if (seriesId == null) 'count': count.value,
               if (seasonId != null || seriesId != null)
                 'mediaType': RegExp(r'page_type=([\d]+)')
-                    .firstMatch('${episodicButton?.uri}')
+                    .firstMatch('${episodicButton.value.uri}')
                     ?.group(1),
               'desc': desc,
               if (type == ContributeType.video)
