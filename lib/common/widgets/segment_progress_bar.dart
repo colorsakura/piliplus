@@ -40,7 +40,7 @@ class SegmentProgressBar extends CustomPainter {
       if (segmentEnd > segmentStart ||
           (segmentEnd == segmentStart && segmentStart > 0)) {
         if (segmentColors[i].title != null) {
-          double fontSize = 8;
+          double fontSize = 10;
 
           TextPainter getTextPainter() => TextPainter(
                 text: TextSpan(
@@ -65,7 +65,7 @@ class SegmentProgressBar extends CustomPainter {
           double width = i == 0 ? segmentStart : segmentStart - prevStart;
 
           while (textPainter.width > width - 2 && fontSize >= 2) {
-            fontSize -= 1;
+            fontSize -= 0.5;
             textPainter = getTextPainter();
           }
 
