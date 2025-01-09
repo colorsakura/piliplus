@@ -44,12 +44,13 @@ class ApiInterceptor extends Interceptor {
     // handler.next(err);
     String url = err.requestOptions.uri.toString();
     debugPrint('🌹🌹ApiInterceptor: $url');
-    // 屏蔽弹幕、心跳、人数请求的错误提示
-    if (!url.contains('heartbeat') &&
-        !url.contains('seg.so') &&
-        !url.contains('online/total') &&
-        !url.contains('github') &&
-        (!url.contains('skipSegments') && err.requestOptions.method != 'GET')) {
+    if (url.contains('heartbeat') ||
+        url.contains('seg.so') ||
+        url.contains('online/total') ||
+        url.contains('github') ||
+        (url.contains('skipSegments') && err.requestOptions.method == 'GET')) {
+      // skip
+    } else {
       SmartDialog.showToast(
         await dioError(err) + url,
         displayType: SmartToastType.onlyRefresh,
