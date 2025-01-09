@@ -98,7 +98,7 @@ class SearchPanelController extends CommonController {
         keyword: keyword!,
         page: currentPage,
         order: order.value,
-        duration: searchType!.type != 'video' ? null : duration.value,
+        duration: searchType!.name != 'video' ? null : duration.value,
         tids: tids,
         orderSort: orderSort,
         userType: userType,

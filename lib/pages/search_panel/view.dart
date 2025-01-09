@@ -46,7 +46,7 @@ class _SearchPanelState extends State<SearchPanel>
         searchType: widget.searchType,
         tag: widget.tag,
       ),
-      tag: widget.searchType!.type + widget.keyword!,
+      tag: widget.searchType!.name + widget.keyword!,
     );
   }
 
@@ -71,14 +71,17 @@ class _SearchPanelState extends State<SearchPanel>
               mainAxisSpacing: 2,
               maxCrossAxisExtent: Grid.maxRowWidth * 2,
               childAspectRatio: StyleString.aspectRatio *
-                  (widget.searchType == SearchType.media_bangumi ? 1.5 : 2.2),
+                  (widget.searchType == SearchType.media_bangumi ||
+                          widget.searchType == SearchType.media_ft
+                      ? 1.5
+                      : 2.2),
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 switch (widget.searchType) {
                   case SearchType.video:
                     return const VideoCardHSkeleton();
-                  case SearchType.media_bangumi:
+                  case SearchType.media_bangumi || SearchType.media_ft:
                     return const MediaBangumiSkeleton();
                   case SearchType.bili_user:
                     return const VideoCardHSkeleton();
@@ -101,7 +104,7 @@ class _SearchPanelState extends State<SearchPanel>
             _searchPanelController,
             loadingState,
           );
-        case SearchType.media_bangumi:
+        case SearchType.media_bangumi || SearchType.media_ft:
           return searchBangumiPanel(
             context,
             _searchPanelController,

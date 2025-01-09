@@ -56,7 +56,7 @@ class _SearchResultPageState extends State<SearchResultPage>
           ),
         ),
         title: GestureDetector(
-          onTap: () => Get.back(),
+          onTap: Get.back,
           child: SizedBox(
             width: double.infinity,
             child: Text(
@@ -110,7 +110,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 onTap: (index) {
                   if (_tabController.indexIsChanging.not) {
                     Get.find<SearchPanelController>(
-                            tag: SearchType.values[index].type +
+                            tag: SearchType.values[index].name +
                                 _searchResultController.keyword!)
                         .animateToTop();
                   }

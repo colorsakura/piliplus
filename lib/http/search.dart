@@ -82,7 +82,7 @@ class SearchHttp {
     int? pubEnd,
   }) async {
     var reqData = {
-      'search_type': searchType.type,
+      'search_type': searchType.name,
       'keyword': keyword,
       // 'order_sort': 0,
       // 'user_type': 0,
@@ -117,7 +117,7 @@ class SearchHttp {
           case SearchType.bili_user:
             data = SearchUserModel.fromJson(res.data['data']);
             break;
-          case SearchType.media_bangumi:
+          case SearchType.media_bangumi || SearchType.media_ft:
             data = SearchMBangumiModel.fromJson(res.data['data']);
             break;
           case SearchType.article:
