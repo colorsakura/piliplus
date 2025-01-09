@@ -75,7 +75,8 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 );
               } catch (e) {
                 if (_cdnResList[item.index] == null) {
-                  _cdnResList[item.index] = '测速失败: $e';
+                  _cdnResList[item.index] = '测速失败';
+                  debugPrint('$e');
                   if (mounted) {
                     setState(() {});
                   }
