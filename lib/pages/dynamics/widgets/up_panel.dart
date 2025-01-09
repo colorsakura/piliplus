@@ -20,13 +20,11 @@ class UpPanel extends StatefulWidget {
 }
 
 class _UpPanelState extends State<UpPanel> {
-  int currentMid = -1;
   List<UpItem> get upList =>
       widget.dynamicsController.upData.value.upList ?? <UpItem>[];
   List<LiveUserItem> get liveList =>
       widget.dynamicsController.upData.value.liveUsers?.items ??
       <LiveUserItem>[];
-  bool _showLiveItems = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +51,20 @@ class _UpPanelState extends State<UpPanel> {
                       fontSize: 13,
                     ),
                     semanticsLabel:
-                        '${_showLiveItems ? '展开' : '收起'}直播中的${liveList.length}个Up',
+                        '${widget.dynamicsController.showLiveItems ? '展开' : '收起'}直播中的${liveList.length}个Up',
                   ),
                   Icon(
-                    _showLiveItems ? Icons.expand_less : Icons.expand_more,
+                    widget.dynamicsController.showLiveItems
+                        ? Icons.expand_less
+                        : Icons.expand_more,
                     size: 12,
                   ),
                 ],
               ),
               onPressed: () {
                 setState(() {
-                  _showLiveItems = !_showLiveItems;
+                  widget.dynamicsController.showLiveItems =
+                      !widget.dynamicsController.showLiveItems;
                 });
               },
             ),
@@ -81,7 +82,8 @@ class _UpPanelState extends State<UpPanel> {
           ),
           delegate: SliverChildListDelegate(
             [
-              if (_showLiveItems && liveList.isNotEmpty) ...[
+              if (widget.dynamicsController.showLiveItems &&
+                  liveList.isNotEmpty) ...[
                 for (int i = 0; i < liveList.length; i++) ...[
                   upItemBuild(liveList[i], i)
                 ],
@@ -109,12 +111,13 @@ class _UpPanelState extends State<UpPanel> {
   }
 
   Widget upItemBuild(data, i) {
-    bool isCurrent = currentMid == data.mid || currentMid == -1;
+    bool isCurrent = widget.dynamicsController.currentMid == data.mid ||
+        widget.dynamicsController.currentMid == -1;
     return InkWell(
       onTap: () {
         feedBack();
         if (data.type == 'up') {
-          currentMid = data.mid;
+          widget.dynamicsController.currentMid = data.mid;
           // dynamicsController.mid.value = data.mid;
           widget.dynamicsController
             ..upInfo.value = data
@@ -218,7 +221,7 @@ class _UpPanelState extends State<UpPanel> {
                 softWrap: true,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: currentMid == data.mid
+                  color: widget.dynamicsController.currentMid == data.mid
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.outline,
                   height: 1.1,

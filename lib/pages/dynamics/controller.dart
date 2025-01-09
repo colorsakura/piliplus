@@ -39,6 +39,9 @@ class DynamicsController extends GetxController
   int allFollowedUpsPage = 1;
   int allFollowedUpsTotal = 0;
 
+  late int currentMid = -1;
+  late bool showLiveItems = false;
+
   @override
   void onInit() {
     super.onInit();
