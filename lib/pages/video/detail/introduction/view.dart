@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -979,50 +981,79 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       switch (currentDesc.type) {
         case 1:
           final List<InlineSpan> spanChildren = <InlineSpan>[];
-          final RegExp urlRegExp = RegExp(r'https?://\S+\b');
-          final Iterable<Match> matches =
-              urlRegExp.allMatches(currentDesc.rawText);
+          final RegExp urlRegExp =
+              RegExp(r'https?://\S+\b|av\d+|bv\S+\b', caseSensitive: false);
 
-          int previousEndIndex = 0;
-          for (final Match match in matches) {
-            if (match.start > previousEndIndex) {
-              spanChildren.add(TextSpan(
-                  text: currentDesc.rawText
-                      .substring(previousEndIndex, match.start)));
-            }
-            spanChildren.add(
-              TextSpan(
-                text: match.group(0),
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary), // 设置颜色为蓝色
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    // 处理点击事件
-                    try {
-                      Get.toNamed(
-                        '/webview',
-                        parameters: {
-                          'url': match.group(0)!,
-                          'type': 'url',
-                          'pageTitle': match.group(0)!,
+          (currentDesc.rawText as String).splitMapJoin(
+            urlRegExp,
+            onMatch: (Match match) {
+              String matchStr = match[0]!;
+              if (RegExp(r'^av\d+$', caseSensitive: false).hasMatch(matchStr)) {
+                try {
+                  // validate
+                  int aid = int.parse(matchStr.substring(2));
+                  IdUtils.av2bv(aid);
+                  spanChildren.add(
+                    TextSpan(
+                      text: matchStr,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          PiliScheme.videoPush(aid, null);
                         },
-                      );
-                    } catch (err) {
-                      SmartDialog.showToast(err.toString());
-                    }
-                  },
-              ),
-            );
-            previousEndIndex = match.end;
-          }
-
-          if (previousEndIndex < currentDesc.rawText.length) {
-            spanChildren.add(TextSpan(
-                text: currentDesc.rawText.substring(previousEndIndex)));
-          }
-
-          final TextSpan result = TextSpan(children: spanChildren);
-          return result;
+                    ),
+                  );
+                } catch (e) {
+                  spanChildren.add(TextSpan(text: matchStr));
+                }
+              } else if (RegExp(r'^bv\S+\b$', caseSensitive: false)
+                  .hasMatch(matchStr)) {
+                try {
+                  // validate
+                  IdUtils.bv2av(matchStr);
+                  spanChildren.add(
+                    TextSpan(
+                      text: matchStr,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          PiliScheme.videoPush(null, matchStr);
+                        },
+                    ),
+                  );
+                } catch (e) {
+                  spanChildren.add(TextSpan(text: matchStr));
+                }
+              } else {
+                spanChildren.add(
+                  TextSpan(
+                    text: matchStr,
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        try {
+                          Get.toNamed(
+                            '/webview',
+                            parameters: {'url': matchStr},
+                          );
+                        } catch (err) {
+                          SmartDialog.showToast(err.toString());
+                        }
+                      },
+                  ),
+                );
+              }
+              return '';
+            },
+            onNonMatch: (String nonMatchStr) {
+              spanChildren.add(TextSpan(text: nonMatchStr));
+              return '';
+            },
+          );
+          return TextSpan(children: spanChildren);
         case 2:
           final Color colorSchemePrimary =
               Theme.of(context).colorScheme.primary;
