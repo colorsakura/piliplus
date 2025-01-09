@@ -1149,66 +1149,15 @@ List<SettingsModel> get recommendSettings => [
           }
         },
       ),
-      SettingsModel(
-        settingsType: SettingsType.normal,
-        leading: const Icon(Icons.title_outlined),
+      getBanwordModel(
         title: '标题关键词过滤',
-        getSubtitle: () {
-          String banWordForRecommend = GStorage.banWordForRecommend;
-          return banWordForRecommend.isEmpty ? "点击添加" : banWordForRecommend;
-        },
-        onTap: (setState) async {
-          String banWordForRecommend = GStorage.banWordForRecommend;
-          await showDialog(
-            context: Get.context!,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text(
-                  '标题关键词过滤',
-                  style: TextStyle(fontSize: 18),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('使用|隔开，如：尝试|测试'),
-                    TextFormField(
-                      autofocus: true,
-                      initialValue: banWordForRecommend,
-                      textInputAction: TextInputAction.newline,
-                      minLines: 1,
-                      maxLines: 4,
-                      onChanged: (value) => banWordForRecommend = value,
-                    )
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: Get.back,
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline),
-                    ),
-                  ),
-                  TextButton(
-                    child: const Text('保存'),
-                    onPressed: () async {
-                      Get.back();
-                      await GStorage.setting.put(
-                        SettingBoxKey.banWordForRecommend,
-                        banWordForRecommend,
-                      );
-                      setState();
-                      RecommendFilter.update();
-                      SmartDialog.showToast('已保存');
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        key: SettingBoxKey.banWordForRecommend,
+        getBanWord: () => GStorage.banWordForRecommend,
+      ),
+      getBanwordModel(
+        title: '推荐(app端)/热门: 视频分区关键词过滤',
+        key: SettingBoxKey.banWordForZone,
+        getBanWord: () => GStorage.banWordForZone,
       ),
       SettingsModel(
         settingsType: SettingsType.normal,
@@ -1665,65 +1614,10 @@ List<SettingsModel> get extraSettings => [
         setKey: SettingBoxKey.horizontalPreview,
         defaultVal: false,
       ),
-      SettingsModel(
-        settingsType: SettingsType.normal,
-        leading: const Icon(Icons.filter_alt_outlined),
+      getBanwordModel(
         title: '评论关键词过滤',
-        getSubtitle: () {
-          String banWordForReply = GStorage.banWordForReply;
-          return banWordForReply.isEmpty ? "点击添加" : banWordForReply;
-        },
-        onTap: (setState) async {
-          String banWordForReply = GStorage.banWordForReply;
-          await showDialog(
-            context: Get.context!,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text(
-                  '评论关键词过滤',
-                  style: TextStyle(fontSize: 18),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('使用|隔开，如：尝试|测试'),
-                    TextFormField(
-                      autofocus: true,
-                      initialValue: banWordForReply,
-                      textInputAction: TextInputAction.newline,
-                      minLines: 1,
-                      maxLines: 4,
-                      onChanged: (value) => banWordForReply = value,
-                    )
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: Get.back,
-                    child: Text(
-                      '取消',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline),
-                    ),
-                  ),
-                  TextButton(
-                    child: const Text('保存'),
-                    onPressed: () async {
-                      Get.back();
-                      await GStorage.setting.put(
-                        SettingBoxKey.banWordForReply,
-                        banWordForReply,
-                      );
-                      setState();
-                      SmartDialog.showToast('已保存');
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        key: SettingBoxKey.banWordForReply,
+        getBanWord: () => GStorage.banWordForReply,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
@@ -1971,3 +1865,70 @@ List<SettingsModel> get extraSettings => [
         },
       ),
     ];
+
+SettingsModel getBanwordModel({
+  required String title,
+  required String key,
+  required Function getBanWord,
+}) {
+  return SettingsModel(
+    settingsType: SettingsType.normal,
+    leading: const Icon(Icons.filter_alt_outlined),
+    title: title,
+    getSubtitle: () {
+      String banWord = getBanWord();
+      return banWord.isEmpty ? "点击添加" : banWord;
+    },
+    onTap: (setState) async {
+      String banWord = getBanWord();
+      await showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              title,
+              style: TextStyle(fontSize: 18),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('使用|隔开，如：尝试|测试'),
+                TextFormField(
+                  autofocus: true,
+                  initialValue: banWord,
+                  textInputAction: TextInputAction.newline,
+                  minLines: 1,
+                  maxLines: 4,
+                  onChanged: (value) => banWord = value,
+                )
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: Get.back,
+                child: Text(
+                  '取消',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.outline),
+                ),
+              ),
+              TextButton(
+                child: const Text('保存'),
+                onPressed: () async {
+                  Get.back();
+                  await GStorage.setting.put(
+                    key,
+                    banWord,
+                  );
+                  setState();
+                  SmartDialog.showToast('已保存');
+                },
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}

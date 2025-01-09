@@ -144,6 +144,12 @@ class VideoHttp {
             (!enableRcmdDynamic ? i['card_goto'] != 'picture' : true) &&
             (i['args'] != null &&
                 !blackMidsList.contains(i['args']['up_id']))) {
+          String banWordForZone = GStorage.banWordForZone;
+          if (banWordForZone.isNotEmpty &&
+              RegExp(banWordForZone, caseSensitive: false)
+                  .hasMatch(i['args']['rname'])) {
+            continue;
+          }
           RecVideoItemAppModel videoItem = RecVideoItemAppModel.fromJson(i);
           if (!RecommendFilter.filter(videoItem)) {
             list.add(videoItem);
@@ -171,6 +177,12 @@ class VideoHttp {
             !RecommendFilter.filterTitle(i['title']) &&
             !RecommendFilter.filterLikeRatio(
                 i['stat']['like'], i['stat']['view'])) {
+          String banWordForZone = GStorage.banWordForZone;
+          if (banWordForZone.isNotEmpty &&
+              RegExp(banWordForZone, caseSensitive: false)
+                  .hasMatch(i['tname'])) {
+            continue;
+          }
           list.add(HotVideoItemModel.fromJson(i));
         }
       }

@@ -184,6 +184,9 @@ class GStorage {
   static String get banWordForReply =>
       setting.get(SettingBoxKey.banWordForReply, defaultValue: '');
 
+  static String get banWordForZone =>
+      setting.get(SettingBoxKey.banWordForZone, defaultValue: '');
+
   static int get minLikeRatioForRecommend =>
       setting.get(SettingBoxKey.minLikeRatioForRecommend, defaultValue: 0);
 
@@ -522,6 +525,7 @@ class SettingBoxKey {
       cdnSpeedTest = 'cdnSpeedTest',
       horizontalPreview = 'horizontalPreview',
       banWordForReply = 'banWordForReply',
+      banWordForZone = 'banWordForZone',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
