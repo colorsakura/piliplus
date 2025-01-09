@@ -1510,16 +1510,44 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Widget get seasonPanel => Column(
         children: [
           if ((videoIntroController.videoDetail.value.pages?.length ?? 0) > 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: PagesPanel(
-                heroTag: heroTag,
-                videoIntroController: videoIntroController,
-                bvid: videoIntroController.bvid,
-                changeFuc: videoIntroController.changeSeasonOrbangu,
-                showEpisodes: showEpisodes,
+            if (videoIntroController.videoDetail.value.ugcSeason != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: PagesPanel(
+                  heroTag: heroTag,
+                  videoIntroController: videoIntroController,
+                  bvid: videoIntroController.bvid,
+                  changeFuc: videoIntroController.changeSeasonOrbangu,
+                  showEpisodes: showEpisodes,
+                ),
+              )
+            else
+              Expanded(
+                child: Obx(
+                  () => ListSheetContent(
+                    episodes: videoIntroController.videoDetail.value.pages,
+                    bvid: videoDetailController.bvid,
+                    aid: IdUtils.bv2av(videoDetailController.bvid),
+                    currentCid: videoDetailController.cid.value,
+                    isReversed:
+                        videoIntroController.videoDetail.value.isPageReversed,
+                    changeFucCall: videoDetailController.videoType ==
+                            SearchType.media_bangumi
+                        ? bangumiIntroController.changeSeasonOrbangu
+                        : videoIntroController.changeSeasonOrbangu,
+                    showTitle: false,
+                    isSupportReverse: videoDetailController.videoType !=
+                        SearchType.media_bangumi,
+                    onReverse: () {
+                      onReversePlay(
+                        bvid: videoDetailController.bvid,
+                        aid: IdUtils.bv2av(videoDetailController.bvid),
+                        isSeason: false,
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
           if (videoIntroController.videoDetail.value.ugcSeason != null) ...[
             if ((videoIntroController.videoDetail.value.pages?.length ?? 0) >
                 1) ...[

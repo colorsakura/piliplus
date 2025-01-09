@@ -39,8 +39,7 @@ class VideoCardV extends StatelessWidget {
           SmartDialog.showToast('暂不支持电影观看');
           return;
         }
-        int epId = videoItem.param;
-        Utils.viewBangumi(epId: epId);
+        Utils.viewBangumi(epId: videoItem.param);
         // SmartDialog.showLoading(msg: '资源获取中');
         // var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);
         // SmartDialog.dismiss();

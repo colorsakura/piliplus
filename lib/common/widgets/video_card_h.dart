@@ -91,8 +91,8 @@ class VideoCardH extends StatelessWidget {
                   seasonId: isSeason ? id : null,
                   epId: isSeason ? null : id,
                 );
+                return;
               }
-              return;
             }
             try {
               final int cid =
