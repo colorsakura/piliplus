@@ -79,10 +79,10 @@ class _MemberFavoriteState extends State<MemberFavorite>
                 ],
               ),
             )
-          : errorWidget(
+          : scrollErrorWidget(
               callback: _controller.onReload,
             ),
-      Error() => errorWidget(
+      Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
           callback: _controller.onReload,
         ),

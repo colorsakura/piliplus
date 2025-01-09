@@ -8,3 +8,12 @@ Widget errorWidget({errMsg, callback}) => HttpError(
       errMsg: errMsg,
       callback: callback,
     );
+
+Widget scrollErrorWidget({errMsg, callback}) => CustomScrollView(
+      slivers: [
+        HttpError(
+          errMsg: errMsg,
+          callback: callback,
+        )
+      ],
+    );
