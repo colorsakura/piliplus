@@ -42,36 +42,30 @@ class _HomePageState extends State<HomePage>
         children: [
           if (!_homeController.useSideBar) customAppBar,
           if (_homeController.tabs.length > 1) ...[
-            ...[
-              const SizedBox(height: 4),
-              SizedBox(
-                width: double.infinity,
-                height: 42,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: TabBar(
-                    controller: _homeController.tabController,
-                    tabs: [
-                      for (var i in _homeController.tabs) Tab(text: i['label'])
-                    ],
-                    isScrollable: true,
-                    dividerColor: Colors.transparent,
-                    enableFeedback: true,
-                    splashBorderRadius: BorderRadius.circular(10),
-                    tabAlignment: TabAlignment.center,
-                    onTap: (value) {
-                      feedBack();
-                      if (_homeController.tabController.indexIsChanging.not) {
-                        _homeController.tabsCtrList[value]().animateToTop();
-                      }
-                    },
-                  ),
-                ),
+            const SizedBox(height: 4),
+            Container(
+              height: 42,
+              color: Theme.of(context).colorScheme.surface,
+              child: TabBar(
+                controller: _homeController.tabController,
+                tabs: [
+                  for (var i in _homeController.tabs) Tab(text: i['label'])
+                ],
+                isScrollable: true,
+                dividerColor: Colors.transparent,
+                enableFeedback: true,
+                splashBorderRadius: BorderRadius.circular(10),
+                tabAlignment: TabAlignment.center,
+                onTap: (value) {
+                  feedBack();
+                  if (_homeController.tabController.indexIsChanging.not) {
+                    _homeController.tabsCtrList[value]().animateToTop();
+                  }
+                },
               ),
-            ],
-          ] else ...[
+            ),
+          ] else
             const SizedBox(height: 6),
-          ],
           Expanded(
             child: TabBarView(
               controller: _homeController.tabController,
@@ -90,44 +84,7 @@ class _HomePageState extends State<HomePage>
         const SizedBox(width: 4),
         Obx(
           () => _homeController.isLogin.value
-              ? Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    IconButton(
-                      tooltip: '消息',
-                      onPressed: () {
-                        Get.toNamed('/whisper');
-                        _mainController.msgUnReadCount.value = '';
-                      },
-                      icon: const Icon(
-                        Icons.notifications_none,
-                      ),
-                    ),
-                    if (_mainController.msgBadgeMode !=
-                            DynamicBadgeMode.hidden &&
-                        _mainController.msgUnReadCount.value.isNotEmpty)
-                      Positioned(
-                        top: _mainController.msgBadgeMode ==
-                                DynamicBadgeMode.number
-                            ? 8
-                            : 12,
-                        left: _mainController.msgBadgeMode ==
-                                DynamicBadgeMode.number
-                            ? 22
-                            : 32,
-                        child: IgnorePointer(
-                          child: Badge(
-                            label: _mainController.msgBadgeMode ==
-                                    DynamicBadgeMode.number
-                                ? Text(_mainController.msgUnReadCount.value
-                                    .toString())
-                                : null,
-                          ),
-                        ),
-                      ),
-                  ],
-                )
+              ? msgBadge(_mainController)
               : const SizedBox.shrink(),
         ),
         const SizedBox(width: 8),
@@ -221,7 +178,6 @@ class _HomePageState extends State<HomePage>
   Widget get searchBar {
     return Expanded(
       child: Container(
-        width: 250,
         height: 44,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -300,4 +256,34 @@ class DefaultUser extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget msgBadge(mainController) {
+  void toWhisper() {
+    mainController.msgUnReadCount.value = '';
+    mainController.lastCheckUnreadAt = DateTime.now().millisecondsSinceEpoch;
+    Get.toNamed('/whisper');
+  }
+
+  return GestureDetector(
+    onTap: toWhisper,
+    child: Badge(
+      isLabelVisible: mainController.msgBadgeMode != DynamicBadgeMode.hidden &&
+          mainController.msgUnReadCount.value.isNotEmpty,
+      alignment: mainController.msgBadgeMode == DynamicBadgeMode.number
+          ? Alignment(0, -0.5)
+          : Alignment(0.5, -0.5),
+      label: mainController.msgBadgeMode == DynamicBadgeMode.number &&
+              mainController.msgUnReadCount.value.isNotEmpty
+          ? Text(mainController.msgUnReadCount.value.toString())
+          : null,
+      child: IconButton(
+        tooltip: '消息',
+        onPressed: toWhisper,
+        icon: const Icon(
+          Icons.notifications_none,
+        ),
+      ),
+    ),
+  );
 }
