@@ -126,10 +126,6 @@ class _RcmdPageState extends State<RcmdPage>
                   },
                   child: Card(
                     margin: EdgeInsets.zero,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .secondaryContainer
-                        .withOpacity(0.5),
                     child: Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
