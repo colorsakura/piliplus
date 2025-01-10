@@ -34,7 +34,10 @@ class BangumiIntroController extends CommonController {
       ? int.tryParse(Get.parameters['epId']!)
       : null;
 
-  late dynamic type = Get.parameters['type'] == '1' ? '追番' : '追剧';
+  late dynamic type =
+      Get.parameters['type'] == '1' || Get.parameters['type'] == '4'
+          ? '追番'
+          : '追剧';
 
   // 是否预渲染 骨架屏
   bool preRender = false;
