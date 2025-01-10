@@ -1181,7 +1181,7 @@ List<SettingsModel> get recommendSettings => [
         getBanWord: () => GStorage.banWordForRecommend,
       ),
       getBanwordModel(
-        title: '推荐(app端)/热门: 视频分区关键词过滤',
+        title: '推荐(app端)/热门/分区: 视频分区关键词过滤',
         key: SettingBoxKey.banWordForZone,
         getBanWord: () => GStorage.banWordForZone,
       ),
