@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
+import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'package:PiliPlus/http/bangumi.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class BangumiController extends CommonController {
+  BangumiController({required this.tabType});
+  final TabType tabType;
+
   bool isLoadingMore = true;
   RxBool isLogin = false.obs;
   int? mid;
@@ -33,6 +37,7 @@ class BangumiController extends CommonController {
       followPage = 1;
       followEnd = false;
     }
+    queryBangumiFollow();
     return super.onRefresh();
   }
 
@@ -51,7 +56,7 @@ class BangumiController extends CommonController {
     followLoading = true;
     dynamic res = await BangumiHttp.bangumiFollow(
       mid: mid,
-      type: 1,
+      type: tabType == TabType.bangumi ? 1 : 2,
       pn: followPage,
     );
     if (res is Success) {
@@ -75,6 +80,7 @@ class BangumiController extends CommonController {
   @override
   Future<LoadingState> customGetData() => BangumiHttp.bangumiList(
         page: currentPage,
+        indexType: tabType == TabType.cinema ? 102 : null, // TODO: sort
       );
 
   @override

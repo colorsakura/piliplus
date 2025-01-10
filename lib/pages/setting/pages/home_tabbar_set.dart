@@ -25,8 +25,8 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
         .toList();
     // 对 tabData 进行排序
     defaultTabs.sort((a, b) {
-      int indexA = tabbarSort.indexOf((a['type'] as TabType).id);
-      int indexB = tabbarSort.indexOf((b['type'] as TabType).id);
+      int indexA = tabbarSort.indexOf((a['type'] as TabType).name);
+      int indexB = tabbarSort.indexOf((b['type'] as TabType).name);
 
       // 如果类型在 sortOrder 中不存在，则放在末尾
       if (indexA == -1) indexA = tabbarSort.length;
@@ -38,8 +38,8 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
 
   void saveEdit() {
     List<String> sortedTabbar = defaultTabs
-        .where((i) => tabbarSort.contains((i['type'] as TabType).id))
-        .map<String>((i) => (i['type'] as TabType).id)
+        .where((i) => tabbarSort.contains((i['type'] as TabType).name))
+        .map<String>((i) => (i['type'] as TabType).name)
         .toList();
     GStorage.setting.put(SettingBoxKey.tabbarSort, sortedTabbar);
     SmartDialog.showToast('保存成功，下次启动时生效');
@@ -61,9 +61,9 @@ class _TabbarSetPageState extends State<TabbarSetPage> {
       for (int i = 0; i < defaultTabs.length; i++) ...[
         CheckboxListTile(
           key: Key(defaultTabs[i]['label']),
-          value: tabbarSort.contains((defaultTabs[i]['type'] as TabType).id),
+          value: tabbarSort.contains((defaultTabs[i]['type'] as TabType).name),
           onChanged: (bool? newValue) {
-            String tabTypeId = (defaultTabs[i]['type'] as TabType).id;
+            String tabTypeId = (defaultTabs[i]['type'] as TabType).name;
             if (!newValue!) {
               tabbarSort.remove(tabTypeId);
             } else {

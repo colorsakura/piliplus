@@ -52,7 +52,13 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     try {
       int index = tabController.index;
       var ctr = tabsCtrList[index];
-      ctr().onRefresh();
+      ctr(
+              tag: tabs[index]['type'] == TabType.bangumi
+                  ? TabType.bangumi.name
+                  : tabs[index]['type'] == TabType.cinema
+                      ? TabType.cinema.name
+                      : null)
+          .onRefresh();
     } catch (_) {}
   }
 
@@ -60,7 +66,13 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     try {
       int index = tabController.index;
       var ctr = tabsCtrList[index];
-      ctr().animateToTop();
+      ctr(
+              tag: tabs[index]['type'] == TabType.bangumi
+                  ? TabType.bangumi.name
+                  : tabs[index]['type'] == TabType.cinema
+                      ? TabType.cinema.name
+                      : null)
+          .animateToTop();
     } catch (_) {}
   }
 
@@ -68,14 +80,14 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     defaultTabs = [...tabsConfig];
     tabbarSort = GStorage.setting
         .get(SettingBoxKey.tabbarSort,
-            defaultValue: ['live', 'rcmd', 'hot', 'rank', 'bangumi'])
+            defaultValue: TabType.values.map((item) => item.name).toList())
         .map<String>((i) => i.toString())
         .toList();
     defaultTabs.retainWhere(
-        (item) => tabbarSort.contains((item['type'] as TabType).id));
+        (item) => tabbarSort.contains((item['type'] as TabType).name));
     defaultTabs.sort((a, b) => tabbarSort
-        .indexOf((a['type'] as TabType).id)
-        .compareTo(tabbarSort.indexOf((b['type'] as TabType).id)));
+        .indexOf((a['type'] as TabType).name)
+        .compareTo(tabbarSort.indexOf((b['type'] as TabType).name)));
 
     tabs.value = defaultTabs;
 
@@ -83,7 +95,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     tabsPageList = tabs.map<Widget>((e) => e['page']).toList();
 
     tabController = TabController(
-      initialIndex: max(0, tabbarSort.indexOf(TabType.rcmd.id)),
+      initialIndex: max(0, tabbarSort.indexOf(TabType.rcmd.name)),
       length: tabs.length,
       vsync: this,
     );

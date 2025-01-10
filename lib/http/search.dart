@@ -182,6 +182,7 @@ class SearchHttp {
     }
     final dynamic res = await Request()
         .get(Api.bangumiInfo, queryParameters: <String, dynamic>{...data});
+
     if (res.data['code'] == 0) {
       return {
         'status': true,

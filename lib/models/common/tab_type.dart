@@ -5,12 +5,12 @@ import 'package:PiliPlus/pages/bangumi/index.dart';
 import 'package:PiliPlus/pages/hot/index.dart';
 import 'package:PiliPlus/pages/live/index.dart';
 import 'package:PiliPlus/pages/rcmd/index.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-enum TabType { live, rcmd, hot, rank, bangumi }
+enum TabType { live, rcmd, hot, rank, bangumi, cinema }
 
 extension TabTypeDesc on TabType {
-  String get description => ['直播', '推荐', '热门', '分区', '番剧'][index];
-  String get id => ['live', 'rcmd', 'hot', 'rank', 'bangumi'][index];
+  String get description => ['直播', '推荐', '热门', '分区', '番剧', '影视'][index];
 }
 
 List get tabsConfig => [
@@ -62,6 +62,16 @@ List get tabsConfig => [
         'label': '番剧',
         'type': TabType.bangumi,
         'ctr': Get.find<BangumiController>,
-        'page': const BangumiPage(),
+        'page': const BangumiPage(tabType: TabType.bangumi),
+      },
+      {
+        'icon': Icon(
+          MdiIcons.theater,
+          size: 15,
+        ),
+        'label': '影视',
+        'type': TabType.cinema,
+        'ctr': Get.find<BangumiController>,
+        'page': const BangumiPage(tabType: TabType.cinema),
       },
     ];

@@ -343,8 +343,8 @@ class _BangumiInfoState extends State<BangumiInfo>
                                         child: Text(
                                           bangumiIntroController
                                                   .isFollowed.value
-                                              ? '已追番'
-                                              : '追番',
+                                              ? '已${bangumiIntroController.type}'
+                                              : '${bangumiIntroController.type}',
                                         ),
                                       ),
                                     ),
@@ -632,10 +632,10 @@ class _BangumiInfoState extends State<BangumiInfo>
           _followDialogItem(1, '想看'),
           ListTile(
             dense: true,
-            title: const Padding(
+            title: Padding(
               padding: EdgeInsets.only(left: 10),
               child: Text(
-                '取消追番',
+                '取消${bangumiIntroController.type}',
                 style: TextStyle(fontSize: 14),
               ),
             ),

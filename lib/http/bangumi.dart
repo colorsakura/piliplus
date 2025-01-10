@@ -4,9 +4,14 @@ import '../models/bangumi/list.dart';
 import 'index.dart';
 
 class BangumiHttp {
-  static Future<LoadingState> bangumiList({int? page}) async {
-    var res =
-        await Request().get(Api.bangumiList, queryParameters: {'page': page});
+  static Future<LoadingState> bangumiList({
+    int? page,
+    int? indexType,
+  }) async {
+    var res = await Request().get(Api.bangumiList, queryParameters: {
+      'page': page,
+      if (indexType != null) 'index_type': indexType,
+    });
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);

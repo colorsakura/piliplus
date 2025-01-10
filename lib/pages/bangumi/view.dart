@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -16,7 +17,12 @@ import 'controller.dart';
 import 'widgets/bangumi_card_v.dart';
 
 class BangumiPage extends StatefulWidget {
-  const BangumiPage({super.key});
+  const BangumiPage({
+    super.key,
+    required this.tabType,
+  });
+
+  final TabType tabType;
 
   @override
   State<BangumiPage> createState() => _BangumiPageState();
@@ -24,7 +30,10 @@ class BangumiPage extends StatefulWidget {
 
 class _BangumiPageState extends State<BangumiPage>
     with AutomaticKeepAliveClientMixin {
-  final BangumiController _bangumiController = Get.put(BangumiController());
+  late final BangumiController _bangumiController = Get.put(
+    BangumiController(tabType: widget.tabType),
+    tag: widget.tabType.name,
+  );
 
   @override
   bool get wantKeepAlive => true;
@@ -84,7 +93,7 @@ class _BangumiPageState extends State<BangumiPage>
                         children: [
                           Obx(
                             () => Text(
-                              '最近追番${_bangumiController.followCount.value == -1 ? '' : ' ${_bangumiController.followCount.value}'}',
+                              '最近${widget.tabType == TabType.bangumi ? '追番' : '追剧'}${_bangumiController.followCount.value == -1 ? '' : ' ${_bangumiController.followCount.value}'}',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ),
@@ -210,7 +219,9 @@ class _BangumiPageState extends State<BangumiPage>
       Loading() => loadingWidget,
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? _buildFollowList(loadingState)
-          : const Center(child: Text('还没有追番')),
+          : Center(
+              child: Text(
+                  '还没有${widget.tabType == TabType.bangumi ? '追番' : '追剧'}')),
       Error() => Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.center,
