@@ -8,9 +8,13 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 class SearchPanelController extends CommonController {
-  SearchPanelController({this.keyword, this.searchType, this.tag});
+  SearchPanelController({
+    this.keyword,
+    required this.searchType,
+    required this.tag,
+  });
   String? keyword;
-  SearchType? searchType;
+  SearchType searchType;
   // 结果排序方式 搜索类型为视频、专栏及相簿时
   RxString order = ''.obs;
   // 视频时长筛选 仅用于搜索视频
@@ -19,11 +23,9 @@ class SearchPanelController extends CommonController {
   int? orderSort;
   int? userType;
   int? categoryId;
-  String? tag;
+  String tag;
   int? pubBegin;
   int? pubEnd;
-  late final searchResultController =
-      Get.find<SearchResultController>(tag: tag);
 
   @override
   void onInit() {
@@ -33,8 +35,10 @@ class SearchPanelController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    searchResultController.count[SearchType.values.indexOf(searchType!)] =
-        response.response.numResults;
+    try {
+      Get.find<SearchResultController>(tag: tag).count[searchType.index] =
+          response.response.numResults;
+    } catch (_) {}
     if (response.response.list != null) {
       isEnd = response.response.list.isEmpty;
       if (currentPage != 1 && loadingState.value is Success) {
@@ -94,11 +98,11 @@ class SearchPanelController extends CommonController {
 
   @override
   Future<LoadingState> customGetData() => SearchHttp.searchByType(
-        searchType: searchType!,
+        searchType: searchType,
         keyword: keyword!,
         page: currentPage,
         order: order.value,
-        duration: searchType!.name != 'video' ? null : duration.value,
+        duration: searchType.name != 'video' ? null : duration.value,
         tids: tids,
         orderSort: orderSort,
         userType: userType,

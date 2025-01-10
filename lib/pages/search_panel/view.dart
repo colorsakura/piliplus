@@ -17,13 +17,13 @@ import 'widgets/user_panel.dart';
 
 class SearchPanel extends StatefulWidget {
   final String? keyword;
-  final SearchType? searchType;
-  final String? tag;
+  final SearchType searchType;
+  final String tag;
   const SearchPanel({
     super.key,
     required this.keyword,
     required this.searchType,
-    this.tag,
+    required this.tag,
   });
 
   @override
@@ -46,7 +46,7 @@ class _SearchPanelState extends State<SearchPanel>
         searchType: widget.searchType,
         tag: widget.tag,
       ),
-      tag: widget.searchType!.name + widget.keyword!,
+      tag: widget.searchType.name + widget.keyword!,
     );
   }
 
