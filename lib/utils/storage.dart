@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
@@ -46,6 +47,9 @@ class GStorage {
           ],
         ),
       );
+
+  static List<String> get tabbarSort => setting.get(SettingBoxKey.tabbarSort,
+      defaultValue: TabType.values.map((item) => item.name).toList());
 
   static List<Pair<SegmentType, SkipType>> get blockSettings {
     List list = setting.get(
