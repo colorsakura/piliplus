@@ -60,21 +60,14 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                                     height: 148,
                                     src: i.cover,
                                   ),
-                                  PBadge(
-                                    text: switch (i.mediaType) {
-                                      1 => '番剧',
-                                      2 => '电影',
-                                      3 => '纪录片',
-                                      4 => '国创',
-                                      5 => '电视剧',
-                                      7 => '综艺',
-                                      _ => 'type: ${i.mediaType}',
-                                    },
-                                    top: 6.0,
-                                    right: 4.0,
-                                    bottom: null,
-                                    left: null,
-                                  )
+                                  if (i.seasonTypeName?.isNotEmpty == true)
+                                    PBadge(
+                                      text: i.seasonTypeName,
+                                      top: 6.0,
+                                      right: 4.0,
+                                      bottom: null,
+                                      left: null,
+                                    )
                                 ],
                               ),
                               const SizedBox(width: 10),
