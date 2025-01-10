@@ -1,3 +1,4 @@
+import 'package:PiliPlus/pages/live/view.dart';
 import 'package:PiliPlus/pages/rank/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ List get tabsConfig => [
         'label': '直播',
         'type': TabType.live,
         'ctr': Get.find<LiveController>,
-        'page': const RcmdPage(tabType: TabType.live),
+        'page': const LivePage(),
       },
       {
         'icon': const Icon(
@@ -32,7 +33,7 @@ List get tabsConfig => [
         'label': '推荐',
         'type': TabType.rcmd,
         'ctr': Get.find<RcmdController>,
-        'page': const RcmdPage(tabType: TabType.rcmd),
+        'page': const RcmdPage(),
       },
       {
         'icon': const Icon(

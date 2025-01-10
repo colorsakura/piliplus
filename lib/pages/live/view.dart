@@ -2,29 +2,29 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/live/controller.dart';
+import 'package:PiliPlus/pages/live/widgets/live_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/common/widgets/video_card_v.dart';
 import 'package:PiliPlus/pages/home/index.dart';
 import 'package:PiliPlus/pages/main/index.dart';
 
 import '../../utils/grid.dart';
-import 'controller.dart';
 
-class RcmdPage extends StatefulWidget {
-  const RcmdPage({super.key});
+class LivePage extends StatefulWidget {
+  const LivePage({super.key});
 
   @override
-  State<RcmdPage> createState() => _RcmdPageState();
+  State<LivePage> createState() => _LivePageState();
 }
 
-class _RcmdPageState extends State<RcmdPage>
+class _LivePageState extends State<LivePage>
     with AutomaticKeepAliveClientMixin {
-  late final _controller = Get.put(RcmdController());
+  late final _controller = Get.put(LiveController());
 
   @override
   bool get wantKeepAlive => true;
@@ -116,62 +116,13 @@ class _RcmdPageState extends State<RcmdPage>
               index == loadingState.response.length - 1) {
             _controller.onLoadMore();
           }
-          if (loadingState is Success) {
-            if (_controller.lastRefreshAt != null) {
-              if (_controller.lastRefreshAt == index) {
-                return GestureDetector(
-                  onTap: () {
-                    _controller.animateToTop();
-                    _controller.onRefresh();
-                  },
-                  child: Card(
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        '上次看到这里\n点击刷新',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-              int actualIndex = _controller.lastRefreshAt == null
-                  ? index
-                  : index > _controller.lastRefreshAt!
-                      ? index - 1
-                      : index;
-              return VideoCardV(
-                videoItem: loadingState.response[actualIndex],
-                onRemove: () {
-                  if (_controller.lastRefreshAt != null &&
-                      actualIndex < _controller.lastRefreshAt!) {
-                    _controller.lastRefreshAt = _controller.lastRefreshAt! - 1;
-                  }
-                  _controller.loadingState.value = LoadingState.success(
-                      (loadingState.response as List)..removeAt(actualIndex));
-                },
-              );
-            } else {
-              return VideoCardV(
-                videoItem: loadingState.response[index],
-                onRemove: () {
-                  _controller.loadingState.value = LoadingState.success(
-                      (loadingState.response as List)..removeAt(index));
-                },
-              );
-            }
-          }
-          return const VideoCardVSkeleton();
+          return loadingState is Success
+              ? LiveCardV(
+                  liveItem: loadingState.response[index],
+                )
+              : const VideoCardVSkeleton();
         },
-        childCount: loadingState is Success
-            ? _controller.lastRefreshAt != null
-                ? loadingState.response.length + 1
-                : loadingState.response.length
-            : 10,
+        childCount: loadingState is Success ? loadingState.response.length : 10,
       ),
     );
   }
