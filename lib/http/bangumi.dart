@@ -16,13 +16,20 @@ class BangumiHttp {
     }
   }
 
-  static Future<LoadingState> bangumiFollow({int? mid}) async {
-    var res =
-        await Request().get(Api.bangumiFollow, queryParameters: {'vmid': mid});
+  static Future<LoadingState> bangumiFollow({
+    dynamic mid,
+    required int type,
+    required int pn,
+  }) async {
+    var res = await Request().get(Api.bangumiFollow, queryParameters: {
+      'vmid': mid,
+      'type': type,
+      'pn': pn,
+    });
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);
-      return LoadingState.success(data.list);
+      return LoadingState.success(data);
     } else {
       return LoadingState.error(res.data['message']);
     }

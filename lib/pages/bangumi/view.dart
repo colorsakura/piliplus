@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:nil/nil.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/pages/home/index.dart';
@@ -82,14 +82,19 @@ class _BangumiPageState extends State<BangumiPage>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '最近追番',
-                            style: Theme.of(context).textTheme.titleMedium,
+                          Obx(
+                            () => Text(
+                              '最近追番${_bangumiController.followCount.value == -1 ? '' : ' ${_bangumiController.followCount.value}'}',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
                           ),
                           IconButton(
                             tooltip: '刷新',
                             onPressed: () {
-                              _bangumiController.queryBangumiFollow();
+                              _bangumiController
+                                ..followPage = 1
+                                ..followEnd = false
+                                ..queryBangumiFollow();
                             },
                             icon: const Icon(
                               Icons.refresh,
@@ -177,9 +182,13 @@ class _BangumiPageState extends State<BangumiPage>
 
   Widget _buildFollowList(Success loadingState) {
     return ListView.builder(
+      controller: _bangumiController.followController,
       scrollDirection: Axis.horizontal,
       itemCount: loadingState.response.length,
       itemBuilder: (context, index) {
+        if (index == loadingState.response.length - 1) {
+          _bangumiController.queryBangumiFollow(false);
+        }
         return Container(
           width: Grid.maxRowWidth / 2,
           margin: EdgeInsets.only(
@@ -198,11 +207,18 @@ class _BangumiPageState extends State<BangumiPage>
 
   Widget _buildFollowBody(LoadingState loadingState) {
     return switch (loadingState) {
-      Loading() => nil,
+      Loading() => loadingWidget,
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? _buildFollowList(loadingState)
           : const Center(child: Text('还没有追番')),
-      Error() => Center(child: Text(loadingState.errMsg)),
+      Error() => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
+          child: Text(
+            loadingState.errMsg,
+            textAlign: TextAlign.center,
+          ),
+        ),
       LoadingState() => throw UnimplementedError(),
     };
   }

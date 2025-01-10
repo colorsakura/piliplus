@@ -390,9 +390,8 @@ class Api {
   static const String bangumiList =
       '/pgc/season/index/result?st=1&order=3&season_version=-1&spoken_language_type=-1&area=-1&is_finish=-1&copyright=-1&season_status=-1&season_month=-1&year=-1&style_id=-1&sort=0&season_type=1&pagesize=20&type=1';
 
-  // 我的订阅
-  static const String bangumiFollow =
-      '/x/space/bangumi/follow/list?type=1&follow_status=0&pn=1&ps=15&ts=1691544359969';
+  // 我的追番/追剧 ?type=1&pn=1&ps=15
+  static const String bangumiFollow = '/x/space/bangumi/follow/list';
 
   // 黑名单
   static const String blackLst = '/x/relation/blacks';
