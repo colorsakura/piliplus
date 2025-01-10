@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage>
                 onTap: (value) {
                   feedBack();
                   if (_homeController.tabController.indexIsChanging.not) {
-                    _homeController.tabsCtrList[value]().animateToTop();
+                    _homeController.animateToTop();
                   }
                 },
               ),
