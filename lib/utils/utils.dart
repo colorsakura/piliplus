@@ -426,42 +426,73 @@ class Utils {
     dynamic seasonId,
     dynamic epId,
   }) async {
-    SmartDialog.showLoading(msg: '资源获取中');
-    var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
-    SmartDialog.dismiss();
-    if (result['status']) {
-      if (result['data'].episodes.isEmpty) {
-        SmartDialog.showToast('资源加载失败');
-        return;
-      }
-      // epId episode -> progress episode -> first episode
-      EpisodeItem? episode;
-      if (epId != null) {
-        episode = (result['data'].episodes as List).firstWhereOrNull(
-          (item) {
-            return item.epId.toString() == epId.toString();
+    try {
+      SmartDialog.showLoading(msg: '资源获取中');
+      var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
+      SmartDialog.dismiss();
+      if (result['status']) {
+        BangumiInfoModel data = result['data'];
+
+        // epId episode -> progress episode -> first episode
+        EpisodeItem? episode;
+
+        if (epId != null) {
+          if (data.episodes?.isNotEmpty == true) {
+            episode = data.episodes!.firstWhereOrNull(
+              (item) {
+                return item.epId.toString() == epId.toString();
+              },
+            );
+          }
+          if (episode == null && data.section?.isNotEmpty == true) {
+            for (Section item in data.section!) {
+              if (item.episodes?.isNotEmpty == true) {
+                for (EpisodeItem item in item.episodes!) {
+                  if (item.epId.toString() == epId.toString()) {
+                    // view as normal video
+                    Utils.toDupNamed(
+                      '/video?bvid=${item.bvid}&cid=${item.cid}',
+                      arguments: {
+                        'pic': item.cover,
+                        'heroTag': Utils.makeHeroTag(item.cid),
+                        'videoType': SearchType.video,
+                      },
+                    );
+                    return;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (data.episodes?.isEmpty == true) {
+          SmartDialog.showToast('资源加载失败');
+          return;
+        }
+
+        episode ??= data.userStatus?.progress?.lastEpId != null
+            ? data.episodes!.firstWhereOrNull(
+                  (item) => item.epId == data.userStatus?.progress?.lastEpId,
+                ) ??
+                data.episodes!.first
+            : data.episodes!.first;
+        Utils.toDupNamed(
+          '/video?bvid=${episode.bvid}&cid=${episode.cid}&seasonId=${data.seasonId}&epId=${episode.epId}&type=${data.type}',
+          arguments: {
+            'pic': episode.cover,
+            'heroTag': Utils.makeHeroTag(episode.cid),
+            'videoType': SearchType.media_bangumi,
+            'bangumiItem': data,
           },
         );
+      } else {
+        SmartDialog.showToast(result['msg']);
       }
-      episode ??= (result['data'].episodes as List).firstWhereOrNull(
-            (item) =>
-                item.epId == result['data'].userStatus?.progress?.lastEpId,
-          ) ??
-          result['data'].episodes.first;
-      dynamic bvid = episode?.bvid;
-      dynamic cid = episode?.cid;
-      dynamic pic = episode?.cover;
-      Utils.toDupNamed(
-        '/video?bvid=$bvid&cid=$cid&seasonId=${result['data'].seasonId}&epId=${episode?.epId}&type=${result['data'].type}',
-        arguments: {
-          'pic': pic,
-          'heroTag': Utils.makeHeroTag(cid),
-          'videoType': SearchType.media_bangumi,
-          'bangumiItem': result['data'],
-        },
-      );
-    } else {
-      SmartDialog.showToast(result['msg']);
+    } catch (e) {
+      SmartDialog.dismiss();
+      SmartDialog.showToast('$e');
+      debugPrint('$e');
     }
   }
 

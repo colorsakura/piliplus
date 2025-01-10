@@ -80,6 +80,7 @@ class BangumiInfoModel {
   int? type;
   UserStatus? userStatus;
   String? staff;
+  List<Section>? section;
 
   BangumiInfoModel.fromJson(Map<String, dynamic> json) {
     activity = json['activity'];
@@ -89,8 +90,8 @@ class BangumiInfoModel {
     bkgCover = json['bkg_cover'];
     cover = json['cover'];
     enableVt = json['enableVt'];
-    episodes = json['episodes']
-        .map<EpisodeItem>((e) => EpisodeItem.fromJson(e))
+    episodes = (json['episodes'] as List?)
+        ?.map<EpisodeItem>((e) => EpisodeItem.fromJson(e))
         .toList();
     evaluate = json['evaluate'];
     freya = json['freya'];
@@ -125,6 +126,22 @@ class BangumiInfoModel {
       userStatus = UserStatus.fromJson(json['user_status']);
     }
     staff = json['staff'];
+    section = (json['section'] as List?)
+        ?.map((item) => Section.fromJson(item))
+        .toList();
+  }
+}
+
+class Section {
+  Section({
+    this.episodes,
+  });
+  List<EpisodeItem>? episodes;
+
+  Section.fromJson(Map<String, dynamic> json) {
+    episodes = (json['episodes'] as List?)
+        ?.map<EpisodeItem>((e) => EpisodeItem.fromJson(e))
+        .toList();
   }
 }
 
