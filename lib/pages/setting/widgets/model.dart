@@ -1136,7 +1136,11 @@ List<SettingsModel> get recommendSettings => [
         defaultVal: true,
         onChanged: (value) {
           try {
-            Get.find<RcmdController>().savedRcmdTip = value;
+            RcmdController ctr = Get.find<RcmdController>();
+            ctr.savedRcmdTip = value;
+            if (value.not) {
+              ctr.lastRefreshAt = null;
+            }
           } catch (e) {
             debugPrint('$e');
           }

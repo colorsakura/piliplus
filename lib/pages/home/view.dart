@@ -43,25 +43,27 @@ class _HomePageState extends State<HomePage>
           if (!_homeController.useSideBar) customAppBar,
           if (_homeController.tabs.length > 1) ...[
             const SizedBox(height: 4),
-            Container(
-              height: 42,
+            Material(
               color: Theme.of(context).colorScheme.surface,
-              child: TabBar(
-                controller: _homeController.tabController,
-                tabs: [
-                  for (var i in _homeController.tabs) Tab(text: i['label'])
-                ],
-                isScrollable: true,
-                dividerColor: Colors.transparent,
-                enableFeedback: true,
-                splashBorderRadius: BorderRadius.circular(10),
-                tabAlignment: TabAlignment.center,
-                onTap: (value) {
-                  feedBack();
-                  if (_homeController.tabController.indexIsChanging.not) {
-                    _homeController.animateToTop();
-                  }
-                },
+              child: SizedBox(
+                height: 42,
+                child: TabBar(
+                  controller: _homeController.tabController,
+                  tabs: [
+                    for (var i in _homeController.tabs) Tab(text: i['label'])
+                  ],
+                  isScrollable: true,
+                  dividerColor: Colors.transparent,
+                  enableFeedback: true,
+                  splashBorderRadius: BorderRadius.circular(10),
+                  tabAlignment: TabAlignment.center,
+                  onTap: (value) {
+                    feedBack();
+                    if (_homeController.tabController.indexIsChanging.not) {
+                      _homeController.animateToTop();
+                    }
+                  },
+                ),
               ),
             ),
           ] else
