@@ -97,7 +97,7 @@ class DynamicsController extends GetxController
                 'https:${item.modules.moduleDynamic.major.archive.jumpUrl}';
           }
           String? redirectUrl = await UrlUtils.parseRedirectUrl(
-              item.modules.moduleDynamic.major.archive.jumpUrl);
+              item.modules.moduleDynamic.major.archive.jumpUrl, false);
           if (redirectUrl != null) {
             Utils.viewPgcFromUri(redirectUrl);
             return;

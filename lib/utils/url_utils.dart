@@ -8,7 +8,8 @@ import 'utils.dart';
 
 class UrlUtils {
   // 302重定向路由截取
-  static Future<String?> parseRedirectUrl(String url) async {
+  static Future<String?> parseRedirectUrl(String url,
+      [bool returnOri = false]) async {
     try {
       final response = await Request().get(
         url,
@@ -20,12 +21,29 @@ class UrlUtils {
         ),
       );
       if (response.statusCode == 302 || response.statusCode == 301) {
-        return response.headers['location']?.first;
+        String? redirectUrl = response.headers['location']?.first;
+        if (redirectUrl != null) {
+          if (redirectUrl.endsWith('/')) {
+            redirectUrl = redirectUrl.substring(0, redirectUrl.length - 1);
+          }
+          if (url.contains(redirectUrl)) {
+            if (url.endsWith('/')) {
+              url = url.substring(0, url.length - 1);
+            }
+            return url;
+          }
+          return redirectUrl;
+        } else {
+          if (returnOri && url.endsWith('/')) {
+            url = url.substring(0, url.length - 1);
+          }
+          return returnOri ? url : null;
+        }
       } else {
-        return null;
+        return returnOri ? url : null;
       }
     } catch (err) {
-      return null;
+      return returnOri ? url : null;
     }
   }
 
