@@ -276,6 +276,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                       Expanded(
                         child: GestureDetector(
                           onTap: showIntroDetail,
+                          behavior: HitTestBehavior.translucent,
                           child: SizedBox(
                             height: isLandscape ? 115 : 115 / 0.75,
                             child: Column(
