@@ -292,6 +292,7 @@ class DynamicsController extends GetxController
         upData.refresh();
       } else {
         upData.value.liveUsers = ress[0]['data'].liveUsers;
+        upData.refresh();
         hasUpdatedUps = ress[0]['data'].upList!;
       }
       if (!ress[1]['status']) {
@@ -311,6 +312,7 @@ class DynamicsController extends GetxController
       }
       upData.value.upList =
           allFollowedUpsTotal > 0 ? allFollowedUps : hasUpdatedUps;
+      upData.refresh();
     } else {
       var res = await DynamicsHttp.followUp();
       if (res['status']) {

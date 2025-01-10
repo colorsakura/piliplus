@@ -129,7 +129,6 @@ class _DynamicsPageState extends State<DynamicsPage>
             );
           } else {
             return UpPanel(
-              key: ValueKey(_dynamicsController.upData.value),
               dynamicsController: _dynamicsController,
             );
           }
