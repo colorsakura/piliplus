@@ -16,6 +16,7 @@ import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/member/new/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/pages/rcmd/controller.dart';
 import 'package:PiliPlus/pages/setting/pages/color_select.dart';
 import 'package:PiliPlus/pages/setting/widgets/multi_select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/normal_item.dart';
@@ -1113,12 +1114,33 @@ List<SettingsModel> get recommendSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
-        title: '首页推荐刷新',
+        title: '保留首页推荐刷新',
         subtitle: '下拉刷新时保留上次内容',
         leading: Icon(Icons.refresh),
         setKey: SettingBoxKey.enableSaveLastData,
         defaultVal: false,
-        needReboot: true,
+        onChanged: (value) {
+          try {
+            Get.find<RcmdController>().enableSaveLastData = value;
+          } catch (e) {
+            debugPrint('$e');
+          }
+        },
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '显示上次看到位置提示',
+        subtitle: '保留上次推荐时，在上次刷新位置显示提示',
+        leading: Icon(Icons.tips_and_updates_outlined),
+        setKey: SettingBoxKey.savedRcmdTip,
+        defaultVal: true,
+        onChanged: (value) {
+          try {
+            Get.find<RcmdController>().savedRcmdTip = value;
+          } catch (e) {
+            debugPrint('$e');
+          }
+        },
       ),
       SettingsModel(settingsType: SettingsType.divider),
       SettingsModel(

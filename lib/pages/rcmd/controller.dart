@@ -4,14 +4,16 @@ import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class RcmdController extends CommonController {
-  late bool enableSaveLastData;
+  late bool enableSaveLastData = GStorage.setting
+      .get(SettingBoxKey.enableSaveLastData, defaultValue: false);
   late String defaultRcmdType = 'app';
+
+  int? lastRefreshAt;
+  late bool savedRcmdTip = GStorage.savedRcmdTip;
 
   @override
   void onInit() {
     super.onInit();
-    enableSaveLastData = GStorage.setting
-        .get(SettingBoxKey.enableSaveLastData, defaultValue: false);
     defaultRcmdType = GStorage.setting
         .get(SettingBoxKey.defaultRcmdType, defaultValue: 'app');
 
@@ -34,12 +36,13 @@ class RcmdController extends CommonController {
 
   @override
   List? handleListResponse(List currentList, List dataList) {
-    return currentPage == 0 &&
-            enableSaveLastData &&
-            currentList.isNotEmpty &&
-            currentList.length < 500
-        ? dataList + currentList
-        : null;
+    bool shouldSaveLast = enableSaveLastData && currentPage == 0;
+    if (shouldSaveLast) {
+      int length = currentList.length;
+      shouldSaveLast = shouldSaveLast && length > 0 && length < 500;
+    }
+    lastRefreshAt = shouldSaveLast && savedRcmdTip ? dataList.length : null;
+    return shouldSaveLast ? dataList + currentList : null;
   }
 
   @override

@@ -318,6 +318,9 @@ class GStorage {
   static bool get horizontalPreview => GStorage.setting
       .get(SettingBoxKey.horizontalPreview, defaultValue: false);
 
+  static bool get savedRcmdTip =>
+      GStorage.setting.get(SettingBoxKey.savedRcmdTip, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -530,6 +533,7 @@ class SettingBoxKey {
       horizontalPreview = 'horizontalPreview',
       banWordForReply = 'banWordForReply',
       banWordForZone = 'banWordForZone',
+      savedRcmdTip = 'savedRcmdTip',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

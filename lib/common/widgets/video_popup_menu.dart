@@ -194,6 +194,9 @@ class VideoCustomActions {
                                 SmartDialog.showToast(
                                   res['status'] ? "点踩成功" : res['msg'],
                                 );
+                                if (res['status']) {
+                                  onRemove?.call();
+                                }
                               },
                               style: FilledButton.styleFrom(
                                 visualDensity: VisualDensity(

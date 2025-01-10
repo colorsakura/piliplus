@@ -124,21 +124,73 @@ class _RcmdPageState extends State<RcmdPage>
               index == loadingState.response.length - 1) {
             _controller.onLoadMore();
           }
-          return loadingState is Success
-              ? widget.tabType == TabType.rcmd
-                  ? VideoCardV(
-                      videoItem: loadingState.response[index],
-                      onRemove: () {
-                        _controller.loadingState.value = LoadingState.success(
-                            (loadingState.response as List)..removeAt(index));
-                      },
-                    )
-                  : LiveCardV(
-                      liveItem: loadingState.response[index],
-                    )
-              : const VideoCardVSkeleton();
+          if (widget.tabType == TabType.rcmd) {
+            if (loadingState is Success) {
+              RcmdController ctr = _controller as RcmdController;
+              if (ctr.savedRcmdTip) {
+                if (ctr.lastRefreshAt == index) {
+                  return GestureDetector(
+                    onTap: () {
+                      _controller.animateToTop();
+                      _controller.onRefresh();
+                    },
+                    child: Card(
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          '上次看到这里\n点击刷新',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                int actualIndex = ctr.lastRefreshAt == null
+                    ? index
+                    : index > ctr.lastRefreshAt!
+                        ? index - 1
+                        : index;
+                return VideoCardV(
+                  videoItem: loadingState.response[actualIndex],
+                  onRemove: () {
+                    if (ctr.lastRefreshAt != null &&
+                        actualIndex < ctr.lastRefreshAt!) {
+                      ctr.lastRefreshAt = ctr.lastRefreshAt! - 1;
+                    }
+                    _controller.loadingState.value = LoadingState.success(
+                        (loadingState.response as List)..removeAt(actualIndex));
+                  },
+                );
+              } else {
+                return VideoCardV(
+                  videoItem: loadingState.response[index],
+                  onRemove: () {
+                    _controller.loadingState.value = LoadingState.success(
+                        (loadingState.response as List)..removeAt(index));
+                  },
+                );
+              }
+            }
+            return const VideoCardVSkeleton();
+          } else {
+            return loadingState is Success
+                ? LiveCardV(
+                    liveItem: loadingState.response[index],
+                  )
+                : const VideoCardVSkeleton();
+          }
         },
-        childCount: loadingState is Success ? loadingState.response.length : 10,
+        childCount: loadingState is Success
+            ? widget.tabType == TabType.rcmd &&
+                    (_controller as RcmdController).lastRefreshAt != null
+                ? loadingState.response.length + 1
+                : loadingState.response.length
+            : 10,
       ),
     );
   }
