@@ -1,9 +1,14 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/live/widgets/live_item.dart';
+import 'package:PiliPlus/pages/live/widgets/live_item_follow.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -75,10 +80,22 @@ class _LivePageState extends State<LivePage>
           controller: _controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
+            Obx(
+              () => _controller.isLogin.value
+                  ? SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: StyleString.cardSpace,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: _buildFollowList(),
+                      ),
+                    )
+                  : const SliverToBoxAdapter(),
+            ),
             SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.cardSpace,
-                bottom: MediaQuery.paddingOf(context).bottom,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver: Obx(
                 () => _controller.loadingState.value is Loading ||
@@ -125,5 +142,216 @@ class _LivePageState extends State<LivePage>
         childCount: loadingState is Success ? loadingState.response.length : 10,
       ),
     );
+  }
+
+  Widget _buildFollowList() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Obx(
+              () => Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: '我的关注  '),
+                    TextSpan(
+                      text: '${_controller.liveCount.value}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '人正在直播',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                Get.to(_buildFollowListPage);
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '查看更多',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
+                  Icon(
+                    size: 20,
+                    Icons.keyboard_arrow_right_outlined,
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        Obx(() => _buildFollowBody(_controller.followListState.value)),
+      ],
+    );
+  }
+
+  Widget _buildFollowBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => SizedBox(
+          height: 80,
+          child: loadingWidget,
+        ),
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? SelfSizedHorizontalList(
+              gapSize: 5,
+              childBuilder: (index) {
+                if (index == loadingState.response.length - 1) {
+                  _controller.fetchLiveFollowing(false);
+                }
+                return SizedBox(
+                  width: 65,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                        '/liveRoom?roomid=${loadingState.response[index].roomId}',
+                        arguments: {
+                          'liveItem': loadingState.response[index],
+                          'heroTag':
+                              loadingState.response[index].roomId.toString()
+                        },
+                      );
+                    },
+                    onLongPress: () {
+                      Get.toNamed(
+                        '/member?mid=${loadingState.response[index].uid}',
+                        arguments: {
+                          'face': loadingState.response[index].face,
+                          'heroTag': Utils.makeHeroTag(
+                              loadingState.response[index].uid)
+                        },
+                      );
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          margin: const EdgeInsets.all(2),
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1.5,
+                              color: Theme.of(context).colorScheme.primary,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: NetworkImgLayer(
+                            type: 'avatar',
+                            width: 45,
+                            height: 45,
+                            src: loadingState.response[index].face,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          loadingState.response[index].uname,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 11),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              itemCount: loadingState.response.length,
+            )
+          : const SizedBox.shrink(),
+      Error() => GestureDetector(
+          onTap: () {
+            _controller.fetchLiveFollowing();
+          },
+          child: Container(
+            height: 80,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              loadingState.errMsg,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
+  }
+
+  Widget get _buildFollowListPage => Scaffold(
+        appBar: AppBar(
+          title: Obx(
+            () => Text('${_controller.liveCount.value}人正在直播'),
+          ),
+        ),
+        body: CustomScrollView(
+          slivers: [
+            Obx(
+              () => _buildFollowListBody(_controller.followListState.value),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildFollowListBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Success() || Loading() => SliverPadding(
+          padding: EdgeInsets.only(
+              top: StyleString.cardSpace,
+              left: StyleString.cardSpace,
+              right: StyleString.cardSpace,
+              bottom: MediaQuery.paddingOf(context).bottom + 80),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithExtentAndRatio(
+              mainAxisSpacing: StyleString.cardSpace,
+              crossAxisSpacing: StyleString.cardSpace,
+              maxCrossAxisExtent: Grid.maxRowWidth,
+              childAspectRatio: StyleString.aspectRatio,
+              mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                if (loadingState is Success &&
+                    index == loadingState.response.length - 1) {
+                  _controller.fetchLiveFollowing(false);
+                }
+                return loadingState is Success
+                    ? LiveCardVFollow(
+                        liveItem: loadingState.response[index],
+                      )
+                    : const VideoCardVSkeleton();
+              },
+              childCount:
+                  loadingState is Success ? loadingState.response.length : 10,
+            ),
+          ),
+        ),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: () {
+            _controller
+              ..followListState.value = LoadingState.loading()
+              ..fetchLiveFollowing();
+          },
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

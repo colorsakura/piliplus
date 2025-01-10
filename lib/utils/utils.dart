@@ -15,6 +15,7 @@ import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
+import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
@@ -147,6 +148,12 @@ class Utils {
         Get.find<MediaController>()
           ..mid = result['data'].mid
           ..onRefresh();
+      } catch (_) {}
+
+      try {
+        Get.find<LiveController>()
+          ..isLogin.value = true
+          ..fetchLiveFollowing();
       } catch (_) {}
     } else {
       // 获取用户信息失败

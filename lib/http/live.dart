@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/live/danmu_info.dart';
+import 'package:PiliPlus/models/live/follow.dart';
 import 'package:dio/dio.dart';
 import '../models/live/item.dart';
 import '../models/live/room_info.dart';
@@ -132,6 +133,31 @@ class LiveHttp {
       return {
         'status': false,
         'data': [],
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  // 我的关注 正在直播
+  static Future liveFollowing({required int pn, required int ps}) async {
+    var res = await Request().get(
+      Api.getFollowingLive,
+      queryParameters: {
+        'page': pn,
+        'page_size': ps,
+        'platform': 'web',
+        'ignoreRecord': 1,
+        'hit_ab': true,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {
+        'status': true,
+        'data': LiveFollowingModel.fromJson(res.data['data'])
+      };
+    } else {
+      return {
+        'status': false,
         'msg': res.data['message'],
       };
     }

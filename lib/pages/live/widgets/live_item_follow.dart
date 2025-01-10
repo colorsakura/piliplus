@@ -1,16 +1,16 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/models/live/follow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 
 // 视频卡片 - 垂直布局
-class LiveCardV extends StatelessWidget {
-  final LiveItemModel liveItem;
+class LiveCardVFollow extends StatelessWidget {
+  final LiveFollowingItemModel liveItem;
 
-  const LiveCardV({
+  const LiveCardVFollow({
     super.key,
     required this.liveItem,
   });
@@ -29,7 +29,7 @@ class LiveCardV extends StatelessWidget {
         onLongPress: () => imageSaveDialog(
           context: context,
           title: liveItem.title,
-          cover: liveItem.cover,
+          cover: liveItem.roomCover,
         ),
         child: Column(
           children: [
@@ -45,7 +45,7 @@ class LiveCardV extends StatelessWidget {
                       Hero(
                         tag: heroTag,
                         child: NetworkImgLayer(
-                          src: liveItem.cover!,
+                          src: liveItem.roomCover!,
                           width: maxWidth,
                           height: maxHeight,
                         ),
@@ -134,12 +134,10 @@ class LiveCardV extends StatelessWidget {
           Text(
             '${liveItem.areaName}',
             style: const TextStyle(fontSize: 11, color: Colors.white),
-            semanticsLabel: "${liveItem.areaName}直播",
           ),
           Text(
-            liveItem.watchedShow!['text_small'],
+            liveItem.textSmall ?? '',
             style: const TextStyle(fontSize: 11, color: Colors.white),
-            semanticsLabel: "${liveItem.watchedShow?['text_small']}围观",
           ),
         ],
       ),

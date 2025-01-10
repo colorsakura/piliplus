@@ -6,6 +6,7 @@ import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
+import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:get/get.dart';
@@ -42,6 +43,12 @@ class LoginUtils {
     try {
       Get.find<MediaController>()
         ..mid = null
+        ..loadingState.value = LoadingState.loading();
+    } catch (_) {}
+
+    try {
+      Get.find<LiveController>()
+        ..isLogin.value = false
         ..loadingState.value = LoadingState.loading();
     } catch (_) {}
 
