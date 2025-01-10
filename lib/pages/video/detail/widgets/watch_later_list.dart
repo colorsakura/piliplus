@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/danmu.dart';
 import 'package:PiliPlus/common/widgets/stat/view.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +99,7 @@ class _MediaListPanelState extends State<MediaListPanel> {
             child: Material(
               color: Theme.of(context).colorScheme.surface,
               child: widget.loadPrevious != null
-                  ? RefreshIndicator(
+                  ? refreshIndicator(
                       onRefresh: () async {
                         await widget.loadPrevious!();
                       },

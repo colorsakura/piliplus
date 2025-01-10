@@ -5,7 +5,7 @@ Widget refreshIndicator({
   required Widget child,
 }) {
   return RefreshIndicator(
-    displacement: 20,
+    displacement: 10,
     onRefresh: onRefresh,
     child: child,
   );
