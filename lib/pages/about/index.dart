@@ -4,7 +4,6 @@ import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -13,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:PiliPlus/models/github/latest.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import '../../http/init.dart';
 import '../../utils/cache_manage.dart';
 
 class AboutPage extends StatefulWidget {
@@ -223,11 +223,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                         Get.back();
                         dynamic accessKey = GStorage.localCache
                             .get(LocalCacheKey.accessKey, defaultValue: {});
-                        dynamic cookies = (await CookieManager(PersistCookieJar(
-                          ignoreExpires: true,
-                          storage: FileStorage(await Utils.getCookiePath()),
-                        ))
-                                .cookieJar
+                        dynamic cookies = (await Request.cookieManager.cookieJar
                                 .loadForRequest(Uri.parse(HttpString.baseUrl)))
                             .map(
                               (Cookie cookie) => {
