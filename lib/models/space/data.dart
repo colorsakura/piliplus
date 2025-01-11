@@ -52,6 +52,7 @@ class Data {
   @JsonKey(name: 'digital_button')
   dynamic digitalButton;
   dynamic entry;
+  dynamic live;
 
   Data({
     this.relation,
@@ -77,6 +78,7 @@ class Data {
     this.nftFaceButton,
     this.digitalButton,
     this.entry,
+    this.live,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);

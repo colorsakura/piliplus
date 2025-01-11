@@ -317,6 +317,7 @@ class _MemberPageNewState extends State<MemberPageNew>
               card: userState.response.card,
               images: userState.response.images,
               onFollow: () => _userController.onFollow(context),
+              live: _userController.live,
             ),
           ),
         ),

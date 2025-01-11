@@ -18,6 +18,7 @@ class UserInfoCard extends StatelessWidget {
     required this.relation,
     required this.isFollow,
     required this.onFollow,
+    this.live,
   });
 
   final bool isV;
@@ -27,6 +28,7 @@ class UserInfoCard extends StatelessWidget {
   final space.Card card;
   final space.Images images;
   final VoidCallback onFollow;
+  final dynamic live;
 
   @override
   Widget build(BuildContext context) {
@@ -463,6 +465,47 @@ class UserInfoCard extends StatelessWidget {
                   top: 170,
                   left: 80,
                   child: _buildBadge(context),
+                ),
+              if (live is Map && ((live['liveStatus'] as int?) ?? 0) == 1)
+                Positioned(
+                  top: 180,
+                  left: 20,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                        '/liveRoom?roomid=${live['roomid']}',
+                        arguments: {'heroTag': '${live['roomid']}'},
+                      );
+                    },
+                    child: Container(
+                      width: 85,
+                      alignment: Alignment.center,
+                      child: Badge(
+                        label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.equalizer_rounded,
+                              size: MediaQuery.textScalerOf(context).scale(16),
+                            ),
+                            Text(
+                              '直播中',
+                              style: TextStyle(height: 1),
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 1,
+                        ),
+                        alignment: Alignment.center,
+                        textColor:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
+                      ),
+                    ),
+                  ),
                 ),
               Positioned(
                 left: 120,

@@ -61,6 +61,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       nftFaceButton: json['nft_face_button'],
       digitalButton: json['digital_button'],
       entry: json['entry'],
+      live: json['live'],
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{

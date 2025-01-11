@@ -38,6 +38,8 @@ class MemberControllerNew extends CommonController
     queryData();
   }
 
+  dynamic live;
+
   @override
   bool customHandleResponse(Success response) {
     username = response.response?.card?.name ?? '';
@@ -46,6 +48,7 @@ class MemberControllerNew extends CommonController
         ? 2
         : response.response?.relation ?? 1;
     tab2 = response.response.tab2;
+    live = response.response?.live;
     if (tab2 != null && tab2!.isNotEmpty) {
       if (!response.response.tab.toJson().values.contains(true) &&
           tab2!.first.param == 'home') {
