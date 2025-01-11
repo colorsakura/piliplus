@@ -28,7 +28,7 @@ class LiveRoomPage extends StatefulWidget {
 class _LiveRoomPageState extends State<LiveRoomPage>
     with WidgetsBindingObserver {
   late final int _roomId;
-  final LiveRoomController _liveRoomController = Get.put(LiveRoomController());
+  late final LiveRoomController _liveRoomController;
   late final PlPlayerController plPlayerController;
   late Future? _futureBuilder;
   late Future? _futureBuilderFuture;
@@ -55,6 +55,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _roomId = int.parse(Get.parameters['roomid'] ?? '-1');
+    _liveRoomController = Get.put(
+      LiveRoomController(),
+      tag: Utils.makeHeroTag(_roomId),
+    );
     PlPlayerController.setPlayCallBack(playCallBack);
     if (Platform.isAndroid) {
       floating = Floating();

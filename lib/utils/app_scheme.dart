@@ -86,8 +86,7 @@ class PiliScheme {
         }
       } else if (host == 'live') {
         final String roomId = path.split('/').last;
-        Utils.toDupNamed('/liveRoom?roomid=$roomId',
-            arguments: <String, String?>{'liveItem': null, 'heroTag': roomId});
+        Utils.toDupNamed('/liveRoom?roomid=$roomId');
       } else if (host == 'bangumi') {
         if (path.startsWith('/season')) {
           final String seasonId = path.split('/').last;
@@ -307,10 +306,7 @@ class PiliScheme {
       debugPrint('bilibili.com');
     } else if (host.contains('live')) {
       int roomId = int.parse(path.split('/').last);
-      Utils.toDupNamed(
-        '/liveRoom?roomid=$roomId',
-        arguments: {'liveItem': null, 'heroTag': roomId.toString()},
-      );
+      Utils.toDupNamed('/liveRoom?roomid=$roomId');
       return;
     } else if (host.contains('space')) {
       var mid = path.split('/').last;

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
@@ -53,15 +52,13 @@ class LiveItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(liveItem.roomid);
     return Card(
       elevation: 1,
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () async {
-          Get.toNamed('/liveRoom?roomid=${liveItem.roomid}',
-              arguments: {'liveItem': liveItem, 'heroTag': heroTag});
+          Get.toNamed('/liveRoom?roomid=${liveItem.roomid}');
         },
         onLongPress: () => imageSaveDialog(
           context: context,

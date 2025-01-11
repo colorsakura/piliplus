@@ -2,7 +2,6 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
@@ -47,16 +46,15 @@ class ProfilePanel extends StatelessWidget {
                       left: 14,
                       child: GestureDetector(
                         onTap: () {
-                          LiveItemModel liveItem = LiveItemModel.fromJson({
-                            'title': memberInfo.liveRoom!.title,
-                            'uname': memberInfo.name,
-                            'face': memberInfo.face,
-                            'roomid': memberInfo.liveRoom!.roomId,
-                            'watched_show': memberInfo.liveRoom!.watchedShow,
-                          });
+                          // LiveItemModel liveItem = LiveItemModel.fromJson({
+                          //   'title': memberInfo.liveRoom!.title,
+                          //   'uname': memberInfo.name,
+                          //   'face': memberInfo.face,
+                          //   'roomid': memberInfo.liveRoom!.roomId,
+                          //   'watched_show': memberInfo.liveRoom!.watchedShow,
+                          // });
                           Get.toNamed(
                             '/liveRoom?roomid=${memberInfo.liveRoom!.roomId}',
-                            arguments: {'liveItem': liveItem},
                           );
                         },
                         child: Container(

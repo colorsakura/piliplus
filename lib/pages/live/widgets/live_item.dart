@@ -23,8 +23,7 @@ class LiveCardV extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () {
-          Get.toNamed('/liveRoom?roomid=${liveItem.roomId}',
-              arguments: {'liveItem': liveItem, 'heroTag': heroTag});
+          Get.toNamed('/liveRoom?roomid=${liveItem.roomId}');
         },
         onLongPress: () => imageSaveDialog(
           context: context,

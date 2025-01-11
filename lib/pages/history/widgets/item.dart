@@ -12,7 +12,6 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/business_type.dart';
-import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -55,18 +54,15 @@ class HistoryItem extends StatelessWidget {
               "https://www.bilibili.com/read/cv${videoItem.history.oid}"));
         } else if (videoItem.history.business == 'live') {
           if (videoItem.liveStatus == 1) {
-            LiveItemModel liveItem = LiveItemModel.fromJson({
-              'face': videoItem.authorFace,
-              'roomid': videoItem.history.oid,
-              'pic': videoItem.cover,
-              'title': videoItem.title,
-              'uname': videoItem.authorName,
-              'cover': videoItem.cover,
-            });
-            Get.toNamed(
-              '/liveRoom?roomid=${videoItem.history.oid}',
-              arguments: {'liveItem': liveItem},
-            );
+            // LiveItemModel liveItem = LiveItemModel.fromJson({
+            //   'face': videoItem.authorFace,
+            //   'roomid': videoItem.history.oid,
+            //   'pic': videoItem.cover,
+            //   'title': videoItem.title,
+            //   'uname': videoItem.authorName,
+            //   'cover': videoItem.cover,
+            // });
+            Get.toNamed('/liveRoom?roomid=${videoItem.history.oid}');
           } else {
             SmartDialog.showToast('直播未开播');
           }

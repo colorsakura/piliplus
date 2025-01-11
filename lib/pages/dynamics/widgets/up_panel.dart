@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
-import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
@@ -142,16 +141,13 @@ class _UpPanelState extends State<UpPanel> {
           // );
           setState(() {});
         } else if (data.type == 'live') {
-          LiveItemModel liveItem = LiveItemModel.fromJson({
-            'title': data.title,
-            'uname': data.uname,
-            'face': data.face,
-            'roomid': data.roomId,
-          });
-          Get.toNamed(
-            '/liveRoom?roomid=${data.roomId}',
-            arguments: {'liveItem': liveItem},
-          );
+          // LiveItemModel liveItem = LiveItemModel.fromJson({
+          //   'title': data.title,
+          //   'uname': data.uname,
+          //   'face': data.face,
+          //   'roomid': data.roomId,
+          // });
+          Get.toNamed('/liveRoom?roomid=${data.roomId}');
         }
       },
       onLongPress: () {

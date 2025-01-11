@@ -165,10 +165,7 @@ class DynamicsController extends GetxController
           'roomid': liveRcmd.roomId,
           'watched_show': liveRcmd.watchedShow,
         });
-        Utils.toDupNamed('/liveRoom?roomid=${liveItem.roomId}', arguments: {
-          'liveItem': liveItem,
-          'heroTag': liveItem.roomId.toString()
-        });
+        Utils.toDupNamed('/liveRoom?roomid=${liveItem.roomId}');
         break;
 
       /// 合集查看

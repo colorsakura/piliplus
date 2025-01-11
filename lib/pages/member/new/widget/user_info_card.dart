@@ -472,10 +472,7 @@ class UserInfoCard extends StatelessWidget {
                   left: 20,
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(
-                        '/liveRoom?roomid=${live['roomid']}',
-                        arguments: {'heroTag': '${live['roomid']}'},
-                      );
+                      Get.toNamed('/liveRoom?roomid=${live['roomid']}');
                     },
                     child: Container(
                       width: 85,
@@ -487,6 +484,9 @@ class UserInfoCard extends StatelessWidget {
                             Icon(
                               Icons.equalizer_rounded,
                               size: MediaQuery.textScalerOf(context).scale(16),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
                             ),
                             Text(
                               '直播中',

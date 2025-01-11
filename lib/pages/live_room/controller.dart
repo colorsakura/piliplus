@@ -16,17 +16,14 @@ import '../../models/live/room_info_h5.dart';
 import '../../utils/video_utils.dart';
 
 class LiveRoomController extends GetxController {
-  String cover = '';
   late int roomId;
   dynamic liveItem;
-  late String heroTag;
   double volume = 0.0;
   // 静音状态
   RxBool volumeOff = false.obs;
   PlPlayerController plPlayerController =
       PlPlayerController.getInstance(videoType: 'live');
   Rx<RoomInfoH5Model> roomInfoH5 = RoomInfoH5Model().obs;
-  // late bool enableCDN;
 
   RxList<dynamic> messages = [].obs;
   RxBool disableAutoScroll = false.obs;
@@ -38,19 +35,6 @@ class LiveRoomController extends GetxController {
   void onInit() {
     super.onInit();
     roomId = int.parse(Get.parameters['roomid']!);
-    if (Get.arguments != null) {
-      liveItem = Get.arguments['liveItem'];
-      heroTag = Get.arguments['heroTag'] ?? '';
-      if (liveItem != null) {
-        cover = (liveItem.pic != null && liveItem.pic != '')
-            ? liveItem.pic
-            : (liveItem.cover != null && liveItem.cover != '')
-                ? liveItem.cover
-                : null;
-      }
-    }
-    // CDN优化
-    // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
   }
 
   playerInit(source) async {

@@ -223,11 +223,6 @@ class _LivePageState extends State<LivePage>
                     onTap: () {
                       Get.toNamed(
                         '/liveRoom?roomid=${loadingState.response[index].roomId}',
-                        arguments: {
-                          'liveItem': loadingState.response[index],
-                          'heroTag':
-                              loadingState.response[index].roomId.toString()
-                        },
                       );
                     },
                     onLongPress: () {
