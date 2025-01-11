@@ -554,13 +554,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           : HttpError(
               callback: _dynamicDetailController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
-          callback: _dynamicDetailController.onReload,
-          extraWidget: loadingState.errMsg.startsWith('gRPC Error') &&
-                  GlobalData().grpcReply
-              ? grpcReplyErrorWidget(context, _dynamicDetailController.onReload)
-              : null,
+      Error() => replyErrorWidget(
+          context,
+          true,
+          loadingState.errMsg,
+          _dynamicDetailController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

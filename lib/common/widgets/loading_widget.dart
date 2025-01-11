@@ -19,18 +19,26 @@ Widget scrollErrorWidget({errMsg, callback}) => CustomScrollView(
       ],
     );
 
-Widget grpcReplyErrorWidget(context, onReload) => FilledButton.tonal(
-      onPressed: () {
-        GlobalData().grpcReply = false;
-        onReload();
-      },
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.resolveWith((states) {
-          return Theme.of(context).colorScheme.primary.withAlpha(20);
-        }),
-      ),
-      child: Text(
-        '暂时关闭gRPC加载评论',
-        style: TextStyle(color: Theme.of(context).colorScheme.primary),
-      ),
+Widget replyErrorWidget(context, isSliver, errMsg, onReload) => HttpError(
+      isSliver: isSliver,
+      errMsg:
+          '${errMsg.startsWith('gRPC Error') ? '如无法加载评论：\n关闭代理\n或设置中关闭使用gRPC加载评论\n\n' : ''}$errMsg',
+      callback: onReload,
+      extraWidget: errMsg.startsWith('gRPC Error') && GlobalData().grpcReply
+          ? FilledButton.tonal(
+              onPressed: () {
+                GlobalData().grpcReply = false;
+                onReload();
+              },
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.resolveWith((states) {
+                  return Theme.of(context).colorScheme.primary.withAlpha(20);
+                }),
+              ),
+              child: Text(
+                '暂时关闭gRPC加载评论',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+            )
+          : null,
     );

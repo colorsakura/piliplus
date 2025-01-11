@@ -129,8 +129,7 @@ class ReplyHttp {
       }
       return LoadingState.success(mainListReply);
     } else {
-      return LoadingState.error(
-          '${res['msg'].startsWith('gRPC Error') ? '如无法加载评论：\n关闭代理\n或设置中关闭使用gRPC加载评论\n\n' : ''}${res['msg']}');
+      return LoadingState.error(res['msg']);
     }
   }
 

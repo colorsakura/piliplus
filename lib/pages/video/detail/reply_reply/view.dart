@@ -13,7 +13,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -412,22 +411,11 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
                 : _replyItem(loadingState.response[index], index);
           }
         }(),
-      Error() => CustomScrollView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          slivers: [
-            HttpError(
-              errMsg: loadingState.errMsg,
-              callback: _videoReplyReplyController.onReload,
-              extraWidget: loadingState.errMsg.startsWith('gRPC Error') &&
-                      GlobalData().grpcReply
-                  ? grpcReplyErrorWidget(
-                      context,
-                      _videoReplyReplyController.onReload,
-                    )
-                  : null,
-            )
-          ],
+      Error() => replyErrorWidget(
+          context,
+          false,
+          loadingState.errMsg,
+          _videoReplyReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

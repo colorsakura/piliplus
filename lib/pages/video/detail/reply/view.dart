@@ -297,13 +297,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               errMsg: '还没有评论',
               callback: _videoReplyController.onReload,
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
-          callback: _videoReplyController.onReload,
-          extraWidget: loadingState.errMsg.startsWith('gRPC Error') &&
-                  GlobalData().grpcReply
-              ? grpcReplyErrorWidget(context, _videoReplyController.onReload)
-              : null,
+      Error() => replyErrorWidget(
+          context,
+          true,
+          loadingState.errMsg,
+          _videoReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };
