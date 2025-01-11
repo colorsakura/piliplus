@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
+    show kDragContainerExtentPercentage, displacement;
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
@@ -212,6 +214,12 @@ class GStorage {
   static double get blockLimit =>
       setting.get(SettingBoxKey.blockLimit, defaultValue: 0.0);
 
+  static double get refreshDragPercentage =>
+      setting.get(SettingBoxKey.refreshDragPercentage, defaultValue: 0.25);
+
+  static double get refreshDisplacement =>
+      setting.get(SettingBoxKey.refreshDisplacement, defaultValue: 40.0);
+
   static String get blockUserID {
     String blockUserID =
         setting.get(SettingBoxKey.blockUserID, defaultValue: '');
@@ -390,6 +398,8 @@ class GStorage {
     );
     // 视频设置
     video = await Hive.openBox('video');
+    displacement = GStorage.refreshDisplacement;
+    kDragContainerExtentPercentage = GStorage.refreshDragPercentage;
     // 设置全局变量
     GlobalData()
       ..imgQuality = defaultPicQa
@@ -538,6 +548,8 @@ class SettingBoxKey {
       banWordForZone = 'banWordForZone',
       savedRcmdTip = 'savedRcmdTip',
       openInBrowser = 'openInBrowser',
+      refreshDragPercentage = 'refreshDragPercentage',
+      refreshDisplacement = 'refreshDisplacement',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:PiliPlus/models/common/theme_type.dart';
+import 'package:get/get_utils/get_utils.dart';
 
 class SlideDialog<T extends num> extends StatefulWidget {
   final T value;
@@ -8,6 +8,7 @@ class SlideDialog<T extends num> extends StatefulWidget {
   final double max;
   final int? divisions;
   final String? suffix;
+  final int precise;
 
   const SlideDialog({
     super.key,
@@ -17,6 +18,7 @@ class SlideDialog<T extends num> extends StatefulWidget {
     required this.max,
     this.divisions,
     this.suffix,
+    this.precise = 1,
   });
 
   @override
@@ -47,11 +49,11 @@ class _SlideDialogState<T extends num> extends State<SlideDialog<T>> {
           value: _tempValue,
           min: widget.min,
           max: widget.max,
-          divisions: widget.divisions ?? 10,
+          divisions: widget.divisions,
           label: '$_tempValue${widget.suffix ?? ''}',
           onChanged: (double value) {
             setState(() {
-              _tempValue = value;
+              _tempValue = value.toPrecision(widget.precise);
             });
           },
         ),

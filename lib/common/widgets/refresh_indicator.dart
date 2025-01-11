@@ -10,7 +10,7 @@ Widget refreshIndicator({
   required Widget child,
 }) {
   return RefreshIndicator(
-    displacement: 10,
+    displacement: displacement,
     onRefresh: onRefresh,
     child: child,
   );
@@ -22,7 +22,9 @@ Widget refreshIndicator({
 
 // The over-scroll distance that moves the indicator to its maximum
 // displacement, as a percentage of the scrollable's container extent.
-const double _kDragContainerExtentPercentage = 0.15;
+
+double displacement = 40;
+double kDragContainerExtentPercentage = 0.25;
 
 // How much the scroll's drag gesture can overshoot the RefreshIndicator's
 // displacement; max displacement = _kDragSizeFactorLimit * displacement.
@@ -471,7 +473,7 @@ class RefreshIndicatorState extends State<RefreshIndicator>
     assert(_mode == _RefreshIndicatorMode.drag ||
         _mode == _RefreshIndicatorMode.armed);
     double newValue =
-        _dragOffset! / (containerExtent * _kDragContainerExtentPercentage);
+        _dragOffset! / (containerExtent * kDragContainerExtentPercentage);
     if (_mode == _RefreshIndicatorMode.armed) {
       newValue = math.max(newValue, 1.0 / _kDragSizeFactorLimit);
     }

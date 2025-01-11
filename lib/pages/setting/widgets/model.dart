@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
+    show kDragContainerExtentPercentage, displacement;
 import 'package:PiliPlus/http/interceptor_anonymity.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
@@ -161,7 +163,7 @@ List<SettingsModel> get styleSettings => [
                 );
               });
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.maxRowWidth, result);
+            await GStorage.setting.put(SettingBoxKey.maxRowWidth, result);
             SmartDialog.showToast('重启生效');
             setState();
           }
@@ -208,7 +210,8 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.upPanelPosition, result.index);
+            await GStorage.setting
+                .put(SettingBoxKey.upPanelPosition, result.index);
             SmartDialog.showToast('重启生效');
             setState();
           }
@@ -238,13 +241,14 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.dynamicBadgeMode, result.index);
             MainController mainController = Get.put(MainController());
             mainController.dynamicBadgeMode =
                 DynamicBadgeMode.values[result.index];
             if (mainController.dynamicBadgeMode != DynamicBadgeMode.hidden) {
               mainController.getUnreadDynamic();
             }
+            await GStorage.setting
+                .put(SettingBoxKey.dynamicBadgeMode, result.index);
             SmartDialog.showToast('设置成功');
             setState();
           }
@@ -269,7 +273,6 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.msgBadgeMode, result.index);
             MainController mainController = Get.put(MainController());
             mainController.msgBadgeMode = DynamicBadgeMode.values[result.index];
             if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
@@ -277,6 +280,8 @@ List<SettingsModel> get styleSettings => [
             } else {
               mainController.msgUnReadCount.value = '';
             }
+            await GStorage.setting
+                .put(SettingBoxKey.msgBadgeMode, result.index);
             SmartDialog.showToast('设置成功');
             setState();
           }
@@ -301,13 +306,13 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.msgUnReadTypeV2,
-                result.map((item) => item.index).toList()..sort());
             MainController mainController = Get.put(MainController());
             mainController.msgUnReadTypes = result;
             if (mainController.msgBadgeMode != DynamicBadgeMode.hidden) {
               mainController.queryUnreadMsg();
             }
+            await GStorage.setting.put(SettingBoxKey.msgUnReadTypeV2,
+                result.map((item) => item.index).toList()..sort());
             SmartDialog.showToast('设置成功');
             setState();
           }
@@ -342,9 +347,10 @@ List<SettingsModel> get styleSettings => [
             context: Get.context!,
             title: '图片质量',
             initValue: GStorage.picQuality,
-            callback: (picQuality) {
-              GStorage.setting.put(SettingBoxKey.defaultPicQa, picQuality);
+            callback: (picQuality) async {
               GlobalData().imgQuality = picQuality;
+              await GStorage.setting
+                  .put(SettingBoxKey.defaultPicQa, picQuality);
               setState();
             },
           );
@@ -368,8 +374,9 @@ List<SettingsModel> get styleSettings => [
             context: Get.context!,
             title: '查看大图质量',
             initValue: GStorage.previewQ,
-            callback: (picQuality) {
-              GStorage.setting.put(SettingBoxKey.previewQuality, picQuality);
+            callback: (picQuality) async {
+              await GStorage.setting
+                  .put(SettingBoxKey.previewQuality, picQuality);
               setState();
             },
           );
@@ -401,8 +408,8 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
+            await GStorage.setting.put(SettingBoxKey.defaultToastOp, result);
             SmartDialog.showToast('设置成功');
-            GStorage.setting.put(SettingBoxKey.defaultToastOp, result);
             setState();
           }
         },
@@ -467,7 +474,7 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultHomePage, result);
+            await GStorage.setting.put(SettingBoxKey.defaultHomePage, result);
             SmartDialog.showToast('设置成功，重启生效');
             setState();
           }
@@ -619,7 +626,8 @@ List<SettingsModel> get playSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.subtitlePreference, result);
+            await GStorage.setting
+                .put(SettingBoxKey.subtitlePreference, result);
             setState();
           }
         },
@@ -730,7 +738,7 @@ List<SettingsModel> get playSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.fullScreenMode, result);
+            await GStorage.setting.put(SettingBoxKey.fullScreenMode, result);
             setState();
           }
         },
@@ -754,7 +762,8 @@ List<SettingsModel> get playSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.btmProgressBehavior, result);
+            await GStorage.setting
+                .put(SettingBoxKey.btmProgressBehavior, result);
             setState();
           }
         },
@@ -826,7 +835,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.CDNService, result);
+            await GStorage.setting.put(SettingBoxKey.CDNService, result);
             setState();
           }
         },
@@ -867,7 +876,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultVideoQa, result);
+            await GStorage.setting.put(SettingBoxKey.defaultVideoQa, result);
             setState();
           }
         },
@@ -892,7 +901,8 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultVideoQaCellular, result);
+            await GStorage.setting
+                .put(SettingBoxKey.defaultVideoQaCellular, result);
             setState();
           }
         },
@@ -917,7 +927,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultAudioQa, result);
+            await GStorage.setting.put(SettingBoxKey.defaultAudioQa, result);
             setState();
           }
         },
@@ -942,7 +952,8 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultAudioQaCellular, result);
+            await GStorage.setting
+                .put(SettingBoxKey.defaultAudioQaCellular, result);
             setState();
           }
         },
@@ -966,7 +977,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultDecode, result);
+            await GStorage.setting.put(SettingBoxKey.defaultDecode, result);
             setState();
           }
         },
@@ -990,7 +1001,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.secondDecode, result);
+            await GStorage.setting.put(SettingBoxKey.secondDecode, result);
             setState();
           }
         },
@@ -1042,7 +1053,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.videoSync, result);
+            await GStorage.setting.put(SettingBoxKey.videoSync, result);
             setState();
           }
         },
@@ -1066,7 +1077,7 @@ List<SettingsModel> get videoSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.hardwareDecoding, result);
+            await GStorage.setting.put(SettingBoxKey.hardwareDecoding, result);
             setState();
           }
         },
@@ -1098,7 +1109,7 @@ List<SettingsModel> get recommendSettings => [
                 SmartDialog.showToast('尚未登录，无法收到个性化推荐');
               }
             }
-            GStorage.setting.put(SettingBoxKey.defaultRcmdType, result);
+            await GStorage.setting.put(SettingBoxKey.defaultRcmdType, result);
             SmartDialog.showToast('下次启动时生效');
             setState();
           }
@@ -1168,7 +1179,7 @@ List<SettingsModel> get recommendSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting
+            await GStorage.setting
                 .put(SettingBoxKey.minLikeRatioForRecommend, result);
             RecommendFilter.update();
             setState();
@@ -1215,8 +1226,9 @@ List<SettingsModel> get recommendSettings => [
             },
           );
           if (result != null) {
-            void updateDuration(int value) {
-              GStorage.setting.put(SettingBoxKey.minDurationForRcmd, value);
+            void updateDuration(int value) async {
+              await GStorage.setting
+                  .put(SettingBoxKey.minDurationForRcmd, value);
               RecommendFilter.update();
               setState();
             }
@@ -1653,6 +1665,63 @@ List<SettingsModel> get extraSettings => [
         defaultVal: false,
       ),
       SettingsModel(
+        settingsType: SettingsType.normal,
+        title: '刷新滑动距离',
+        leading: Icon(Icons.refresh),
+        setKey: SettingBoxKey.refreshDragPercentage,
+        getSubtitle: () => '当前滑动距离: ${GStorage.refreshDragPercentage}x',
+        onTap: (setState) async {
+          double? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return SlideDialog<double>(
+                title: '刷新滑动距离',
+                min: 0.1,
+                max: 0.5,
+                divisions: 8,
+                precise: 2,
+                value: GStorage.refreshDragPercentage,
+              );
+            },
+          );
+          if (result != null) {
+            kDragContainerExtentPercentage = result;
+            await GStorage.setting
+                .put(SettingBoxKey.refreshDragPercentage, result);
+            Get.forceAppUpdate();
+            setState();
+          }
+        },
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        title: '刷新指示器高度',
+        leading: Icon(Icons.height),
+        setKey: SettingBoxKey.refreshDisplacement,
+        getSubtitle: () => '当前指示器高度: ${GStorage.refreshDisplacement}',
+        onTap: (setState) async {
+          double? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return SlideDialog<double>(
+                title: '刷新指示器高度',
+                min: 10.0,
+                max: 100.0,
+                divisions: 9,
+                value: GStorage.refreshDisplacement,
+              );
+            },
+          );
+          if (result != null) {
+            displacement = result;
+            await GStorage.setting
+                .put(SettingBoxKey.refreshDisplacement, result);
+            Get.forceAppUpdate();
+            setState();
+          }
+        },
+      ),
+      SettingsModel(
         settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
@@ -1743,7 +1812,7 @@ List<SettingsModel> get extraSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.replySortType, result);
+            await GStorage.setting.put(SettingBoxKey.replySortType, result);
             setState();
           }
         },
@@ -1768,7 +1837,8 @@ List<SettingsModel> get extraSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.defaultDynamicType, result);
+            await GStorage.setting
+                .put(SettingBoxKey.defaultDynamicType, result);
             setState();
           }
         },
@@ -1792,7 +1862,7 @@ List<SettingsModel> get extraSettings => [
             },
           );
           if (result != null) {
-            GStorage.setting.put(SettingBoxKey.memberTab, result.index);
+            await GStorage.setting.put(SettingBoxKey.memberTab, result.index);
             setState();
           }
         },
@@ -1950,10 +2020,7 @@ SettingsModel getBanwordModel({
                 child: const Text('保存'),
                 onPressed: () async {
                   Get.back();
-                  await GStorage.setting.put(
-                    key,
-                    banWord,
-                  );
+                  await GStorage.setting.put(key, banWord);
                   setState();
                   SmartDialog.showToast('已保存');
                 },
