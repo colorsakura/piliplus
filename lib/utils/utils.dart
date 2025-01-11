@@ -40,6 +40,24 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
+  static void handleWebview(String url, {bool off = false}) {
+    if (GStorage.openInBrowser) {
+      launchURL(url);
+    } else {
+      if (off) {
+        Get.offNamed(
+          '/webview',
+          parameters: {'url': url},
+        );
+      } else {
+        toDupNamed(
+          '/webview',
+          parameters: {'url': url},
+        );
+      }
+    }
+  }
+
   static bool viewPgcFromUri(String uri) {
     String? id = RegExp(r'(ep|ss)\d+').firstMatch(uri)?.group(0);
     if (id != null) {

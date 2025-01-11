@@ -1035,10 +1035,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         try {
-                          Get.toNamed(
-                            '/webview',
-                            parameters: {'url': matchStr},
-                          );
+                          Utils.handleWebview(matchStr);
                         } catch (err) {
                           SmartDialog.showToast(err.toString());
                         }

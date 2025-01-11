@@ -66,14 +66,7 @@ class UrlUtils {
         preventDuplicates: false,
       );
     } else {
-      await Get.toNamed(
-        '/webview',
-        parameters: {
-          'url': redirectUrl,
-          'type': 'url',
-          'pageTitle': title,
-        },
-      );
+      Utils.handleWebview(redirectUrl);
     }
   }
 }

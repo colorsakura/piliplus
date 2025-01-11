@@ -1647,6 +1647,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '使用外部浏览器打开链接',
+        leading: Icon(Icons.open_in_browser),
+        setKey: SettingBoxKey.openInBrowser,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

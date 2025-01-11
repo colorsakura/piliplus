@@ -286,11 +286,7 @@ Widget forWard(item, context, ctr, source, callback, {floor = 1}) {
       final Map music = item.modules.moduleDynamic.major.music;
       return InkWell(
         onTap: () {
-          Get.toNamed('/webview', parameters: {
-            'url': "https:${music['jump_url']}",
-            'type': 'url',
-            'pageTitle': music['title']
-          });
+          Utils.handleWebview("https:${music['jump_url']}");
         },
         child: Container(
           width: double.infinity,

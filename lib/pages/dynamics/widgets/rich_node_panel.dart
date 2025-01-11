@@ -108,16 +108,9 @@ InlineSpan? richNode(item, context) {
                     PiliScheme.routePush(Uri.parse(url));
                     return;
                   }
-                  Get.toNamed(
-                    '/webview',
-                    parameters: {
-                      'url': url.startsWith('//')
-                          ? "https://${url.split('//').last}"
-                          : url,
-                      'type': 'url',
-                      'pageTitle': ''
-                    },
-                  );
+                  Utils.handleWebview(url.startsWith('//')
+                      ? "https://${url.split('//').last}"
+                      : url);
                 },
                 child: Text(
                   i.text ?? '',

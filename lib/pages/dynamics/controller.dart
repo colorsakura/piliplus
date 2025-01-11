@@ -138,14 +138,7 @@ class DynamicsController extends GetxController
             'dynamicType': url.split('//').last.split('/')[1]
           });
         } else {
-          Utils.toDupNamed(
-            '/webview',
-            parameters: {
-              'url': 'https:$url',
-              'type': 'note',
-              'pageTitle': title
-            },
-          );
+          Utils.handleWebview('https:$url');
         }
 
         break;

@@ -870,24 +870,10 @@ class ReplyItemGrpc extends StatelessWidget {
                               redirectUrl,
                             );
                           } else {
-                            Get.toNamed(
-                              '/webview',
-                              parameters: {
-                                'url': redirectUrl,
-                                'type': 'url',
-                                'pageTitle': title
-                              },
-                            );
+                            Utils.handleWebview(redirectUrl);
                           }
                         } else {
-                          Get.toNamed(
-                            '/webview',
-                            parameters: {
-                              'url': matchStr,
-                              'type': 'url',
-                              'pageTitle': title
-                            },
-                          );
+                          Utils.handleWebview(matchStr);
                         }
                       }
                     },
@@ -922,10 +908,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => Get.toNamed(
-                        '/webview',
-                        parameters: {'url': matchStr},
-                      ),
+                  ..onTap = () => Utils.handleWebview(matchStr),
               ),
             );
           } else {
@@ -966,14 +949,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    Get.toNamed(
-                      '/webview',
-                      parameters: {
-                        'url': patternStr,
-                        'type': 'url',
-                        'pageTitle': content.url[patternStr]!.title
-                      },
-                    );
+                    Utils.handleWebview(patternStr);
                   },
               )
             ],
@@ -1028,14 +1004,7 @@ class ReplyItemGrpc extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           recognizer: TapGestureRecognizer()
-            ..onTap = () => Get.toNamed(
-                  '/webview',
-                  parameters: {
-                    'url': content.richText.note.clickUrl,
-                    'type': 'note',
-                    'pageTitle': '笔记预览'
-                  },
-                ),
+            ..onTap = () => Utils.handleWebview(content.richText.note.clickUrl),
         ),
       );
     }

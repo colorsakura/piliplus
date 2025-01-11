@@ -190,14 +190,7 @@ class AiDetail extends StatelessWidget {
                   ..onTap = () {
                     // 处理点击事件
                     try {
-                      Get.toNamed(
-                        '/webview',
-                        parameters: {
-                          'url': match.group(0)!,
-                          'type': 'url',
-                          'pageTitle': match.group(0)!,
-                        },
-                      );
+                      Utils.handleWebview(match.group(0)!);
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
                     }

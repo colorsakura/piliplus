@@ -292,21 +292,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                             ),
                             //内置浏览器打开
                             IconButton(
-                                tooltip: '内置浏览器打开',
+                                tooltip: '浏览器打开',
                                 onPressed: () {
-                                  Get.offNamed(
-                                    '/webview',
-                                    parameters: {
-                                      'url':
-                                          'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
-                                      'type': 'liveRoom',
-                                      'pageTitle': _liveRoomController
-                                          .roomInfoH5
-                                          .value
-                                          .anchorInfo!
-                                          .baseInfo!
-                                          .uname!,
-                                    },
+                                  Utils.handleWebview(
+                                    'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
+                                    off: true,
                                   );
                                 },
                                 icon: const Icon(Icons.open_in_browser)),

@@ -318,6 +318,9 @@ class GStorage {
   static bool get horizontalPreview => GStorage.setting
       .get(SettingBoxKey.horizontalPreview, defaultValue: false);
 
+  static bool get openInBrowser =>
+      GStorage.setting.get(SettingBoxKey.openInBrowser, defaultValue: false);
+
   static bool get savedRcmdTip =>
       GStorage.setting.get(SettingBoxKey.savedRcmdTip, defaultValue: true);
 
@@ -534,6 +537,7 @@ class SettingBoxKey {
       banWordForReply = 'banWordForReply',
       banWordForZone = 'banWordForZone',
       savedRcmdTip = 'savedRcmdTip',
+      openInBrowser = 'openInBrowser',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
