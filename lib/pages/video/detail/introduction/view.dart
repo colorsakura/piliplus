@@ -548,64 +548,66 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
               Stack(
                 children: [
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: showIntroDetail,
-                    child: Row(
-                      children: <Widget>[
-                        statView(
-                          context: context,
-                          theme: 'gray',
-                          view: !widget.loadingStatus
-                              ? videoDetail.stat?.view ?? '-'
-                              : videoItem['stat']?.view ?? '-',
-                          size: 'medium',
-                        ),
-                        const SizedBox(width: 10),
-                        statDanMu(
-                          context: context,
-                          theme: 'gray',
-                          danmu: !widget.loadingStatus
-                              ? videoDetail.stat?.danmu ?? '-'
-                              : videoItem['stat']?.danmu ?? '-',
-                          size: 'medium',
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          Utils.dateFormat(
-                              !widget.loadingStatus
-                                  ? videoDetail.pubdate
-                                  : videoItem['pubdate'],
-                              formatType: 'detail'),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: t.colorScheme.outline,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        children: <Widget>[
+                          statView(
+                            context: context,
+                            theme: 'gray',
+                            view: !widget.loadingStatus
+                                ? videoDetail.stat?.view ?? '-'
+                                : videoItem['stat']?.view ?? '-',
+                            size: 'medium',
                           ),
-                        ),
-                        if (MineController.anonymity.value) ...<Widget>[
                           const SizedBox(width: 10),
-                          Icon(
-                            MdiIcons.incognito,
-                            size: 15,
-                            color: t.colorScheme.outline,
-                            semanticLabel: '无痕',
+                          statDanMu(
+                            context: context,
+                            theme: 'gray',
+                            danmu: !widget.loadingStatus
+                                ? videoDetail.stat?.danmu ?? '-'
+                                : videoItem['stat']?.danmu ?? '-',
+                            size: 'medium',
                           ),
-                        ],
-                        const SizedBox(width: 10),
-                        if (videoIntroController.isShowOnlineTotal)
-                          Obx(
-                            () => Text(
-                              '${videoIntroController.total.value}人在看',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: t.colorScheme.outline,
-                              ),
+                          const SizedBox(width: 10),
+                          Text(
+                            Utils.dateFormat(
+                                !widget.loadingStatus
+                                    ? videoDetail.pubdate
+                                    : videoItem['pubdate'],
+                                formatType: 'detail'),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: t.colorScheme.outline,
                             ),
                           ),
-                      ],
+                          if (MineController.anonymity.value) ...<Widget>[
+                            const SizedBox(width: 10),
+                            Icon(
+                              MdiIcons.incognito,
+                              size: 15,
+                              color: t.colorScheme.outline,
+                              semanticLabel: '无痕',
+                            ),
+                          ],
+                          const SizedBox(width: 10),
+                          if (videoIntroController.isShowOnlineTotal)
+                            Obx(
+                              () => Text(
+                                '${videoIntroController.total.value}人在看',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: t.colorScheme.outline,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                   if (videoIntroController.enableAi)
