@@ -53,7 +53,7 @@ class LiveController extends CommonController {
       }
       followEnd = list.length >= liveCount.value ||
           list.isEmpty ||
-          res['data'].list.isNullOrEmpty;
+          (res['data'].list as List?).isNullOrEmpty;
       followListState.value = LoadingState.success(list);
     } else {
       followListState.value = LoadingState.error(res['msg']);
