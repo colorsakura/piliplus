@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -299,26 +300,9 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _videoReplyController.onReload,
-          extraWidget: GlobalData().grpcReply
-              ? FilledButton.tonal(
-                  onPressed: () {
-                    GlobalData().grpcReply = false;
-                    _videoReplyController.onReload();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withAlpha(20);
-                    }),
-                  ),
-                  child: Text(
-                    '暂时关闭gRPC加载评论',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                )
+          extraWidget: loadingState.errMsg.startsWith('gRPC Error') &&
+                  GlobalData().grpcReply
+              ? grpcReplyErrorWidget(context, _videoReplyController.onReload)
               : null,
         ),
       LoadingState() => throw UnimplementedError(),

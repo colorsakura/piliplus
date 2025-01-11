@@ -491,7 +491,7 @@ class Utils {
           }
         }
 
-        if (data.episodes?.isEmpty == true) {
+        if (data.episodes.isNullOrEmpty) {
           SmartDialog.showToast('资源加载失败');
           return;
         }

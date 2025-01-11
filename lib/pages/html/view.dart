@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/article_content.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
@@ -488,26 +489,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _htmlRenderCtr.onReload,
-          extraWidget: GlobalData().grpcReply
-              ? FilledButton.tonal(
-                  onPressed: () {
-                    GlobalData().grpcReply = false;
-                    _htmlRenderCtr.onReload();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withAlpha(20);
-                    }),
-                  ),
-                  child: Text(
-                    '暂时关闭gRPC加载评论',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                )
+          extraWidget: loadingState.errMsg.startsWith('gRPC Error') &&
+                  GlobalData().grpcReply
+              ? grpcReplyErrorWidget(context, _htmlRenderCtr.onReload)
               : null,
         ),
       LoadingState() => throw UnimplementedError(),

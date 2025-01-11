@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
@@ -556,26 +557,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _dynamicDetailController.onReload,
-          extraWidget: GlobalData().grpcReply
-              ? FilledButton.tonal(
-                  onPressed: () {
-                    GlobalData().grpcReply = false;
-                    _dynamicDetailController.onReload();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withAlpha(20);
-                    }),
-                  ),
-                  child: Text(
-                    '暂时关闭gRPC加载评论',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                )
+          extraWidget: loadingState.errMsg.startsWith('gRPC Error') &&
+                  GlobalData().grpcReply
+              ? grpcReplyErrorWidget(context, _dynamicDetailController.onReload)
               : null,
         ),
       LoadingState() => throw UnimplementedError(),
