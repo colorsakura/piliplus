@@ -857,9 +857,6 @@ class VideoDetailController extends GetxController
     skipTimer ??= Timer.periodic(const Duration(seconds: 4), (_) {
       if (listData.isNotEmpty) {
         onRemoveItem(listData.length - 1, listData.last);
-      } else {
-        skipTimer?.cancel();
-        skipTimer = null;
       }
     });
   }
@@ -869,6 +866,10 @@ class VideoDetailController extends GetxController
         () {
       try {
         listData.removeAt(index);
+        if (listData.isEmpty) {
+          skipTimer?.cancel();
+          skipTimer = null;
+        }
         listKey.currentState?.removeItem(
           index,
           (context, animation) => buildItem(item, animation),
