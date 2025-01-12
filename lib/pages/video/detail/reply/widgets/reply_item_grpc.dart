@@ -809,7 +809,6 @@ class ReplyItemGrpc extends StatelessWidget {
                         if (matchStr.startsWith('BV')) {
                           UrlUtils.matchUrlPush(
                             matchStr,
-                            title,
                             '',
                           );
                         } else if (RegExp(r'^[Cc][Vv][0-9]+$')
@@ -866,7 +865,6 @@ class ReplyItemGrpc extends StatelessWidget {
                           if (lastPathSegment.startsWith('BV')) {
                             UrlUtils.matchUrlPush(
                               lastPathSegment,
-                              title,
                               redirectUrl,
                             );
                           } else {
@@ -908,7 +906,26 @@ class ReplyItemGrpc extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => Utils.handleWebview(matchStr),
+                  ..onTap = () async {
+                    if (matchStr.startsWith('https://b23.tv')) {
+                      final String redirectUrl =
+                          (await UrlUtils.parseRedirectUrl(matchStr)) ??
+                              matchStr;
+                      final String pathSegment = Uri.parse(redirectUrl).path;
+                      final String lastPathSegment =
+                          pathSegment.split('/').last;
+                      if (lastPathSegment.startsWith('BV')) {
+                        UrlUtils.matchUrlPush(
+                          lastPathSegment,
+                          redirectUrl,
+                        );
+                      } else {
+                        PiliScheme.routePush(Uri.parse(matchStr));
+                      }
+                    } else {
+                      PiliScheme.routePush(Uri.parse(matchStr));
+                    }
+                  },
               ),
             );
           } else {

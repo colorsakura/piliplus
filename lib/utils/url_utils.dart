@@ -50,7 +50,6 @@ class UrlUtils {
   // 匹配url路由跳转
   static matchUrlPush(
     String pathSegment,
-    String title,
     String redirectUrl,
   ) async {
     final Map matchRes = IdUtils.matchAvorBv(input: pathSegment);

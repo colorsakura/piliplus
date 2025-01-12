@@ -201,7 +201,7 @@ class PiliScheme {
         //Utils.toDupNamed(
         //   '/webview',
         //   parameters: {
-        //     'url': value.dataString ?? "",
+        //     'url': ,
         //     'type': 'url',
         //     'pageTitle': ''
         //   },
@@ -336,24 +336,17 @@ class PiliScheme {
       } else if (lastPathSegment.startsWith('BV')) {
         UrlUtils.matchUrlPush(
           lastPathSegment,
-          '',
           redirectUrl,
         );
       } else {
-        Utils.toDupNamed(
-          '/webview',
-          parameters: {'url': redirectUrl, 'type': 'url', 'pageTitle': ''},
-        );
+        Utils.handleWebview(redirectUrl);
       }
       return;
     }
 
     List<String> pathPart = path.split('/');
     if (pathPart.length < 3) {
-      Utils.toDupNamed(
-        '/webview',
-        parameters: {'url': value.toString()},
-      );
+      Utils.handleWebview(value.toString());
       return;
     }
     final String area = pathPart[1] == 'mobile' ? pathPart[2] : pathPart[1];
@@ -409,15 +402,8 @@ class PiliScheme {
         } else if (res.containsKey('BV')) {
           videoPush(null, res['BV'] as String);
         } else {
-          SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
-          Utils.toDupNamed(
-            '/webview',
-            parameters: {
-              'url': value.toString(),
-              'type': 'url',
-              'pageTitle': ''
-            },
-          );
+          // SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
+          Utils.handleWebview(value.toString());
         }
     }
   }
