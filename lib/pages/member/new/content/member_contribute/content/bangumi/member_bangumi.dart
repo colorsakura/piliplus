@@ -63,7 +63,7 @@ class _MemberBangumiState extends State<MemberBangumi>
                       gridDelegate: SliverGridDelegateWithExtentAndRatio(
                         mainAxisSpacing: StyleString.cardSpace,
                         crossAxisSpacing: StyleString.cardSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
+                        maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
                         childAspectRatio: 0.75,
                         mainAxisExtent:
                             MediaQuery.textScalerOf(context).scale(30),

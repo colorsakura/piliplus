@@ -96,7 +96,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
                                     SliverGridDelegateWithExtentAndRatio(
                                   mainAxisSpacing: StyleString.safeSpace,
                                   crossAxisSpacing: StyleString.safeSpace,
-                                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
                                   childAspectRatio:
                                       StyleString.aspectRatio * 2.4,
                                 ),

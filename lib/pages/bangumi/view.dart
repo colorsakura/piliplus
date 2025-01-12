@@ -114,7 +114,7 @@ class _BangumiPageState extends State<BangumiPage>
                       ),
                     ),
                     SizedBox(
-                      height: Grid.maxRowWidth / 2 / 0.75 +
+                      height: Grid.mediumCardWidth / 2 / 0.75 +
                           MediaQuery.textScalerOf(context).scale(50),
                       child: Obx(
                         () => _buildFollowBody(
@@ -163,7 +163,7 @@ class _BangumiPageState extends State<BangumiPage>
                 // 列间距
                 crossAxisSpacing: StyleString.cardSpace,
                 // 最大宽度
-                maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
+                maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
                 childAspectRatio: 0.75,
                 mainAxisExtent: MediaQuery.textScalerOf(context).scale(50),
               ),
@@ -199,7 +199,7 @@ class _BangumiPageState extends State<BangumiPage>
           _bangumiController.queryBangumiFollow(false);
         }
         return Container(
-          width: Grid.maxRowWidth / 2,
+          width: Grid.mediumCardWidth / 2,
           margin: EdgeInsets.only(
             left: StyleString.safeSpace,
             right: index == loadingState.response.length - 1

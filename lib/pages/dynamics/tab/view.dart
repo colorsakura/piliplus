@@ -111,7 +111,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         slivers: [
           const SliverFillRemaining(),
           SliverConstrainedCrossAxis(
-            maxExtent: Grid.maxRowWidth * 2,
+            maxExtent: Grid.mediumCardWidth * 2,
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -129,7 +129,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
         crossAxisSpacing: StyleString.cardSpace / 2,
         mainAxisSpacing: StyleString.cardSpace / 2,
-        maxCrossAxisExtent: Grid.maxRowWidth * 2,
+        maxCrossAxisExtent: Grid.smallCardWidth * 2,
         childAspectRatio: StyleString.aspectRatio,
         mainAxisExtent: 50,
       ),
@@ -148,7 +148,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? dynamicsWaterfallFlow
               ? SliverWaterfallFlow.extent(
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  maxCrossAxisExtent: Grid.smallCardWidth * 2,
                   //cacheExtent: 0.0,
                   crossAxisSpacing: StyleString.cardSpace / 2,
                   mainAxisSpacing: StyleString.cardSpace / 2,
@@ -184,7 +184,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                   slivers: [
                     const SliverFillRemaining(),
                     SliverConstrainedCrossAxis(
-                      maxExtent: Grid.maxRowWidth * 2,
+                      maxExtent: Grid.mediumCardWidth * 2,
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {

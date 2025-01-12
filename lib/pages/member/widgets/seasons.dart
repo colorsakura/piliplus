@@ -65,7 +65,7 @@ class MemberSeasonsPanel extends StatelessWidget {
                     gridDelegate: SliverGridDelegateWithExtentAndRatio(
                       mainAxisSpacing: StyleString.cardSpace,
                       crossAxisSpacing: StyleString.cardSpace,
-                      maxCrossAxisExtent: Grid.maxRowWidth,
+                      maxCrossAxisExtent: Grid.smallCardWidth,
                       childAspectRatio: 0.94,
                     ),
                     physics: const NeverScrollableScrollPhysics(),

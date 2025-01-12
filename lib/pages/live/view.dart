@@ -124,7 +124,7 @@ class _LivePageState extends State<LivePage>
         // 列间距
         crossAxisSpacing: StyleString.cardSpace,
         // 最大宽度
-        maxCrossAxisExtent: Grid.maxRowWidth,
+        maxCrossAxisExtent: Grid.smallCardWidth,
         childAspectRatio: StyleString.aspectRatio,
         mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
       ),
@@ -319,7 +319,7 @@ class _LivePageState extends State<LivePage>
             gridDelegate: SliverGridDelegateWithExtentAndRatio(
               mainAxisSpacing: StyleString.cardSpace,
               crossAxisSpacing: StyleString.cardSpace,
-              maxCrossAxisExtent: Grid.maxRowWidth,
+              maxCrossAxisExtent: Grid.smallCardWidth,
               childAspectRatio: StyleString.aspectRatio,
               mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
             ),

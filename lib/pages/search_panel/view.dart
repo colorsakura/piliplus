@@ -69,7 +69,7 @@ class _SearchPanelState extends State<SearchPanel>
           SliverGrid(
             gridDelegate: SliverGridDelegateWithExtentAndRatio(
               mainAxisSpacing: 2,
-              maxCrossAxisExtent: Grid.maxRowWidth * 2,
+              maxCrossAxisExtent: Grid.smallCardWidth * 2,
               childAspectRatio: StyleString.aspectRatio *
                   (widget.searchType == SearchType.media_bangumi ||
                           widget.searchType == SearchType.media_ft

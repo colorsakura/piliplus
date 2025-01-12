@@ -117,8 +117,11 @@ class GStorage {
   static int get previewQ =>
       setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
 
-  static double get maxRowWidth =>
-      setting.get(SettingBoxKey.maxRowWidth, defaultValue: 280.0);
+  static double get mediumCardWidth =>
+      setting.get(SettingBoxKey.mediumCardWidth, defaultValue: 280.0);
+
+  static double get smallCardWidth =>
+      setting.get(SettingBoxKey.smallCardWidth, defaultValue: 240.0);
 
   static UpPanelPosition get upPanelPosition =>
       UpPanelPosition.values[setting.get(SettingBoxKey.upPanelPosition,
@@ -589,7 +592,8 @@ class SettingBoxKey {
       customColor = 'customColor', // 自定义主题色
       enableSingleRow = 'enableSingleRow', // 首页单列
       displayMode = 'displayMode',
-      maxRowWidth = 'maxRowWidth', // 首页列最大宽度（dp）
+      mediumCardWidth = 'mediumCardWidth', // 首页列最大宽度（dp）
+      smallCardWidth = 'smallCardWidth',
       videoPlayerRemoveSafeArea = 'videoPlayerRemoveSafeArea', // 视频播放器移除安全边距
       // videoPlayerShowStatusBarBackgroundColor =
       //     'videoPlayerShowStatusBarBackgroundColor', // 播放页状态栏显示为背景色

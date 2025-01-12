@@ -293,7 +293,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
             mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
             childAspectRatio: StyleString.aspectRatio * 2.2,
           ),
           delegate: SliverChildBuilderDelegate(
@@ -311,7 +311,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithExtentAndRatio(
                   mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
                   childAspectRatio: StyleString.aspectRatio * 2.2,
                 ),
                 delegate: SliverChildBuilderDelegate(

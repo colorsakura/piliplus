@@ -82,7 +82,7 @@ Widget searchUserPanel(context, searchPanelCtr, LoadingState loadingState) {
                 ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
                     mainAxisExtent: 56,
                   ),
                   delegate: SliverChildBuilderDelegate(

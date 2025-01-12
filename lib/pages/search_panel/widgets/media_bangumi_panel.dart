@@ -24,7 +24,7 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                 ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
                     mainAxisExtent: 160,
                   ),
                   delegate: SliverChildBuilderDelegate(

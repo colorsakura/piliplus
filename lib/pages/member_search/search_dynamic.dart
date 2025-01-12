@@ -50,7 +50,7 @@ class SearchDynamic extends StatelessWidget {
                     ),
                     sliver: dynamicsWaterfallFlow
                         ? SliverWaterfallFlow.extent(
-                            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                            maxCrossAxisExtent: Grid.smallCardWidth * 2,
                             crossAxisSpacing: StyleString.safeSpace,
                             mainAxisSpacing: StyleString.safeSpace,
                             lastChildLayoutTypeBuilder: (index) {
@@ -72,7 +72,7 @@ class SearchDynamic extends StatelessWidget {
                             slivers: [
                               const SliverFillRemaining(),
                               SliverConstrainedCrossAxis(
-                                maxExtent: Grid.maxRowWidth * 2,
+                                maxExtent: Grid.mediumCardWidth * 2,
                                 sliver: SliverList(
                                   delegate: SliverChildBuilderDelegate(
                                     (context, index) {

@@ -154,8 +154,8 @@ List<SettingsModel> get styleSettings => [
               context: Get.context!,
               builder: (context) {
                 return SlideDialog<double>(
-                  title: '最大列宽度（默认280dp）',
-                  value: GStorage.maxRowWidth,
+                  title: '小卡最大列宽度（默认240dp）',
+                  value: GStorage.smallCardWidth,
                   min: 150.0,
                   max: 500.0,
                   divisions: 35,
@@ -163,15 +163,41 @@ List<SettingsModel> get styleSettings => [
                 );
               });
           if (result != null) {
-            await GStorage.setting.put(SettingBoxKey.maxRowWidth, result);
+            await GStorage.setting.put(SettingBoxKey.smallCardWidth, result);
             SmartDialog.showToast('重启生效');
             setState();
           }
         },
         leading: const Icon(Icons.calendar_view_week_outlined),
-        title: '列表宽度（dp）限制',
+        title: '小卡列表宽度（dp）限制',
         getSubtitle: () =>
-            '当前:${GStorage.maxRowWidth.toInt()}dp，屏幕宽度:${MediaQuery.of(Get.context!).size.width.toPrecision(2)}dp。宽度越小列数越多，横条、大卡会2倍折算',
+            '当前:${GStorage.mediumCardWidth.toInt()}dp，屏幕宽度:${MediaQuery.of(Get.context!).size.width.toPrecision(2)}dp。宽度越小列数越多。',
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        onTap: (setState) async {
+          double? result = await showDialog(
+              context: Get.context!,
+              builder: (context) {
+                return SlideDialog<double>(
+                  title: '中卡最大列宽度（默认280dp）',
+                  value: GStorage.mediumCardWidth,
+                  min: 150.0,
+                  max: 500.0,
+                  divisions: 35,
+                  suffix: 'dp',
+                );
+              });
+          if (result != null) {
+            await GStorage.setting.put(SettingBoxKey.mediumCardWidth, result);
+            SmartDialog.showToast('重启生效');
+            setState();
+          }
+        },
+        leading: const Icon(Icons.calendar_view_week_outlined),
+        title: '中卡列表宽度（dp）限制',
+        getSubtitle: () =>
+            '当前:${GStorage.mediumCardWidth.toInt()}dp，屏幕宽度:${MediaQuery.of(Get.context!).size.width.toPrecision(2)}dp。宽度越小列数越多。',
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

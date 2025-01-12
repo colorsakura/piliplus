@@ -21,7 +21,7 @@ Widget searchLivePanel(BuildContext context, ctr, LoadingState loadingState) {
             primary: false,
             controller: ctr!.scrollController,
             gridDelegate: SliverGridDelegateWithExtentAndRatio(
-              maxCrossAxisExtent: Grid.maxRowWidth,
+              maxCrossAxisExtent: Grid.smallCardWidth,
               crossAxisSpacing: StyleString.safeSpace,
               mainAxisSpacing: StyleString.safeSpace,
               childAspectRatio: StyleString.aspectRatio,

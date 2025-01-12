@@ -61,7 +61,7 @@ class _MemberHomeState extends State<MemberHome>
                       gridDelegate: SliverGridDelegateWithExtentAndRatio(
                         mainAxisSpacing: StyleString.cardSpace,
                         crossAxisSpacing: StyleString.cardSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth,
+                        maxCrossAxisExtent: Grid.smallCardWidth,
                         childAspectRatio: StyleString.aspectRatio,
                         mainAxisExtent:
                             MediaQuery.textScalerOf(context).scale(55),
@@ -188,7 +188,7 @@ class _MemberHomeState extends State<MemberHome>
                       gridDelegate: SliverGridDelegateWithExtentAndRatio(
                         mainAxisSpacing: StyleString.cardSpace,
                         crossAxisSpacing: StyleString.cardSpace,
-                        maxCrossAxisExtent: Grid.maxRowWidth / 3 * 2,
+                        maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
                         childAspectRatio: 0.75,
                         mainAxisExtent:
                             MediaQuery.textScalerOf(context).scale(30),

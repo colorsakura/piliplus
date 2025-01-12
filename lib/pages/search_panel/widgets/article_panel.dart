@@ -86,7 +86,7 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithExtentAndRatio(
                     mainAxisSpacing: 2,
-                    maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                    maxCrossAxisExtent: Grid.mediumCardWidth * 2,
                     childAspectRatio: StyleString.aspectRatio * 2.2,
                   ),
                   delegate: SliverChildBuilderDelegate(

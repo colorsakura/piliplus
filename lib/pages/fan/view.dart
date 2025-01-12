@@ -54,7 +54,7 @@ class _FansPageState extends State<FansPage> {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                maxCrossAxisExtent: Grid.smallCardWidth * 2,
                 mainAxisExtent: 56,
               ),
               delegate: SliverChildBuilderDelegate(

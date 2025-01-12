@@ -82,7 +82,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
               ),
               sliver: dynamicsWaterfallFlow
                   ? SliverWaterfallFlow.extent(
-                      maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                      maxCrossAxisExtent: Grid.smallCardWidth * 2,
                       //cacheExtent: 0.0,
                       crossAxisSpacing: StyleString.safeSpace,
                       mainAxisSpacing: StyleString.safeSpace,
@@ -117,7 +117,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                       slivers: [
                         const SliverFillRemaining(),
                         SliverConstrainedCrossAxis(
-                          maxExtent: Grid.maxRowWidth * 2,
+                          maxExtent: Grid.mediumCardWidth * 2,
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {

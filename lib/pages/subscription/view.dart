@@ -40,7 +40,7 @@ class _SubPageState extends State<SubPage> {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
             mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.maxRowWidth * 2,
+            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
             childAspectRatio: StyleString.aspectRatio * 2.2,
           ),
           delegate: SliverChildBuilderDelegate(
@@ -52,7 +52,7 @@ class _SubPageState extends State<SubPage> {
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.maxRowWidth * 2,
+                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
                 childAspectRatio: StyleString.aspectRatio * 2.2,
               ),
               delegate: SliverChildBuilderDelegate(
