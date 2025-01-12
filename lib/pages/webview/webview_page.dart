@@ -128,6 +128,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                       isHttpOnly: item.httpOnly,
                     );
                   }
+                  SmartDialog.showToast('设置成功，刷新或重新打开网页');
                   break;
               }
             },
