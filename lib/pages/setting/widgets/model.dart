@@ -154,7 +154,7 @@ List<SettingsModel> get styleSettings => [
               context: Get.context!,
               builder: (context) {
                 return SlideDialog<double>(
-                  title: '最大列宽度（默认240dp）',
+                  title: '最大列宽度（默认280dp）',
                   value: GStorage.maxRowWidth,
                   min: 150.0,
                   max: 500.0,

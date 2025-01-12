@@ -118,7 +118,7 @@ class GStorage {
       setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
 
   static double get maxRowWidth =>
-      setting.get(SettingBoxKey.maxRowWidth, defaultValue: 240.0);
+      setting.get(SettingBoxKey.maxRowWidth, defaultValue: 280.0);
 
   static UpPanelPosition get upPanelPosition =>
       UpPanelPosition.values[setting.get(SettingBoxKey.upPanelPosition,

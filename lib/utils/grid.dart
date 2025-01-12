@@ -4,8 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'storage.dart';
 
 class Grid {
-  static double maxRowWidth = GStorage.setting
-      .get(SettingBoxKey.maxRowWidth, defaultValue: 240.0) as double;
+  static double maxRowWidth = GStorage.maxRowWidth;
   //
   // static double calculateActualWidth(BuildContext context, double maxCrossAxisExtent, double crossAxisSpacing, {double? screenWidthOffset}) {
   //   double screenWidth = MediaQuery.of(context).size.width;
