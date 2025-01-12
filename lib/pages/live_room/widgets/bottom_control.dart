@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/pages/live_room/index.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
+import 'package:get/get.dart';
 
 class BottomControl extends StatefulWidget implements PreferredSizeWidget {
-  final PlPlayerController? controller;
-  final LiveRoomController? liveRoomCtr;
+  final PlPlayerController controller;
+  final LiveRoomController liveRoomCtr;
   final Floating? floating;
   const BottomControl({
-    this.controller,
-    this.liveRoomCtr,
+    required this.controller,
+    required this.liveRoomCtr,
     this.floating,
     super.key,
   });
@@ -87,7 +88,7 @@ class _BottomControlState extends State<BottomControl> {
                 ),
                 onPressed: () async {
                   bool canUsePiP = false;
-                  widget.controller!.hiddenControls(false);
+                  widget.controller.hiddenControls(false);
                   try {
                     canUsePiP = await widget.floating!.isPipAvailable;
                   } catch (_) {}
@@ -104,6 +105,31 @@ class _BottomControlState extends State<BottomControl> {
             ),
             const SizedBox(width: 4),
           ],
+          SizedBox(
+            width: 30,
+            child: PopupMenuButton<int>(
+              padding: EdgeInsets.zero,
+              initialValue: widget.liveRoomCtr.currentQn,
+              onSelected: (value) {
+                widget.liveRoomCtr.changeQn(value);
+              },
+              child: Obx(
+                () => Text(
+                  widget.liveRoomCtr.currentQnDesc.value,
+                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                ),
+              ),
+              itemBuilder: (BuildContext context) {
+                return widget.liveRoomCtr.acceptQnList.map((e) {
+                  return PopupMenuItem<int>(
+                    value: e['code'],
+                    child: Text(e['desc']),
+                  );
+                }).toList();
+              },
+            ),
+          ),
+          const SizedBox(width: 10),
           ComBtn(
             icon: const Icon(
               Icons.fullscreen,
@@ -111,8 +137,8 @@ class _BottomControlState extends State<BottomControl> {
               size: 20,
               color: Colors.white,
             ),
-            fuc: () => widget.controller!.triggerFullScreen(
-                status: !widget.controller!.isFullScreen.value),
+            fuc: () => widget.controller.triggerFullScreen(
+                status: !widget.controller.isFullScreen.value),
           ),
         ],
       ),

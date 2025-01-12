@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/models/live/danmu_info.dart';
+import 'package:PiliPlus/models/live/quality.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/danmaku.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -31,6 +32,10 @@ class LiveRoomController extends GetxController {
   DanmakuController? controller;
   bool showDanmaku = true;
 
+  late int currentQn = 10000;
+  late List<Map> acceptQnList = <Map>[];
+  RxString currentQnDesc = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -58,12 +63,26 @@ class LiveRoomController extends GetxController {
   bool? isPortrait;
 
   Future queryLiveInfo() async {
-    var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: 10000);
+    var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: currentQn);
     if (res['status']) {
       isPortrait = res['data'].isPortrait;
       List<CodecItem> codec =
           res['data'].playurlInfo.playurl.stream.first.format.first.codec;
       CodecItem item = codec.first;
+      // 以服务端返回的码率为准
+      currentQn = item.currentQn!;
+      List acceptQn = item.acceptQn!;
+      acceptQnList = acceptQn.map((e) {
+        return {
+          'code': e,
+          'desc': LiveQuality.values
+              .firstWhere((element) => element.code == e)
+              .description,
+        };
+      }).toList();
+      currentQnDesc.value = LiveQuality.values
+          .firstWhere((element) => element.code == currentQn)
+          .description;
       String videoUrl = VideoUtils.getCdnUrl(item);
       await playerInit(videoUrl);
       return res;
@@ -182,5 +201,17 @@ class LiveRoomController extends GetxController {
   void onClose() {
     scrollController.dispose();
     super.onClose();
+  }
+
+  // 修改画质
+  void changeQn(int qn) async {
+    if (currentQn == qn) {
+      return;
+    }
+    currentQn = qn;
+    currentQnDesc.value = LiveQuality.values
+        .firstWhere((element) => element.code == currentQn)
+        .description;
+    await queryLiveInfo();
   }
 }
