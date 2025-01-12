@@ -28,8 +28,8 @@ class _RankPageState extends State<RankPage>
     super.build(context);
     return Row(
       children: [
-        Expanded(
-          flex: 18,
+        SizedBox(
+          width: 64,
           child: SingleChildScrollView(
             padding: EdgeInsets.only(
               bottom: MediaQuery.paddingOf(context).bottom + 80,
@@ -63,7 +63,7 @@ class _RankPageState extends State<RankPage>
                               child: Container(
                                 alignment: Alignment.center,
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                    const EdgeInsets.symmetric(vertical: 7),
                                 child: Text(
                                   _rankController.tabs[index]['label'],
                                   style: TextStyle(
@@ -91,7 +91,6 @@ class _RankPageState extends State<RankPage>
           ),
         ),
         Expanded(
-          flex: 82,
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _rankController.tabController,
