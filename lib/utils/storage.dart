@@ -50,14 +50,15 @@ class GStorage {
         ),
       );
 
-  static List<String> get tabbarSort => setting.get(SettingBoxKey.tabbarSort,
-      defaultValue: TabType.values.map((item) => item.name).toList());
+  static List<String> get tabbarSort =>
+      List<String>.from(setting.get(SettingBoxKey.tabbarSort,
+          defaultValue: TabType.values.map((item) => item.name).toList()));
 
   static List<Pair<SegmentType, SkipType>> get blockSettings {
-    List list = setting.get(
+    List<int> list = List<int>.from(setting.get(
       SettingBoxKey.blockSettings,
       defaultValue: List.generate(SegmentType.values.length, (_) => 1),
-    );
+    ));
     return SegmentType.values
         .map((item) => Pair<SegmentType, SkipType>(
               first: item,
@@ -67,10 +68,10 @@ class GStorage {
   }
 
   static List<Color> get blockColor {
-    List list = setting.get(
+    List<String> list = List<String>.from(setting.get(
       SettingBoxKey.blockColor,
       defaultValue: List.generate(SegmentType.values.length, (_) => ''),
-    );
+    ));
     return SegmentType.values
         .map((item) => list[item.index].isNotEmpty
             ? Color(
