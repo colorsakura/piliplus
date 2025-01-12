@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/list_sheet.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -1610,17 +1609,24 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           onDismissed: videoDetailController.onDismissed,
           callback: _horizontalPreview
               ? (imgList, index) {
-                  videoDetailController.childKey.currentState?.showBottomSheet(
-                    (context) {
-                      return InteractiveviewerGallery(
-                        sources: imgList,
-                        initIndex: index,
-                        setStatusBar: false,
-                      );
+                  final ctr = AnimationController(
+                    vsync: this,
+                    duration: const Duration(milliseconds: 200),
+                  )..forward();
+                  Utils.onHorizontalPreview(
+                    videoDetailController.childKey,
+                    AnimationController(
+                      vsync: this,
+                      duration: Duration.zero,
+                    ),
+                    ctr,
+                    imgList,
+                    index,
+                    () async {
+                      await ctr.reverse();
+                      ctr.dispose();
+                      Get.back();
                     },
-                    enableDrag: false,
-                    elevation: 0,
-                    backgroundColor: Colors.transparent,
                   );
                 }
               : null,

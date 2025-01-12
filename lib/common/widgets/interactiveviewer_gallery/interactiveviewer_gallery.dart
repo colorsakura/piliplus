@@ -44,7 +44,10 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
     this.onPageChanged,
     this.onDismissed,
     this.setStatusBar,
+    this.onClose,
   });
+
+  final VoidCallback? onClose;
 
   final bool? setStatusBar;
 
@@ -222,6 +225,15 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
       ? '${widget.sources[index]}@${_quality}q.webp'.http2https
       : widget.sources[index].http2https;
 
+  void onClose() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else {
+      Get.back();
+      widget.onDismissed?.call(_pageController!.page!.floor());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -235,10 +247,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
           onNoBoundaryHit: _onNoBoundaryHit,
           maxScale: widget.maxScale,
           minScale: widget.minScale,
-          onDismissed: () {
-            Get.back();
-            widget.onDismissed?.call(_pageController!.page!.floor());
-          },
+          onDismissed: onClose,
           onReset: () {
             if (!_enablePageView) {
               setState(() {
@@ -255,7 +264,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: Get.back,
+                onTap: onClose,
                 onDoubleTapDown: (TapDownDetails details) {
                   _doubleTapLocalPosition = details.localPosition;
                 },
@@ -301,10 +310,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               children: [
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () {
-                    Get.back();
-                    widget.onDismissed?.call(_pageController!.page!.floor());
-                  },
+                  onPressed: onClose,
                 ),
                 widget.sources.length > 1
                     ? Text(
@@ -493,7 +499,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                     Get.back();
                     DownloadUtils.downloadImg(
                       context,
-                      widget.sources as List<String>,
+                      widget.sources,
                     );
                   },
                   dense: true,

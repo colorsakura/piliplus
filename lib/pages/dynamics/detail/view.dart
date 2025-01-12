@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -61,17 +60,24 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
-          _key.currentState?.showBottomSheet(
-            (context) {
-              return InteractiveviewerGallery(
-                sources: imgList,
-                initIndex: index,
-                setStatusBar: false,
-              );
+          final ctr = AnimationController(
+            vsync: this,
+            duration: const Duration(milliseconds: 200),
+          )..forward();
+          Utils.onHorizontalPreview(
+            _key,
+            AnimationController(
+              vsync: this,
+              duration: Duration.zero,
+            ),
+            ctr,
+            imgList,
+            index,
+            () async {
+              await ctr.reverse();
+              ctr.dispose();
+              Get.back();
             },
-            enableDrag: false,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
           );
         }
       : null;

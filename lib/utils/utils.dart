@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
@@ -39,6 +40,28 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static void onHorizontalPreview(GlobalKey<ScaffoldState> key,
+      transitionAnimationController, ctr, imgList, index, onClose) {
+    key.currentState?.showBottomSheet(
+      (context) {
+        return FadeTransition(
+          opacity: Tween<double>(begin: 0, end: 1).animate(ctr),
+          child: InteractiveviewerGallery(
+            sources: imgList,
+            initIndex: index,
+            setStatusBar: false,
+            onClose: onClose,
+          ),
+        );
+      },
+      enableDrag: false,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      transitionAnimationController: transitionAnimationController,
+      sheetAnimationStyle: AnimationStyle(duration: Duration.zero),
+    );
+  }
 
   static void handleWebview(String url, {bool off = false}) {
     if (GStorage.openInBrowser) {

@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
@@ -50,7 +49,8 @@ class VideoReplyReplyPanel extends StatefulWidget {
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
 }
 
-class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
+class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
+    with SingleTickerProviderStateMixin {
   late VideoReplyReplyController _videoReplyReplyController;
   late final _savedReplies = {};
   late final itemPositionsListener = ItemPositionsListener.create();
@@ -280,17 +280,24 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel> {
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
-          _key.currentState?.showBottomSheet(
-            (context) {
-              return InteractiveviewerGallery(
-                sources: imgList,
-                initIndex: index,
-                setStatusBar: false,
-              );
+          final ctr = AnimationController(
+            vsync: this,
+            duration: const Duration(milliseconds: 200),
+          )..forward();
+          Utils.onHorizontalPreview(
+            _key,
+            AnimationController(
+              vsync: this,
+              duration: Duration.zero,
+            ),
+            ctr,
+            imgList,
+            index,
+            () async {
+              await ctr.reverse();
+              ctr.dispose();
+              Get.back();
             },
-            enableDrag: false,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
           );
         }
       : null;
