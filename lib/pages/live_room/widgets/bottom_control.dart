@@ -105,28 +105,28 @@ class _BottomControlState extends State<BottomControl> {
             ),
             const SizedBox(width: 4),
           ],
-          SizedBox(
-            width: 30,
-            child: PopupMenuButton<int>(
-              padding: EdgeInsets.zero,
-              initialValue: widget.liveRoomCtr.currentQn,
-              onSelected: (value) {
-                widget.liveRoomCtr.changeQn(value);
-              },
-              child: Obx(
-                () => Text(
+          Obx(
+            () => SizedBox(
+              width: 30,
+              child: PopupMenuButton<int>(
+                padding: EdgeInsets.zero,
+                initialValue: widget.liveRoomCtr.currentQn,
+                onSelected: (value) {
+                  widget.liveRoomCtr.changeQn(value);
+                },
+                child: Text(
                   widget.liveRoomCtr.currentQnDesc.value,
                   style: const TextStyle(color: Colors.white, fontSize: 13),
                 ),
+                itemBuilder: (BuildContext context) {
+                  return widget.liveRoomCtr.acceptQnList.map((e) {
+                    return PopupMenuItem<int>(
+                      value: e['code'],
+                      child: Text(e['desc']),
+                    );
+                  }).toList();
+                },
               ),
-              itemBuilder: (BuildContext context) {
-                return widget.liveRoomCtr.acceptQnList.map((e) {
-                  return PopupMenuItem<int>(
-                    value: e['code'],
-                    child: Text(e['desc']),
-                  );
-                }).toList();
-              },
             ),
           ),
           const SizedBox(width: 10),
