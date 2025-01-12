@@ -221,7 +221,7 @@ class GStorage {
       setting.get(SettingBoxKey.refreshDragPercentage, defaultValue: 0.25);
 
   static double get refreshDisplacement =>
-      setting.get(SettingBoxKey.refreshDisplacement, defaultValue: 40.0);
+      setting.get(SettingBoxKey.refreshDisplacement, defaultValue: 20.0);
 
   static String get blockUserID {
     String blockUserID =
