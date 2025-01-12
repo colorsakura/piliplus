@@ -1,5 +1,5 @@
+import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:dio/dio.dart';
-import '../models/danmaku/dm.pb.dart';
 import 'index.dart';
 
 class DanmakaHttp {
