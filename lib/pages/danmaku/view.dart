@@ -113,6 +113,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
                 ? Colors.white
                 : DmUtils.decimalToColor(e.color),
             type: DmUtils.getPosition(e.mode),
+            isColorful: e.colorful == DmColorfulType.VipGradualColor,
           ),
         );
       }
