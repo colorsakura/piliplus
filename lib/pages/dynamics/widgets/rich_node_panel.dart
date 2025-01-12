@@ -177,7 +177,15 @@ InlineSpan? richNode(item, context) {
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(
+                    '/webview',
+                    parameters: {
+                      'url':
+                          'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
+                    },
+                  );
+                },
                 child: Text(
                   '${i.origText} ',
                   style: authorStyle,
