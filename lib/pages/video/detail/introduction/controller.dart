@@ -780,14 +780,20 @@ class VideoIntroController extends GetxController
         (relatedCtr.loadingState.value as Success).response[0];
     try {
       if (videoItem.cid != null) {
-        Get.offNamed(
-          '/video?bvid=${videoItem.bvid}&cid=${videoItem.cid}',
-          arguments: {
-            'videoItem': videoItem,
-            'heroTag': heroTag,
-          },
+        // Get.offNamed(
+        //   '/video?bvid=${videoItem.bvid}&cid=${videoItem.cid}',
+        //   arguments: {
+        //     'videoItem': videoItem,
+        //     'heroTag': heroTag,
+        //   },
+        // );
+        changeSeasonOrbangu(
+          null,
+          videoItem.bvid,
+          videoItem.cid,
+          videoItem.aid,
+          videoItem.pic,
         );
-        // changeSeasonOrbangu(videoItem.bvid, videoItem.cid, videoItem.aid);
       } else {
         SearchHttp.ab2c(aid: videoItem.aid, bvid: videoItem.bvid).then(
           (cid) => Get.offNamed(
