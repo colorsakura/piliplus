@@ -296,7 +296,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
         children: [
           OrientationBuilder(
             builder: (context, orientation) {
-              double padding = max(context.width / 2 - Grid.mediumCardWidth, 0);
+              double padding = max(context.width / 2 - Grid.smallCardWidth, 0);
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -320,7 +320,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
         children: [
           Builder(
             builder: (context) {
-              double padding = max(context.width / 2 - Grid.mediumCardWidth, 0);
+              double padding = max(context.width / 2 - Grid.smallCardWidth, 0);
               if (orientation == Orientation.portrait) {
                 return CustomScrollView(
                   controller: _dynamicDetailController.scrollController,

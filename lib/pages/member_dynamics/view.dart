@@ -117,7 +117,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                       slivers: [
                         const SliverFillRemaining(),
                         SliverConstrainedCrossAxis(
-                          maxExtent: Grid.mediumCardWidth * 2,
+                          maxExtent: Grid.smallCardWidth * 2,
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {

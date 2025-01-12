@@ -114,7 +114,7 @@ class _BangumiPageState extends State<BangumiPage>
                       ),
                     ),
                     SizedBox(
-                      height: Grid.mediumCardWidth / 2 / 0.75 +
+                      height: Grid.smallCardWidth / 2 / 0.75 +
                           MediaQuery.textScalerOf(context).scale(50),
                       child: Obx(
                         () => _buildFollowBody(
@@ -199,7 +199,7 @@ class _BangumiPageState extends State<BangumiPage>
           _bangumiController.queryBangumiFollow(false);
         }
         return Container(
-          width: Grid.mediumCardWidth / 2,
+          width: Grid.smallCardWidth / 2,
           margin: EdgeInsets.only(
             left: StyleString.safeSpace,
             right: index == loadingState.response.length - 1

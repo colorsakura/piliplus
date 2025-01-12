@@ -111,7 +111,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         slivers: [
           const SliverFillRemaining(),
           SliverConstrainedCrossAxis(
-            maxExtent: Grid.mediumCardWidth * 2,
+            maxExtent: Grid.smallCardWidth * 2,
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -184,7 +184,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                   slivers: [
                     const SliverFillRemaining(),
                     SliverConstrainedCrossAxis(
-                      maxExtent: Grid.mediumCardWidth * 2,
+                      maxExtent: Grid.smallCardWidth * 2,
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
