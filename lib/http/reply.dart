@@ -21,6 +21,7 @@ class ReplyHttp {
     required int type,
     required int page,
     int sort = 1,
+    required String banWordForReply,
   }) async {
     Options? options = !isLogin
         ? Options(
@@ -51,7 +52,6 @@ class ReplyHttp {
           );
     if (res.data['code'] == 0) {
       ReplyData replyData = ReplyData.fromJson(res.data['data']);
-      String banWordForReply = GStorage.banWordForReply;
       if (banWordForReply.isNotEmpty) {
         // topReplies
         if (replyData.topReplies?.isNotEmpty == true) {
@@ -97,11 +97,11 @@ class ReplyHttp {
     int type = 1,
     required int oid,
     required CursorReq cursor,
+    required String banWordForReply,
   }) async {
     dynamic res = await GrpcRepo.mainList(type: type, oid: oid, cursor: cursor);
     if (res['status']) {
       MainListReply mainListReply = res['data'];
-      String banWordForReply = GStorage.banWordForReply;
       if (banWordForReply.isNotEmpty) {
         // upTop
         if (mainListReply.hasUpTop() &&
@@ -139,6 +139,7 @@ class ReplyHttp {
     required int pageNum,
     required int type,
     int sort = 1,
+    required String banWordForReply,
   }) async {
     Options? options = GStorage.userInfo.get('userInfoCache') == null
         ? Options(
@@ -158,7 +159,6 @@ class ReplyHttp {
     );
     if (res.data['code'] == 0) {
       ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);
-      String banWordForReply = GStorage.banWordForReply;
       if (banWordForReply.isNotEmpty) {
         if (replyData.replies?.isNotEmpty == true) {
           replyData.replies!.removeWhere((item) =>
@@ -178,6 +178,7 @@ class ReplyHttp {
     required int root,
     required int rpid,
     required CursorReq cursor,
+    required String banWordForReply,
   }) async {
     dynamic res = await GrpcRepo.detailList(
       type: type,
@@ -188,7 +189,6 @@ class ReplyHttp {
     );
     if (res['status']) {
       DetailListReply detailListReply = res['data'];
-      String banWordForReply = GStorage.banWordForReply;
       if (banWordForReply.isNotEmpty) {
         if (detailListReply.root.replies.isNotEmpty) {
           detailListReply.root.replies.removeWhere((item) =>
@@ -208,6 +208,7 @@ class ReplyHttp {
     required int root,
     required int rpid,
     required CursorReq cursor,
+    required String banWordForReply,
   }) async {
     dynamic res = await GrpcRepo.dialogList(
       type: type,
@@ -218,7 +219,6 @@ class ReplyHttp {
     );
     if (res['status']) {
       DialogListReply dialogListReply = res['data'];
-      String banWordForReply = GStorage.banWordForReply;
       if (banWordForReply.isNotEmpty) {
         if (dialogListReply.replies.isNotEmpty) {
           dialogListReply.replies.removeWhere((item) =>

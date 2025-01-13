@@ -57,6 +57,7 @@ class HtmlRenderController extends ReplyController {
             next: cursor?.next ?? $fixnum.Int64(0),
             mode: mode,
           ),
+          banWordForReply: banWordForReply,
         )
       : ReplyHttp.replyList(
           isLogin: isLogin,
@@ -65,5 +66,6 @@ class HtmlRenderController extends ReplyController {
           type: type,
           sort: sortType.index,
           page: currentPage,
+          banWordForReply: banWordForReply,
         );
 }

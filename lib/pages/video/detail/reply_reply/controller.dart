@@ -45,6 +45,8 @@ class VideoReplyReplyController extends CommonController
 
   late final horizontalPreview = GStorage.horizontalPreview;
 
+  late final banWordForReply = GStorage.banWordForReply;
+
   @override
   void onInit() {
     super.onInit();
@@ -186,6 +188,7 @@ class VideoReplyReplyController extends CommonController
             next: cursor?.next,
             mode: mode.value,
           ),
+          banWordForReply: banWordForReply,
         )
       : GlobalData().grpcReply
           ? ReplyHttp.replyReplyListGrpc(
@@ -197,12 +200,14 @@ class VideoReplyReplyController extends CommonController
                 next: cursor?.next,
                 mode: mode.value,
               ),
+              banWordForReply: banWordForReply,
             )
           : ReplyHttp.replyReplyList(
               oid: oid!,
               root: rpid!,
               pageNum: currentPage,
               type: replyType.index,
+              banWordForReply: banWordForReply,
             );
 
   queryBySort() {

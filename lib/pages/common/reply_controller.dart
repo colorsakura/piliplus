@@ -33,6 +33,8 @@ abstract class ReplyController extends CommonController {
   late Mode mode = Mode.MAIN_LIST_HOT;
   bool hasUpTop = false;
 
+  late final banWordForReply = GStorage.banWordForReply;
+
   @override
   void onInit() {
     super.onInit();
