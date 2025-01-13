@@ -64,12 +64,14 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         }
       } catch (_) {}
     });
-    _listener = dynamicsController.mid.listen((mid) {
-      // debugPrint('midListen: $mid');
-      _dynamicsTabController.mid = mid;
-      _dynamicsTabController.scrollController.jumpTo(0);
-      _dynamicsTabController.onReload();
-    });
+    if (widget.dynamicsType == 'up') {
+      _listener = dynamicsController.mid.listen((mid) {
+        // debugPrint('midListen: $mid');
+        _dynamicsTabController.mid = mid;
+        _dynamicsTabController.scrollController.jumpTo(0);
+        _dynamicsTabController.onReload();
+      });
+    }
     dynamicsWaterfallFlow = GStorage.setting
         .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   }
