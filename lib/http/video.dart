@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:PiliPlus/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../common/constants.dart';
@@ -216,6 +217,7 @@ class VideoHttp {
     int? qn,
     dynamic epid,
     dynamic seasonId,
+    bool? forcePgcApi,
   }) async {
     Map<String, dynamic> data = {
       if (avid != null) 'avid': avid,
@@ -243,15 +245,17 @@ class VideoHttp {
       'web_location': 1550101,
     });
 
-    late final isLogin = GStorage.isLogin;
+    final usePgcApi = forcePgcApi == true || GStorage.isLogin;
 
     try {
       var res = await Request().get(
-          epid != null && isLogin ? Api.bangumiVideoUrl : Api.videoUrl,
-          queryParameters: params);
+        epid != null && usePgcApi ? Api.bangumiVideoUrl : Api.videoUrl,
+        queryParameters: params,
+      );
+
       if (res.data['code'] == 0) {
         late PlayUrlModel data;
-        if (epid != null && isLogin) {
+        if (epid != null && usePgcApi) {
           data = PlayUrlModel.fromJson(res.data['result']['video_info'])
             ..lastPlayTime = res.data['result']['play_view_business_info']
                 ['user_status']['watch_progress']['current_watch_progress'];
@@ -263,6 +267,17 @@ class VideoHttp {
           'data': data,
         };
       } else {
+        if (epid != null && usePgcApi.not && forcePgcApi != true) {
+          return videoUrl(
+            avid: avid,
+            bvid: bvid,
+            cid: cid,
+            qn: qn,
+            epid: epid,
+            seasonId: seasonId,
+            forcePgcApi: true,
+          );
+        }
         return {
           'status': false,
           'data': [],
