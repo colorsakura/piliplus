@@ -336,6 +336,9 @@ class GStorage {
   static bool get savedRcmdTip =>
       GStorage.setting.get(SettingBoxKey.savedRcmdTip, defaultValue: true);
 
+  static bool get showVipDanmaku =>
+      GStorage.setting.get(SettingBoxKey.showVipDanmaku, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -554,6 +557,7 @@ class SettingBoxKey {
       openInBrowser = 'openInBrowser',
       refreshDragPercentage = 'refreshDragPercentage',
       refreshDisplacement = 'refreshDisplacement',
+      showVipDanmaku = 'showVipDanmaku',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

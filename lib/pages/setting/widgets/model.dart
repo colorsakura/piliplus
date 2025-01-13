@@ -1749,6 +1749,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '显示会员彩色弹幕',
+        leading: Icon(MdiIcons.gradientHorizontal),
+        setKey: SettingBoxKey.showVipDanmaku,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

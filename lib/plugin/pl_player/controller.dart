@@ -274,6 +274,7 @@ class PlPlayerController {
   late int subtitlePaddingH = GStorage.subtitlePaddingH;
   late int subtitlePaddingB = GStorage.subtitlePaddingB;
   late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
+  late bool showVipDanmaku = GStorage.showVipDanmaku;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
