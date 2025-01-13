@@ -1050,7 +1050,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   value: '${(value / max * 100).round()}%',
                   // enabled: false,
                   child: Stack(
-                    alignment: Alignment.center,
+                    alignment: Alignment.bottomCenter,
                     children: [
                       ProgressBar(
                         progress: Duration(seconds: value),
@@ -1097,18 +1097,32 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         // },
                       ),
                       if (plPlayerController.segmentList.isNotEmpty)
-                        CustomPaint(
-                          size: Size(double.infinity, 3.5),
-                          painter: SegmentProgressBar(
-                            segmentColors: plPlayerController.segmentList,
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0.75,
+                          child: IgnorePointer(
+                            child: CustomPaint(
+                              size: Size(double.infinity, 3.5),
+                              painter: SegmentProgressBar(
+                                segmentColors: plPlayerController.segmentList,
+                              ),
+                            ),
                           ),
                         ),
                       if (plPlayerController.viewPointList.isNotEmpty &&
                           plPlayerController.showVP.value)
-                        CustomPaint(
-                          size: Size(double.infinity, 3.5),
-                          painter: SegmentProgressBar(
-                            segmentColors: plPlayerController.viewPointList,
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0.75,
+                          child: IgnorePointer(
+                            child: CustomPaint(
+                              size: Size(double.infinity, 3.5),
+                              painter: SegmentProgressBar(
+                                segmentColors: plPlayerController.viewPointList,
+                              ),
+                            ),
                           ),
                         ),
                     ],

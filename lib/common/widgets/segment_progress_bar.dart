@@ -48,8 +48,10 @@ class SegmentProgressBar extends CustomPainter {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: fontSize,
+                    height: 1,
                   ),
                 ),
+                strutStyle: StrutStyle(height: 1, leading: 0),
                 textDirection: TextDirection.ltr,
               )..layout();
 

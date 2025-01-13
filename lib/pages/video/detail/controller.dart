@@ -1992,15 +1992,6 @@ class VideoDetailController extends GetxController
         } catch (_) {}
       }
 
-      if (res["data"] is List && res["data"].isNotEmpty) {
-        var result = await VideoHttp.vttSubtitles(res["data"]);
-        if (result != null) {
-          _vttSubtitles = result;
-        }
-        // if (_vttSubtitles.isEmpty) {
-        //   SmartDialog.showToast('字幕均加载失败');
-        // }
-      }
       if (GStorage.showViewPoints &&
           res["view_points"] is List &&
           res["view_points"].isNotEmpty) {
@@ -2021,6 +2012,16 @@ class VideoDetailController extends GetxController
           plPlayerController.viewPointList.value = viewPointList;
           plPlayerController.showVP.value = showVP = true;
         }
+      }
+
+      if (res["data"] is List && res["data"].isNotEmpty) {
+        var result = await VideoHttp.vttSubtitles(res["data"]);
+        if (result != null) {
+          _vttSubtitles = result;
+        }
+        // if (_vttSubtitles.isEmpty) {
+        //   SmartDialog.showToast('字幕均加载失败');
+        // }
       }
     }
   }
