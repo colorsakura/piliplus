@@ -81,55 +81,69 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
             subtitle: Obx(() => Text('当前模式：${ctr.themeType.value.description}',
                 style: subTitleStyle)),
           ),
-          ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('调色板风格'),
-                PopupMenuButton(
-                  initialValue: _dynamicSchemeVariant,
-                  onSelected: (item) async {
-                    _dynamicSchemeVariant = item;
-                    await GStorage.setting
-                        .put(SettingBoxKey.schemeVariant, item.index);
-                    Get.forceAppUpdate();
-                  },
-                  itemBuilder: (context) => FlexSchemeVariant.values
-                      .map((item) => PopupMenuItem<FlexSchemeVariant>(
-                            value: item,
-                            child: Text(item.variantName),
-                          ))
-                      .toList(),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        _dynamicSchemeVariant.variantName,
-                        style: TextStyle(
-                          height: 1,
-                          fontSize: 13,
-                          color: Theme.of(context).colorScheme.primary,
+          Obx(
+            () => ListTile(
+              enabled: ctr.type.value != 0,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('调色板风格'),
+                  PopupMenuButton(
+                    enabled: ctr.type.value != 0,
+                    initialValue: _dynamicSchemeVariant,
+                    onSelected: (item) async {
+                      _dynamicSchemeVariant = item;
+                      await GStorage.setting
+                          .put(SettingBoxKey.schemeVariant, item.index);
+                      Get.forceAppUpdate();
+                    },
+                    itemBuilder: (context) => FlexSchemeVariant.values
+                        .map((item) => PopupMenuItem<FlexSchemeVariant>(
+                              value: item,
+                              child: Text(item.variantName),
+                            ))
+                        .toList(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _dynamicSchemeVariant.variantName,
+                          style: TextStyle(
+                            height: 1,
+                            fontSize: 13,
+                            color: ctr.type.value == 0
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .outline
+                                    .withOpacity(0.8)
+                                : Theme.of(context).colorScheme.secondary,
+                          ),
+                          strutStyle: StrutStyle(leading: 0, height: 1),
                         ),
-                        strutStyle: StrutStyle(leading: 0, height: 1),
-                      ),
-                      Icon(
-                        size: 20,
-                        Icons.keyboard_arrow_right,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    ],
+                        Icon(
+                          size: 20,
+                          Icons.keyboard_arrow_right,
+                          color: ctr.type.value == 0
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withOpacity(0.8)
+                              : Theme.of(context).colorScheme.secondary,
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            leading: Container(
-              width: 40,
-              alignment: Alignment.center,
-              child: Icon(Icons.palette_outlined),
-            ),
-            subtitle: Text(
-              _dynamicSchemeVariant.description,
-              style: TextStyle(fontSize: 12),
+                ],
+              ),
+              leading: Container(
+                width: 40,
+                alignment: Alignment.center,
+                child: Icon(Icons.palette_outlined),
+              ),
+              subtitle: Text(
+                _dynamicSchemeVariant.description,
+                style: TextStyle(fontSize: 12),
+              ),
             ),
           ),
           Obx(
