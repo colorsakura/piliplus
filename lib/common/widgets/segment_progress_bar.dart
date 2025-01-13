@@ -75,7 +75,7 @@ class SegmentProgressBar extends CustomPainter {
             canvas.drawRect(
               Rect.fromLTRB(
                 0,
-                -_defHeight,
+                -_defHeight - 2,
                 size.width,
                 0,
               ),
@@ -86,9 +86,9 @@ class SegmentProgressBar extends CustomPainter {
           canvas.drawRect(
             Rect.fromLTWH(
               segmentStart,
-              -_defHeight,
+              -_defHeight - 2,
               segmentEnd == segmentStart ? 2 : segmentEnd - segmentStart,
-              size.height + _defHeight,
+              size.height + _defHeight + 2,
             ),
             paint,
           );
@@ -98,7 +98,7 @@ class SegmentProgressBar extends CustomPainter {
               : (segmentStart - prevStart - textPainter.width) / 2 +
                   prevStart +
                   1;
-          double textY = (-_defHeight - textPainter.height) / 2;
+          double textY = (-_defHeight - textPainter.height) / 2 - 1;
           textPainter.paint(canvas, Offset(textX, textY));
         } else {
           canvas.drawRect(

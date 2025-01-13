@@ -52,6 +52,37 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                   child: Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
+                      if (controller?.viewPointList.isNotEmpty == true &&
+                          controller?.showVP.value == true)
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return Container(
+                              height: 20,
+                              margin: const EdgeInsets.only(bottom: 5.25),
+                              child: Listener(
+                                behavior: HitTestBehavior.translucent,
+                                onPointerDown: (event) {
+                                  try {
+                                    double seg = event.localPosition.dx /
+                                        constraints.maxWidth;
+                                    Segment? item = controller?.viewPointList
+                                        .where((item) {
+                                      return item.start >= seg;
+                                    }).reduce((a, b) =>
+                                            a.start < b.start ? a : b);
+                                    if (item?.from != null) {
+                                      controller?.seekTo(
+                                          Duration(seconds: item!.from!));
+                                    }
+                                    // debugPrint('${item?.title},,${item?.from}');
+                                  } catch (e) {
+                                    debugPrint('$e');
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ProgressBar(
                         progress: Duration(seconds: value),
                         buffered: Duration(seconds: buffer),

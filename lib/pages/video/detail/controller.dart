@@ -2001,7 +2001,7 @@ class VideoDetailController extends GetxController
           return Segment(
             start,
             start,
-            Colors.black87,
+            Colors.black.withOpacity(0.5),
             item?['content'],
             item?['imgUrl'],
             item?['from'],
