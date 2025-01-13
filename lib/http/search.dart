@@ -97,7 +97,10 @@ class SearchHttp {
       if (pubEnd != null) 'pubtime_end_s': pubEnd,
     };
     var res = await Request().get(Api.searchByType, queryParameters: reqData);
-    if (res.data['code'] is int && res.data['code'] == 0) {
+    if (res.data is! Map) {
+      return LoadingState.error('没有相关数据');
+    }
+    if (res.data['code'] == 0) {
       dynamic data;
       try {
         switch (searchType) {

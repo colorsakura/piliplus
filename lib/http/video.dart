@@ -245,7 +245,7 @@ class VideoHttp {
       'web_location': 1550101,
     });
 
-    final usePgcApi = forcePgcApi == true || GStorage.isLogin;
+    late final usePgcApi = forcePgcApi == true || GStorage.isLogin;
 
     try {
       var res = await Request().get(
