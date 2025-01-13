@@ -48,19 +48,21 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
       tag: widget.dynamicsType,
     );
     _dynamicsTabController.scrollController.addListener(() {
-      StreamController<bool> mainStream =
-          Get.find<MainController>().bottomBarStream;
-      StreamController<bool> searchBarStream =
-          Get.find<HomeController>().searchBarStream;
-      final ScrollDirection direction =
-          _dynamicsTabController.scrollController.position.userScrollDirection;
-      if (direction == ScrollDirection.forward) {
-        mainStream.add(true);
-        searchBarStream.add(true);
-      } else if (direction == ScrollDirection.reverse) {
-        mainStream.add(false);
-        searchBarStream.add(false);
-      }
+      try {
+        StreamController<bool> mainStream =
+            Get.find<MainController>().bottomBarStream;
+        StreamController<bool> searchBarStream =
+            Get.find<HomeController>().searchBarStream;
+        final ScrollDirection direction = _dynamicsTabController
+            .scrollController.position.userScrollDirection;
+        if (direction == ScrollDirection.forward) {
+          mainStream.add(true);
+          searchBarStream.add(true);
+        } else if (direction == ScrollDirection.reverse) {
+          mainStream.add(false);
+          searchBarStream.add(false);
+        }
+      } catch (_) {}
     });
     _listener = dynamicsController.mid.listen((mid) {
       // debugPrint('midListen: $mid');
