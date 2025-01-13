@@ -21,6 +21,8 @@ class SSearchController extends GetxController {
 
   int initIndex = 0;
 
+  RxBool showUidBtn = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -44,7 +46,12 @@ class SSearchController extends GetxController {
     }
   }
 
+  void validateUid() {
+    showUidBtn.value = RegExp(r'^\d+$').hasMatch(controller.text);
+  }
+
   void onChange(String value) {
+    validateUid();
     if (value.isEmpty) {
       searchSuggestList.clear();
     } else {
@@ -57,6 +64,7 @@ class SSearchController extends GetxController {
       controller.clear();
       searchSuggestList.clear();
       searchFocusNode.requestFocus();
+      showUidBtn.value = false;
     } else {
       Get.back();
     }
@@ -69,6 +77,7 @@ class SSearchController extends GetxController {
         return;
       }
       controller.text = hintText;
+      validateUid();
     }
 
     historyList.remove(controller.text);
@@ -98,6 +107,8 @@ class SSearchController extends GetxController {
 
   void onClickKeyword(String keyword) {
     controller.text = keyword;
+    validateUid();
+
     searchSuggestList.clear();
     submit();
   }

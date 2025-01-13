@@ -29,6 +29,26 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
           ),
         ),
         actions: [
+          Obx(
+            () => _searchController.showUidBtn.value
+                ? IconButton(
+                    tooltip: 'UID搜索用户',
+                    icon: const Icon(Icons.person_outline, size: 22),
+                    onPressed: () {
+                      if (RegExp(r'^\d+$')
+                          .hasMatch(_searchController.controller.text)) {
+                        Get.toNamed(
+                            '/member?mid=${_searchController.controller.text}');
+                      }
+                    },
+                  )
+                : const SizedBox.shrink(),
+          ),
+          IconButton(
+            tooltip: '清空',
+            icon: const Icon(Icons.clear, size: 22),
+            onPressed: _searchController.onClear,
+          ),
           IconButton(
             tooltip: '搜索',
             onPressed: () => _searchController.submit(),
@@ -46,11 +66,6 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
           decoration: InputDecoration(
             hintText: _searchController.hintText,
             border: InputBorder.none,
-            suffixIcon: IconButton(
-              tooltip: '清空',
-              icon: const Icon(Icons.clear, size: 22),
-              onPressed: _searchController.onClear,
-            ),
           ),
           onSubmitted: (value) => _searchController.submit(),
         ),
