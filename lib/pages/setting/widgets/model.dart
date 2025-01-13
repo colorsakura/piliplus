@@ -1756,6 +1756,14 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '合并弹幕',
+        subtitle: '合并一段时间内获取到的相同弹幕',
+        leading: Icon(Icons.merge),
+        setKey: SettingBoxKey.mergeDanmaku,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

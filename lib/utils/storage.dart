@@ -339,6 +339,9 @@ class GStorage {
   static bool get showVipDanmaku =>
       GStorage.setting.get(SettingBoxKey.showVipDanmaku, defaultValue: true);
 
+  static bool get mergeDanmaku =>
+      GStorage.setting.get(SettingBoxKey.mergeDanmaku, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -558,6 +561,7 @@ class SettingBoxKey {
       refreshDragPercentage = 'refreshDragPercentage',
       refreshDisplacement = 'refreshDisplacement',
       showVipDanmaku = 'showVipDanmaku',
+      mergeDanmaku = 'mergeDanmaku',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

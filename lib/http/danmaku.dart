@@ -1,4 +1,5 @@
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'index.dart';
 
@@ -7,6 +8,7 @@ class DanmakaHttp {
   static Future queryDanmaku({
     required int cid,
     required int segmentIndex,
+    required bool mergeDanmaku,
   }) async {
     // 构建参数对象
     Map<String, int> params = {
@@ -22,7 +24,11 @@ class DanmakaHttp {
     if (response.statusCode != 200 || response.data == null) {
       return DmSegMobileReply();
     }
-    return DmSegMobileReply.fromBuffer(response.data);
+    DmSegMobileReply data = DmSegMobileReply.fromBuffer(response.data);
+    if (mergeDanmaku) {
+      data.elems.unique((item) => item.content);
+    }
+    return data;
   }
 
   static Future shootDanmaku({
