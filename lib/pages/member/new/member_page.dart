@@ -34,7 +34,7 @@ class _MemberPageNewState extends State<MemberPageNew>
   @override
   void initState() {
     super.initState();
-    _mid = int.parse(Get.parameters['mid']!);
+    _mid = int.tryParse(Get.parameters['mid']!) ?? -1;
     _heroTag = Utils.makeHeroTag(_mid);
     _userController = Get.put(
       MemberControllerNew(mid: _mid),
