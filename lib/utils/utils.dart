@@ -13,8 +13,10 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
+import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/media/controller.dart';
@@ -188,6 +190,13 @@ class Utils {
           ..face = result['data'].face
           ..onRefresh();
       } catch (_) {}
+
+      for (int i = 0; i < tabsConfig.length; i++) {
+        try {
+          Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag'])
+              .onRefresh();
+        } catch (_) {}
+      }
 
       try {
         Get.find<MediaController>()

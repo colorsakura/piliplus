@@ -52,11 +52,11 @@ class LoginUtils {
         ..loadingState.value = LoadingState.loading();
     } catch (_) {}
 
-    try {
-      for (int i = 0; i < tabsConfig.length; i++) {
+    for (int i = 0; i < tabsConfig.length; i++) {
+      try {
         Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag']).onRefresh();
-      }
-    } catch (_) {}
+      } catch (_) {}
+    }
   }
 
   static String buvid() {

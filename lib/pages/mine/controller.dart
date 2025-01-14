@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -56,6 +57,8 @@ class MineController extends GetxController {
         userInfo.value = res['data'];
         GStorage.userInfo.put('userInfoCache', res['data']);
         isLogin.value = true;
+      } else {
+        LoginUtils.onLogout();
       }
     } else {
       SmartDialog.showToast(res['msg']);
