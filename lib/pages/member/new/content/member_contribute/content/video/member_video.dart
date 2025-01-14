@@ -74,24 +74,30 @@ class _MemberVideoState extends State<MemberVideo>
                     delegate: CustomSliverPersistentHeaderDelegate(
                       extent: 40,
                       bgColor: Theme.of(context).colorScheme.surface,
-                      child: Container(
+                      child: SizedBox(
                         height: 40,
-                        padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
                         child: Row(
                           children: [
+                            const SizedBox(width: 8),
                             Obx(
-                              () => Text(
-                                _controller.count.value != -1
-                                    ? '共${_controller.count.value}视频'
-                                    : '',
-                                style: const TextStyle(fontSize: 13),
+                              () => Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: Text(
+                                  _controller.count.value != -1
+                                      ? '共${_controller.count.value}视频'
+                                      : '',
+                                  style: const TextStyle(fontSize: 13),
+                                ),
                               ),
                             ),
                             Obx(
                               () => _controller.episodicButton.value.uri != null
                                   ? Container(
                                       height: 35,
-                                      padding: const EdgeInsets.only(left: 5),
+                                      padding: EdgeInsets.only(
+                                          left: _controller.count.value != -1
+                                              ? 6
+                                              : 0),
                                       child: TextButton.icon(
                                         onPressed: _controller.toViewPlayAll,
                                         icon: Icon(
@@ -146,6 +152,7 @@ class _MemberVideoState extends State<MemberVideo>
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 8),
                           ],
                         ),
                       ),

@@ -176,48 +176,47 @@ class UserInfoCard extends StatelessWidget {
           ),
         ),
         if (card.officialVerify?.desc?.isNotEmpty == true)
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 8, right: 20),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).colorScheme.onInverseSurface),
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    if (card.officialVerify?.icon?.isNotEmpty == true) ...[
-                      WidgetSpan(
-                        child: Container(
-                          padding: const EdgeInsets.all(0.1),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).colorScheme.surface,
-                          ),
-                          child: CachedNetworkImage(
-                            width: 18,
-                            height: 18,
-                            imageUrl: card.officialVerify!.icon!.http2https,
-                          ),
+          Container(
+            margin: const EdgeInsets.only(left: 20, top: 8, right: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Theme.of(context).colorScheme.onInverseSurface,
+            ),
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  if (card.officialVerify?.icon?.isNotEmpty == true) ...[
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        child: CachedNetworkImage(
+                          width: 18,
+                          height: 18,
+                          imageUrl: card.officialVerify!.icon!.http2https,
                         ),
                       ),
-                      TextSpan(
-                        text: ' ',
-                      )
-                    ],
+                    ),
                     TextSpan(
-                      text: card.officialVerify!.spliceTitle!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.7),
-                      ),
+                      text: ' ',
                     )
                   ],
-                ),
+                  TextSpan(
+                    text: card.officialVerify!.spliceTitle!,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -425,25 +424,24 @@ class UserInfoCard extends StatelessWidget {
         ],
       );
 
-  _buildBadge(BuildContext context) => Container(
-        padding: const EdgeInsets.all(0.01),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).colorScheme.surface,
+  _buildBadge(BuildContext context) => IgnorePointer(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          child: card.officialVerify?.icon?.isNotEmpty == true
+              ? CachedNetworkImage(
+                  imageUrl: card.officialVerify!.icon!.http2https,
+                  width: 24,
+                  height: 24,
+                )
+              : Image.asset(
+                  'assets/images/big-vip.png',
+                  width: 24,
+                  height: 24,
+                ),
         ),
-        child: card.officialVerify?.icon?.isNotEmpty == true
-            ? NetworkImgLayer(
-                src: card.officialVerify?.icon,
-                radius: null,
-                width: 24,
-                height: 24,
-                quality: 100,
-              )
-            : Image.asset(
-                'assets/images/big-vip.png',
-                width: 24,
-                height: 24,
-              ),
       );
 
   _buildAvatar(BuildContext context) => Hero(
