@@ -47,6 +47,41 @@ Widget imageview(
   } else if (picArr.length == 2) {
     imageWidth = imageHeight = 2 * imageWidth;
   }
+  BorderRadius borderRadius(index) {
+    if (picArr.length == 1) {
+      return BorderRadius.circular(12);
+    }
+    final int row = picArr.length == 4 ? 2 : 3;
+    return BorderRadius.only(
+      topLeft: Radius.circular(
+        (index - row >= 0 ||
+                ((index - 1) >= 0 && (index - 1) % row < index % row))
+            ? 0
+            : 12,
+      ),
+      topRight: Radius.circular(
+        (index - row >= 0 ||
+                ((index + 1) < picArr.length &&
+                    (index + 1) % row > index % row))
+            ? 0
+            : 12,
+      ),
+      bottomLeft: Radius.circular(
+        (index + row < picArr.length ||
+                ((index - 1) >= 0 && (index - 1) % row < index % row))
+            ? 0
+            : 12,
+      ),
+      bottomRight: Radius.circular(
+        (index + row < picArr.length ||
+                ((index + 1) < picArr.length &&
+                    (index + 1) % row > index % row))
+            ? 0
+            : 12,
+      ),
+    );
+  }
+
   return NineGridView(
     type: NineGridType.weiBo,
     margin: const EdgeInsets.only(top: 6),
@@ -75,14 +110,36 @@ Widget imageview(
           alignment: Alignment.center,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: borderRadius(index),
               child: NetworkImgLayer(
+                radius: 0,
                 src: picArr[index].url,
                 width: imageWidth,
                 height: imageHeight,
                 isLongPic: () => picArr[index].isLongPic,
                 callback: () =>
                     picArr[index].safeWidth <= picArr[index].safeHeight,
+                getPlaceHolder: () {
+                  return Container(
+                    width: imageWidth,
+                    height: imageHeight,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onInverseSurface
+                          .withOpacity(0.4),
+                      borderRadius: borderRadius(index),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/loading.png',
+                        width: imageWidth,
+                        height: imageHeight,
+                        cacheWidth: imageWidth.cacheSize(context),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             if (picArr[index].isLongPic)

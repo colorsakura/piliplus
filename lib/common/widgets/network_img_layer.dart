@@ -21,6 +21,7 @@ class NetworkImgLayer extends StatelessWidget {
     this.imageBuilder,
     this.isLongPic,
     this.callback,
+    this.getPlaceHolder,
   });
 
   final String? src;
@@ -36,71 +37,61 @@ class NetworkImgLayer extends StatelessWidget {
   final ImageWidgetBuilder? imageBuilder;
   final Function? isLongPic;
   final Function? callback;
+  final Function? getPlaceHolder;
 
   @override
   Widget build(BuildContext context) {
+    double radius = this.radius != null
+        ? this.radius!
+        : type == 'avatar'
+            ? 50
+            : type == 'emote'
+                ? 0
+                : StyleString.imgRadius.x;
+    return src.isNullOrEmpty.not
+        ? radius != 0
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(radius),
+                child: _buildImage(context),
+              )
+            : _buildImage(context)
+        : getPlaceHolder?.call() ?? placeholder(context);
+  }
+
+  Widget _buildImage(context) {
     late final int defaultImgQuality = GlobalData().imgQuality;
     bool thumbnail = true;
     int? memCacheWidth, memCacheHeight;
-
     if (callback?.call() == true || width <= height) {
       memCacheWidth = width.cacheSize(context);
     } else {
       memCacheHeight = height.cacheSize(context);
     }
-    Widget res = src != '' && src != null
-        ? ClipRRect(
-            clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.circular(
-              radius != null
-                  ? radius!
-                  : type == 'avatar'
-                      ? 50
-                      : type == 'emote'
-                          ? 0
-                          : StyleString.imgRadius.x,
-            ),
-            child: Builder(
-              builder: (context) => CachedNetworkImage(
-                imageUrl:
-                    '${src?.startsWith('//') == true ? 'https:$src' : src?.http2https}${type != 'emote' && thumbnail ? '@${quality ?? defaultImgQuality}q.webp' : ''}',
-                width: width,
-                height: ignoreHeight == null || ignoreHeight == false
-                    ? height
-                    : null,
-                memCacheWidth: memCacheWidth,
-                memCacheHeight: memCacheHeight,
-                fit: BoxFit.cover,
-                alignment: isLongPic?.call() == true
-                    ? Alignment.topCenter
-                    : Alignment.center,
-                fadeOutDuration:
-                    fadeOutDuration ?? const Duration(milliseconds: 120),
-                fadeInDuration:
-                    fadeInDuration ?? const Duration(milliseconds: 120),
-                filterQuality: FilterQuality.low,
-                // errorWidget: (BuildContext context, String url, Object error) =>
-                //     placeholder(context),
-                placeholder: (BuildContext context, String url) =>
-                    placeholder(context),
-                imageBuilder: imageBuilder,
-                // errorListener: (value) {
-                //   thumbnail = false;
-                //   if (context.mounted) {
-                //     (context as Element).markNeedsBuild();
-                //   }
-                // },
-              ),
-            ),
-          )
-        : placeholder(context);
-    if (semanticsLabel != null) {
-      return Semantics(
-        label: semanticsLabel,
-        child: res,
-      );
-    }
-    return res;
+    return CachedNetworkImage(
+      imageUrl:
+          '${src?.startsWith('//') == true ? 'https:$src' : src?.http2https}${type != 'emote' && thumbnail ? '@${quality ?? defaultImgQuality}q.webp' : ''}',
+      width: width,
+      height: ignoreHeight == null || ignoreHeight == false ? height : null,
+      memCacheWidth: memCacheWidth,
+      memCacheHeight: memCacheHeight,
+      fit: BoxFit.cover,
+      alignment:
+          isLongPic?.call() == true ? Alignment.topCenter : Alignment.center,
+      fadeOutDuration: fadeOutDuration ?? const Duration(milliseconds: 120),
+      fadeInDuration: fadeInDuration ?? const Duration(milliseconds: 120),
+      filterQuality: FilterQuality.low,
+      // errorWidget: (BuildContext context, String url, Object error) =>
+      //     placeholder(context),
+      placeholder: (BuildContext context, String url) =>
+          getPlaceHolder?.call() ?? placeholder(context),
+      imageBuilder: imageBuilder,
+      // errorListener: (value) {
+      //   thumbnail = false;
+      //   if (context.mounted) {
+      //     (context as Element).markNeedsBuild();
+      //   }
+      // },
+    );
   }
 
   Widget placeholder(BuildContext context) {
@@ -108,14 +99,15 @@ class NetworkImgLayer extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onInverseSurface.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(type == 'avatar'
-            ? 50
-            : type == 'emote'
-                ? 0
-                : StyleString.imgRadius.x),
+        borderRadius: BorderRadius.circular(
+          type == 'avatar'
+              ? 50
+              : type == 'emote'
+                  ? 0
+                  : StyleString.imgRadius.x,
+        ),
       ),
       child: type == 'bg'
           ? const SizedBox()
