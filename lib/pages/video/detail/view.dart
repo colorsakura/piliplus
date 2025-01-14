@@ -1890,7 +1890,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 videoDetailController.bsController!.close();
                                 videoDetailController.bsController = null;
                               } else {
-                                setState(() {});
+                                Get.back();
+                                // setState(() {});
                               }
                             }
                           : null,
