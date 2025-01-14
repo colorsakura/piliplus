@@ -266,39 +266,33 @@ class UserInfoCard extends StatelessWidget {
         if (silence == 1)
           Builder(builder: (context) {
             bool isLight = Theme.of(context).brightness == Brightness.light;
-            return GestureDetector(
-              onTap: () {
-                Utils.handleWebview(
-                    'https://www.bilibili.com/blackroom/ban/${card.mid}');
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: isLight
-                      ? Theme.of(context).colorScheme.errorContainer
-                      : Theme.of(context).colorScheme.error,
-                ),
-                margin: const EdgeInsets.only(left: 20, top: 8, right: 20),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info,
-                      size: MediaQuery.textScalerOf(context).scale(18),
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: isLight
+                    ? Theme.of(context).colorScheme.errorContainer
+                    : Theme.of(context).colorScheme.error,
+              ),
+              margin: const EdgeInsets.only(left: 20, top: 8, right: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info,
+                    size: MediaQuery.textScalerOf(context).scale(18),
+                    color: isLight
+                        ? Theme.of(context).colorScheme.onErrorContainer
+                        : Theme.of(context).colorScheme.onError,
+                  ),
+                  Text(
+                    ' 该账号封禁中${endTime ?? ''}',
+                    style: TextStyle(
                       color: isLight
                           ? Theme.of(context).colorScheme.onErrorContainer
                           : Theme.of(context).colorScheme.onError,
                     ),
-                    Text(
-                      ' 该账号封禁中${endTime ?? ''}',
-                      style: TextStyle(
-                        color: isLight
-                            ? Theme.of(context).colorScheme.onErrorContainer
-                            : Theme.of(context).colorScheme.onError,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }),
