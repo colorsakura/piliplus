@@ -30,6 +30,8 @@ class _AboutPageState extends State<AboutPage> {
       'https://github.com/guozhigq/pilipala';
   static const String _upstreamUrl = 'https://github.com/orz12/PiliPalaX';
 
+  late int _pressCount = 0;
+
   @override
   void initState() {
     super.initState();
@@ -51,12 +53,36 @@ class _AboutPageState extends State<AboutPage> {
       appBar: AppBar(title: Text('关于')),
       body: ListView(
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 150),
-            child: ExcludeSemantics(
+          GestureDetector(
+            onTap: () {
+              _pressCount++;
+              if (_pressCount == 5) {
+                _pressCount = 0;
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    String text = '';
+                    return AlertDialog(
+                      content: TextField(
+                        onChanged: (value) => text = value,
+                        onSubmitted: (value) {
+                          Get.back();
+                          Get.toNamed('/webview', parameters: {'url': text});
+                        },
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 150),
+              child: ExcludeSemantics(
                 child: Image.asset(
-              'assets/images/logo/logo_android_2.png',
-            )),
+                  'assets/images/logo/logo_android_2.png',
+                ),
+              ),
+            ),
           ),
           ListTile(
             title: Text('PiliPlus',

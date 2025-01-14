@@ -1,9 +1,13 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/utils/storage.dart';
+import 'package:get/get.dart';
 
 class HotController extends CommonController {
   // int idx = 0;
+
+  late RxBool showHotRcmd = GStorage.showHotRcmd.obs;
 
   @override
   void onInit() {

@@ -15,6 +15,7 @@ import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/subtitle.dart';
 import 'package:PiliPlus/pages/home/controller.dart';
+import 'package:PiliPlus/pages/hot/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/member/new/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -1761,6 +1762,19 @@ List<SettingsModel> get extraSettings => [
         leading: Icon(Icons.merge),
         setKey: SettingBoxKey.mergeDanmaku,
         defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '显示热门推荐',
+        subtitle: '热门页面显示每周必看等推荐内容入口',
+        leading: Icon(Icons.local_fire_department_outlined),
+        setKey: SettingBoxKey.showHotRcmd,
+        defaultVal: false,
+        onChanged: (value) {
+          try {
+            Get.find<HotController>().showHotRcmd.value = value;
+          } catch (_) {}
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

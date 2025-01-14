@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -178,18 +179,20 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                     : null,
           ),
           onLoadStop: (controller, url) {
-            _webViewController?.evaluateJavascript(
-              source: '''
-                document.styleSheets[0].insertRule('div.open-app-btn.bili-btn-warp {display:none;}', 0);
-                document.styleSheets[0].insertRule('#app__display-area > div.control-panel {display:none;}', 0);
-                ''',
-            );
-            _webViewController?.evaluateJavascript(
-              source: '''
-                document.querySelector('#internationalHeader').remove();
-                document.querySelector('#message-navbar').remove();
-              ''',
-            );
+            if (url.toString().startsWith('https://live.bilibili.com')) {
+              _webViewController?.evaluateJavascript(
+                source: '''
+                  document.styleSheets[0].insertRule('div.open-app-btn.bili-btn-warp {display:none;}', 0);
+                  document.styleSheets[0].insertRule('#app__display-area > div.control-panel {display:none;}', 0);
+                  ''',
+              );
+            }
+            // _webViewController?.evaluateJavascript(
+            //   source: '''
+            //     document.querySelector('#internationalHeader').remove();
+            //     document.querySelector('#message-navbar').remove();
+            //   ''',
+            // );
           },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             final String str = navigationAction.request.url!.pathSegments[0];
@@ -206,7 +209,23 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             }
 
             var url = navigationAction.request.url!.toString();
-            if (!url.startsWith('http')) {
+
+            if (url.startsWith('http')) {
+              if (RegExp(r'https://www.bilibili.com/video/BV[a-zA-Z\d]+')
+                  .hasMatch(url)) {
+                PiliScheme.routePush(Uri.parse(url));
+                return NavigationActionPolicy.CANCEL;
+              } else if (url.startsWith('http://m.bilibili.com/playlist/')) {
+                try {
+                  String? bvid =
+                      RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
+                  if (bvid != null) {
+                    PiliScheme.videoPush(null, bvid);
+                    return NavigationActionPolicy.CANCEL;
+                  }
+                } catch (_) {}
+              }
+            } else {
               if (url.startsWith('bilibili://video/')) {
                 String str = Uri.parse(url).pathSegments[0];
                 Get.offAndToNamed(

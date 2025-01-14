@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/tab_type.dart';
+import 'package:PiliPlus/pages/rank/view.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -56,6 +59,27 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
     super.dispose();
   }
 
+  Widget _buildEntranceItem({
+    required String iconUrl,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.network(width: 35, height: 35, iconUrl),
+          const SizedBox(height: 2),
+          Text(
+            title,
+            style: TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -67,6 +91,67 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _hotController.scrollController,
         slivers: [
+          SliverToBoxAdapter(
+            child: Obx(
+              () => _hotController.showHotRcmd.value
+                  ? Padding(
+                      padding:
+                          const EdgeInsets.only(left: 12, top: 12, right: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildEntranceItem(
+                            iconUrl:
+                                'http://i0.hdslb.com/bfs/archive/a3f11218aaf4521b4967db2ae164ecd3052586b9.png',
+                            title: '排行榜',
+                            onTap: () {
+                              try {
+                                HomeController homeController =
+                                    Get.find<HomeController>();
+                                int index = homeController.tabs.indexWhere(
+                                  (item) => item['type'] == TabType.rank,
+                                );
+                                if (index != -1) {
+                                  homeController.tabController.animateTo(index);
+                                } else {
+                                  Get.to(
+                                    Scaffold(
+                                      appBar: AppBar(title: const Text('排行榜')),
+                                      body: RankPage(),
+                                    ),
+                                  );
+                                }
+                              } catch (_) {}
+                            },
+                          ),
+                          _buildEntranceItem(
+                            iconUrl:
+                                'http://i0.hdslb.com/bfs/archive/552ebe8c4794aeef30ebd1568b59ad35f15e21ad.png',
+                            title: '每周必看',
+                            onTap: () {
+                              Utils.handleWebview(
+                                'https://www.bilibili.com/h5/weekly-recommend',
+                                inApp: true,
+                              );
+                            },
+                          ),
+                          _buildEntranceItem(
+                            iconUrl:
+                                'http://i0.hdslb.com/bfs/archive/3693ec9335b78ca57353ac0734f36a46f3d179a9.png',
+                            title: '入站必刷',
+                            onTap: () {
+                              Utils.handleWebview(
+                                'https://www.bilibili.com/h5/good-history',
+                                inApp: true,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
           SliverPadding(
             padding: EdgeInsets.only(
               top: StyleString.safeSpace - 5,

@@ -63,8 +63,12 @@ class Utils {
     );
   }
 
-  static void handleWebview(String url, {bool off = false}) {
-    if (GStorage.openInBrowser) {
+  static void handleWebview(
+    String url, {
+    bool off = false,
+    bool inApp = false,
+  }) {
+    if (inApp.not && GStorage.openInBrowser) {
       launchURL(url);
     } else {
       if (off) {

@@ -342,6 +342,9 @@ class GStorage {
   static bool get mergeDanmaku =>
       GStorage.setting.get(SettingBoxKey.mergeDanmaku, defaultValue: false);
 
+  static bool get showHotRcmd =>
+      GStorage.setting.get(SettingBoxKey.showHotRcmd, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -562,6 +565,7 @@ class SettingBoxKey {
       refreshDisplacement = 'refreshDisplacement',
       showVipDanmaku = 'showVipDanmaku',
       mergeDanmaku = 'mergeDanmaku',
+      showHotRcmd = 'showHotRcmd',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
