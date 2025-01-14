@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -195,7 +196,8 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             // );
           },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
-            final String str = navigationAction.request.url!.pathSegments[0];
+            final String? str =
+                navigationAction.request.url!.pathSegments.getOrNull(0);
             final Map matchRes = IdUtils.matchAvorBv(input: str);
             final List matchKeys = matchRes.keys.toList();
             if (matchKeys.isNotEmpty) {
@@ -227,10 +229,10 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
               }
             } else {
               if (url.startsWith('bilibili://video/')) {
-                String str = Uri.parse(url).pathSegments[0];
+                String? str = Uri.parse(url).pathSegments.getOrNull(0);
                 Get.offAndToNamed(
                   '/searchResult',
-                  parameters: {'keyword': str},
+                  parameters: {'keyword': str ?? ''},
                 );
               } else {
                 var snackBar = SnackBar(
