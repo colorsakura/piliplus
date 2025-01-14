@@ -165,105 +165,64 @@ class _MainAppState extends State<MainApp>
           }
         }
       },
-      child: LayoutBuilder(
-        builder: (context, constriants) {
-          bool isPortait = constriants.maxHeight > constriants.maxWidth;
-
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            extendBody: true,
-            body: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (useSideBar) ...[
-                  SizedBox(
-                    width: context.width * 0.04 +
-                        40 +
-                        MediaQuery.of(context).padding.left,
-                    child: Obx(
-                      () => _mainController.navigationBars.length > 1
-                          ? NavigationRail(
-                              groupAlignment: 1,
-                              minWidth: context.width * 0.0286 + 28.56,
-                              backgroundColor: Colors.transparent,
-                              selectedIndex:
-                                  _mainController.selectedIndex.value,
-                              onDestinationSelected: setIndex,
-                              labelType: NavigationRailLabelType.none,
-                              leading: userAndSearchVertical,
-                              destinations: _mainController.navigationBars
-                                  .map((e) => NavigationRailDestination(
-                                        icon: _buildIcon(
-                                          id: e['id'],
-                                          count: e['count'],
-                                          icon: e['icon'],
-                                        ),
-                                        selectedIcon: _buildIcon(
-                                          id: e['id'],
-                                          count: e['count'],
-                                          icon: e['selectIcon'],
-                                        ),
-                                        label: Text(e['label']),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 0.01 * context.height),
-                                      ))
-                                  .toList(),
-                              trailing: SizedBox(height: 0.1 * context.height),
-                            )
-                          : Container(
-                              padding: EdgeInsets.only(
-                                  top: MediaQuery.paddingOf(context).top + 10),
-                              constraints: BoxConstraints(
-                                minWidth: context.width * 0.0286 + 28.56,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBody: true,
+        body: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (useSideBar || context.orientation == Orientation.landscape)
+              Obx(
+                () => _mainController.navigationBars.length > 1
+                    ? NavigationRail(
+                        groupAlignment: 0.5,
+                        selectedIndex: _mainController.selectedIndex.value,
+                        onDestinationSelected: setIndex,
+                        labelType: NavigationRailLabelType.selected,
+                        leading: userAndSearchVertical,
+                        destinations: _mainController.navigationBars
+                            .map(
+                              (e) => NavigationRailDestination(
+                                icon: _buildIcon(
+                                  id: e['id'],
+                                  count: e['count'],
+                                  icon: e['icon'],
+                                ),
+                                selectedIcon: _buildIcon(
+                                  id: e['id'],
+                                  count: e['count'],
+                                  icon: e['selectIcon'],
+                                ),
+                                label: Text(e['label']),
                               ),
-                              child: userAndSearchVertical,
-                            ),
-                    ),
-                  ),
-                ] else if (!isPortait)
-                  Obx(
-                    () => _mainController.navigationBars.length > 1
-                        ? NavigationRail(
-                            onDestinationSelected: setIndex,
-                            selectedIndex: _mainController.selectedIndex.value,
-                            destinations: _mainController.navigationBars
-                                .map(
-                                  (e) => NavigationRailDestination(
-                                    icon: _buildIcon(
-                                      id: e['id'],
-                                      count: e['count'],
-                                      icon: e['icon'],
-                                    ),
-                                    selectedIcon: _buildIcon(
-                                      id: e['id'],
-                                      count: e['count'],
-                                      icon: e['selectIcon'],
-                                    ),
-                                    label: Text(e['label']),
-                                  ),
-                                )
-                                .toList(),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                VerticalDivider(
-                  width: 1,
-                  indent: MediaQuery.of(context).padding.top,
-                  endIndent: MediaQuery.of(context).padding.bottom,
-                  color:
-                      Theme.of(context).colorScheme.outline.withOpacity(0.06),
-                ),
-                Expanded(
-                  child: PageView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _mainController.pageController,
-                    children: _mainController.pages,
-                  ),
-                ),
-                if (useSideBar) SizedBox(width: context.width * 0.004),
-              ],
+                            )
+                            .toList(),
+                      )
+                    : Container(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.paddingOf(context).top + 10,
+                        ),
+                        width: 56,
+                        child: userAndSearchVertical,
+                      ),
+              ),
+            VerticalDivider(
+              width: 1,
+              indent: MediaQuery.of(context).padding.top,
+              endIndent: MediaQuery.of(context).padding.bottom,
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
             ),
-            bottomNavigationBar: useSideBar || !isPortait
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _mainController.pageController,
+                children: _mainController.pages,
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar:
+            useSideBar || context.orientation == Orientation.landscape
                 ? null
                 : StreamBuilder(
                     stream: _mainController.hideTabBar
@@ -313,10 +272,6 @@ class _MainAppState extends State<MainApp>
                                         selectedFontSize: 12,
                                         unselectedFontSize: 12,
                                         type: BottomNavigationBarType.fixed,
-                                        // selectedItemColor:
-                                        //     Theme.of(context).colorScheme.primary, // 选中项的颜色
-                                        // unselectedItemColor:
-                                        //     Theme.of(context).colorScheme.onSurface,
                                         items: _mainController.navigationBars
                                             .map(
                                               (e) => BottomNavigationBarItem(
@@ -340,8 +295,6 @@ class _MainAppState extends State<MainApp>
                       );
                     },
                   ),
-          );
-        },
       ),
     );
   }

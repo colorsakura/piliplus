@@ -36,11 +36,14 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
       body: Column(
         children: [
-          if (!_homeController.useSideBar) customAppBar,
+          if (!_homeController.useSideBar &&
+              context.orientation == Orientation.portrait)
+            customAppBar,
           if (_homeController.tabs.length > 1) ...[
             const SizedBox(height: 4),
             Material(
