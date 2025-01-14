@@ -1,5 +1,6 @@
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/article/member_article.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/audio/member_audio.dart';
+import 'package:PiliPlus/pages/member/new/content/member_contribute/content/season_series/season_series_page.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/video/member_video.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute_ctr.dart';
 import 'package:flutter/material.dart';
@@ -109,6 +110,10 @@ class _MemberContributeState extends State<MemberContribute>
                               mid: widget.mid,
                               seriesId: item.seriesId,
                               title: item.title,
+                            ),
+                          'ugcSeason' => SeasonSeriesPage(
+                              mid: widget.mid,
+                              heroTag: widget.heroTag,
                             ),
                           _ => Center(child: Text(item.title!))
                         },

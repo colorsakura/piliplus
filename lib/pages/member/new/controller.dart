@@ -31,6 +31,7 @@ class MemberControllerNew extends CommonController
   List<Tab2>? tab2;
   RxInt contributeInitialIndex = 0.obs;
   double? top;
+  int? ugcSeasonCount;
 
   @override
   void onInit() {
@@ -54,6 +55,7 @@ class MemberControllerNew extends CommonController
     tab2 = response.response.tab2;
     live = response.response?.live;
     silence = response.response?.card?.silence;
+    ugcSeasonCount = response.response?.ugcSeason?.count;
     if (response.response?.card?.endTime != null) {
       if (response.response.card.endTime == 0) {
         endTime = ': 永久封禁';

@@ -53,6 +53,7 @@ class Data {
   dynamic digitalButton;
   dynamic entry;
   dynamic live;
+  UgcSeason? ugcSeason;
 
   Data({
     this.relation,
@@ -79,9 +80,22 @@ class Data {
     this.digitalButton,
     this.entry,
     this.live,
+    this.ugcSeason,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
+}
+
+class UgcSeason {
+  int? count;
+
+  UgcSeason({
+    this.count,
+  });
+
+  UgcSeason.fromJson(Map<String, dynamic> json) {
+    count = json['count'];
+  }
 }

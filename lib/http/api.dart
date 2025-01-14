@@ -328,6 +328,8 @@ class Api {
 
   static const String spaceFav = '/x/v3/fav/folder/space';
 
+  static const String seasonSeries = '/x/polymer/web-space/seasons_series_list';
+
   // 用户名片信息
   static const String memberCardInfo = '/x/web-interface/card';
 

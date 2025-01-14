@@ -154,6 +154,25 @@ class MemberHttp {
     }
   }
 
+  static Future<LoadingState> seasonSeriesList({
+    required int? mid,
+    required int pn,
+  }) async {
+    dynamic res = await Request().get(
+      Api.seasonSeries,
+      queryParameters: {
+        'mid': mid,
+        'page_num': pn,
+        'page_size': 10,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']['items_lists']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
   static Future<LoadingState> spaceArchive({
     required ContributeType type,
     required int? mid,

@@ -62,6 +62,9 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       digitalButton: json['digital_button'],
       entry: json['entry'],
       live: json['live'],
+      ugcSeason: json['ugc_season'] != null
+          ? UgcSeason.fromJson(json['ugc_season'])
+          : null,
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
