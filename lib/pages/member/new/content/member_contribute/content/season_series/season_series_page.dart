@@ -23,14 +23,19 @@ class SeasonSeriesPage extends StatefulWidget {
   State<SeasonSeriesPage> createState() => _SeasonSeriesPageState();
 }
 
-class _SeasonSeriesPageState extends State<SeasonSeriesPage> {
+class _SeasonSeriesPageState extends State<SeasonSeriesPage>
+    with AutomaticKeepAliveClientMixin {
   late final _controller = Get.put(
     SeasonSeriesController(widget.mid),
     tag: widget.heroTag,
   );
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 

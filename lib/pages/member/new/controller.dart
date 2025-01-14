@@ -1,6 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -31,7 +32,7 @@ class MemberControllerNew extends CommonController
   List<Tab2>? tab2;
   RxInt contributeInitialIndex = 0.obs;
   double? top;
-  int? ugcSeasonCount;
+  bool? hasSeasonOrSeries;
 
   @override
   void onInit() {
@@ -47,26 +48,28 @@ class MemberControllerNew extends CommonController
 
   @override
   bool customHandleResponse(Success response) {
-    username = response.response?.card?.name ?? '';
-    isFollow.value = response.response?.card?.relation?.isFollow == 1;
-    relation.value = response.response?.relSpecial == 1
-        ? 2
-        : response.response?.relation ?? 1;
-    tab2 = response.response.tab2;
-    live = response.response?.live;
-    silence = response.response?.card?.silence;
-    ugcSeasonCount = response.response?.ugcSeason?.count;
-    if (response.response?.card?.endTime != null) {
-      if (response.response.card.endTime == 0) {
+    Data data = response.response;
+    username = data.card?.name ?? '';
+    isFollow.value = data.card?.relation?.isFollow == 1;
+    relation.value = data.relSpecial == 1 ? 2 : data.relation ?? 1;
+    tab2 = data.tab2;
+    live = data.live;
+    silence = data.card?.silence;
+    if ((data.ugcSeason?.count != null && data.ugcSeason?.count != 0) ||
+        data.series?.item?.isNotEmpty == true) {
+      hasSeasonOrSeries = true;
+    }
+    if (data.card?.endTime != null) {
+      if (data.card!.endTime == 0) {
         endTime = ': 永久封禁';
-      } else if (response.response.card.endTime >
+      } else if (data.card!.endTime! >
           DateTime.now().millisecondsSinceEpoch ~/ 1000) {
         endTime =
-            '：至 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(response.response.card.endTime * 1000))}';
+            '：至 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(data.card!.endTime! * 1000))}';
       }
     }
     if (tab2 != null && tab2!.isNotEmpty) {
-      if (!response.response.tab.toJson().values.contains(true) &&
+      if (!data.tab!.toJson().values.contains(true) &&
           tab2!.first.param == 'home') {
         // remove empty home tab
         tab2!.removeAt(0);
@@ -80,11 +83,11 @@ class MemberControllerNew extends CommonController
           });
         }
         if (initialIndex == -1) {
-          if (response.response.defaultTab == 'video') {
-            response.response.defaultTab = 'dynamic';
+          if (data.defaultTab == 'video') {
+            data.defaultTab = 'dynamic';
           }
           initialIndex = tab2!.indexWhere((item) {
-            return item.param == response.response.defaultTab;
+            return item.param == data.defaultTab;
           });
         }
         tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();

@@ -32,17 +32,26 @@ class MemberContributeCtr extends CommonController
     if (contribute.items?.isNullOrEmpty == false &&
         contribute.items!.length > 1) {
       items = contribute.items;
-      if (_ctr.ugcSeasonCount != null) {
-        int currentSeasonCount =
-            items!.where((item) => item.param == 'season_video').length;
-        if (currentSeasonCount < _ctr.ugcSeasonCount!) {
-          items!.add(
-            Item(
-              param: 'ugcSeason',
-              title: '全部合集/列表',
-            ),
-          );
-        }
+      // if (_ctr.ugcSeasonCount != null) {
+      //   int currentSeasonCount =
+      //       items!.where((item) => item.param == 'season_video').length;
+      //   if (currentSeasonCount < _ctr.ugcSeasonCount!) {
+      //     items!.add(
+      //       Item(
+      //         param: 'ugcSeason',
+      //         title: '全部合集/列表',
+      //       ),
+      //     );
+      //   }
+      // }
+      // show if exist
+      if (_ctr.hasSeasonOrSeries == true) {
+        items!.add(
+          Item(
+            param: 'ugcSeason',
+            title: '全部合集/列表',
+          ),
+        );
       }
       tabs = items!.map((item) => Tab(text: item.title)).toList();
       tabController = TabController(
