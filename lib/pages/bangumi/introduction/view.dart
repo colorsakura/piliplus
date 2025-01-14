@@ -173,11 +173,26 @@ class _BangumiInfoState extends State<BangumiInfo>
   }
 
   // 收藏
-  showFavBottomSheet() {
+  showFavBottomSheet({type = 'tap'}) {
     if (bangumiIntroController.userInfo == null) {
       SmartDialog.showToast('账号未登录');
       return;
     }
+    // 快速收藏 &
+    // 点按 收藏至默认文件夹
+    // 长按选择文件夹
+    if (bangumiIntroController.enableQuickFav) {
+      if (type == 'tap') {
+        bangumiIntroController.actionFavVideo(type: 'default');
+      } else {
+        _showFavBottomSheet();
+      }
+    } else if (type != 'longPress') {
+      _showFavBottomSheet();
+    }
+  }
+
+  _showFavBottomSheet() {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -522,6 +537,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                     icon: const Icon(FontAwesomeIcons.star),
                     selectIcon: const Icon(FontAwesomeIcons.solidStar),
                     onTap: () => showFavBottomSheet(),
+                    onLongPress: () => showFavBottomSheet(type: 'longPress'),
                     selectStatus: bangumiIntroController.hasFav.value,
                     loadingStatus: false,
                     semanticsLabel: '收藏',
@@ -592,6 +608,7 @@ class _BangumiInfoState extends State<BangumiInfo>
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.heart),
           onTap: () => showFavBottomSheet(),
+          onLongPress: () => showFavBottomSheet(type: 'longPress'),
           selectStatus: videoIntroController.hasFav.value,
           loadingStatus: widget.isLoading,
           text: !widget.isLoading

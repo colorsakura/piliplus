@@ -277,12 +277,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       SmartDialog.showToast('账号未登录');
       return;
     }
-    final bool enableDragQuickFav =
-        GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
     // 快速收藏 &
     // 点按 收藏至默认文件夹
     // 长按选择文件夹
-    if (enableDragQuickFav) {
+    if (videoIntroController.enableQuickFav) {
       if (type == 'tap') {
         videoIntroController.actionFavVideo(type: 'default');
       } else {

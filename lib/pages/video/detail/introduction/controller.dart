@@ -83,6 +83,8 @@ class VideoIntroController extends GetxController
   late final showArgueMsg = GStorage.showArgueMsg;
   late final enableAi =
       GStorage.setting.get(SettingBoxKey.enableAi, defaultValue: false);
+  late final enableQuickFav =
+      GStorage.setting.get(SettingBoxKey.enableQuickFav, defaultValue: false);
 
   @override
   void onInit() {
