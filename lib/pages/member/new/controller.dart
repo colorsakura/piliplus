@@ -8,6 +8,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 enum MemberTabType { none, home, dynamic, contribute, favorite, bangumi }
@@ -40,6 +41,9 @@ class MemberControllerNew extends CommonController
 
   dynamic live;
 
+  int? silence;
+  String? endTime;
+
   @override
   bool customHandleResponse(Success response) {
     username = response.response?.card?.name ?? '';
@@ -49,6 +53,16 @@ class MemberControllerNew extends CommonController
         : response.response?.relation ?? 1;
     tab2 = response.response.tab2;
     live = response.response?.live;
+    silence = response.response?.card?.silence;
+    if (response.response?.card?.endTime != null) {
+      if (response.response.card.endTime == 0) {
+        endTime = ': 永久封禁';
+      } else if (response.response.card.endTime >
+          DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+        endTime =
+            '：至 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(response.response.card.endTime * 1000))}';
+      }
+    }
     if (tab2 != null && tab2!.isNotEmpty) {
       if (!response.response.tab.toJson().values.contains(true) &&
           tab2!.first.param == 'home') {

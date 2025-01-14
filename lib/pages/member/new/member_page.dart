@@ -318,6 +318,8 @@ class _MemberPageNewState extends State<MemberPageNew>
               images: userState.response.images,
               onFollow: () => _userController.onFollow(context),
               live: _userController.live,
+              silence: _userController.silence,
+              endTime: _userController.endTime,
             ),
           ),
         ),
