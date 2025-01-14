@@ -165,16 +165,14 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             children: [
                               Icon(
                                 Icons.shield_outlined,
-                                size:
-                                    MediaQuery.textScalerOf(context).scale(16),
+                                size: 16,
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSecondaryContainer,
                               ),
                               Icon(
                                 Icons.play_arrow_rounded,
-                                size:
-                                    MediaQuery.textScalerOf(context).scale(12),
+                                size: 12,
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSecondaryContainer,
@@ -183,6 +181,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                           ),
                           Text(
                             videoDetailCtr.videoLabel.value,
+                            textScaler: TextScaler.linear(1),
                             strutStyle: StrutStyle(leading: 0, height: 1),
                             style: TextStyle(
                               height: 1,

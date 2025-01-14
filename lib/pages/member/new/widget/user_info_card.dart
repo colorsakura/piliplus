@@ -267,6 +267,7 @@ class UserInfoCard extends StatelessWidget {
           Builder(builder: (context) {
             bool isLight = Theme.of(context).brightness == Brightness.light;
             return Container(
+              width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: isLight
@@ -275,24 +276,29 @@ class UserInfoCard extends StatelessWidget {
               ),
               margin: const EdgeInsets.only(left: 20, top: 8, right: 20),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.info,
-                    size: MediaQuery.textScalerOf(context).scale(18),
-                    color: isLight
-                        ? Theme.of(context).colorScheme.onErrorContainer
-                        : Theme.of(context).colorScheme.onError,
-                  ),
-                  Text(
-                    ' 该账号封禁中${endTime ?? ''}',
-                    style: TextStyle(
-                      color: isLight
-                          ? Theme.of(context).colorScheme.onErrorContainer
-                          : Theme.of(context).colorScheme.onError,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Icon(
+                        Icons.info,
+                        size: 17,
+                        color: isLight
+                            ? Theme.of(context).colorScheme.onErrorContainer
+                            : Theme.of(context).colorScheme.onError,
+                      ),
                     ),
-                  ),
-                ],
+                    TextSpan(
+                      text: ' 该账号封禁中${endTime ?? ''}',
+                      style: TextStyle(
+                        color: isLight
+                            ? Theme.of(context).colorScheme.onErrorContainer
+                            : Theme.of(context).colorScheme.onError,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
