@@ -59,12 +59,16 @@ class MineController extends GetxController {
         isLogin.value = true;
       } else {
         LoginUtils.onLogout();
+        return;
       }
     } else {
       SmartDialog.showToast(res['msg']);
+      if (res['msg'] == '账号未登录') {
+        LoginUtils.onLogout();
+        return;
+      }
     }
-    await queryUserStatOwner();
-    return res;
+    queryUserStatOwner();
   }
 
   Future queryUserStatOwner() async {
@@ -72,7 +76,6 @@ class MineController extends GetxController {
     if (res['status']) {
       userStat.value = res['data'];
     }
-    return res;
   }
 
   static onChangeAnonymity(BuildContext context) {
