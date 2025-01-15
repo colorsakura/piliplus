@@ -86,7 +86,6 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                 //   tag: content.bvid,
                 //   child:
                 NetworkImgLayer(
-                  type: null,
                   width: width,
                   height: width / StyleString.aspectRatio,
                   src: content.cover,
