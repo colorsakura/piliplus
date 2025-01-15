@@ -1,5 +1,6 @@
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +21,15 @@ class VideoUtils {
     if (item is AudioItem) {
       if (GStorage.setting
           .get(SettingBoxKey.disableAudioCDN, defaultValue: true)) {
-        return item.backupUrl ?? item.baseUrl ?? "";
+        return item.backupUrl.isNullOrEmpty.not
+            ? item.backupUrl!
+            : item.baseUrl ?? "";
       }
     }
     if (defaultCDNService == CDNService.baseUrl.code) {
-      return item.baseUrl ?? "";
+      return item.baseUrl.isNullOrEmpty.not
+          ? item.baseUrl
+          : item.backupUrl ?? "";
     }
     if (item is CodecItem) {
       backupUrl = (item.urlInfo?.first.host)! +
@@ -34,20 +39,20 @@ class VideoUtils {
       backupUrl = item.backupUrl;
     }
     if (defaultCDNService == CDNService.backupUrl.code) {
-      return backupUrl ?? item.baseUrl ?? "";
+      return backupUrl.isNullOrEmpty.not ? backupUrl : item.baseUrl ?? "";
     }
-    videoUrl = (backupUrl == null || isMCDNorPCDN(backupUrl))
+    videoUrl = (backupUrl.isNullOrEmpty || isMCDNorPCDN(backupUrl!))
         ? item.baseUrl
         : backupUrl;
 
-    if (videoUrl == null) {
+    if (videoUrl.isNullOrEmpty) {
       return "";
     }
     debugPrint("videoUrl:$videoUrl");
 
     String defaultCDNHost = CDNServiceCode.fromCode(defaultCDNService)!.host;
     debugPrint("defaultCDNHost:$defaultCDNHost");
-    if (videoUrl.contains("szbdyd.com")) {
+    if (videoUrl!.contains("szbdyd.com")) {
       String hostname =
           Uri.parse(videoUrl).queryParameters['xy_usource'] ?? defaultCDNHost;
       videoUrl =

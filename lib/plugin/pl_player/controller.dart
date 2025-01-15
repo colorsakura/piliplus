@@ -800,6 +800,10 @@ class PlPlayerController {
       videoPlayerController!.stream.error.listen((String event) {
         // 直播的错误提示没有参考价值，均不予显示
         if (videoType.value == 'live') return;
+        if (event.startsWith("Failed to open .") ||
+            event.startsWith("Cannot open file ''")) {
+          SmartDialog.showToast('视频源为空');
+        }
         if (event.startsWith("Failed to open https://") ||
             event.startsWith("Can not open external file https://") ||
             //tcp: ffurl_read returned 0xdfb9b0bb
@@ -807,13 +811,15 @@ class PlPlayerController {
             event.startsWith('tcp: ffurl_read returned ')) {
           EasyThrottle.throttle('videoPlayerController!.stream.error.listen',
               const Duration(milliseconds: 10000), () {
-            Future.delayed(const Duration(milliseconds: 3000), () {
+            Future.delayed(const Duration(milliseconds: 3000), () async {
               debugPrint("isBuffering.value: ${isBuffering.value}");
               debugPrint("_buffered.value: ${_buffered.value}");
               if (isBuffering.value && _buffered.value == Duration.zero) {
-                refreshPlayer();
                 SmartDialog.showToast('视频链接打开失败，重试中',
                     displayTime: const Duration(milliseconds: 500));
+                if (!await refreshPlayer()) {
+                  debugPrint("failed");
+                }
               }
             });
           });
