@@ -116,7 +116,7 @@ class GStorage {
       setting.get(SettingBoxKey.defaultHomePage, defaultValue: 0);
 
   static int get previewQ =>
-      setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
+      setting.get(SettingBoxKey.previewQuality, defaultValue: 100);
 
   static double get mediumCardWidth =>
       setting.get(SettingBoxKey.mediumCardWidth, defaultValue: 280.0);

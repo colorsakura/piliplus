@@ -92,14 +92,12 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   int? currentIndex;
 
   late List<bool> _thumbList;
-  late int _quality;
+  late final int _quality = GStorage.previewQ;
 
   @override
   void initState() {
     super.initState();
 
-    _quality =
-        GStorage.setting.get(SettingBoxKey.previewQuality, defaultValue: 80);
     _thumbList = List.generate(widget.sources.length, (_) => true);
 
     _pageController = PageController(initialPage: widget.initIndex);
