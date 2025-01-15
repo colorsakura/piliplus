@@ -77,33 +77,37 @@ class _BottomControlState extends State<BottomControl> {
           //   ),
           // ),
           // const SizedBox(width: 4),
-          Container(
-            height: 30,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            alignment: Alignment.center,
-            child: PopupMenuButton<BoxFit>(
-              onSelected: widget.controller.toggleVideoFit,
-              initialValue: widget.controller.videoFit.value,
-              color: Colors.black.withOpacity(0.8),
-              itemBuilder: (BuildContext context) {
-                return BoxFit.values.map((BoxFit boxFit) {
-                  return PopupMenuItem<BoxFit>(
-                    height: 35,
-                    padding: const EdgeInsets.only(left: 30),
-                    value: boxFit,
-                    child: Text(
-                      "${PlPlayerController.videoFitType[boxFit.index]['desc']}",
-                      style: const TextStyle(color: Colors.white, fontSize: 13),
-                    ),
-                  );
-                }).toList();
-              },
-              child: Text(
-                "${PlPlayerController.videoFitType[widget.controller.videoFit.value.index]['desc']}",
-                style: const TextStyle(color: Colors.white, fontSize: 13),
+          Obx(
+            () => Container(
+              height: 30,
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              alignment: Alignment.center,
+              child: PopupMenuButton<BoxFit>(
+                onSelected: widget.controller.toggleVideoFit,
+                initialValue: widget.controller.videoFit.value,
+                color: Colors.black.withOpacity(0.8),
+                itemBuilder: (BuildContext context) {
+                  return BoxFit.values.map((BoxFit boxFit) {
+                    return PopupMenuItem<BoxFit>(
+                      height: 35,
+                      padding: const EdgeInsets.only(left: 30),
+                      value: boxFit,
+                      child: Text(
+                        "${PlPlayerController.videoFitType[boxFit.index]['desc']}",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13),
+                      ),
+                    );
+                  }).toList();
+                },
+                child: Text(
+                  "${PlPlayerController.videoFitType[widget.controller.videoFit.value.index]['desc']}",
+                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                ),
               ),
             ),
           ),
+          const SizedBox(width: 10),
           if (Platform.isAndroid) ...[
             SizedBox(
               width: 34,
