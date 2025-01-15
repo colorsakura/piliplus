@@ -391,22 +391,27 @@ class VideoIntroController extends GetxController
     // 收藏至默认文件夹
     if (type == 'default') {
       SmartDialog.showLoading(msg: '请求中');
-      await queryVideoInFolder();
-      int defaultFolderId = favFolderData.value.list!.first.id!;
-      int favStatus = favFolderData.value.list!.first.favState!;
-      var result = await VideoHttp.favVideo(
-        aid: IdUtils.bv2av(bvid),
-        addIds: favStatus == 0 ? '$defaultFolderId' : '',
-        delIds: favStatus == 1 ? '$defaultFolderId' : '',
-      );
-      SmartDialog.dismiss();
-      if (result['status']) {
-        // 重新获取收藏状态
-        await queryHasFavVideo();
-        SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
-      } else {
-        SmartDialog.showToast(result['msg']);
-      }
+      queryVideoInFolder().then((res) async {
+        if (res['status']) {
+          int defaultFolderId = favFolderData.value.list!.first.id!;
+          int favStatus = favFolderData.value.list!.first.favState!;
+          var result = await VideoHttp.favVideo(
+            aid: IdUtils.bv2av(bvid),
+            addIds: favStatus == 0 ? '$defaultFolderId' : '',
+            delIds: favStatus == 1 ? '$defaultFolderId' : '',
+          );
+          SmartDialog.dismiss();
+          if (result['status']) {
+            // 重新获取收藏状态
+            await queryHasFavVideo();
+            SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
+          } else {
+            SmartDialog.showToast(result['msg']);
+          }
+        } else {
+          SmartDialog.dismiss();
+        }
+      });
       return;
     }
     try {
