@@ -27,7 +27,7 @@ class VideoUtils {
       }
     }
     if (defaultCDNService == CDNService.baseUrl.code) {
-      return item.baseUrl.isNullOrEmpty.not
+      return (item.baseUrl as String?).isNullOrEmpty.not
           ? item.baseUrl
           : item.backupUrl ?? "";
     }
