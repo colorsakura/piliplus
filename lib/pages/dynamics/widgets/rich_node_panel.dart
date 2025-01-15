@@ -46,7 +46,7 @@ InlineSpan? richNode(item, context) {
               TextSpan(text: i.origText, style: const TextStyle(height: 1.65)));
         }
         // @用户
-        if (i.type == 'RICH_TEXT_NODE_TYPE_AT') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_AT') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -67,7 +67,7 @@ InlineSpan? richNode(item, context) {
           );
         }
         // 话题
-        if (i.type == 'RICH_TEXT_NODE_TYPE_TOPIC') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_TOPIC') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -82,7 +82,7 @@ InlineSpan? richNode(item, context) {
           );
         }
         // 网页链接
-        if (i.type == 'RICH_TEXT_NODE_TYPE_WEB') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_WEB') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -121,7 +121,7 @@ InlineSpan? richNode(item, context) {
           );
         }
         // 投票
-        if (i.type == 'RICH_TEXT_NODE_TYPE_VOTE') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_VOTE') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -149,7 +149,7 @@ InlineSpan? richNode(item, context) {
           );
         }
         // 表情
-        if (i.type == 'RICH_TEXT_NODE_TYPE_EMOJI' && i.emoji != null) {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_EMOJI' && i.emoji != null) {
           spanChildren.add(
             WidgetSpan(
               child: NetworkImgLayer(
@@ -162,7 +162,7 @@ InlineSpan? richNode(item, context) {
           );
         }
         // 抽奖
-        if (i.type == 'RICH_TEXT_NODE_TYPE_LOTTERY') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_LOTTERY') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -178,13 +178,24 @@ InlineSpan? richNode(item, context) {
               alignment: PlaceholderAlignment.middle,
               child: GestureDetector(
                 onTap: () {
-                  Get.toNamed(
-                    '/webview',
-                    parameters: {
-                      'url':
-                          'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
-                    },
-                  );
+                  dynamic id;
+                  if (item is DynamicItemModel) {
+                    id = item.idStr;
+                  } else if (item is ItemOrigModel &&
+                      item.basic?['jump_url'] != null) {
+                    id = RegExp(r'/(\d+)')
+                        .firstMatch(item.basic?['jump_url'])
+                        ?.group(1);
+                  }
+                  if (id != null) {
+                    Get.toNamed(
+                      '/webview',
+                      parameters: {
+                        'url':
+                            'https://www.bilibili.com/h5/lottery/result?business_id=$id'
+                      },
+                    );
+                  }
                 },
                 child: Text(
                   '${i.origText} ',
@@ -196,7 +207,7 @@ InlineSpan? richNode(item, context) {
         }
 
         /// TODO 商品
-        if (i.type == 'RICH_TEXT_NODE_TYPE_GOODS') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_GOODS') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -221,7 +232,7 @@ InlineSpan? richNode(item, context) {
           );
         }
         // 投稿
-        if (i.type == 'RICH_TEXT_NODE_TYPE_BV') {
+        else if (i.type == 'RICH_TEXT_NODE_TYPE_BV') {
           spanChildren.add(
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
