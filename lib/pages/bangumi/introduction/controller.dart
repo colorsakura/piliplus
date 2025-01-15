@@ -300,6 +300,7 @@ class BangumiIntroController extends CommonController {
       SmartDialog.dismiss();
       if (result['status']) {
         // 重新获取收藏状态
+        await Future.delayed(const Duration(milliseconds: 255));
         await queryBangumiLikeCoinFav();
         SmartDialog.showToast('✅ 快速收藏/取消收藏成功');
       } else {
