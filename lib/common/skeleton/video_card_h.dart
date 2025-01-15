@@ -31,8 +31,7 @@ class VideoCardHSkeleton extends StatelessWidget {
                           decoration: BoxDecoration(
                             color:
                                 Theme.of(context).colorScheme.onInverseSurface,
-                            borderRadius:
-                                BorderRadius.circular(StyleString.imgRadius.x),
+                            borderRadius: StyleString.mdRadius,
                           ),
                         );
                       },

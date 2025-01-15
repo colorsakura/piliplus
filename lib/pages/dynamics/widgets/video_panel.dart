@@ -110,16 +110,16 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                     padding: const EdgeInsets.fromLTRB(10, 0, 8, 8),
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            Colors.transparent,
-                            Colors.black54,
-                          ],
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(StyleString.imgRadius.x)),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Colors.transparent,
+                          Colors.black54,
+                        ],
+                      ),
+                      borderRadius: StyleString.mdRadius,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,

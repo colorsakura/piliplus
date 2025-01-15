@@ -72,7 +72,7 @@ class BangumiCardV extends StatelessWidget {
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.all(StyleString.imgRadius),
+              borderRadius: StyleString.mdRadius,
               child: AspectRatio(
                 aspectRatio: 0.75,
                 child: LayoutBuilder(builder: (context, boxConstraints) {

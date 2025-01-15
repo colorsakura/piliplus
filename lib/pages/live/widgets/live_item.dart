@@ -33,7 +33,7 @@ class LiveCardV extends StatelessWidget {
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.all(StyleString.imgRadius),
+              borderRadius: StyleString.mdRadius,
               child: AspectRatio(
                 aspectRatio: StyleString.aspectRatio,
                 child: LayoutBuilder(builder: (context, boxConstraints) {

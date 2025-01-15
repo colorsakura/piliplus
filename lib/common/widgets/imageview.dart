@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/nine_grid_view.dart';
@@ -49,7 +50,7 @@ Widget imageview(
   }
   BorderRadius borderRadius(index) {
     if (picArr.length == 1) {
-      return BorderRadius.circular(12);
+      return StyleString.mdRadius;
     }
     final int row = picArr.length == 4 ? 2 : 3;
     return BorderRadius.only(
@@ -57,27 +58,27 @@ Widget imageview(
         (index - row >= 0 ||
                 ((index - 1) >= 0 && (index - 1) % row < index % row))
             ? 0
-            : 12,
+            : 10,
       ),
       topRight: Radius.circular(
         (index - row >= 0 ||
                 ((index + 1) < picArr.length &&
                     (index + 1) % row > index % row))
             ? 0
-            : 12,
+            : 10,
       ),
       bottomLeft: Radius.circular(
         (index + row < picArr.length ||
                 ((index - 1) >= 0 && (index - 1) % row < index % row))
             ? 0
-            : 12,
+            : 10,
       ),
       bottomRight: Radius.circular(
         (index + row < picArr.length ||
                 ((index + 1) < picArr.length &&
                     (index + 1) % row > index % row))
             ? 0
-            : 12,
+            : 10,
       ),
     );
   }

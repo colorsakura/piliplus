@@ -41,20 +41,17 @@ class NetworkImgLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double radius = this.radius != null
-        ? this.radius!
-        : type == 'avatar'
-            ? 50
-            : type == 'emote'
-                ? 0
-                : StyleString.imgRadius.x;
     return src.isNullOrEmpty.not
-        ? radius != 0
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(radius),
-                child: _buildImage(context),
-              )
-            : _buildImage(context)
+        ? type == 'avatar'
+            ? ClipOval(child: _buildImage(context))
+            : radius == 0 || type == 'emote'
+                ? _buildImage(context)
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      radius ?? StyleString.imgRadius.x,
+                    ),
+                    child: _buildImage(context),
+                  )
         : getPlaceHolder?.call() ?? placeholder(context);
   }
 
@@ -99,15 +96,15 @@ class NetworkImgLayer extends StatelessWidget {
     return Container(
       width: width,
       height: height,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
+        shape: type == 'avatar' ? BoxShape.circle : BoxShape.rectangle,
         color: Theme.of(context).colorScheme.onInverseSurface.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(
-          type == 'avatar'
-              ? 50
-              : type == 'emote'
-                  ? 0
-                  : StyleString.imgRadius.x,
-        ),
+        borderRadius: type == 'avatar' || type == 'emote' || radius == 0
+            ? null
+            : BorderRadius.circular(
+                radius ?? StyleString.imgRadius.x,
+              ),
       ),
       child: type == 'bg'
           ? const SizedBox()

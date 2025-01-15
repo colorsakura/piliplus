@@ -70,8 +70,8 @@ class _LivePageState extends State<LivePage>
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(
           left: StyleString.safeSpace, right: StyleString.safeSpace),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(StyleString.imgRadius),
+      decoration: BoxDecoration(
+        borderRadius: StyleString.mdRadius,
       ),
       child: refreshIndicator(
         onRefresh: () async {

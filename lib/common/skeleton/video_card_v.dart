@@ -16,9 +16,9 @@ class VideoCardVSkeleton extends StatelessWidget {
               builder: (context, boxConstraints) {
                 return Container(
                   decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
-                      borderRadius:
-                          BorderRadius.circular(StyleString.imgRadius.x)),
+                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    borderRadius: StyleString.mdRadius,
+                  ),
                 );
               },
             ),
