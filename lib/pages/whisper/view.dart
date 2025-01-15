@@ -176,7 +176,7 @@ class _WhisperPageState extends State<WhisperPage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, int i) {
                                   dynamic content =
-                                      sessionList[i].lastMsg.content;
+                                      sessionList[i]?.lastMsg?.content;
                                   if (content == null || content == "") {
                                     content = '不支持的消息类型';
                                   } else {
