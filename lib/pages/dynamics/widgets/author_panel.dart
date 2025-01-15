@@ -1,3 +1,4 @@
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,9 @@ class AuthorPanel extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text(item.modules.moduleAuthor.pubTime),
+                  Text(item is ItemOrigModel
+                      ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
+                      : item.modules.moduleAuthor.pubTime),
                   if (item.modules.moduleAuthor.pubTime != '' &&
                       item.modules.moduleAuthor.pubAction != '')
                     const Text(' '),
