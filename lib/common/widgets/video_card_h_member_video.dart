@@ -82,14 +82,14 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                 width: maxWidth,
                                 height: maxHeight,
                               ),
-                              // if (videoItem.season != null)
-                              //   PBadge(
-                              //     text: '合集: ${videoItem.season?['count']}',
-                              //     right: 6.0,
-                              //     bottom: 6.0,
-                              //     type: 'gray',
-                              //   )
-                              // else
+                              if (videoItem.badges?.isNotEmpty == true)
+                                PBadge(
+                                  text: videoItem.badges!
+                                      .map((item) => item.text)
+                                      .join('|'),
+                                  right: 6.0,
+                                  top: 6.0,
+                                ),
                               if (videoItem.duration != null)
                                 PBadge(
                                   text: Utils.timeFormat(videoItem.duration),

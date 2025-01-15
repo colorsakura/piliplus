@@ -93,7 +93,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
                   semanticsLabel: content.title,
                 ),
                 // ),
-                if (content.badge != null && type == 'pgc')
+                if (content?.badge?['text'] != null)
                   PBadge(
                     text: content.badge['text'],
                     top: 8.0,
