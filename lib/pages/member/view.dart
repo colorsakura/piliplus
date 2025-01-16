@@ -581,13 +581,13 @@ class _ReportPanelState extends State<ReportPanel> {
           const Text('举报理由（单选，非必选）'),
           ...List.generate(
             5,
-            (index) => _radioWidget(
-              index,
-              _reasonV2,
-              (value) {
+            (index) => radioWidget<int>(
+              value: index,
+              groupValue: _reasonV2,
+              onChanged: (value) {
                 setState(() => _reasonV2 = value);
               },
-              ['色情低俗', '不实信息', '违禁', '人身攻击', '赌博诈骗'][index],
+              title: const ['色情低俗', '不实信息', '违禁', '人身攻击', '赌博诈骗'][index],
             ),
           ),
           const SizedBox(height: 10),
@@ -650,16 +650,18 @@ Widget _checkBoxWidget(
   );
 }
 
-Widget _radioWidget(
-  int value,
-  int? groupValue,
-  ValueChanged onChanged,
-  String title,
-) {
+Widget radioWidget<T>({
+  required T value,
+  T? groupValue,
+  required ValueChanged onChanged,
+  required String title,
+  double? paddingStart,
+}) {
   return InkWell(
     onTap: () => onChanged(value),
     child: Row(
       children: [
+        if (paddingStart != null) SizedBox(width: paddingStart),
         Radio(
           value: value,
           groupValue: groupValue,

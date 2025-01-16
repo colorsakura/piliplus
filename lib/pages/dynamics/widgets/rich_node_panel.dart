@@ -178,24 +178,13 @@ InlineSpan? richNode(item, context) {
               alignment: PlaceholderAlignment.middle,
               child: GestureDetector(
                 onTap: () {
-                  dynamic id;
-                  if (item is DynamicItemModel) {
-                    id = item.idStr;
-                  } else if (item is ItemOrigModel &&
-                      item.basic?['jump_url'] != null) {
-                    id = RegExp(r'/(\d+)')
-                        .firstMatch(item.basic?['jump_url'])
-                        ?.group(1);
-                  }
-                  if (id != null) {
-                    Get.toNamed(
-                      '/webview',
-                      parameters: {
-                        'url':
-                            'https://www.bilibili.com/h5/lottery/result?business_id=$id'
-                      },
-                    );
-                  }
+                  Get.toNamed(
+                    '/webview',
+                    parameters: {
+                      'url':
+                          'https://www.bilibili.com/h5/lottery/result?business_id=${item.idStr}'
+                    },
+                  );
                 },
                 child: Text(
                   '${i.origText} ',

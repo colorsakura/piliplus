@@ -54,6 +54,7 @@ class ItemOrigModel {
     this.modules,
     this.type,
     this.visible,
+    this.idStr,
   });
 
   Map? basic;
@@ -61,6 +62,7 @@ class ItemOrigModel {
   ItemModulesModel? modules;
   String? type;
   bool? visible;
+  dynamic idStr;
 
   ItemOrigModel.fromJson(Map<String, dynamic> json) {
     basic = json['basic'];
@@ -68,6 +70,7 @@ class ItemOrigModel {
     modules = ItemModulesModel.fromJson(json['modules']);
     type = json['type'];
     visible = json['visible'];
+    idStr = json['id_str'];
   }
 }
 
