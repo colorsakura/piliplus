@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -572,7 +573,19 @@ class PlPlayerController {
         );
     var pp = player.platform as NativePlayer;
     // 解除倍速限制
-    await pp.setProperty("af", "scaletempo2=max-speed=8");
+    if (_videoPlayerController == null) {
+      String audioNormalization = GStorage.audioNormalization;
+      audioNormalization = switch (audioNormalization) {
+        '0' => '',
+        '1' => ',${AudioNormalization.dynaudnorm.param}',
+        '2' => ',${AudioNormalization.loudnorm.param}',
+        _ => ',$audioNormalization',
+      };
+      await pp.setProperty(
+        "af",
+        "scaletempo2=max-speed=8$audioNormalization",
+      );
+    }
     //  音量不一致
     if (Platform.isAndroid) {
       await pp.setProperty("volume-max", "100");
@@ -834,7 +847,8 @@ class PlPlayerController {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
           return;
         }
-        SmartDialog.showToast('视频加载错误, $event');
+        // SmartDialog.showToast('视频加载错误, $event');
+        debugPrint('视频加载错误, $event');
       }),
       // videoPlayerController!.stream.volume.listen((event) {
       //   if (!mute.value && _volumeBeforeMute != event) {

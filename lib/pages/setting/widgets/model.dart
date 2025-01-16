@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
 import 'package:PiliPlus/http/interceptor_anonymity.dart';
+import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
@@ -1774,6 +1775,89 @@ List<SettingsModel> get extraSettings => [
           try {
             Get.find<HotController>().showHotRcmd.value = value;
           } catch (_) {}
+        },
+      ),
+      SettingsModel(
+        settingsType: SettingsType.normal,
+        title: '音量均衡',
+        setKey: SettingBoxKey.audioNormalization,
+        leading: const Icon(Icons.multitrack_audio),
+        getSubtitle: () {
+          String audioNormalization = GStorage.audioNormalization;
+          audioNormalization = switch (audioNormalization) {
+            '0' => AudioNormalization.disable.title,
+            '1' => AudioNormalization.dynaudnorm.title,
+            '2' => AudioNormalization.loudnorm.title,
+            _ => audioNormalization,
+          };
+          return '当前:「$audioNormalization」';
+        },
+        onTap: (setState) async {
+          String? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              String audioNormalization = GStorage.audioNormalization;
+              Set<String> values = {'0', '1', '2', audioNormalization, '3'};
+              return SelectDialog<String>(
+                  title: '音量均衡',
+                  value: audioNormalization,
+                  values: values.map((e) {
+                    return {
+                      'title': switch (e) {
+                        '0' => AudioNormalization.disable.title,
+                        '1' => AudioNormalization.dynaudnorm.title,
+                        '2' => AudioNormalization.loudnorm.title,
+                        '3' => AudioNormalization.custom.title,
+                        _ => e,
+                      },
+                      'value': e,
+                    };
+                  }).toList());
+            },
+          );
+          if (result != null) {
+            if (result == '3') {
+              String param = '';
+              showDialog(
+                  context: Get.context!,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text(
+                        '自定义参数',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      content: TextField(
+                        autofocus: true,
+                        onChanged: (value) => param = value,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: Get.back,
+                          child: Text(
+                            '取消',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Get.back();
+                            await GStorage.setting
+                                .put(SettingBoxKey.audioNormalization, param);
+                            setState();
+                          },
+                          child: Text('确定'),
+                        ),
+                      ],
+                    );
+                  });
+            } else {
+              await GStorage.setting
+                  .put(SettingBoxKey.audioNormalization, result);
+              setState();
+            }
+          }
         },
       ),
       SettingsModel(

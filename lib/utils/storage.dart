@@ -345,6 +345,9 @@ class GStorage {
   static bool get showHotRcmd =>
       GStorage.setting.get(SettingBoxKey.showHotRcmd, defaultValue: false);
 
+  static String get audioNormalization =>
+      GStorage.setting.get(SettingBoxKey.audioNormalization, defaultValue: '0');
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -566,6 +569,7 @@ class SettingBoxKey {
       showVipDanmaku = 'showVipDanmaku',
       mergeDanmaku = 'mergeDanmaku',
       showHotRcmd = 'showHotRcmd',
+      audioNormalization = 'audioNormalization',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
