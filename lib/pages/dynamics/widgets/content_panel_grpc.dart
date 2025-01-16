@@ -65,8 +65,8 @@ class ContentGrpc extends StatelessWidget {
                   /// fix 默认20px高度
                   style: const TextStyle(height: 0),
                   richNodes,
-                  maxLines: source == 'detail' ? 999 : 6,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: source == 'detail' ? null : 6,
+                  overflow: source == 'detail' ? null : TextOverflow.ellipsis,
                 ),
               ),
             ),

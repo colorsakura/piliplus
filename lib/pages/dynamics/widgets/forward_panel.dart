@@ -97,8 +97,10 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
               Text.rich(
                 richNodes,
                 // 被转发状态(floor=2) 隐藏
-                maxLines: source == 'detail' && floor != 2 ? 999 : 4,
-                overflow: TextOverflow.ellipsis,
+                maxLines: source == 'detail' && floor != 2 ? null : 4,
+                overflow: source == 'detail' && floor != 2
+                    ? null
+                    : TextOverflow.ellipsis,
               ),
             if (hasPics) ...[
               Text.rich(
@@ -214,8 +216,10 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
                   Text.rich(
                     richNodes,
                     // 被转发状态(floor=2) 隐藏
-                    maxLines: source == 'detail' && floor != 2 ? 999 : 4,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: source == 'detail' && floor != 2 ? null : 4,
+                    overflow: source == 'detail' && floor != 2
+                        ? null
+                        : TextOverflow.ellipsis,
                   ),
               ],
             )
