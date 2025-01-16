@@ -513,7 +513,7 @@ class PlPlayerController {
       }
       // 配置Player 音轨、字幕等等
       _videoPlayerController = await _createVideoController(
-          dataSource, _looping, enableHA, hwdec, width, height);
+          dataSource, _looping, enableHA, hwdec, width, height, seekTo);
       callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
@@ -530,7 +530,7 @@ class PlPlayerController {
       if (!_listenersInitialized) {
         startListeners();
       }
-      await _initializePlayer(seekTo: seekTo ?? Duration.zero);
+      await _initializePlayer();
       setSubtitle(this.vttSubtitlesIndex.value);
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
@@ -547,6 +547,7 @@ class PlPlayerController {
     String? hwdec,
     double? width,
     double? height,
+    Duration? seekTo,
   ) async {
     // 每次配置时先移除监听
     removeListeners();
@@ -633,12 +634,13 @@ class PlPlayerController {
           ? dataSource.videoSource!
           : "asset://${dataSource.videoSource!}";
       await player.open(
-        Media(assetUrl, httpHeaders: dataSource.httpHeaders),
+        Media(assetUrl, httpHeaders: dataSource.httpHeaders, start: seekTo),
         play: false,
       );
     } else {
       await player.open(
-        Media(dataSource.videoSource!, httpHeaders: dataSource.httpHeaders),
+        Media(dataSource.videoSource!,
+            httpHeaders: dataSource.httpHeaders, start: seekTo),
         play: false,
       );
     }
@@ -650,15 +652,15 @@ class PlPlayerController {
     return player;
   }
 
-  Future refreshPlayer() async {
+  Future<bool> refreshPlayer() async {
     Duration currentPos = _position.value;
     if (_videoPlayerController == null) {
       SmartDialog.showToast('视频播放器为空，请重新进入本页面');
-      return;
+      return false;
     }
     if (dataSource.videoSource?.isEmpty ?? true) {
       SmartDialog.showToast('视频源为空，请重新进入本页面');
-      return;
+      return false;
     }
     if (dataSource.audioSource?.isEmpty ?? true) {
       SmartDialog.showToast('音频源为空');
@@ -674,14 +676,16 @@ class PlPlayerController {
       Media(
         dataSource.videoSource!,
         httpHeaders: dataSource.httpHeaders,
+        start: currentPos,
       ),
       play: true,
     );
-    seekTo(currentPos);
+    return true;
+    // seekTo(currentPos);
   }
 
   // 开始播放
-  Future _initializePlayer({Duration seekTo = Duration.zero}) async {
+  Future _initializePlayer() async {
     if (_instance == null) return;
     // 设置倍速
     if (videoType.value == 'live') {
@@ -699,9 +703,9 @@ class PlPlayerController {
     // }
 
     // 跳转播放
-    if (seekTo != Duration.zero) {
-      await this.seekTo(seekTo);
-    }
+    // if (seekTo != Duration.zero) {
+    //   await this.seekTo(seekTo);
+    // }
 
     // 自动播放
     if (_autoPlay) {
