@@ -301,13 +301,12 @@ class AuthorPanel extends StatelessWidget {
   }
 
   void _showReportDynDialog(context) {
+    _ReportReasonType? reasonType;
+    String? reasonDesc;
+    late final key = GlobalKey<FormState>();
     showDialog(
         context: context,
         builder: (context) {
-          _ReportReasonType? reasonType;
-          String? reasonDesc;
-          late final key = GlobalKey<FormState>();
-
           return AlertDialog(
             title: Text(
               '举报动态',
