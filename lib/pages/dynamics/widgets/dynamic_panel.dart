@@ -1,6 +1,6 @@
+import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:PiliPlus/pages/dynamics/index.dart';
 import 'action_panel.dart';
 import 'author_panel.dart';
 import 'content_panel.dart';
@@ -12,7 +12,7 @@ class DynamicPanel extends StatelessWidget {
   final Function? onRemove;
   final Function(List<String>, int)? callback;
 
-  DynamicPanel({
+  const DynamicPanel({
     required this.item,
     this.source,
     this.onRemove,
@@ -20,11 +20,9 @@ class DynamicPanel extends StatelessWidget {
     super.key,
   });
 
-  final DynamicsController _dynamicsController = Get.put(DynamicsController());
-
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: source == 'detail'
           ? const EdgeInsets.only(bottom: 12)
           : EdgeInsets.zero,
@@ -46,7 +44,29 @@ class DynamicPanel extends StatelessWidget {
         child: InkWell(
           onTap: source == 'detail' && item.type != 'DYNAMIC_TYPE_AV'
               ? null
-              : () => _dynamicsController.pushDetail(item, 1),
+              : () => Utils.pushDynDetail(item, 1),
+          onLongPress: () {
+            if (item.type == 'DYNAMIC_TYPE_AV') {
+              imageSaveDialog(
+                context: context,
+                title: item.modules.moduleDynamic.major.archive.title,
+                cover: item.modules.moduleDynamic.major.archive.cover,
+              );
+            } else if (item.type == 'DYNAMIC_TYPE_UGC_SEASON') {
+              imageSaveDialog(
+                context: context,
+                title: item.modules.moduleDynamic.major.ugcSeason.title,
+                cover: item.modules.moduleDynamic.major.ugcSeason.cover,
+              );
+            } else if (item.type == 'DYNAMIC_TYPE_PGC' ||
+                item.type == 'DYNAMIC_TYPE_PGC_UNION') {
+              imageSaveDialog(
+                context: context,
+                title: item.modules.moduleDynamic.major.pgc.title,
+                cover: item.modules.moduleDynamic.major.pgc.cover,
+              );
+            }
+          },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -61,7 +81,7 @@ class DynamicPanel extends StatelessWidget {
               if (item!.modules!.moduleDynamic!.desc != null ||
                   item!.modules!.moduleDynamic!.major != null)
                 content(context, item, source, callback),
-              forWard(item, context, _dynamicsController, source, callback),
+              forWard(item, context, source, callback),
               const SizedBox(height: 2),
               if (source == null) ActionPanel(item: item),
             ],

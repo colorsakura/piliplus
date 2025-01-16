@@ -2,20 +2,13 @@ import 'package:PiliPlus/http/follow.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/dynamics/tab/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/dynamics.dart';
-import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
-import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/dynamics/up.dart';
-import 'package:PiliPlus/models/live/item.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 
 import '../../models/follow/result.dart';
 
@@ -66,165 +59,6 @@ class DynamicsController extends GetxController
 
   onSelectType(value) async {
     initialValue.value = value;
-  }
-
-  pushDetail(item, floor, {action = 'all'}) async {
-    feedBack();
-
-    /// 点击评论action 直接查看评论
-    if (action == 'comment') {
-      Utils.toDupNamed('/dynamicDetail',
-          arguments: {'item': item, 'floor': floor, 'action': action});
-      return false;
-    }
-    switch (item!.type) {
-      /// 转发的动态
-      case 'DYNAMIC_TYPE_FORWARD':
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
-        break;
-
-      /// 图文动态查看
-      case 'DYNAMIC_TYPE_DRAW':
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
-        break;
-      case 'DYNAMIC_TYPE_AV':
-        if (item.modules.moduleDynamic.major.archive.type == 2) {
-          if (item.modules.moduleDynamic.major.archive.jumpUrl
-              .startsWith('//')) {
-            item.modules.moduleDynamic.major.archive.jumpUrl =
-                'https:${item.modules.moduleDynamic.major.archive.jumpUrl}';
-          }
-          String? redirectUrl = await UrlUtils.parseRedirectUrl(
-              item.modules.moduleDynamic.major.archive.jumpUrl, false);
-          if (redirectUrl != null) {
-            Utils.viewPgcFromUri(redirectUrl);
-            return;
-          }
-        }
-
-        String bvid = item.modules.moduleDynamic.major.archive.bvid;
-        String cover = item.modules.moduleDynamic.major.archive.cover;
-        try {
-          int cid = await SearchHttp.ab2c(bvid: bvid);
-          Utils.toDupNamed(
-            '/video?bvid=$bvid&cid=$cid',
-            arguments: {
-              'pic': cover,
-              'heroTag': Utils.makeHeroTag(bvid),
-            },
-          );
-        } catch (err) {
-          SmartDialog.showToast(err.toString());
-        }
-        break;
-
-      /// 专栏文章查看
-      case 'DYNAMIC_TYPE_ARTICLE':
-        String title = item.modules.moduleDynamic.major.opus.title;
-        String url = item.modules.moduleDynamic.major.opus.jumpUrl;
-        if (url.contains('opus') || url.contains('read')) {
-          RegExp digitRegExp = RegExp(r'\d+');
-          Iterable<Match> matches = digitRegExp.allMatches(url);
-          String number = matches.first.group(0)!;
-          if (url.contains('read')) {
-            number = 'cv$number';
-          }
-          Utils.toDupNamed('/htmlRender', parameters: {
-            'url': url.startsWith('//') ? url.split('//').last : url,
-            'title': title,
-            'id': number,
-            'dynamicType': url.split('//').last.split('/')[1]
-          });
-        } else {
-          Utils.handleWebview('https:$url');
-        }
-
-        break;
-      case 'DYNAMIC_TYPE_PGC':
-        debugPrint('番剧');
-        SmartDialog.showToast('暂未支持的类型，请联系开发者');
-        break;
-
-      /// 纯文字动态查看
-      case 'DYNAMIC_TYPE_WORD':
-        debugPrint('纯文本');
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
-        break;
-      case 'DYNAMIC_TYPE_LIVE_RCMD':
-        DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
-        ModuleAuthorModel author = item.modules.moduleAuthor;
-        LiveItemModel liveItem = LiveItemModel.fromJson({
-          'title': liveRcmd.title,
-          'uname': author.name,
-          'cover': liveRcmd.cover,
-          'mid': author.mid,
-          'face': author.face,
-          'roomid': liveRcmd.roomId,
-          'watched_show': liveRcmd.watchedShow,
-        });
-        Utils.toDupNamed('/liveRoom?roomid=${liveItem.roomId}');
-        break;
-
-      /// 合集查看
-      case 'DYNAMIC_TYPE_UGC_SEASON':
-        DynamicArchiveModel ugcSeason =
-            item.modules.moduleDynamic.major.ugcSeason;
-        int aid = ugcSeason.aid!;
-        String bvid = IdUtils.av2bv(aid);
-        String cover = ugcSeason.cover!;
-        int cid = await SearchHttp.ab2c(bvid: bvid);
-        Utils.toDupNamed(
-          '/video?bvid=$bvid&cid=$cid',
-          arguments: {
-            'pic': cover,
-            'heroTag': Utils.makeHeroTag(bvid),
-          },
-        );
-        break;
-
-      /// 番剧查看
-      case 'DYNAMIC_TYPE_PGC_UNION':
-        debugPrint('DYNAMIC_TYPE_PGC_UNION 番剧');
-        DynamicArchiveModel pgc = item.modules.moduleDynamic.major.pgc;
-        if (pgc.epid != null) {
-          Utils.viewBangumi(epId: pgc.epid);
-          // SmartDialog.showLoading(msg: '获取中...');
-          // var res = await SearchHttp.bangumiInfo(epId: pgc.epid);
-          // SmartDialog.dismiss();
-          // if (res['status']) {
-          //   // dynamic episode -> progress episode -> first episode
-          //   EpisodeItem episode = (res['data'].episodes as List)
-          //           .firstWhereOrNull(
-          //         (item) => item.epId == pgc.epid,
-          //       ) ??
-          //       (res['data'].episodes as List).firstWhereOrNull(
-          //         (item) =>
-          //             item.epId == res['data'].userStatus?.progress?.lastEpId,
-          //       ) ??
-          //       res['data'].episodes.first;
-          //   dynamic epId = episode.epId;
-          //   dynamic bvid = episode.bvid;
-          //   dynamic cid = episode.cid;
-          //   dynamic pic = episode.cover;
-          //   dynamic heroTag = Utils.makeHeroTag(cid);
-          //   Utils.toDupNamed(
-          //     '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=$epId',
-          //     arguments: {
-          //       'pic': pic,
-          //       'heroTag': heroTag,
-          //       'videoType': SearchType.media_bangumi,
-          //       'bangumiItem': res['data'],
-          //     },
-          //   );
-          // } else {
-          //   SmartDialog.showToast(res['msg']);
-          // }
-        }
-        break;
-    }
   }
 
   Future queryFollowing2() async {

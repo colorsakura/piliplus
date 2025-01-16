@@ -4,12 +4,10 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/dynamics/index.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 import 'rich_node_panel.dart';
 
-final DynamicsController _dynamicsController = Get.put(DynamicsController());
 Widget liveRcmdPanel(item, context, {floor = 1}) {
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
@@ -65,7 +63,7 @@ Widget liveRcmdPanel(item, context, {floor = 1}) {
               const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
           child: GestureDetector(
             onTap: () {
-              _dynamicsController.pushDetail(item, floor);
+              Utils.pushDynDetail(item, floor);
             },
             child: LayoutBuilder(builder: (context, box) {
               double width = box.maxWidth;

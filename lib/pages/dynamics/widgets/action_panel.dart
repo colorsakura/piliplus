@@ -1,5 +1,3 @@
-// 操作栏
-
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -11,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/dynamics/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 
 class ActionPanel extends StatefulWidget {
@@ -26,8 +23,6 @@ class ActionPanel extends StatefulWidget {
 }
 
 class _ActionPanelState extends State<ActionPanel> {
-  final DynamicsController _dynamicsController = Get.put(DynamicsController());
-  // late ModuleStatModel stat;
   bool isProcessing = false;
   void handleState(Future Function() action) async {
     if (isProcessing.not) {
@@ -36,12 +31,6 @@ class _ActionPanelState extends State<ActionPanel> {
       isProcessing = false;
     }
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   stat = widget.item!.modules.moduleStat;
-  // }
 
   // 动态点赞
   Future onLikeDynamic() async {
@@ -123,8 +112,8 @@ class _ActionPanelState extends State<ActionPanel> {
         Expanded(
           flex: 1,
           child: TextButton.icon(
-            onPressed: () => _dynamicsController.pushDetail(widget.item, 1,
-                action: 'comment'),
+            onPressed: () =>
+                Utils.pushDynDetail(widget.item, 1, action: 'comment'),
             icon: Icon(
               FontAwesomeIcons.comment,
               size: 16,

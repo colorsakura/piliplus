@@ -1,23 +1,20 @@
 import 'package:PiliPlus/grpc/app/dynamic/v2/dynamic.pb.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel_grpc.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/content_panel_grpc.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:PiliPlus/pages/dynamics/index.dart';
 
 class DynamicPanelGrpc extends StatelessWidget {
   final DynamicItem item;
   final String? source;
   final Function? onRemove;
 
-  DynamicPanelGrpc({
+  const DynamicPanelGrpc({
     required this.item,
     this.source,
     this.onRemove,
     super.key,
   });
-
-  final DynamicsController _dynamicsController = Get.put(DynamicsController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,7 @@ class DynamicPanelGrpc extends StatelessWidget {
         child: InkWell(
           onTap: source == 'detail' && item.itemType == DynamicType.draw
               ? null
-              : () => _dynamicsController.pushDetail(item, 1),
+              : () => Utils.pushDynDetail(item, 1),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

@@ -1,4 +1,5 @@
 // 转发
+import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
   );
 }
 
-Widget forWard(item, context, ctr, source, callback, {floor = 1}) {
+Widget forWard(item, context, source, callback, {floor = 1}) {
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
 
@@ -140,13 +141,35 @@ Widget forWard(item, context, ctr, source, callback, {floor = 1}) {
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
       return InkWell(
-        onTap: () => ctr.pushDetail(item.orig, floor + 1),
+        onTap: () => Utils.pushDynDetail(item.orig, floor + 1),
+        onLongPress: () {
+          if (item.orig.type == 'DYNAMIC_TYPE_AV') {
+            imageSaveDialog(
+              context: context,
+              title: item.orig.modules.moduleDynamic.major.archive.title,
+              cover: item.orig.modules.moduleDynamic.major.archive.cover,
+            );
+          } else if (item.orig.type == 'DYNAMIC_TYPE_UGC_SEASON') {
+            imageSaveDialog(
+              context: context,
+              title: item.orig.modules.moduleDynamic.major.ugcSeason.title,
+              cover: item.orig.modules.moduleDynamic.major.ugcSeason.cover,
+            );
+          } else if (item.orig.type == 'DYNAMIC_TYPE_PGC' ||
+              item.orig.type == 'DYNAMIC_TYPE_PGC_UNION') {
+            imageSaveDialog(
+              context: context,
+              title: item.orig.modules.moduleDynamic.major.pgc.title,
+              cover: item.orig.modules.moduleDynamic.major.pgc.cover,
+            );
+          }
+        },
         child: Container(
           padding:
               const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 8),
           color: Theme.of(context).dividerColor.withOpacity(0.08),
-          child: forWard(item.orig, context, ctr, source, callback,
-              floor: floor + 1),
+          child:
+              forWard(item.orig, context, source, callback, floor: floor + 1),
         ),
       );
     // 直播
