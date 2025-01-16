@@ -1,4 +1,5 @@
 // 视频or合集
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -25,6 +26,88 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
   };
   dynamic content = dynamicProperty[type];
   InlineSpan? richNodes = richNode(item, context);
+
+  Widget buildCover() {
+    return LayoutBuilder(builder: (context, box) {
+      double width = box.maxWidth;
+      return Stack(
+        children: [
+          // Hero(
+          //   tag: content.bvid,
+          //   child:
+          NetworkImgLayer(
+            width: width,
+            height: width / StyleString.aspectRatio,
+            src: content.cover,
+            semanticsLabel: content.title,
+          ),
+          // ),
+          if (content?.badge?['text'] != null)
+            PBadge(
+              text: content.badge['text'],
+              top: 8.0,
+              right: 10.0,
+              bottom: null,
+              left: null,
+            ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              height: 70,
+              padding: const EdgeInsets.fromLTRB(10, 0, 8, 8),
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    Colors.transparent,
+                    Colors.black54,
+                  ],
+                ),
+                borderRadius: StyleString.mdRadius,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  DefaultTextStyle.merge(
+                    style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.labelMedium!.fontSize,
+                        color: Colors.white),
+                    child: Row(
+                      children: [
+                        if (content.durationText != null)
+                          Text(
+                            content.durationText,
+                            semanticsLabel:
+                                '时长${Utils.durationReadFormat(content.durationText)}',
+                          ),
+                        if (content.durationText != null)
+                          const SizedBox(width: 6),
+                        Text(content.stat.play + '次围观'),
+                        const SizedBox(width: 6),
+                        Text(content.stat.danmu + '条弹幕')
+                      ],
+                    ),
+                  ),
+                  Image.asset(
+                    'assets/images/play.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.start,
@@ -76,88 +159,13 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
         if (richNodes != null) Text.rich(richNodes),
         const SizedBox(height: 6),
       ],
-      Padding(
+      if (item is ItemOrigModel)
+        buildCover()
+      else
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-          child: LayoutBuilder(builder: (context, box) {
-            double width = box.maxWidth;
-            return Stack(
-              children: [
-                // Hero(
-                //   tag: content.bvid,
-                //   child:
-                NetworkImgLayer(
-                  width: width,
-                  height: width / StyleString.aspectRatio,
-                  src: content.cover,
-                  semanticsLabel: content.title,
-                ),
-                // ),
-                if (content?.badge?['text'] != null)
-                  PBadge(
-                    text: content.badge['text'],
-                    top: 8.0,
-                    right: 10.0,
-                    bottom: null,
-                    left: null,
-                  ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    height: 70,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 8, 8),
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.transparent,
-                          Colors.black54,
-                        ],
-                      ),
-                      borderRadius: StyleString.mdRadius,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        DefaultTextStyle.merge(
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .fontSize,
-                              color: Colors.white),
-                          child: Row(
-                            children: [
-                              if (content.durationText != null)
-                                Text(
-                                  content.durationText,
-                                  semanticsLabel:
-                                      '时长${Utils.durationReadFormat(content.durationText)}',
-                                ),
-                              if (content.durationText != null)
-                                const SizedBox(width: 6),
-                              Text(content.stat.play + '次围观'),
-                              const SizedBox(width: 6),
-                              Text(content.stat.danmu + '条弹幕')
-                            ],
-                          ),
-                        ),
-                        Image.asset(
-                          'assets/images/play.png',
-                          width: 50,
-                          height: 50,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          })),
+          child: buildCover(),
+        ),
       const SizedBox(height: 6),
       Padding(
         padding: floor == 1
