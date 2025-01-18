@@ -37,16 +37,7 @@ class GStorage {
   static List<double> get speedList => List<double>.from(
         video.get(
           VideoBoxKey.speedsList,
-          defaultValue: [
-            0.5,
-            0.75,
-            1.0,
-            1.25,
-            1.5,
-            1.75,
-            2.0,
-            3.0,
-          ],
+          defaultValue: [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 3.0],
         ),
       );
 
@@ -348,6 +339,9 @@ class GStorage {
   static String get audioNormalization =>
       GStorage.setting.get(SettingBoxKey.audioNormalization, defaultValue: '0');
 
+  static int get superResolutionType =>
+      GStorage.setting.get(SettingBoxKey.superResolutionType, defaultValue: 0);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -570,6 +564,7 @@ class SettingBoxKey {
       mergeDanmaku = 'mergeDanmaku',
       showHotRcmd = 'showHotRcmd',
       audioNormalization = 'audioNormalization',
+      superResolutionType = 'superResolutionType',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

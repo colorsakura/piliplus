@@ -11,4 +11,5 @@ enum BottomControlType {
   fullscreen,
   custom,
   viewPoints,
+  superResolution,
 }

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -336,6 +337,44 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.space: const Spacer(),
 
       /// 分段信息
+      BottomControlType.superResolution: Get.parameters['type'] == '1' ||
+              Get.parameters['type'] == '4'
+          ? Container(
+              height: 30,
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              alignment: Alignment.center,
+              child: PopupMenuButton<SuperResolutionType>(
+                onSelected: (SuperResolutionType value) {
+                  plPlayerController.setShader(value.index);
+                },
+                initialValue: SuperResolutionType
+                    .values[plPlayerController.superResolutionType],
+                color: Colors.black.withOpacity(0.8),
+                itemBuilder: (BuildContext context) {
+                  return SuperResolutionType.values
+                      .map((SuperResolutionType type) {
+                    return PopupMenuItem<SuperResolutionType>(
+                      height: 35,
+                      padding: const EdgeInsets.only(left: 30),
+                      value: type,
+                      child: Text(
+                        type.title,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13),
+                      ),
+                    );
+                  }).toList();
+                },
+                child: Text(
+                  SuperResolutionType
+                      .values[plPlayerController.superResolutionType].title,
+                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                ),
+              ),
+            )
+          : const SizedBox.shrink(),
+
+      /// 分段信息
       BottomControlType.viewPoints: Obx(
         () => plPlayerController.viewPointList.isEmpty
             ? const SizedBox.shrink()
@@ -544,6 +583,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           if (anySeason) BottomControlType.pre,
           if (anySeason) BottomControlType.next,
           BottomControlType.space,
+          BottomControlType.superResolution,
           BottomControlType.viewPoints,
           if (anySeason) BottomControlType.episode,
           if (isFullScreen) BottomControlType.fit,

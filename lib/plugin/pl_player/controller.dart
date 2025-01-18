@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -9,6 +11,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart';
@@ -22,8 +25,10 @@ import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:path/path.dart' as path;
 
 class PlPlayerController {
   Player? _videoPlayerController;
@@ -540,6 +545,80 @@ class PlPlayerController {
     }
   }
 
+  Directory? shadersDirectory;
+  Future<Directory?> copyShadersToExternalDirectory() async {
+    if (shadersDirectory != null) {
+      return shadersDirectory;
+    }
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+    final directory = await getApplicationSupportDirectory();
+    shadersDirectory = Directory(path.join(directory.path, 'anime_shaders'));
+
+    if (!await shadersDirectory!.exists()) {
+      await shadersDirectory!.create(recursive: true);
+    }
+
+    final shaderFiles = manifestMap.keys.where((String key) =>
+        key.startsWith('assets/shaders/') && key.endsWith('.glsl'));
+
+    // int copiedFilesCount = 0;
+
+    for (var filePath in shaderFiles) {
+      final fileName = filePath.split('/').last;
+      final targetFile = File(path.join(shadersDirectory!.path, fileName));
+      if (await targetFile.exists()) {
+        continue;
+      }
+
+      try {
+        final data = await rootBundle.load(filePath);
+        final List<int> bytes = data.buffer.asUint8List();
+        await targetFile.writeAsBytes(bytes);
+        // copiedFilesCount++;
+      } catch (e) {
+        debugPrint('$e');
+      }
+    }
+    return shadersDirectory;
+  }
+
+  late int superResolutionType = GStorage.superResolutionType;
+  Future<void> setShader([int? type, NativePlayer? pp]) async {
+    if (type == null) {
+      type ??= superResolutionType;
+    } else {
+      superResolutionType = type;
+      GStorage.setting.put(SettingBoxKey.superResolutionType, type);
+    }
+    pp ??= _videoPlayerController?.platform as NativePlayer;
+    await pp.waitForPlayerInitialization;
+    await pp.waitForVideoControllerInitializationIfAttached;
+    if (type == 1) {
+      await pp.command([
+        'change-list',
+        'glsl-shaders',
+        'set',
+        Utils.buildShadersAbsolutePath(
+          (await copyShadersToExternalDirectory())?.path ?? '',
+          Constants.mpvAnime4KShadersLite,
+        ),
+      ]);
+    } else if (type == 2) {
+      await pp.command([
+        'change-list',
+        'glsl-shaders',
+        'set',
+        Utils.buildShadersAbsolutePath(
+          (await copyShadersToExternalDirectory())?.path ?? '',
+          Constants.mpvAnime4KShaders,
+        ),
+      ]);
+    } else {
+      await pp.command(['change-list', 'glsl-shaders', 'clr', '']);
+    }
+  }
+
   // 配置播放器
   Future<Player> _createVideoController(
     DataSource dataSource,
@@ -573,6 +652,9 @@ class PlPlayerController {
         );
     var pp = player.platform as NativePlayer;
     // 解除倍速限制
+    if (Get.parameters['type'] == '1' || Get.parameters['type'] == '4') {
+      setShader(superResolutionType, pp);
+    }
     if (_videoPlayerController == null) {
       String audioNormalization = GStorage.audioNormalization;
       audioNormalization = switch (audioNormalization) {
@@ -847,7 +929,7 @@ class PlPlayerController {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
           return;
         }
-        // SmartDialog.showToast('视频加载错误, $event');
+        SmartDialog.showToast('视频加载错误, $event');
         debugPrint('视频加载错误, $event');
       }),
       // videoPlayerController!.stream.volume.listen((event) {

@@ -41,11 +41,20 @@ import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
+import 'package:path/path.dart' as path;
 
 class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static String buildShadersAbsolutePath(
+      String baseDirectory, List<String> shaders) {
+    List<String> absolutePaths = shaders.map((shader) {
+      return path.join(baseDirectory, shader);
+    }).toList();
+    return absolutePaths.join(':');
+  }
 
   static void pushDynDetail(item, floor, {action = 'all'}) async {
     feedBack();
