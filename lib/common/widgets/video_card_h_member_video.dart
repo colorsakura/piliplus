@@ -25,8 +25,6 @@ class VideoCardHMemberVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int aid = int.tryParse(videoItem.param ?? '') ?? -1;
-    final String bvid = videoItem.bvid ?? '';
     return Stack(
       children: [
         InkWell(
@@ -45,11 +43,14 @@ class VideoCardHMemberVideo extends StatelessWidget {
                 return;
               }
             }
+            if (videoItem.bvid == null || videoItem.firstCid == null) {
+              return;
+            }
             try {
               Get.toNamed(
-                '/video?bvid=$bvid&cid=${videoItem.firstCid}',
+                '/video?bvid=${videoItem.bvid}&cid=${videoItem.firstCid}',
                 arguments: {
-                  'heroTag': Utils.makeHeroTag(aid),
+                  'heroTag': Utils.makeHeroTag(videoItem.bvid),
                 },
               );
             } catch (err) {
@@ -136,11 +137,13 @@ class VideoCardHMemberVideo extends StatelessWidget {
                   videoItem.title ?? '',
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontWeight: videoItem.bvid == bvid ? FontWeight.bold : null,
+                    fontWeight: videoItem.bvid != null && videoItem.bvid == bvid
+                        ? FontWeight.bold
+                        : null,
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     height: 1.42,
                     letterSpacing: 0.3,
-                    color: videoItem.bvid == bvid
+                    color: videoItem.bvid != null && videoItem.bvid == bvid
                         ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
