@@ -342,6 +342,9 @@ class GStorage {
   static int get superResolutionType =>
       GStorage.setting.get(SettingBoxKey.superResolutionType, defaultValue: 0);
 
+  static bool get preInitPlayer =>
+      GStorage.setting.get(SettingBoxKey.preInitPlayer, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -565,6 +568,7 @@ class SettingBoxKey {
       showHotRcmd = 'showHotRcmd',
       audioNormalization = 'audioNormalization',
       superResolutionType = 'superResolutionType',
+      preInitPlayer = 'preInitPlayer',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

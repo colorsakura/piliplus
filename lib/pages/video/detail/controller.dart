@@ -225,6 +225,7 @@ class VideoDetailController extends GetxController
   bool get showReply =>
       videoType == SearchType.video ? _showVideoReply : _showBangumiReply;
 
+  late final preInitPlayer = GStorage.preInitPlayer;
   late final horizontalSeasonPanel = GStorage.horizontalSeasonPanel;
   int? seasonCid;
   late RxInt seasonIndex = 0.obs;
@@ -1205,6 +1206,8 @@ class VideoDetailController extends GetxController
         if (autoPlay.value) {
           isShowCover.value = false;
           await playerInit();
+        } else if (preInitPlayer) {
+          await playerInit();
         }
         isQuerying = false;
         return;
@@ -1312,6 +1315,8 @@ class VideoDetailController extends GetxController
       defaultST = Duration(milliseconds: data.lastPlayTime!);
       if (autoPlay.value) {
         isShowCover.value = false;
+        await playerInit();
+      } else if (preInitPlayer) {
         await playerInit();
       }
     } else {

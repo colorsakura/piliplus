@@ -1889,6 +1889,14 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '提前初始化播放器',
+        subtitle: '相对减少手动播放加载时间',
+        leading: Icon(Icons.play_circle_outlined),
+        setKey: SettingBoxKey.preInitPlayer,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {
