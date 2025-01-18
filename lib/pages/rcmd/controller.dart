@@ -36,10 +36,10 @@ class RcmdController extends CommonController {
 
   @override
   List? handleListResponse(List currentList, List dataList) {
-    bool shouldSaveLast = enableSaveLastData && currentPage == 0;
-    if (shouldSaveLast) {
-      int length = currentList.length;
-      shouldSaveLast = length > 0 && length < 500;
+    bool shouldSaveLast =
+        enableSaveLastData && currentPage == 0 && currentList.isNotEmpty;
+    if (shouldSaveLast && currentList.length > 500) {
+      currentList = currentList.sublist(0, 50);
     }
     lastRefreshAt = shouldSaveLast && savedRcmdTip ? dataList.length : null;
     return shouldSaveLast ? dataList + currentList : null;
