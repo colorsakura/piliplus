@@ -316,7 +316,7 @@ List<SettingsModel> get styleSettings => [
           }
         },
         title: '消息未读标记',
-        leading: const Icon(Icons.notifications_active_outlined),
+        leading: Icon(MdiIcons.bellBadgeOutline),
         getSubtitle: () => '当前标记样式：${GStorage.msgBadgeMode.description}',
       ),
       SettingsModel(
@@ -347,7 +347,7 @@ List<SettingsModel> get styleSettings => [
           }
         },
         title: '消息未读类型',
-        leading: const Icon(Icons.notifications_active_outlined),
+        leading: Icon(MdiIcons.bellCogOutline),
         getSubtitle: () =>
             '当前消息类型：${GStorage.msgUnReadTypeV2.map((item) => item.title).join('、')}',
       ),
@@ -608,7 +608,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '弹幕开关',
         subtitle: '是否展示弹幕',
-        leading: Icon(Icons.comment_outlined),
+        leading: Icon(Icons.subtitles_outlined),
         setKey: SettingBoxKey.enableShowDanmaku,
         defaultVal: true,
       ),
@@ -728,7 +728,7 @@ List<SettingsModel> get playSettings => [
           settingsType: SettingsType.sw1tch,
           title: '画中画不加载弹幕',
           subtitle: '当弹幕开关开启时，小窗屏蔽弹幕以获得较好的体验',
-          leading: Icon(Icons.comments_disabled_outlined),
+          leading: Icon(Icons.subtitles_off_outlined),
           setKey: SettingBoxKey.pipNoDanmaku,
           defaultVal: false,
         ),
