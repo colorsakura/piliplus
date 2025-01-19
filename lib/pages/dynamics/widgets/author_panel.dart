@@ -38,7 +38,8 @@ class AuthorPanel extends StatelessWidget {
         GestureDetector(
           onTap: () {
             // 番剧
-            if (item.modules.moduleAuthor.type == 'AUTHOR_TYPE_PGC') {
+            if (item.modules.moduleAuthor.type == 'AUTHOR_TYPE_PGC' ||
+                item.modules.moduleAuthor.type == 'AUTHOR_TYPE_UGC_SEASON') {
               return;
             }
             feedBack();
