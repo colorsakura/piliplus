@@ -103,11 +103,6 @@ class _WhisperPageState extends State<WhisperPage> {
                                   isLabelVisible: _whisperController
                                           .msgFeedTop[idx]['value'] >
                                       0,
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onInverseSurface,
                                   label: Text(
                                       " ${_whisperController.msgFeedTop[idx]['value']} "),
                                   alignment: Alignment.topRight,
@@ -267,11 +262,6 @@ class _WhisperPageState extends State<WhisperPage> {
                                     leading: Badge(
                                       isLabelVisible:
                                           sessionList[i].unreadCount > 0,
-                                      // backgroundColor:
-                                      //     Theme.of(context).colorScheme.primary,
-                                      // textColor: Theme.of(context)
-                                      //     .colorScheme
-                                      //     .onInverseSurface,
                                       label: Text(
                                           " ${sessionList[i].unreadCount.toString()} "),
                                       alignment: Alignment.topRight,

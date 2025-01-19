@@ -198,10 +198,7 @@ class _UpPanelState extends State<UpPanel> {
                     isLabelVisible: data.type == 'live' ||
                         (data.type == 'up' && (data.hasUpdate ?? false)),
                     backgroundColor: data.type == 'live'
-                        ? Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer
-                            .withOpacity(0.7)
+                        ? Theme.of(context).colorScheme.secondaryContainer
                         : Theme.of(context).colorScheme.primary,
                   ),
                 ),
