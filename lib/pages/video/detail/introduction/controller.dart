@@ -613,9 +613,7 @@ class VideoIntroController extends GetxController
     this.bvid = bvid;
     lastPlayCid.value = cid;
     queryVideoIntro();
-    if (isShowOnlineTotal) {
-      queryOnlineTotal();
-    }
+    queryOnlineTotal();
   }
 
   void startTimer() {
@@ -634,6 +632,9 @@ class VideoIntroController extends GetxController
 
   // 查看同时在看人数
   Future queryOnlineTotal() async {
+    if (isShowOnlineTotal.not) {
+      return;
+    }
     dynamic result = await VideoHttp.onlineTotal(
       aid: IdUtils.bv2av(bvid),
       bvid: bvid,

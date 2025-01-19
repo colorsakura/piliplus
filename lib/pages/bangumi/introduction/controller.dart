@@ -443,6 +443,14 @@ class BangumiIntroController extends CommonController {
     if (isLogin) {
       queryBangumiLikeCoinFav();
     }
+
+    try {
+      Get.find<VideoIntroController>(tag: Get.arguments['heroTag'])
+        ..bvid = bvid
+        ..lastPlayCid.value = cid
+        ..queryVideoIntro()
+        ..queryOnlineTotal();
+    } catch (_) {}
   }
 
   // 追番
