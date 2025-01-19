@@ -64,7 +64,7 @@ class _MainAppState extends State<MainApp>
   void didPopNext() {
     _mainController.checkUnreadDynamic();
     _checkDefaultSearch(true);
-    _checkUnread(true);
+    _checkUnread(context.orientation == Orientation.portrait);
     super.didPopNext();
   }
 
@@ -73,7 +73,7 @@ class _MainAppState extends State<MainApp>
     if (state == AppLifecycleState.resumed) {
       _mainController.checkUnreadDynamic();
       _checkDefaultSearch(true);
-      _checkUnread(true);
+      _checkUnread(context.orientation == Orientation.portrait);
     }
   }
 
