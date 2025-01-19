@@ -23,7 +23,7 @@ class MainController extends GetxController {
   final StreamController<bool> bottomBarStream =
       StreamController<bool>.broadcast();
   late bool hideTabBar;
-  late PageController pageController;
+  late TabController controller;
   RxInt selectedIndex = 0.obs;
   RxBool isLogin = false.obs;
 

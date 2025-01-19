@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/tabs.dart';
 import 'package:PiliPlus/grpc/grpc_client.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -41,8 +42,11 @@ class _MainAppState extends State<MainApp>
   void initState() {
     super.initState();
     _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
-    _mainController.pageController =
-        PageController(initialPage: _mainController.selectedIndex.value);
+    _mainController.controller = TabController(
+      vsync: this,
+      initialIndex: _mainController.selectedIndex.value,
+      length: _mainController.navigationBars.length,
+    );
     enableMYBar =
         GStorage.setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar =
@@ -110,7 +114,7 @@ class _MainAppState extends State<MainApp>
 
     if (value != _mainController.selectedIndex.value) {
       _mainController.selectedIndex.value = value;
-      _mainController.pageController.jumpToPage(value);
+      _mainController.controller.animateTo(value);
       dynamic currentPage = _mainController.pages[value];
       if (currentPage is HomePage) {
         _checkDefaultSearch();
@@ -213,9 +217,12 @@ class _MainAppState extends State<MainApp>
               color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
             ),
             Expanded(
-              child: PageView(
+              child: CustomTabBarView(
+                scrollDirection: context.orientation == Orientation.portrait
+                    ? Axis.horizontal
+                    : Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),
-                controller: _mainController.pageController,
+                controller: _mainController.controller,
                 children: _mainController.pages,
               ),
             ),
