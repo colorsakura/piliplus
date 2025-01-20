@@ -500,42 +500,7 @@ class UserInfoCard extends StatelessWidget {
                 Positioned(
                   top: 180,
                   left: 20,
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/liveRoom?roomid=${live['roomid']}');
-                    },
-                    child: Container(
-                      width: 85,
-                      alignment: Alignment.center,
-                      child: Badge(
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.equalizer_rounded,
-                              size: MediaQuery.textScalerOf(context).scale(16),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                            ),
-                            Text(
-                              '直播中',
-                              style: TextStyle(height: 1),
-                            )
-                          ],
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 1,
-                        ),
-                        alignment: Alignment.center,
-                        textColor:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                      ),
-                    ),
-                  ),
+                  child: _buildLiveBadge(context),
                 ),
               Positioned(
                 left: 120,
@@ -558,6 +523,39 @@ class UserInfoCard extends StatelessWidget {
         ],
       );
 
+  _buildLiveBadge(context) => GestureDetector(
+        onTap: () {
+          Get.toNamed('/liveRoom?roomid=${live['roomid']}');
+        },
+        child: Container(
+          width: 85,
+          alignment: Alignment.center,
+          child: Badge(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.equalizer_rounded,
+                  size: MediaQuery.textScalerOf(context).scale(16),
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+                Text(
+                  '直播中',
+                  style: TextStyle(height: 1),
+                )
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 1,
+            ),
+            alignment: Alignment.center,
+            textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          ),
+        ),
+      );
+
   _buildH(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -571,6 +569,7 @@ class UserInfoCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     _buildAvatar(context),
                     if (card.officialVerify?.icon?.isNotEmpty == true ||
@@ -579,6 +578,13 @@ class UserInfoCard extends StatelessWidget {
                         right: 0,
                         bottom: 0,
                         child: _buildBadge(context),
+                      ),
+                    if (live is Map && ((live['liveStatus'] as int?) ?? 0) == 1)
+                      Positioned(
+                        left: 0,
+                        bottom: -5,
+                        right: 0,
+                        child: _buildLiveBadge(context),
                       ),
                   ],
                 ),
