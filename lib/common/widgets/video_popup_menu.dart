@@ -28,7 +28,7 @@ class VideoCustomActions {
 
   VideoCustomActions(this.videoItem, this.context, [this.onRemove]) {
     actions = [
-      if ((videoItem.bvid as String?)?.isNotEmpty == true)
+      if ((videoItem.bvid as String?)?.isNotEmpty == true) ...[
         VideoCustomAction(
           videoItem.bvid,
           'copy',
@@ -42,15 +42,16 @@ class VideoCustomActions {
             Utils.copyText(videoItem.bvid);
           },
         ),
-      VideoCustomAction(
-        '稍后再看',
-        'pause',
-        Icon(MdiIcons.clockTimeEightOutline, size: 16),
-        () async {
-          var res = await UserHttp.toViewLater(bvid: videoItem.bvid as String);
-          SmartDialog.showToast(res['msg']);
-        },
-      ),
+        VideoCustomAction(
+          '稍后再看',
+          'pause',
+          Icon(MdiIcons.clockTimeEightOutline, size: 16),
+          () async {
+            var res = await UserHttp.toViewLater(bvid: videoItem.bvid);
+            SmartDialog.showToast(res['msg']);
+          },
+        ),
+      ],
       if (videoItem is! Item)
         VideoCustomAction(
           '访问：${videoItem.owner.name}',
