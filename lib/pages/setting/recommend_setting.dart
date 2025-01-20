@@ -2,12 +2,14 @@ import 'package:PiliPlus/pages/setting/widgets/model.dart';
 import 'package:flutter/material.dart';
 
 class RecommendSetting extends StatelessWidget {
-  const RecommendSetting({super.key});
+  const RecommendSetting({super.key, this.showAppBar});
+
+  final bool? showAppBar;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('推荐流设置')),
+      appBar: showAppBar == false ? null : AppBar(title: Text('推荐流设置')),
       body: ListView(
         children: [
           ...recommendSettings.map((item) => item.widget),
@@ -24,7 +26,8 @@ class RecommendSetting extends StatelessWidget {
                   color:
                       Theme.of(context).colorScheme.outline.withOpacity(0.7)),
             ),
-          )
+          ),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
         ],
       ),
     );

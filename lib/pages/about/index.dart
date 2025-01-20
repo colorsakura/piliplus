@@ -16,7 +16,9 @@ import '../../http/init.dart';
 import '../../utils/cache_manage.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({super.key});
+  const AboutPage({super.key, this.showAppBar});
+
+  final bool? showAppBar;
 
   @override
   State<AboutPage> createState() => _AboutPageState();
@@ -50,7 +52,7 @@ class _AboutPageState extends State<AboutPage> {
     TextStyle subTitleStyle =
         TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline);
     return Scaffold(
-      appBar: AppBar(title: Text('关于')),
+      appBar: widget.showAppBar == false ? null : AppBar(title: Text('关于')),
       body: ListView(
         children: [
           GestureDetector(
@@ -455,7 +457,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
                 },
               );
             },
-          )
+          ),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
         ],
       ),
     );

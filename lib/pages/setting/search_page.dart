@@ -1,7 +1,9 @@
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/pages/setting/widgets/model.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waterfall_flow/waterfall_flow.dart';
 
 class SettingsSearchPage extends StatefulWidget {
   const SettingsSearchPage({super.key});
@@ -78,8 +80,18 @@ class _SettingsSearchPageState extends State<SettingsSearchPage> {
             ? CustomScrollView(
                 slivers: [HttpError()],
               )
-            : ListView(
-                children: _list.map((item) => item.widget).toList(),
+            : CustomScrollView(
+                slivers: [
+                  SliverWaterfallFlow.extent(
+                    maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                    children: [
+                      ..._list.map((item) => item.widget),
+                      SizedBox(
+                        height: MediaQuery.paddingOf(context).bottom + 80,
+                      ),
+                    ],
+                  ),
+                ],
               ),
       ),
     );

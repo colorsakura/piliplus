@@ -1710,6 +1710,7 @@ List<SettingsModel> get extraSettings => [
                 divisions: 8,
                 precise: 2,
                 value: GStorage.refreshDragPercentage,
+                suffix: 'x',
               );
             },
           );

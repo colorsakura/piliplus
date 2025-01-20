@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 
 class PlaySetting extends StatefulWidget {
-  const PlaySetting({super.key});
+  const PlaySetting({super.key, this.showAppBar});
+
+  final bool? showAppBar;
 
   @override
   State<PlaySetting> createState() => _PlaySettingState();
@@ -21,9 +23,12 @@ class _PlaySettingState extends State<PlaySetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('播放器设置')),
+      appBar: widget.showAppBar == false ? null : AppBar(title: Text('播放器设置')),
       body: ListView(
-        children: playSettings.map((item) => item.widget).toList(),
+        children: [
+          ...playSettings.map((item) => item.widget),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom + 80),
+        ],
       ),
     );
   }
