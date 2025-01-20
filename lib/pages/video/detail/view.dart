@@ -437,7 +437,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       await videoDetailController.playerInit(
         autoplay: videoDetailController.playerStatus == PlayerStatus.playing,
       );
-    } else if (videoDetailController.preInitPlayer) {
+    } else if (videoDetailController.preInitPlayer &&
+        videoDetailController.isQuerying.not &&
+        videoDetailController.videoState.value is! Error) {
       await videoDetailController.playerInit();
     }
 
