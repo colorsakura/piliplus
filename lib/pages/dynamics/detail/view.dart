@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -464,7 +465,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                   label: Obx(() => Text(
-                        _dynamicDetailController.sortTypeLabel.value,
+                        _dynamicDetailController.sortType.value.label,
                         style: TextStyle(
                           fontSize: 13,
                           color: Theme.of(context).colorScheme.secondary,

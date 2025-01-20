@@ -54,7 +54,7 @@ class DynamicDetailController extends ReplyController {
           oid: oid!,
           nextOffset: nextOffset,
           type: type!,
-          sort: sortType.index,
+          sort: sortType.value.index,
           page: currentPage,
           banWordForReply: banWordForReply,
         );

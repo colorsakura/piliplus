@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -146,7 +147,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       children: [
                         Obx(
                           () => Text(
-                            '${_videoReplyController.sortTypeLabel.value}评论',
+                            _videoReplyController.sortType.value.title,
                             style: const TextStyle(fontSize: 13),
                           ),
                         ),
@@ -162,7 +163,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             ),
                             label: Obx(
                               () => Text(
-                                _videoReplyController.sortTypeLabel.value,
+                                _videoReplyController.sortType.value.label,
                                 style: TextStyle(
                                   fontSize: 13,
                                   color:

@@ -64,7 +64,7 @@ class HtmlRenderController extends ReplyController {
           oid: oid.value,
           nextOffset: nextOffset,
           type: type,
-          sort: sortType.index,
+          sort: sortType.value.index,
           page: currentPage,
           banWordForReply: banWordForReply,
         );

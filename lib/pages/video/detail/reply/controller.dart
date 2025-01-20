@@ -34,7 +34,7 @@ class VideoReplyController extends ReplyController {
           oid: aid!,
           nextOffset: nextOffset,
           type: ReplyType.video.index,
-          sort: sortType.index,
+          sort: sortType.value.index,
           page: currentPage,
           banWordForReply: banWordForReply,
         );

@@ -12,7 +12,6 @@ class BangumiController extends CommonController {
   BangumiController({required this.tabType});
   final TabType tabType;
 
-  bool isLoadingMore = true;
   RxBool isLogin = false.obs;
   int? mid;
   dynamic userInfo;

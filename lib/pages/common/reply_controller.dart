@@ -18,20 +18,17 @@ import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 abstract class ReplyController extends CommonController {
   String nextOffset = '';
-  bool isLoadingMore = false;
   RxInt count = (-1).obs;
 
-  ReplySortType sortType = ReplySortType.time;
-  RxString sortTypeTitle = ReplySortType.time.titles.obs;
-  RxString sortTypeLabel = ReplySortType.time.labels.obs;
+  Rx<ReplySortType> sortType = ReplySortType.time.obs;
 
   late final savedReplies = {};
 
-  late bool isLogin = GStorage.userInfo.get('userInfoCache') != null;
+  late final bool isLogin = GStorage.userInfo.get('userInfoCache') != null;
 
   CursorReply? cursor;
   late Mode mode = Mode.MAIN_LIST_HOT;
-  bool hasUpTop = false;
+  late bool hasUpTop = false;
 
   late final banWordForReply = GStorage.banWordForReply;
 
@@ -44,10 +41,8 @@ abstract class ReplyController extends CommonController {
       GStorage.setting.put(SettingBoxKey.replySortType, 0);
       defaultReplySortIndex = 0;
     }
-    sortType = ReplySortType.values[defaultReplySortIndex];
-    sortTypeTitle.value = sortType.titles;
-    sortTypeLabel.value = sortType.labels;
-    if (sortType == ReplySortType.time) {
+    sortType.value = ReplySortType.values[defaultReplySortIndex];
+    if (sortType.value == ReplySortType.time) {
       mode = Mode.MAIN_LIST_TIME;
     }
   }
@@ -119,18 +114,16 @@ abstract class ReplyController extends CommonController {
   queryBySort() {
     EasyThrottle.throttle('queryBySort', const Duration(seconds: 1), () {
       feedBack();
-      switch (sortType) {
+      switch (sortType.value) {
         case ReplySortType.time:
-          sortType = ReplySortType.like;
+          sortType.value = ReplySortType.like;
           mode = Mode.MAIN_LIST_HOT;
           break;
         case ReplySortType.like:
-          sortType = ReplySortType.time;
+          sortType.value = ReplySortType.time;
           mode = Mode.MAIN_LIST_TIME;
           break;
       }
-      sortTypeTitle.value = sortType.titles;
-      sortTypeLabel.value = sortType.labels;
       nextOffset = '';
       loadingState.value = LoadingState.loading();
       onRefresh();

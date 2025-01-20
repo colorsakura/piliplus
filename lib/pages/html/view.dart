@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/article_content.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -517,7 +518,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               icon: const Icon(Icons.sort, size: 16),
               label: Obx(
                 () => Text(
-                  _htmlRenderCtr.sortTypeLabel.value,
+                  _htmlRenderCtr.sortType.value.label,
                   style: const TextStyle(fontSize: 13),
                 ),
               ),

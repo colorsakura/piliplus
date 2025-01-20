@@ -1986,7 +1986,7 @@ List<SettingsModel> get extraSettings => [
         setKey: SettingBoxKey.replySortType,
         leading: const Icon(Icons.whatshot_outlined),
         getSubtitle: () =>
-            '当前优先展示「${ReplySortType.values[GStorage.defaultReplySort].titles}」',
+            '当前优先展示「${ReplySortType.values[GStorage.defaultReplySort].title}」',
         onTap: (setState) async {
           int? result = await showDialog(
             context: Get.context!,
@@ -1995,7 +1995,7 @@ List<SettingsModel> get extraSettings => [
                 title: '评论展示',
                 value: GStorage.defaultReplySort,
                 values: ReplySortType.values.map((e) {
-                  return {'title': e.titles, 'value': e.index};
+                  return {'title': e.title, 'value': e.index};
                 }).toList(),
               );
             },
