@@ -411,6 +411,7 @@ class _MainAppState extends State<MainApp>
               : const SizedBox.shrink(),
         ),
         IconButton(
+          tooltip: '搜索',
           icon: const Icon(
             Icons.search_outlined,
             semanticLabel: '搜索',

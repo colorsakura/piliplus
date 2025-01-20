@@ -74,12 +74,22 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
         child: Column(
           children: [
             // 搜索建议
-            _searchSuggest(),
-            if (_searchController.enableHotKey)
-              // 热搜
-              hotSearch(),
-            // 搜索历史
-            _history()
+            if (_searchController.searchSuggestion) _searchSuggest(),
+            if (context.orientation == Orientation.portrait) ...[
+              if (_searchController.enableHotKey)
+                // 热搜
+                hotSearch(),
+              // 搜索历史
+              _history()
+            ] else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (_searchController.enableHotKey)
+                    Expanded(child: hotSearch()),
+                  Expanded(child: _history()),
+                ],
+              ),
           ],
         ),
       ),
@@ -174,7 +184,11 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(
           10,
-          _searchController.enableHotKey ? 0 : 6,
+          context.orientation == Orientation.landscape
+              ? 25
+              : _searchController.enableHotKey
+                  ? 0
+                  : 6,
           6,
           MediaQuery.of(context).padding.bottom + 50,
         ),
