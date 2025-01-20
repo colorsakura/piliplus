@@ -53,7 +53,7 @@ class SettingPage extends StatelessWidget {
             onTap: () => Get.toNamed('/privacySetting'),
             leading: const Icon(Icons.privacy_tip_outlined),
             title: Text('隐私设置', style: titleStyle),
-            subtitle: Text('黑名单、access_key刷新、无痕模式', style: subTitleStyle),
+            subtitle: Text('黑名单、无痕模式', style: subTitleStyle),
           ),
           ListTile(
             onTap: () => Get.toNamed('/recommendSetting'),
