@@ -1905,6 +1905,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '搜索建议',
+        leading: Icon(Icons.search),
+        setKey: SettingBoxKey.searchSuggestion,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

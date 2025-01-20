@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class SSearchController extends GetxController {
   final searchFocusNode = FocusNode();
@@ -22,6 +23,9 @@ class SSearchController extends GetxController {
   int initIndex = 0;
 
   RxBool showUidBtn = false.obs;
+
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 200));
+  late final searchSuggestion = GStorage.searchSuggestion;
 
   @override
   void onInit() {
@@ -54,8 +58,8 @@ class SSearchController extends GetxController {
     validateUid();
     if (value.isEmpty) {
       searchSuggestList.clear();
-    } else {
-      querySearchSuggest(value);
+    } else if (searchSuggestion) {
+      _debouncer.call(() => querySearchSuggest(value));
     }
   }
 
@@ -136,6 +140,7 @@ class SSearchController extends GetxController {
   void onClose() {
     searchFocusNode.dispose();
     controller.dispose();
+    _debouncer.cancel();
     super.onClose();
   }
 }

@@ -348,6 +348,9 @@ class GStorage {
   static bool get mainTabBarView =>
       GStorage.setting.get(SettingBoxKey.mainTabBarView, defaultValue: false);
 
+  static bool get searchSuggestion =>
+      GStorage.setting.get(SettingBoxKey.searchSuggestion, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -573,6 +576,7 @@ class SettingBoxKey {
       superResolutionType = 'superResolutionType',
       preInitPlayer = 'preInitPlayer',
       mainTabBarView = 'mainTabBarView',
+      searchSuggestion = 'searchSuggestion',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
