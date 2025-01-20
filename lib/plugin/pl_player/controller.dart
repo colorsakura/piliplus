@@ -899,10 +899,6 @@ class PlPlayerController {
       videoPlayerController!.stream.error.listen((String event) {
         // 直播的错误提示没有参考价值，均不予显示
         if (videoType.value == 'live') return;
-        if (event.startsWith("Failed to open .") ||
-            event.startsWith("Cannot open file ''")) {
-          SmartDialog.showToast('视频源为空');
-        }
         if (event.startsWith("Failed to open https://") ||
             event.startsWith("Can not open external file https://") ||
             //tcp: ffurl_read returned 0xdfb9b0bb
@@ -923,14 +919,16 @@ class PlPlayerController {
             });
           });
           return;
-        }
-        debugPrint('videoPlayerController!.stream.error.listen: ');
-        if (event.startsWith('Could not open codec')) {
+        } else if (event.startsWith('Could not open codec')) {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
           return;
+        } else if (event.startsWith("Failed to open .") ||
+            event.startsWith("Cannot open file ''")) {
+          SmartDialog.showToast('视频源为空');
+        } else {
+          SmartDialog.showToast('视频加载错误, $event');
+          debugPrint('视频加载错误, $event');
         }
-        SmartDialog.showToast('视频加载错误, $event');
-        debugPrint('视频加载错误, $event');
       }),
       // videoPlayerController!.stream.volume.listen((event) {
       //   if (!mute.value && _volumeBeforeMute != event) {
