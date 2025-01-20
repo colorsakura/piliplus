@@ -151,7 +151,6 @@ class _UpPanelState extends State<UpPanel> {
         }
       },
       onLongPress: () {
-        feedBack();
         if (data.mid == -1) {
           return;
         }
@@ -187,7 +186,7 @@ class _UpPanelState extends State<UpPanel> {
                         ),
                 ),
                 Positioned(
-                  top: 0,
+                  top: data.type == 'live' ? -5 : 0,
                   right: data.type == 'live' ? -6 : 4,
                   child: Badge(
                     smallSize: 8,
@@ -198,7 +197,10 @@ class _UpPanelState extends State<UpPanel> {
                     isLabelVisible: data.type == 'live' ||
                         (data.type == 'up' && (data.hasUpdate ?? false)),
                     backgroundColor: data.type == 'live'
-                        ? Theme.of(context).colorScheme.secondaryContainer
+                        ? Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer
+                            .withOpacity(0.75)
                         : Theme.of(context).colorScheme.primary,
                   ),
                 ),

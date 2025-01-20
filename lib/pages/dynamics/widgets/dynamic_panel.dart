@@ -65,6 +65,18 @@ class DynamicPanel extends StatelessWidget {
                 title: item.modules.moduleDynamic.major.pgc.title,
                 cover: item.modules.moduleDynamic.major.pgc.cover,
               );
+            } else if (item.type == 'DYNAMIC_TYPE_LIVE_RCMD') {
+              imageSaveDialog(
+                context: context,
+                title: item.modules.moduleDynamic.major.liveRcmd.title,
+                cover: item.modules.moduleDynamic.major.liveRcmd.cover,
+              );
+            } else if (item.type == 'DYNAMIC_TYPE_LIVE') {
+              imageSaveDialog(
+                context: context,
+                title: item.modules.moduleDynamic.major.live.title,
+                cover: item.modules.moduleDynamic.major.live.cover,
+              );
             }
           },
           child: Column(
