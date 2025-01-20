@@ -23,7 +23,7 @@ class MainController extends GetxController {
   final StreamController<bool> bottomBarStream =
       StreamController<bool>.broadcast();
   late bool hideTabBar;
-  late TabController controller;
+  late dynamic controller;
   RxInt selectedIndex = 0.obs;
   RxBool isLogin = false.obs;
 
@@ -38,6 +38,8 @@ class MainController extends GetxController {
   late List<MsgUnReadType> msgUnReadTypes = GStorage.msgUnReadTypeV2;
   late final RxString msgUnReadCount = ''.obs;
   late int lastCheckUnreadAt = 0;
+
+  late final mainTabBarView = GStorage.mainTabBarView;
 
   @override
   void onInit() {

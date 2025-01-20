@@ -42,11 +42,13 @@ class _MainAppState extends State<MainApp>
   void initState() {
     super.initState();
     _lastSelectTime = DateTime.now().millisecondsSinceEpoch;
-    _mainController.controller = TabController(
-      vsync: this,
-      initialIndex: _mainController.selectedIndex.value,
-      length: _mainController.navigationBars.length,
-    );
+    _mainController.controller = _mainController.mainTabBarView
+        ? TabController(
+            vsync: this,
+            initialIndex: _mainController.selectedIndex.value,
+            length: _mainController.navigationBars.length,
+          )
+        : PageController(initialPage: _mainController.selectedIndex.value);
     enableMYBar =
         GStorage.setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
     useSideBar =
@@ -114,7 +116,11 @@ class _MainAppState extends State<MainApp>
 
     if (value != _mainController.selectedIndex.value) {
       _mainController.selectedIndex.value = value;
-      _mainController.controller.animateTo(value);
+      if (_mainController.mainTabBarView) {
+        _mainController.controller.animateTo(value);
+      } else {
+        _mainController.controller.jumpToPage(value);
+      }
       dynamic currentPage = _mainController.pages[value];
       if (currentPage is HomePage) {
         _checkDefaultSearch();
@@ -217,14 +223,21 @@ class _MainAppState extends State<MainApp>
               color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
             ),
             Expanded(
-              child: CustomTabBarView(
-                scrollDirection: context.orientation == Orientation.portrait
-                    ? Axis.horizontal
-                    : Axis.vertical,
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _mainController.controller,
-                children: _mainController.pages,
-              ),
+              child: _mainController.mainTabBarView
+                  ? CustomTabBarView(
+                      scrollDirection:
+                          context.orientation == Orientation.portrait
+                              ? Axis.horizontal
+                              : Axis.vertical,
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _mainController.controller,
+                      children: _mainController.pages,
+                    )
+                  : PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _mainController.controller,
+                      children: _mainController.pages,
+                    ),
             ),
           ],
         ),

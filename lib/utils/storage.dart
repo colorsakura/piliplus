@@ -345,6 +345,9 @@ class GStorage {
   static bool get preInitPlayer =>
       GStorage.setting.get(SettingBoxKey.preInitPlayer, defaultValue: false);
 
+  static bool get mainTabBarView =>
+      GStorage.setting.get(SettingBoxKey.mainTabBarView, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -569,6 +572,7 @@ class SettingBoxKey {
       audioNormalization = 'audioNormalization',
       superResolutionType = 'superResolutionType',
       preInitPlayer = 'preInitPlayer',
+      mainTabBarView = 'mainTabBarView',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

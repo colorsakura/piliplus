@@ -1897,6 +1897,14 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '首页切换页面动画',
+        leading: Icon(Icons.home_outlined),
+        setKey: SettingBoxKey.mainTabBarView,
+        defaultVal: false,
+        needReboot: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {
