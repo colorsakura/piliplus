@@ -583,13 +583,17 @@ class PlPlayerController {
     return shadersDirectory;
   }
 
-  late int superResolutionType = GStorage.superResolutionType;
+  bool get _isBangumi =>
+      Get.parameters['type'] == '1' || Get.parameters['type'] == '4';
+  late int superResolutionType = _isBangumi ? GStorage.superResolutionType : 0;
   Future<void> setShader([int? type, NativePlayer? pp]) async {
     if (type == null) {
       type ??= superResolutionType;
     } else {
       superResolutionType = type;
-      GStorage.setting.put(SettingBoxKey.superResolutionType, type);
+      if (_isBangumi) {
+        GStorage.setting.put(SettingBoxKey.superResolutionType, type);
+      }
     }
     pp ??= _videoPlayerController?.platform as NativePlayer;
     await pp.waitForPlayerInitialization;
@@ -652,7 +656,7 @@ class PlPlayerController {
         );
     var pp = player.platform as NativePlayer;
     // 解除倍速限制
-    if (Get.parameters['type'] == '1' || Get.parameters['type'] == '4') {
+    if (_isBangumi) {
       setShader(superResolutionType, pp);
     }
     if (_videoPlayerController == null) {

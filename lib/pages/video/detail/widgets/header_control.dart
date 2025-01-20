@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
+import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -196,6 +197,75 @@ class _HeaderControlState extends State<HeaderControl> {
                           },
                           leading: const Icon(Icons.refresh_outlined, size: 20),
                           title: const Text('重载视频', style: titleStyle),
+                        ),
+                        ListTile(
+                          dense: true,
+                          leading: const Icon(
+                              Icons.stay_current_landscape_outlined,
+                              size: 20),
+                          title: Row(
+                            children: [
+                              const Text(
+                                '超分辨率',
+                                strutStyle: StrutStyle(leading: 0, height: 1),
+                                style: TextStyle(
+                                  height: 1,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Builder(
+                                builder: (context) => PopupMenuButton(
+                                  initialValue: SuperResolutionType.values[
+                                      widget.controller.superResolutionType],
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          SuperResolutionType
+                                              .values[widget.controller
+                                                  .superResolutionType]
+                                              .title,
+                                          strutStyle:
+                                              StrutStyle(leading: 0, height: 1),
+                                          style: TextStyle(
+                                            height: 1,
+                                            fontSize: 14,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
+                                        Icon(
+                                          MdiIcons.unfoldMoreHorizontal,
+                                          size: MediaQuery.textScalerOf(context)
+                                              .scale(14),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  onSelected: (value) {
+                                    widget.controller.setShader(value.index);
+                                    if (context.mounted) {
+                                      (context as Element).markNeedsBuild();
+                                    }
+                                  },
+                                  itemBuilder: (context) =>
+                                      SuperResolutionType.values
+                                          .map((item) => PopupMenuItem(
+                                                value: item,
+                                                child: Text(item.title),
+                                              ))
+                                          .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         ListTile(
                           dense: true,
