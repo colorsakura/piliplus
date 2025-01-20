@@ -625,8 +625,7 @@ class ReplyItem extends StatelessWidget {
       ...content.atNameToMid.keys.map((e) => '@$e'),
     ];
     List<String> jumpUrlKeysList = content.jumpUrl.keys.map<String>((String e) {
-      return e.replaceAllMapped(
-          RegExp(r'[?+*]'), (match) => '\\${match.group(0)}');
+      return e;
     }).toList();
     specialTokens.sort((a, b) => b.length.compareTo(a.length));
     String patternStr = specialTokens.map(RegExp.escape).join('|');
