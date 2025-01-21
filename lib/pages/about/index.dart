@@ -81,7 +81,7 @@ class _AboutPageState extends State<AboutPage> {
               constraints: const BoxConstraints(maxHeight: 150),
               child: ExcludeSemantics(
                 child: Image.asset(
-                  'assets/images/logo/logo_android_2.png',
+                  'assets/images/logo/logo.png',
                 ),
               ),
             ),

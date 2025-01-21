@@ -179,9 +179,9 @@ class _UpPanelState extends State<UpPanel> {
                           type: 'avatar',
                         )
                       : const CircleAvatar(
-                          radius: 19,
+                          backgroundColor: Color(0xFF5CB67B),
                           backgroundImage: AssetImage(
-                            'assets/images/logo/logo_android_2.png',
+                            'assets/images/logo/logo.png',
                           ),
                         ),
                 ),

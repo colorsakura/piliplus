@@ -213,15 +213,15 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: assets/images/logo/logo_android_2.png
-  image_path_android: assets/images/logo/logo_android_2.png
-  image_path_ios: assets/images/logo/logo_ios.png
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: assets/images/logo/logo_android_2.png
-  adaptive_icon_monochrome: assets/images/logo/logo_android_2.png
+  image_path: assets/images/logo/logo.png
+  image_path_android: assets/images/logo/logo.png
+  image_path_ios: assets/images/logo/logo.png
+  adaptive_icon_background: "#FF5CB67B"
+  adaptive_icon_foreground: assets/images/logo/logo.png
+  adaptive_icon_monochrome: assets/images/logo/logo.png
   macos:
     generate: true
-    image_path: assets/images/logo/logo_ios.png
+    image_path: assets/images/logo/logo.png
 
 flutter_native_splash:
   android_12:
@@ -229,8 +229,8 @@ flutter_native_splash:
     color_dark: "#212121"
   color: "#ffffff"
   color_dark: "#212121"
-  image: assets/images/logo/logo_android_2.png
-  image_dark: assets/images/logo/logo_android_2.png
+  image: assets/images/logo/logo.png
+  image_dark: assets/images/logo/logo.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -262,13 +262,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: fansCard
-      fonts:
-        - asset: assets/fonts/fansCard.ttf
-    - family: Jura-Bold
-      fonts:
-        - asset: assets/fonts/Jura-Bold.ttf
+  # fonts:
+  #   - family: fansCard
+  #     fonts:
+  #       - asset: assets/fonts/fansCard.ttf
+  #   - family: Jura-Bold
+  #     fonts:
+  #       - asset: assets/fonts/Jura-Bold.ttf
     # - family: HarmonyOS
     #   fonts:
     #     - asset: assets/fonts/HarmonyOS_Sans_SC_Regular.ttf

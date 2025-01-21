@@ -27,7 +27,7 @@ class _MinePageState extends State<MinePage> {
           children: [
             const SizedBox(width: 12),
             Image.asset(
-              'assets/images/logo/logo_android_2.png',
+              'assets/images/logo/logo.png',
               width: 35,
             ),
             const SizedBox(width: 5),
