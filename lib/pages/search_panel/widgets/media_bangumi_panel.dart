@@ -10,8 +10,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import '../../../utils/grid.dart';
 
 Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
-  TextStyle style =
-      TextStyle(fontSize: Theme.of(context).textTheme.labelMedium!.fontSize);
+  late TextStyle style = TextStyle(fontSize: 13);
   return switch (loadingState) {
     Loading() => loadingWidget,
     Success() => (loadingState.response as List?)?.isNotEmpty == true
@@ -77,8 +76,8 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                                   children: [
                                     const SizedBox(height: 4),
                                     RichText(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                      // maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
                                       textScaler:
                                           MediaQuery.textScalerOf(context),
                                       text: TextSpan(
