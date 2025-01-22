@@ -63,13 +63,14 @@ class _AboutPageState extends State<AboutPage> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    String text = '';
                     return AlertDialog(
                       content: TextField(
-                        onChanged: (value) => text = value,
+                        autofocus: true,
                         onSubmitted: (value) {
                           Get.back();
-                          Get.toNamed('/webview', parameters: {'url': text});
+                          if (value.isNotEmpty) {
+                            Get.toNamed('/webview', parameters: {'url': value});
+                          }
                         },
                       ),
                     );
