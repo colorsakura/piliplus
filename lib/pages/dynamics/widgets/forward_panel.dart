@@ -290,35 +290,39 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
           child: Row(
             children: [
               NetworkImgLayer(
+                type: 'cover',
+                radius: 8,
                 width: 45,
                 height: 45,
                 src: item.modules.moduleDynamic.major.common['cover'],
               ),
               const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.modules.moduleDynamic.major.common['title'],
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.modules.moduleDynamic.major.common['title'],
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    item.modules.moduleDynamic.major.common['desc'],
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
+                    const SizedBox(height: 2),
+                    Text(
+                      item.modules.moduleDynamic.major.common['desc'],
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontSize:
+                            Theme.of(context).textTheme.labelMedium!.fontSize,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -337,6 +341,8 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
           child: Row(
             children: [
               NetworkImgLayer(
+                type: 'cover',
+                radius: 8,
                 width: 45,
                 height: 45,
                 src: music['cover'],
