@@ -27,6 +27,7 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -992,39 +993,39 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   primary: false,
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.transparent,
-                  // automaticallyImplyLeading: false,
-                  // title: Row(
-                  //   children: [
-                  //     SizedBox(
-                  //       width: 42,
-                  //       height: 34,
-                  //       child: IconButton(
-                  //         tooltip: '返回',
-                  //         icon: const Icon(
-                  //           FontAwesomeIcons.arrowLeft,
-                  //           size: 15,
-                  //           color: Colors.white,
-                  //         ),
-                  //         onPressed: Get.back,
-                  //       ),
-                  //     ),
-                  //     SizedBox(
-                  //       width: 42,
-                  //       height: 34,
-                  //       child: IconButton(
-                  //         tooltip: '返回主页',
-                  //         icon: const Icon(
-                  //           FontAwesomeIcons.house,
-                  //           size: 15,
-                  //           color: Colors.white,
-                  //         ),
-                  //         onPressed: () {
-                  //           Get.until((route) => route.isFirst);
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                  automaticallyImplyLeading: false,
+                  title: Row(
+                    children: [
+                      SizedBox(
+                        width: 42,
+                        height: 34,
+                        child: IconButton(
+                          tooltip: '返回',
+                          icon: const Icon(
+                            FontAwesomeIcons.arrowLeft,
+                            size: 15,
+                            color: Colors.white,
+                          ),
+                          onPressed: Get.back,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 42,
+                        height: 34,
+                        child: IconButton(
+                          tooltip: '返回主页',
+                          icon: const Icon(
+                            FontAwesomeIcons.house,
+                            size: 15,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Get.until((route) => route.isFirst);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                   actions: [
                     PopupMenuButton<String>(
                       onSelected: (String type) async {
