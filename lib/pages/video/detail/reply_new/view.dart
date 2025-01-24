@@ -8,6 +8,7 @@ import 'package:PiliPlus/models/video/reply/emote.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/pages/emote/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 import 'toolbar_icon_button.dart';
 
@@ -38,7 +39,8 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
   final GlobalKey _formKey = GlobalKey<FormState>();
   late double emoteHeight = 0.0;
   double keyboardHeight = 0.0; // 键盘高度
-  final _debouncer = Debouncer(milliseconds: 200); // 设置延迟时间
+  final _debouncer =
+      Debouncer(delay: const Duration(milliseconds: 200)); // 设置延迟时间
   String toolbarType = 'input';
   bool _enablePublish = false;
   final _publishStream = StreamController<bool>();
@@ -121,7 +123,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
       // 键盘高度
       final viewInsets = EdgeInsets.fromViewPadding(
           View.of(context).viewInsets, View.of(context).devicePixelRatio);
-      _debouncer.run(() {
+      _debouncer(() {
         if (!mounted) return;
         if (keyboardHeight == 0 && emoteHeight == 0) {
           emoteHeight = keyboardHeight =
@@ -273,24 +275,5 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
         ],
       ),
     );
-  }
-}
-
-typedef DebounceCallback = void Function();
-
-class Debouncer {
-  DebounceCallback? callback;
-  final int? milliseconds;
-  Timer? _timer;
-
-  Debouncer({this.milliseconds});
-
-  run(DebounceCallback callback) {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    _timer = Timer(Duration(milliseconds: milliseconds!), () {
-      callback();
-    });
   }
 }

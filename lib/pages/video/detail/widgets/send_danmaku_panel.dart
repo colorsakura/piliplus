@@ -3,8 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/http/danmaku.dart';
-import 'package:PiliPlus/pages/setting/sponsor_block_page.dart'
-    show SlideColorPicker;
+import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart'
     show PanelType;
 import 'package:PiliPlus/utils/extension.dart';
