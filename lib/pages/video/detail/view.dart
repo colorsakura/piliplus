@@ -105,6 +105,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Box get setting => GStorage.setting;
 
+  final GlobalKey relatedVideoPanelKey = GlobalKey();
+  final GlobalKey videoPlayerKey = GlobalKey();
+  final GlobalKey videoReplyPanelKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -863,7 +867,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                                 CustomScrollView(
                                   controller: _introController,
                                   slivers: [
-                                    RelatedVideoPanel(heroTag: heroTag),
+                                    RelatedVideoPanel(
+                                        key: relatedVideoPanelKey,
+                                        heroTag: heroTag),
                                   ],
                                 ),
                               if (videoDetailController.showReply)
@@ -950,6 +956,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         () => !videoDetailController.autoPlay.value
             ? const SizedBox()
             : PLVideoPlayer(
+                key: Key(heroTag),
                 plPlayerController: plPlayerController!,
                 videoIntroController:
                     videoDetailController.videoType == SearchType.video
@@ -1081,12 +1088,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   Widget get plPlayer => Obx(
+        key: videoPlayerKey,
         () => videoDetailController.videoState.value is! Success
             ? const SizedBox.shrink()
             : !videoDetailController.autoPlay.value ||
                     plPlayerController?.videoController == null
                 ? const SizedBox.shrink()
                 : PLVideoPlayer(
+                    key: Key(heroTag),
                     plPlayerController: plPlayerController!,
                     videoIntroController:
                         videoDetailController.videoType == SearchType.video
@@ -1411,6 +1420,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Widget videoIntro([bool needRelated = true]) {
     Widget introPanel() => CustomScrollView(
+          key: const PageStorageKey<String>('简介'),
           controller: needRelated ? _introController : null,
           slivers: [
             if (videoDetailController.videoType == SearchType.video) ...[
@@ -1433,7 +1443,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     ),
                   ),
                 ),
-                RelatedVideoPanel(heroTag: heroTag),
+                RelatedVideoPanel(key: relatedVideoPanelKey, heroTag: heroTag),
               ] else
                 SliverToBoxAdapter(
                   child: SizedBox(
@@ -1610,6 +1620,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Widget get videoReplyPanel => Obx(
         () => VideoReplyPanel(
+          key: videoReplyPanelKey,
           bvid: videoDetailController.bvid,
           oid: videoDetailController.oid.value,
           heroTag: heroTag,
