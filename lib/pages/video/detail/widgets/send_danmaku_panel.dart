@@ -1,34 +1,29 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/http/danmaku.dart';
+import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
-import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart'
-    show PanelType;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:canvas_danmaku/models/danmaku_content_item.dart';
-import 'package:chat_bottom_container/chat_bottom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class SendDanmakuPanel extends StatefulWidget {
+class SendDanmakuPanel extends CommonPublishPage {
   final dynamic cid;
   final dynamic bvid;
   final dynamic progress;
-  final String? savedDanmaku;
-  final ValueChanged<String>? onSaveDanmaku;
   final ValueChanged<DanmakuContentItem> callback;
 
   const SendDanmakuPanel({
     super.key,
+    super.initialValue,
+    super.onSave,
     required this.cid,
     required this.bvid,
     required this.progress,
-    required this.savedDanmaku,
-    required this.onSaveDanmaku,
     required this.callback,
   });
 
@@ -36,14 +31,7 @@ class SendDanmakuPanel extends StatefulWidget {
   State<SendDanmakuPanel> createState() => _SendDanmakuPanelState();
 }
 
-class _SendDanmakuPanelState extends State<SendDanmakuPanel>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  late final _focusNode = FocusNode();
-  late final _controller = ChatBottomPanelContainerController<PanelType>();
-  late final _textController = TextEditingController(text: widget.savedDanmaku);
-  final RxBool _readOnly = false.obs;
-  final RxBool _enablePublish = false.obs;
-  final RxBool _selectKeyboard = true.obs;
+class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
   final RxInt _mode = 1.obs;
   final RxInt _fontsize = 25.obs;
   final Rx<Color> _color = Colors.white.obs;
@@ -120,57 +108,6 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
       );
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-
-    if (widget.savedDanmaku.isNullOrEmpty.not) {
-      _enablePublish.value = true;
-    }
-
-    () async {
-      await Future.delayed(const Duration(milliseconds: 300));
-      if (mounted) {
-        _focusNode.requestFocus();
-      }
-    }();
-  }
-
-  @override
-  void dispose() async {
-    _focusNode.dispose();
-    _textController.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  void _requestFocus() async {
-    await Future.delayed(const Duration(microseconds: 200));
-    _focusNode.requestFocus();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      if (mounted && _selectKeyboard.value) {
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-          if (_focusNode.hasFocus) {
-            _focusNode.unfocus();
-            _requestFocus();
-          } else {
-            _requestFocus();
-          }
-        });
-      }
-    } else if (state == AppLifecycleState.paused) {
-      _controller.keepChatPanel();
-      if (_focusNode.hasFocus) {
-        _focusNode.unfocus();
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
       removeTop: true,
@@ -192,7 +129,7 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       _buildInputView(),
-                      _buildPanelContainer(),
+                      buildPanelContainer(),
                     ],
                   ),
                 ),
@@ -204,80 +141,57 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
     );
   }
 
-  Widget _buildPanelContainer() {
-    return ChatBottomPanelContainer<PanelType>(
-      controller: _controller,
-      inputFocusNode: _focusNode,
-      otherPanelWidget: (type) {
-        if (type == null) return const SizedBox.shrink();
-        switch (type) {
-          case PanelType.emoji:
-            return _buildEmojiPickerPanel();
-          default:
-            return const SizedBox.shrink();
-        }
-      },
-      panelBgColor: Theme.of(context).colorScheme.surface,
-    );
-  }
-
-  Widget _buildEmojiPickerPanel() {
-    double height = 170;
-    final keyboardHeight = _controller.keyboardHeight;
-    if (keyboardHeight != 0) {
-      height = max(height, keyboardHeight);
-    }
-    return Container(
-      height: height,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+  @override
+  Widget? customPanel(double height) => Container(
+        height: height,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+            ),
           ),
         ),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Text('弹幕字号', style: TextStyle(fontSize: 15)),
-                const SizedBox(width: 16),
-                _buildFontSizeItem(18, '小'),
-                const SizedBox(width: 5),
-                _buildFontSizeItem(25, '标准'),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Text('弹幕样式', style: TextStyle(fontSize: 15)),
-                const SizedBox(width: 16),
-                _buildPositionItem(1, '滚动'),
-                const SizedBox(width: 5),
-                _buildPositionItem(5, '顶部'),
-                const SizedBox(width: 5),
-                _buildPositionItem(4, '底部'),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('弹幕颜色', style: TextStyle(fontSize: 15)),
-                const SizedBox(width: 16),
-                _buildColorPanel,
-              ],
-            ),
-            const SizedBox(height: 12),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Text('弹幕字号', style: TextStyle(fontSize: 15)),
+                  const SizedBox(width: 16),
+                  _buildFontSizeItem(18, '小'),
+                  const SizedBox(width: 5),
+                  _buildFontSizeItem(25, '标准'),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Text('弹幕样式', style: TextStyle(fontSize: 15)),
+                  const SizedBox(width: 16),
+                  _buildPositionItem(1, '滚动'),
+                  const SizedBox(width: 5),
+                  _buildPositionItem(5, '顶部'),
+                  const SizedBox(width: 5),
+                  _buildPositionItem(4, '底部'),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('弹幕颜色', style: TextStyle(fontSize: 15)),
+                  const SizedBox(width: 16),
+                  _buildColorPanel,
+                ],
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   Widget _buildColorItem(Color color) {
     return GestureDetector(
@@ -392,18 +306,18 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
               context: context,
               tooltip: '弹幕样式',
               onPressed: () {
-                if (_selectKeyboard.value) {
-                  _selectKeyboard.value = false;
+                if (selectKeyboard.value) {
+                  selectKeyboard.value = false;
                   updatePanelType(PanelType.emoji);
                 } else {
-                  _selectKeyboard.value = true;
+                  selectKeyboard.value = true;
                   updatePanelType(PanelType.keyboard);
                 }
               },
               bgColor: Colors.transparent,
               iconSize: 24,
               icon: Icons.text_format,
-              iconColor: _selectKeyboard.value.not
+              iconColor: selectKeyboard.value.not
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -414,35 +328,35 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Listener(
                 onPointerUp: (event) {
-                  if (_readOnly.value) {
+                  if (readOnly.value) {
                     updatePanelType(PanelType.keyboard);
-                    _selectKeyboard.value = true;
+                    selectKeyboard.value = true;
                   }
                 },
                 child: Obx(
                   () => TextField(
-                    controller: _textController,
+                    controller: editController,
                     autofocus: false,
-                    readOnly: _readOnly.value,
+                    readOnly: readOnly.value,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(100),
                     ],
                     onChanged: (value) {
                       bool isEmpty = value.trim().isEmpty;
-                      if (!isEmpty && !_enablePublish.value) {
-                        _enablePublish.value = true;
-                      } else if (isEmpty && _enablePublish.value) {
-                        _enablePublish.value = false;
+                      if (!isEmpty && !enablePublish.value) {
+                        enablePublish.value = true;
+                      } else if (isEmpty && enablePublish.value) {
+                        enablePublish.value = false;
                       }
-                      widget.onSaveDanmaku?.call(value);
+                      widget.onSave?.call(value);
                     },
                     textInputAction: TextInputAction.send,
                     onSubmitted: (value) {
                       if (value.trim().isNotEmpty) {
-                        onSendDanmaku();
+                        onPublish();
                       }
                     },
-                    focusNode: _focusNode,
+                    focusNode: focusNode,
                     decoration: InputDecoration(
                       hintText: "输入弹幕内容",
                       border: InputBorder.none,
@@ -464,10 +378,10 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
               tooltip: '发送',
               bgColor: Colors.transparent,
               iconSize: 22,
-              iconColor: _enablePublish.value
+              iconColor: enablePublish.value
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.outline,
-              onPressed: _enablePublish.value ? onSendDanmaku : null,
+              onPressed: enablePublish.value ? onPublish : null,
               icon: Icons.send,
             ),
           )
@@ -476,97 +390,8 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
     );
   }
 
-  updatePanelType(PanelType type) async {
-    final isSwitchToKeyboard = PanelType.keyboard == type;
-    final isSwitchToEmojiPanel = PanelType.emoji == type;
-    bool isUpdated = false;
-    switch (type) {
-      case PanelType.keyboard:
-        updateInputView(isReadOnly: false);
-        break;
-      case PanelType.emoji:
-        isUpdated = updateInputView(isReadOnly: true);
-        break;
-      default:
-        break;
-    }
-
-    updatePanelTypeFunc() {
-      _controller.updatePanelType(
-        isSwitchToKeyboard
-            ? ChatBottomPanelType.keyboard
-            : ChatBottomPanelType.other,
-        data: type,
-        forceHandleFocus: isSwitchToEmojiPanel
-            ? ChatBottomHandleFocus.requestFocus
-            : ChatBottomHandleFocus.none,
-      );
-    }
-
-    if (isUpdated) {
-      // Waiting for the input view to update.
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        updatePanelTypeFunc();
-      });
-    } else {
-      updatePanelTypeFunc();
-    }
-  }
-
-  hidePanel() async {
-    if (_focusNode.hasFocus) {
-      await Future.delayed(const Duration(milliseconds: 100));
-      _focusNode.unfocus();
-    }
-    updateInputView(isReadOnly: false);
-    if (ChatBottomPanelType.none == _controller.currentPanelType) return;
-    _controller.updatePanelType(ChatBottomPanelType.none);
-  }
-
-  bool updateInputView({
-    required bool isReadOnly,
-  }) {
-    if (_readOnly.value != isReadOnly) {
-      _readOnly.value = isReadOnly;
-      return true;
-    }
-    return false;
-  }
-
-  Future onSendDanmaku() async {
-    SmartDialog.showLoading(msg: '发送中...');
-    final dynamic res = await DanmakaHttp.shootDanmaku(
-      oid: widget.cid,
-      bvid: widget.bvid,
-      progress: widget.progress,
-      msg: _textController.text,
-      mode: _mode.value,
-      fontsize: _fontsize.value,
-      color: _color.value.value & 0xFFFFFF,
-    );
-    SmartDialog.dismiss();
-    if (res['status']) {
-      Get.back();
-      SmartDialog.showToast('发送成功');
-      widget.callback(
-        DanmakuContentItem(
-          _textController.text,
-          color: _color.value,
-          type: switch (_mode.value) {
-            5 => DanmakuItemType.top,
-            4 => DanmakuItemType.bottom,
-            _ => DanmakuItemType.scroll,
-          },
-          selfSend: true,
-        ),
-      );
-    } else {
-      SmartDialog.showToast('发送失败: ${res['msg']}');
-    }
-  }
-
   void _showColorPicker() {
-    _controller.keepChatPanel();
+    controller.keepChatPanel();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -610,5 +435,38 @@ class _SendDanmakuPanelState extends State<SendDanmakuPanel>
         ),
       ),
     );
+  }
+
+  @override
+  Future onCustomPublish({required String message, List? pictures}) async {
+    SmartDialog.showLoading(msg: '发送中...');
+    final dynamic res = await DanmakaHttp.shootDanmaku(
+      oid: widget.cid,
+      bvid: widget.bvid,
+      progress: widget.progress,
+      msg: editController.text,
+      mode: _mode.value,
+      fontsize: _fontsize.value,
+      color: _color.value.value & 0xFFFFFF,
+    );
+    SmartDialog.dismiss();
+    if (res['status']) {
+      Get.back();
+      SmartDialog.showToast('发送成功');
+      widget.callback(
+        DanmakuContentItem(
+          editController.text,
+          color: _color.value,
+          type: switch (_mode.value) {
+            5 => DanmakuItemType.top,
+            4 => DanmakuItemType.bottom,
+            _ => DanmakuItemType.scroll,
+          },
+          selfSend: true,
+        ),
+      );
+    } else {
+      SmartDialog.showToast('发送失败: ${res['msg']}');
+    }
   }
 }

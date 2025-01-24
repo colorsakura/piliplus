@@ -75,11 +75,13 @@ extension BuildContextExt on BuildContext {
     int? initialPage,
     required List<String> imgList,
     ValueChanged<int>? onDismissed,
+    bool? isFile,
   }) {
     Navigator.of(this).push(
       HeroDialogRoute(
         builder: (context) => InteractiveviewerGallery(
           sources: imgList,
+          isFile: isFile,
           initIndex: initialPage ?? 0,
           onPageChanged: (int pageIndex) {},
           onDismissed: onDismissed,

@@ -458,8 +458,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
           uiSettings: [
             AndroidUiSettings(
               toolbarTitle: '裁剪',
-              toolbarColor: Theme.of(context).colorScheme.primary,
-              toolbarWidgetColor: Colors.white,
+              toolbarColor: Theme.of(context).colorScheme.secondaryContainer,
+              toolbarWidgetColor:
+                  Theme.of(context).colorScheme.onSecondaryContainer,
               aspectRatioPresets: [
                 CropAspectRatioPresetCustom(),
               ],

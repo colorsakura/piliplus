@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
-import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:chat_bottom_container/panel_container.dart';
-import 'package:chat_bottom_container/typedef.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -16,55 +13,22 @@ import 'package:mime/mime.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/pages/whisper_detail/controller.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/models/video/reply/emote.dart';
 import 'package:image_picker/image_picker.dart';
 import 'widget/chat_item.dart';
 
-class WhisperDetailPage extends StatefulWidget {
-  const WhisperDetailPage({super.key});
+class WhisperDetailPage extends CommonPublishPage {
+  const WhisperDetailPage({
+    super.key,
+    super.autofocus = false,
+  });
 
   @override
   State<WhisperDetailPage> createState() => _WhisperDetailPageState();
 }
 
-class _WhisperDetailPageState extends State<WhisperDetailPage> {
+class _WhisperDetailPageState
+    extends CommonPublishPageState<WhisperDetailPage> {
   final _whisperDetailController = Get.put(WhisperDetailController());
-  late final _controller = ChatBottomPanelContainerController<PanelType>();
-  late final _focusNode = FocusNode();
-  PanelType _currentPanelType = PanelType.none;
-  bool _readOnly = false;
-  final _readOnlyStream = StreamController<bool>();
-  late final _enableSend = StreamController<bool>();
-  late bool _visibleSend = false;
-  late final _imagePicker = ImagePicker();
-
-  @override
-  void dispose() {
-    _readOnlyStream.close();
-    _enableSend.close();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void onChooseEmote(Packages package, Emote emote) {
-    if (!_visibleSend) {
-      _visibleSend = true;
-      _enableSend.add(true);
-    }
-    int cursorPosition =
-        _whisperDetailController.replyContentController.selection.baseOffset;
-    if (cursorPosition == -1) cursorPosition = 0;
-    final String currentText =
-        _whisperDetailController.replyContentController.text;
-    final String newText = currentText.substring(0, cursorPosition) +
-        emote.text! +
-        currentText.substring(cursorPosition);
-    _whisperDetailController.replyContentController.value = TextEditingValue(
-      text: newText,
-      selection:
-          TextSelection.collapsed(offset: cursorPosition + emote.text!.length),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +99,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
         children: [
           Expanded(child: _buildList()),
           _buildInputView(),
-          _buildPanelContainer(),
+          buildPanelContainer(Theme.of(context).colorScheme.onInverseSurface),
         ],
       ),
     );
@@ -177,66 +141,6 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
     return resultWidget;
   }
 
-  hidePanel() async {
-    if (_focusNode.hasFocus) {
-      await Future.delayed(const Duration(milliseconds: 100));
-      _focusNode.unfocus();
-    }
-    updateInputView(isReadOnly: false);
-    if (ChatBottomPanelType.none == _controller.currentPanelType) return;
-    _controller.updatePanelType(ChatBottomPanelType.none);
-  }
-
-  bool updateInputView({
-    required bool isReadOnly,
-  }) {
-    if (_readOnly != isReadOnly) {
-      _readOnly = isReadOnly;
-      _readOnlyStream.add(_readOnly);
-      return true;
-    }
-    return false;
-  }
-
-  updatePanelType(PanelType type) async {
-    final isSwitchToKeyboard = PanelType.keyboard == type;
-    final isSwitchToEmojiPanel = PanelType.emoji == type;
-    bool isUpdated = false;
-    switch (type) {
-      case PanelType.keyboard:
-        updateInputView(isReadOnly: false);
-        break;
-      case PanelType.emoji:
-        isUpdated = updateInputView(isReadOnly: true);
-        break;
-      default:
-        break;
-    }
-
-    updatePanelTypeFunc() {
-      _controller.updatePanelType(
-        isSwitchToKeyboard
-            ? ChatBottomPanelType.keyboard
-            : ChatBottomPanelType.other,
-        data: type,
-        forceHandleFocus: isSwitchToEmojiPanel
-            ? ChatBottomHandleFocus.requestFocus
-            : ChatBottomHandleFocus.none,
-      );
-    }
-
-    if (isUpdated) {
-      // Waiting for the input view to update.
-      WidgetsBinding.instance.addPostFrameCallback(
-        (timeStamp) {
-          updatePanelTypeFunc();
-        },
-      );
-    } else {
-      updatePanelTypeFunc();
-    }
-  }
-
   Widget _buildInputView() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -253,7 +157,7 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
           IconButton(
             onPressed: () async {
               updatePanelType(
-                PanelType.emoji == _currentPanelType
+                PanelType.emoji == currentPanelType
                     ? PanelType.keyboard
                     : PanelType.emoji,
               );
@@ -265,27 +169,23 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
             child: Listener(
               onPointerUp: (event) {
                 // Currently it may be emojiPanel.
-                if (_readOnly) {
+                if (readOnly.value) {
                   updatePanelType(PanelType.keyboard);
                 }
               },
-              child: StreamBuilder(
-                initialData: false,
-                stream: _readOnlyStream.stream,
-                builder: (context, snapshot) => TextField(
-                  readOnly: snapshot.data ?? false,
-                  focusNode: _focusNode,
+              child: Obx(
+                () => TextField(
+                  readOnly: readOnly.value,
+                  focusNode: focusNode,
                   controller: _whisperDetailController.replyContentController,
                   minLines: 1,
                   maxLines: 4,
                   onChanged: (value) {
                     bool isNotEmpty = value.trim().isNotEmpty;
-                    if (isNotEmpty && !_visibleSend) {
-                      _visibleSend = true;
-                      _enableSend.add(true);
-                    } else if (!isNotEmpty && _visibleSend) {
-                      _visibleSend = false;
-                      _enableSend.add(false);
+                    if (isNotEmpty && !enablePublish.value) {
+                      enablePublish.value = true;
+                    } else if (!isNotEmpty && enablePublish.value) {
+                      enablePublish.value = false;
                     }
                   },
                   textInputAction: TextInputAction.newline,
@@ -304,16 +204,15 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
               ),
             ),
           ),
-          StreamBuilder(
-            stream: _enableSend.stream,
-            builder: (context, snapshot) {
+          Obx(
+            () {
               return IconButton(
                 onPressed: () async {
-                  if (snapshot.data == true) {
+                  if (enablePublish.value) {
                     _whisperDetailController.sendMsg();
                   } else {
                     try {
-                      XFile? pickedFile = await _imagePicker.pickImage(
+                      XFile? pickedFile = await imagePicker.pickImage(
                         source: ImageSource.gallery,
                         imageQuality: 100,
                       );
@@ -351,10 +250,10 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
                     }
                   }
                 },
-                icon: Icon(snapshot.data == true
+                icon: Icon(enablePublish.value
                     ? Icons.send
                     : Icons.add_photo_alternate_outlined),
-                tooltip: snapshot.data == true ? '发送' : '图片',
+                tooltip: enablePublish.value ? '发送' : '图片',
               );
             },
           ),
@@ -363,57 +262,14 @@ class _WhisperDetailPageState extends State<WhisperDetailPage> {
     );
   }
 
-  Widget _buildEmojiPickerPanel() {
-    double height = 300;
-    final keyboardHeight = _controller.keyboardHeight;
-    if (keyboardHeight != 0) {
-      height = max(200, keyboardHeight);
-    }
+  @override
+  Widget? customPanel(double height) => SizedBox(
+        height: height,
+        child: EmotePanel(onChoose: onChooseEmote),
+      );
 
-    return SizedBox(
-      height: height,
-      child: EmotePanel(
-        onChoose: onChooseEmote,
-      ),
-    );
-  }
-
-  Widget _buildPanelContainer() {
-    return ChatBottomPanelContainer<PanelType>(
-      controller: _controller,
-      inputFocusNode: _focusNode,
-      otherPanelWidget: (type) {
-        if (type == null) return const SizedBox.shrink();
-        switch (type) {
-          case PanelType.emoji:
-            return _buildEmojiPickerPanel();
-          default:
-            return const SizedBox.shrink();
-        }
-      },
-      onPanelTypeChange: (panelType, data) {
-        // debugPrint('panelType: $panelType');
-        switch (panelType) {
-          case ChatBottomPanelType.none:
-            _currentPanelType = PanelType.none;
-            break;
-          case ChatBottomPanelType.keyboard:
-            _currentPanelType = PanelType.keyboard;
-            break;
-          case ChatBottomPanelType.other:
-            if (data == null) return;
-            switch (data) {
-              case PanelType.emoji:
-                _currentPanelType = PanelType.emoji;
-                break;
-              default:
-                _currentPanelType = PanelType.none;
-                break;
-            }
-            break;
-        }
-      },
-      panelBgColor: Theme.of(context).colorScheme.onInverseSurface,
-    );
+  @override
+  Future onCustomPublish({required String message, List? pictures}) {
+    throw UnimplementedError();
   }
 }

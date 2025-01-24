@@ -26,4 +26,10 @@ class EmotePanelController extends CommonController
   @override
   Future<LoadingState> customGetData() =>
       ReplyHttp.getEmoteList(business: 'reply');
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    super.onClose();
+  }
 }

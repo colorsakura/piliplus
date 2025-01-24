@@ -45,7 +45,10 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
     this.onDismissed,
     this.setStatusBar,
     this.onClose,
+    this.isFile,
   });
+
+  final bool? isFile;
 
   final VoidCallback? onClose;
 
@@ -137,8 +140,10 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
         StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       }
     }
-    for (int index = 0; index < widget.sources.length; index++) {
-      CachedNetworkImageProvider(_getActualUrl(index)).evict();
+    if (widget.isFile != true) {
+      for (int index = 0; index < widget.sources.length; index++) {
+        CachedNetworkImageProvider(_getActualUrl(index)).evict();
+      }
     }
     super.dispose();
   }
@@ -267,7 +272,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   _doubleTapLocalPosition = details.localPosition;
                 },
                 onDoubleTap: onDoubleTap,
-                onLongPress: onLongPress,
+                onLongPress: widget.isFile == true ? null : onLongPress,
                 child: widget.itemBuilder != null
                     ? widget.itemBuilder!(
                         context,
@@ -303,59 +308,69 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                     ),
                   )
                 : null,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: onClose,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: onClose,
+                  ),
                 ),
-                widget.sources.length > 1
-                    ? Text(
-                        "${currentIndex! + 1}/${widget.sources.length}",
-                        style: const TextStyle(color: Colors.white),
-                      )
-                    : const SizedBox(),
-                PopupMenuButton(
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                        value: 0,
-                        onTap: () => onShareImg(widget.sources[currentIndex!]),
-                        child: const Text("分享图片"),
-                      ),
-                      PopupMenuItem(
-                        value: 1,
-                        onTap: () {
-                          Utils.copyText(widget.sources[currentIndex!]);
-                        },
-                        child: const Text("复制链接"),
-                      ),
-                      PopupMenuItem(
-                        value: 2,
-                        onTap: () {
-                          DownloadUtils.downloadImg(
-                            context,
-                            [widget.sources[currentIndex!]],
-                          );
-                        },
-                        child: const Text("保存图片"),
-                      ),
-                      if (widget.sources.length > 1)
-                        PopupMenuItem(
-                          value: 3,
-                          onTap: () {
-                            DownloadUtils.downloadImg(
-                              context,
-                              widget.sources as List<String>,
-                            );
-                          },
-                          child: const Text("保存全部图片"),
-                        ),
-                    ];
-                  },
-                  child: const Icon(Icons.more_horiz, color: Colors.white),
-                ),
+                if (widget.sources.length > 1)
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${currentIndex! + 1}/${widget.sources.length}",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                if (widget.isFile != true)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: PopupMenuButton(
+                      itemBuilder: (context) {
+                        return [
+                          PopupMenuItem(
+                            value: 0,
+                            onTap: () =>
+                                onShareImg(widget.sources[currentIndex!]),
+                            child: const Text("分享图片"),
+                          ),
+                          PopupMenuItem(
+                            value: 1,
+                            onTap: () {
+                              Utils.copyText(widget.sources[currentIndex!]);
+                            },
+                            child: const Text("复制链接"),
+                          ),
+                          PopupMenuItem(
+                            value: 2,
+                            onTap: () {
+                              DownloadUtils.downloadImg(
+                                context,
+                                [widget.sources[currentIndex!]],
+                              );
+                            },
+                            child: const Text("保存图片"),
+                          ),
+                          if (widget.sources.length > 1)
+                            PopupMenuItem(
+                              value: 3,
+                              onTap: () {
+                                DownloadUtils.downloadImg(
+                                  context,
+                                  widget.sources,
+                                );
+                              },
+                              child: const Text("保存全部图片"),
+                            ),
+                        ];
+                      },
+                      child: const Icon(Icons.more_horiz, color: Colors.white),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -382,27 +397,33 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     return Center(
       child: Hero(
         tag: widget.sources[index],
-        child: CachedNetworkImage(
-          fadeInDuration: const Duration(milliseconds: 0),
-          fadeOutDuration: const Duration(milliseconds: 0),
-          imageUrl: _getActualUrl(index),
-          // fit: BoxFit.contain,
-          progressIndicatorBuilder: (context, url, progress) {
-            return Center(
-              child: SizedBox(
-                width: 150.0,
-                child: LinearProgressIndicator(value: progress.progress ?? 0),
+        child: widget.isFile == true
+            ? Image(
+                filterQuality: FilterQuality.low,
+                image: FileImage(File(widget.sources[index])),
+              )
+            : CachedNetworkImage(
+                fadeInDuration: const Duration(milliseconds: 0),
+                fadeOutDuration: const Duration(milliseconds: 0),
+                imageUrl: _getActualUrl(index),
+                // fit: BoxFit.contain,
+                progressIndicatorBuilder: (context, url, progress) {
+                  return Center(
+                    child: SizedBox(
+                      width: 150.0,
+                      child: LinearProgressIndicator(
+                          value: progress.progress ?? 0),
+                    ),
+                  );
+                },
+                // errorListener: (value) {
+                //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                //     setState(() {
+                //       _thumbList[index] = false;
+                //     });
+                //   });
+                // },
               ),
-            );
-          },
-          // errorListener: (value) {
-          //   WidgetsBinding.instance.addPostFrameCallback((_) {
-          //     setState(() {
-          //       _thumbList[index] = false;
-          //     });
-          //   });
-          // },
-        ),
       ),
     );
   }

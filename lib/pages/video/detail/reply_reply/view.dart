@@ -317,8 +317,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
             parent: root,
             replyType: widget.replyType,
             replyItem: item,
-            savedReply: _savedReplies[key],
-            onSaveReply: (reply) {
+            initialValue: _savedReplies[key],
+            onSave: (reply) {
               _savedReplies[key] = reply;
             },
           );

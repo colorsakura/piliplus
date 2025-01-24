@@ -153,8 +153,8 @@ abstract class ReplyController extends CommonController {
                       ? ReplyType.values[replyItem.type.toInt()]
                       : replyType,
                   replyItem: replyItem,
-                  savedReply: savedReplies[key],
-                  onSaveReply: (reply) {
+                  initialValue: savedReplies[key],
+                  onSave: (reply) {
                     savedReplies[key] = reply;
                   },
                 )
@@ -166,8 +166,8 @@ abstract class ReplyController extends CommonController {
                       ? ReplyType.values[replyItem.type.toInt()]
                       : replyType,
                   replyItem: replyItem,
-                  savedReply: savedReplies[key],
-                  onSaveReply: (reply) {
+                  initialValue: savedReplies[key],
+                  onSave: (reply) {
                     savedReplies[key] = reply;
                   },
                 );
