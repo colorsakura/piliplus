@@ -1,12 +1,10 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class FavController extends CommonController {
-  late final UserInfoData? userInfo = GStorage.userInfo.get('userInfoCache');
-  int pageSize = 10;
+  late final dynamic mid = GStorage.userInfo.get('userInfoCache')?.mid;
 
   @override
   void onInit() {
@@ -16,7 +14,7 @@ class FavController extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (userInfo == null) {
+    if (mid == null) {
       loadingState.value = LoadingState.error('账号未登录');
       return Future.value();
     }
@@ -39,7 +37,7 @@ class FavController extends CommonController {
   @override
   Future<LoadingState> customGetData() => UserHttp.userfavFolder(
         pn: currentPage,
-        ps: pageSize,
-        mid: userInfo!.mid!,
+        ps: 10,
+        mid: mid,
       );
 }

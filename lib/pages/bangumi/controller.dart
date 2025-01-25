@@ -14,14 +14,12 @@ class BangumiController extends CommonController {
 
   RxBool isLogin = false.obs;
   int? mid;
-  dynamic userInfo;
 
   @override
   void onInit() {
     super.onInit();
-    userInfo = GStorage.userInfo.get('userInfoCache');
-    mid = userInfo?.mid;
-    isLogin.value = userInfo != null;
+    mid = GStorage.userInfo.get('userInfoCache')?.mid;
+    isLogin.value = mid != null;
 
     queryData();
     queryBangumiFollow();
