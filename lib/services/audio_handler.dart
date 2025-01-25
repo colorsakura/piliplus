@@ -16,7 +16,7 @@ Future<VideoPlayerServiceHandler> initAudioService() async {
       fastForwardInterval: Duration(seconds: 10),
       rewindInterval: Duration(seconds: 10),
       androidNotificationChannelDescription: 'Media notification channel',
-      androidNotificationIcon: 'drawable/ic_notification_icon',
+      // androidNotificationIcon: 'drawable/ic_notification_icon',
     ),
   );
 }
