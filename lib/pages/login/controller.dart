@@ -5,8 +5,8 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/login.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -84,7 +84,7 @@ class LoginPageController extends GetxController
             if (value['status']) {
               t.cancel();
               statusQRCode.value = '扫码成功';
-              await Utils.afterLoginByApp(
+              await LoginUtils.onLogin(
                   value['data'], value['data']['cookie_info']);
               Get.back();
             } else if (value['code'] == 86038) {
@@ -221,7 +221,7 @@ class LoginPageController extends GetxController
       );
       if (result.data['code'] == 0) {
         try {
-          await Utils.afterLoginByApp(
+          await LoginUtils.onLogin(
             {'mid': '${result.data['data']['mid']}'},
             {
               'cookies':
@@ -435,7 +435,7 @@ class LoginPageController extends GetxController
                     return;
                   }
                   SmartDialog.showToast('正在保存身份信息');
-                  await Utils.afterLoginByApp(
+                  await LoginUtils.onLogin(
                       data['token_info'], data['cookie_info']);
                   Get.back();
                   Get.back();
@@ -454,7 +454,7 @@ class LoginPageController extends GetxController
         return;
       }
       SmartDialog.showToast('正在保存身份信息');
-      await Utils.afterLoginByApp(data['token_info'], data['cookie_info']);
+      await LoginUtils.onLogin(data['token_info'], data['cookie_info']);
       Get.back();
     } else {
       // handle login result
@@ -517,7 +517,7 @@ class LoginPageController extends GetxController
     if (res['status']) {
       SmartDialog.showToast('登录成功');
       var data = res['data'];
-      await Utils.afterLoginByApp(data['token_info'], data['cookie_info']);
+      await LoginUtils.onLogin(data['token_info'], data['cookie_info']);
       Get.back();
     } else {
       SmartDialog.showToast(res['msg']);

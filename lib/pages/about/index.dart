@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/services/loggeer.dart';
+import 'package:PiliPlus/utils/login.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -313,7 +314,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
                                     Get.back();
                                     try {
                                       dynamic res = jsonDecode(data.text!);
-                                      Utils.afterLoginByApp(
+                                      LoginUtils.onLogin(
                                         res['accessKey'],
                                         {'cookies': res['cookies']},
                                       );

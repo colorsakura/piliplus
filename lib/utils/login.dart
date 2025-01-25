@@ -1,24 +1,137 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
+import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/dynamics/index.dart';
 import 'package:PiliPlus/pages/home/index.dart';
 import 'package:PiliPlus/pages/media/index.dart';
 import 'package:PiliPlus/pages/mine/index.dart';
 import 'package:uuid/uuid.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
+import 'package:PiliPlus/pages/dynamics/controller.dart';
+import 'package:PiliPlus/pages/home/controller.dart';
+import 'package:PiliPlus/pages/media/controller.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/http/user.dart';
 
 class LoginUtils {
+  static Future onLogin(Map<String, dynamic> token_info, cookie_info) async {
+    try {
+      GStorage.localCache.put(LocalCacheKey.accessKey, {
+        'mid': token_info['mid'],
+        'value': token_info['access_token'] ?? token_info['value'],
+        'refresh': token_info['refresh_token'] ?? token_info['refresh']
+      });
+      List<dynamic> cookieInfo = cookie_info['cookies'];
+      List<Cookie> cookies = [];
+      String cookieStrings = cookieInfo.map((cookie) {
+        String cstr =
+            '${cookie['name']}=${cookie['value']};Domain=.bilibili.com;Path=/;';
+        cookies.add(Cookie.fromSetCookieValue(cstr));
+        return cstr;
+      }).join('');
+      List<String> urls = [
+        HttpString.baseUrl,
+        HttpString.apiBaseUrl,
+        HttpString.tUrl
+      ];
+      for (var url in urls) {
+        await Request.cookieManager.cookieJar
+            .saveFromResponse(Uri.parse(url), cookies);
+      }
+      Request.dio.options.headers['cookie'] = cookieStrings;
+      await WebviewCookieManager().setCookies(cookies);
+      for (Cookie item in cookies) {
+        await web.CookieManager().setCookie(
+          url: web.WebUri(item.domain ?? ''),
+          name: item.name,
+          value: item.value,
+          path: item.path ?? '',
+          domain: item.domain,
+          isSecure: item.secure,
+          isHttpOnly: item.httpOnly,
+        );
+      }
+    } catch (e) {
+      SmartDialog.showToast('设置登录态失败，$e');
+    }
+    final result = await UserHttp.userInfo();
+    if (result['status'] && result['data'].isLogin) {
+      SmartDialog.showToast('登录成功，当前采用「'
+          '${GStorage.setting.get(SettingBoxKey.defaultRcmdType, defaultValue: 'app')}'
+          '端」推荐');
+      await GStorage.userInfo.put('userInfoCache', result['data']);
+      try {
+        Get.find<MineController>()
+          ..isLogin.value = true
+          ..queryUserInfo();
+      } catch (_) {}
+
+      try {
+        Get.find<HomeController>()
+          ..isLogin.value = true
+          ..userFace.value = result['data'].face;
+      } catch (_) {}
+
+      try {
+        Get.find<DynamicsController>()
+          ..isLogin.value = true
+          ..ownerMid = result['data'].mid
+          ..face = result['data'].face
+          ..onRefresh();
+      } catch (_) {}
+
+      for (int i = 0; i < tabsConfig.length; i++) {
+        try {
+          Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag'])
+              .onRefresh();
+        } catch (_) {}
+      }
+
+      try {
+        Get.find<MediaController>()
+          ..mid = result['data'].mid
+          ..onRefresh();
+      } catch (_) {}
+
+      try {
+        Get.find<LiveController>()
+          ..isLogin.value = true
+          ..fetchLiveFollowing();
+      } catch (_) {}
+    } else {
+      // 获取用户信息失败
+      SmartDialog.showNotify(
+          msg: '登录失败，请检查cookie是否正确，${result['message']}',
+          notifyType: NotifyType.warning);
+    }
+  }
+
   static Future onLogout() async {
+    await Request.cookieManager.cookieJar.deleteAll();
+    await web.CookieManager().deleteAllCookies();
+    Request.dio.options.headers['cookie'] = '';
+
     await GStorage.userInfo.delete('userInfoCache');
+    await GStorage.localCache.delete(LocalCacheKey.accessKey);
+
+    try {
+      Get.find<MainController>().isLogin.value = false;
+    } catch (_) {}
 
     try {
       Get.find<MineController>()

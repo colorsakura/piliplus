@@ -1,5 +1,4 @@
 import 'package:PiliPlus/pages/about/index.dart';
-import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/setting/extra_setting.dart';
 import 'package:PiliPlus/pages/setting/play_setting.dart';
 import 'package:PiliPlus/pages/setting/privacy_setting.dart';
@@ -9,8 +8,9 @@ import 'package:PiliPlus/pages/setting/video_setting.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/login.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 import '../../http/init.dart';
@@ -205,22 +205,26 @@ class _SettingPageState extends State<SettingPage> {
                           ),
                           TextButton(
                             onPressed: () async {
-                              // 清空cookie
-                              await Request.cookieManager.cookieJar.deleteAll();
-                              await CookieManager().deleteAllCookies();
-                              Request.dio.options.headers['cookie'] = '';
-                              // 清空本地存储的用户标识
-                              GStorage.userInfo.put('userInfoCache', null);
-                              GStorage.localCache.put(LocalCacheKey.accessKey,
-                                  {'mid': -1, 'value': '', 'refresh': ''});
-                              _isLogin.value = false;
-                              if (Get.isRegistered<MainController>()) {
-                                MainController mainController =
-                                    Get.find<MainController>();
-                                mainController.isLogin.value = false;
+                              SmartDialog.showLoading();
+                              dynamic res = await Request().post(
+                                'https://passport.bilibili.com/login/exit/v2',
+                                data: {
+                                  'biliCSRF': await Request.getCsrf(),
+                                },
+                                options: Options(
+                                  contentType:
+                                      Headers.formUrlEncodedContentType,
+                                ),
+                              );
+                              if (res.data['code'] == 0) {
+                                await LoginUtils.onLogout();
+                                _isLogin.value = false;
+                                SmartDialog.dismiss();
+                                Get.back();
+                              } else {
+                                SmartDialog.dismiss();
+                                SmartDialog.showToast('${res.data['message']}');
                               }
-                              await LoginUtils.onLogout();
-                              Get.back();
                             },
                             child: const Text('确认'),
                           )
