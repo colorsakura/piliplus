@@ -1,7 +1,9 @@
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:dio/dio.dart';
@@ -44,6 +46,10 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
           if (result['status']) {
             VideoItem videoItem = result['data'].dash.video.first;
 
+            late final isLogin = GStorage.isLogin;
+            late final dynamic mid =
+                GStorage.userInfo.get('userInfoCache')?.mid;
+
             for (CDNService item in CDNService.values) {
               if (mounted.not) {
                 break;
@@ -51,6 +57,15 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
               String videoUrl = VideoUtils.getCdnUrl(videoItem, item.code);
               Dio dio = Dio()
                 ..options.headers['referer'] = 'https://www.bilibili.com/';
+              if (isLogin) {
+                dio.interceptors.add(Request.cookieManager);
+                dio.options.headers['env'] = 'prod';
+                dio.options.headers['app-key'] = 'android64';
+                dio.options.headers['x-bili-aurora-zone'] = 'sh001';
+                dio.options.headers['x-bili-mid'] = mid;
+                dio.options.headers['x-bili-aurora-eid'] =
+                    IdUtils.genAuroraEid(mid);
+              }
               int maxSize = 8 * 1024 * 1024;
               int downloaded = 0;
               int start = DateTime.now().millisecondsSinceEpoch;
