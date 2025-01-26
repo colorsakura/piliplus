@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="512dp"
-    android:width="512dp"
-    android:viewportWidth="512.0"
-    android:viewportHeight="512.0">
+    android:height="108dp"
+    android:width="108dp"
+    android:viewportWidth="108.0"
+    android:viewportHeight="108.0">
     <path
-        android:fillColor="#FF5CB67B"
-        android:pathData="M456.65,256C456.65,366.81 366.81,456.65 256,456.65 145.19,456.65 55.35,366.81 55.35,256 55.35,145.18 145.19,55.35 256,55.35 366.81,55.35 456.65,145.18 456.65,256Z"
-        android:strokeWidth="0.783784"
-        android:fillType="evenOdd" />
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M270.04,256L156.1,256l15.61,-76.8h98.32c21.21,0 38.4,17.19 38.4,38.4 0,21.21 -17.19,38.4 -38.4,38.4zM270.04,128L202.46,128l-50.1,256h52.76l15.18,-76.8h49.73c49.49,0 89.6,-40.12 89.6,-89.6 0,-49.49 -40.11,-89.6 -89.6,-89.6z"
+        android:fillColor="@color/ic_launcher_foreground"
+        android:pathData="M56,54L39.78,54l2.22,-10.94h14c3.02,0 5.47,2.45 5.47,5.47 0,3.02 -2.45,5.47 -5.47,5.47zM56,35.77h-9.62l-7.13,36.45h7.51L48.92,61.29h7.08c7.05,0 12.76,-5.71 12.76,-12.76 0,-7.05 -5.71,-12.76 -12.76,-12.76z"
         android:fillType="evenOdd" />
 </vector>
