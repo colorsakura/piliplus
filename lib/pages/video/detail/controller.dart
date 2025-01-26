@@ -634,6 +634,7 @@ class VideoDetailController extends GetxController
       );
 
   Future _querySponsorBlock() async {
+    positionSubscription?.cancel();
     dynamic result = await Request().get(
       '${GStorage.blockServer}/api/skipSegments',
       queryParameters: {
