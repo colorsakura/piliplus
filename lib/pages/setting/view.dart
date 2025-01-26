@@ -203,6 +203,15 @@ class _SettingPageState extends State<SettingPage> {
                               ),
                             ),
                           ),
+                          // TextButton(
+                          //   onPressed: () async {
+                          //     await LoginUtils.onLogout();
+                          //     _isLogin.value = false;
+                          //     SmartDialog.dismiss();
+                          //     Get.back();
+                          //   },
+                          //   child: const Text('仅登出'),
+                          // ),
                           TextButton(
                             onPressed: () async {
                               SmartDialog.showLoading();

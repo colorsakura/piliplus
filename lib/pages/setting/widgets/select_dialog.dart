@@ -59,9 +59,6 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 ..options.headers['referer'] = 'https://www.bilibili.com/';
               if (isLogin) {
                 dio.interceptors.add(Request.cookieManager);
-                dio.options.headers['env'] = 'prod';
-                dio.options.headers['app-key'] = 'android64';
-                dio.options.headers['x-bili-aurora-zone'] = 'sh001';
                 dio.options.headers['x-bili-mid'] = mid;
                 dio.options.headers['x-bili-aurora-eid'] =
                     IdUtils.genAuroraEid(mid);
