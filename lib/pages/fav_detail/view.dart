@@ -214,7 +214,11 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                             .then((data) {
                                           if (data['status']) {
                                             SmartDialog.showToast('清除成功');
-                                            _favDetailController.onReload();
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 200), () {
+                                              _favDetailController.onReload();
+                                            });
                                           } else {
                                             SmartDialog.showToast(data['msg']);
                                           }
