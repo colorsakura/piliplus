@@ -191,7 +191,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('倍速设置'),
+        title: const Text('倍速设置'),
         actions: [
           TextButton(
             onPressed: () async {

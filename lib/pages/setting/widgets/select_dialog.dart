@@ -107,10 +107,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   Widget build(BuildContext context) {
     return AlertDialog(
       clipBehavior: Clip.hardEdge,
-      title: Text(
-        widget.title,
-        style: TextStyle(fontSize: 18),
-      ),
+      title: Text(widget.title),
       contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
       content: StatefulBuilder(builder: (context, StateSetter setState) {
         return SingleChildScrollView(

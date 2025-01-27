@@ -49,7 +49,7 @@ class PiliScheme {
             () => Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                title: Text('评论详情'),
+                title: const Text('评论详情'),
                 actions: [
                   IconButton(
                     tooltip: '前往原视频',
@@ -133,7 +133,7 @@ class PiliScheme {
           () => Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: Text('评论详情'),
+              title: const Text('评论详情'),
               actions: [
                 IconButton(
                   tooltip: '前往',
@@ -173,7 +173,7 @@ class PiliScheme {
             () => Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                title: Text('评论详情'),
+                title: const Text('评论详情'),
                 actions: [
                   IconButton(
                     tooltip: '前往',

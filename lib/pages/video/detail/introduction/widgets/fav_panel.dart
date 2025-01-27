@@ -56,7 +56,7 @@ class _FavPanelState extends State<FavPanel> {
                 onPressed: Get.back,
                 icon: const Icon(Icons.close_outlined),
               ),
-              title: Text('添加到收藏夹'),
+              title: const Text('添加到收藏夹'),
               actions: [
                 TextButton.icon(
                   onPressed: () {

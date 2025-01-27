@@ -1826,7 +1826,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             appBar: AppBar(
               automaticallyImplyLeading: false,
               titleSpacing: 16,
-              title: Text('分段信息'),
+              title: const Text('分段信息'),
               actions: [
                 Text(
                   '分段进度条',

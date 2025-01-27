@@ -275,6 +275,9 @@ class MyApp extends StatelessWidget {
       progressIndicatorTheme: ProgressIndicatorThemeData(
         refreshBackgroundColor: colorScheme.onSecondary,
       ),
+      dialogTheme: DialogTheme(
+        titleTextStyle: TextStyle(fontSize: 18),
+      ),
     );
   }
 }

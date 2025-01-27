@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
@@ -79,34 +80,18 @@ class LaterController extends MultiSelectController {
   }
 
   // 一键清空
-  Future toViewClear(BuildContext context) async {
-    await showDialog(
+  void toViewClear(BuildContext context) {
+    showConfirmDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('清空确认'),
-          content: const Text('确定要清空你的稍后再看列表吗？'),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                var res = await UserHttp.toViewClear();
-                if (res['status']) {
-                  loadingState.value = LoadingState.success([]);
-                }
-                Get.back();
-                SmartDialog.showToast(res['msg']);
-              },
-              child: const Text('确认'),
-            )
-          ],
-        );
+      title: '清空确认',
+      content: '确定要清空你的稍后再看列表吗？',
+      onConfirm: () async {
+        var res = await UserHttp.toViewClear();
+        if (res['status']) {
+          loadingState.value = LoadingState.success([]);
+        }
+        Get.back();
+        SmartDialog.showToast(res['msg']);
       },
     );
   }

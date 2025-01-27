@@ -49,10 +49,7 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(
-            '确定禁用 SSL 证书验证？',
-            style: TextStyle(fontSize: 18),
-          ),
+          title: const Text('确定禁用 SSL 证书验证？'),
           content: const Text('禁用容易受到中间人攻击'),
           actions: [
             TextButton(

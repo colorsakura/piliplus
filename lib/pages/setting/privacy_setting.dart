@@ -9,7 +9,7 @@ class PrivacySetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: Text('隐私设置')),
+      appBar: showAppBar == false ? null : AppBar(title: const Text('隐私设置')),
       body: ListView(
         children: [
           ...privacySettings.map((item) => item.widget),

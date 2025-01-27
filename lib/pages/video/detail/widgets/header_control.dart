@@ -659,10 +659,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 builder: (context) {
                                   String duration = '';
                                   return AlertDialog(
-                                    title: Text(
-                                      '自定义时长',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
+                                    title: const Text('自定义时长'),
                                     content: TextField(
                                       autofocus: true,
                                       onChanged: (value) => duration = value,

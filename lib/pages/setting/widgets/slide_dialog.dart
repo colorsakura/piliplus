@@ -37,10 +37,7 @@ class _SlideDialogState<T extends num> extends State<SlideDialog<T>> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        widget.title,
-        style: TextStyle(fontSize: 18),
-      ),
+      title: Text(widget.title),
       contentPadding:
           const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 8),
       content: SizedBox(

@@ -46,7 +46,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
     super.build(context);
     return widget.mid == null
         ? Scaffold(
-            appBar: AppBar(title: Text('Ta的动态')),
+            appBar: AppBar(title: const Text('Ta的动态')),
             body: _buildBody,
           )
         : _buildBody;

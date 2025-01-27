@@ -21,7 +21,7 @@ class _SubPageState extends State<SubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('我的订阅')),
+      appBar: AppBar(title: const Text('我的订阅')),
       body: CustomScrollView(
         slivers: [
           Obx(() => _buildBody(_subController.loadingState.value)),

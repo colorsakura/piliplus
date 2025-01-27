@@ -23,7 +23,9 @@ class _PlaySettingState extends State<PlaySetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.showAppBar == false ? null : AppBar(title: Text('播放器设置')),
+      appBar: widget.showAppBar == false
+          ? null
+          : AppBar(title: const Text('播放器设置')),
       body: ListView(
         children: [
           ...playSettings.map((item) => item.widget),

@@ -182,6 +182,8 @@ class Api {
 
   static const String deleteFolder = '/x/v3/fav/folder/del';
 
+  static const String cleanFav = '/x/v3/fav/resource/clean';
+
   /// 收藏夹 详情
   /// media_id  当前收藏夹id 搜索全部时为默认收藏夹id
   /// pn int 当前页

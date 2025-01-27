@@ -36,7 +36,7 @@ class _HistoryPageState extends State<HistoryPage> {
           appBar: AppBarWidget(
             visible: _historyController.enableMultiSelect.value,
             child1: AppBar(
-              title: Text('观看记录'),
+              title: const Text('观看记录'),
               actions: [
                 IconButton(
                   tooltip: '搜索',

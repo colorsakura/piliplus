@@ -313,7 +313,6 @@ class LoginPageController extends GetxController
             title: const Text(
               "本次登录需要验证您的手机号",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,

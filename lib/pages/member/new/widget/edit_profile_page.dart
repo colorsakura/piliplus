@@ -276,10 +276,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            '修改$title',
-            style: TextStyle(fontSize: 18),
-          ),
+          title: Text('修改$title'),
           content: TextField(
             controller: _textController,
             minLines: type == ProfileType.uname ? 1 : 4,

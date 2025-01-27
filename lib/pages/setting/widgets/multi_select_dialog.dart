@@ -30,10 +30,7 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
   Widget build(BuildContext context) {
     return AlertDialog(
       clipBehavior: Clip.hardEdge,
-      title: Text(
-        widget.title,
-        style: TextStyle(fontSize: 18),
-      ),
+      title: Text(widget.title),
       contentPadding: const EdgeInsets.only(top: 12),
       content: StatefulBuilder(builder: (context, StateSetter setState) {
         return SingleChildScrollView(

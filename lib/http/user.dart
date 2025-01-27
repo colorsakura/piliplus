@@ -62,6 +62,27 @@ class UserHttp {
     }
   }
 
+  static Future cleanFav({
+    required dynamic mediaId,
+  }) async {
+    var res = await Request().post(
+      Api.cleanFav,
+      data: {
+        'media_id': mediaId,
+        'platform': 'web',
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   static Future deleteFolder({
     required List<dynamic> mediaIds,
   }) async {

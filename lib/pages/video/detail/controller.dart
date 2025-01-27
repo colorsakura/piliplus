@@ -1662,10 +1662,7 @@ class VideoDetailController extends GetxController
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text(
-                                    '确定无误再提交',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
+                                  title: const Text('确定无误再提交'),
                                   actions: [
                                     TextButton(
                                       onPressed: Get.back,

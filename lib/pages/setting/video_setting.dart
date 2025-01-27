@@ -9,7 +9,7 @@ class VideoSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: Text('音视频设置')),
+      appBar: showAppBar == false ? null : AppBar(title: const Text('音视频设置')),
       body: ListView(
         children: [
           ...videoSettings.map((item) => item.widget),

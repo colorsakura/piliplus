@@ -9,7 +9,7 @@ class RecommendSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: showAppBar == false ? null : AppBar(title: Text('推荐流设置')),
+      appBar: showAppBar == false ? null : AppBar(title: const Text('推荐流设置')),
       body: ListView(
         children: [
           ...recommendSettings.map((item) => item.widget),

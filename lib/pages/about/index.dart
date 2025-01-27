@@ -53,7 +53,8 @@ class _AboutPageState extends State<AboutPage> {
     TextStyle subTitleStyle =
         TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline);
     return Scaffold(
-      appBar: widget.showAppBar == false ? null : AppBar(title: Text('关于')),
+      appBar:
+          widget.showAppBar == false ? null : AppBar(title: const Text('关于')),
       body: ListView(
         children: [
           GestureDetector(

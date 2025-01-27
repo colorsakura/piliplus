@@ -145,7 +145,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: Text('评论详情'),
+              title: const Text('评论详情'),
               titleSpacing: automaticallyImplyLeading ? null : 12,
               automaticallyImplyLeading: automaticallyImplyLeading,
             ),

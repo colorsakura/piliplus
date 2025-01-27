@@ -1268,10 +1268,7 @@ List<SettingsModel> get recommendSettings => [
                 builder: (context) {
                   String duration = '';
                   return AlertDialog(
-                    title: Text(
-                      '自定义时长',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    title: const Text('自定义时长'),
                     content: TextField(
                       autofocus: true,
                       onChanged: (value) => duration = value,
@@ -1415,7 +1412,7 @@ List<SettingsModel> get extraSettings => [
             context: Get.context!,
             builder: (context) {
               return AlertDialog(
-                title: Text('检查周期', style: TextStyle(fontSize: 18)),
+                title: const Text('检查周期'),
                 content: TextFormField(
                   autofocus: true,
                   initialValue: dynamicPeriod.toString(),
@@ -1543,7 +1540,7 @@ List<SettingsModel> get extraSettings => [
             context: Get.context!,
             builder: (context) {
               return AlertDialog(
-                title: Text('评论折叠行数', style: TextStyle(fontSize: 18)),
+                title: const Text('评论折叠行数'),
                 content: TextFormField(
                   autofocus: true,
                   initialValue: replyLengthLimit,
@@ -1601,7 +1598,7 @@ List<SettingsModel> get extraSettings => [
             context: Get.context!,
             builder: (context) {
               return AlertDialog(
-                title: Text('弹幕行高', style: TextStyle(fontSize: 18)),
+                title: const Text('弹幕行高'),
                 content: TextFormField(
                   autofocus: true,
                   initialValue: danmakuLineHeight,
@@ -1824,10 +1821,7 @@ List<SettingsModel> get extraSettings => [
                   context: Get.context!,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text(
-                        '自定义参数',
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      title: const Text('自定义参数'),
                       content: TextField(
                         autofocus: true,
                         onChanged: (value) => param = value,
@@ -2178,10 +2172,7 @@ SettingsModel getBanwordModel({
         context: Get.context!,
         builder: (context) {
           return AlertDialog(
-            title: Text(
-              title,
-              style: TextStyle(fontSize: 18),
-            ),
+            title: Text(title),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

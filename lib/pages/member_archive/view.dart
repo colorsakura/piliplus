@@ -53,7 +53,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ta的投稿'),
+        title: const Text('Ta的投稿'),
         actions: [
           Obx(
             () => TextButton.icon(

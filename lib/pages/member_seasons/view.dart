@@ -47,7 +47,7 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Ta的专栏')),
+      appBar: AppBar(title: const Text('Ta的专栏')),
       body: Padding(
         padding: const EdgeInsets.only(
           left: StyleString.safeSpace,

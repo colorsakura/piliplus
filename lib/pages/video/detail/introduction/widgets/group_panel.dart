@@ -94,7 +94,7 @@ class _GroupPanelState extends State<GroupPanel> {
                   tooltip: '关闭',
                   onPressed: Get.back,
                   icon: const Icon(Icons.close_outlined)),
-              title: Text('设置关注分组'),
+              title: const Text('设置关注分组'),
             ),
             Expanded(
               child: Material(

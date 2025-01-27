@@ -95,7 +95,7 @@ class _LogsPageState extends State<LogsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('日志'),
+        title: const Text('日志'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (String type) {
