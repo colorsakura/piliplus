@@ -111,11 +111,57 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 actions: _favDetailController.enableMultiSelect.value
                     ? [
                         TextButton(
+                          style: TextButton.styleFrom(
+                            visualDensity:
+                                VisualDensity(horizontal: -2, vertical: -2),
+                          ),
                           onPressed: () =>
                               _favDetailController.handleSelect(true),
                           child: const Text('全选'),
                         ),
                         TextButton(
+                          style: TextButton.styleFrom(
+                            visualDensity:
+                                VisualDensity(horizontal: -2, vertical: -2),
+                          ),
+                          onPressed: () => Utils.onCopyOrMove(
+                            context: context,
+                            isCopy: true,
+                            ctr: _favDetailController,
+                          ),
+                          child: Text(
+                            '复制到',
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            visualDensity:
+                                VisualDensity(horizontal: -2, vertical: -2),
+                          ),
+                          onPressed: () => Utils.onCopyOrMove(
+                            context: context,
+                            isCopy: false,
+                            ctr: _favDetailController,
+                          ),
+                          child: Text(
+                            '移动到',
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            visualDensity:
+                                VisualDensity(horizontal: -2, vertical: -2),
+                          ),
                           onPressed: () =>
                               _favDetailController.onDelChecked(context),
                           child: Text(

@@ -17,6 +17,8 @@ class FavDetailController extends MultiSelectController {
   RxBool isOwner = false.obs;
   RxBool titleCtr = false.obs;
 
+  dynamic mid;
+
   @override
   void onInit() {
     // item = Get.arguments;
@@ -26,6 +28,8 @@ class FavDetailController extends MultiSelectController {
     }
     super.onInit();
 
+    mid = GStorage.userInfo.get('userInfoCache')?.mid;
+
     queryData();
   }
 
@@ -33,8 +37,7 @@ class FavDetailController extends MultiSelectController {
   bool customHandleResponse(Success response) {
     if (currentPage == 1) {
       item.value = response.response.info;
-      isOwner.value = response.response.info.mid ==
-          GStorage.userInfo.get('userInfoCache')?.mid;
+      isOwner.value = response.response.info.mid == mid;
     }
     if (response.response.medias.isEmpty) {
       isEnd = true;

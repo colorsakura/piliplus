@@ -676,6 +676,45 @@ class VideoHttp {
   //   }
   // }
 
+  static Future copyOrMoveFav({
+    required bool isCopy,
+    required dynamic srcMediaId,
+    required dynamic tarMediaId,
+    dynamic mid,
+    required List resources,
+  }) async {
+    var res = await Request().post(
+      isCopy ? Api.copyFav : Api.moveFav,
+      data: {
+        if (srcMediaId != null) 'src_media_id': srcMediaId,
+        'tar_media_id': tarMediaId,
+        if (mid != null) 'mid': mid,
+        'resources': resources.join(','),
+        'platform': 'web',
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future allFavFolders(mid) async {
+    var res = await Request().get(
+      Api.favFolder,
+      queryParameters: {'up_mid': mid},
+    );
+    if (res.data['code'] == 0) {
+      FavFolderData data = FavFolderData.fromJson(res.data['data']);
+      return {'status': true, 'data': data};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   // 查看视频被收藏在哪个文件夹
   static Future videoInFolder({
     dynamic mid,
@@ -683,7 +722,7 @@ class VideoHttp {
     dynamic type,
   }) async {
     var res = await Request().get(
-      Api.videoInFolder,
+      Api.favFolder,
       queryParameters: {
         'up_mid': mid,
         'rid': rid,

@@ -1,6 +1,6 @@
+import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/http/index.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/member/view.dart' show radioWidget;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';

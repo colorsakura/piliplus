@@ -4,10 +4,12 @@ import 'dart:io';
 import 'dart:math';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -15,6 +17,7 @@ import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -38,6 +41,104 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static void onCopyOrMove({
+    required BuildContext context,
+    required bool isCopy,
+    required dynamic ctr,
+    dynamic mediaId,
+  }) {
+    VideoHttp.allFavFolders(ctr.mid).then((res) {
+      if (context.mounted &&
+          res['status'] &&
+          (res['data'].list as List?)?.isNotEmpty == true) {
+        List<FavFolderItemData> list = res['data'].list;
+        dynamic checkedId;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('${isCopy ? '复制' : '移动'}到'),
+              contentPadding: const EdgeInsets.only(top: 5),
+              content: SingleChildScrollView(
+                child: Builder(
+                  builder: (context) => Column(
+                    children: List.generate(list.length, (index) {
+                      return radioWidget(
+                        paddingStart: 14,
+                        title: list[index].title ?? '',
+                        groupValue: checkedId,
+                        value: list[index].id,
+                        onChanged: (value) {
+                          checkedId = value;
+                          if (context.mounted) {
+                            (context as Element).markNeedsBuild();
+                          }
+                        },
+                      );
+                    }),
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: Get.back,
+                  child: Text(
+                    '取消',
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (checkedId != null) {
+                      List resources =
+                          ((ctr.loadingState.value as Success).response as List)
+                              .where((e) => e.checked == true)
+                              .toList();
+                      SmartDialog.showLoading();
+                      VideoHttp.copyOrMoveFav(
+                        isCopy: isCopy,
+                        srcMediaId: mediaId,
+                        tarMediaId: checkedId,
+                        resources: resources
+                            .map((item) => '${item.id}:${item.type}')
+                            .toList(),
+                        mid: isCopy ? ctr.mid : null,
+                      ).then((res) {
+                        if (res['status']) {
+                          ctr.handleSelect(false);
+                          if (isCopy.not) {
+                            List dataList =
+                                (ctr.loadingState.value as Success).response;
+                            List remainList = dataList
+                                .toSet()
+                                .difference(resources.toSet())
+                                .toList();
+                            ctr.loadingState.value =
+                                LoadingState.success(remainList);
+                          }
+                          SmartDialog.dismiss();
+                          SmartDialog.showToast('${isCopy ? '复制' : '移动'}成功');
+                          Get.back();
+                        } else {
+                          SmartDialog.dismiss();
+                          SmartDialog.showToast('${res['msg']}');
+                        }
+                      });
+                    }
+                  },
+                  child: Text('确认'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        SmartDialog.showToast('${res['msg']}');
+      }
+    });
+  }
 
   static void showFavBottomSheet({
     required BuildContext context,

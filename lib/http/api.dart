@@ -121,7 +121,11 @@ class Api {
   // up_mid	num	目标用户mid	必要
   // type	num	目标内容属性	非必要	默认为全部 0：全部 2：视频稿件
   // rid	num	目标 视频稿件avid
-  static const String videoInFolder = '/x/v3/fav/folder/created/list-all';
+  static const String favFolder = '/x/v3/fav/folder/created/list-all';
+
+  static const String copyFav = '/x/v3/fav/resource/copy';
+
+  static const String moveFav = '/x/v3/fav/resource/move';
 
   // 视频详情页 相关视频
   static const String relatedList = '/x/web-interface/archive/related';
