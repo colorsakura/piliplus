@@ -1867,7 +1867,7 @@ List<SettingsModel> get extraSettings => [
         title: '超分辨率',
         leading: const Icon(Icons.stay_current_landscape_outlined),
         getSubtitle: () =>
-            '当前:「${SuperResolutionType.values[GStorage.superResolutionType].title}」\n超分辨率需要启用硬件解码, 若启用硬件解码后仍然不生效, 尝试切换硬件解码器为 auto-copy',
+            '当前:「${SuperResolutionType.values[GStorage.superResolutionType].title}」\n默认设置对番剧生效, 其他视频默认关闭\n超分辨率需要启用硬件解码, 若启用硬件解码后仍然不生效, 尝试切换硬件解码器为 auto-copy',
         onTap: (setState) async {
           SuperResolutionType? result = await showDialog(
             context: Get.context!,
