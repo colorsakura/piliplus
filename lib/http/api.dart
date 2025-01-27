@@ -127,6 +127,10 @@ class Api {
 
   static const String moveFav = '/x/v3/fav/resource/move';
 
+  static const String copyToview = '/x/v2/history/toview/copy';
+
+  static const String moveToview = '/x/v2/history/toview/move';
+
   // 视频详情页 相关视频
   static const String relatedList = '/x/web-interface/archive/related';
 

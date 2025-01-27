@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
@@ -80,10 +81,50 @@ class _LaterPageState extends State<LaterPage> {
               ),
               actions: [
                 TextButton(
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                  ),
                   onPressed: () => _laterController.handleSelect(true),
                   child: const Text('全选'),
                 ),
                 TextButton(
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                  ),
+                  onPressed: () => Utils.onCopyOrMove(
+                    context: context,
+                    isCopy: true,
+                    ctr: _laterController,
+                    mediaId: null,
+                  ),
+                  child: Text(
+                    '复制到',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                  ),
+                  onPressed: () => Utils.onCopyOrMove(
+                    context: context,
+                    isCopy: false,
+                    ctr: _laterController,
+                    mediaId: null,
+                  ),
+                  child: Text(
+                    '移动到',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                  ),
                   onPressed: () => _laterController.onDelChecked(context),
                   child: Text(
                     '移除',

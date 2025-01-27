@@ -12,9 +12,12 @@ import 'package:PiliPlus/http/user.dart';
 class LaterController extends MultiSelectController {
   RxInt count = (-1).obs;
 
+  dynamic mid;
+
   @override
   void onInit() {
     super.onInit();
+    mid = GStorage.userInfo.get('userInfoCache')?.mid;
     queryData();
   }
 
@@ -170,7 +173,7 @@ class LaterController extends MultiSelectController {
               'sourceType': 'watchLater',
               'count': list.length,
               'favTitle': '稍后再看',
-              'mediaId': GStorage.userInfo.get('userInfoCache')?.mid,
+              'mediaId': mid,
               'desc': false,
             },
           );

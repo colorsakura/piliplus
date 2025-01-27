@@ -678,13 +678,20 @@ class VideoHttp {
 
   static Future copyOrMoveFav({
     required bool isCopy,
+    required bool isFav,
     required dynamic srcMediaId,
     required dynamic tarMediaId,
     dynamic mid,
     required List resources,
   }) async {
     var res = await Request().post(
-      isCopy ? Api.copyFav : Api.moveFav,
+      isFav
+          ? isCopy
+              ? Api.copyFav
+              : Api.moveFav
+          : isCopy
+              ? Api.copyToview
+              : Api.moveToview,
       data: {
         if (srcMediaId != null) 'src_media_id': srcMediaId,
         'tar_media_id': tarMediaId,

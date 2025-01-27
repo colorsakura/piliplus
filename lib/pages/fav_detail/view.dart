@@ -128,6 +128,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             context: context,
                             isCopy: true,
                             ctr: _favDetailController,
+                            mediaId: _favDetailController.mediaId,
                           ),
                           child: Text(
                             '复制到',
@@ -147,6 +148,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             context: context,
                             isCopy: false,
                             ctr: _favDetailController,
+                            mediaId: _favDetailController.mediaId,
                           ),
                           child: Text(
                             '移动到',

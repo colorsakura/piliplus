@@ -18,6 +18,7 @@ import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -46,7 +47,7 @@ class Utils {
     required BuildContext context,
     required bool isCopy,
     required dynamic ctr,
-    dynamic mediaId,
+    required dynamic mediaId,
   }) {
     VideoHttp.allFavFolders(ctr.mid).then((res) {
       if (context.mounted &&
@@ -99,10 +100,13 @@ class Utils {
                       SmartDialog.showLoading();
                       VideoHttp.copyOrMoveFav(
                         isCopy: isCopy,
+                        isFav: ctr is! LaterController,
                         srcMediaId: mediaId,
                         tarMediaId: checkedId,
                         resources: resources
-                            .map((item) => '${item.id}:${item.type}')
+                            .map((item) => ctr is LaterController
+                                ? item.aid
+                                : '${item.id}:${item.type}')
                             .toList(),
                         mid: isCopy ? ctr.mid : null,
                       ).then((res) {
