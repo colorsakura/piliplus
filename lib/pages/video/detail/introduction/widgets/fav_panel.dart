@@ -26,7 +26,7 @@ class _FavPanelState extends State<FavPanel> {
   @override
   void initState() {
     super.initState();
-    _futureBuilderFuture = widget.ctr!.queryVideoInFolder();
+    _futureBuilderFuture = widget.ctr.queryVideoInFolder();
   }
 
   @override
@@ -98,7 +98,7 @@ class _FavPanelState extends State<FavPanel> {
                           isSliver: false,
                           callback: () => setState(() {
                             _futureBuilderFuture =
-                                widget.ctr!.queryVideoInFolder();
+                                widget.ctr.queryVideoInFolder();
                           }),
                         );
                       }
@@ -108,33 +108,33 @@ class _FavPanelState extends State<FavPanel> {
                           () => ListView.builder(
                             controller: widget.scrollController,
                             itemCount:
-                                widget.ctr!.favFolderData.value.list!.length,
+                                widget.ctr.favFolderData.value.list.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                onTap: () => widget.ctr!.onChoose(
-                                    widget.ctr!.favFolderData.value.list![index]
+                                onTap: () => widget.ctr.onChoose(
+                                    widget.ctr.favFolderData.value.list[index]
                                             .favState !=
                                         1,
                                     index),
                                 dense: true,
-                                leading: Utils.isPublic(widget.ctr!
-                                        .favFolderData.value.list![index].attr)
+                                leading: Utils.isPublic(widget.ctr.favFolderData
+                                        .value.list[index].attr)
                                     ? const Icon(Icons.folder_outlined)
                                     : const Icon(Icons.lock_outline),
                                 minLeadingWidth: 0,
-                                title: Text(widget.ctr!.favFolderData.value
-                                    .list![index].title!),
+                                title: Text(widget.ctr.favFolderData.value
+                                    .list[index].title!),
                                 subtitle: Text(
-                                  '${widget.ctr!.favFolderData.value.list![index].mediaCount}个内容 . ${Utils.isPublicText(widget.ctr!.favFolderData.value.list![index].attr)}',
+                                  '${widget.ctr.favFolderData.value.list[index].mediaCount}个内容 . ${Utils.isPublicText(widget.ctr.favFolderData.value.list[index].attr)}',
                                 ),
                                 trailing: Transform.scale(
                                   scale: 0.9,
                                   child: Checkbox(
-                                    value: widget.ctr!.favFolderData.value
-                                            .list![index].favState ==
+                                    value: widget.ctr.favFolderData.value
+                                            .list[index].favState ==
                                         1,
-                                    onChanged: (bool? checkValue) => widget.ctr!
-                                        .onChoose(checkValue!, index),
+                                    onChanged: (bool? checkValue) =>
+                                        widget.ctr.onChoose(checkValue!, index),
                                   ),
                                 ),
                               );
@@ -149,7 +149,7 @@ class _FavPanelState extends State<FavPanel> {
                               errMsg: data['msg'],
                               callback: () => setState(() {
                                 _futureBuilderFuture =
-                                    widget.ctr!.queryVideoInFolder();
+                                    widget.ctr.queryVideoInFolder();
                               }),
                             )
                           ],
@@ -198,7 +198,7 @@ class _FavPanelState extends State<FavPanel> {
                   FilledButton.tonal(
                     onPressed: () async {
                       feedBack();
-                      await widget.ctr!.actionFavVideo();
+                      await widget.ctr.actionFavVideo();
                     },
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

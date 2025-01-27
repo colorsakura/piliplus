@@ -17,7 +17,6 @@ import 'package:PiliPlus/pages/bangumi/widgets/bangumi_panel.dart';
 import 'package:PiliPlus/pages/video/detail/index.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_item.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_row_item.dart';
-import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 
 import '../../../utils/utils.dart';
@@ -185,40 +184,11 @@ class _BangumiInfoState extends State<BangumiInfo>
       if (type == 'tap') {
         bangumiIntroController.actionFavVideo(type: 'default');
       } else {
-        _showFavBottomSheet();
+        Utils.showFavBottomSheet(context: context, ctr: bangumiIntroController);
       }
     } else if (type != 'longPress') {
-      _showFavBottomSheet();
+      Utils.showFavBottomSheet(context: context, ctr: bangumiIntroController);
     }
-  }
-
-  _showFavBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true,
-      transitionAnimationController: AnimationController(
-        duration: const Duration(milliseconds: 200),
-        vsync: this,
-      ),
-      sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          minChildSize: 0,
-          maxChildSize: 1,
-          initialChildSize: 0.7,
-          snap: true,
-          expand: false,
-          snapSizes: const [0.7],
-          builder: (BuildContext context, ScrollController scrollController) {
-            return FavPanel(
-              ctr: bangumiIntroController,
-              scrollController: scrollController,
-            );
-          },
-        );
-      },
-    );
   }
 
   // 视频介绍

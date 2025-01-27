@@ -15,6 +15,7 @@ import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
+import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -37,6 +38,34 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static void showFavBottomSheet({
+    required BuildContext context,
+    required dynamic ctr,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          minChildSize: 0,
+          maxChildSize: 1,
+          initialChildSize: 0.7,
+          snap: true,
+          expand: false,
+          snapSizes: const [0.7],
+          builder: (BuildContext context, ScrollController scrollController) {
+            return FavPanel(
+              ctr: ctr,
+              scrollController: scrollController,
+            );
+          },
+        );
+      },
+    );
+  }
 
   static String buildShadersAbsolutePath(
       String baseDirectory, List<String> shaders) {
@@ -402,10 +431,6 @@ class Utils {
                         context: context,
                         useSafeArea: true,
                         isScrollControlled: true,
-                        // transitionAnimationController: AnimationController(
-                        //   duration: const Duration(milliseconds: 200),
-                        //   vsync: this,
-                        // ),
                         sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
                         builder: (BuildContext context) {
                           return DraggableScrollableSheet(

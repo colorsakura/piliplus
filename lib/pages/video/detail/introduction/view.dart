@@ -27,7 +27,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'widgets/action_item.dart';
 import 'widgets/action_row_item.dart';
-import 'widgets/fav_panel.dart';
 import 'widgets/page.dart';
 import 'widgets/season.dart';
 
@@ -244,33 +243,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     }
   }
 
-  void _showFavBottomSheet() => showModalBottomSheet(
-        context: context,
-        useSafeArea: true,
-        isScrollControlled: true,
-        transitionAnimationController: AnimationController(
-          duration: const Duration(milliseconds: 200),
-          vsync: this,
-        ),
-        sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
-        builder: (BuildContext context) {
-          return DraggableScrollableSheet(
-            minChildSize: 0,
-            maxChildSize: 1,
-            initialChildSize: 0.7,
-            snap: true,
-            expand: false,
-            snapSizes: const [0.7],
-            builder: (BuildContext context, ScrollController scrollController) {
-              return FavPanel(
-                ctr: videoIntroController,
-                scrollController: scrollController,
-              );
-            },
-          );
-        },
-      );
-
   // 收藏
   showFavBottomSheet({type = 'tap'}) {
     if (videoIntroController.userInfo == null) {
@@ -284,10 +256,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       if (type == 'tap') {
         videoIntroController.actionFavVideo(type: 'default');
       } else {
-        _showFavBottomSheet();
+        Utils.showFavBottomSheet(context: context, ctr: videoIntroController);
       }
     } else if (type != 'longPress') {
-      _showFavBottomSheet();
+      Utils.showFavBottomSheet(context: context, ctr: videoIntroController);
     }
   }
 
