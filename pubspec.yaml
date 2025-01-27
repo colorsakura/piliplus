@@ -262,10 +262,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: fansCard
-  #     fonts:
-  #       - asset: assets/fonts/fansCard.ttf
+  fonts:
+    - family: digital_id_num
+      fonts:
+        - asset: assets/fonts/digital_id_num.ttf
   #   - family: Jura-Bold
   #     fonts:
   #       - asset: assets/fonts/Jura-Bold.ttf

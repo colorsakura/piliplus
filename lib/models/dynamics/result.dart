@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/utils/storage.dart';
+
 class DynamicsDataModel {
   DynamicsDataModel({
     this.hasMore,
@@ -126,6 +128,7 @@ class ModuleAuthorModel {
     this.pubTs,
     this.type,
     this.vip,
+    this.decorate,
   });
 
   String? face;
@@ -139,6 +142,7 @@ class ModuleAuthorModel {
   int? pubTs;
   String? type;
   Map? vip;
+  Map? decorate;
 
   ModuleAuthorModel.fromJson(Map<String, dynamic> json) {
     face = json['face'];
@@ -152,7 +156,10 @@ class ModuleAuthorModel {
     pubTs = json['pub_ts'] == 0 ? null : json['pub_ts'];
     type = json['type'];
     vip = json['vip'];
+    if (showDynDecorate) decorate = json['decorate'];
   }
+
+  static bool showDynDecorate = GStorage.showDynDecorate;
 }
 
 // 单个动态详情 - 动态信息

@@ -13,6 +13,7 @@ import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/subtitle.dart';
@@ -1904,6 +1905,14 @@ List<SettingsModel> get extraSettings => [
         leading: Icon(Icons.search),
         setKey: SettingBoxKey.searchSuggestion,
         defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '展示动态装饰',
+        leading: Icon(MdiIcons.stickerCircleOutline),
+        setKey: SettingBoxKey.showDynDecorate,
+        defaultVal: true,
+        onChanged: (value) => ModuleAuthorModel.showDynDecorate = value,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

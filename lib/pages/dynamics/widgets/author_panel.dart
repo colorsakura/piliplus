@@ -126,6 +126,56 @@ class AuthorPanel extends StatelessWidget {
               ),
             ),
           ),
+        if (item.modules.moduleAuthor.decorate != null)
+          GestureDetector(
+            onTap: item.modules.moduleAuthor.decorate['jump_url'] != null
+                ? () {
+                    Get.toNamed(
+                      '/webview',
+                      parameters: {
+                        'url':
+                            '${item.modules.moduleAuthor.decorate['jump_url']}'
+                      },
+                    );
+                  }
+                : null,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.centerRight,
+              children: [
+                Image.network(
+                  height: 32,
+                  item.modules.moduleAuthor.decorate['card_url'],
+                ),
+                if ((item.modules.moduleAuthor.decorate?['fan']?['num_str']
+                            as String?)
+                        ?.isNotEmpty ==
+                    true)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 32),
+                    child: Text(
+                      '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontFamily: 'digital_id_num',
+                        color: (item.modules.moduleAuthor.decorate?['fan']
+                                        ?['color'] as String?)
+                                    ?.startsWith('#') ==
+                                true
+                            ? Color(
+                                int.parse(
+                                  item.modules.moduleAuthor
+                                      .decorate['fan']['color']
+                                      .replaceFirst('#', '0xFF'),
+                                ),
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         SizedBox(
           width: 32,
           height: 32,

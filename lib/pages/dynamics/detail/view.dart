@@ -43,7 +43,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   AnimationController? _fabAnimationCtr;
   late StreamController<bool> _titleStreamC; // appBar title
   bool _visibleTitle = false;
-  String? action;
+  // String? action;
   // 回复类型
   late int replyType;
   bool _isFabVisible = true;
@@ -89,10 +89,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     // floor 1原创 2转发
     init();
     _titleStreamC = StreamController<bool>();
-    if (action == 'comment') {
-      _visibleTitle = true;
-      _titleStreamC.add(true);
-    }
+    // if (action == 'comment') {
+    //   _visibleTitle = true;
+    //   _titleStreamC.add(true);
+    // }
 
     _fabAnimationCtr = AnimationController(
       vsync: this,
@@ -109,7 +109,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     // 楼层
     int floor = args['floor'];
     // 从action栏点击进入
-    action = args.containsKey('action') ? args['action'] : null;
+    // action = args.containsKey('action') ? args['action'] : null;
     // 评论类型
     int commentType = args['item'].basic!['comment_type'] ?? 11;
     replyType = (commentType == 0) ? 11 : commentType;
