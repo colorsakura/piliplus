@@ -276,7 +276,10 @@ class MyApp extends StatelessWidget {
         refreshBackgroundColor: colorScheme.onSecondary,
       ),
       dialogTheme: DialogTheme(
-        titleTextStyle: TextStyle(fontSize: 18),
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          color: colorScheme.onSurface,
+        ),
       ),
     );
   }

@@ -86,7 +86,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 pinned: true,
                 title: _favDetailController.enableMultiSelect.value
                     ? Text(
-                        '已选择${_favDetailController.checkedCount.value}项',
+                        '已选: ${_favDetailController.checkedCount.value}',
                       )
                     : Obx(
                         () => AnimatedOpacity(
@@ -131,7 +131,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             mediaId: _favDetailController.mediaId,
                           ),
                           child: Text(
-                            '复制到',
+                            '复制',
                             style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -151,7 +151,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             mediaId: _favDetailController.mediaId,
                           ),
                           child: Text(
-                            '移动到',
+                            '移动',
                             style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme

@@ -103,7 +103,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               title: Obx(
                 () => Text(
-                  '已选择${_historyController.checkedCount.value}项',
+                  '已选: ${_historyController.checkedCount.value}',
                 ),
               ),
               actions: [

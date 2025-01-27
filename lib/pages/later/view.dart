@@ -76,7 +76,7 @@ class _LaterPageState extends State<LaterPage> {
               ),
               title: Obx(
                 () => Text(
-                  '已选择${_laterController.checkedCount.value}项',
+                  '已选: ${_laterController.checkedCount.value}',
                 ),
               ),
               actions: [
@@ -98,7 +98,7 @@ class _LaterPageState extends State<LaterPage> {
                     mediaId: null,
                   ),
                   child: Text(
-                    '复制到',
+                    '复制',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -115,7 +115,7 @@ class _LaterPageState extends State<LaterPage> {
                     mediaId: null,
                   ),
                   child: Text(
-                    '移动到',
+                    '移动',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
