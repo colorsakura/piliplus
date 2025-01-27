@@ -14,7 +14,7 @@ class DynamicsHttp {
       'type': type ?? 'all',
       'timezone_offset': '-480',
       'offset': offset,
-      'features': 'itemOpusStyle'
+      'features': 'itemOpusStyle,listOnlyfans'
     };
     if (mid != -1) {
       data['host_mid'] = mid;

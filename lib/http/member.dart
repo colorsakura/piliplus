@@ -404,7 +404,7 @@ class MemberHttp {
       'offset': offset ?? '',
       'host_mid': mid,
       'timezone_offset': '-480',
-      'features': 'itemOpusStyle',
+      'features': 'itemOpusStyle,listOnlyfans',
       'platform': 'web',
       'web_location': '333.999',
       'dm_img_list': '[]',

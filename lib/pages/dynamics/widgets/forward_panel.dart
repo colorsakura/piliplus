@@ -37,21 +37,14 @@ InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
 }
 
 Widget forWard(item, context, source, callback, {floor = 1}) {
-  TextStyle authorStyle =
-      TextStyle(color: Theme.of(context).colorScheme.primary);
-
-  List<OpusPicsModel> pics = [];
-
-  bool hasPics = item.modules.moduleDynamic.major != null &&
-      item.modules.moduleDynamic.major.opus != null &&
-      item.modules.moduleDynamic.major.opus.pics.isNotEmpty;
-  if (hasPics) {
-    pics = item.modules.moduleDynamic.major.opus.pics;
-  }
-  InlineSpan? richNodes = richNode(item, context);
   switch (item.type) {
     // 图文
     case 'DYNAMIC_TYPE_DRAW':
+      bool hasPics = item.modules.moduleDynamic.major != null &&
+          item.modules.moduleDynamic.major.opus != null &&
+          item.modules.moduleDynamic.major.opus.pics.isNotEmpty;
+
+      InlineSpan? richNodes = richNode(item, context);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,7 +57,8 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
                       arguments: {'face': item.modules.moduleAuthor.face}),
                   child: Text(
                     '@${item.modules.moduleAuthor.name}',
-                    style: authorStyle,
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 const SizedBox(width: 6),
@@ -93,6 +87,7 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
             //     ),
             //   ),
             // ],
+
             if (richNodes != null)
               Text.rich(
                 richNodes,
@@ -104,7 +99,7 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
               ),
             if (hasPics) ...[
               Text.rich(
-                picsNodes(pics, callback),
+                picsNodes(item.modules.moduleDynamic.major.opus.pics, callback),
                 // semanticsLabel: '动态图片',
               ),
               if (item.modules.moduleDynamic.additional != null)
@@ -126,7 +121,38 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
               context,
               item.modules.moduleDynamic.additional.type,
               floor: floor,
-            )
+            ),
+
+          if (item.modules.moduleDynamic.major.blocked != null) ...[
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(
+                  left: 12, right: 12, bottom: source == 'detail' ? 8 : 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (item.modules.moduleDynamic.major.blocked['title'] != null)
+                    Text(
+                      item.modules.moduleDynamic.major.blocked['title'],
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  if (item.modules.moduleDynamic.major
+                          .blocked['hint_message'] !=
+                      null)
+                    Text(
+                      item.modules.moduleDynamic.major.blocked['hint_message'],
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ],
       );
     // 视频
@@ -198,6 +224,7 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
     case 'DYNAMIC_TYPE_UGC_SEASON':
       return videoSeasonWidget(item, context, 'ugcSeason');
     case 'DYNAMIC_TYPE_WORD':
+      InlineSpan? richNodes = richNode(item, context);
       return floor == 2
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,7 +237,8 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
                           arguments: {'face': item.modules.moduleAuthor.face}),
                       child: Text(
                         '@${item.modules.moduleAuthor.name}',
-                        style: authorStyle,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                     const SizedBox(width: 6),
