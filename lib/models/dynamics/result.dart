@@ -143,6 +143,7 @@ class ModuleAuthorModel {
   String? type;
   Map? vip;
   Map? decorate;
+  // Map? pendant;
 
   ModuleAuthorModel.fromJson(Map<String, dynamic> json) {
     face = json['face'];
@@ -156,7 +157,10 @@ class ModuleAuthorModel {
     pubTs = json['pub_ts'] == 0 ? null : json['pub_ts'];
     type = json['type'];
     vip = json['vip'];
-    if (showDynDecorate) decorate = json['decorate'];
+    if (showDynDecorate) {
+      decorate = json['decorate'];
+      // pendant = json['pendant'];
+    }
   }
 
   static bool showDynDecorate = GStorage.showDynDecorate;

@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/index.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,174 +33,192 @@ class AuthorPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(item.modules.moduleAuthor.mid);
-    return Row(
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        GestureDetector(
-          onTap: () {
-            // 番剧
-            if (item.modules.moduleAuthor.type == 'AUTHOR_TYPE_PGC' ||
-                item.modules.moduleAuthor.type == 'AUTHOR_TYPE_UGC_SEASON') {
-              return;
-            }
-            feedBack();
-            Get.toNamed(
-              '/member?mid=${item.modules.moduleAuthor.mid}',
-              arguments: {
-                'face': item.modules.moduleAuthor.face,
-                'heroTag': heroTag
-              },
-            );
-          },
-          child: Hero(
-            tag: heroTag,
-            child: NetworkImgLayer(
-              width: 40,
-              height: 40,
-              type: 'avatar',
-              src: item.modules.moduleAuthor.face,
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  item.modules.moduleAuthor.name,
-                  // semanticsLabel: "UP主：${item.modules.moduleAuthor.name}",
-                  style: TextStyle(
-                    color: item.modules.moduleAuthor!.vip != null &&
-                            item.modules.moduleAuthor!.vip['status'] > 0 &&
-                            item.modules.moduleAuthor!.vip['type'] == 2
-                        ? context.vipColor
-                        : Theme.of(context).colorScheme.onSurface,
-                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-                  ),
-                ),
-              ],
-            ),
-            DefaultTextStyle.merge(
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.outline,
-                fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-              ),
-              child: Row(
-                children: [
-                  Text(item is ItemOrigModel
-                      ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
-                      : item.modules.moduleAuthor.pubTime),
-                  if (item.modules.moduleAuthor.pubTime != '' &&
-                      item.modules.moduleAuthor.pubAction != '')
-                    const Text(' '),
-                  Text(item.modules.moduleAuthor.pubAction),
-                ],
-              ),
-            )
-          ],
-        ),
-        const Spacer(),
-        if (source != 'detail' && item.modules?.moduleTag?.text != null)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
-              border: Border.all(
-                width: 1.25,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            child: Text(
-              item.modules.moduleTag.text,
-              style: TextStyle(
-                height: 1,
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              strutStyle: const StrutStyle(
-                leading: 0,
-                height: 1,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        if (item.modules.moduleAuthor.decorate != null)
-          GestureDetector(
-            onTap: item.modules.moduleAuthor.decorate['jump_url'] != null
-                ? () {
-                    Get.toNamed(
-                      '/webview',
-                      parameters: {
-                        'url':
-                            '${item.modules.moduleAuthor.decorate['jump_url']}'
-                      },
-                    );
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // 番剧
+                  if (item.modules.moduleAuthor.type == 'AUTHOR_TYPE_PGC' ||
+                      item.modules.moduleAuthor.type ==
+                          'AUTHOR_TYPE_UGC_SEASON') {
+                    return;
                   }
-                : null,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.centerRight,
-              children: [
-                Image.network(
-                  height: 32,
-                  item.modules.moduleAuthor.decorate['card_url'],
+                  feedBack();
+                  Get.toNamed(
+                    '/member?mid=${item.modules.moduleAuthor.mid}',
+                    arguments: {
+                      'face': item.modules.moduleAuthor.face,
+                    },
+                  );
+                },
+                child: NetworkImgLayer(
+                  width: 40,
+                  height: 40,
+                  type: 'avatar',
+                  src: item.modules.moduleAuthor.face,
                 ),
-                if ((item.modules.moduleAuthor.decorate?['fan']?['num_str']
-                            as String?)
-                        ?.isNotEmpty ==
-                    true)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 32),
-                    child: Text(
-                      '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontFamily: 'digital_id_num',
-                        color: (item.modules.moduleAuthor.decorate?['fan']
-                                        ?['color'] as String?)
-                                    ?.startsWith('#') ==
-                                true
-                            ? Color(
-                                int.parse(
-                                  item.modules.moduleAuthor
-                                      .decorate['fan']['color']
-                                      .replaceFirst('#', '0xFF'),
-                                ),
-                              )
-                            : null,
-                      ),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.modules.moduleAuthor.name,
+                    // semanticsLabel: "UP主：${item.modules.moduleAuthor.name}",
+                    style: TextStyle(
+                      color: item.modules.moduleAuthor!.vip != null &&
+                              item.modules.moduleAuthor!.vip['status'] > 0 &&
+                              item.modules.moduleAuthor!.vip['type'] == 2
+                          ? context.vipColor
+                          : Theme.of(context).colorScheme.onSurface,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                     ),
                   ),
-              ],
-            ),
-          ),
-        SizedBox(
-          width: 32,
-          height: 32,
-          child: IconButton(
-            tooltip: '更多',
-            style: ButtonStyle(
-              padding: WidgetStateProperty.all(EdgeInsets.zero),
-            ),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                builder: (context) {
-                  return morePanel(context);
-                },
-              );
-            },
-            icon: const Icon(Icons.more_vert_outlined, size: 18),
+                  DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontSize:
+                          Theme.of(context).textTheme.labelSmall!.fontSize,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(item is ItemOrigModel
+                            ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
+                            : item.modules.moduleAuthor.pubTime),
+                        if (item.modules.moduleAuthor.pubTime != '' &&
+                            item.modules.moduleAuthor.pubAction != '')
+                          const Text(' '),
+                        Text(item.modules.moduleAuthor.pubAction),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              // const Spacer(),
+              // if (source != 'detail' && item.modules?.moduleTag?.text != null)
+              //   Container(
+              //     padding:
+              //         const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              //     decoration: BoxDecoration(
+              //       color: Theme.of(context).colorScheme.surface,
+              //       borderRadius: const BorderRadius.all(Radius.circular(4)),
+              //       border: Border.all(
+              //         width: 1.25,
+              //         color: Theme.of(context).colorScheme.primary,
+              //       ),
+              //     ),
+              //     child: Text(
+              //       item.modules.moduleTag.text,
+              //       style: TextStyle(
+              //         height: 1,
+              //         fontSize: 12,
+              //         color: Theme.of(context).colorScheme.primary,
+              //       ),
+              //       strutStyle: const StrutStyle(
+              //         leading: 0,
+              //         height: 1,
+              //         fontSize: 12,
+              //       ),
+              //     ),
+              //   ),
+            ],
           ),
         ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: item.modules.moduleAuthor.decorate != null
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap:
+                          item.modules.moduleAuthor.decorate['jump_url'] != null
+                              ? () {
+                                  Get.toNamed(
+                                    '/webview',
+                                    parameters: {
+                                      'url':
+                                          '${item.modules.moduleAuthor.decorate['jump_url']}'
+                                    },
+                                  );
+                                }
+                              : null,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.centerRight,
+                        children: [
+                          CachedNetworkImage(
+                            height: 32,
+                            imageUrl:
+                                item.modules.moduleAuthor.decorate['card_url'],
+                          ),
+                          if ((item.modules.moduleAuthor.decorate?['fan']
+                                      ?['num_str'] as String?)
+                                  ?.isNotEmpty ==
+                              true)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 32),
+                              child: Text(
+                                '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontFamily: 'digital_id_num',
+                                  color: (item.modules.moduleAuthor
+                                                      .decorate?['fan']
+                                                  ?['color'] as String?)
+                                              ?.startsWith('#') ==
+                                          true
+                                      ? Color(
+                                          int.parse(
+                                            item.modules.moduleAuthor
+                                                .decorate['fan']['color']
+                                                .replaceFirst('#', '0xFF'),
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    _moreWidget(context),
+                  ],
+                )
+              : _moreWidget(context),
+        )
       ],
     );
   }
+
+  Widget _moreWidget(context) => SizedBox(
+        width: 32,
+        height: 32,
+        child: IconButton(
+          tooltip: '更多',
+          style: ButtonStyle(
+            padding: WidgetStateProperty.all(EdgeInsets.zero),
+          ),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              useRootNavigator: true,
+              isScrollControlled: true,
+              builder: (context) {
+                return morePanel(context);
+              },
+            );
+          },
+          icon: const Icon(Icons.more_vert_outlined, size: 18),
+        ),
+      );
 
   Widget morePanel(context) {
     return Container(
