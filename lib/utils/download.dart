@@ -6,6 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'dart:io';
@@ -83,6 +84,38 @@ class DownloadUtils {
       }
     }
     return await requestStoragePer(context);
+  }
+
+  static Future downloadVideo(BuildContext context, String url) async {
+    try {
+      if (!await checkPermissionDependOnSdkInt(context)) {
+        return;
+      }
+      SmartDialog.showLoading(msg: '正在下载');
+      String videoName =
+          "video_${DateTime.now().toString().replaceAll(' ', '_').replaceAll(':', '-').split('.').first}.${url.split('.').lastOrNull ?? 'mp4'}";
+      String savePath = '${(await getTemporaryDirectory()).path}/$videoName';
+      await Request.dio.download(url, savePath);
+      SmartDialog.showLoading(msg: '正在保存');
+      final SaveResult result = await SaverGallery.saveFile(
+        filePath: savePath,
+        fileName: videoName,
+        androidRelativePath: "Pictures/PiliPlus",
+        skipIfExists: false,
+      );
+      SmartDialog.dismiss();
+      if (result.isSuccess) {
+        SmartDialog.showToast('「$videoName」已保存 ');
+      } else {
+        SmartDialog.showToast('保存失败，${result.errorMessage}');
+      }
+
+      return true;
+    } catch (err) {
+      SmartDialog.dismiss();
+      SmartDialog.showToast(err.toString());
+      return false;
+    }
   }
 
   static Future downloadImg(

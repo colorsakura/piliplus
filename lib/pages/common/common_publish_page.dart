@@ -4,6 +4,8 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel, SourceType;
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:chat_bottom_container/chat_bottom_container.dart';
@@ -274,8 +276,12 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
           onTap: () {
             controller.keepChatPanel();
             context.imageView(
-              isFile: true,
-              imgList: pathList,
+              imgList: pathList
+                  .map((path) => SourceModel(
+                        url: path,
+                        sourceType: SourceType.fileImage,
+                      ))
+                  .toList(),
               initialPage: index,
             );
           },

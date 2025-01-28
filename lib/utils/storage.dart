@@ -354,6 +354,9 @@ class GStorage {
   static bool get showDynDecorate =>
       GStorage.setting.get(SettingBoxKey.showDynDecorate, defaultValue: true);
 
+  static bool get enableLivePhoto =>
+      GStorage.setting.get(SettingBoxKey.enableLivePhoto, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -581,6 +584,7 @@ class SettingBoxKey {
       mainTabBarView = 'mainTabBarView',
       searchSuggestion = 'searchSuggestion',
       showDynDecorate = 'showDynDecorate',
+      enableLivePhoto = 'enableLivePhoto',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

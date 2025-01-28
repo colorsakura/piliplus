@@ -1,3 +1,5 @@
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -54,7 +56,7 @@ Widget htmlRender({
                     callback([imgUrl], 0);
                   } else {
                     context.imageView(
-                      imgList: [imgUrl],
+                      imgList: [SourceModel(url: imgUrl)],
                     );
                   }
                 },

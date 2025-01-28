@@ -2,9 +2,12 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel, SourceType;
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/nine_grid_view.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 
 class ImageModel {
@@ -12,16 +15,20 @@ class ImageModel {
     required this.width,
     required this.height,
     required this.url,
+    this.liveUrl,
   });
 
   dynamic width;
   dynamic height;
   String url;
+  String? liveUrl;
   bool? _isLongPic;
+  bool? _isLivePhoto;
 
   dynamic get safeWidth => width ?? 1;
   dynamic get safeHeight => height ?? 1;
   bool get isLongPic => _isLongPic ??= (safeHeight / safeWidth) > (22 / 9);
+  bool get isLivePhoto => _isLivePhoto ??= liveUrl?.isNotEmpty == true;
 }
 
 Widget imageview(
@@ -83,6 +90,8 @@ Widget imageview(
     );
   }
 
+  late final enableLivePhoto = GStorage.enableLivePhoto;
+
   return NineGridView(
     type: NineGridType.weiBo,
     margin: const EdgeInsets.only(top: 6),
@@ -102,7 +111,17 @@ Widget imageview(
             onViewImage?.call();
             context.imageView(
               initialPage: index,
-              imgList: picArr.map((item) => item.url).toList(),
+              imgList: picArr
+                  .map(
+                    (item) => SourceModel(
+                      sourceType: item.isLivePhoto && enableLivePhoto
+                          ? SourceType.livePhoto
+                          : SourceType.networkImage,
+                      url: item.url,
+                      liveUrl: item.liveUrl,
+                    ),
+                  )
+                  .toList(),
               onDismissed: onDismissed,
             );
           }
@@ -143,7 +162,14 @@ Widget imageview(
                 },
               ),
             ),
-            if (picArr[index].isLongPic)
+            if (picArr[index].liveUrl?.isNotEmpty == true)
+              const PBadge(
+                text: 'Live',
+                right: 8,
+                bottom: 8,
+                type: 'gray',
+              )
+            else if (picArr[index].isLongPic)
               const PBadge(
                 text: '长图',
                 right: 8,

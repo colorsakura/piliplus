@@ -1,3 +1,5 @@
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel;
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/space/card.dart' as space;
@@ -81,7 +83,7 @@ class UserInfoCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           context.imageView(
-            imgList: [imgUrl ?? 'bgTag'],
+            imgList: [SourceModel(url: imgUrl ?? 'bgTag')],
           );
         },
         child: CachedNetworkImage(
@@ -458,7 +460,7 @@ class UserInfoCard extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               context.imageView(
-                imgList: [card.face ?? 'avatarTag'],
+                imgList: [SourceModel(url: card.face ?? 'avatarTag')],
               );
             },
             child: NetworkImgLayer(

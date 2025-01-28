@@ -27,6 +27,7 @@ InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
                 width: item.width,
                 height: item.height,
                 url: item.url ?? '',
+                liveUrl: item.liveUrl,
               ),
             )
             .toList(),

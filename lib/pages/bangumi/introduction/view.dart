@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel;
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -224,9 +226,11 @@ class _BangumiInfoState extends State<BangumiInfo>
                               videoDetailCtr.onViewImage();
                               context.imageView(
                                 imgList: [
-                                  !widget.isLoading
-                                      ? widget.bangumiDetail!.cover!
-                                      : bangumiItem!.cover!
+                                  SourceModel(
+                                    url: !widget.isLoading
+                                        ? widget.bangumiDetail!.cover!
+                                        : bangumiItem!.cover!,
+                                  )
                                 ],
                                 onDismissed: videoDetailCtr.onDismissed,
                               );

@@ -17,6 +17,7 @@ Widget picWidget(item, context, callback) {
               width: item.width,
               height: item.height,
               url: item.url ?? '',
+              liveUrl: item.liveUrl,
             ),
           )
           .toList(),

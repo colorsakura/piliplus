@@ -673,6 +673,7 @@ class OpusPicsModel {
   int? size;
   String? src;
   String? url;
+  String? liveUrl;
 
   OpusPicsModel.fromJson(Map<String, dynamic> json) {
     width = json['width'];
@@ -680,6 +681,7 @@ class OpusPicsModel {
     size = json['size'] != null ? json['size'].toInt() : 0;
     src = json['src'];
     url = json['url'];
+    liveUrl = json['live_url'];
   }
 }
 

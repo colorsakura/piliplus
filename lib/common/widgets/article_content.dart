@@ -1,3 +1,5 @@
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel;
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -68,7 +70,8 @@ Widget articleContent({
                 } else {
                   context.imageView(
                     initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
-                    imgList: imgList,
+                    imgList:
+                        imgList.map((url) => SourceModel(url: url)).toList(),
                   );
                 }
               },

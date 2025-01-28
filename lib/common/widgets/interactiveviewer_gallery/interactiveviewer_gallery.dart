@@ -10,6 +10,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:status_bar_control/status_bar_control.dart';
@@ -33,6 +35,20 @@ typedef IndexedFocusedWidgetBuilder = Widget Function(
 
 typedef IndexedTagStringBuilder = String Function(int index);
 
+enum SourceType { fileImage, networkImage, livePhoto }
+
+class SourceModel {
+  final SourceType sourceType;
+  final String url;
+  final String? liveUrl;
+
+  const SourceModel({
+    this.sourceType = SourceType.networkImage,
+    required this.url,
+    this.liveUrl,
+  });
+}
+
 class InteractiveviewerGallery<T> extends StatefulWidget {
   const InteractiveviewerGallery({
     super.key,
@@ -45,17 +61,14 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
     this.onDismissed,
     this.setStatusBar,
     this.onClose,
-    this.isFile,
   });
-
-  final bool? isFile;
 
   final VoidCallback? onClose;
 
   final bool? setStatusBar;
 
   /// The sources to show.
-  final List<String> sources;
+  final List<SourceModel> sources;
 
   /// The index of the first source in [sources] to show.
   final int initIndex;
@@ -92,7 +105,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   late Offset _doubleTapLocalPosition;
 
-  int? currentIndex;
+  late final RxInt currentIndex = widget.initIndex.obs;
 
   late List<bool> _thumbList;
   late final int _quality = GStorage.previewQ;
@@ -115,9 +128,12 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
             _animation?.value ?? Matrix4.identity();
       });
 
-    currentIndex = widget.initIndex;
     if (widget.setStatusBar != false) {
       setStatusBar();
+    }
+
+    if (widget.sources[currentIndex.value].sourceType == SourceType.livePhoto) {
+      _onPlay(currentIndex.value);
     }
   }
 
@@ -132,6 +148,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   @override
   void dispose() async {
+    _player?.dispose();
     _pageController?.dispose();
     _animationController.removeListener(() {});
     _animationController.dispose();
@@ -140,8 +157,8 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
         StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
       }
     }
-    if (widget.isFile != true) {
-      for (int index = 0; index < widget.sources.length; index++) {
+    for (int index = 0; index < widget.sources.length; index++) {
+      if (widget.sources[index].sourceType == SourceType.networkImage) {
         CachedNetworkImageProvider(_getActualUrl(index)).evict();
       }
     }
@@ -201,14 +218,22 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     }
   }
 
+  void _onPlay(int index) {
+    _player ??= Player();
+    _videoController ??= VideoController(_player!);
+    _player!.open(Media(widget.sources[index].liveUrl!));
+  }
+
   /// When the page view changed its page, the source will animate back into the
   /// original scale if it was scaled up.
   ///
   /// Additionally the swipe up / down to dismiss gets enabled.
   void _onPageChanged(int page) {
-    setState(() {
-      currentIndex = page;
-    });
+    _player?.pause();
+    currentIndex.value = page;
+    if (widget.sources[page].sourceType == SourceType.livePhoto) {
+      _onPlay(page);
+    }
     widget.onPageChanged?.call(page);
     if (_transformationController!.value != Matrix4.identity()) {
       // animate the reset for the transformation of the interactive viewer
@@ -226,7 +251,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   String _getActualUrl(int index) => _thumbList[index] && _quality != 100
       ? '${widget.sources[index]}@${_quality}q.webp'.http2https
-      : widget.sources[index].http2https;
+      : widget.sources[index].url.http2https;
 
   void onClose() {
     if (widget.onClose != null) {
@@ -236,6 +261,9 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
       widget.onDismissed?.call(_pageController!.page!.floor());
     }
   }
+
+  Player? _player;
+  VideoController? _videoController;
 
   @override
   Widget build(BuildContext context) {
@@ -272,12 +300,15 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   _doubleTapLocalPosition = details.localPosition;
                 },
                 onDoubleTap: onDoubleTap,
-                onLongPress: widget.isFile == true ? null : onLongPress,
+                onLongPress:
+                    widget.sources[index].sourceType == SourceType.fileImage
+                        ? null
+                        : onLongPress,
                 child: widget.itemBuilder != null
                     ? widget.itemBuilder!(
                         context,
                         index,
-                        index == currentIndex,
+                        index == currentIndex.value,
                         _enablePageView,
                       )
                     : _itemBuilder(index),
@@ -321,47 +352,60 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                 if (widget.sources.length > 1)
                   Align(
                     alignment: Alignment.center,
-                    child: Text(
-                      "${currentIndex! + 1}/${widget.sources.length}",
-                      style: const TextStyle(color: Colors.white),
+                    child: Obx(
+                      () => Text(
+                        "${currentIndex.value + 1}/${widget.sources.length}",
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                if (widget.isFile != true)
+                if (widget.sources[currentIndex.value].sourceType !=
+                    SourceType.fileImage)
                   Align(
                     alignment: Alignment.centerRight,
                     child: PopupMenuButton(
                       itemBuilder: (context) {
                         return [
                           PopupMenuItem(
-                            value: 0,
-                            onTap: () =>
-                                onShareImg(widget.sources[currentIndex!]),
+                            onTap: () => onShareImg(
+                                widget.sources[currentIndex.value].url),
                             child: const Text("分享图片"),
                           ),
                           PopupMenuItem(
-                            value: 1,
                             onTap: () {
-                              Utils.copyText(widget.sources[currentIndex!]);
+                              Utils.copyText(
+                                  widget.sources[currentIndex.value].url);
                             },
                             child: const Text("复制链接"),
                           ),
                           PopupMenuItem(
-                            value: 2,
                             onTap: () {
                               DownloadUtils.downloadImg(
                                 context,
-                                [widget.sources[currentIndex!]],
+                                [widget.sources[currentIndex.value].url],
                               );
                             },
                             child: const Text("保存图片"),
                           ),
+                          if (widget.sources[currentIndex.value].sourceType ==
+                              SourceType.livePhoto)
+                            PopupMenuItem(
+                              onTap: () {
+                                DownloadUtils.downloadVideo(
+                                  context,
+                                  widget.sources[currentIndex.value].liveUrl!,
+                                );
+                              },
+                              child: const Text("保存 Live"),
+                            ),
                           if (widget.sources.length > 1)
                             PopupMenuItem(
-                              value: 3,
                               onTap: () {
                                 DownloadUtils.downloadImg(
                                   context,
-                                  widget.sources,
+                                  widget.sources
+                                      .map((item) => item.url)
+                                      .toList(),
                                 );
                               },
                               child: const Text("保存全部图片"),
@@ -396,34 +440,37 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   Widget _itemBuilder(index) {
     return Center(
       child: Hero(
-        tag: widget.sources[index],
-        child: widget.isFile == true
-            ? Image(
-                filterQuality: FilterQuality.low,
-                image: FileImage(File(widget.sources[index])),
-              )
-            : CachedNetworkImage(
-                fadeInDuration: const Duration(milliseconds: 0),
-                fadeOutDuration: const Duration(milliseconds: 0),
-                imageUrl: _getActualUrl(index),
-                // fit: BoxFit.contain,
-                progressIndicatorBuilder: (context, url, progress) {
-                  return Center(
-                    child: SizedBox(
-                      width: 150.0,
-                      child: LinearProgressIndicator(
-                          value: progress.progress ?? 0),
-                    ),
-                  );
-                },
-                // errorListener: (value) {
-                //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                //     setState(() {
-                //       _thumbList[index] = false;
-                //     });
-                //   });
-                // },
-              ),
+        tag: widget.sources[index].url,
+        child: switch (widget.sources[index].sourceType) {
+          SourceType.fileImage => Image(
+              filterQuality: FilterQuality.low,
+              image: FileImage(File(widget.sources[index].url)),
+            ),
+          SourceType.networkImage => CachedNetworkImage(
+              fadeInDuration: const Duration(milliseconds: 0),
+              fadeOutDuration: const Duration(milliseconds: 0),
+              imageUrl: _getActualUrl(index),
+              // fit: BoxFit.contain,
+              progressIndicatorBuilder: (context, url, progress) {
+                return Center(
+                  child: SizedBox(
+                    width: 150.0,
+                    child:
+                        LinearProgressIndicator(value: progress.progress ?? 0),
+                  ),
+                );
+              },
+              // errorListener: (value) {
+              //   WidgetsBinding.instance.addPostFrameCallback((_) {
+              //     setState(() {
+              //       _thumbList[index] = false;
+              //     });
+              //   });
+              // },
+            ),
+          SourceType.livePhoto =>
+            IgnorePointer(child: Video(controller: _videoController!)),
+        },
       ),
     );
   }
@@ -487,7 +534,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
             children: [
               ListTile(
                 onTap: () {
-                  onShareImg(widget.sources[currentIndex!]);
+                  onShareImg(widget.sources[currentIndex.value].url);
                   Get.back();
                 },
                 dense: true,
@@ -496,7 +543,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               ListTile(
                 onTap: () {
                   Get.back();
-                  Utils.copyText(widget.sources[currentIndex!]);
+                  Utils.copyText(widget.sources[currentIndex.value].url);
                 },
                 dense: true,
                 title: const Text('复制链接', style: TextStyle(fontSize: 14)),
@@ -506,19 +553,35 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   Get.back();
                   DownloadUtils.downloadImg(
                     context,
-                    [widget.sources[currentIndex!]],
+                    [widget.sources[currentIndex.value].url],
                   );
                 },
                 dense: true,
                 title: const Text('保存图片', style: TextStyle(fontSize: 14)),
               ),
+              if (widget.sources[currentIndex.value].sourceType ==
+                  SourceType.livePhoto)
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    DownloadUtils.downloadVideo(
+                      context,
+                      widget.sources[currentIndex.value].liveUrl!,
+                    );
+                  },
+                  dense: true,
+                  title: const Text(
+                    '保存 Live',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
               if (widget.sources.length > 1)
                 ListTile(
                   onTap: () {
                     Get.back();
                     DownloadUtils.downloadImg(
                       context,
-                      widget.sources,
+                      widget.sources.map((item) => item.url).toList(),
                     );
                   },
                   dense: true,
