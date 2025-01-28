@@ -111,7 +111,8 @@ class VideoCardHGrpc extends StatelessWidget {
                       },
                     ),
                   ),
-                  videoContent(context)
+                  const SizedBox(width: 10),
+                  videoContent(context),
                 ],
               );
             },
@@ -133,58 +134,43 @@ class VideoCardHGrpc extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...[
-              Expanded(
-                child: Text(
-                  videoItem.smallCoverV5.base.title,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    height: 1.42,
-                    letterSpacing: 0.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              videoItem.smallCoverV5.base.title,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                height: 1.42,
+                letterSpacing: 0.3,
               ),
-            ],
-            // const Spacer(),
-            // if (videoItem.rcmdReason != null &&
-            //     videoItem.rcmdReason.content != '')
-            //   Container(
-            //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(4),
-            //       border: Border.all(
-            //           color: Theme.of(context).colorScheme.surfaceTint),
-            //     ),
-            //     child: Text(
-            //       videoItem.rcmdReason.content,
-            //       style: TextStyle(
-            //           fontSize: 9,
-            //           color: Theme.of(context).colorScheme.surfaceTint),
-            //     ),
-            //   ),
-            // const SizedBox(height: 4),
-            if (showOwner || showPubdate)
-              Text(
-                videoItem.smallCoverV5.rightDesc1,
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  height: 1,
-                  color: Theme.of(context).colorScheme.outline,
-                  overflow: TextOverflow.clip,
-                ),
-              ),
-            const SizedBox(height: 3),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          // const Spacer(),
+          // if (videoItem.rcmdReason != null &&
+          //     videoItem.rcmdReason.content != '')
+          //   Container(
+          //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(4),
+          //       border: Border.all(
+          //           color: Theme.of(context).colorScheme.surfaceTint),
+          //     ),
+          //     child: Text(
+          //       videoItem.rcmdReason.content,
+          //       style: TextStyle(
+          //           fontSize: 9,
+          //           color: Theme.of(context).colorScheme.surfaceTint),
+          //     ),
+          //   ),
+          // const SizedBox(height: 4),
+          if (showOwner || showPubdate)
             Text(
-              videoItem.smallCoverV5.rightDesc2,
+              videoItem.smallCoverV5.rightDesc1,
               maxLines: 1,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
@@ -193,26 +179,36 @@ class VideoCardHGrpc extends StatelessWidget {
                 overflow: TextOverflow.clip,
               ),
             ),
-            // Row(
-            //   children: [
-            //     if (showView) ...[
-            //       StatView(
-            //         theme: 'gray',
-            //         view: videoItem.stat.view as int,
-            //       ),
-            //       const SizedBox(width: 8),
-            //     ],
-            //     if (showDanmaku)
-            //       StatDanMu(
-            //         theme: 'gray',
-            //         danmu: videoItem.stat.danmu as int,
-            //       ),
-            //     const Spacer(),
-            //     if (source == 'normal') const SizedBox(width: 24),
-            //   ],
-            // ),
-          ],
-        ),
+          const SizedBox(height: 3),
+          Text(
+            videoItem.smallCoverV5.rightDesc2,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              height: 1,
+              color: Theme.of(context).colorScheme.outline,
+              overflow: TextOverflow.clip,
+            ),
+          ),
+          // Row(
+          //   children: [
+          //     if (showView) ...[
+          //       StatView(
+          //         theme: 'gray',
+          //         view: videoItem.stat.view as int,
+          //       ),
+          //       const SizedBox(width: 8),
+          //     ],
+          //     if (showDanmaku)
+          //       StatDanMu(
+          //         theme: 'gray',
+          //         danmu: videoItem.stat.danmu as int,
+          //       ),
+          //     const Spacer(),
+          //     if (source == 'normal') const SizedBox(width: 24),
+          //   ],
+          // ),
+        ],
       ),
     );
   }

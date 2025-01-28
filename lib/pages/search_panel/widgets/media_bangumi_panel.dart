@@ -75,12 +75,10 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(height: 4),
-                                    RichText(
+                                    Text.rich(
                                       // maxLines: 1,
                                       // overflow: TextOverflow.ellipsis,
-                                      textScaler:
-                                          MediaQuery.textScalerOf(context),
-                                      text: TextSpan(
+                                      TextSpan(
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme

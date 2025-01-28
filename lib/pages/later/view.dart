@@ -34,6 +34,7 @@ class _LaterPageState extends State<LaterPage> {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBarWidget(
             visible: _laterController.enableMultiSelect.value,
             child1: AppBar(

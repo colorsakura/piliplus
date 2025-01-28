@@ -151,7 +151,8 @@ class VideoCardH extends StatelessWidget {
                     },
                   ),
                 ),
-                videoContent(context)
+                const SizedBox(width: 10),
+                videoContent(context),
               ],
             ),
           ),
@@ -176,107 +177,102 @@ class VideoCardH extends StatelessWidget {
         : '';
     if (pubdate != '') pubdate += ' ';
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (videoItem.title is String)
-              Expanded(
-                child: Text(
-                  videoItem.title as String,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    height: 1.42,
-                    letterSpacing: 0.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (videoItem.title is String)
+            Expanded(
+              child: Text(
+                videoItem.title,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  height: 1.42,
+                  letterSpacing: 0.3,
                 ),
-              )
-            else
-              Expanded(
-                child: RichText(
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  textScaler: MediaQuery.textScalerOf(context),
-                  text: TextSpan(
-                    children: [
-                      for (final i in videoItem.title) ...[
-                        TextSpan(
-                          text: i['text'] as String,
-                          style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
-                            letterSpacing: 0.3,
-                            color: i['type'] == 'em'
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onSurface,
-                          ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            )
+          else
+            Expanded(
+              child: Text.rich(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                TextSpan(
+                  children: [
+                    for (final i in videoItem.title) ...[
+                      TextSpan(
+                        text: i['text'] as String,
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          height: 1.42,
+                          letterSpacing: 0.3,
+                          color: i['type'] == 'em'
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onSurface,
                         ),
-                      ]
-                    ],
-                  ),
+                      ),
+                    ]
+                  ],
                 ),
               ),
-            // const Spacer(),
-            // if (videoItem.rcmdReason != null &&
-            //     videoItem.rcmdReason.content != '')
-            //   Container(
-            //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(4),
-            //       border: Border.all(
-            //           color: Theme.of(context).colorScheme.surfaceTint),
-            //     ),
-            //     child: Text(
-            //       videoItem.rcmdReason.content,
-            //       style: TextStyle(
-            //           fontSize: 9,
-            //           color: Theme.of(context).colorScheme.surfaceTint),
-            //     ),
-            //   ),
-            // const SizedBox(height: 4),
-            if (showOwner || showPubdate)
-              Expanded(
-                flex: 0,
-                child: Text(
-                  "$pubdate ${showOwner ? videoItem.owner.name : ''}",
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-                    height: 1,
-                    color: Theme.of(context).colorScheme.outline,
-                    overflow: TextOverflow.clip,
-                  ),
-                ),
-              ),
-            const SizedBox(height: 3),
-            Row(
-              children: [
-                if (showView) ...[
-                  statView(
-                    context: context,
-                    theme: 'gray',
-                    view: videoItem.stat.view as int,
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                if (showDanmaku)
-                  statDanMu(
-                    context: context,
-                    theme: 'gray',
-                    danmu: videoItem.stat.danmu as int,
-                  ),
-                const Spacer(),
-                if (source == 'normal') const SizedBox(width: 24),
-              ],
             ),
-          ],
-        ),
+          // const Spacer(),
+          // if (videoItem.rcmdReason != null &&
+          //     videoItem.rcmdReason.content != '')
+          //   Container(
+          //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(4),
+          //       border: Border.all(
+          //           color: Theme.of(context).colorScheme.surfaceTint),
+          //     ),
+          //     child: Text(
+          //       videoItem.rcmdReason.content,
+          //       style: TextStyle(
+          //           fontSize: 9,
+          //           color: Theme.of(context).colorScheme.surfaceTint),
+          //     ),
+          //   ),
+          // const SizedBox(height: 4),
+          if (showOwner || showPubdate)
+            Expanded(
+              flex: 0,
+              child: Text(
+                "$pubdate ${showOwner ? videoItem.owner.name : ''}",
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+                  height: 1,
+                  color: Theme.of(context).colorScheme.outline,
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ),
+          const SizedBox(height: 3),
+          Row(
+            children: [
+              if (showView) ...[
+                statView(
+                  context: context,
+                  theme: 'gray',
+                  view: videoItem.stat.view as int,
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (showDanmaku)
+                statDanMu(
+                  context: context,
+                  theme: 'gray',
+                  danmu: videoItem.stat.danmu as int,
+                ),
+              const Spacer(),
+              if (source == 'normal') const SizedBox(width: 24),
+            ],
+          ),
+        ],
       ),
     );
   }

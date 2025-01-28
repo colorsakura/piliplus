@@ -153,61 +153,54 @@ Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
                                           );
                                         }),
                                       ),
+                                    const SizedBox(width: 10),
                                     Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 2, 6, 0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            RichText(
-                                              maxLines: 2,
-                                              textScaler:
-                                                  MediaQuery.textScalerOf(
-                                                      context),
-                                              text: TextSpan(
-                                                children: [
-                                                  for (var i in loadingState
-                                                      .response[index]
-                                                      .title) ...[
-                                                    TextSpan(
-                                                      text: i['text'],
-                                                      style: TextStyle(
-                                                        color: i['type'] == 'em'
-                                                            ? Theme.of(context)
-                                                                .colorScheme
-                                                                .primary
-                                                            : Theme.of(context)
-                                                                .colorScheme
-                                                                .onSurface,
-                                                      ),
-                                                    ),
-                                                  ]
-                                                ],
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                                Utils.dateFormat(
-                                                    loadingState.response[index]
-                                                        .pubTime,
-                                                    formatType: 'detail'),
-                                                style: textStyle),
-                                            Row(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text.rich(
+                                            maxLines: 2,
+                                            TextSpan(
                                               children: [
-                                                Text(
-                                                    '${loadingState.response[index].view}浏览',
-                                                    style: textStyle),
-                                                Text(' • ', style: textStyle),
-                                                Text(
-                                                    '${loadingState.response[index].reply}评论',
-                                                    style: textStyle),
+                                                for (var i in loadingState
+                                                    .response[index].title) ...[
+                                                  TextSpan(
+                                                    text: i['text'],
+                                                    style: TextStyle(
+                                                      color: i['type'] == 'em'
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .primary
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface,
+                                                    ),
+                                                  ),
+                                                ]
                                               ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                              Utils.dateFormat(
+                                                  loadingState
+                                                      .response[index].pubTime,
+                                                  formatType: 'detail'),
+                                              style: textStyle),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  '${loadingState.response[index].view}浏览',
+                                                  style: textStyle),
+                                              Text(' • ', style: textStyle),
+                                              Text(
+                                                  '${loadingState.response[index].reply}评论',
+                                                  style: textStyle),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

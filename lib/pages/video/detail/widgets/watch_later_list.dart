@@ -182,60 +182,56 @@ class _MediaListPanelState extends State<MediaListPanel> {
                               },
                             ),
                           ),
+                          const SizedBox(width: 10),
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item.title as String,
-                                    textAlign: TextAlign.start,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: item.bvid == widget.getBvId()
-                                          ? FontWeight.bold
-                                          : null,
-                                      color: item.bvid == widget.getBvId()
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                          : null,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.title as String,
+                                  textAlign: TextAlign.start,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: item.bvid == widget.getBvId()
+                                        ? FontWeight.bold
+                                        : null,
+                                    color: item.bvid == widget.getBvId()
+                                        ? Theme.of(context).colorScheme.primary
+                                        : null,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  item.upper?.name as String,
+                                  style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .fontSize,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Row(
+                                  children: [
+                                    statView(
+                                      context: context,
+                                      theme: 'gray',
+                                      view: item.cntInfo!['play'] as int,
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    item.upper?.name as String,
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .fontSize,
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
+                                    const SizedBox(width: 8),
+                                    statDanMu(
+                                      context: context,
+                                      theme: 'gray',
+                                      danmu: item.cntInfo!['danmaku'] as int,
                                     ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Row(
-                                    children: [
-                                      statView(
-                                        context: context,
-                                        theme: 'gray',
-                                        view: item.cntInfo!['play'] as int,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      statDanMu(
-                                        context: context,
-                                        theme: 'gray',
-                                        danmu: item.cntInfo!['danmaku'] as int,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     );

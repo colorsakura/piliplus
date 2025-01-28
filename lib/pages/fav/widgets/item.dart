@@ -53,7 +53,8 @@ class FavItem extends StatelessWidget {
                       },
                     ),
                   ),
-                  videoContent(context)
+                  const SizedBox(width: 10),
+                  videoContent(context),
                 ],
               ),
             );
@@ -65,43 +66,40 @@ class FavItem extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              favFolderItem.title ?? '',
-              textAlign: TextAlign.start,
-              style: const TextStyle(
-                letterSpacing: 0.3,
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            favFolderItem.title ?? '',
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              letterSpacing: 0.3,
             ),
-            if (favFolderItem.intro?.isNotEmpty == true)
-              Text(
-                favFolderItem.intro!,
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
+          ),
+          if (favFolderItem.intro?.isNotEmpty == true)
             Text(
-              '${favFolderItem.mediaCount}个内容',
+              favFolderItem.intro!,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                 color: Theme.of(context).colorScheme.outline,
               ),
             ),
-            const Spacer(),
-            Text(
-              Utils.isPublicText(favFolderItem.attr ?? 0),
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                color: Theme.of(context).colorScheme.outline,
-              ),
+          Text(
+            '${favFolderItem.mediaCount}个内容',
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              color: Theme.of(context).colorScheme.outline,
             ),
-          ],
-        ),
+          ),
+          const Spacer(),
+          Text(
+            Utils.isPublicText(favFolderItem.attr ?? 0),
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -103,7 +103,8 @@ class VideoCardHMemberVideo extends StatelessWidget {
                         },
                       ),
                     ),
-                    videoContent(context)
+                    const SizedBox(width: 10),
+                    videoContent(context),
                   ],
                 );
               },
@@ -125,66 +126,61 @@ class VideoCardHMemberVideo extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...[
-              Expanded(
-                child: Text(
-                  // videoItem.season?['title'] ?? videoItem.title ?? '',
-                  videoItem.title ?? '',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: videoItem.bvid != null && videoItem.bvid == bvid
-                        ? FontWeight.bold
-                        : null,
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    height: 1.42,
-                    letterSpacing: 0.3,
-                    color: videoItem.bvid != null && videoItem.bvid == bvid
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              // videoItem.season?['title'] ?? videoItem.title ?? '',
+              videoItem.title ?? '',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: videoItem.bvid != null && videoItem.bvid == bvid
+                    ? FontWeight.bold
+                    : null,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                height: 1.42,
+                letterSpacing: 0.3,
+                color: videoItem.bvid != null && videoItem.bvid == bvid
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Text(
+            videoItem.season != null
+                ? Utils.dateFormat(videoItem.season?['mtime'])
+                : videoItem.publishTimeText ?? '',
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+              height: 1,
+              color: Theme.of(context).colorScheme.outline,
+              overflow: TextOverflow.clip,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Row(
+            children: [
+              statView(
+                context: context,
+                theme: 'gray',
+                // view: videoItem.season?['view_content'] ??
+                //     videoItem.viewContent,
+                view: videoItem.viewContent,
+              ),
+              const SizedBox(width: 8),
+              statDanMu(
+                context: context,
+                theme: 'gray',
+                // danmu: videoItem.season?['danmaku'] ?? videoItem.danmaku,
+                danmu: videoItem.danmaku,
               ),
             ],
-            Text(
-              videoItem.season != null
-                  ? Utils.dateFormat(videoItem.season?['mtime'])
-                  : videoItem.publishTimeText ?? '',
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                height: 1,
-                color: Theme.of(context).colorScheme.outline,
-                overflow: TextOverflow.clip,
-              ),
-            ),
-            const SizedBox(height: 3),
-            Row(
-              children: [
-                statView(
-                  context: context,
-                  theme: 'gray',
-                  // view: videoItem.season?['view_content'] ??
-                  //     videoItem.viewContent,
-                  view: videoItem.viewContent,
-                ),
-                const SizedBox(width: 8),
-                statDanMu(
-                  context: context,
-                  theme: 'gray',
-                  // danmu: videoItem.season?['danmaku'] ?? videoItem.danmaku,
-                  danmu: videoItem.danmaku,
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

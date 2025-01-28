@@ -291,7 +291,8 @@ class HistoryItem extends StatelessWidget {
                         ),
                     ],
                   ),
-                  videoContent(context)
+                  const SizedBox(width: 10),
+                  videoContent(context),
                 ],
               ),
             );
@@ -303,113 +304,108 @@ class HistoryItem extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            videoItem.title,
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              letterSpacing: 0.3,
+            ),
+            maxLines: videoItem.videos > 1 ? 1 : 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (videoItem.isFullScreen != null) ...[
+            const SizedBox(height: 2),
             Text(
-              videoItem.title,
+              videoItem.isFullScreen,
               textAlign: TextAlign.start,
-              style: const TextStyle(
-                letterSpacing: 0.3,
-              ),
-              maxLines: videoItem.videos > 1 ? 1 : 2,
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                  color: Theme.of(context).colorScheme.outline),
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            if (videoItem.isFullScreen != null) ...[
-              const SizedBox(height: 2),
-              Text(
-                videoItem.isFullScreen,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    color: Theme.of(context).colorScheme.outline),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-            const Spacer(),
-            if (videoItem.authorName != '')
-              Row(
-                children: [
-                  Text(
-                    videoItem.authorName,
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
-                ],
-              ),
+          ],
+          const Spacer(),
+          if (videoItem.authorName != '')
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  Utils.dateFormat(videoItem.viewAt!),
+                  videoItem.authorName,
                   style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.labelMedium!.fontSize,
-                      color: Theme.of(context).colorScheme.outline),
-                ),
-                SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: PopupMenuButton<String>(
-                    padding: EdgeInsets.zero,
-                    tooltip: '功能菜单',
-                    icon: Icon(
-                      Icons.more_vert_outlined,
-                      color: Theme.of(context).colorScheme.outline,
-                      size: 18,
-                    ),
-                    position: PopupMenuPosition.under,
-                    // constraints: const BoxConstraints(maxHeight: 35),
-                    onSelected: (String type) {},
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<String>>[
-                      if (videoItem.history?.business != 'pgc' &&
-                          videoItem.badge != '番剧' &&
-                          !videoItem.tagName.contains('动画') &&
-                          videoItem.history.business != 'live' &&
-                          !videoItem.history.business.contains('article'))
-                        PopupMenuItem<String>(
-                          onTap: () async {
-                            var res = await UserHttp.toViewLater(
-                                bvid: videoItem.history.bvid);
-                            SmartDialog.showToast(res['msg']);
-                          },
-                          value: 'pause',
-                          height: 35,
-                          child: const Row(
-                            children: [
-                              Icon(Icons.watch_later_outlined, size: 16),
-                              SizedBox(width: 6),
-                              Text('稍后再看', style: TextStyle(fontSize: 13))
-                            ],
-                          ),
-                        ),
-                      PopupMenuItem<String>(
-                        onTap: () => ctr!.delHistory(
-                            videoItem.kid, videoItem.history.business),
-                        value: 'pause',
-                        height: 35,
-                        child: const Row(
-                          children: [
-                            Icon(Icons.close_outlined, size: 16),
-                            SizedBox(width: 6),
-                            Text('删除记录', style: TextStyle(fontSize: 13))
-                          ],
-                        ),
-                      ),
-                    ],
+                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                Utils.dateFormat(videoItem.viewAt!),
+                style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                    color: Theme.of(context).colorScheme.outline),
+              ),
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: PopupMenuButton<String>(
+                  padding: EdgeInsets.zero,
+                  tooltip: '功能菜单',
+                  icon: Icon(
+                    Icons.more_vert_outlined,
+                    color: Theme.of(context).colorScheme.outline,
+                    size: 18,
+                  ),
+                  position: PopupMenuPosition.under,
+                  // constraints: const BoxConstraints(maxHeight: 35),
+                  onSelected: (String type) {},
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    if (videoItem.history?.business != 'pgc' &&
+                        videoItem.badge != '番剧' &&
+                        !videoItem.tagName.contains('动画') &&
+                        videoItem.history.business != 'live' &&
+                        !videoItem.history.business.contains('article'))
+                      PopupMenuItem<String>(
+                        onTap: () async {
+                          var res = await UserHttp.toViewLater(
+                              bvid: videoItem.history.bvid);
+                          SmartDialog.showToast(res['msg']);
+                        },
+                        value: 'pause',
+                        height: 35,
+                        child: const Row(
+                          children: [
+                            Icon(Icons.watch_later_outlined, size: 16),
+                            SizedBox(width: 6),
+                            Text('稍后再看', style: TextStyle(fontSize: 13))
+                          ],
+                        ),
+                      ),
+                    PopupMenuItem<String>(
+                      onTap: () => ctr!.delHistory(
+                          videoItem.kid, videoItem.history.business),
+                      value: 'pause',
+                      height: 35,
+                      child: const Row(
+                        children: [
+                          Icon(Icons.close_outlined, size: 16),
+                          SizedBox(width: 6),
+                          Text('删除记录', style: TextStyle(fontSize: 13))
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

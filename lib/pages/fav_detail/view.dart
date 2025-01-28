@@ -61,6 +61,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           floatingActionButton: Obx(
             () => (_favDetailController.item.value.mediaCount ?? -1) > 0
                 ? FloatingActionButton.extended(

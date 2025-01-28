@@ -62,7 +62,8 @@ class SubItem extends StatelessWidget {
                       },
                     ),
                   ),
-                  videoContent(context)
+                  const SizedBox(width: 10),
+                  videoContent(context),
                 ],
               ),
             );
@@ -84,39 +85,36 @@ class SubItem extends StatelessWidget {
     return Expanded(
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  subFolderItem.title!,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    letterSpacing: 0.3,
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                subFolderItem.title!,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  letterSpacing: 0.3,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  '[$typeString] UP主：${subFolderItem.upper!.name!}',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '[$typeString] UP主：${subFolderItem.upper!.name!}',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  '${subFolderItem.mediaCount}个视频',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '${subFolderItem.mediaCount}个视频',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
-                const Spacer(),
-              ],
-            ),
+              ),
+              const Spacer(),
+            ],
           ),
           Positioned(
             bottom: 0,

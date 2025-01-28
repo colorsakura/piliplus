@@ -39,51 +39,55 @@ class VideoCardHSkeleton extends StatelessWidget {
                   ),
                   // VideoContent(videoItem: videoItem)
                   Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 4, 6, 4),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          color: Theme.of(context).colorScheme.onInverseSurface,
-                          width: 200,
-                          height: 11,
-                          margin: const EdgeInsets.only(bottom: 5),
-                        ),
-                        Container(
-                          color: Theme.of(context).colorScheme.onInverseSurface,
-                          width: 150,
-                          height: 13,
-                        ),
-                        const Spacer(),
-                        Container(
-                          color: Theme.of(context).colorScheme.onInverseSurface,
-                          width: 100,
-                          height: 13,
-                          margin: const EdgeInsets.only(bottom: 5),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onInverseSurface,
-                              width: 40,
-                              height: 13,
-                              margin: const EdgeInsets.only(right: 8),
-                            ),
-                            Container(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onInverseSurface,
-                              width: 40,
-                              height: 13,
-                            ),
-                          ],
-                        )
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 4, 6, 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            color:
+                                Theme.of(context).colorScheme.onInverseSurface,
+                            width: 200,
+                            height: 11,
+                            margin: const EdgeInsets.only(bottom: 5),
+                          ),
+                          Container(
+                            color:
+                                Theme.of(context).colorScheme.onInverseSurface,
+                            width: 150,
+                            height: 13,
+                          ),
+                          const Spacer(),
+                          Container(
+                            color:
+                                Theme.of(context).colorScheme.onInverseSurface,
+                            width: 100,
+                            height: 13,
+                            margin: const EdgeInsets.only(bottom: 5),
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
+                                width: 40,
+                                height: 13,
+                                margin: const EdgeInsets.only(right: 8),
+                              ),
+                              Container(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
+                                width: 40,
+                                height: 13,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
             );

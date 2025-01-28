@@ -314,10 +314,9 @@ class VideoCardV extends StatelessWidget {
           const Spacer(),
           Expanded(
               flex: 0,
-              child: RichText(
+              child: Text.rich(
                 maxLines: 1,
-                textScaler: MediaQuery.textScalerOf(context),
-                text: TextSpan(
+                TextSpan(
                     style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.labelSmall!.fontSize,
@@ -337,10 +336,9 @@ class VideoCardV extends StatelessWidget {
           const Spacer(),
           Expanded(
               flex: 0,
-              child: RichText(
+              child: Text.rich(
                 maxLines: 1,
-                textScaler: MediaQuery.textScalerOf(context),
-                text: TextSpan(
+                TextSpan(
                     style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.labelSmall!.fontSize,

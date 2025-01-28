@@ -127,9 +127,8 @@ class LiveContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            RichText(
-              textScaler: MediaQuery.textScalerOf(context),
-              text: TextSpan(
+            Text.rich(
+              TextSpan(
                 children: [
                   for (var i in liveItem.title) ...[
                     TextSpan(

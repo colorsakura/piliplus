@@ -97,7 +97,8 @@ class SubVideoCardH extends StatelessWidget {
                       },
                     ),
                   ),
-                  videoContent(context)
+                  const SizedBox(width: 10),
+                  videoContent(context),
                 ],
               ),
             );
@@ -109,52 +110,48 @@ class SubVideoCardH extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 2, 6, 0),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${videoItem.title}',
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    letterSpacing: 0.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${videoItem.title}',
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  letterSpacing: 0.3,
                 ),
-                const Spacer(),
-                Text(
-                  Utils.dateFormat(videoItem.pubtime),
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: Theme.of(context).colorScheme.outline),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+              Text(
+                Utils.dateFormat(videoItem.pubtime),
+                style: TextStyle(
+                    fontSize: 11, color: Theme.of(context).colorScheme.outline),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Row(
+                  children: [
+                    statView(
+                      context: context,
+                      theme: 'gray',
+                      view: videoItem.cntInfo?['play'],
+                    ),
+                    const SizedBox(width: 8),
+                    statDanMu(
+                      context: context,
+                      theme: 'gray',
+                      danmu: videoItem.cntInfo?['danmaku'],
+                    ),
+                    const Spacer(),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: Row(
-                    children: [
-                      statView(
-                        context: context,
-                        theme: 'gray',
-                        view: videoItem.cntInfo?['play'],
-                      ),
-                      const SizedBox(width: 8),
-                      statDanMu(
-                        context: context,
-                        theme: 'gray',
-                        danmu: videoItem.cntInfo?['danmaku'],
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

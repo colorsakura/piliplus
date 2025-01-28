@@ -58,7 +58,8 @@ class SeasonSeriesCard extends StatelessWidget {
                 },
               ),
             ),
-            videoContent(context)
+            const SizedBox(width: 10),
+            videoContent(context),
           ],
         ),
       ),
@@ -67,36 +68,33 @@ class SeasonSeriesCard extends StatelessWidget {
 
   Widget videoContent(context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 6, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              item['meta']['name'],
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                height: 1.42,
-                letterSpacing: 0.3,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item['meta']['name'],
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              height: 1.42,
+              letterSpacing: 0.3,
             ),
-            const Spacer(),
-            Text(
-              Utils.dateFormat(item['meta']['ptime']),
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-                height: 1,
-                color: Theme.of(context).colorScheme.outline,
-                overflow: TextOverflow.clip,
-              ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          Text(
+            Utils.dateFormat(item['meta']['ptime']),
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+              height: 1,
+              color: Theme.of(context).colorScheme.outline,
+              overflow: TextOverflow.clip,
             ),
-            const Spacer(),
-          ],
-        ),
+          ),
+          const Spacer(),
+        ],
       ),
     );
   }
