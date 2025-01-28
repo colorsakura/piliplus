@@ -339,14 +339,20 @@ class Utils {
     }
   }
 
-  static void onHorizontalPreview(GlobalKey<ScaffoldState> key,
-      transitionAnimationController, ctr, imgList, index, onClose) {
+  static void onHorizontalPreview(
+    GlobalKey<ScaffoldState> key,
+    transitionAnimationController,
+    ctr,
+    List<String> imgList,
+    index,
+    onClose,
+  ) {
     key.currentState?.showBottomSheet(
       (context) {
         return FadeTransition(
           opacity: Tween<double>(begin: 0, end: 1).animate(ctr),
           child: InteractiveviewerGallery(
-            sources: imgList,
+            sources: imgList.map((url) => SourceModel(url: url)).toList(),
             initIndex: index,
             setStatusBar: false,
             onClose: onClose,

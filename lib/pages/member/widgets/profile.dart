@@ -1,3 +1,5 @@
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
+    show SourceModel;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,10 @@ class ProfilePanel extends StatelessWidget {
                   GestureDetector(
                     onTap: () => context.imageView(
                       imgList: [
-                        !loadingStatus ? memberInfo.face : ctr.face.value
+                        SourceModel(
+                          url:
+                              !loadingStatus ? memberInfo.face : ctr.face.value,
+                        )
                       ],
                     ),
                     child: NetworkImgLayer(
