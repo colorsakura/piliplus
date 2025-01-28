@@ -468,8 +468,14 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               //   });
               // },
             ),
-          SourceType.livePhoto =>
-            IgnorePointer(child: Video(controller: _videoController!)),
+          SourceType.livePhoto => Obx(() => currentIndex.value == index
+              ? IgnorePointer(
+                  child: Video(
+                    controller: _videoController!,
+                    fill: Colors.transparent,
+                  ),
+                )
+              : const SizedBox.shrink()),
         },
       ),
     );

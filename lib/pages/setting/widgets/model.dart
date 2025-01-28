@@ -1917,7 +1917,7 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '预览 Live Photo',
-        subtitle: '开启则以视频形式预览Live Photo，否则预览静态图片',
+        subtitle: '开启则以视频形式预览 Live Photo，否则预览静态图片',
         leading: Icon(Icons.image_outlined),
         setKey: SettingBoxKey.enableLivePhoto,
         defaultVal: true,

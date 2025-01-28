@@ -162,7 +162,7 @@ Widget imageview(
                 },
               ),
             ),
-            if (picArr[index].liveUrl?.isNotEmpty == true)
+            if (picArr[index].isLivePhoto)
               const PBadge(
                 text: 'Live',
                 right: 8,
