@@ -31,6 +31,13 @@ class AuthorPanel extends StatelessWidget {
     this.onRemove,
   });
 
+  Widget _buildAvatar(double size) => NetworkImgLayer(
+        width: size,
+        height: size,
+        type: 'avatar',
+        src: item.modules.moduleAuthor.face,
+      );
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -57,12 +64,14 @@ class AuthorPanel extends StatelessWidget {
                     },
                   );
                 },
-                child: NetworkImgLayer(
-                  width: 40,
-                  height: 40,
-                  type: 'avatar',
-                  src: item.modules.moduleAuthor.face,
-                ),
+                child: (item.modules.moduleAuthor?.pendant?['image'] as String?)
+                            ?.isNotEmpty ==
+                        true
+                    ? Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: _buildAvatar(34),
+                      )
+                    : _buildAvatar(40),
               ),
               const SizedBox(width: 10),
               Column(
@@ -137,58 +146,59 @@ class AuthorPanel extends StatelessWidget {
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    GestureDetector(
-                      onTap:
-                          item.modules.moduleAuthor.decorate['jump_url'] != null
-                              ? () {
-                                  Get.toNamed(
-                                    '/webview',
-                                    parameters: {
-                                      'url':
-                                          '${item.modules.moduleAuthor.decorate['jump_url']}'
-                                    },
-                                  );
-                                }
-                              : null,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.centerRight,
-                        children: [
-                          CachedNetworkImage(
-                            height: 32,
-                            imageUrl:
-                                item.modules.moduleAuthor.decorate['card_url'],
-                          ),
-                          if ((item.modules.moduleAuthor.decorate?['fan']
-                                      ?['num_str'] as String?)
-                                  ?.isNotEmpty ==
-                              true)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 32),
-                              child: Text(
-                                '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontFamily: 'digital_id_num',
-                                  color: (item.modules.moduleAuthor
-                                                      .decorate?['fan']
-                                                  ?['color'] as String?)
-                                              ?.startsWith('#') ==
-                                          true
-                                      ? Color(
-                                          int.parse(
-                                            item.modules.moduleAuthor
-                                                .decorate['fan']['color']
-                                                .replaceFirst('#', '0xFF'),
-                                          ),
-                                        )
-                                      : null,
-                                ),
+                    // GestureDetector(
+                    //   onTap:
+                    //       item.modules.moduleAuthor.decorate['jump_url'] != null
+                    //           ? () {
+                    //               Get.toNamed(
+                    //                 '/webview',
+                    //                 parameters: {
+                    //                   'url':
+                    //                       '${item.modules.moduleAuthor.decorate['jump_url']}'
+                    //                 },
+                    //               );
+                    //             }
+                    //           : null,
+                    //   child:
+                    Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.centerRight,
+                      children: [
+                        CachedNetworkImage(
+                          height: 32,
+                          imageUrl:
+                              item.modules.moduleAuthor.decorate['card_url'],
+                        ),
+                        if ((item.modules.moduleAuthor.decorate?['fan']
+                                    ?['num_str'] as String?)
+                                ?.isNotEmpty ==
+                            true)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 32),
+                            child: Text(
+                              '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontFamily: 'digital_id_num',
+                                color:
+                                    (item.modules.moduleAuthor.decorate?['fan']
+                                                    ?['color'] as String?)
+                                                ?.startsWith('#') ==
+                                            true
+                                        ? Color(
+                                            int.parse(
+                                              item.modules.moduleAuthor
+                                                  .decorate['fan']['color']
+                                                  .replaceFirst('#', '0xFF'),
+                                            ),
+                                          )
+                                        : null,
                               ),
                             ),
-                        ],
-                      ),
+                          ),
+                      ],
                     ),
+                    // ),
                     _moreWidget(context),
                   ],
                 )

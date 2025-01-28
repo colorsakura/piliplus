@@ -4,9 +4,11 @@ import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -89,40 +91,116 @@ class ReplyItemGrpc extends StatelessWidget {
             },
           );
         },
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
-              child: content(context),
-            ),
-            if (needDivider)
-              Divider(
-                indent: 55,
-                endIndent: 15,
-                height: 0.3,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onInverseSurface
-                    .withOpacity(0.5),
-              )
-          ],
-        ),
+        child: _buildContent(context),
       ),
     );
   }
 
-  Widget lfAvtar(BuildContext context, String heroTag) {
-    return Stack(
+  Widget _buildAuthorPanel(context) => Padding(
+        padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
+        child: content(context),
+      );
+
+  Widget _buildContent(context) {
+    print(replyItem.member.garbCardImage);
+    return Column(
       children: [
-        Hero(
-          tag: heroTag,
-          child: NetworkImgLayer(
+        if (ModuleAuthorModel.showDynDecorate &&
+            replyItem.member.hasGarbCardImage())
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                top: 8,
+                right: 12,
+                // child: GestureDetector(
+                //   onTap: replyItem.member.garbCardJumpUrl.isNotEmpty
+                //       ? () {
+                //           Get.toNamed(
+                //             'webview',
+                //             parameters: {
+                //               'url': replyItem.member.garbCardJumpUrl
+                //             },
+                //           );
+                //         }
+                //       : null,
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    CachedNetworkImage(
+                      height: 38,
+                      imageUrl: replyItem.member.garbCardImage,
+                    ),
+                    if (replyItem.member.hasGarbCardNumber())
+                      Text(
+                        'NO.\n${replyItem.member.garbCardNumber}',
+                        style: replyItem.member.garbCardFanColor.startsWith('#')
+                            ? TextStyle(
+                                fontSize: 8,
+                                fontFamily: 'digital_id_num',
+                                color: Color(
+                                  int.parse(
+                                    replyItem.member.garbCardFanColor
+                                        .replaceFirst('#', '0xFF'),
+                                  ),
+                                ),
+                              )
+                            : null,
+                      ),
+                  ],
+                ),
+              ),
+              // ),
+              _buildAuthorPanel(context),
+            ],
+          )
+        else
+          _buildAuthorPanel(context),
+        if (needDivider)
+          Divider(
+            indent: 55,
+            endIndent: 15,
+            height: 0.3,
+            color:
+                Theme.of(context).colorScheme.onInverseSurface.withOpacity(0.5),
+          )
+      ],
+    );
+  }
+
+  Widget lfAvtar(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        if (ModuleAuthorModel.showDynDecorate &&
+            replyItem.member.hasGarbPendantImage()) ...[
+          Padding(
+            padding: const EdgeInsets.all(2),
+            child: NetworkImgLayer(
+              src: replyItem.member.face,
+              width: 30,
+              height: 30,
+              type: 'avatar',
+            ),
+          ),
+          Positioned(
+            left: -9,
+            top: -9,
+            child: IgnorePointer(
+              child: CachedNetworkImage(
+                width: 52,
+                height: 52,
+                imageUrl: replyItem.member.garbPendantImage,
+              ),
+            ),
+          ),
+        ] else
+          NetworkImgLayer(
             src: replyItem.member.face,
             width: 34,
             height: 34,
             type: 'avatar',
           ),
-        ),
         if (replyItem.member.vipStatus > 0)
           Positioned(
             right: 0,
@@ -182,28 +260,29 @@ class ReplyItemGrpc extends StatelessWidget {
   }
 
   Widget content(BuildContext context) {
-    final String heroTag = Utils.makeHeroTag(replyItem.mid);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         /// fix Stack内GestureDetector  onTap无效
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
             feedBack();
-            Get.toNamed('/member?mid=${replyItem.mid}',
-                arguments: {'face': replyItem.member.face, 'heroTag': heroTag});
+            Get.toNamed('/member?mid=${replyItem.mid}');
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              lfAvtar(context, heroTag),
+              lfAvtar(context),
               const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         replyItem.member.name,
@@ -232,6 +311,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     ],
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
                         Utils.dateFormat(replyItem.ctime.toInt()),
@@ -496,15 +576,9 @@ class ReplyItemGrpc extends StatelessWidget {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   feedBack();
-                                  final String heroTag = Utils.makeHeroTag(
-                                      replyItem.replies[i].member.mid);
                                   Get.toNamed(
-                                      '/member?mid=${replyItem.replies[i].member.mid}',
-                                      arguments: {
-                                        'face':
-                                            replyItem.replies[i].member.face,
-                                        'heroTag': heroTag
-                                      });
+                                    '/member?mid=${replyItem.replies[i].member.mid}',
+                                  );
                                 },
                             ),
                             if (replyItem.replies[i].mid == upMid) ...[
@@ -715,11 +789,7 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  final String heroTag = Utils.makeHeroTag(userId);
-                  Get.toNamed(
-                    '/member?mid=$userId',
-                    arguments: {'face': '', 'heroTag': heroTag},
-                  );
+                  Get.toNamed('/member?mid=$userId');
                 },
             ),
           );

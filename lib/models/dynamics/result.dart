@@ -129,6 +129,7 @@ class ModuleAuthorModel {
     this.type,
     this.vip,
     this.decorate,
+    this.pendant,
   });
 
   String? face;
@@ -143,7 +144,7 @@ class ModuleAuthorModel {
   String? type;
   Map? vip;
   Map? decorate;
-  // Map? pendant;
+  Map? pendant;
 
   ModuleAuthorModel.fromJson(Map<String, dynamic> json) {
     face = json['face'];
@@ -159,7 +160,7 @@ class ModuleAuthorModel {
     vip = json['vip'];
     if (showDynDecorate) {
       decorate = json['decorate'];
-      // pendant = json['pendant'];
+      pendant = json['pendant'];
     }
   }
 

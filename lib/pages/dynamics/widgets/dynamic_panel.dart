@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'action_panel.dart';
 import 'author_panel.dart';
@@ -79,27 +80,50 @@ class DynamicPanel extends StatelessWidget {
               );
             }
           },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-                child: AuthorPanel(
-                  item: item,
-                  source: source,
-                  onRemove: onRemove,
-                ),
-              ),
-              if (item!.modules!.moduleDynamic!.desc != null ||
-                  item!.modules!.moduleDynamic!.major != null)
-                content(context, item, source, callback),
-              forWard(item, context, source, callback),
-              const SizedBox(height: 2),
-              if (source == null) ActionPanel(item: item),
-            ],
-          ),
+          child: (item.modules.moduleAuthor?.pendant?['image'] as String?)
+                      ?.isNotEmpty ==
+                  true
+              ? Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    _buildContent(context, item, source, callback),
+                    Positioned(
+                      left: 2,
+                      top: 2,
+                      child: IgnorePointer(
+                        child: CachedNetworkImage(
+                          width: 60,
+                          height: 60,
+                          imageUrl: item.modules.moduleAuthor.pendant['image'],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : _buildContent(context, item, source, callback),
         ),
       ),
     );
   }
+
+  Widget _buildContent(context, item, source, callback) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+            child: AuthorPanel(
+              item: item,
+              source: source,
+              onRemove: onRemove,
+            ),
+          ),
+          if (item!.modules!.moduleDynamic!.desc != null ||
+              item!.modules!.moduleDynamic!.major != null)
+            content(context, item, source, callback),
+          forWard(item, context, source, callback),
+          const SizedBox(height: 2),
+          if (source == null) ActionPanel(item: item),
+        ],
+      );
 }

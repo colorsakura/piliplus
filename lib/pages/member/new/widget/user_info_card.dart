@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/space/card.dart' as space;
 import 'package:PiliPlus/models/space/images.dart' as space;
 import 'package:PiliPlus/utils/extension.dart';
@@ -444,22 +445,22 @@ class UserInfoCard extends StatelessWidget {
         ),
       );
 
-  _buildAvatar(BuildContext context) => Hero(
-        tag: card.face ?? 'avatarTag',
-        child: GestureDetector(
-          onTap: () {
-            context.imageView(
-              imgList: [card.face ?? 'avatarTag'],
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2.5,
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              shape: BoxShape.circle,
-            ),
+  _buildAvatar(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2.5,
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          shape: BoxShape.circle,
+        ),
+        child: Hero(
+          tag: card.face ?? 'avatarTag',
+          child: GestureDetector(
+            onTap: () {
+              context.imageView(
+                imgList: [card.face ?? 'avatarTag'],
+              );
+            },
             child: NetworkImgLayer(
               src: card.face,
               type: 'avatar',
@@ -489,6 +490,19 @@ class UserInfoCard extends StatelessWidget {
                 left: 20,
                 child: _buildAvatar(context),
               ),
+              if (ModuleAuthorModel.showDynDecorate &&
+                  card.pendant?.image?.isNotEmpty == true)
+                Positioned(
+                  top: 82.5,
+                  left: -7.5,
+                  child: IgnorePointer(
+                    child: CachedNetworkImage(
+                      width: 140,
+                      height: 140,
+                      imageUrl: card.pendant!.image!,
+                    ),
+                  ),
+                ),
               if (card.officialVerify?.icon?.isNotEmpty == true ||
                   (card.vip?.vipStatus ?? -1) > 0)
                 Positioned(
@@ -572,6 +586,19 @@ class UserInfoCard extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     _buildAvatar(context),
+                    if (ModuleAuthorModel.showDynDecorate &&
+                        card.pendant?.image?.isNotEmpty == true)
+                      Positioned(
+                        top: -27.5,
+                        left: -27.5,
+                        child: IgnorePointer(
+                          child: CachedNetworkImage(
+                            width: 140,
+                            height: 140,
+                            imageUrl: card.pendant!.image!,
+                          ),
+                        ),
+                      ),
                     if (card.officialVerify?.icon?.isNotEmpty == true ||
                         (card.vip?.vipStatus ?? -1) > 0)
                       Positioned(

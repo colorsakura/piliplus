@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -77,10 +79,56 @@ class ReplyItem extends StatelessWidget {
         },
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
-              child: content(context),
-            ),
+            if (ModuleAuthorModel.showDynDecorate &&
+                (replyItem?.member?.userSailing?.cardbg?['image'] as String?)
+                        ?.isNotEmpty ==
+                    true)
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: 8,
+                    right: 12,
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        CachedNetworkImage(
+                          height: 38,
+                          imageUrl:
+                              replyItem?.member?.userSailing?.cardbg?['image'],
+                        ),
+                        if ((replyItem?.member?.userSailing?.cardbg?['fan']
+                                    ?['num_desc'] as String?)
+                                ?.isNotEmpty ==
+                            true)
+                          Text(
+                            'NO.\n${replyItem?.member?.userSailing?.cardbg?['fan']?['num_desc']}',
+                            style:
+                                (replyItem?.member?.userSailing?.cardbg?['fan']
+                                                ?['color'] as String?)
+                                            ?.startsWith('#') ==
+                                        true
+                                    ? TextStyle(
+                                        fontSize: 8,
+                                        fontFamily: 'digital_id_num',
+                                        color: Color(
+                                          int.parse(
+                                            replyItem?.member?.userSailing
+                                                ?.cardbg?['fan']?['color']
+                                                .replaceFirst('#', '0xFF'),
+                                          ),
+                                        ),
+                                      )
+                                    : null,
+                          ),
+                      ],
+                    ),
+                  ),
+                  _buildAuthorPanel(context),
+                ],
+              )
+            else
+              _buildAuthorPanel(context),
             if (needDivider)
               Divider(
                 indent: 55,
@@ -97,18 +145,44 @@ class ReplyItem extends StatelessWidget {
     );
   }
 
-  Widget lfAvtar(BuildContext context, String heroTag) {
+  Widget _buildAuthorPanel(context) => Padding(
+        padding: const EdgeInsets.fromLTRB(12, 14, 8, 5),
+        child: content(context),
+      );
+
+  Widget lfAvtar(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
-        Hero(
-          tag: heroTag,
-          child: NetworkImgLayer(
+        if (ModuleAuthorModel.showDynDecorate &&
+            replyItem?.member?.pendant?.image?.isNotEmpty == true) ...[
+          Padding(
+            padding: const EdgeInsets.all(2),
+            child: NetworkImgLayer(
+              src: replyItem!.member!.avatar,
+              width: 30,
+              height: 30,
+              type: 'avatar',
+            ),
+          ),
+          Positioned(
+            left: -9,
+            top: -9,
+            child: IgnorePointer(
+              child: CachedNetworkImage(
+                width: 52,
+                height: 52,
+                imageUrl: replyItem!.member!.pendant!.image!,
+              ),
+            ),
+          ),
+        ] else
+          NetworkImgLayer(
             src: replyItem!.member!.avatar,
             width: 34,
             height: 34,
             type: 'avatar',
           ),
-        ),
         if (replyItem!.member!.vip!['vipStatus'] > 0)
           Positioned(
             right: 0,
@@ -171,27 +245,25 @@ class ReplyItem extends StatelessWidget {
 
   Widget content(BuildContext context) {
     if (replyItem?.member == null) return const SizedBox();
-    final String heroTag = Utils.makeHeroTag(replyItem!.mid);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         /// fix Stack内GestureDetector  onTap无效
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
             feedBack();
-            Get.toNamed('/member?mid=${replyItem!.mid}', arguments: {
-              'face': replyItem!.member!.avatar!,
-              'heroTag': heroTag
-            });
+            Get.toNamed('/member?mid=${replyItem!.mid}');
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              lfAvtar(context, heroTag),
+              lfAvtar(context),
               const SizedBox(width: 12),
               Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -223,6 +295,7 @@ class ReplyItem extends StatelessWidget {
                     ],
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
                         Utils.dateFormat(replyItem!.ctime),
@@ -470,14 +543,8 @@ class ReplyItem extends StatelessWidget {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   feedBack();
-                                  final String heroTag = Utils.makeHeroTag(
-                                      replies![i].member!.mid);
                                   Get.toNamed(
-                                      '/member?mid=${replies![i].member!.mid}',
-                                      arguments: {
-                                        'face': replies![i].member!.avatar,
-                                        'heroTag': heroTag
-                                      });
+                                      '/member?mid=${replies![i].member!.mid}');
                                 },
                             ),
                             if (replies![i].isUp!) ...[
@@ -682,11 +749,7 @@ class ReplyItem extends StatelessWidget {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  final String heroTag = Utils.makeHeroTag(userId);
-                  Get.toNamed(
-                    '/member?mid=$userId',
-                    arguments: {'face': '', 'heroTag': heroTag},
-                  );
+                  Get.toNamed('/member?mid=$userId');
                 },
             ),
           );

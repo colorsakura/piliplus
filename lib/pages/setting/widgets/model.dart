@@ -1908,7 +1908,7 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
-        title: '展示动态装饰',
+        title: '展示头像/评论/动态装饰',
         leading: Icon(MdiIcons.stickerCircleOutline),
         setKey: SettingBoxKey.showDynDecorate,
         defaultVal: true,
