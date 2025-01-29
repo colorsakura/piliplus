@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -59,8 +60,7 @@ class BangumiIntroController extends CommonController {
   dynamic videoTags;
   bool isLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
-  List addMediaIdsNew = [];
-  List delMediaIdsNew = [];
+  List? favIds;
   dynamic userInfo;
 
   late final enableQuickFav =
@@ -314,12 +314,20 @@ class BangumiIntroController extends CommonController {
       });
       return;
     }
+
+    List addMediaIdsNew = [];
+    List delMediaIdsNew = [];
     try {
       for (var i in favFolderData.value.list!.toList()) {
+        bool isFaved = favIds?.contains(i.id) == true;
         if (i.favState == 1) {
-          addMediaIdsNew.add(i.id);
+          if (isFaved.not) {
+            addMediaIdsNew.add(i.id);
+          }
         } else {
-          delMediaIdsNew.add(i.id);
+          if (isFaved) {
+            delMediaIdsNew.add(i.id);
+          }
         }
       }
     } catch (_) {}
@@ -330,8 +338,6 @@ class BangumiIntroController extends CommonController {
       delIds: delMediaIdsNew.join(','),
     );
     if (result['status']) {
-      addMediaIdsNew = [];
-      delMediaIdsNew = [];
       SmartDialog.showToast('操作成功');
       Get.back();
       Future.delayed(const Duration(milliseconds: 255), () {
@@ -394,14 +400,10 @@ class BangumiIntroController extends CommonController {
   onChoose(bool checkValue, int index) {
     feedBack();
     List<FavFolderItemData> datalist = favFolderData.value.list!;
-    for (var i = 0; i < datalist.length; i++) {
-      if (i == index) {
-        datalist[i].favState = checkValue == true ? 1 : 0;
-        datalist[i].mediaCount = checkValue == true
-            ? datalist[i].mediaCount! + 1
-            : datalist[i].mediaCount! - 1;
-      }
-    }
+    datalist[index].favState = checkValue ? 1 : 0;
+    datalist[index].mediaCount = checkValue
+        ? datalist[index].mediaCount! + 1
+        : datalist[index].mediaCount! - 1;
     favFolderData.value.list = datalist;
     favFolderData.refresh();
   }
@@ -487,6 +489,7 @@ class BangumiIntroController extends CommonController {
   }
 
   Future queryVideoInFolder() async {
+    favIds = null;
     var result = await VideoHttp.videoInFolder(
       mid: userInfo.mid,
       rid: epId, // bangumi
@@ -494,6 +497,10 @@ class BangumiIntroController extends CommonController {
     );
     if (result['status']) {
       favFolderData.value = result['data'];
+      favIds = favFolderData.value.list
+          ?.where((item) => item.favState == 1)
+          .map((item) => item.id)
+          .toList();
     }
     return result;
   }

@@ -103,8 +103,8 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
                 picsNodes(item.modules.moduleDynamic.major.opus.pics, callback),
                 // semanticsLabel: '动态图片',
               ),
-              if (item.modules.moduleDynamic.additional != null)
-                const SizedBox(height: 4),
+              // if (item.modules.moduleDynamic.additional != null)
+              //   const SizedBox(height: 4),
             ],
             const SizedBox(height: 4),
           ],

@@ -61,8 +61,7 @@ class VideoIntroController extends GetxController
   RxBool hasFav = false.obs;
   bool isLogin = false;
   Rx<FavFolderData> favFolderData = FavFolderData().obs;
-  List addMediaIdsNew = [];
-  List delMediaIdsNew = [];
+  List? favIds;
   // 关注状态 默认未关注
   RxMap followStatus = {}.obs;
 
@@ -414,12 +413,20 @@ class VideoIntroController extends GetxController
       });
       return;
     }
+
+    List addMediaIdsNew = [];
+    List delMediaIdsNew = [];
     try {
       for (var i in favFolderData.value.list!.toList()) {
+        bool isFaved = favIds?.contains(i.id) == true;
         if (i.favState == 1) {
-          addMediaIdsNew.add(i.id);
+          if (isFaved.not) {
+            addMediaIdsNew.add(i.id);
+          }
         } else {
-          delMediaIdsNew.add(i.id);
+          if (isFaved) {
+            delMediaIdsNew.add(i.id);
+          }
         }
       }
     } catch (e) {
@@ -433,8 +440,6 @@ class VideoIntroController extends GetxController
     );
     SmartDialog.dismiss();
     if (result['status']) {
-      addMediaIdsNew = [];
-      delMediaIdsNew = [];
       Get.back();
       // 重新获取收藏状态
       await queryHasFavVideo();
@@ -495,10 +500,15 @@ class VideoIntroController extends GetxController
   }
 
   Future queryVideoInFolder() async {
+    favIds = null;
     var result = await VideoHttp.videoInFolder(
         mid: userInfo.mid, rid: IdUtils.bv2av(bvid));
     if (result['status']) {
       favFolderData.value = result['data'];
+      favIds = favFolderData.value.list
+          ?.where((item) => item.favState == 1)
+          .map((item) => item.id)
+          .toList();
     }
     return result;
   }
@@ -507,14 +517,10 @@ class VideoIntroController extends GetxController
   onChoose(bool checkValue, int index) {
     feedBack();
     List<FavFolderItemData> datalist = favFolderData.value.list!;
-    for (var i = 0; i < datalist.length; i++) {
-      if (i == index) {
-        datalist[i].favState = checkValue == true ? 1 : 0;
-        datalist[i].mediaCount = checkValue == true
-            ? datalist[i].mediaCount! + 1
-            : datalist[i].mediaCount! - 1;
-      }
-    }
+    datalist[index].favState = checkValue ? 1 : 0;
+    datalist[index].mediaCount = checkValue
+        ? datalist[index].mediaCount! + 1
+        : datalist[index].mediaCount! - 1;
     favFolderData.value.list = datalist;
     favFolderData.refresh();
   }
