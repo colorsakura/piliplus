@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -1587,8 +1585,10 @@ class PlPlayerController {
     dynamic res = await Request().get(
       'https://api.bilibili.com/x/player/videoshot',
       queryParameters: {
-        'aid': IdUtils.bv2av(_bvid),
+        // 'aid': IdUtils.bv2av(_bvid),
+        'bvid': _bvid,
         'cid': _cid,
+        'index': 1,
       },
     );
     if (res.data['code'] == 0) {

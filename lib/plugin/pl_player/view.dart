@@ -1511,7 +1511,13 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
                     .clamp(8, constraints.maxWidth - 48 * scale - 8);
 
             // index
-            int index = plPlayerController.sliderPositionSeconds.value ~/ 5;
+            // int index = plPlayerController.sliderPositionSeconds.value ~/ 5;
+            int index = (List<int>.from(
+                        plPlayerController.videoShot!['data']['index'])
+                    .where((item) =>
+                        item <= plPlayerController.sliderPositionSeconds.value)
+                    .length -
+                2);
 
             // pageIndex
             int pageIndex = (index ~/ 100).clamp(
@@ -1560,7 +1566,8 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
                 ),
               ),
             );
-          } catch (_) {
+          } catch (e) {
+            debugPrint('seek preview: $e');
             return SizedBox.shrink(
               key: ValueKey(plPlayerController.localPosition.value),
             );
