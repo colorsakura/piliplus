@@ -41,11 +41,15 @@ class SourceModel {
   final SourceType sourceType;
   final String url;
   final String? liveUrl;
+  final int? width;
+  final int? height;
 
   const SourceModel({
     this.sourceType = SourceType.networkImage,
     required this.url,
     this.liveUrl,
+    this.width,
+    this.height,
   });
 }
 
@@ -387,17 +391,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                             },
                             child: const Text("保存图片"),
                           ),
-                          if (widget.sources[currentIndex.value].sourceType ==
-                              SourceType.livePhoto)
-                            PopupMenuItem(
-                              onTap: () {
-                                DownloadUtils.downloadVideo(
-                                  context,
-                                  widget.sources[currentIndex.value].liveUrl!,
-                                );
-                              },
-                              child: const Text("保存 Live"),
-                            ),
                           if (widget.sources.length > 1)
                             PopupMenuItem(
                               onTap: () {
@@ -409,6 +402,23 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                                 );
                               },
                               child: const Text("保存全部图片"),
+                            ),
+                          if (widget.sources[currentIndex.value].sourceType ==
+                              SourceType.livePhoto)
+                            PopupMenuItem(
+                              onTap: () {
+                                DownloadUtils.downloadLivePhoto(
+                                  context: context,
+                                  url: widget.sources[currentIndex.value].url,
+                                  liveUrl: widget
+                                      .sources[currentIndex.value].liveUrl!,
+                                  width:
+                                      widget.sources[currentIndex.value].width!,
+                                  height: widget
+                                      .sources[currentIndex.value].height!,
+                                );
+                              },
+                              child: const Text("保存 Live Photo"),
                             ),
                         ];
                       },
@@ -565,22 +575,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                 dense: true,
                 title: const Text('保存图片', style: TextStyle(fontSize: 14)),
               ),
-              if (widget.sources[currentIndex.value].sourceType ==
-                  SourceType.livePhoto)
-                ListTile(
-                  onTap: () {
-                    Get.back();
-                    DownloadUtils.downloadVideo(
-                      context,
-                      widget.sources[currentIndex.value].liveUrl!,
-                    );
-                  },
-                  dense: true,
-                  title: const Text(
-                    '保存 Live',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
               if (widget.sources.length > 1)
                 ListTile(
                   onTap: () {
@@ -592,6 +586,25 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   },
                   dense: true,
                   title: const Text('保存全部图片', style: TextStyle(fontSize: 14)),
+                ),
+              if (widget.sources[currentIndex.value].sourceType ==
+                  SourceType.livePhoto)
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    DownloadUtils.downloadLivePhoto(
+                      context: context,
+                      url: widget.sources[currentIndex.value].url,
+                      liveUrl: widget.sources[currentIndex.value].liveUrl!,
+                      width: widget.sources[currentIndex.value].width!,
+                      height: widget.sources[currentIndex.value].height!,
+                    );
+                  },
+                  dense: true,
+                  title: const Text(
+                    '保存 Live Photo',
+                    style: TextStyle(fontSize: 14),
+                  ),
                 ),
             ],
           ),

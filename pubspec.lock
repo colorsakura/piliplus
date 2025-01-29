@@ -1079,6 +1079,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  live_photo_maker:
+    dependency: "direct main"
+    description:
+      name: live_photo_maker
+      sha256: "9af3965bd9d2ab55b0d4d0a1e4041fdcc9ef6c6c44543c8412667541a054f58b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   logger:
     dependency: "direct main"
     description:

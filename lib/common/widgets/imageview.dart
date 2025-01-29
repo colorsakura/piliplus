@@ -92,6 +92,15 @@ Widget imageview(
 
   late final enableLivePhoto = GStorage.enableLivePhoto;
 
+  int parseSize(size) {
+    return switch (size) {
+      int() => size,
+      double() => size.round(),
+      String() => int.tryParse(size) ?? 1,
+      _ => 1,
+    };
+  }
+
   return NineGridView(
     type: NineGridType.weiBo,
     margin: const EdgeInsets.only(top: 6),
@@ -111,17 +120,19 @@ Widget imageview(
             onViewImage?.call();
             context.imageView(
               initialPage: index,
-              imgList: picArr
-                  .map(
-                    (item) => SourceModel(
-                      sourceType: item.isLivePhoto && enableLivePhoto
-                          ? SourceType.livePhoto
-                          : SourceType.networkImage,
-                      url: item.url,
-                      liveUrl: item.liveUrl,
-                    ),
-                  )
-                  .toList(),
+              imgList: picArr.map(
+                (item) {
+                  bool isLive = item.isLivePhoto && enableLivePhoto;
+                  return SourceModel(
+                    sourceType:
+                        isLive ? SourceType.livePhoto : SourceType.networkImage,
+                    url: item.url,
+                    liveUrl: isLive ? item.liveUrl : null,
+                    width: isLive ? parseSize(item.width) : null,
+                    height: isLive ? parseSize(item.height) : null,
+                  );
+                },
+              ).toList(),
               onDismissed: onDismissed,
             );
           }
