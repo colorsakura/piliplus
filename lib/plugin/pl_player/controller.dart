@@ -5,8 +5,10 @@ import 'dart:typed_data';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -508,6 +510,12 @@ class PlPlayerController {
       _seasonId = seasonId;
       _subType = subType;
       _enableHeart = enableHeart;
+
+      if (showSeekPreview) {
+        videoShot = null;
+        showPreview.value = false;
+        localPosition.value = Offset.zero;
+      }
 
       if (_videoPlayerController != null &&
           _videoPlayerController!.state.playing) {
@@ -1563,5 +1571,34 @@ class PlPlayerController {
     _onlyPlayAudio.value = !_onlyPlayAudio.value;
     videoPlayerController?.setVideoTrack(
         _onlyPlayAudio.value ? VideoTrack.no() : VideoTrack.auto());
+  }
+
+  late final showSeekPreview = GStorage.showSeekPreview;
+  late bool _isQueryingVideoShot = false;
+  Map? videoShot;
+  late final RxBool showPreview = false.obs;
+  late final Rx<Offset> localPosition = Offset.zero.obs;
+
+  void getVideoShot() async {
+    if (_isQueryingVideoShot) {
+      return;
+    }
+    _isQueryingVideoShot = true;
+    dynamic res = await Request().get(
+      'https://api.bilibili.com/x/player/videoshot',
+      queryParameters: {
+        'aid': IdUtils.bv2av(_bvid),
+        'cid': _cid,
+      },
+    );
+    if (res.data['code'] == 0) {
+      videoShot = {
+        'status': true,
+        'data': res.data['data'],
+      };
+    } else {
+      videoShot = {'status': false};
+    }
+    _isQueryingVideoShot = false;
   }
 }

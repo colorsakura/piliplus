@@ -5,7 +5,9 @@ import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -1090,6 +1092,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   value: '${(value / max * 100).round()}%',
                   // enabled: false,
                   child: Stack(
+                    clipBehavior: Clip.none,
                     alignment: Alignment.bottomCenter,
                     children: [
                       if (plPlayerController.viewPointList.isNotEmpty &&
@@ -1137,35 +1140,28 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         thumbColor: colorTheme,
                         barHeight: 3.5,
                         thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
-                        // onDragStart: (duration) {
-                        //   draggingFixedProgressBar.value = true;
-                        //   feedBack();
-                        //   _.onChangedSliderStart();
-                        // },
-                        // onDragUpdate: (duration) {
-                        //   double newProgress = duration.timeStamp.inSeconds / max;
-                        //   if ((newProgress - _lastAnnouncedValue).abs() > 0.02) {
-                        //     _accessibilityDebounce?.cancel();
-                        //     _accessibilityDebounce =
-                        //         Timer(const Duration(milliseconds: 200), () {
-                        //       SemanticsService.announce(
-                        //           "${(newProgress * 100).round()}%",
-                        //           TextDirection.ltr);
-                        //       _lastAnnouncedValue = newProgress;
-                        //     });
-                        //   }
-                        //   _.onUpdatedSliderProgress(duration.timeStamp);
-                        // },
-                        // onSeek: (duration) {
-                        //   draggingFixedProgressBar.value = false;
-                        //   _.onChangedSliderEnd();
-                        //   _.onChangedSlider(duration.inSeconds.toDouble());
-                        //   _.seekTo(Duration(seconds: duration.inSeconds),
-                        //       type: 'slider');
-                        //   SemanticsService.announce(
-                        //       "${(duration.inSeconds / max * 100).round()}%",
-                        //       TextDirection.ltr);
-                        // },
+                        onDragStart: (duration) {
+                          feedBack();
+                          plPlayerController.onChangedSliderStart();
+                        },
+                        onDragUpdate: (duration) {
+                          plPlayerController
+                              .onUpdatedSliderProgress(duration.timeStamp);
+                          if (plPlayerController.showPreview.value.not) {
+                            plPlayerController.showPreview.value = true;
+                          }
+                          plPlayerController.localPosition.value =
+                              duration.localPosition;
+                        },
+                        onSeek: (duration) {
+                          plPlayerController.showPreview.value = false;
+                          plPlayerController.onChangedSliderEnd();
+                          plPlayerController
+                              .onChangedSlider(duration.inSeconds.toDouble());
+                          plPlayerController.seekTo(
+                              Duration(seconds: duration.inSeconds),
+                              type: 'slider');
+                        },
                       ),
                       if (plPlayerController.segmentList.isNotEmpty)
                         Positioned(
@@ -1195,6 +1191,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               ),
                             ),
                           ),
+                        ),
+                      if (plPlayerController.showSeekPreview)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 12,
+                          child: buildSeekPreviewWidget(plPlayerController),
                         ),
                     ],
                   ),
@@ -1477,4 +1480,91 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ],
     );
   }
+}
+
+Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
+  return Obx(() {
+    if (plPlayerController.showPreview.value.not) {
+      return SizedBox.shrink(
+        key: ValueKey(plPlayerController.localPosition.value),
+      );
+    }
+    if (plPlayerController.videoShot == null) {
+      plPlayerController.getVideoShot();
+      return SizedBox.shrink(
+        key: ValueKey(plPlayerController.localPosition.value),
+      );
+    } else if (plPlayerController.videoShot!['status'] == false) {
+      return SizedBox.shrink(
+        key: ValueKey(plPlayerController.localPosition.value),
+      );
+    }
+
+    return LayoutBuilder(
+        key: ValueKey(plPlayerController.localPosition.value),
+        builder: (context, constraints) {
+          try {
+            double scale = 1.5;
+            // offset
+            double left =
+                (plPlayerController.localPosition.value.dx - 48 * scale / 2)
+                    .clamp(8, constraints.maxWidth - 48 * scale - 8);
+
+            // index
+            int index = plPlayerController.sliderPositionSeconds.value ~/ 5;
+
+            // pageIndex
+            int pageIndex = (index ~/ 100).clamp(
+              0,
+              (plPlayerController.videoShot!['data']['image'] as List).length,
+            );
+
+            // alignment
+            double cal(m) {
+              return -1 + 2 / 9 * m;
+            }
+
+            int align = index % 100;
+            int x = align % 10;
+            int y = align ~/ 10;
+            double dx = cal(x);
+            double dy = cal(y);
+            Alignment alignment = Alignment(dx, dy);
+
+            // url
+            String parseUrl(String url) {
+              return url.startsWith('//') ? 'https:$url' : url;
+            }
+
+            return Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: left),
+              child: SizedBox(
+                width: 48 * scale,
+                height: 27 * scale,
+                child: UnconstrainedBox(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Align(
+                      widthFactor: 0.1,
+                      heightFactor: 0.1,
+                      alignment: alignment,
+                      child: CachedNetworkImage(
+                        width: 480 * scale,
+                        height: 270 * scale,
+                        imageUrl: parseUrl(plPlayerController.videoShot!['data']
+                            ['image'][pageIndex]),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } catch (_) {
+            return SizedBox.shrink(
+              key: ValueKey(plPlayerController.localPosition.value),
+            );
+          }
+        });
+  });
 }

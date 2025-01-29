@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:nil/nil.dart';
-import 'package:PiliPlus/plugin/pl_player/index.dart';
+import 'package:PiliPlus/plugin/pl_player/index.dart'
+    show PlPlayerController, buildSeekPreviewWidget;
 import 'package:PiliPlus/utils/feed_back.dart';
 
 import '../../../common/widgets/audio_video_progress_bar.dart';
@@ -30,7 +32,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     double lastAnnouncedValue = -1;
     return Container(
       color: Colors.transparent,
-      height: 90,
+      height: 120,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -50,6 +52,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                   value: '${(value / max * 100).round()}%',
                   // enabled: false,
                   child: Stack(
+                    clipBehavior: Clip.none,
                     alignment: Alignment.bottomCenter,
                     children: [
                       if (controller?.viewPointList.isNotEmpty == true &&
@@ -101,6 +104,11 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         onDragUpdate: (duration) {
                           double newProgress =
                               duration.timeStamp.inSeconds / max;
+                          if (controller!.showPreview.value.not) {
+                            controller!.showPreview.value = true;
+                          }
+                          controller!.localPosition.value =
+                              duration.localPosition;
                           if ((newProgress - lastAnnouncedValue).abs() > 0.02) {
                             accessibilityDebounce?.cancel();
                             accessibilityDebounce =
@@ -115,6 +123,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                               .onUpdatedSliderProgress(duration.timeStamp);
                         },
                         onSeek: (duration) {
+                          controller!.showPreview.value = false;
                           controller!.onChangedSliderEnd();
                           controller!
                               .onChangedSlider(duration.inSeconds.toDouble());
@@ -154,6 +163,13 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                               ),
                             ),
                           ),
+                        ),
+                      if (controller?.showSeekPreview == true)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 16,
+                          child: buildSeekPreviewWidget(controller!),
                         ),
                     ],
                   ),

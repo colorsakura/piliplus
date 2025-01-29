@@ -357,6 +357,9 @@ class GStorage {
   static bool get enableLivePhoto =>
       GStorage.setting.get(SettingBoxKey.enableLivePhoto, defaultValue: true);
 
+  static bool get showSeekPreview =>
+      GStorage.setting.get(SettingBoxKey.showSeekPreview, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -585,6 +588,7 @@ class SettingBoxKey {
       searchSuggestion = 'searchSuggestion',
       showDynDecorate = 'showDynDecorate',
       enableLivePhoto = 'enableLivePhoto',
+      showSeekPreview = 'showSeekPreview',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
