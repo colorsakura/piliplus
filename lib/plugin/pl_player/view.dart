@@ -688,6 +688,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               if (_gestureType == 'horizontal') {
                 // live模式下禁用
                 if (plPlayerController.videoType.value == 'live') return;
+
                 final int curSliderPosition =
                     plPlayerController.sliderPosition.value.inMilliseconds;
                 final double scale = 90000 / renderBox.size.width;
@@ -698,6 +699,16 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     pos.clamp(Duration.zero, plPlayerController.duration.value);
                 plPlayerController.onUpdatedSliderProgress(result);
                 plPlayerController.onChangedSliderStart();
+                if (plPlayerController.showSeekPreview) {
+                  try {
+                    plPlayerController.previewDx.value = result.inMilliseconds /
+                        plPlayerController.duration.value.inMilliseconds *
+                        context.size!.width;
+                    if (plPlayerController.showPreview.value.not) {
+                      plPlayerController.showPreview.value = true;
+                    }
+                  } catch (_) {}
+                }
               } else if (_gestureType == 'left') {
                 // 左边区域 👈
                 final double level = renderBox.size.height * 3;
@@ -744,6 +755,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               }
             },
             onInteractionEnd: (ScaleEndDetails details) {
+              if (plPlayerController.showSeekPreview) {
+                plPlayerController.showPreview.value = false;
+              }
               if (plPlayerController.isSliderMoving.value) {
                 plPlayerController.onChangedSliderEnd();
                 plPlayerController.seekTo(
@@ -1036,8 +1050,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   ),
                 ),
               const Spacer(),
-              ClipRect(
-                child: AppBarAni(
+              if (plPlayerController.showControls.value)
+                AppBarAni(
                   controller: animationController,
                   visible: !plPlayerController.controlsLock.value &&
                       plPlayerController.showControls.value,
@@ -1048,7 +1062,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         buildBottomControl: buildBottomControl(),
                       ),
                 ),
-              ),
             ],
           ),
         ),
@@ -1061,27 +1074,27 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             final int max = plPlayerController.durationSeconds.value;
             final int buffer = plPlayerController.bufferedSeconds.value;
             if (plPlayerController.showControls.value) {
-              return Container();
+              return const SizedBox.shrink();
             }
             if (defaultBtmProgressBehavior ==
                 BtmProgressBehavior.alwaysHide.code) {
-              return const SizedBox();
+              return const SizedBox.shrink();
             }
             if (defaultBtmProgressBehavior ==
                     BtmProgressBehavior.onlyShowFullScreen.code &&
                 !isFullScreen) {
-              return const SizedBox();
+              return const SizedBox.shrink();
             } else if (defaultBtmProgressBehavior ==
                     BtmProgressBehavior.onlyHideFullScreen.code &&
                 isFullScreen) {
-              return const SizedBox();
+              return const SizedBox.shrink();
             }
 
             if (plPlayerController.videoType.value == 'live') {
-              return Container();
+              return const SizedBox.shrink();
             }
             if (value > max || max <= 0) {
-              return const SizedBox();
+              return const SizedBox.shrink();
             }
             return Positioned(
                 bottom: -1,
@@ -1147,14 +1160,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         onDragUpdate: (duration) {
                           plPlayerController
                               .onUpdatedSliderProgress(duration.timeStamp);
-                          if (plPlayerController.showPreview.value.not) {
-                            plPlayerController.showPreview.value = true;
+                          if (plPlayerController.showSeekPreview) {
+                            if (plPlayerController.showPreview.value.not) {
+                              plPlayerController.showPreview.value = true;
+                            }
+                            plPlayerController.previewDx.value =
+                                duration.localPosition.dx;
                           }
-                          plPlayerController.localPosition.value =
-                              duration.localPosition;
                         },
                         onSeek: (duration) {
-                          plPlayerController.showPreview.value = false;
+                          if (plPlayerController.showSeekPreview) {
+                            plPlayerController.showPreview.value = false;
+                          }
                           plPlayerController.onChangedSliderEnd();
                           plPlayerController
                               .onChangedSlider(duration.inSeconds.toDouble());
@@ -1374,7 +1391,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       ]),
                     )));
           } else {
-            return const SizedBox();
+            return const SizedBox.shrink();
           }
         }),
 
@@ -1424,7 +1441,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               },
                             ),
                           )
-                        : const SizedBox(),
+                        : const SizedBox.shrink(),
                   ),
                   const Spacer(),
                   // Expanded(
@@ -1470,7 +1487,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               },
                             ),
                           )
-                        : const SizedBox(),
+                        : const SizedBox.shrink(),
                   ),
                 ],
               ),
@@ -1486,38 +1503,42 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
   return Obx(() {
     if (plPlayerController.showPreview.value.not) {
       return SizedBox.shrink(
-        key: ValueKey(plPlayerController.localPosition.value),
+        key: ValueKey(plPlayerController.previewDx.value),
       );
     }
     if (plPlayerController.videoShot == null) {
       plPlayerController.getVideoShot();
       return SizedBox.shrink(
-        key: ValueKey(plPlayerController.localPosition.value),
+        key: ValueKey(plPlayerController.previewDx.value),
       );
     } else if (plPlayerController.videoShot!['status'] == false) {
       return SizedBox.shrink(
-        key: ValueKey(plPlayerController.localPosition.value),
+        key: ValueKey(plPlayerController.previewDx.value),
       );
     }
 
     return LayoutBuilder(
-        key: ValueKey(plPlayerController.localPosition.value),
+        key: ValueKey(plPlayerController.previewDx.value),
         builder: (context, constraints) {
           try {
-            double scale = 1.5;
+            double scale = plPlayerController.isFullScreen.value &&
+                    plPlayerController.direction.value == 'horizontal'
+                ? 4
+                : 2.5;
             // offset
-            double left =
-                (plPlayerController.localPosition.value.dx - 48 * scale / 2)
-                    .clamp(8, constraints.maxWidth - 48 * scale - 8);
+            double left = (plPlayerController.previewDx.value - 48 * scale / 2)
+                .clamp(8, constraints.maxWidth - 48 * scale - 8);
 
             // index
             // int index = plPlayerController.sliderPositionSeconds.value ~/ 5;
-            int index = (List<int>.from(
-                        plPlayerController.videoShot!['data']['index'])
-                    .where((item) =>
-                        item <= plPlayerController.sliderPositionSeconds.value)
-                    .length -
-                2);
+            int index = max(
+                0,
+                (List<int>.from(plPlayerController.videoShot!['data']['index'])
+                        .where((item) =>
+                            item <=
+                            plPlayerController.sliderPositionSeconds.value)
+                        .length -
+                    2));
 
             // pageIndex
             int pageIndex = (index ~/ 100).clamp(
@@ -1545,22 +1566,26 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
             return Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: left),
-              child: SizedBox(
-                width: 48 * scale,
-                height: 27 * scale,
-                child: UnconstrainedBox(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Align(
-                      widthFactor: 0.1,
-                      heightFactor: 0.1,
-                      alignment: alignment,
-                      child: CachedNetworkImage(
-                        width: 480 * scale,
-                        height: 270 * scale,
-                        imageUrl: parseUrl(plPlayerController.videoShot!['data']
-                            ['image'][pageIndex]),
-                      ),
+              child: UnconstrainedBox(
+                child: ClipRRect(
+                  // clipBehavior: Clip.antiAlias,
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(
+                  //     color: Colors.white,
+                  //     strokeAlign: BorderSide.strokeAlignOutside,
+                  //   ),
+                  //   borderRadius: BorderRadius.circular(scale == 2.5 ? 6 : 10),
+                  // ),
+                  borderRadius: BorderRadius.circular(scale == 2.5 ? 6 : 10),
+                  child: Align(
+                    widthFactor: 0.1,
+                    heightFactor: 0.1,
+                    alignment: alignment,
+                    child: CachedNetworkImage(
+                      width: 480 * scale,
+                      height: 270 * scale,
+                      imageUrl: parseUrl(plPlayerController.videoShot!['data']
+                          ['image'][pageIndex]),
                     ),
                   ),
                 ),
@@ -1569,7 +1594,7 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
           } catch (e) {
             debugPrint('seek preview: $e');
             return SizedBox.shrink(
-              key: ValueKey(plPlayerController.localPosition.value),
+              key: ValueKey(plPlayerController.previewDx.value),
             );
           }
         });

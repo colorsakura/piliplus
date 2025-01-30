@@ -30,9 +30,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
     //阅读器限制
     Timer? accessibilityDebounce;
     double lastAnnouncedValue = -1;
-    return Container(
-      color: Colors.transparent,
-      height: 120,
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -104,11 +102,13 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         onDragUpdate: (duration) {
                           double newProgress =
                               duration.timeStamp.inSeconds / max;
-                          if (controller!.showPreview.value.not) {
-                            controller!.showPreview.value = true;
+                          if (controller!.showSeekPreview) {
+                            if (controller!.showPreview.value.not) {
+                              controller!.showPreview.value = true;
+                            }
+                            controller!.previewDx.value =
+                                duration.localPosition.dx;
                           }
-                          controller!.localPosition.value =
-                              duration.localPosition;
                           if ((newProgress - lastAnnouncedValue).abs() > 0.02) {
                             accessibilityDebounce?.cancel();
                             accessibilityDebounce =
@@ -123,7 +123,9 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                               .onUpdatedSliderProgress(duration.timeStamp);
                         },
                         onSeek: (duration) {
-                          controller!.showPreview.value = false;
+                          if (controller!.showSeekPreview) {
+                            controller!.showPreview.value = false;
+                          }
                           controller!.onChangedSliderEnd();
                           controller!
                               .onChangedSlider(duration.inSeconds.toDouble());
@@ -168,7 +170,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         Positioned(
                           left: 0,
                           right: 0,
-                          bottom: 16,
+                          bottom: 18,
                           child: buildSeekPreviewWidget(controller!),
                         ),
                     ],

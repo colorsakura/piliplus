@@ -410,7 +410,7 @@ class _NineGridViewState extends State<NineGridView> {
 
   @override
   Widget build(BuildContext context) {
-    Widget? child = Container();
+    Widget? child;
     double? realWidth = widget.width;
     double? realHeight = widget.height;
     switch (widget.type) {

@@ -512,7 +512,7 @@ class PlPlayerController {
       if (showSeekPreview) {
         videoShot = null;
         showPreview.value = false;
-        localPosition.value = Offset.zero;
+        previewDx.value = 0;
       }
 
       if (_videoPlayerController != null &&
@@ -1575,7 +1575,7 @@ class PlPlayerController {
   late bool _isQueryingVideoShot = false;
   Map? videoShot;
   late final RxBool showPreview = false.obs;
-  late final Rx<Offset> localPosition = Offset.zero.obs;
+  late final RxDouble previewDx = 0.0.obs;
 
   void getVideoShot() async {
     if (_isQueryingVideoShot) {

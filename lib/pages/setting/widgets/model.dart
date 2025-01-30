@@ -1924,8 +1924,7 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
-        title: '视频进度条缩略图',
-        subtitle: '滑动进度条时显示视频缩略图',
+        title: '滑动跳转预览视频缩略图',
         leading: Icon(Icons.preview_outlined),
         setKey: SettingBoxKey.showSeekPreview,
         defaultVal: true,
