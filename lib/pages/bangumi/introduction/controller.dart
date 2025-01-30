@@ -418,11 +418,7 @@ class BangumiIntroController extends CommonController {
         Get.find<VideoDetailController>(tag: Get.arguments['heroTag'])
           ..plPlayerController.pause()
           ..makeHeartBeat()
-          ..playedTime = null
-          ..videoUrl = null
-          ..audioUrl = null
-          ..vttSubtitlesIndex = null
-          ..savedDanmaku = null
+          ..onReset()
           ..epId = epId
           ..bvid = bvid
           ..cid.value = cid

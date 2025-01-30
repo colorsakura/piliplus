@@ -635,6 +635,9 @@ class VideoDetailController extends GetxController
 
   Future _querySponsorBlock() async {
     positionSubscription?.cancel();
+    videoLabel.value = '';
+    segmentList.clear();
+    _segmentProgressList = null;
     dynamic result = await Request().get(
       '${GStorage.blockServer}/api/skipSegments',
       queryParameters: {
@@ -643,9 +646,6 @@ class VideoDetailController extends GetxController
       },
       options: _options,
     );
-    videoLabel.value = '';
-    segmentList.clear();
-    _segmentProgressList = null;
     _handleSBData(result);
   }
 
@@ -1962,5 +1962,27 @@ class VideoDetailController extends GetxController
   void onClose() {
     tabCtr.dispose();
     super.onClose();
+  }
+
+  onReset() {
+    playedTime = null;
+    videoUrl = null;
+    audioUrl = null;
+
+    // danmaku
+    savedDanmaku = null;
+
+    // subtitle
+    vttSubtitlesIndex = null;
+    _vttSubtitles.clear();
+
+    // view point
+    viewPointList.clear();
+
+    // sponsor block
+    positionSubscription?.cancel();
+    videoLabel.value = '';
+    segmentList.clear();
+    _segmentProgressList = null;
   }
 }

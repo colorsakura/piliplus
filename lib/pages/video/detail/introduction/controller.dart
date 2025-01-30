@@ -583,12 +583,8 @@ class VideoIntroController extends GetxController
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag)
       ..plPlayerController.pause()
       ..makeHeartBeat()
-      ..playedTime = null
-      ..videoUrl = null
-      ..audioUrl = null
       ..updateMediaListHistory(aid)
-      ..vttSubtitlesIndex = null
-      ..savedDanmaku = null
+      ..onReset()
       ..bvid = bvid
       ..oid.value = aid ?? IdUtils.bv2av(bvid)
       ..cid.value = cid
