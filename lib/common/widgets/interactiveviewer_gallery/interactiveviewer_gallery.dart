@@ -254,7 +254,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   }
 
   String _getActualUrl(int index) => _thumbList[index] && _quality != 100
-      ? '${widget.sources[index]}@${_quality}q.webp'.http2https
+      ? '${widget.sources[index].url}@${_quality}q.webp'.http2https
       : widget.sources[index].url.http2https;
 
   void onClose() {
