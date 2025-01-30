@@ -1582,6 +1582,7 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
                     heightFactor: 0.1,
                     alignment: alignment,
                     child: CachedNetworkImage(
+                      fit: BoxFit.fill,
                       width: 480 * scale,
                       height: 270 * scale,
                       imageUrl: parseUrl(plPlayerController.videoShot!['data']
