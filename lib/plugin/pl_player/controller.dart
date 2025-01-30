@@ -58,7 +58,7 @@ class PlPlayerController {
   // 展示使用
   final Rx<Duration> _sliderTempPosition = Rx(Duration.zero);
   final Rx<Duration> _duration = Rx(Duration.zero);
-  final RxInt durationSeconds = 0.obs;
+  final Rx<Duration> durationSeconds = Duration.zero.obs;
   final Rx<Duration> _buffered = Rx(Duration.zero);
   final RxInt bufferedSeconds = 0.obs;
 
@@ -330,9 +330,8 @@ class PlPlayerController {
   }
 
   void updateDurationSecond() {
-    int newSecond = _duration.value.inSeconds;
-    if (durationSeconds.value != newSecond) {
-      durationSeconds.value = newSecond;
+    if (durationSeconds.value != _duration.value) {
+      durationSeconds.value = _duration.value;
     }
   }
 
@@ -1437,7 +1436,7 @@ class PlPlayerController {
     }
     bool isComplete = playerStatus.status.value == PlayerStatus.completed ||
         type == 'completed';
-    if ((duration.value - position.value).inMilliseconds > 1000) {
+    if ((durationSeconds.value - position.value).inMilliseconds > 1000) {
       isComplete = false;
     }
     // 播放状态变化时，更新

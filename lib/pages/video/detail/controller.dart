@@ -1359,7 +1359,8 @@ class VideoDetailController extends GetxController
                           duration += split[i] * pow(60, i).toInt();
                         }
                         if (duration <=
-                            plPlayerController.durationSeconds.value) {
+                            plPlayerController
+                                .durationSeconds.value.inSeconds) {
                           setState(() {
                             updateSegment(
                               isFirst: isFirst,
@@ -1687,7 +1688,9 @@ class VideoDetailController extends GetxController
                                             'userID': GStorage.blockUserID,
                                             'userAgent': Constants.userAgent,
                                             'videoDuration': plPlayerController
-                                                .durationSeconds.value,
+                                                .durationSeconds
+                                                .value
+                                                .inSeconds,
                                           },
                                           data: {
                                             'segments': list!

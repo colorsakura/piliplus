@@ -321,7 +321,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           }),
           Obx(
             () => Text(
-              Utils.timeFormat(plPlayerController.durationSeconds.value),
+              Utils.timeFormat(
+                  plPlayerController.durationSeconds.value.inSeconds),
               style: const TextStyle(
                 color: Color(0xFFD0D0D0),
                 fontSize: 10,
@@ -329,7 +330,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
               semanticsLabel:
-                  '共${Utils.durationReadFormat(Utils.timeFormat(plPlayerController.durationSeconds.value))}',
+                  '共${Utils.durationReadFormat(Utils.timeFormat(plPlayerController.durationSeconds.value.inSeconds))}',
             ),
           ),
         ],
@@ -702,7 +703,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 if (plPlayerController.showSeekPreview) {
                   try {
                     plPlayerController.previewDx.value = result.inMilliseconds /
-                        plPlayerController.duration.value.inMilliseconds *
+                        plPlayerController
+                            .durationSeconds.value.inMilliseconds *
                         context.size!.width;
                     if (plPlayerController.showPreview.value.not) {
                       plPlayerController.showPreview.value = true;
@@ -856,11 +858,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           const SizedBox(width: 2),
                           Obx(
                             () => Text(
-                              plPlayerController.duration.value.inMinutes >= 60
+                              plPlayerController
+                                          .durationSeconds.value.inMinutes >=
+                                      60
                                   ? printDurationWithHours(
-                                      plPlayerController.duration.value)
+                                      plPlayerController.durationSeconds.value)
                                   : printDuration(
-                                      plPlayerController.duration.value),
+                                      plPlayerController.durationSeconds.value),
                               style: textStyle,
                             ),
                           ),
@@ -1071,7 +1075,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         Obx(
           () {
             final int value = plPlayerController.sliderPositionSeconds.value;
-            final int max = plPlayerController.durationSeconds.value;
+            final int max = plPlayerController.durationSeconds.value.inSeconds;
             final int buffer = plPlayerController.bufferedSeconds.value;
             if (plPlayerController.showControls.value) {
               return const SizedBox.shrink();

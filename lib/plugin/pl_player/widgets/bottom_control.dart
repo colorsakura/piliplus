@@ -38,7 +38,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
           Obx(
             () {
               final int value = controller!.sliderPositionSeconds.value;
-              final int max = controller!.durationSeconds.value;
+              final int max = controller!.durationSeconds.value.inSeconds;
               final int buffer = controller!.bufferedSeconds.value;
               if (value > max || max <= 0) {
                 return nil;
