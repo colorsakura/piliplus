@@ -1537,12 +1537,12 @@ Widget buildDmChart(
           lineTouchData: const LineTouchData(enabled: false),
           gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
-          // minX: 0,
-          // maxX: (plPlayerController.dmTrend.length - 1).toDouble(),
-          // minY: 0,
-          // maxY: plPlayerController.dmTrend
-          //     .reduce((a, b) => a > b ? a : b)
-          //     .toDouble(),
+          minX: 0,
+          maxX: (plPlayerController.dmTrend.length - 1).toDouble(),
+          minY: 0,
+          maxY: plPlayerController.dmTrend
+              .reduce((a, b) => a > b ? a : b)
+              .toDouble(),
           lineBarsData: [
             LineChartBarData(
               spots: List.generate(
