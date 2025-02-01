@@ -77,7 +77,7 @@ class VideoDetailController extends GetxController
   RxBool isShowCover = true.obs;
   // 硬解
   RxBool enableHA = true.obs;
-  RxString hwdec = 'auto-safe'.obs;
+  RxString hwdec = GStorage.hardwareDecoding.obs;
 
   RxInt oid = 0.obs;
 
@@ -194,8 +194,6 @@ class VideoDetailController extends GetxController
         setting.get(SettingBoxKey.autoPlayEnable, defaultValue: false);
     if (autoPlay.value) isShowCover.value = false;
     enableHA.value = setting.get(SettingBoxKey.enableHA, defaultValue: true);
-    hwdec.value = setting.get(SettingBoxKey.hardwareDecoding,
-        defaultValue: Platform.isAndroid ? 'auto-safe' : 'auto');
     if (userInfo == null ||
         GStorage.localCache.get(LocalCacheKey.historyPause) == true) {
       enableHeart = false;
