@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
@@ -175,6 +176,15 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         FlutterVolumeController.addListener((double value) {
           if (mounted && !_volumeInterceptEventStream.value) {
             _volumeValue.value = value;
+            if (Platform.isIOS && FlutterVolumeController.showSystemUI.not) {
+              _volumeIndicator.value = true;
+              _volumeTimer?.cancel();
+              _volumeTimer = Timer(const Duration(milliseconds: 800), () {
+                if (mounted) {
+                  _volumeIndicator.value = false;
+                }
+              });
+            }
           }
         });
       } catch (_) {}
