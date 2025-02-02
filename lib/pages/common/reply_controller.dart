@@ -299,7 +299,7 @@ abstract class ReplyController extends CommonController {
     int replyId,
     String message,
   ) async {
-    void showReplyCheckResult(BuildContext context, String message) {
+    void showReplyCheckResult(String message) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -335,7 +335,6 @@ abstract class ReplyController extends CommonController {
           // found
           if (context.mounted) {
             showReplyCheckResult(
-              context,
               '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message',
             );
           }
@@ -356,7 +355,6 @@ abstract class ReplyController extends CommonController {
             // not found
             if (context.mounted) {
               showReplyCheckResult(
-                context,
                 '无法找到你的评论。\n\n你的评论：$message',
               );
             }
@@ -378,7 +376,6 @@ abstract class ReplyController extends CommonController {
               // not found
               if (context.mounted) {
                 showReplyCheckResult(
-                  context,
                   res2.errMsg.startsWith('12022')
                       ? '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message'
                       : '评论不可见(${res2.errMsg}): $message',
@@ -387,7 +384,7 @@ abstract class ReplyController extends CommonController {
             } else if (res2 is Success) {
               // found
               if (context.mounted) {
-                showReplyCheckResult(context, '''
+                showReplyCheckResult('''
 你评论状态有点可疑，虽然无账号翻找评论区获取不到你的评论，但是无账号可通过
 https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$replyType
 获取你的评论，疑似评论区被戒严或者这是你的视频。
@@ -425,7 +422,6 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$r
             // found
             if (context.mounted) {
               showReplyCheckResult(
-                context,
                 '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message',
               );
             }
@@ -460,7 +456,6 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$r
             // found
             if (context.mounted) {
               showReplyCheckResult(
-                context,
                 '你的评论被shadow ban（仅自己可见）！\n\n你的评论: $message',
               );
             }
@@ -471,7 +466,6 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$r
 
       if (context.mounted) {
         showReplyCheckResult(
-          context,
           '评论不可见: $message',
         );
       }
