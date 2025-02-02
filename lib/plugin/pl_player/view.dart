@@ -1534,7 +1534,7 @@ Widget buildDmChart(
 ]) {
   return IgnorePointer(
     child: Container(
-      height: 14,
+      height: 12,
       margin: EdgeInsets.only(
         bottom: plPlayerController.viewPointList.isNotEmpty &&
                 plPlayerController.showVP.value
