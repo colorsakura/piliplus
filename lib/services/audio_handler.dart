@@ -4,6 +4,7 @@ import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:get/get_utils/get_utils.dart';
 
 Future<VideoPlayerServiceHandler> initAudioService() async {
   return await AudioService.init(
@@ -112,7 +113,8 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     MediaItem? mediaItem;
     if (data is VideoDetailData) {
       if ((data.pages?.length ?? 0) > 1) {
-        final current = data.pages?.firstWhere((element) => element.cid == cid);
+        final current =
+            data.pages?.firstWhereOrNull((element) => element.cid == cid);
         mediaItem = MediaItem(
           id: UniqueKey().toString(),
           title: current?.pagePart ?? "",
@@ -132,7 +134,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       }
     } else if (data is BangumiInfoModel) {
       final current =
-          data.episodes?.firstWhere((element) => element.cid == cid);
+          data.episodes?.firstWhereOrNull((element) => element.cid == cid);
       mediaItem = MediaItem(
         id: UniqueKey().toString(),
         title: current?.longTitle ?? "",
