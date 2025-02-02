@@ -14,7 +14,6 @@ import '../utils/utils.dart';
 import 'api.dart';
 import 'constants.dart';
 import 'interceptor.dart';
-import 'interceptor_anonymity.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as web;
 
 class Request {
@@ -37,7 +36,7 @@ class Request {
     );
     cookieManager = CookieManager(cookieJar);
     dio.interceptors.add(cookieManager);
-    dio.interceptors.add(AnonymityInterceptor());
+    dio.interceptors.add(ApiInterceptor());
     final List<Cookie> cookies = await cookieManager.cookieJar
         .loadForRequest(Uri.parse(HttpString.baseUrl));
     for (Cookie item in cookies) {
@@ -175,15 +174,12 @@ class Request {
       );
     }
 
-    //添加拦截器
-    dio.interceptors.add(ApiInterceptor());
-
     // 日志拦截器 输出请求、响应内容
-    dio.interceptors.add(LogInterceptor(
-      request: false,
-      requestHeader: false,
-      responseHeader: false,
-    ));
+    // dio.interceptors.add(LogInterceptor(
+    //   request: false,
+    //   requestHeader: false,
+    //   responseHeader: false,
+    // ));
 
     dio.transformer = BackgroundTransformer();
     dio.options.validateStatus = (int? status) {

@@ -1,17 +1,63 @@
+import 'dart:io';
+
+import 'package:PiliPlus/http/api.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ApiInterceptor extends Interceptor {
-  // @override
-  // void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-  //   debugPrint("请求之前");
-  //   // 在请求之前添加头部或认证信息
-  //   options.headers['Authorization'] = 'Bearer token';
-  //   options.headers['Content-Type'] = 'application/json';
-  //   handler.next(options);
-  // }
+  static const List<String> anonymityList = [
+    Api.videoUrl,
+    Api.videoIntro,
+    Api.relatedList,
+    Api.replyList,
+    Api.replyReplyList,
+    Api.searchSuggest,
+    Api.searchByType,
+    Api.heartBeat,
+    Api.ab2c,
+    Api.bangumiInfo,
+    Api.liveRoomInfo,
+    Api.onlineTotal,
+    Api.webDanmaku,
+    Api.dynamicDetail,
+    Api.aiConclusion,
+    Api.getSeasonDetailApi,
+    Api.liveRoomDmToken,
+    Api.liveRoomDmPrefetch,
+  ];
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (MineController.anonymity.value) {
+      String uri = options.uri.toString();
+      for (var i in anonymityList) {
+        // 如果请求的url包含无痕列表中的url，则清空cookie
+        // 但需要保证匹配到url的后半部分不再出现/符号，否则会误伤
+        int index = uri.indexOf(i);
+        if (index == -1) continue;
+        if (uri.lastIndexOf('/') >= index + i.length) continue;
+        //SmartDialog.showToast('触发无痕模式\n\n$i\n\n${options.uri}');
+        options.headers[HttpHeaders.cookieHeader] = "";
+        if (options.data != null && options.data.csrf != null) {
+          options.data.csrf = "";
+        }
+        break;
+      }
+    }
+    if (options.extra['clearCookie'] == true) {
+      options.headers['x-bili-mid'] = '';
+      options.headers['x-bili-aurora-eid'] = '';
+      options.headers['x-bili-aurora-zone'] = '';
+      options.headers[HttpHeaders.cookieHeader] = '';
+      if (options.data != null && options.data.csrf != null) {
+        options.data.csrf = '';
+      }
+    }
+    handler.next(options);
+  }
 
   // @override
   // void onResponse(Response response, ResponseInterceptorHandler handler) {

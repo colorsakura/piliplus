@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -12,6 +10,8 @@ import 'api.dart';
 import 'init.dart';
 
 class ReplyHttp {
+  static Options get _options => Options(extra: {'clearCookie': true});
+
   static Future<LoadingState> replyList({
     required bool isLogin,
     required int oid,
@@ -21,10 +21,6 @@ class ReplyHttp {
     int sort = 1,
     required String banWordForReply,
   }) async {
-    Options? options = !isLogin
-        ? Options(
-            headers: {HttpHeaders.cookieHeader: "buvid3= ; b_nut= ; sid= "})
-        : null;
     var res = !isLogin
         ? await Request().get(
             '${Api.replyList}/main',
@@ -35,7 +31,7 @@ class ReplyHttp {
                   '{"offset":"${nextOffset.replaceAll('"', '\\"')}"}',
               'mode': sort + 2, //2:按时间排序；3：按热度排序
             },
-            options: options,
+            options: isLogin.not ? _options : null,
           )
         : await Request().get(
             Api.replyList,
@@ -46,7 +42,7 @@ class ReplyHttp {
               'pn': page,
               'ps': 20,
             },
-            options: options,
+            options: isLogin.not ? _options : null,
           );
     if (res.data['code'] == 0) {
       ReplyData replyData = ReplyData.fromJson(res.data['data']);
@@ -140,10 +136,6 @@ class ReplyHttp {
     required String banWordForReply,
     bool? isCheck,
   }) async {
-    Options? options = isLogin.not
-        ? Options(
-            headers: {HttpHeaders.cookieHeader: "buvid3= ; b_nut= ; sid= "})
-        : null;
     var res = await Request().get(
       Api.replyReplyList,
       queryParameters: {
@@ -154,7 +146,7 @@ class ReplyHttp {
         'sort': 1,
         if (isLogin) 'csrf': await Request.getCsrf(),
       },
-      options: options,
+      options: isLogin.not ? _options : null,
     );
     if (res.data['code'] == 0) {
       ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);

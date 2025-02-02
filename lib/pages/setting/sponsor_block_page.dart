@@ -66,17 +66,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
     Request()
         .get(
       '$_blockServer/api/status/uptime',
-      options: Options(
-        headers: {
-          'env': '',
-          'app-key': '',
-          'x-bili-mid': '',
-          'x-bili-aurora-eid': '',
-          'x-bili-aurora-zone': '',
-          'cookie':
-              'buvid3= ; SESSDATA= ; bili_jct= ; DedeUserID= ; DedeUserID__ckMd5= ; sid= ',
-        },
-      ),
+      options: Options(extra: {'clearCookie': true}),
     )
         .then((res) {
       setState(() {

@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
-import 'package:PiliPlus/http/interceptor_anonymity.dart';
+import 'package:PiliPlus/http/interceptor.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
@@ -1359,7 +1359,7 @@ List<SettingsModel> get privacySettings => [
             builder: (context) {
               return AlertDialog(
                 title: const Text('查看详情'),
-                content: Text(AnonymityInterceptor.anonymityList.join('\n')),
+                content: Text(ApiInterceptor.anonymityList.join('\n')),
                 actions: [
                   TextButton(
                     onPressed: () async {

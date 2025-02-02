@@ -619,17 +619,7 @@ class VideoDetailController extends GetxController
     );
   }
 
-  Options get _options => Options(
-        headers: {
-          'env': '',
-          'app-key': '',
-          'x-bili-mid': '',
-          'x-bili-aurora-eid': '',
-          'x-bili-aurora-zone': '',
-          HttpHeaders.cookieHeader:
-              'buvid3= ; SESSDATA= ; bili_jct= ; DedeUserID= ; DedeUserID__ckMd5= ; sid= ',
-        },
-      );
+  Options get _options => Options(extra: {'clearCookie': true});
 
   Future _querySponsorBlock() async {
     positionSubscription?.cancel();

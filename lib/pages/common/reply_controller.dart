@@ -345,7 +345,7 @@ abstract class ReplyController extends CommonController {
           dynamic res1 = await ReplyHttp.replyReplyList(
             isLogin: isLogin,
             oid: oid,
-            root: rpid,
+            root: rpid ?? replyId,
             pageNum: 1,
             type: replyType,
             banWordForReply: '',
@@ -365,7 +365,7 @@ abstract class ReplyController extends CommonController {
             dynamic res2 = await ReplyHttp.replyReplyList(
               isLogin: false,
               oid: oid,
-              root: rpid,
+              root: rpid ?? replyId,
               pageNum: 1,
               type: replyType,
               banWordForReply: '',
@@ -401,7 +401,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$r
         dynamic res3 = await ReplyHttp.replyReplyList(
           isLogin: false,
           oid: oid,
-          root: rpid,
+          root: rpid ?? replyId,
           pageNum: i,
           type: replyType,
           banWordForReply: '',
@@ -435,7 +435,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$r
         dynamic res4 = await ReplyHttp.replyReplyList(
           isLogin: true,
           oid: oid,
-          root: rpid,
+          root: rpid ?? replyId,
           pageNum: i,
           type: replyType,
           banWordForReply: '',
