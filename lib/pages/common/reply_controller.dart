@@ -385,7 +385,7 @@ abstract class ReplyController extends CommonController {
               if (context.mounted) {
                 showReplyCheckResult('''
 你评论状态有点可疑，虽然无账号翻找评论区获取不到你的评论，但是无账号可通过
-https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=$rpid&type=$replyType
+https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? replyId}&type=$replyType
 获取你的评论，疑似评论区被戒严或者这是你的视频。
 
 你的评论：$message''');
