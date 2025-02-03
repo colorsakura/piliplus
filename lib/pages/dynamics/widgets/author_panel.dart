@@ -110,78 +110,84 @@ class AuthorPanel extends StatelessWidget {
                   )
                 ],
               ),
-              // const Spacer(),
-              // if (source != 'detail' && item.modules?.moduleTag?.text != null)
-              //   Container(
-              //     padding:
-              //         const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              //     decoration: BoxDecoration(
-              //       color: Theme.of(context).colorScheme.surface,
-              //       borderRadius: const BorderRadius.all(Radius.circular(4)),
-              //       border: Border.all(
-              //         width: 1.25,
-              //         color: Theme.of(context).colorScheme.primary,
-              //       ),
-              //     ),
-              //     child: Text(
-              //       item.modules.moduleTag.text,
-              //       style: TextStyle(
-              //         height: 1,
-              //         fontSize: 12,
-              //         color: Theme.of(context).colorScheme.primary,
-              //       ),
-              //       strutStyle: const StrutStyle(
-              //         leading: 0,
-              //         height: 1,
-              //         fontSize: 12,
-              //       ),
-              //     ),
-              //   ),
             ],
           ),
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: item.modules.moduleAuthor.decorate != null
+          child: source != 'detail' && item.modules?.moduleTag?.text != null
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // GestureDetector(
-                    //   onTap:
-                    //       item.modules.moduleAuthor.decorate['jump_url'] != null
-                    //           ? () {
-                    //               Get.toNamed(
-                    //                 '/webview',
-                    //                 parameters: {
-                    //                   'url':
-                    //                       '${item.modules.moduleAuthor.decorate['jump_url']}'
-                    //                 },
-                    //               );
-                    //             }
-                    //           : null,
-                    //   child:
-                    Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.centerRight,
-                      children: [
-                        CachedNetworkImage(
-                          height: 32,
-                          imageUrl:
-                              item.modules.moduleAuthor.decorate['card_url'],
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 2),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(4)),
+                        border: Border.all(
+                          width: 1.25,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        if ((item.modules.moduleAuthor.decorate?['fan']
-                                    ?['num_str'] as String?)
-                                ?.isNotEmpty ==
-                            true)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 32),
-                            child: Text(
-                              '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontFamily: 'digital_id_num',
-                                color:
-                                    (item.modules.moduleAuthor.decorate?['fan']
+                      ),
+                      child: Text(
+                        item.modules.moduleTag.text,
+                        style: TextStyle(
+                          height: 1,
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        strutStyle: const StrutStyle(
+                          leading: 0,
+                          height: 1,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    _moreWidget(context),
+                  ],
+                )
+              : item.modules.moduleAuthor.decorate != null
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // GestureDetector(
+                        //   onTap:
+                        //       item.modules.moduleAuthor.decorate['jump_url'] != null
+                        //           ? () {
+                        //               Get.toNamed(
+                        //                 '/webview',
+                        //                 parameters: {
+                        //                   'url':
+                        //                       '${item.modules.moduleAuthor.decorate['jump_url']}'
+                        //                 },
+                        //               );
+                        //             }
+                        //           : null,
+                        //   child:
+                        Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.centerRight,
+                          children: [
+                            CachedNetworkImage(
+                              height: 32,
+                              imageUrl: item
+                                  .modules.moduleAuthor.decorate['card_url'],
+                            ),
+                            if ((item.modules.moduleAuthor.decorate?['fan']
+                                        ?['num_str'] as String?)
+                                    ?.isNotEmpty ==
+                                true)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 32),
+                                child: Text(
+                                  '${item.modules.moduleAuthor.decorate['fan']['num_str']}',
+                                  style: TextStyle(
+                                    height: 1,
+                                    fontSize: 11,
+                                    fontFamily: 'digital_id_num',
+                                    color: (item.modules.moduleAuthor
+                                                        .decorate?['fan']
                                                     ?['color'] as String?)
                                                 ?.startsWith('#') ==
                                             true
@@ -193,16 +199,16 @@ class AuthorPanel extends StatelessWidget {
                                             ),
                                           )
                                         : null,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
+                          ],
+                        ),
+                        // ),
+                        _moreWidget(context),
                       ],
-                    ),
-                    // ),
-                    _moreWidget(context),
-                  ],
-                )
-              : _moreWidget(context),
+                    )
+                  : _moreWidget(context),
         )
       ],
     );
