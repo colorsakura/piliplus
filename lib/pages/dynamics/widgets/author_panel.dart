@@ -306,6 +306,25 @@ class AuthorPanel extends StatelessWidget {
             },
             minLeadingWidth: 0,
           ),
+          if (GStorage.isLogin)
+            ListTile(
+              title: Text(
+                '举报',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+              ),
+              leading: Icon(
+                Icons.error_outline_outlined,
+                size: 19,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              onTap: () {
+                Get.back();
+                _showReportDynDialog(context);
+              },
+              minLeadingWidth: 0,
+            ),
           if (item.modules.moduleAuthor.mid ==
                   GStorage.userInfo.get('userInfoCache')?.mid &&
               onRemove != null)
@@ -344,25 +363,6 @@ class AuthorPanel extends StatelessWidget {
                       .textTheme
                       .titleSmall!
                       .copyWith(color: Theme.of(context).colorScheme.error)),
-            ),
-          if (GStorage.isLogin)
-            ListTile(
-              title: Text(
-                '举报',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-              ),
-              leading: Icon(
-                Icons.error_outline_outlined,
-                size: 19,
-                color: Theme.of(context).colorScheme.error,
-              ),
-              onTap: () {
-                Get.back();
-                _showReportDynDialog(context);
-              },
-              minLeadingWidth: 0,
             ),
           const Divider(thickness: 0.1, height: 1),
           ListTile(

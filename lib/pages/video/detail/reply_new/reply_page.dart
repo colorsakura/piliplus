@@ -34,6 +34,8 @@ class ReplyPage extends CommonPublishPage {
 }
 
 class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
+  RxBool _syncToDynamic = false.obs;
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
@@ -177,7 +179,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                     selected: selectKeyboard.value,
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 10),
                 Obx(
                   () => ToolbarIconButton(
                     tooltip: '表情',
@@ -192,7 +194,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                   ),
                 ),
                 if (widget.root == 0) ...[
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 10),
                   ToolbarIconButton(
                     tooltip: '图片',
                     selected: false,
@@ -200,6 +202,32 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                     onPressed: onPickImage,
                   ),
                 ],
+                const Spacer(),
+                Obx(
+                  () => TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 13),
+                      visualDensity: const VisualDensity(
+                        horizontal: -2,
+                        vertical: -2,
+                      ),
+                      foregroundColor: _syncToDynamic.value
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).colorScheme.outline,
+                    ),
+                    onPressed: () {
+                      _syncToDynamic.value = !_syncToDynamic.value;
+                    },
+                    icon: Icon(
+                      _syncToDynamic.value
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 22,
+                    ),
+                    label: const Text('转发至动态'),
+                  ),
+                ),
                 const Spacer(),
                 Obx(
                   () => FilledButton.tonal(
@@ -234,6 +262,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
           ? ' 回复 @${GlobalData().grpcReply ? widget.replyItem.member.name : widget.replyItem.member.uname} : $message'
           : message,
       pictures: pictures,
+      syncToDynamic: _syncToDynamic.value,
     );
     if (result['status']) {
       SmartDialog.showToast(result['data']['success_toast']);

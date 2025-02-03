@@ -759,6 +759,7 @@ class VideoHttp {
     int? root,
     int? parent,
     List? pictures,
+    bool? syncToDynamic,
   }) async {
     if (message == '') {
       return {'status': false, 'data': [], 'msg': '请输入评论内容'};
@@ -766,10 +767,11 @@ class VideoHttp {
     Map<String, dynamic> data = {
       'type': type.index,
       'oid': oid,
-      'root': root == null || root == 0 ? '' : root,
-      'parent': parent == null || parent == 0 ? '' : parent,
+      if (root != null && root != 0) 'root': root,
+      if (parent != null && parent != 0) 'parent': parent,
       'message': message,
       if (pictures != null) 'pictures': jsonEncode(pictures),
+      if (syncToDynamic == true) 'sync_to_dynamic': 1,
       'csrf': await Request.getCsrf(),
     };
     var res = await Request().post(
