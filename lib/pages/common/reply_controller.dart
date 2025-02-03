@@ -17,7 +17,6 @@ import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
-import 'package:fixnum/fixnum.dart' as $fixnum;
 
 abstract class ReplyController extends CommonController {
   String nextOffset = '';
