@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -31,7 +29,24 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (MineController.anonymity.value) {
+    void onRemoveCookie() {
+      options.headers.remove('x-bili-mid');
+      options.headers.remove('x-bili-aurora-eid');
+      options.headers.remove('x-bili-aurora-zone');
+      options.headers['cookie'] = '';
+      options.queryParameters.remove('access_key');
+      options.queryParameters.remove('csrf');
+      options.queryParameters.remove('csrf_token');
+      if (options.data is Map) {
+        options.data.remove('access_key');
+        options.data.remove('csrf');
+        options.data.remove('csrf_token');
+      }
+    }
+
+    if (options.extra['clearCookie'] == true) {
+      onRemoveCookie();
+    } else if (MineController.anonymity.value) {
       String uri = options.uri.toString();
       for (var i in anonymityList) {
         // 如果请求的url包含无痕列表中的url，则清空cookie
@@ -40,22 +55,11 @@ class ApiInterceptor extends Interceptor {
         if (index == -1) continue;
         if (uri.lastIndexOf('/') >= index + i.length) continue;
         //SmartDialog.showToast('触发无痕模式\n\n$i\n\n${options.uri}');
-        options.headers[HttpHeaders.cookieHeader] = "";
-        if (options.data != null && options.data.csrf != null) {
-          options.data.csrf = "";
-        }
+        onRemoveCookie();
         break;
       }
     }
-    if (options.extra['clearCookie'] == true) {
-      options.headers['x-bili-mid'] = '';
-      options.headers['x-bili-aurora-eid'] = '';
-      options.headers['x-bili-aurora-zone'] = '';
-      options.headers[HttpHeaders.cookieHeader] = '';
-      if (options.data != null && options.data.csrf != null) {
-        options.data.csrf = '';
-      }
-    }
+
     handler.next(options);
   }
 
