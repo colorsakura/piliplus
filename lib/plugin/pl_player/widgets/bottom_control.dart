@@ -62,10 +62,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                         buildDmChart(context, controller!, 4.5),
                       if (controller?.viewPointList.isNotEmpty == true &&
                           controller?.showVP.value == true)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5.25),
-                          child: buildViewPointWidget(controller!),
-                        ),
+                        buildViewPointWidget(controller!, 8.75),
                       ProgressBar(
                         progress: Duration(seconds: value),
                         buffered: Duration(seconds: buffer),

@@ -43,15 +43,16 @@ class SegmentProgressBar extends CustomPainter {
           double fontSize = 10;
 
           _defHeight ??= (TextPainter(
-            text: TextSpan(
-              text: segmentColors[i].title,
-              style: TextStyle(
-                fontSize: fontSize,
-              ),
-            ),
-            textDirection: TextDirection.ltr,
-          )..layout())
-              .height;
+                text: TextSpan(
+                  text: segmentColors[i].title,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                  ),
+                ),
+                textDirection: TextDirection.ltr,
+              )..layout())
+                  .height +
+              2;
 
           TextPainter getTextPainter() => TextPainter(
                 text: TextSpan(

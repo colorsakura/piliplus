@@ -1166,7 +1166,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         buildDmChart(context, plPlayerController),
                       if (plPlayerController.viewPointList.isNotEmpty &&
                           plPlayerController.showVP.value)
-                        buildViewPointWidget(plPlayerController),
+                        buildViewPointWidget(plPlayerController, 4.25),
                       ProgressBar(
                         progress: Duration(seconds: value),
                         buffered: Duration(seconds: buffer),
@@ -1681,13 +1681,15 @@ Widget buildSeekPreviewWidget(PlPlayerController plPlayerController) {
   });
 }
 
-Widget buildViewPointWidget(PlPlayerController plPlayerController) {
+Widget buildViewPointWidget(
+    PlPlayerController plPlayerController, double offset) {
   return LayoutBuilder(
     builder: (context, constraints) {
-      return SizedBox(
-        height: 20,
+      return Container(
+        height: 16,
+        margin: EdgeInsets.only(bottom: offset),
         child: Listener(
-          behavior: HitTestBehavior.translucent,
+          behavior: HitTestBehavior.opaque,
           onPointerDown: (event) {
             try {
               double seg = event.localPosition.dx / constraints.maxWidth;
