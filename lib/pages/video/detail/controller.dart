@@ -425,24 +425,18 @@ class VideoDetailController extends GetxController
                             WidgetSpan(
                               alignment: PlaceholderAlignment.middle,
                               child: Container(
-                                height:
-                                    MediaQuery.textScalerOf(context).scale(14),
+                                height: 10,
                                 width: 10,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  height: 10,
-                                  width: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: _getColor(item),
-                                  ),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _getColor(item),
                                 ),
                               ),
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 14, height: 1),
                             ),
                             TextSpan(
                               text: ' ${item.title}',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 14, height: 1),
                             ),
                           ],
                         ),
@@ -528,24 +522,18 @@ class VideoDetailController extends GetxController
                           WidgetSpan(
                             alignment: PlaceholderAlignment.middle,
                             child: Container(
-                              height:
-                                  MediaQuery.textScalerOf(context).scale(14),
+                              height: 10,
                               width: 10,
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 10,
-                                width: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: _getColor(item.segmentType),
-                                ),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _getColor(item.segmentType),
                               ),
                             ),
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 14, height: 1),
                           ),
                           TextSpan(
                             text: ' ${item.segmentType.title}',
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 14, height: 1),
                           ),
                         ],
                       ),

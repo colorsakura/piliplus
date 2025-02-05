@@ -55,7 +55,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   _getInfo() async {
     Map<String, String> data = {
       'access_key': GStorage.localCache
-          .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
+              .get(LocalCacheKey.accessKey, defaultValue: {})['value'] ??
+          '',
       'appkey': Constants.appKey,
       'build': '1462100',
       'c_locale': 'zh_CN',
@@ -329,7 +330,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }) async {
     Map<String, String> data = {
       'access_key': GStorage.localCache
-          .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
+              .get(LocalCacheKey.accessKey, defaultValue: {})['value'] ??
+          '',
       'appkey': Constants.appKey,
       'build': '1462100',
       'c_locale': 'zh_CN',

@@ -12,6 +12,7 @@ class PBadge extends StatelessWidget {
   final double? fs;
   final String? semanticsLabel;
   final bool bold;
+  final double? textScaleFactor;
 
   const PBadge({
     super.key,
@@ -26,6 +27,7 @@ class PBadge extends StatelessWidget {
     this.fs = 11,
     this.semanticsLabel,
     this.bold = true,
+    this.textScaleFactor,
   });
 
   @override
@@ -71,6 +73,9 @@ class PBadge extends StatelessWidget {
       ),
       child: Text(
         text ?? "",
+        textScaler: textScaleFactor != null
+            ? TextScaler.linear(textScaleFactor!)
+            : null,
         style: TextStyle(
           height: 1,
           fontSize: fs ?? fontSize,

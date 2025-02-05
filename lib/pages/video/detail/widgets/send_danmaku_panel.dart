@@ -397,33 +397,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
       builder: (context) => AlertDialog(
         clipBehavior: Clip.hardEdge,
         contentPadding: const EdgeInsets.symmetric(vertical: 16),
-        title: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: 'Color Picker ',
-                style: TextStyle(fontSize: 15),
-              ),
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Container(
-                  height: MediaQuery.textScalerOf(context).scale(13),
-                  width: MediaQuery.textScalerOf(context).scale(13),
-                  alignment: Alignment.center,
-                  child: Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _color.value,
-                    ),
-                  ),
-                ),
-                style: TextStyle(fontSize: 13),
-              ),
-            ],
-          ),
-        ),
+        title: Text('Color Picker'),
         content: SlideColorPicker(
           showResetBtn: false,
           color: _color.value,

@@ -403,24 +403,18 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                           WidgetSpan(
                             alignment: PlaceholderAlignment.middle,
                             child: Container(
-                              height:
-                                  MediaQuery.textScalerOf(context).scale(13),
-                              width: MediaQuery.textScalerOf(context).scale(13),
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 10,
-                                width: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: _blockColor[index],
-                                ),
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _blockColor[index],
                               ),
                             ),
-                            style: TextStyle(fontSize: 13),
+                            style: TextStyle(fontSize: 13, height: 1),
                           ),
                           TextSpan(
                             text: ' ${_blockSettings[index].first.title}',
-                            style: TextStyle(fontSize: 13),
+                            style: TextStyle(fontSize: 13, height: 1),
                           ),
                         ],
                       ),
@@ -451,23 +445,18 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
                         WidgetSpan(
                           alignment: PlaceholderAlignment.middle,
                           child: Container(
-                            height: MediaQuery.textScalerOf(context).scale(15),
+                            height: 10,
                             width: 10,
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: 10,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _blockColor[index],
-                              ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _blockColor[index],
                             ),
                           ),
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14, height: 1),
                         ),
                         TextSpan(
                           text: ' ${_blockSettings[index].first.title}',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14, height: 1),
                         ),
                       ],
                     ),
