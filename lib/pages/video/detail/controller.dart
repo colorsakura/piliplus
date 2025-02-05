@@ -1962,10 +1962,12 @@ class VideoDetailController extends GetxController
     viewPointList.clear();
 
     // sponsor block
-    positionSubscription?.cancel();
-    videoLabel.value = '';
-    segmentList.clear();
-    _segmentProgressList = null;
+    if (enableSponsorBlock) {
+      positionSubscription?.cancel();
+      videoLabel.value = '';
+      segmentList.clear();
+      _segmentProgressList = null;
+    }
   }
 
   late final showDmChart = GStorage.showDmChart;

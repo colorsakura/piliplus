@@ -79,11 +79,11 @@ class UserInfoCard extends StatelessWidget {
             : images.nightImgurl?.http2https)
         : images.imgUrl?.http2https;
     return Hero(
-      tag: imgUrl ?? 'bgTag',
+      tag: imgUrl ?? '',
       child: GestureDetector(
         onTap: () {
           context.imageView(
-            imgList: [SourceModel(url: imgUrl ?? 'bgTag')],
+            imgList: [SourceModel(url: imgUrl ?? '')],
           );
         },
         child: CachedNetworkImage(
@@ -447,22 +447,22 @@ class UserInfoCard extends StatelessWidget {
         ),
       );
 
-  _buildAvatar(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2.5,
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          shape: BoxShape.circle,
-        ),
-        child: Hero(
-          tag: card.face ?? 'avatarTag',
-          child: GestureDetector(
-            onTap: () {
-              context.imageView(
-                imgList: [SourceModel(url: card.face ?? 'avatarTag')],
-              );
-            },
+  _buildAvatar(BuildContext context) => Hero(
+        tag: card.face ?? '',
+        child: GestureDetector(
+          onTap: () {
+            context.imageView(
+              imgList: [SourceModel(url: card.face ?? '')],
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2.5,
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              shape: BoxShape.circle,
+            ),
             child: NetworkImgLayer(
               src: card.face,
               type: 'avatar',

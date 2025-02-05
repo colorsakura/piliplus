@@ -585,7 +585,7 @@ class ReplyItemGrpc extends StatelessWidget {
                             if (replyItem.replies[i].mid == upMid) ...[
                               const TextSpan(text: ' '),
                               const WidgetSpan(
-                                alignment: PlaceholderAlignment.top,
+                                alignment: PlaceholderAlignment.middle,
                                 child: PBadge(
                                   text: 'UP',
                                   size: 'small',

@@ -551,7 +551,7 @@ class ReplyItem extends StatelessWidget {
                             if (replies![i].isUp!) ...[
                               const TextSpan(text: ' '),
                               const WidgetSpan(
-                                alignment: PlaceholderAlignment.top,
+                                alignment: PlaceholderAlignment.middle,
                                 child: PBadge(
                                   text: 'UP',
                                   size: 'small',
