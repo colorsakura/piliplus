@@ -305,11 +305,16 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
     case 'DYNAMIC_TYPE_COMMON_SQUARE':
       return InkWell(
         onTap: () {
-          Get.toNamed('/webview', parameters: {
-            'url': item.modules.moduleDynamic.major.common['jump_url'],
-            'type': 'url',
-            'pageTitle': item.modules.moduleDynamic.major.common['title']
-          });
+          try {
+            String url = item.modules.moduleDynamic.major.common['jump_url'];
+            if (url.contains('bangumi/play') && Utils.viewPgcFromUri(url)) {
+              return;
+            }
+            Get.toNamed(
+              '/webview',
+              parameters: {'url': url},
+            );
+          } catch (_) {}
         },
         child: Container(
           width: double.infinity,
