@@ -125,8 +125,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   // 双击播放、暂停
-  void onDoubleTapCenter() {
-    plPlayerController.videoPlayerController!.playOrPause();
+  void onDoubleTapCenter() async {
+    if (plPlayerController.videoPlayerController!.state.completed) {
+      await plPlayerController.videoPlayerController!.seek(Duration.zero);
+      plPlayerController.videoPlayerController!.play();
+    } else {
+      plPlayerController.videoPlayerController!.playOrPause();
+    }
   }
 
   void doubleTapFuc(String type) {
@@ -283,7 +288,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 播放暂停
       BottomControlType.playOrPause: PlayOrPauseButton(
-        controller: plPlayerController,
+        plPlayerController: plPlayerController,
       ),
 
       /// 下一集

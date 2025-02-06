@@ -7,13 +7,13 @@ import 'package:PiliPlus/plugin/pl_player/index.dart';
 class PlayOrPauseButton extends StatefulWidget {
   final double? iconSize;
   final Color? iconColor;
-  final PlPlayerController? controller;
+  final PlPlayerController plPlayerController;
 
   const PlayOrPauseButton({
     super.key,
     this.iconSize,
     this.iconColor,
-    this.controller,
+    required this.plPlayerController,
   });
 
   @override
@@ -28,10 +28,12 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
   late Player player;
   bool isOpacity = false;
 
+  PlPlayerController get plPlayerController => widget.plPlayerController;
+
   @override
   void initState() {
     super.initState();
-    player = widget.controller!.videoPlayerController!;
+    player = plPlayerController.videoPlayerController!;
     animation = AnimationController(
       vsync: this,
       value: player.state.playing ? 1 : 0,
@@ -67,13 +69,20 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
       width: 42,
       height: 34,
       child: InkWell(
-        onTap: player.playOrPause,
+        onTap: () async {
+          if (player.state.completed) {
+            await player.seek(Duration.zero);
+            player.play();
+          } else {
+            player.playOrPause();
+          }
+        },
         // iconSize: widget.iconSize ?? _theme(context).buttonBarButtonSize,
         // color: widget.iconColor ?? _theme(context).buttonBarButtonColor,
         child: Center(
           child: AnimatedIcon(
             semanticLabel:
-                widget.controller!.videoPlayerController!.state.playing
+                plPlayerController.videoPlayerController!.state.playing
                     ? '暂停'
                     : '播放',
             progress: animation,
