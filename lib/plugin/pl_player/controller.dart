@@ -285,7 +285,7 @@ class PlPlayerController {
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
 
-  final GlobalKey<VideoState> key = GlobalKey<VideoState>();
+  GlobalKey<VideoState> key = GlobalKey<VideoState>();
 
   TextStyle get subTitleStyle => TextStyle(
         height: 1.5,
@@ -1496,7 +1496,9 @@ class PlPlayerController {
     if (type == 'single' && playerCount.value > 1) {
       _playerCount.value -= 1;
       _heartDuration = 0;
-      pause();
+      if (!Get.previousRoute.startsWith('/video')) {
+        pause();
+      }
       return;
     }
     _playerCount.value = 0;

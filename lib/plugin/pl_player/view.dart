@@ -154,6 +154,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   @override
   void initState() {
     super.initState();
+    plPlayerController.key = GlobalKey<VideoState>();
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
     videoController = plPlayerController.videoController!;

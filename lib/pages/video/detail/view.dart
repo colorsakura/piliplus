@@ -417,6 +417,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       return;
     }
 
+    if (videoDetailController.plPlayerController.playerStatus.status.value ==
+            PlayerStatus.playing &&
+        videoDetailController.playerStatus != PlayerStatus.playing) {
+      videoDetailController.plPlayerController.pause();
+    }
+
     isShowing = true;
     PlPlayerController.setPlayCallBack(playCallBack);
     videoIntroController.startTimer();
