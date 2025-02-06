@@ -308,223 +308,192 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
             constraints.viewportMainAxisExtent * 1.25;
         return SliverPadding(
           padding: const EdgeInsets.only(
-              left: StyleString.safeSpace,
-              right: StyleString.safeSpace,
-              top: 10),
+            left: StyleString.safeSpace,
+            right: StyleString.safeSpace,
+            top: 10,
+          ),
           sliver: SliverToBoxAdapter(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: showIntroDetail,
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: videoItem['staff'] == null
-                        ? GestureDetector(
-                            onTap: onPushMember,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                NetworkImgLayer(
-                                  type: 'avatar',
-                                  src: widget.loadingStatus
-                                      ? videoItem['owner']?.face ?? ""
-                                      : videoDetail.owner!.face,
-                                  width: 35,
-                                  height: 35,
-                                  fadeInDuration: Duration.zero,
-                                  fadeOutDuration: Duration.zero,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.loadingStatus
-                                            ? videoItem['owner']?.name ?? ""
-                                            : videoDetail.owner!.name,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          // color: t.colorScheme.primary,
-                                        ),
-                                        // semanticsLabel: "UP主：${owner.name}",
-                                      ),
-                                      const SizedBox(height: 0),
-                                      Obx(
-                                        () => Text(
-                                          '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: t.colorScheme.outline,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                followButton(context, t),
-                              ],
-                            ),
-                          )
-                        : SelfSizedHorizontalList(
-                            gapSize: 25,
-                            itemCount: videoItem['staff'].length,
-                            childBuilder: (index) => GestureDetector(
-                              onTap: () {
-                                int? ownerMid = !widget.loadingStatus
-                                    ? videoDetail.owner?.mid
-                                    : videoItem['owner']?.mid;
-                                if (videoItem['staff'][index].mid == ownerMid &&
-                                    context.orientation ==
-                                        Orientation.landscape &&
-                                    _horizontalMemberPage) {
-                                  widget.onShowMemberPage(ownerMid);
-                                } else {
-                                  Get.toNamed(
-                                    '/member?mid=${videoItem['staff'][index].mid}',
-                                    // arguments: {
-                                    // 'face':
-                                    //     videoItem['staff'][index].face,
-                                    // 'heroTag': Utils.makeHeroTag(
-                                    //     videoItem['staff'][index].mid),
-                                    // },
-                                  );
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  NetworkImgLayer(
-                                    type: 'avatar',
-                                    src: videoItem['staff'][index].face,
-                                    width: 35,
-                                    height: 35,
-                                    fadeInDuration: Duration.zero,
-                                    fadeOutDuration: Duration.zero,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        videoItem['staff'][index].name,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: videoItem['staff'][index]
-                                                          .vip
-                                                          .status >
-                                                      0 &&
-                                                  videoItem['staff'][index]
-                                                          .vip
-                                                          .type ==
-                                                      2
-                                              ? context.vipColor
-                                              : null,
-                                        ),
-                                      ),
-                                      Text(
-                                        videoItem['staff'][index].title,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                  ),
-                  if (isHorizontal) ...[
-                    const SizedBox(width: 10),
-                    Expanded(child: actionGrid(context, videoIntroController)),
-                  ]
-                ],
-              ),
-              if (videoIntroController.videoDetail.value.argueMsg?.isNotEmpty ==
-                      true &&
-                  videoIntroController.showArgueMsg) ...[
-                const SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  child: Text.rich(
-                    TextSpan(children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Icon(
-                          size: 17,
-                          Icons.warning_rounded,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                      ),
-                      TextSpan(
-                          text:
-                              ' ${videoIntroController.videoDetail.value.argueMsg}')
-                    ]),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                )
-              ],
-              const SizedBox(height: 8),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: showIntroDetail,
-                child: ExpandablePanel(
-                  controller: videoIntroController.expandableCtr,
-                  collapsed: GestureDetector(
-                    onLongPress: () {
-                      feedBack();
-                      Utils.copyText(
-                          '${videoDetail.title ?? videoItem['title'] ?? ''}');
-                    },
-                    child: _buildVideoTitle(),
-                  ),
-                  expanded: GestureDetector(
-                    onLongPress: () {
-                      feedBack();
-                      Utils.copyText(
-                          '${videoDetail.title ?? videoItem['title'] ?? ''}');
-                    },
-                    child: _buildVideoTitle(true),
-                  ),
-                  theme: const ExpandableThemeData(
-                    animationDuration: Duration(milliseconds: 300),
-                    scrollAnimationDuration: Duration(milliseconds: 300),
-                    crossFadePoint: 0,
-                    fadeCurve: Curves.ease,
-                    sizeCurve: Curves.linear,
-                  ),
-                ),
-              ),
-              Stack(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: showIntroDetail,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Row(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: videoItem['staff'] == null
+                              ? GestureDetector(
+                                  onTap: onPushMember,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      NetworkImgLayer(
+                                        type: 'avatar',
+                                        src: widget.loadingStatus
+                                            ? videoItem['owner']?.face ?? ""
+                                            : videoDetail.owner!.face,
+                                        width: 35,
+                                        height: 35,
+                                        fadeInDuration: Duration.zero,
+                                        fadeOutDuration: Duration.zero,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget.loadingStatus
+                                                  ? videoItem['owner']?.name ??
+                                                      ""
+                                                  : videoDetail.owner!.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                // color: t.colorScheme.primary,
+                                              ),
+                                              // semanticsLabel: "UP主：${owner.name}",
+                                            ),
+                                            const SizedBox(height: 0),
+                                            Obx(
+                                              () => Text(
+                                                '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: t.colorScheme.outline,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      followButton(context, t),
+                                    ],
+                                  ),
+                                )
+                              : SelfSizedHorizontalList(
+                                  gapSize: 25,
+                                  itemCount: videoItem['staff'].length,
+                                  childBuilder: (index) => GestureDetector(
+                                    onTap: () {
+                                      int? ownerMid = !widget.loadingStatus
+                                          ? videoDetail.owner?.mid
+                                          : videoItem['owner']?.mid;
+                                      if (videoItem['staff'][index].mid ==
+                                              ownerMid &&
+                                          context.orientation ==
+                                              Orientation.landscape &&
+                                          _horizontalMemberPage) {
+                                        widget.onShowMemberPage(ownerMid);
+                                      } else {
+                                        Get.toNamed(
+                                          '/member?mid=${videoItem['staff'][index].mid}',
+                                          // arguments: {
+                                          // 'face':
+                                          //     videoItem['staff'][index].face,
+                                          // 'heroTag': Utils.makeHeroTag(
+                                          //     videoItem['staff'][index].mid),
+                                          // },
+                                        );
+                                      }
+                                    },
+                                    child: Row(
+                                      children: [
+                                        NetworkImgLayer(
+                                          type: 'avatar',
+                                          src: videoItem['staff'][index].face,
+                                          width: 35,
+                                          height: 35,
+                                          fadeInDuration: Duration.zero,
+                                          fadeOutDuration: Duration.zero,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              videoItem['staff'][index].name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: videoItem['staff'][index]
+                                                                .vip
+                                                                .status >
+                                                            0 &&
+                                                        videoItem['staff']
+                                                                    [index]
+                                                                .vip
+                                                                .type ==
+                                                            2
+                                                    ? context.vipColor
+                                                    : null,
+                                              ),
+                                            ),
+                                            Text(
+                                              videoItem['staff'][index].title,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                        ),
+                        if (isHorizontal) ...[
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: actionGrid(context, videoIntroController)),
+                        ]
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ExpandablePanel(
+                    controller: videoIntroController.expandableCtr,
+                    collapsed: GestureDetector(
+                      onLongPress: () {
+                        feedBack();
+                        Utils.copyText(
+                            '${videoDetail.title ?? videoItem['title'] ?? ''}');
+                      },
+                      child: _buildVideoTitle(),
+                    ),
+                    expanded: GestureDetector(
+                      onLongPress: () {
+                        feedBack();
+                        Utils.copyText(
+                            '${videoDetail.title ?? videoItem['title'] ?? ''}');
+                      },
+                      child: _buildVideoTitle(true),
+                    ),
+                    theme: const ExpandableThemeData(
+                      animationDuration: Duration(milliseconds: 300),
+                      scrollAnimationDuration: Duration(milliseconds: 300),
+                      crossFadePoint: 0,
+                      fadeCurve: Curves.ease,
+                      sizeCurve: Curves.linear,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Stack(
+                    children: [
+                      Row(
                         children: <Widget>[
                           statView(
                             context: context,
@@ -577,169 +546,195 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             ),
                         ],
                       ),
-                    ),
-                  ),
-                  if (videoIntroController.enableAi)
-                    Positioned(
-                      right: 10,
-                      top: 0,
-                      bottom: 0,
-                      child: Center(
-                        child: Semantics(
-                          label: 'AI总结',
-                          child: GestureDetector(
-                            onTap: () async {
-                              final res =
-                                  await videoIntroController.aiConclusion();
-                              if (res['status']) {
-                                widget.showAiBottomSheet();
-                              }
-                            },
-                            child:
-                                Image.asset('assets/images/ai.png', height: 22),
+                      if (videoIntroController.enableAi)
+                        Positioned(
+                          right: 10,
+                          top: 0,
+                          bottom: 0,
+                          child: Center(
+                            child: Semantics(
+                              label: 'AI总结',
+                              child: GestureDetector(
+                                onTap: () async {
+                                  final res =
+                                      await videoIntroController.aiConclusion();
+                                  if (res['status']) {
+                                    widget.showAiBottomSheet();
+                                  }
+                                },
+                                child: Image.asset('assets/images/ai.png',
+                                    height: 22),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                ],
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: showIntroDetail,
-                child: ExpandablePanel(
-                  controller: videoIntroController.expandableCtr,
-                  collapsed: const SizedBox.shrink(),
-                  expanded: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: () {
-                          Utils.copyText(
-                              '${videoIntroController.videoDetail.value.bvid}');
-                        },
-                        child: Text(
-                          videoIntroController.videoDetail.value.bvid ?? '',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      if (videoIntroController
-                          .videoDetail.value.descV2.isNullOrEmpty.not) ...[
-                        const SizedBox(height: 8),
-                        SelectableText.rich(
-                          style: const TextStyle(
-                            height: 1.4,
-                            // fontSize: 13,
-                          ),
-                          TextSpan(
-                            children: [
-                              buildContent(context,
-                                  videoIntroController.videoDetail.value),
-                            ],
-                          ),
-                        ),
-                      ],
-                      if (videoIntroController.videoTags is List &&
-                          videoIntroController.videoTags.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: (videoIntroController.videoTags as List)
-                              .map(
-                                (item) => SearchText(
-                                  fontSize: 13,
-                                  text: item['tag_name'],
-                                  onTap: (_) => Get.toNamed('/searchResult',
-                                      parameters: {
-                                        'keyword': item['tag_name']
-                                      }),
-                                  onLongPress: (_) =>
-                                      Utils.copyText(item['tag_name']),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ],
+                        )
                     ],
                   ),
-                  theme: const ExpandableThemeData(
-                    animationDuration: Duration(milliseconds: 300),
-                    scrollAnimationDuration: Duration(milliseconds: 300),
-                    crossFadePoint: 0,
-                    fadeCurve: Curves.ease,
-                    sizeCurve: Curves.linear,
-                  ),
-                ),
-              ),
-              Obx(
-                () => videoIntroController.queryVideoIntroData.value["status"]
-                    ? const SizedBox.shrink()
-                    : Center(
-                        child: TextButton.icon(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: () {
-                            videoIntroController
-                                .queryVideoIntroData.value["status"] = true;
-                            videoIntroController.queryVideoIntro();
-                            if (videoDetailCtr.videoUrl.isNullOrEmpty &&
-                                videoDetailCtr.isQuerying.not) {
-                              videoDetailCtr.queryVideoUrl();
-                            }
-                          },
-                          label: const Text("点此重新加载"),
-                        ),
+                  if (videoIntroController
+                              .videoDetail.value.argueMsg?.isNotEmpty ==
+                          true &&
+                      videoIntroController.showArgueMsg) ...[
+                    const SizedBox(height: 2),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              size: 13,
+                              Icons.error_outline,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                          WidgetSpan(child: SizedBox(width: 2)),
+                          TextSpan(
+                            text:
+                                '${videoIntroController.videoDetail.value.argueMsg}',
+                          )
+                        ],
                       ),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                  ExpandablePanel(
+                    controller: videoIntroController.expandableCtr,
+                    collapsed: const SizedBox.shrink(),
+                    expanded: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () {
+                            Utils.copyText(
+                                '${videoIntroController.videoDetail.value.bvid}');
+                          },
+                          child: Text(
+                            videoIntroController.videoDetail.value.bvid ?? '',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                        if (videoIntroController
+                            .videoDetail.value.descV2.isNullOrEmpty.not) ...[
+                          const SizedBox(height: 8),
+                          SelectableText.rich(
+                            style: const TextStyle(
+                              height: 1.4,
+                              // fontSize: 13,
+                            ),
+                            TextSpan(
+                              children: [
+                                buildContent(context,
+                                    videoIntroController.videoDetail.value),
+                              ],
+                            ),
+                          ),
+                        ],
+                        if (videoIntroController.videoTags is List &&
+                            videoIntroController.videoTags.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: (videoIntroController.videoTags as List)
+                                .map(
+                                  (item) => SearchText(
+                                    fontSize: 13,
+                                    text: item['tag_name'],
+                                    onTap: (_) => Get.toNamed('/searchResult',
+                                        parameters: {
+                                          'keyword': item['tag_name']
+                                        }),
+                                    onLongPress: (_) =>
+                                        Utils.copyText(item['tag_name']),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ],
+                      ],
+                    ),
+                    theme: const ExpandableThemeData(
+                      animationDuration: Duration(milliseconds: 300),
+                      scrollAnimationDuration: Duration(milliseconds: 300),
+                      crossFadePoint: 0,
+                      fadeCurve: Curves.ease,
+                      sizeCurve: Curves.linear,
+                    ),
+                  ),
+                  Obx(
+                    () =>
+                        videoIntroController.queryVideoIntroData.value["status"]
+                            ? const SizedBox.shrink()
+                            : Center(
+                                child: TextButton.icon(
+                                  icon: const Icon(Icons.refresh),
+                                  onPressed: () {
+                                    videoIntroController.queryVideoIntroData
+                                        .value["status"] = true;
+                                    videoIntroController.queryVideoIntro();
+                                    if (videoDetailCtr.videoUrl.isNullOrEmpty &&
+                                        videoDetailCtr.isQuerying.not) {
+                                      videoDetailCtr.queryVideoUrl();
+                                    }
+                                  },
+                                  label: const Text("点此重新加载"),
+                                ),
+                              ),
+                  ),
+                  // 点赞收藏转发 布局样式1
+                  // SingleChildScrollView(
+                  //   padding: const EdgeInsets.only(top: 7, bottom: 7),
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: actionRow(
+                  //     context,
+                  //     videoIntroController,
+                  //     videoDetailCtr,
+                  //   ),
+                  // ),
+                  // 点赞收藏转发 布局样式2
+                  if (!isHorizontal) ...[
+                    const SizedBox(height: 8),
+                    actionGrid(context, videoIntroController),
+                  ],
+                  // 合集
+                  if (!widget.loadingStatus &&
+                      videoDetail.ugcSeason != null &&
+                      (context.orientation != Orientation.landscape ||
+                          (context.orientation == Orientation.landscape &&
+                              videoDetailCtr.horizontalSeasonPanel.not)))
+                    SeasonPanel(
+                      heroTag: widget.heroTag,
+                      ugcSeason: videoDetail.ugcSeason!,
+                      changeFuc: videoIntroController.changeSeasonOrbangu,
+                      showEpisodes: widget.showEpisodes,
+                      pages: videoDetail.pages,
+                      videoIntroController: videoIntroController,
+                    ),
+                  if (!widget.loadingStatus &&
+                      videoDetail.pages != null &&
+                      videoDetail.pages!.length > 1 &&
+                      (context.orientation != Orientation.landscape ||
+                          (context.orientation == Orientation.landscape &&
+                              videoDetailCtr.horizontalSeasonPanel.not))) ...[
+                    PagesPanel(
+                      heroTag: widget.heroTag,
+                      videoIntroController: videoIntroController,
+                      bvid: videoIntroController.bvid,
+                      changeFuc: videoIntroController.changeSeasonOrbangu,
+                      showEpisodes: widget.showEpisodes,
+                    ),
+                  ],
+                ],
               ),
-              // 点赞收藏转发 布局样式1
-              // SingleChildScrollView(
-              //   padding: const EdgeInsets.only(top: 7, bottom: 7),
-              //   scrollDirection: Axis.horizontal,
-              //   child: actionRow(
-              //     context,
-              //     videoIntroController,
-              //     videoDetailCtr,
-              //   ),
-              // ),
-              // 点赞收藏转发 布局样式2
-              if (!isHorizontal) ...[
-                const SizedBox(height: 8),
-                actionGrid(context, videoIntroController),
-              ],
-              // 合集
-              if (!widget.loadingStatus &&
-                  videoDetail.ugcSeason != null &&
-                  (context.orientation != Orientation.landscape ||
-                      (context.orientation == Orientation.landscape &&
-                          videoDetailCtr.horizontalSeasonPanel.not)))
-                SeasonPanel(
-                  heroTag: widget.heroTag,
-                  ugcSeason: videoDetail.ugcSeason!,
-                  changeFuc: videoIntroController.changeSeasonOrbangu,
-                  showEpisodes: widget.showEpisodes,
-                  pages: videoDetail.pages,
-                  videoIntroController: videoIntroController,
-                ),
-              if (!widget.loadingStatus &&
-                  videoDetail.pages != null &&
-                  videoDetail.pages!.length > 1 &&
-                  (context.orientation != Orientation.landscape ||
-                      (context.orientation == Orientation.landscape &&
-                          videoDetailCtr.horizontalSeasonPanel.not))) ...[
-                PagesPanel(
-                  heroTag: widget.heroTag,
-                  videoIntroController: videoIntroController,
-                  bvid: videoIntroController.bvid,
-                  changeFuc: videoIntroController.changeSeasonOrbangu,
-                  showEpisodes: widget.showEpisodes,
-                ),
-              ],
-            ],
-          )),
+            ),
+          ),
         );
       },
     );

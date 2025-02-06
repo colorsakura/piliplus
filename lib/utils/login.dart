@@ -6,8 +6,10 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
+import 'package:PiliPlus/models/common/tab_type.dart' hide tabsConfig;
 import 'package:PiliPlus/models/user/info.dart';
 import 'package:PiliPlus/models/user/stat.dart';
+import 'package:PiliPlus/pages/bangumi/controller.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
@@ -113,6 +115,18 @@ class LoginUtils {
           ..isLogin.value = true
           ..fetchLiveFollowing();
       } catch (_) {}
+
+      try {
+        Get.find<BangumiController>(tag: TabType.bangumi.name)
+          ..isLogin.value = true
+          ..queryBangumiFollow();
+      } catch (_) {}
+
+      try {
+        Get.find<BangumiController>(tag: TabType.cinema.name)
+          ..isLogin.value = true
+          ..queryBangumiFollow();
+      } catch (_) {}
     } else {
       // 获取用户信息失败
       SmartDialog.showNotify(
@@ -170,6 +184,18 @@ class LoginUtils {
         Get.find<DynamicsTabController>(tag: tabsConfig[i]['tag']).onRefresh();
       } catch (_) {}
     }
+
+    try {
+      Get.find<BangumiController>(tag: TabType.bangumi.name)
+        ..isLogin.value = false
+        ..followState.value = LoadingState.loading();
+    } catch (_) {}
+
+    try {
+      Get.find<BangumiController>(tag: TabType.cinema.name)
+        ..isLogin.value = false
+        ..followState.value = LoadingState.loading();
+    } catch (_) {}
   }
 
   static String buvid() {

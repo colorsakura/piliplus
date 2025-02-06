@@ -127,7 +127,7 @@ class _MinePageState extends State<MinePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
-          behavior: HitTestBehavior.translucent,
+          behavior: HitTestBehavior.opaque,
           onTap: _mineController.onLogin,
           child: Row(
             mainAxisSize: MainAxisSize.min,

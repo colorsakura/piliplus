@@ -82,48 +82,48 @@ class _BangumiPageState extends State<BangumiPage>
         slivers: [
           SliverToBoxAdapter(
             child: Obx(
-              () => Visibility(
-                visible: _bangumiController.isLogin.value,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(
-                            () => Text(
-                              '最近${widget.tabType == TabType.bangumi ? '追番' : '追剧'}${_bangumiController.followCount.value == -1 ? '' : ' ${_bangumiController.followCount.value}'}',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
+              () => _bangumiController.isLogin.value
+                  ? Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Obx(
+                                () => Text(
+                                  '最近${widget.tabType == TabType.bangumi ? '追番' : '追剧'}${_bangumiController.followCount.value == -1 ? '' : ' ${_bangumiController.followCount.value}'}',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: '刷新',
+                                onPressed: () {
+                                  _bangumiController
+                                    ..followPage = 1
+                                    ..followEnd = false
+                                    ..queryBangumiFollow();
+                                },
+                                icon: const Icon(
+                                  Icons.refresh,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
                           ),
-                          IconButton(
-                            tooltip: '刷新',
-                            onPressed: () {
-                              _bangumiController
-                                ..followPage = 1
-                                ..followEnd = false
-                                ..queryBangumiFollow();
-                            },
-                            icon: const Icon(
-                              Icons.refresh,
-                              size: 20,
-                            ),
+                        ),
+                        SizedBox(
+                          height: Grid.smallCardWidth / 2 / 0.75 +
+                              MediaQuery.textScalerOf(context).scale(50),
+                          child: Obx(
+                            () => _buildFollowBody(
+                                _bangumiController.followState.value),
                           ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: Grid.smallCardWidth / 2 / 0.75 +
-                          MediaQuery.textScalerOf(context).scale(50),
-                      child: Obx(
-                        () => _buildFollowBody(
-                            _bangumiController.followState.value),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
           SliverToBoxAdapter(
