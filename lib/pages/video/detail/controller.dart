@@ -1846,6 +1846,31 @@ class VideoDetailController extends GetxController
     });
   }
 
+  // interactive video
+  dynamic graphVersion;
+  Map? steinEdgeInfo;
+  late final RxBool showSteinEdgeInfo = false.obs;
+  void getSteinEdgeInfo([edgeId]) async {
+    steinEdgeInfo = null;
+    try {
+      dynamic res = await Request().get(
+        'https://api.bilibili.com/x/stein/edgeinfo_v2',
+        queryParameters: {
+          'bvid': bvid,
+          'graph_version': graphVersion,
+          if (edgeId != null) 'edge_id': edgeId,
+        },
+      );
+      if (res.data['code'] == 0) {
+        steinEdgeInfo = res.data['data'];
+      } else {
+        debugPrint('getSteinEdgeInfo error: ${res.data['message']}');
+      }
+    } catch (e) {
+      debugPrint('getSteinEdgeInfo: $e');
+    }
+  }
+
   late bool continuePlayingPart = GStorage.continuePlayingPart;
 
   Future _querySubtitles() async {
@@ -1854,6 +1879,19 @@ class VideoDetailController extends GetxController
     //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
     // }
     if (res['status']) {
+      // interactive video
+      if (graphVersion == null) {
+        try {
+          final introCtr = Get.find<VideoIntroController>(tag: heroTag);
+          if (introCtr.videoDetail.value.rights?['is_stein_gate'] == 1) {
+            graphVersion = res['interaction']?['graph_version'];
+            getSteinEdgeInfo();
+          }
+        } catch (e) {
+          debugPrint('handle stein: $e');
+        }
+      }
+
       if (continuePlayingPart) {
         continuePlayingPart = false;
         try {
@@ -1945,7 +1983,7 @@ class VideoDetailController extends GetxController
     super.onClose();
   }
 
-  onReset() {
+  onReset([isStein]) {
     playedTime = null;
     videoUrl = null;
     audioUrl = null;
@@ -1968,6 +2006,13 @@ class VideoDetailController extends GetxController
       segmentList.clear();
       _segmentProgressList = null;
     }
+
+    // interactive video
+    if (isStein != true) {
+      graphVersion = null;
+    }
+    steinEdgeInfo = null;
+    showSteinEdgeInfo.value = false;
   }
 
   late final showDmChart = GStorage.showDmChart;

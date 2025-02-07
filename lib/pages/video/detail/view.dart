@@ -240,6 +240,15 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // 播放器状态监听
   void playerListener(PlayerStatus? status) async {
     if (status == PlayerStatus.completed) {
+      try {
+        if ((videoDetailController.steinEdgeInfo?['edges']['questions'][0]
+                    ['choices'] as List?)
+                ?.isNotEmpty ==
+            true) {
+          videoDetailController.showSteinEdgeInfo.value = true;
+          return;
+        }
+      } catch (_) {}
       shutdownTimerService.handleWaitingFinished();
       bool notExitFlag = false;
 
@@ -1421,6 +1430,69 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           //     child: Text('index'),
           //   ),
           // ),
+
+          Obx(
+            () {
+              if (videoDetailController.showSteinEdgeInfo.value) {
+                try {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: plPlayerController?.showControls.value == true
+                            ? 75
+                            : 16,
+                      ),
+                      child: Wrap(
+                        spacing: 25,
+                        runSpacing: 10,
+                        children: (videoDetailController.steinEdgeInfo!['edges']
+                                ['questions'][0]['choices'] as List)
+                            .map((item) {
+                          return FilledButton.tonal(
+                            style: FilledButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer
+                                  .withOpacity(0.8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 10,
+                              ),
+                              visualDensity:
+                                  VisualDensity(horizontal: -2, vertical: -2),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            onPressed: () {
+                              videoIntroController.changeSeasonOrbangu(
+                                null,
+                                videoDetailController.bvid,
+                                item['cid'],
+                                IdUtils.bv2av(videoDetailController.bvid),
+                                null,
+                                true,
+                              );
+                              videoDetailController
+                                  .getSteinEdgeInfo(item['id']);
+                            },
+                            child: Text(item['option']),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  );
+                } catch (e) {
+                  debugPrint('build stein edges: $e');
+                  return const SizedBox.shrink();
+                }
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ],
       );
 

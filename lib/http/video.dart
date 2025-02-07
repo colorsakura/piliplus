@@ -977,7 +977,6 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       dynamic data = res.data['data'];
-      List subtitlesJson = data['subtitle']['subtitles'];
       /*
       [
         {
@@ -995,10 +994,11 @@ class VideoHttp {
        */
       return {
         'status': true,
-        'data': subtitlesJson,
+        'data': data['subtitle']['subtitles'],
         'view_points': data['view_points'],
         // 'last_play_time': data['last_play_time'],
         'last_play_cid': data['last_play_cid'],
+        'interaction': data['interaction'],
       };
     } else {
       return {'status': false, 'data': [], 'msg': res.data['message']};
