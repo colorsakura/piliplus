@@ -564,14 +564,17 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       );
 
   Widget get _buildContent => SliverPadding(
-        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         sliver: Obx(
           () => _htmlRenderCtr.loaded.value
               ? _htmlRenderCtr.response['isJsonContent'] == true
-                  ? articleContent(
-                      context: context,
-                      list: _htmlRenderCtr.response['content'],
-                      callback: _getImageCallback,
+                  ? LayoutBuilder(
+                      builder: (context, constraints) => articleContent(
+                        context: context,
+                        list: _htmlRenderCtr.response['content'],
+                        callback: _getImageCallback,
+                        maxWidth: constraints.maxWidth,
+                      ),
                     )
                   : SliverToBoxAdapter(
                       child: LayoutBuilder(
@@ -583,9 +586,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                         ),
                       ),
                     )
-              : SliverToBoxAdapter(
-                  child: const SizedBox(),
-                ),
+              : SliverToBoxAdapter(child: const SizedBox()),
         ),
       );
 }

@@ -11,6 +11,7 @@ Widget articleContent({
   required BuildContext context,
   required List<ArticleContentModel> list,
   Function(List<String>, int)? callback,
+  required double maxWidth,
 }) {
   List<String>? imgList = list
       .where((item) => item.pic != null)
@@ -57,31 +58,28 @@ Widget articleContent({
           ),
         );
       } else if (item.pic != null) {
-        return LayoutBuilder(
-          builder: (context, constraints) => Hero(
-            tag: item.pic!.pics!.first.url!,
-            child: GestureDetector(
-              onTap: () {
-                if (callback != null) {
-                  callback(
-                    imgList,
-                    imgList.indexOf(item.pic!.pics!.first.url!),
-                  );
-                } else {
-                  context.imageView(
-                    initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
-                    imgList:
-                        imgList.map((url) => SourceModel(url: url)).toList(),
-                  );
-                }
-              },
-              child: NetworkImgLayer(
-                width: constraints.maxWidth,
-                height: constraints.maxWidth *
-                    item.pic!.pics!.first.height! /
-                    item.pic!.pics!.first.width!,
-                src: item.pic!.pics!.first.url,
-              ),
+        return Hero(
+          tag: item.pic!.pics!.first.url!,
+          child: GestureDetector(
+            onTap: () {
+              if (callback != null) {
+                callback(
+                  imgList,
+                  imgList.indexOf(item.pic!.pics!.first.url!),
+                );
+              } else {
+                context.imageView(
+                  initialPage: imgList.indexOf(item.pic!.pics!.first.url!),
+                  imgList: imgList.map((url) => SourceModel(url: url)).toList(),
+                );
+              }
+            },
+            child: NetworkImgLayer(
+              width: maxWidth,
+              height: maxWidth *
+                  item.pic!.pics!.first.height! /
+                  item.pic!.pics!.first.width!,
+              src: item.pic!.pics!.first.url,
             ),
           ),
         );
