@@ -373,7 +373,7 @@ class Utils {
     bool inApp = false,
   }) {
     if (inApp.not && GStorage.openInBrowser) {
-      if (RegExp(r'^(https?://)?((www|m).)?(bilibili|bv23).com')
+      if (RegExp(r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)')
           .hasMatch(url)) {
         toDupNamed(
           '/webview',
