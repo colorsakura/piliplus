@@ -225,18 +225,12 @@ class PiliScheme {
   }
 
   // 投稿跳转
-  static Future<void> videoPush(int? aidVal, String? bvidVal) async {
+  static Future<void> videoPush(int? aid, String? bvid) async {
     try {
-      int? aid = aidVal;
-      String? bvid = bvidVal;
-      if (aidVal == null) {
-        aid = IdUtils.bv2av(bvidVal!);
-      }
-      if (bvidVal == null) {
-        bvid = IdUtils.av2bv(aidVal!);
-      }
+      aid ??= IdUtils.bv2av(bvid!);
+      bvid ??= IdUtils.av2bv(aid);
       SmartDialog.showLoading<dynamic>(msg: '获取中...');
-      final int cid = await SearchHttp.ab2c(bvid: bvidVal, aid: aidVal);
+      final int cid = await SearchHttp.ab2c(bvid: bvid, aid: aid);
       SmartDialog.dismiss();
       Utils.toDupNamed(
         '/video?bvid=$bvid&cid=$cid',

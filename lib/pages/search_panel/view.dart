@@ -16,7 +16,7 @@ import 'widgets/media_bangumi_panel.dart';
 import 'widgets/user_panel.dart';
 
 class SearchPanel extends StatefulWidget {
-  final String? keyword;
+  final String keyword;
   final SearchType searchType;
   final String tag;
   const SearchPanel({
@@ -46,7 +46,7 @@ class _SearchPanelState extends State<SearchPanel>
         searchType: widget.searchType,
         tag: widget.tag,
       ),
-      tag: widget.searchType.name + widget.keyword!,
+      tag: widget.searchType.name + widget.keyword,
     );
   }
 

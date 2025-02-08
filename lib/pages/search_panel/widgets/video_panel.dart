@@ -277,7 +277,7 @@ class VideoPanelController extends GetxController {
                     SmartDialog.dismiss();
                     // SmartDialog.showToast("「${item['label']}」的筛选结果");
                     SearchPanelController ctr = Get.find<SearchPanelController>(
-                        tag: 'video${searchPanelCtr.keyword!}');
+                        tag: 'video${searchPanelCtr.keyword}');
                     ctr.pubBegin = DateTime(
                           pubBegin.year,
                           pubBegin.month,
@@ -345,7 +345,7 @@ class VideoPanelController extends GetxController {
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
                               SearchPanelController ctr =
                                   Get.find<SearchPanelController>(
-                                      tag: 'video${searchPanelCtr.keyword!}');
+                                      tag: 'video${searchPanelCtr.keyword}');
                               DateTime now = DateTime.now();
                               if (item['value'] == 0) {
                                 ctr.pubBegin = null;
@@ -424,7 +424,7 @@ class VideoPanelController extends GetxController {
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
                               SearchPanelController ctr =
                                   Get.find<SearchPanelController>(
-                                      tag: 'video${searchPanelCtr.keyword!}');
+                                      tag: 'video${searchPanelCtr.keyword}');
                               ctr.duration.value = item['value'];
                               SmartDialog.showLoading(msg: 'loading');
                               await ctr.onRefresh();
@@ -462,7 +462,7 @@ class VideoPanelController extends GetxController {
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
                               SearchPanelController ctr =
                                   Get.find<SearchPanelController>(
-                                      tag: 'video${searchPanelCtr.keyword!}');
+                                      tag: 'video${searchPanelCtr.keyword}');
                               ctr.tids = item['tids'];
                               SmartDialog.showLoading(msg: 'loading');
                               await ctr.onRefresh();

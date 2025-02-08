@@ -68,23 +68,16 @@ class IdUtils {
     if (input == null || input.isEmpty) {
       return result;
     }
-    final RegExp bvRegex =
-        RegExp(r'[bB][vV][0-9A-Za-z]{10}', caseSensitive: false);
-    final RegExp avRegex = RegExp(r'[aA][vV]\d+', caseSensitive: false);
+    final RegExp bvRegex = RegExp(r'bv([0-9A-Za-z]+)', caseSensitive: false);
+    String? bvid = bvRegex.firstMatch(input)?.group(1);
 
-    final Iterable<Match> bvMatches = bvRegex.allMatches(input);
-    final Iterable<Match> avMatches = avRegex.allMatches(input);
+    late final RegExp avRegex = RegExp(r'av(\d+)', caseSensitive: false);
+    late String? aid = avRegex.firstMatch(input)?.group(1);
 
-    final List<String> bvs =
-        bvMatches.map((Match match) => match.group(0)!).toList();
-    final List<String> avs =
-        avMatches.map((Match match) => match.group(0)!).toList();
-
-    if (bvs.isNotEmpty) {
-      result['BV'] = bvs[0].substring(0, 2).toUpperCase() + bvs[0].substring(2);
-    }
-    if (avs.isNotEmpty) {
-      result['AV'] = int.parse(avs[0].substring(2));
+    if (bvid != null) {
+      result['BV'] = 'BV$bvid';
+    } else if (aid != null) {
+      result['AV'] = int.parse(aid);
     }
     return result;
   }

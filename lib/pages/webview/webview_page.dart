@@ -198,35 +198,38 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             final String? str =
                 navigationAction.request.url!.pathSegments.getOrNull(0);
-            final Map matchRes = IdUtils.matchAvorBv(input: str);
-            final List matchKeys = matchRes.keys.toList();
-            if (matchKeys.isNotEmpty) {
-              if (matchKeys.first == 'BV') {
-                Get.offAndToNamed(
-                  '/searchResult',
-                  parameters: {'keyword': matchRes['BV']},
-                );
+            if (str != null) {
+              final Map matchRes = IdUtils.matchAvorBv(input: str);
+              if (matchRes.isNotEmpty) {
+                Get.back();
+                PiliScheme.videoPush(matchRes['AV'], matchRes['BV']);
                 return NavigationActionPolicy.CANCEL;
               }
             }
 
             var url = navigationAction.request.url!.toString();
 
-            if (url.startsWith('http')) {
-              if (RegExp(r'https://www.bilibili.com/video/BV[a-zA-Z\d]+')
-                  .hasMatch(url)) {
-                PiliScheme.routePush(Uri.parse(url));
-                return NavigationActionPolicy.CANCEL;
-              } else if (url.startsWith('http://m.bilibili.com/playlist/')) {
-                try {
-                  String? bvid =
-                      RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
-                  if (bvid != null) {
-                    PiliScheme.videoPush(null, bvid);
-                    return NavigationActionPolicy.CANCEL;
-                  }
-                } catch (_) {}
-              }
+            if (RegExp(
+                    r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/video/BV[a-zA-Z\d]+')
+                .hasMatch(url)) {
+              try {
+                String? bvid =
+                    RegExp(r'BV[a-zA-Z\d]+').firstMatch(url)?.group(0);
+                if (bvid != null) {
+                  Get.back();
+                  PiliScheme.videoPush(null, bvid);
+                  return NavigationActionPolicy.CANCEL;
+                }
+              } catch (_) {}
+            } else if (url.startsWith('http://m.bilibili.com/playlist/')) {
+              try {
+                String? bvid =
+                    RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
+                if (bvid != null) {
+                  PiliScheme.videoPush(null, bvid);
+                  return NavigationActionPolicy.CANCEL;
+                }
+              } catch (_) {}
             } else {
               if (url.startsWith('bilibili://video/')) {
                 String? str = Uri.parse(url).pathSegments.getOrNull(0);

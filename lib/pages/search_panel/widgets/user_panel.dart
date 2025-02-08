@@ -214,7 +214,7 @@ class UserPanelController extends GetxController {
                           SmartDialog.showToast("「${item['label']}」的筛选结果");
                           SearchPanelController ctr =
                               Get.find<SearchPanelController>(
-                                  tag: 'bili_user${searchPanelCtr.keyword!}');
+                                  tag: 'bili_user${searchPanelCtr.keyword}');
                           ctr.orderSort = item['orderSort'];
                           ctr.order.value = item['order'];
                           SmartDialog.showLoading(msg: 'loading');
@@ -249,7 +249,7 @@ class UserPanelController extends GetxController {
                           SmartDialog.showToast("「${item['label']}」的筛选结果");
                           SearchPanelController ctr =
                               Get.find<SearchPanelController>(
-                                  tag: 'bili_user${searchPanelCtr.keyword!}');
+                                  tag: 'bili_user${searchPanelCtr.keyword}');
                           ctr.userType = item['userType'];
                           SmartDialog.showLoading(msg: 'loading');
                           await ctr.onRefresh();

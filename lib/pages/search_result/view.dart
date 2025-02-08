@@ -60,7 +60,7 @@ class _SearchResultPageState extends State<SearchResultPage>
           child: SizedBox(
             width: double.infinity,
             child: Text(
-              '${_searchResultController.keyword}',
+              _searchResultController.keyword,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -110,7 +110,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                   if (_tabController.indexIsChanging.not) {
                     Get.find<SearchPanelController>(
                             tag: SearchType.values[index].name +
-                                _searchResultController.keyword!)
+                                _searchResultController.keyword)
                         .animateToTop();
                   }
                 },

@@ -287,7 +287,7 @@ class ArticlePanelController extends GetxController {
                           SmartDialog.showToast("「${item['label']}」的筛选结果");
                           SearchPanelController ctr =
                               Get.find<SearchPanelController>(
-                                  tag: 'article${searchPanelCtr.keyword!}');
+                                  tag: 'article${searchPanelCtr.keyword}');
                           ctr.order.value = item['order'];
                           SmartDialog.showLoading(msg: 'loading');
                           await ctr.onRefresh();
@@ -321,7 +321,7 @@ class ArticlePanelController extends GetxController {
                           SmartDialog.showToast("「${item['label']}」的筛选结果");
                           SearchPanelController ctr =
                               Get.find<SearchPanelController>(
-                                  tag: 'article${searchPanelCtr.keyword!}');
+                                  tag: 'article${searchPanelCtr.keyword}');
                           ctr.categoryId = item['categoryId'];
                           SmartDialog.showLoading(msg: 'loading');
                           await ctr.onRefresh();

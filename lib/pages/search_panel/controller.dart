@@ -9,11 +9,11 @@ import 'package:PiliPlus/utils/utils.dart';
 
 class SearchPanelController extends CommonController {
   SearchPanelController({
-    this.keyword,
+    required this.keyword,
     required this.searchType,
     required this.tag,
   });
-  String? keyword;
+  String keyword;
   SearchType searchType;
   // 结果排序方式 搜索类型为视频、专栏及相簿时
   RxString order = ''.obs;
@@ -99,7 +99,7 @@ class SearchPanelController extends CommonController {
   @override
   Future<LoadingState> customGetData() => SearchHttp.searchByType(
         searchType: searchType,
-        keyword: keyword!,
+        keyword: keyword,
         page: currentPage,
         order: order.value,
         duration: searchType.name != 'video' ? null : duration.value,
