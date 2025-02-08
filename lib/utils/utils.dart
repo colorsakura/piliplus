@@ -21,6 +21,7 @@ import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -367,19 +368,46 @@ class Utils {
     );
   }
 
+  static bool _handleInAppWebview(String url) {
+    if (RegExp(
+            r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/video/BV[a-zA-Z\d]+')
+        .hasMatch(url)) {
+      try {
+        String? bvid = RegExp(r'BV[a-zA-Z\d]+').firstMatch(url)?.group(0);
+        if (bvid != null) {
+          PiliScheme.videoPush(null, bvid);
+          return true;
+        }
+      } catch (_) {}
+    } else if (RegExp(
+            r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/playlist')
+        .hasMatch(url)) {
+      try {
+        String? bvid =
+            RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
+        if (bvid != null) {
+          PiliScheme.videoPush(null, bvid);
+          return true;
+        }
+      } catch (_) {}
+    } else if (RegExp(r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)')
+        .hasMatch(url)) {
+      toDupNamed(
+        '/webview',
+        parameters: {'url': url},
+      );
+      return true;
+    }
+    return false;
+  }
+
   static void handleWebview(
     String url, {
     bool off = false,
     bool inApp = false,
   }) {
     if (inApp.not && GStorage.openInBrowser) {
-      if (RegExp(r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)')
-          .hasMatch(url)) {
-        toDupNamed(
-          '/webview',
-          parameters: {'url': url},
-        );
-      } else {
+      if (_handleInAppWebview(url).not) {
         launchURL(url);
       }
     } else {
@@ -389,10 +417,12 @@ class Utils {
           parameters: {'url': url},
         );
       } else {
-        toDupNamed(
-          '/webview',
-          parameters: {'url': url},
-        );
+        if (_handleInAppWebview(url).not) {
+          toDupNamed(
+            '/webview',
+            parameters: {'url': url},
+          );
+        }
       }
     }
   }

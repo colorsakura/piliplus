@@ -1,11 +1,11 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/search_result/controller.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
 
 class SearchPanelController extends CommonController {
   SearchPanelController({
@@ -61,39 +61,17 @@ class SearchPanelController extends CommonController {
   void onPushDetail(resultList) async {
     // 匹配输入内容，如果是AV、BV号且有结果 直接跳转详情页
     Map matchRes = IdUtils.matchAvorBv(input: keyword);
-    List matchKeys = matchRes.keys.toList();
-    String? bvid;
-    try {
-      bvid = resultList.first.bvid;
-    } catch (_) {
-      bvid = null;
+    if (matchRes.isNotEmpty) {
+      PiliScheme.videoPush(matchRes['AV'], matchRes['BV'], false);
+      return;
     }
     // keyword 可能输入纯数字
-    int? aid;
     try {
-      aid = resultList.first.aid;
-    } catch (_) {
-      aid = null;
-    }
-    if (matchKeys.isNotEmpty && searchType == SearchType.video ||
-        aid.toString() == keyword) {
-      int cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
-      if (matchKeys.isNotEmpty &&
-              matchKeys.first == 'BV' &&
-              matchRes[matchKeys.first] == bvid ||
-          matchKeys.isNotEmpty &&
-              matchKeys.first == 'AV' &&
-              matchRes[matchKeys.first] == aid ||
-          aid.toString() == keyword) {
-        Get.toNamed(
-          '/video?bvid=$bvid&cid=$cid',
-          arguments: {
-            'videoItem': resultList.first,
-            'heroTag': Utils.makeHeroTag(bvid),
-          },
-        );
+      int? aid = int.tryParse(keyword);
+      if (aid != null && resultList.first.aid == aid) {
+        PiliScheme.videoPush(aid, null, false);
       }
-    }
+    } catch (_) {}
   }
 
   @override

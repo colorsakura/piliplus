@@ -71,7 +71,7 @@ class _AboutPageState extends State<AboutPage> {
                         onSubmitted: (value) {
                           Get.back();
                           if (value.isNotEmpty) {
-                            Get.toNamed('/webview', parameters: {'url': value});
+                            Utils.handleWebview(value, inApp: true);
                           }
                         },
                       ),

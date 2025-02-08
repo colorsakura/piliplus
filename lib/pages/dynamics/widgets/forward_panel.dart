@@ -310,10 +310,7 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
             if (url.contains('bangumi/play') && Utils.viewPgcFromUri(url)) {
               return;
             }
-            Get.toNamed(
-              '/webview',
-              parameters: {'url': url},
-            );
+            Utils.handleWebview(url, inApp: true);
           } catch (_) {}
         },
         child: Container(

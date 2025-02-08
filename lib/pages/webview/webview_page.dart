@@ -221,7 +221,9 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                   return NavigationActionPolicy.CANCEL;
                 }
               } catch (_) {}
-            } else if (url.startsWith('http://m.bilibili.com/playlist/')) {
+            } else if (RegExp(
+                    r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/playlist')
+                .hasMatch(url)) {
               try {
                 String? bvid =
                     RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
@@ -230,9 +232,10 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                   return NavigationActionPolicy.CANCEL;
                 }
               } catch (_) {}
-            } else {
+            } else if (url.startsWith('http').not) {
               if (url.startsWith('bilibili://video/')) {
-                String? str = Uri.parse(url).pathSegments.getOrNull(0);
+                String? str =
+                    navigationAction.request.url!.pathSegments.getOrNull(0);
                 Get.offAndToNamed(
                   '/searchResult',
                   parameters: {'keyword': str ?? ''},
