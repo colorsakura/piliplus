@@ -355,12 +355,13 @@ class PiliScheme {
         for (var pathSegment in pathPart) {
           if (pathSegment.startsWith('ss')) {
             bangumiPush(matchNum(pathSegment).first, null);
-            break;
+            return;
           } else if (pathSegment.startsWith('ep')) {
             bangumiPush(null, matchNum(pathSegment).first);
-            break;
+            return;
           }
         }
+        Utils.handleWebview(value.toString());
         break;
       case 'video':
         debugPrint('投稿');
