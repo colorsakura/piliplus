@@ -13,6 +13,7 @@ Widget articleContent({
   Function(List<String>, int)? callback,
   required double maxWidth,
 }) {
+  debugPrint('articleContent');
   List<String>? imgList = list
       .where((item) => item.pic != null)
       .toList()

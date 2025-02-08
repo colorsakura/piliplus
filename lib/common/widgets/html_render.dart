@@ -13,6 +13,7 @@ Widget htmlRender({
   required double constrainedWidth,
   Function(List<String>, int)? callback,
 }) {
+  debugPrint('htmlRender');
   return SelectionArea(
       child: Html(
     data: htmlContent,
