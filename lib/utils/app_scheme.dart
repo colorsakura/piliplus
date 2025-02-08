@@ -77,10 +77,8 @@ class PiliScheme {
           pathQuery = 'AV$pathQuery';
         }
         Map map = IdUtils.matchAvorBv(input: pathQuery);
-        if (map.containsKey('AV')) {
-          videoPush(map['AV'], null);
-        } else if (map.containsKey('BV')) {
-          videoPush(null, map['BV']);
+        if (map.isNotEmpty) {
+          videoPush(map['AV'], map['BV']);
         } else {
           SmartDialog.showToast('投稿匹配失败');
         }
@@ -321,10 +319,8 @@ class PiliScheme {
       if (avRegex.hasMatch(lastPathSegment)) {
         final Map<String, dynamic> map =
             IdUtils.matchAvorBv(input: lastPathSegment);
-        if (map.containsKey('AV')) {
-          videoPush(map['AV']! as int, null);
-        } else if (map.containsKey('BV')) {
-          videoPush(null, map['BV'] as String);
+        if (map.isNotEmpty) {
+          videoPush(map['AV'], map['BV']);
         } else {
           SmartDialog.showToast('投稿匹配失败');
         }
@@ -366,10 +362,8 @@ class PiliScheme {
       case 'video':
         debugPrint('投稿');
         final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
-        if (map.containsKey('AV')) {
-          videoPush(map['AV']! as int, null);
-        } else if (map.containsKey('BV')) {
-          videoPush(null, map['BV'] as String);
+        if (map.isNotEmpty) {
+          videoPush(map['AV'], map['BV']);
         } else {
           SmartDialog.showToast('投稿匹配失败');
         }
@@ -396,11 +390,9 @@ class PiliScheme {
             arguments: {'face': ''});
         break;
       default:
-        var res = IdUtils.matchAvorBv(input: area.split('?').first);
-        if (res.containsKey('AV')) {
-          videoPush(res['AV']! as int, null);
-        } else if (res.containsKey('BV')) {
-          videoPush(null, res['BV'] as String);
+        Map map = IdUtils.matchAvorBv(input: area.split('?').first);
+        if (map.isNotEmpty) {
+          videoPush(map['AV'], map['BV']);
         } else {
           // SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
           Utils.handleWebview(value.toString());

@@ -68,11 +68,10 @@ class IdUtils {
     if (input == null || input.isEmpty) {
       return result;
     }
-    final RegExp bvRegex =
-        RegExp(r'^bv([0-9A-Za-z]{10})', caseSensitive: false);
+    final RegExp bvRegex = RegExp(r'bv([0-9A-Za-z]{10})', caseSensitive: false);
     String? bvid = bvRegex.firstMatch(input)?.group(1);
 
-    late final RegExp avRegex = RegExp(r'^av(\d+)', caseSensitive: false);
+    late final RegExp avRegex = RegExp(r'av(\d+)', caseSensitive: false);
     late String? aid = avRegex.firstMatch(input)?.group(1);
 
     if (bvid != null) {
