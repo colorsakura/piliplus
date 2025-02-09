@@ -235,23 +235,25 @@ class Utils {
 
       /// 专栏文章查看
       case 'DYNAMIC_TYPE_ARTICLE':
-        String title = item.modules.moduleDynamic.major.opus.title;
-        String url = item.modules.moduleDynamic.major.opus.jumpUrl;
-        if (url.contains('opus') || url.contains('read')) {
-          RegExp digitRegExp = RegExp(r'\d+');
-          Iterable<Match> matches = digitRegExp.allMatches(url);
-          String number = matches.first.group(0)!;
-          if (url.contains('read')) {
-            number = 'cv$number';
+        String? url = item?.modules?.moduleDynamic?.major?.opus?.jumpUrl;
+        if (url != null) {
+          String? title = item?.modules?.moduleDynamic?.major?.opus?.title;
+          if (url.contains('opus') || url.contains('read')) {
+            RegExp digitRegExp = RegExp(r'\d+');
+            Iterable<Match> matches = digitRegExp.allMatches(url);
+            String number = matches.first.group(0)!;
+            if (url.contains('read')) {
+              number = 'cv$number';
+            }
+            Utils.toDupNamed('/htmlRender', parameters: {
+              'url': url.startsWith('//') ? url.split('//').last : url,
+              'title': title ?? '',
+              'id': number,
+              'dynamicType': url.split('//').last.split('/')[1]
+            });
+          } else {
+            Utils.handleWebview('https:$url');
           }
-          Utils.toDupNamed('/htmlRender', parameters: {
-            'url': url.startsWith('//') ? url.split('//').last : url,
-            'title': title,
-            'id': number,
-            'dynamicType': url.split('//').last.split('/')[1]
-          });
-        } else {
-          Utils.handleWebview('https:$url');
         }
 
         break;

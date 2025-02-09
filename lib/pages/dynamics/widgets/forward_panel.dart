@@ -161,9 +161,40 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
       return videoSeasonWidget(item, context, 'archive', floor: floor);
     // 文章
     case 'DYNAMIC_TYPE_ARTICLE':
-      return item is ItemOrigModel
-          ? articlePanel(item, context, callback, floor: floor)
-          : const SizedBox.shrink();
+      return switch (item) {
+        ItemOrigModel() => articlePanel(item, context, callback, floor: floor),
+        DynamicItemModel() => item.modules?.moduleDynamic?.major?.blocked !=
+                null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (item.modules?.moduleDynamic?.major?.blocked?['title'] !=
+                        null)
+                      Text(
+                        '${item.modules?.moduleDynamic?.major?.blocked!['title']}',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    if (item.modules?.moduleDynamic?.major
+                            ?.blocked?['hint_message'] !=
+                        null)
+                      Text(
+                        '${item.modules?.moduleDynamic?.major?.blocked!['hint_message']}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      )
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
+        _ => const SizedBox.shrink(),
+      };
     // return Container(
     //     padding:
     //         const EdgeInsets.only(left: 10, top: 12, right: 10, bottom: 10),
