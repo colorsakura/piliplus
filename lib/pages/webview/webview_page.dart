@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -195,6 +196,41 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             //   ''',
             // );
           },
+          onDownloadStartRequest: (controller, request) {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  String suggestedFilename =
+                      request.suggestedFilename.toString();
+                  String fileSize =
+                      CacheManage.formatSize(request.contentLength.toDouble());
+                  try {
+                    suggestedFilename = Uri.decodeComponent(suggestedFilename);
+                  } catch (e) {
+                    debugPrint(e.toString());
+                  }
+                  return AlertDialog(
+                    title: Text(
+                      '下载文件: $suggestedFilename ?',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    content: SelectableText(request.url.toString()),
+                    actions: [
+                      TextButton(
+                        onPressed: Get.back,
+                        child: const Text('取消'),
+                      ),
+                      TextButton(
+                          onPressed: () async {
+                            Get.back();
+                            Utils.launchURL(request.url.toString());
+                          },
+                          child: Text('确定 ($fileSize)')),
+                    ],
+                  );
+                });
+            _progressStream.add(1);
+          },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             final String? str =
                 navigationAction.request.url!.pathSegments.getOrNull(0);
@@ -251,7 +287,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
-
+              _progressStream.add(1.0);
               return NavigationActionPolicy.CANCEL;
             }
 

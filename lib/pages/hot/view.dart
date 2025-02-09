@@ -70,7 +70,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.network(width: 35, height: 35, iconUrl),
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             title,
             style: TextStyle(fontSize: 12),
