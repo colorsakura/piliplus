@@ -238,7 +238,15 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
   Widget get _sortWidget => Container(
         height: 40,
         padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-        color: Theme.of(context).colorScheme.surface,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.surface,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
