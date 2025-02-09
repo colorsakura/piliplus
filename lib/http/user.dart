@@ -174,7 +174,10 @@ class UserHttp {
     var res = await Request().get(Api.seeYouLater);
     if (res.data['code'] == 0) {
       if (res.data['data']['count'] == 0) {
-        return LoadingState.success([]);
+        return LoadingState.success({
+          'list': [],
+          'count': 0,
+        });
       }
       List<HotVideoItemModel> list = [];
       for (var i in res.data['data']['list']) {
