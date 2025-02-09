@@ -699,20 +699,21 @@ class ReplyItemGrpc extends StatelessWidget {
         // String matchStr = match[0]!;
         spanChildren.add(
           TextSpan(
-              text: '投票: ${content.vote.title}',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              recognizer: TapGestureRecognizer()..onTap = () {}
-              // Get.toNamed(
-              //       '/webview',
-              //       parameters: {
-              //         'url': content.vote['url'],
-              //         'type': 'vote',
-              //         'pageTitle': content.vote.title,
-              //       },
-              //     ),
-              ),
+            text: '投票: ${content.vote.title}',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Get.toNamed(
+                  '/webview',
+                  parameters: {
+                    'url':
+                        'https://t.bilibili.com/vote/h5/index/#/result?vote_id=${content.vote.id}',
+                  },
+                );
+              },
+          ),
         );
         return '';
       }, onNonMatch: (String str) {
