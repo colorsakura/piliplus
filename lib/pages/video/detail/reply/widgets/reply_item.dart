@@ -852,6 +852,18 @@ class ReplyItem extends StatelessWidget {
                             'dynamicType': 'read'
                           });
                         } else {
+                          String? cvId = RegExp(r'/read/(cv\d+)')
+                              .firstMatch(matchStr)
+                              ?.group(1);
+                          if (cvId != null) {
+                            Get.toNamed('/htmlRender', parameters: {
+                              'url': matchStr,
+                              'title': title,
+                              'id': cvId,
+                              'dynamicType': 'read'
+                            });
+                            return;
+                          }
                           final String redirectUrl =
                               (await UrlUtils.parseRedirectUrl(matchStr)) ??
                                   matchStr;
