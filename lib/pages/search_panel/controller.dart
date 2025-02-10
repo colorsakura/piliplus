@@ -5,7 +5,6 @@ import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 
 class SearchPanelController extends CommonController {
   SearchPanelController({
@@ -26,11 +25,14 @@ class SearchPanelController extends CommonController {
   String tag;
   int? pubBegin;
   int? pubEnd;
-  bool? hasPushDetail;
+  bool? hasJump2Video;
 
   @override
   void onInit() {
     super.onInit();
+    if (searchType == SearchType.video) {
+      jump2Video();
+    }
     queryData();
   }
 
@@ -47,10 +49,10 @@ class SearchPanelController extends CommonController {
             ?.insertAll(0, (loadingState.value as Success).response);
       }
       loadingState.value = LoadingState.success(response.response.list);
-      if (hasPushDetail != true &&
-          currentPage == 1 &&
-          searchType == SearchType.video) {
-        hasPushDetail = true;
+      if (searchType == SearchType.video &&
+          hasJump2Video != true &&
+          currentPage == 1) {
+        hasJump2Video = true;
         onPushDetail(response.response.list);
       }
     } else {
@@ -62,22 +64,22 @@ class SearchPanelController extends CommonController {
     return true;
   }
 
-  void onPushDetail(resultList) async {
-    // 匹配输入内容，如果是AV、BV号且有结果 直接跳转详情页
-    if (RegExp(r'^(av\d+|bv[a-z\d]{10})$', caseSensitive: false)
+  void jump2Video() {
+    if (RegExp(r'^av\d+$', caseSensitive: false).hasMatch(keyword)) {
+      hasJump2Video = true;
+      PiliScheme.videoPush(int.parse(keyword.substring(2)), null, false);
+    } else if (RegExp(r'^bv[a-z\d]{10}$', caseSensitive: false)
         .hasMatch(keyword)) {
-      Map matchRes = IdUtils.matchAvorBv(input: keyword);
-      PiliScheme.videoPush(matchRes['AV'], matchRes['BV'], false);
-      return;
+      hasJump2Video = true;
+      PiliScheme.videoPush(null, keyword, false);
     }
+  }
 
-    // keyword 可能输入纯数字
-    try {
-      int? aid = int.tryParse(keyword);
-      if (aid != null && resultList.first.aid == aid) {
-        PiliScheme.videoPush(aid, null, false);
-      }
-    } catch (_) {}
+  void onPushDetail(resultList) async {
+    int? aid = int.tryParse(keyword);
+    if (aid != null && resultList.first.aid == aid) {
+      PiliScheme.videoPush(aid, null, false);
+    }
   }
 
   @override
