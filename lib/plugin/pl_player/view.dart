@@ -704,6 +704,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             },
 
             onInteractionUpdate: (ScaleUpdateDetails details) {
+              plPlayerController.videoScale.value =
+                  transformationController.value.row0.x;
               if (interacting || _initialFocalPoint == Offset.zero) return;
               Offset cumulativeDelta =
                   details.localFocalPoint - _initialFocalPoint;
@@ -817,8 +819,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               }
             },
             onInteractionEnd: (ScaleEndDetails details) {
-              plPlayerController.videoScale.value =
-                  transformationController.value.row0.x;
               if (plPlayerController.showSeekPreview) {
                 plPlayerController.showPreview.value = false;
               }
