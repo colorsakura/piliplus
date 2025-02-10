@@ -836,13 +836,11 @@ class ReplyItem extends StatelessWidget {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-                      final String title = content.jumpUrl[matchStr]['title'];
+                      late final String title = content.url[matchStr]!.title;
                       if (appUrlSchema == '') {
-                        if (matchStr.startsWith('BV')) {
-                          UrlUtils.matchUrlPush(
-                            matchStr,
-                            '',
-                          );
+                        if (RegExp(r'^(av|bv)', caseSensitive: false)
+                            .hasMatch(matchStr)) {
+                          UrlUtils.matchUrlPush(matchStr, '');
                         } else if (RegExp(r'^[Cc][Vv][0-9]+$')
                             .hasMatch(matchStr)) {
                           Get.toNamed('/htmlRender', parameters: {

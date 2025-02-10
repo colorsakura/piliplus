@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 import '../http/init.dart';
@@ -53,19 +54,25 @@ class UrlUtils {
     String redirectUrl,
   ) async {
     final Map matchRes = IdUtils.matchAvorBv(input: pathSegment);
-    if (matchRes.containsKey('BV')) {
-      final String bv = matchRes['BV'];
-      final int cid = await SearchHttp.ab2c(bvid: bv);
+    if (matchRes.isNotEmpty) {
+      int? aid = matchRes['AV'];
+      String? bvid = matchRes['BV'];
+      bvid ??= IdUtils.av2bv(aid!);
+      final int cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
       await Get.toNamed(
-        '/video?bvid=$bv&cid=$cid',
+        '/video?bvid=$bvid&cid=$cid',
         arguments: <String, String?>{
           'pic': '',
-          'heroTag': Utils.makeHeroTag(bv),
+          'heroTag': Utils.makeHeroTag(bvid),
         },
         preventDuplicates: false,
       );
     } else {
-      Utils.handleWebview(redirectUrl);
+      if (redirectUrl.isNotEmpty) {
+        Utils.handleWebview(redirectUrl);
+      } else {
+        SmartDialog.showToast('matchUrlPush: $pathSegment');
+      }
     }
   }
 }

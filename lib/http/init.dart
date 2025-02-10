@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math' show Random;
+import 'package:PiliPlus/build_config.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -175,11 +176,13 @@ class Request {
     }
 
     // 日志拦截器 输出请求、响应内容
-    // dio.interceptors.add(LogInterceptor(
-    //   request: false,
-    //   requestHeader: false,
-    //   responseHeader: false,
-    // ));
+    if (BuildConfig.isDebug) {
+      dio.interceptors.add(LogInterceptor(
+        request: false,
+        requestHeader: false,
+        responseHeader: false,
+      ));
+    }
 
     dio.transformer = BackgroundTransformer();
     dio.options.validateStatus = (int? status) {

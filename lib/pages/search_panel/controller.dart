@@ -26,6 +26,7 @@ class SearchPanelController extends CommonController {
   String tag;
   int? pubBegin;
   int? pubEnd;
+  bool? hasPushDetail;
 
   @override
   void onInit() {
@@ -46,7 +47,10 @@ class SearchPanelController extends CommonController {
             ?.insertAll(0, (loadingState.value as Success).response);
       }
       loadingState.value = LoadingState.success(response.response.list);
-      if (currentPage == 1) {
+      if (hasPushDetail != true &&
+          currentPage == 1 &&
+          searchType == SearchType.video) {
+        hasPushDetail = true;
         onPushDetail(response.response.list);
       }
     } else {
