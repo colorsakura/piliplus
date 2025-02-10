@@ -761,6 +761,9 @@ class ReplyItemGrpc extends StatelessWidget {
       //           ?.call(replyItem.root == 0 ? replyItem : fReplyItem)))));
     }
 
+    late final bool enableWordRe =
+        GStorage.setting.get(SettingBoxKey.enableWordRe, defaultValue: false);
+
     // 分割文本并处理每个部分
     message.splitMapJoin(
       pattern,
@@ -849,8 +852,6 @@ class ReplyItemGrpc extends StatelessWidget {
           );
         } else {
           String appUrlSchema = '';
-          final bool enableWordRe = GStorage.setting
-              .get(SettingBoxKey.enableWordRe, defaultValue: false) as bool;
           if (content.url[matchStr] != null &&
               !matchedStrs.contains(matchStr)) {
             appUrlSchema = content.url[matchStr]!.appUrlSchema;
@@ -1030,6 +1031,10 @@ class ReplyItemGrpc extends StatelessWidget {
       if (unmatchedItems.isNotEmpty) {
         for (int i = 0; i < unmatchedItems.length; i++) {
           String patternStr = unmatchedItems[i];
+          if (content.url[patternStr]?.extra.isWordSearch == true &&
+              enableWordRe.not) {
+            continue;
+          }
           spanChildren.addAll(
             [
               if (content.url[patternStr]?.hasPrefixIcon() == true) ...[
@@ -1048,6 +1053,19 @@ class ReplyItemGrpc extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
+                    String? cvid = RegExp(r'note-app/view\?cvid=(\d+)')
+                        .firstMatch(patternStr)
+                        ?.group(1);
+                    if (cvid != null) {
+                      Get.toNamed('/htmlRender', parameters: {
+                        'url': 'https://www.bilibili.com/read/cv$cvid',
+                        'title': '',
+                        'id': 'cv$cvid',
+                        'dynamicType': 'read'
+                      });
+                      return;
+                    }
+
                     Utils.handleWebview(patternStr);
                   },
               )

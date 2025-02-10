@@ -24,6 +24,9 @@ class UrlUtils {
       if (response.statusCode == 302 || response.statusCode == 301) {
         String? redirectUrl = response.headers['location']?.first;
         if (redirectUrl != null) {
+          if (redirectUrl.startsWith('/')) {
+            return url;
+          }
           if (redirectUrl.endsWith('/')) {
             redirectUrl = redirectUrl.substring(0, redirectUrl.length - 1);
           }

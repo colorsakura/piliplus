@@ -720,6 +720,9 @@ class ReplyItem extends StatelessWidget {
       //           ?.call(replyItem.root == 0 ? replyItem : fReplyItem)))));
     }
 
+    late final bool enableWordRe =
+        GStorage.setting.get(SettingBoxKey.enableWordRe, defaultValue: false);
+
     // 分割文本并处理每个部分
     message.splitMapJoin(
       pattern,
@@ -808,8 +811,6 @@ class ReplyItem extends StatelessWidget {
           );
         } else {
           String appUrlSchema = '';
-          final bool enableWordRe = GStorage.setting
-              .get(SettingBoxKey.enableWordRe, defaultValue: false) as bool;
           if (content.jumpUrl[matchStr] != null &&
               !matchedStrs.contains(matchStr)) {
             appUrlSchema = content.jumpUrl[matchStr]['app_url_schema'];
@@ -990,6 +991,11 @@ class ReplyItem extends StatelessWidget {
       if (unmatchedItems.isNotEmpty) {
         for (int i = 0; i < unmatchedItems.length; i++) {
           String patternStr = unmatchedItems[i];
+          if (content.jumpUrl?[patternStr]?['extra']?['is_word_search'] ==
+                  true &&
+              enableWordRe.not) {
+            continue;
+          }
           spanChildren.addAll(
             [
               if (content.jumpUrl[patternStr]?['prefix_icon'] != null) ...[
@@ -1009,6 +1015,19 @@ class ReplyItem extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
+                    String? cvid = RegExp(r'note-app/view\?cvid=(\d+)')
+                        .firstMatch(patternStr)
+                        ?.group(1);
+                    if (cvid != null) {
+                      Get.toNamed('/htmlRender', parameters: {
+                        'url': 'https://www.bilibili.com/read/cv$cvid',
+                        'title': '',
+                        'id': 'cv$cvid',
+                        'dynamicType': 'read'
+                      });
+                      return;
+                    }
+
                     Utils.handleWebview(patternStr);
                   },
               )
