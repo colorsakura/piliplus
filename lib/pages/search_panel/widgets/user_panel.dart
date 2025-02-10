@@ -184,6 +184,7 @@ class UserPanelController extends GetxController {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       builder: (context) => SingleChildScrollView(
         child: Container(
           width: double.infinity,

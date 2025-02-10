@@ -251,6 +251,7 @@ class VideoPanelController extends GetxController {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
           Widget dateWidget([bool isFirst = true]) {

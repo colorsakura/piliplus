@@ -882,12 +882,13 @@ class ReplyItemGrpc extends StatelessWidget {
                         if (RegExp(r'^(av|bv)', caseSensitive: false)
                             .hasMatch(matchStr)) {
                           UrlUtils.matchUrlPush(matchStr, '');
-                        } else if (RegExp(r'^[Cc][Vv][0-9]+$')
+                        } else if (RegExp(r'^cv\d+$', caseSensitive: false)
                             .hasMatch(matchStr)) {
+                          String cvid = 'cv${matchStr.substring(2)}';
                           Get.toNamed('/htmlRender', parameters: {
-                            'url': 'https://www.bilibili.com/read/$matchStr',
+                            'url': 'https://www.bilibili.com/read/$cvid',
                             'title': title,
-                            'id': matchStr,
+                            'id': cvid,
                             'dynamicType': 'read'
                           });
                         } else {
