@@ -64,11 +64,13 @@ class SearchPanelController extends CommonController {
 
   void onPushDetail(resultList) async {
     // 匹配输入内容，如果是AV、BV号且有结果 直接跳转详情页
-    Map matchRes = IdUtils.matchAvorBv(input: keyword);
-    if (matchRes.isNotEmpty) {
+    if (RegExp(r'^(av\d+|bv[a-z\d]{10})$', caseSensitive: false)
+        .hasMatch(keyword)) {
+      Map matchRes = IdUtils.matchAvorBv(input: keyword);
       PiliScheme.videoPush(matchRes['AV'], matchRes['BV'], false);
       return;
     }
+
     // keyword 可能输入纯数字
     try {
       int? aid = int.tryParse(keyword);
