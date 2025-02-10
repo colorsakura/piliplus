@@ -246,6 +246,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     _listener?.cancel();
     animationController.dispose();
     FlutterVolumeController.removeListener();
+    transformationController.dispose();
     super.dispose();
   }
 
@@ -669,6 +670,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   bool get isFullScreen => plPlayerController.isFullScreen.value;
 
+  late final transformationController = TransformationController();
+
   @override
   Widget build(BuildContext context) {
     final Color colorTheme = Theme.of(context).colorScheme.primary;
@@ -682,6 +685,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       children: <Widget>[
         Obx(
           () => InteractiveViewer(
+            transformationController: transformationController,
             panEnabled: false, // 启用平移 //单指平移会与横竖手势冲突
             scaleEnabled: !plPlayerController.controlsLock.value, // 启用缩放
             minScale: 1.0,
@@ -813,6 +817,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               }
             },
             onInteractionEnd: (ScaleEndDetails details) {
+              plPlayerController.videoScale.value =
+                  transformationController.value.row0.x;
               if (plPlayerController.showSeekPreview) {
                 plPlayerController.showPreview.value = false;
               }
@@ -1124,6 +1130,69 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 ),
             ],
           ),
+        ),
+
+        // if (BuildConfig.isDebug)
+        //   FilledButton.tonal(
+        //     onPressed: () {
+        //       transformationController.value = Matrix4.identity()
+        //         ..translate(0.5, 0.5)
+        //         ..scale(1.2)
+        //         ..translate(-0.5, -0.5);
+
+        //       plPlayerController.videoScale.value =
+        //           transformationController.value.row0.x;
+        //     },
+        //     child: const Text('scale'),
+        //   ),
+
+        Obx(
+          () => plPlayerController.videoScale.value != 1 &&
+                  plPlayerController.showControls.value
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 75),
+                    child: FilledButton.tonal(
+                      style: FilledButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer
+                            .withOpacity(0.8),
+                        visualDensity:
+                            VisualDensity(horizontal: -2, vertical: -2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      onPressed: () async {
+                        plPlayerController.videoScale.value = 1.0;
+                        final animController = AnimationController(
+                          vsync: this,
+                          duration: const Duration(milliseconds: 255),
+                        );
+                        final anim = Matrix4Tween(
+                          begin: transformationController.value,
+                          end: Matrix4.identity(),
+                        ).animate(
+                          CurveTween(curve: Curves.easeOut)
+                              .animate(animController),
+                        );
+                        animController.addListener(() {
+                          transformationController.value = anim.value;
+                        });
+                        await animController.forward(from: 0);
+                        animController.removeListener(() {});
+                        animController.dispose();
+                      },
+                      child: Text('还原屏幕'),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
 
         /// 进度条 live模式下禁用
