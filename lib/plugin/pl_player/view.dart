@@ -704,8 +704,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             },
 
             onInteractionUpdate: (ScaleUpdateDetails details) {
-              plPlayerController.videoScale.value =
-                  transformationController.value.row0.x;
+              plPlayerController.showRestoreScaleBtn.value =
+                  transformationController.value.row0.x != 1.0;
               if (interacting || _initialFocalPoint == Offset.zero) return;
               Offset cumulativeDelta =
                   details.localFocalPoint - _initialFocalPoint;
@@ -1147,7 +1147,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         //   ),
 
         Obx(
-          () => plPlayerController.videoScale.value != 1 &&
+          () => plPlayerController.showRestoreScaleBtn.value &&
                   plPlayerController.showControls.value
               ? Align(
                   alignment: Alignment.bottomCenter,
@@ -1169,7 +1169,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         ),
                       ),
                       onPressed: () async {
-                        plPlayerController.videoScale.value = 1.0;
+                        plPlayerController.showRestoreScaleBtn.value = false;
                         final animController = AnimationController(
                           vsync: this,
                           duration: const Duration(milliseconds: 255),

@@ -1612,5 +1612,5 @@ class PlPlayerController {
   late final RxList dmTrend = [].obs;
   late final RxBool showDmChart = true.obs;
 
-  late final RxDouble videoScale = 1.0.obs;
+  late final RxBool showRestoreScaleBtn = false.obs;
 }
