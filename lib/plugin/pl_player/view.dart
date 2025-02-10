@@ -86,8 +86,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
   final RxBool _mountSeekBackwardButton = false.obs;
   final RxBool _mountSeekForwardButton = false.obs;
-  final RxBool _hideSeekBackwardButton = false.obs;
-  final RxBool _hideSeekForwardButton = false.obs;
 
   final RxDouble _brightnessValue = 0.0.obs;
   final RxBool _brightnessIndicator = false.obs;
@@ -1500,36 +1498,21 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         /// 点击 快进/快退
         Obx(
-          () => Visibility(
-            visible:
-                _mountSeekBackwardButton.value || _mountSeekForwardButton.value,
-            child: Positioned.fill(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _mountSeekBackwardButton.value
-                        ? TweenAnimationBuilder<double>(
-                            tween: Tween<double>(
-                              begin: 0.0,
-                              end: _hideSeekBackwardButton.value ? 0.0 : 1.0,
-                            ),
+          () => _mountSeekBackwardButton.value || _mountSeekForwardButton.value
+              ? Positioned.fill(
+                  child: Row(
+                    children: [
+                      if (_mountSeekBackwardButton.value)
+                        Expanded(
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0.0, end: 1.0),
                             duration: const Duration(milliseconds: 500),
-                            builder: (BuildContext context, double value,
-                                    Widget? child) =>
-                                Opacity(
+                            builder: (context, value, child) => Opacity(
                               opacity: value,
                               child: child,
                             ),
-                            onEnd: () {
-                              if (_hideSeekBackwardButton.value) {
-                                _hideSeekBackwardButton.value = false;
-                                _mountSeekBackwardButton.value = false;
-                              }
-                            },
                             child: BackwardSeekIndicator(
-                              onChanged: (Duration value) => {},
                               onSubmitted: (Duration value) {
-                                _hideSeekBackwardButton.value = true;
                                 _mountSeekBackwardButton.value = false;
                                 final Player player = widget
                                     .plPlayerController.videoPlayerController!;
@@ -1538,44 +1521,27 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   Duration.zero,
                                   player.state.duration,
                                 );
-                                plPlayerController.seekTo(result,
-                                    type: 'slider');
+                                plPlayerController.seekTo(
+                                  result,
+                                  type: 'slider',
+                                );
                                 plPlayerController.play();
                               },
                             ),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                  const Spacer(),
-                  // Expanded(
-                  //   child: SizedBox(
-                  //     width: context.width / 4,
-                  //   ),
-                  // ),
-                  Expanded(
-                    child: _mountSeekForwardButton.value
-                        ? TweenAnimationBuilder<double>(
-                            tween: Tween<double>(
-                              begin: 0.0,
-                              end: _hideSeekForwardButton.value ? 0.0 : 1.0,
-                            ),
+                          ),
+                        ),
+                      const Spacer(flex: 2),
+                      if (_mountSeekForwardButton.value)
+                        Expanded(
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween<double>(begin: 0.0, end: 1.0),
                             duration: const Duration(milliseconds: 500),
-                            builder: (BuildContext context, double value,
-                                    Widget? child) =>
-                                Opacity(
+                            builder: (context, value, child) => Opacity(
                               opacity: value,
                               child: child,
                             ),
-                            onEnd: () {
-                              if (_hideSeekForwardButton.value) {
-                                _hideSeekForwardButton.value = false;
-                                _mountSeekForwardButton.value = false;
-                              }
-                            },
                             child: ForwardSeekIndicator(
-                              onChanged: (Duration value) => {},
                               onSubmitted: (Duration value) {
-                                _hideSeekForwardButton.value = true;
                                 _mountSeekForwardButton.value = false;
                                 final Player player = widget
                                     .plPlayerController.videoPlayerController!;
@@ -1584,18 +1550,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                                   Duration.zero,
                                   player.state.duration,
                                 );
-                                plPlayerController.seekTo(result,
-                                    type: 'slider');
+                                plPlayerController.seekTo(
+                                  result,
+                                  type: 'slider',
+                                );
                                 plPlayerController.play();
                               },
                             ),
-                          )
-                        : const SizedBox.shrink(),
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : const SizedBox.shrink(),
         ),
       ],
     );
