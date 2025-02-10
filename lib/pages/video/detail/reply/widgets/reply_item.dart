@@ -731,10 +731,13 @@ class ReplyItem extends StatelessWidget {
         if (content.emote.containsKey(matchStr)) {
           // 处理表情
           final int size = content.emote[matchStr]['meta']['size'];
+          String imgUrl = content.emote[matchStr]['webp_url'] ??
+              content.emote[matchStr]['gif_url'] ??
+              content.emote[matchStr]['url'];
           spanChildren.add(WidgetSpan(
             child: ExcludeSemantics(
                 child: NetworkImgLayer(
-              src: content.emote[matchStr]['url'],
+              src: imgUrl,
               type: 'emote',
               width: size * 20,
               height: size * 20,

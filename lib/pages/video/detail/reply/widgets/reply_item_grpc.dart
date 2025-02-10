@@ -775,7 +775,9 @@ class ReplyItemGrpc extends StatelessWidget {
           spanChildren.add(WidgetSpan(
             child: ExcludeSemantics(
                 child: NetworkImgLayer(
-              src: content.emote[matchStr]!.url,
+              src: content.emote[matchStr]?.hasGifUrl() == true
+                  ? content.emote[matchStr]?.gifUrl
+                  : content.emote[matchStr]?.url,
               type: 'emote',
               width: size * 20,
               height: size * 20,
