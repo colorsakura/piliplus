@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:app_links/app_links.dart';
@@ -122,9 +123,9 @@ class PiliScheme {
         List<String> pathParts = path.split('/');
         // int type = int.parse(pathParts[2]);
         int oid = int.parse(pathParts[3]);
-        // int rootId = int.parse(pathParts[4]);
+        int rootId = int.parse(pathParts[4]);
         // int subType = int.parse(value.queryParameters['subType'] ?? '0');
-        int rpID = int.parse(value.queryParameters['anchor'] ?? '0');
+        // int rpID = int.parse(value.queryParameters['anchor'] ?? '0');
         // int extraIntentId =
         // int.parse(value.queryParameters['extraIntentId'] ?? '0');
         Get.to(
@@ -146,24 +147,41 @@ class PiliScheme {
               ],
             ),
             body: VideoReplyReplyPanel(
-                oid: oid,
-                rpid: rpID,
-                source: 'routePush',
-                replyType: ReplyType.dynamics,
-                firstFloor: null),
+              oid: oid,
+              rpid: rootId, // rpID,
+              source: 'routePush',
+              replyType: ReplyType.dynamics,
+              firstFloor: null,
+            ),
           ),
         );
       } else if (host == 'following' && path.startsWith("/detail/")) {
-        void getToOpusWeb() {
-          var opusId = path.split('/').last;
-          Utils.toDupNamed(
-            '/webview',
-            parameters: {
-              'url': 'https://m.bilibili.com/dynamic/$opusId',
-              'type': 'url',
-              'pageTitle': '',
-            },
-          );
+        void getToOpusWeb() async {
+          String? id = RegExp(r'detail/(\d+)').firstMatch(path)?.group(1);
+          if (id != null) {
+            SmartDialog.showLoading();
+            dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+            SmartDialog.dismiss();
+            if (res['status']) {
+              Get.toNamed('/dynamicDetail', arguments: {
+                'item': res['data'],
+                'floor': 1,
+                'action': 'detail'
+              });
+            } else {
+              SmartDialog.showToast(res['msg']);
+            }
+          } else {
+            var opusId = path.split('/').last;
+            Utils.toDupNamed(
+              '/webview',
+              parameters: {
+                'url': 'https://m.bilibili.com/dynamic/$opusId',
+                'type': 'url',
+                'pageTitle': '',
+              },
+            );
+          }
         }
 
         if (value.queryParameters['comment_root_id'] != null) {
