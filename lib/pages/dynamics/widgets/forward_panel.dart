@@ -239,8 +239,7 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
           }
         },
         child: Container(
-          padding:
-              const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           color: Theme.of(context).dividerColor.withOpacity(0.08),
           child:
               forWard(item.orig, context, source, callback, floor: floor + 1),

@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -7,7 +8,7 @@ import 'rich_node_panel.dart';
 
 Widget livePanel(item, context, {floor = 1}) {
   dynamic content = item.modules.moduleDynamic.major;
-  TextStyle authorStyle =
+  late final TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
   InlineSpan? richNodes = richNode(item, context);
   return Column(
@@ -55,7 +56,17 @@ Widget livePanel(item, context, {floor = 1}) {
         const SizedBox(height: 6),
       ],
       GestureDetector(
-        onTap: () {},
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Get.toNamed('/liveRoom?roomid=${content.live?.id}');
+        },
+        onLongPress: () {
+          imageSaveDialog(
+            context: context,
+            title: content.live.title,
+            cover: content.live.cover,
+          );
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
