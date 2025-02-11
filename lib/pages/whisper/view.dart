@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/models/msg/session.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -161,7 +162,8 @@ class _WhisperPageState extends State<WhisperPage> {
                     }
                     Map data = snapshot.data as Map;
                     if (data['status']) {
-                      List sessionList = _whisperController.sessionList;
+                      List<SessionList> sessionList =
+                          _whisperController.sessionList;
                       return Obx(
                         () => sessionList.isEmpty
                             ? const SizedBox()
@@ -171,7 +173,7 @@ class _WhisperPageState extends State<WhisperPage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, int i) {
                                   dynamic content =
-                                      sessionList[i]?.lastMsg?.content;
+                                      sessionList[i].lastMsg?.content;
                                   if (content == null || content == "") {
                                     content = '不支持的消息类型';
                                   } else {
@@ -252,27 +254,33 @@ class _WhisperPageState extends State<WhisperPage> {
                                               '',
                                           if (sessionList[i].accountInfo?.mid !=
                                               null)
-                                            'mid': sessionList[i]
-                                                .accountInfo
-                                                .mid
-                                                .toString(),
+                                            'mid':
+                                                '${sessionList[i].accountInfo?.mid}',
                                         },
                                       );
                                     },
-                                    leading: Badge(
-                                      isLabelVisible:
-                                          sessionList[i].unreadCount > 0,
-                                      label: Text(
-                                          " ${sessionList[i].unreadCount.toString()} "),
-                                      alignment: Alignment.topRight,
-                                      child: NetworkImgLayer(
-                                        width: 45,
-                                        height: 45,
-                                        type: 'avatar',
-                                        src: sessionList[i].accountInfo?.face ??
-                                            "",
-                                      ),
-                                    ),
+                                    leading: Builder(builder: (context) {
+                                      Widget buildAvatar() => NetworkImgLayer(
+                                            width: 45,
+                                            height: 45,
+                                            type: 'avatar',
+                                            src: sessionList[i]
+                                                    .accountInfo
+                                                    ?.face ??
+                                                "",
+                                          );
+                                      return sessionList[i].unreadCount != null
+                                          ? Badge(
+                                              isLabelVisible:
+                                                  sessionList[i].unreadCount! >
+                                                      0,
+                                              label: Text(
+                                                  " ${sessionList[i].unreadCount} "),
+                                              alignment: Alignment.topRight,
+                                              child: buildAvatar(),
+                                            )
+                                          : buildAvatar();
+                                    }),
                                     title: Text(
                                         sessionList[i].accountInfo?.name ?? ""),
                                     subtitle: Text(
@@ -287,18 +295,24 @@ class _WhisperPageState extends State<WhisperPage> {
                                                   .colorScheme
                                                   .outline),
                                     ),
-                                    trailing: Text(
-                                      Utils.dateFormat(
-                                          sessionList[i].lastMsg.timestamp,
-                                          formatType: "day"),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline),
-                                    ),
+                                    trailing:
+                                        sessionList[i].lastMsg?.timestamp !=
+                                                null
+                                            ? Text(
+                                                Utils.dateFormat(
+                                                    sessionList[i]
+                                                        .lastMsg!
+                                                        .timestamp,
+                                                    formatType: "day"),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelSmall!
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .outline),
+                                              )
+                                            : null,
                                   );
                                 },
                                 separatorBuilder:
