@@ -95,6 +95,7 @@ class _EmotePanelState extends State<EmotePanel>
                 ),
                 TabBar(
                   controller: _emotePanelController.tabController,
+                  padding: const EdgeInsets.only(right: 60),
                   dividerColor: Colors.transparent,
                   isScrollable: true,
                   tabs: (loadingState.response as List<Packages>)

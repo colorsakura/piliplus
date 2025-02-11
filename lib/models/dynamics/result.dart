@@ -638,11 +638,15 @@ class Emoji {
   });
 
   String? iconUrl;
+  String? webpUrl;
+  String? gifUrl;
   double? size;
   String? text;
   int? type;
   Emoji.fromJson(Map<String, dynamic> json) {
     iconUrl = json['icon_url'];
+    webpUrl = json['webp_url'];
+    gifUrl = json['gif_url'];
     size = json['size'].toDouble();
     text = json['text'];
     type = json['type'];

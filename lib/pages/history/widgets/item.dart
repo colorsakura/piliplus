@@ -186,7 +186,6 @@ class HistoryItem extends StatelessWidget {
                             return Stack(
                               children: [
                                 NetworkImgLayer(
-                                  radius: 12,
                                   src: (videoItem.cover != ''
                                       ? videoItem.cover
                                       : videoItem.covers.first),
@@ -228,7 +227,7 @@ class HistoryItem extends StatelessWidget {
                           child: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(10),
                               color: Colors.black.withOpacity(0.6),
                             ),
                             child: SizedBox(

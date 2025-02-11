@@ -153,7 +153,7 @@ InlineSpan? richNode(item, context) {
           spanChildren.add(
             WidgetSpan(
               child: NetworkImgLayer(
-                src: i.emoji!.iconUrl,
+                src: i.emoji!.webpUrl ?? i.emoji!.gifUrl ?? i.emoji!.iconUrl,
                 type: 'emote',
                 width: (i.emoji!.size ?? 1) * 20,
                 height: (i.emoji!.size ?? 1) * 20,
