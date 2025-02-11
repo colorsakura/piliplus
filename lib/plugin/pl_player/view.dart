@@ -103,6 +103,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late bool enableQuickDouble;
   late bool fullScreenGestureReverse;
 
+  late final RxBool showRestoreScaleBtn = false.obs;
+
   Offset _initialFocalPoint = Offset.zero;
   String? _gestureType;
   //播放器放缩
@@ -702,7 +704,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             },
 
             onInteractionUpdate: (ScaleUpdateDetails details) {
-              plPlayerController.showRestoreScaleBtn.value =
+              showRestoreScaleBtn.value =
                   transformationController.value.row0.x != 1.0;
               if (interacting || _initialFocalPoint == Offset.zero) return;
               Offset cumulativeDelta =
@@ -1145,52 +1147,51 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         //   ),
 
         Obx(
-          () => plPlayerController.showRestoreScaleBtn.value &&
-                  plPlayerController.showControls.value
-              ? Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 75),
-                    child: FilledButton.tonal(
-                      style: FilledButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer
-                            .withOpacity(0.8),
-                        visualDensity:
-                            VisualDensity(horizontal: -2, vertical: -2),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
+          () =>
+              showRestoreScaleBtn.value && plPlayerController.showControls.value
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 95),
+                        child: FilledButton.tonal(
+                          style: FilledButton.styleFrom(
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer
+                                .withOpacity(0.8),
+                            visualDensity:
+                                VisualDensity(horizontal: -2, vertical: -2),
+                            padding: const EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          onPressed: () async {
+                            showRestoreScaleBtn.value = false;
+                            final animController = AnimationController(
+                              vsync: this,
+                              duration: const Duration(milliseconds: 255),
+                            );
+                            final anim = Matrix4Tween(
+                              begin: transformationController.value,
+                              end: Matrix4.identity(),
+                            ).animate(
+                              CurveTween(curve: Curves.easeOut)
+                                  .animate(animController),
+                            );
+                            animController.addListener(() {
+                              transformationController.value = anim.value;
+                            });
+                            await animController.forward(from: 0);
+                            animController.removeListener(() {});
+                            animController.dispose();
+                          },
+                          child: Text('还原屏幕'),
                         ),
                       ),
-                      onPressed: () async {
-                        plPlayerController.showRestoreScaleBtn.value = false;
-                        final animController = AnimationController(
-                          vsync: this,
-                          duration: const Duration(milliseconds: 255),
-                        );
-                        final anim = Matrix4Tween(
-                          begin: transformationController.value,
-                          end: Matrix4.identity(),
-                        ).animate(
-                          CurveTween(curve: Curves.easeOut)
-                              .animate(animController),
-                        );
-                        animController.addListener(() {
-                          transformationController.value = anim.value;
-                        });
-                        await animController.forward(from: 0);
-                        animController.removeListener(() {});
-                        animController.dispose();
-                      },
-                      child: Text('还原屏幕'),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
+                    )
+                  : const SizedBox.shrink(),
         ),
 
         /// 进度条 live模式下禁用

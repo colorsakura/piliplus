@@ -260,6 +260,7 @@ class PlPlayerController {
   // 关联弹幕控制器
   DanmakuController? danmakuController;
   bool showDanmaku = true;
+  late final mergeDanmaku = GStorage.mergeDanmaku;
   // 弹幕相关配置
   late List blockTypes;
   late double showArea;
@@ -1611,6 +1612,4 @@ class PlPlayerController {
 
   late final RxList dmTrend = [].obs;
   late final RxBool showDmChart = true.obs;
-
-  late final RxBool showRestoreScaleBtn = false.obs;
 }

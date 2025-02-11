@@ -1,7 +1,6 @@
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:PiliPlus/http/danmaku.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 class PlDanmakuController {
   PlDanmakuController(
@@ -18,8 +17,6 @@ class PlDanmakuController {
   bool get initiated => requestedSeg.isNotEmpty;
 
   static int segmentLength = 60 * 6 * 1000;
-
-  late final mergeDanmaku = GStorage.mergeDanmaku;
 
   void initiate(int videoDuration, int progress) {
     if (videoDuration <= 0) {
@@ -50,7 +47,7 @@ class PlDanmakuController {
     final DmSegMobileReply result = await DanmakaHttp.queryDanmaku(
       cid: cid,
       segmentIndex: segmentIndex + 1,
-      mergeDanmaku: mergeDanmaku,
+      mergeDanmaku: plPlayerController.mergeDanmaku,
     );
     if (result.elems.isNotEmpty) {
       for (var element in result.elems) {

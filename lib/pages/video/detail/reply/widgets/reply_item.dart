@@ -846,24 +846,19 @@ class ReplyItem extends StatelessWidget {
                         if (RegExp(r'^(av|bv)', caseSensitive: false)
                             .hasMatch(matchStr)) {
                           UrlUtils.matchUrlPush(matchStr, '');
-                        } else if (RegExp(r'^cv\d+$', caseSensitive: false)
-                            .hasMatch(matchStr)) {
-                          String cvid = 'cv${matchStr.substring(2)}';
-                          Get.toNamed('/htmlRender', parameters: {
-                            'url': 'https://www.bilibili.com/read/$cvid',
-                            'title': title,
-                            'id': cvid,
-                            'dynamicType': 'read'
-                          });
                         } else {
-                          String? cvId = RegExp(r'/read/(cv\d+)')
-                              .firstMatch(matchStr)
-                              ?.group(1);
-                          if (cvId != null) {
+                          RegExpMatch? firstMatch = RegExp(
+                                  r'^cv(\d+)$|/read/cv(\d+)|note-app/view\?cvid=(\d+)',
+                                  caseSensitive: false)
+                              .firstMatch(matchStr);
+                          String? cvid = firstMatch?.group(1) ??
+                              firstMatch?.group(2) ??
+                              firstMatch?.group(3);
+                          if (cvid != null) {
                             Get.toNamed('/htmlRender', parameters: {
-                              'url': matchStr,
+                              'url': 'https://www.bilibili.com/read/cv$cvid',
                               'title': title,
-                              'id': cvId,
+                              'id': 'cv$cvid',
                               'dynamicType': 'read'
                             });
                             return;

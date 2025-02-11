@@ -165,7 +165,8 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             userAgent: Request().headerUa(type: uaType),
             mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
           ),
-          initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(_url))),
+          initialUrlRequest:
+              URLRequest(url: WebUri.uri(Uri.tryParse(_url) ?? Uri())),
           onWebViewCreated: (InAppWebViewController controller) {
             _webViewController = controller;
           },
@@ -272,7 +273,8 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                   return NavigationActionPolicy.CANCEL;
                 }
               } catch (_) {}
-            } else if (url.startsWith('http').not) {
+            } else if (RegExp(r'^(?!(https?://))\S+://', caseSensitive: false)
+                .hasMatch(url)) {
               if (url.startsWith('bilibili://video/')) {
                 String? str =
                     navigationAction.request.url!.pathSegments.getOrNull(0);
