@@ -8,7 +8,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/live/widgets/live_item.dart';
 import 'package:PiliPlus/pages/live/widgets/live_item_follow.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -226,7 +225,7 @@ class _LivePageState extends State<LivePage>
                       );
                     },
                     onLongPress: () {
-                      feedBack();
+                      Feedback.forLongPress(context);
                       Get.toNamed(
                         '/member?mid=${loadingState.response[index].uid}',
                         arguments: {

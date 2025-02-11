@@ -61,6 +61,7 @@ Widget livePanel(item, context, {floor = 1}) {
           Get.toNamed('/liveRoom?roomid=${content.live?.id}');
         },
         onLongPress: () {
+          Feedback.forLongPress(context);
           imageSaveDialog(
             context: context,
             title: content.live.title,

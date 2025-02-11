@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
+import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_search/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -16,6 +17,7 @@ import 'package:PiliPlus/models/common/business_type.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HistoryItem extends StatelessWidget {
   final dynamic videoItem;
@@ -340,59 +342,79 @@ class HistoryItem extends StatelessWidget {
                     fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
                     color: Theme.of(context).colorScheme.outline),
               ),
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: PopupMenuButton<String>(
-                  padding: EdgeInsets.zero,
-                  tooltip: '功能菜单',
-                  icon: Icon(
-                    Icons.more_vert_outlined,
-                    color: Theme.of(context).colorScheme.outline,
-                    size: 18,
-                  ),
-                  position: PopupMenuPosition.under,
-                  // constraints: const BoxConstraints(maxHeight: 35),
-                  onSelected: (String type) {},
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                    if (videoItem.history?.business != 'pgc' &&
-                        videoItem.badge != '番剧' &&
-                        !videoItem.tagName.contains('动画') &&
-                        videoItem.history.business != 'live' &&
-                        !videoItem.history.business.contains('article'))
+              if (videoItem is HisListItem)
+                SizedBox(
+                  width: 29,
+                  height: 29,
+                  child: PopupMenuButton<String>(
+                    padding: EdgeInsets.zero,
+                    tooltip: '功能菜单',
+                    icon: Icon(
+                      Icons.more_vert_outlined,
+                      color: Theme.of(context).colorScheme.outline,
+                      size: 18,
+                    ),
+                    position: PopupMenuPosition.under,
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      if (videoItem.authorMid != null &&
+                          videoItem.authorName?.isNotEmpty == true)
+                        PopupMenuItem<String>(
+                          onTap: () {
+                            Get.toNamed(
+                              '/member?mid=${videoItem.authorMid}',
+                              arguments: {
+                                'heroTag': '${videoItem.authorMid}',
+                              },
+                            );
+                          },
+                          height: 35,
+                          child: Row(
+                            children: [
+                              Icon(MdiIcons.accountCircleOutline, size: 16),
+                              SizedBox(width: 6),
+                              Text(
+                                '访问：${videoItem.authorName}',
+                                style: TextStyle(fontSize: 13),
+                              )
+                            ],
+                          ),
+                        ),
+                      if (videoItem.history?.business != 'pgc' &&
+                          videoItem.badge != '番剧' &&
+                          !videoItem.tagName.contains('动画') &&
+                          videoItem.history.business != 'live' &&
+                          !videoItem.history.business.contains('article'))
+                        PopupMenuItem<String>(
+                          onTap: () async {
+                            var res = await UserHttp.toViewLater(
+                                bvid: videoItem.history.bvid);
+                            SmartDialog.showToast(res['msg']);
+                          },
+                          height: 35,
+                          child: const Row(
+                            children: [
+                              Icon(Icons.watch_later_outlined, size: 16),
+                              SizedBox(width: 6),
+                              Text('稍后再看', style: TextStyle(fontSize: 13))
+                            ],
+                          ),
+                        ),
                       PopupMenuItem<String>(
-                        onTap: () async {
-                          var res = await UserHttp.toViewLater(
-                              bvid: videoItem.history.bvid);
-                          SmartDialog.showToast(res['msg']);
-                        },
-                        value: 'pause',
+                        onTap: () => ctr!.delHistory(
+                            videoItem.kid, videoItem.history.business),
                         height: 35,
                         child: const Row(
                           children: [
-                            Icon(Icons.watch_later_outlined, size: 16),
+                            Icon(Icons.close_outlined, size: 16),
                             SizedBox(width: 6),
-                            Text('稍后再看', style: TextStyle(fontSize: 13))
+                            Text('删除记录', style: TextStyle(fontSize: 13))
                           ],
                         ),
                       ),
-                    PopupMenuItem<String>(
-                      onTap: () => ctr!.delHistory(
-                          videoItem.kid, videoItem.history.business),
-                      value: 'pause',
-                      height: 35,
-                      child: const Row(
-                        children: [
-                          Icon(Icons.close_outlined, size: 16),
-                          SizedBox(width: 6),
-                          Text('删除记录', style: TextStyle(fontSize: 13))
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ],
