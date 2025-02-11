@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/stat/danmu.dart';
 import 'package:PiliPlus/common/widgets/stat/view.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
+import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -98,6 +99,22 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                   bottom: 6.0,
                                   type: 'gray',
                                 ),
+                              if (videoItem.history != null)
+                                Builder(builder: (context) {
+                                  try {
+                                    return Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                      child: videoProgressIndicator(
+                                        videoItem.history!['progress'] /
+                                            videoItem.history!['duration'],
+                                      ),
+                                    );
+                                  } catch (_) {
+                                    return const SizedBox.shrink();
+                                  }
+                                }),
                             ],
                           );
                         },

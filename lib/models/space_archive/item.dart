@@ -60,6 +60,7 @@ class Item {
   String? publishTimeText;
   List<Badge>? badges;
   Map? season;
+  Map? history;
 
   Item({
     this.title,
@@ -97,6 +98,7 @@ class Item {
     this.publishTimeText,
     this.badges,
     this.season,
+    this.history,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);

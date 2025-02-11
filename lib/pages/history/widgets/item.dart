@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_search/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -273,20 +274,10 @@ class HistoryItem extends StatelessWidget {
                           left: 0,
                           right: 0,
                           bottom: 0,
-                          child: ClipRect(
-                            clipper: _Clipper(),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                              child: LinearProgressIndicator(
-                                minHeight: 12,
-                                value: videoItem.progress == -1
-                                    ? 100
-                                    : videoItem.progress / videoItem.duration,
-                              ),
-                            ),
+                          child: videoProgressIndicator(
+                            videoItem.progress == -1
+                                ? 1
+                                : videoItem.progress / videoItem.duration,
                           ),
                         ),
                     ],
@@ -408,17 +399,5 @@ class HistoryItem extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _Clipper extends CustomClipper<Rect> {
-  @override
-  Rect getClip(Size size) {
-    return Rect.fromLTWH(0, 8, size.width, size.height - 8);
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Rect> oldClipper) {
-    return false;
   }
 }

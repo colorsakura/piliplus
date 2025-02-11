@@ -48,6 +48,7 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
           ?.map((e) => Badge.fromJson(e as Map<String, dynamic>))
           .toList(),
       season: json['season'],
+      history: json['history'],
     );
 
 Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
