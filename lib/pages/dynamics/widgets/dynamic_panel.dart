@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,15 @@ class DynamicPanel extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         child: InkWell(
-          onTap: source == 'detail' && item.type != 'DYNAMIC_TYPE_AV'
+          onTap: source == 'detail' &&
+                  [
+                    'DYNAMIC_TYPE_AV',
+                    'DYNAMIC_TYPE_UGC_SEASON',
+                    'DYNAMIC_TYPE_PGC_UNION',
+                    'DYNAMIC_TYPE_PGC',
+                    'DYNAMIC_TYPE_LIVE',
+                    'DYNAMIC_TYPE_LIVE_RCMD',
+                  ].contains(item.type).not
               ? null
               : () => Utils.pushDynDetail(item, 1),
           onLongPress: () {
