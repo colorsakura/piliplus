@@ -364,6 +364,9 @@ class GStorage {
   static bool get enableCommAntifraud => GStorage.setting
       .get(SettingBoxKey.enableCommAntifraud, defaultValue: false);
 
+  static bool get coinWithLike =>
+      GStorage.setting.get(SettingBoxKey.coinWithLike, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -595,6 +598,7 @@ class SettingBoxKey {
       showSeekPreview = 'showSeekPreview',
       showDmChart = 'showDmChart',
       enableCommAntifraud = 'enableCommAntifraud',
+      coinWithLike = 'coinWithLike',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

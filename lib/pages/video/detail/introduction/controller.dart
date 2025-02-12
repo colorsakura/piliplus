@@ -309,16 +309,24 @@ class VideoIntroController extends GetxController
     }
   }
 
-  void coinVideo(int coin) async {
+  void coinVideo(int coin, [bool selectLike = false]) async {
     if (videoDetail.value.stat?.coin == null) {
       // not init
       return;
     }
-    var res = await VideoHttp.coinVideo(bvid: bvid, multiply: coin);
+    var res = await VideoHttp.coinVideo(
+      bvid: bvid,
+      multiply: coin,
+      selectLike: selectLike ? 1 : 0,
+    );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
       hasCoin.value = true;
       videoDetail.value.stat!.coin = videoDetail.value.stat!.coin! + coin;
+      if (selectLike && hasLike.value.not) {
+        hasLike.value = true;
+        videoDetail.value.stat!.like = videoDetail.value.stat!.like! + 1;
+      }
     } else {
       SmartDialog.showToast(res['msg']);
     }

@@ -421,14 +421,18 @@ class VideoHttp {
   }
 
   // 投币
-  static Future coinVideo({required String bvid, required int multiply}) async {
+  static Future coinVideo({
+    required String bvid,
+    required int multiply,
+    int selectLike = 0,
+  }) async {
     var res = await Request().post(
       Api.coinVideo,
       queryParameters: {
         'aid': IdUtils.bv2av(bvid),
         // 'bvid': bvid,
         'multiply': multiply,
-        'select_like': 0,
+        'select_like': selectLike,
         'access_key': GStorage.localCache
             .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
         // 'csrf': await Request.getCsrf(),
