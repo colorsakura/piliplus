@@ -79,10 +79,14 @@ class DynamicsHttp {
   //
   static Future dynamicDetail({
     String? id,
+    dynamic rid,
+    dynamic type,
   }) async {
     var res = await Request().get(Api.dynamicDetail, queryParameters: {
       'timezone_offset': -480,
-      'id': id,
+      if (id != null) 'id': id,
+      if (rid != null) 'rid': rid,
+      if (type != null) 'type': type,
       'features': 'itemOpusStyle',
     });
     if (res.data['code'] == 0) {

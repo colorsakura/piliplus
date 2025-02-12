@@ -121,7 +121,7 @@ class PiliScheme {
         //fmt.Sprintf("bilibili://comment/detail/%d/%d/%d/?subType=%d&anchor=%d&showEnter=1&extraIntentId=%d", rp.Type, rp.Oid, rootID, subType, rp.RpID, extraIntentID)
         debugPrint('${value.queryParameters}');
         List<String> pathParts = path.split('/');
-        // int type = int.parse(pathParts[2]);
+        int type = int.parse(pathParts[2]);
         int oid = int.parse(pathParts[3]);
         int rootId = int.parse(pathParts[4]);
         // int subType = int.parse(value.queryParameters['subType'] ?? '0');
@@ -150,7 +150,7 @@ class PiliScheme {
               oid: oid,
               rpid: rootId, // rpID,
               source: 'routePush',
-              replyType: ReplyType.dynamics,
+              replyType: ReplyType.values[type],
               firstFloor: null,
             ),
           ),
@@ -210,6 +210,23 @@ class PiliScheme {
           );
         } else {
           getToOpusWeb();
+        }
+      } else if (host == 'album') {
+        String? rid =
+            RegExp(r'album/(\d+)').firstMatch(value.toString())?.group(1);
+        if (rid != null) {
+          SmartDialog.showLoading();
+          dynamic res = await DynamicsHttp.dynamicDetail(rid: rid, type: 2);
+          SmartDialog.dismiss();
+          if (res['status']) {
+            Get.toNamed('/dynamicDetail', arguments: {
+              'item': res['data'],
+              'floor': 1,
+              'action': 'detail'
+            });
+          } else {
+            SmartDialog.showToast(res['msg']);
+          }
         }
       } else {
         debugPrint('$value');
