@@ -314,6 +314,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                                     ? Icons.check_box_outlined
                                     : Icons.check_box_outline_blank,
                                 size: 20,
+                                color: Colors.white,
                               ),
                             ),
                             const Text(
