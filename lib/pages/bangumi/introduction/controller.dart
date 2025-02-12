@@ -186,13 +186,21 @@ class BangumiIntroController extends CommonController {
     }
   }
 
-  void coinVideo(int coin) async {
-    var res = await VideoHttp.coinVideo(bvid: bvid, multiply: coin);
+  void coinVideo(int coin, [bool selectLike = false]) async {
+    var res = await VideoHttp.coinVideo(
+      bvid: bvid,
+      multiply: coin,
+      selectLike: selectLike ? 1 : 0,
+    );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
       hasCoin.value = true;
       dynamic bangumiDetail = (loadingState.value as Success).response;
       bangumiDetail.stat!['coins'] = bangumiDetail.stat!['coins'] + coin;
+      if (selectLike && hasLike.value.not) {
+        hasLike.value = true;
+        bangumiDetail.stat!['likes'] = bangumiDetail.stat!['likes'] + 1;
+      }
       loadingState.value = LoadingState.success(bangumiDetail);
     } else {
       SmartDialog.showToast(res['msg']);
