@@ -366,9 +366,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                                     Icons.offline_bolt,
                                                     color: videoIntroController
                                                                         .userStat
-                                                                        .value[
-                                                                    'card']?['vip']
-                                                                ['status'] ==
+                                                                        .value['card']
+                                                                    ?[
+                                                                    'official_verify']
+                                                                ?['type'] ==
                                                             0
                                                         ? Colors.yellow
                                                         : Colors
