@@ -757,8 +757,9 @@ class Utils {
                   if (item.epId.toString() == epId.toString()) {
                     // view as normal video
                     Utils.toDupNamed(
-                      '/video?bvid=${item.bvid}&cid=${item.cid}',
+                      '/video?bvid=${item.bvid}&cid=${item.cid}&seasonId=${data.seasonId}&epId=${item.epId}',
                       arguments: {
+                        'pgcApi': true,
                         'pic': item.cover,
                         'heroTag': Utils.makeHeroTag(item.cid),
                         'videoType': SearchType.video,
