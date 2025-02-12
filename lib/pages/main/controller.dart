@@ -124,37 +124,41 @@ class MainController extends GetxController {
   }
 
   Future _queryPMUnread() async {
-    dynamic res = await Request().get(Api.msgUnread);
-    if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': ((res.data['data']?['unfollow_unread'] as int?) ?? 0) +
-            ((res.data['data']?['follow_unread'] as int?) ?? 0),
-      };
-    } else {
-      return {
-        'status': false,
-        'msg': res.data['message'],
-      };
-    }
+    try {
+      dynamic res = await Request().get(Api.msgUnread);
+      if (res.data['code'] == 0) {
+        return {
+          'status': true,
+          'data': ((res.data['data']?['unfollow_unread'] as int?) ?? 0) +
+              ((res.data['data']?['follow_unread'] as int?) ?? 0),
+        };
+      } else {
+        return {
+          'status': false,
+          'msg': res.data['message'],
+        };
+      }
+    } catch (_) {}
   }
 
   Future _queryMsgFeedUnread() async {
     if (isLogin.value.not) {
       return;
     }
-    dynamic res = await Request().get(Api.msgFeedUnread);
-    if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data'],
-      };
-    } else {
-      return {
-        'status': false,
-        'msg': res.data['message'],
-      };
-    }
+    try {
+      dynamic res = await Request().get(Api.msgFeedUnread);
+      if (res.data['code'] == 0) {
+        return {
+          'status': true,
+          'data': res.data['data'],
+        };
+      } else {
+        return {
+          'status': false,
+          'msg': res.data['message'],
+        };
+      }
+    } catch (_) {}
   }
 
   void getUnreadDynamic() async {

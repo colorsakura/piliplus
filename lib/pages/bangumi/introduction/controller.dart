@@ -604,21 +604,24 @@ class BangumiIntroController extends CommonController {
   RxInt followStatus = (-1).obs;
 
   Future queryIsFollowed() async {
-    dynamic result = await Request().get(
-      'https://www.bilibili.com/bangumi/play/ss$seasonId',
-    );
-    dom.Document document = html_parser.parse(result.data);
-    dom.Element? scriptElement = document.querySelector('script#__NEXT_DATA__');
-    if (scriptElement != null) {
-      dynamic scriptContent = jsonDecode(scriptElement.text);
-      isFollowed.value =
-          scriptContent['props']['pageProps']['followState']['isFollowed'];
-      followStatus.value =
-          scriptContent['props']['pageProps']['followState']['followStatus'];
-      // int progress = scriptContent['props']['pageProps']['dehydratedState']
-      //             ['queries'][0]['state']['data']['result']
-      //         ['play_view_business_info']['user_status']['watch_progress']
-      //     ['current_watch_progress'];
-    }
+    try {
+      dynamic result = await Request().get(
+        'https://www.bilibili.com/bangumi/play/ss$seasonId',
+      );
+      dom.Document document = html_parser.parse(result.data);
+      dom.Element? scriptElement =
+          document.querySelector('script#__NEXT_DATA__');
+      if (scriptElement != null) {
+        dynamic scriptContent = jsonDecode(scriptElement.text);
+        isFollowed.value =
+            scriptContent['props']['pageProps']['followState']['isFollowed'];
+        followStatus.value =
+            scriptContent['props']['pageProps']['followState']['followStatus'];
+        // int progress = scriptContent['props']['pageProps']['dehydratedState']
+        //             ['queries'][0]['state']['data']['result']
+        //         ['play_view_business_info']['user_status']['watch_progress']
+        //     ['current_watch_progress'];
+      }
+    } catch (_) {}
   }
 }

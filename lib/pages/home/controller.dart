@@ -105,10 +105,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void querySearchDefault() async {
-    var res = await Request().get(Api.searchDefault);
-    if (res.data['code'] == 0) {
-      defaultSearch.value = res.data['data']['name'];
-    }
+    try {
+      var res = await Request().get(Api.searchDefault);
+      if (res.data['code'] == 0) {
+        defaultSearch.value = res.data['data']['name'];
+      }
+    } catch (_) {}
   }
 
   showUserInfoDialog(context) {
