@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -197,7 +198,8 @@ class VideoIntroController extends GetxController
     if (videoDetail.value.owner == null) {
       return;
     }
-    var result = await UserHttp.userStat(mid: videoDetail.value.owner!.mid!);
+    var result =
+        await MemberHttp.memberCardInfo(mid: videoDetail.value.owner!.mid!);
     if (result['status']) {
       userStat.value = result['data'];
       userStat.refresh();

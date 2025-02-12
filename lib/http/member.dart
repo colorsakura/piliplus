@@ -334,8 +334,13 @@ class MemberHttp {
   }
 
   static Future memberCardInfo({int? mid}) async {
-    var res = await Request()
-        .get(Api.memberCardInfo, queryParameters: {'mid': mid, 'photo': true});
+    var res = await Request().get(
+      Api.memberCardInfo,
+      queryParameters: {
+        'mid': mid,
+        'photo': false,
+      },
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {

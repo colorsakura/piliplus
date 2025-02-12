@@ -332,15 +332,53 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      NetworkImgLayer(
-                                        type: 'avatar',
-                                        src: widget.loadingStatus
-                                            ? videoItem['owner']?.face ?? ""
-                                            : videoDetail.owner!.face,
-                                        width: 35,
-                                        height: 35,
-                                        fadeInDuration: Duration.zero,
-                                        fadeOutDuration: Duration.zero,
+                                      Obx(
+                                        () => Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            NetworkImgLayer(
+                                              type: 'avatar',
+                                              src: videoIntroController.userStat
+                                                      .value['card']?['face'] ??
+                                                  '',
+                                              width: 35,
+                                              height: 35,
+                                              fadeInDuration: Duration.zero,
+                                              fadeOutDuration: Duration.zero,
+                                            ),
+                                            if ((videoIntroController.userStat
+                                                                .value['card']
+                                                            ?['official_verify']
+                                                        ?['type'] ??
+                                                    -1) !=
+                                                -1)
+                                              Positioned(
+                                                right: -2,
+                                                bottom: -2,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .surface,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.offline_bolt,
+                                                    color: videoIntroController
+                                                                        .userStat
+                                                                        .value[
+                                                                    'card']?['vip']
+                                                                ['status'] ==
+                                                            0
+                                                        ? Colors.yellow
+                                                        : Colors
+                                                            .lightBlueAccent,
+                                                    size: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
                                       ),
                                       const SizedBox(width: 10),
                                       Expanded(
@@ -348,23 +386,39 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              widget.loadingStatus
-                                                  ? videoItem['owner']?.name ??
-                                                      ""
-                                                  : videoDetail.owner!.name,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                // color: t.colorScheme.primary,
+                                            Obx(
+                                              () => Text(
+                                                videoIntroController.userStat
+                                                            .value['card']
+                                                        ?['name'] ??
+                                                    "",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: (videoIntroController
+                                                                          .userStat
+                                                                          .value['card']?['vip']
+                                                                      ?[
+                                                                      'status'] ??
+                                                                  -1) >
+                                                              0 &&
+                                                          (videoIntroController
+                                                                          .userStat
+                                                                          .value['card']?['vip']
+                                                                      ?[
+                                                                      'type'] ??
+                                                                  -1) ==
+                                                              2
+                                                      ? context.vipColor
+                                                      : null,
+                                                ),
                                               ),
-                                              // semanticsLabel: "UP主：${owner.name}",
                                             ),
                                             const SizedBox(height: 0),
                                             Obx(
                                               () => Text(
-                                                '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝',
+                                                '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝    ${videoIntroController.userStat.value['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat.value['archive_count'])}视频' : ''}',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: t.colorScheme.outline,
@@ -414,7 +468,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                           fadeInDuration: Duration.zero,
                                           fadeOutDuration: Duration.zero,
                                         ),
-                                        const SizedBox(width: 5),
+                                        const SizedBox(width: 8),
                                         Column(
                                           mainAxisSize: MainAxisSize.min,
                                           crossAxisAlignment:
