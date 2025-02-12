@@ -16,7 +16,6 @@ class WhisperDetailController extends GetxController {
   RxList<MessageItem> messageList = <MessageItem>[].obs;
   //表情转换图片规则
   List<dynamic>? eInfos;
-  final TextEditingController replyContentController = TextEditingController();
 
   @override
   void onInit() {
@@ -67,10 +66,11 @@ class WhisperDetailController extends GetxController {
   }
 
   Future sendMsg({
+    required String message,
     dynamic picMsg,
+    required VoidCallback onClearText,
   }) async {
     feedBack();
-    String message = replyContentController.text;
     final userInfo = GStorage.userInfo.get('userInfoCache');
     if (userInfo == null) {
       SmartDialog.dismiss();
@@ -96,18 +96,12 @@ class WhisperDetailController extends GetxController {
     if (result['status']) {
       // debugPrint(result['data']);
       querySessionMsg();
-      replyContentController.text = "";
+      onClearText();
       SmartDialog.dismiss();
       SmartDialog.showToast('发送成功');
     } else {
       SmartDialog.dismiss();
       SmartDialog.showToast(result['msg']);
     }
-  }
-
-  @override
-  void onClose() {
-    replyContentController.dispose();
-    super.onClose();
   }
 }

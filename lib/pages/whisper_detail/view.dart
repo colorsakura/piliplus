@@ -177,7 +177,7 @@ class _WhisperDetailPageState
                 () => TextField(
                   readOnly: readOnly.value,
                   focusNode: focusNode,
-                  controller: _whisperDetailController.replyContentController,
+                  controller: editController,
                   minLines: 1,
                   maxLines: 4,
                   onChanged: (value) {
@@ -209,7 +209,10 @@ class _WhisperDetailPageState
               return IconButton(
                 onPressed: () async {
                   if (enablePublish.value) {
-                    _whisperDetailController.sendMsg();
+                    _whisperDetailController.sendMsg(
+                      message: editController.text,
+                      onClearText: editController.clear,
+                    );
                   } else {
                     try {
                       XFile? pickedFile = await imagePicker.pickImage(
@@ -238,7 +241,10 @@ class _WhisperDetailPageState
                           };
                           SmartDialog.showLoading(msg: '正在发送');
                           await _whisperDetailController.sendMsg(
-                              picMsg: picMsg);
+                            picMsg: picMsg,
+                            message: editController.text,
+                            onClearText: editController.clear,
+                          );
                         } else {
                           SmartDialog.dismiss();
                           SmartDialog.showToast(result['msg']);
