@@ -83,7 +83,6 @@ class _BottomControlState extends State<BottomControl> {
               margin: const EdgeInsets.symmetric(horizontal: 10),
               alignment: Alignment.center,
               child: PopupMenuButton<BoxFit>(
-                onSelected: widget.controller.toggleVideoFit,
                 initialValue: widget.controller.videoFit.value,
                 color: Colors.black.withOpacity(0.8),
                 itemBuilder: (BuildContext context) {
@@ -92,6 +91,9 @@ class _BottomControlState extends State<BottomControl> {
                       height: 35,
                       padding: const EdgeInsets.only(left: 30),
                       value: boxFit,
+                      onTap: () {
+                        widget.controller.toggleVideoFit(boxFit);
+                      },
                       child: Text(
                         "${PlPlayerController.videoFitType[boxFit.index]['desc']}",
                         style:
@@ -142,9 +144,6 @@ class _BottomControlState extends State<BottomControl> {
               child: PopupMenuButton<int>(
                 padding: EdgeInsets.zero,
                 initialValue: widget.liveRoomCtr.currentQn,
-                onSelected: (value) {
-                  widget.liveRoomCtr.changeQn(value);
-                },
                 child: Text(
                   widget.liveRoomCtr.currentQnDesc.value,
                   style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -153,6 +152,9 @@ class _BottomControlState extends State<BottomControl> {
                   return widget.liveRoomCtr.acceptQnList.map((e) {
                     return PopupMenuItem<int>(
                       value: e['code'],
+                      onTap: () {
+                        widget.liveRoomCtr.changeQn(e['code']);
+                      },
                       child: Text(e['desc']),
                     );
                   }).toList();

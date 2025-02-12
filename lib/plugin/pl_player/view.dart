@@ -401,9 +401,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               margin: const EdgeInsets.symmetric(horizontal: 10),
               alignment: Alignment.center,
               child: PopupMenuButton<SuperResolutionType>(
-                onSelected: (SuperResolutionType value) {
-                  plPlayerController.setShader(value.index);
-                },
                 initialValue: SuperResolutionType
                     .values[plPlayerController.superResolutionType],
                 color: Colors.black.withOpacity(0.8),
@@ -414,6 +411,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       height: 35,
                       padding: const EdgeInsets.only(left: 30),
                       value: type,
+                      onTap: () {
+                        plPlayerController.setShader(type.index);
+                      },
                       child: Text(
                         type.title,
                         style:
@@ -515,9 +515,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         margin: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         child: PopupMenuButton<BoxFit>(
-          onSelected: (BoxFit value) {
-            plPlayerController.toggleVideoFit(value);
-          },
           initialValue: plPlayerController.videoFit.value,
           color: Colors.black.withOpacity(0.8),
           itemBuilder: (BuildContext context) {
@@ -526,6 +523,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 height: 35,
                 padding: const EdgeInsets.only(left: 30),
                 value: boxFit,
+                onTap: () {
+                  plPlayerController.toggleVideoFit(boxFit);
+                },
                 child: Text(
                   "${PlPlayerController.videoFitType[boxFit.index]['desc']}",
                   style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -548,9 +548,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 width: widgetWidth,
                 height: 30,
                 child: PopupMenuButton<int>(
-                  onSelected: (int value) {
-                    plPlayerController.setSubtitle(value);
-                  },
                   initialValue: plPlayerController.vttSubtitles.length <
                           plPlayerController.vttSubtitlesIndex.value
                       ? 0
@@ -563,6 +560,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         .map((entry) {
                       return PopupMenuItem<int>(
                         value: entry.key,
+                        onTap: () {
+                          plPlayerController.setSubtitle(entry.key);
+                        },
                         child: Text(
                           "${entry.value['title']}",
                           style: const TextStyle(color: Colors.white),
@@ -593,9 +593,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         margin: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         child: PopupMenuButton<double>(
-          onSelected: (double value) {
-            plPlayerController.setPlaybackSpeed(value);
-          },
           initialValue: plPlayerController.playbackSpeed,
           color: Colors.black.withOpacity(0.8),
           itemBuilder: (BuildContext context) {
@@ -604,6 +601,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 height: 35,
                 padding: const EdgeInsets.only(left: 30),
                 value: speed,
+                onTap: () {
+                  plPlayerController.setPlaybackSpeed(speed);
+                },
                 child: Text(
                   "${speed}X",
                   style: const TextStyle(color: Colors.white, fontSize: 13),
