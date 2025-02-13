@@ -15,12 +15,15 @@ import 'utils.dart';
 
 class PiliScheme {
   static late AppLinks appLinks;
+  static StreamSubscription? listener;
+
   static Future<void> init() async {
     // Register our protocol only on Windows platform
     // registerProtocolHandler('bilibili');
     appLinks = AppLinks();
 
-    appLinks.uriLinkStream.listen((uri) {
+    listener?.cancel();
+    listener = appLinks.uriLinkStream.listen((uri) {
       debugPrint('onAppLink: $uri');
       routePush(uri);
     });
@@ -53,12 +56,6 @@ class PiliScheme {
     final String host = uri.host.toLowerCase();
     final String path = uri.path;
 
-    void launchURL() {
-      if (selfHandle.not) {
-        Utils.launchURL(uri.toString());
-      }
-    }
-
     switch (scheme) {
       case 'bilibili':
         switch (host) {
@@ -68,6 +65,18 @@ class PiliScheme {
               (Route<dynamic> route) => route.isFirst,
             );
             return true;
+          case 'pgc':
+            // bilibili://pgc/season/ep/123456?h5_awaken_params=random
+            String? id = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+            if (id != null) {
+              bool isEp = path.contains('/ep/');
+              Utils.viewBangumi(
+                seasonId: isEp ? null : id,
+                epId: isEp ? id : null,
+              );
+              return true;
+            }
+            return false;
           case 'space':
             // bilibili://space/12345678?frommodule=XX&h5awaken=random
             String? mid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
@@ -75,7 +84,6 @@ class PiliScheme {
               Utils.toDupNamed('/member?mid=$mid', off: off);
               return true;
             }
-            launchURL();
             return false;
           case 'video':
             if (uri.queryParameters['comment_root_id'] != null) {
@@ -113,7 +121,6 @@ class PiliScheme {
                 );
                 return true;
               }
-              launchURL();
               return false;
             }
 
@@ -131,7 +138,6 @@ class PiliScheme {
               );
               return true;
             }
-            launchURL();
             return false;
           case 'live':
             // bilibili://live/12345678?extra_jump_from=1&from=1&is_room_feed=1&h5awaken=random
@@ -140,10 +146,9 @@ class PiliScheme {
               Utils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
               return true;
             }
-            launchURL();
             return false;
           case 'bangumi':
-            // to check
+            // bilibili://bangumi/season/12345678?h5_awaken_params=random
             if (path.startsWith('/season')) {
               String? seasonId = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
               if (seasonId != null) {
@@ -151,18 +156,13 @@ class PiliScheme {
                 return true;
               }
             }
-            launchURL();
             return false;
           case 'opus':
             // bilibili://opus/detail/12345678?h5awaken=random
             if (path.startsWith('/detail')) {
               bool hasMatch = await _onPushDynDetail(path, off);
-              if (hasMatch.not) {
-                launchURL();
-              }
               return hasMatch;
             }
-            launchURL();
             return false;
           case 'search':
             Utils.toDupNamed(
@@ -187,7 +187,6 @@ class PiliScheme {
               );
               return true;
             }
-            launchURL();
             return false;
           case 'comment':
             if (path.startsWith("/detail/")) {
@@ -229,7 +228,6 @@ class PiliScheme {
               );
               return true;
             }
-            launchURL();
             return false;
           case 'following':
             if (path.startsWith("/detail/")) {
@@ -246,11 +244,8 @@ class PiliScheme {
                         actions: [
                           IconButton(
                             tooltip: '前往',
-                            onPressed: () async {
-                              bool hasMatch = await _onPushDynDetail(path, off);
-                              if (hasMatch.not) {
-                                launchURL();
-                              }
+                            onPressed: () {
+                              _onPushDynDetail(path, off);
                             },
                             icon: const Icon(Icons.open_in_new),
                           ),
@@ -268,13 +263,9 @@ class PiliScheme {
                 return true;
               } else {
                 bool hasMatch = await _onPushDynDetail(path, off);
-                if (hasMatch.not) {
-                  launchURL();
-                }
                 return hasMatch;
               }
             }
-            launchURL();
             return false;
           case 'album':
             String? rid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
@@ -297,14 +288,12 @@ class PiliScheme {
               }
               return true;
             }
-            launchURL();
             return false;
           default:
             if (selfHandle.not) {
               debugPrint('$uri');
               SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
             }
-            launchURL();
             return false;
         }
       case 'http' || 'https':
@@ -328,7 +317,6 @@ class PiliScheme {
           debugPrint('$uri');
           SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
         }
-        launchURL();
         return false;
     }
   }

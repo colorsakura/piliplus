@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/tabs.dart';
 import 'package:PiliPlus/grpc/grpc_client.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -156,6 +157,7 @@ class _MainAppState extends State<MainApp>
     await GrpcClient.instance.shutdown();
     await GStorage.close();
     EventBus().off(EventName.loginEvent);
+    PiliScheme.listener?.cancel();
     super.dispose();
   }
 
