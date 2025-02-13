@@ -3,7 +3,6 @@ import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_search/controller.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -53,8 +52,15 @@ class HistoryItem extends StatelessWidget {
           //     'pageTitle': videoItem.title
           //   },
           // );
-          PiliScheme.routePush(Uri.parse(
-              "https://www.bilibili.com/read/cv${videoItem.history.oid}"));
+          Utils.toDupNamed(
+            '/htmlRender',
+            parameters: {
+              'url': 'https://www.bilibili.com/read/cv${videoItem.history.oid}',
+              'title': '',
+              'id': 'cv${videoItem.history.oid}',
+              'dynamicType': 'read'
+            },
+          );
         } else if (videoItem.history.business == 'live') {
           if (videoItem.liveStatus == 1) {
             // LiveItemModel liveItem = LiveItemModel.fromJson({

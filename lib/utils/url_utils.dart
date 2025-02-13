@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -9,8 +10,10 @@ import 'utils.dart';
 
 class UrlUtils {
   // 302重定向路由截取
-  static Future<String?> parseRedirectUrl(String url,
-      [bool returnOri = false]) async {
+  static Future<String?> parseRedirectUrl(
+    String url, [
+    bool returnOri = false,
+  ]) async {
     try {
       final response = await Request().get(
         url,
@@ -23,9 +26,10 @@ class UrlUtils {
       );
       if (response.statusCode == 302 || response.statusCode == 301) {
         String? redirectUrl = response.headers['location']?.first;
+        debugPrint('redirectUrl: $redirectUrl');
         if (redirectUrl != null) {
           if (redirectUrl.startsWith('/')) {
-            return url;
+            return returnOri ? url : null;
           }
           if (redirectUrl.endsWith('/')) {
             redirectUrl = redirectUrl.substring(0, redirectUrl.length - 1);

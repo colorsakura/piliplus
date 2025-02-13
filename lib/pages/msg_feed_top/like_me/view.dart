@@ -122,7 +122,7 @@ class LikeMeList extends StatelessWidget {
           onTap: () {
             String? nativeUri = msgFeedLikeMeList[i].item?.nativeUri;
             if (nativeUri != null) {
-              PiliScheme.routePush(Uri.parse(nativeUri));
+              PiliScheme.routePushFromUrl(nativeUri);
             }
             // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
           },

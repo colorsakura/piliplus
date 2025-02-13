@@ -60,7 +60,7 @@ class _MemberArticleState extends State<MemberArticle>
                     return ListTile(
                       dense: true,
                       onTap: () {
-                        PiliScheme.routePush(Uri.parse(item.uri ?? ''));
+                        PiliScheme.routePushFromUrl(item.uri ?? '');
                       },
                       leading: item.originImageUrls?.isNotEmpty == true
                           ? Container(

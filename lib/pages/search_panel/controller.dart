@@ -67,18 +67,22 @@ class SearchPanelController extends CommonController {
   void jump2Video() {
     if (RegExp(r'^av\d+$', caseSensitive: false).hasMatch(keyword)) {
       hasJump2Video = true;
-      PiliScheme.videoPush(int.parse(keyword.substring(2)), null, false);
+      PiliScheme.videoPush(
+        int.parse(keyword.substring(2)),
+        null,
+        showDialog: false,
+      );
     } else if (RegExp(r'^bv[a-z\d]{10}$', caseSensitive: false)
         .hasMatch(keyword)) {
       hasJump2Video = true;
-      PiliScheme.videoPush(null, keyword, false);
+      PiliScheme.videoPush(null, keyword, showDialog: false);
     }
   }
 
   void onPushDetail(resultList) async {
     int? aid = int.tryParse(keyword);
     if (aid != null && resultList.first.aid == aid) {
-      PiliScheme.videoPush(aid, null, false);
+      PiliScheme.videoPush(aid, null, showDialog: false);
     }
   }
 

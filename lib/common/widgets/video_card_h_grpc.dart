@@ -58,7 +58,7 @@ class VideoCardHGrpc extends StatelessWidget {
               return;
             }
             try {
-              PiliScheme.routePush(Uri.parse(videoItem.smallCoverV5.base.uri));
+              PiliScheme.routePushFromUrl(videoItem.smallCoverV5.base.uri);
             } catch (err) {
               SmartDialog.showToast(err.toString());
             }

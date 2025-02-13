@@ -19,7 +19,6 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import '../../../../../utils/app_scheme.dart';
 import 'zan.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -863,56 +862,12 @@ class ReplyItem extends StatelessWidget {
                             });
                             return;
                           }
-                          final String redirectUrl =
-                              (await UrlUtils.parseRedirectUrl(matchStr)) ??
-                                  matchStr;
-                          // if (redirectUrl == matchStr) {
-                          //   Clipboard.setData(ClipboardData(text: matchStr));
-                          //   SmartDialog.showToast('地址可能有误');
-                          //   return;
-                          // }
-                          Uri uri = Uri.parse(redirectUrl);
-                          PiliScheme.routePush(uri);
-                          // final String pathSegment = Uri.parse(redirectUrl).path;
-                          // final String lastPathSegment =
-                          //     pathSegment.split('/').last;
-                          // if (lastPathSegment.startsWith('BV')) {
-                          //   UrlUtils.matchUrlPush(
-                          //     lastPathSegment,
-                          //     title,
-                          //     redirectUrl,
-                          //   );
-                          // } else {
-                          //   Get.toNamed(
-                          //     '/webview',
-                          //     parameters: {
-                          //       'url': redirectUrl,
-                          //       'type': 'url',
-                          //       'pageTitle': title
-                          //     },
-                          //   );
-                          // }
+                          Utils.handleWebview(matchStr);
                         }
                       } else {
                         if (appUrlSchema.startsWith('bilibili://search')) {
                           Get.toNamed('/searchResult',
                               parameters: {'keyword': title});
-                        } else if (matchStr.startsWith('https://b23.tv')) {
-                          final String redirectUrl =
-                              (await UrlUtils.parseRedirectUrl(matchStr)) ??
-                                  matchStr;
-                          final String pathSegment =
-                              Uri.parse(redirectUrl).path;
-                          final String lastPathSegment =
-                              pathSegment.split('/').last;
-                          if (lastPathSegment.startsWith('BV')) {
-                            UrlUtils.matchUrlPush(
-                              lastPathSegment,
-                              redirectUrl,
-                            );
-                          } else {
-                            Utils.handleWebview(redirectUrl);
-                          }
                         } else {
                           Utils.handleWebview(matchStr);
                         }
@@ -949,25 +904,8 @@ class ReplyItem extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () async {
-                    if (matchStr.startsWith('https://b23.tv')) {
-                      final String redirectUrl =
-                          (await UrlUtils.parseRedirectUrl(matchStr)) ??
-                              matchStr;
-                      final String pathSegment = Uri.parse(redirectUrl).path;
-                      final String lastPathSegment =
-                          pathSegment.split('/').last;
-                      if (lastPathSegment.startsWith('BV')) {
-                        UrlUtils.matchUrlPush(
-                          lastPathSegment,
-                          redirectUrl,
-                        );
-                      } else {
-                        PiliScheme.routePush(Uri.parse(matchStr));
-                      }
-                    } else {
-                      PiliScheme.routePush(Uri.parse(matchStr));
-                    }
+                  ..onTap = () {
+                    Utils.handleWebview(matchStr);
                   },
               ),
             );

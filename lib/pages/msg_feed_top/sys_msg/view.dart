@@ -184,8 +184,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   try {
-                    Uri uri = Uri.parse(match[2]!.replaceAll('"', ''));
-                    PiliScheme.routePush(uri);
+                    PiliScheme.routePushFromUrl(match[2]!.replaceAll('"', ''));
                   } catch (err) {
                     SmartDialog.showToast(err.toString());
                   }
@@ -209,8 +208,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     try {
-                      Uri uri = Uri.parse(match[3]!);
-                      PiliScheme.routePush(uri);
+                      PiliScheme.routePushFromUrl(match[3]!);
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
                     }
@@ -231,8 +229,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   try {
-                    Uri uri = Uri.parse(match[0]!);
-                    PiliScheme.routePush(uri);
+                    PiliScheme.routePushFromUrl(match[0]!);
                   } catch (err) {
                     SmartDialog.showToast(err.toString());
                     Utils.copyText(match[0] ?? '');

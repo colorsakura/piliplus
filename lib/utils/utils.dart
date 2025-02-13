@@ -370,46 +370,13 @@ class Utils {
     );
   }
 
-  static bool _handleInAppWebview(String url) {
-    if (RegExp(
-            r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/video/BV[a-zA-Z\d]+')
-        .hasMatch(url)) {
-      try {
-        String? bvid = RegExp(r'BV[a-zA-Z\d]+').firstMatch(url)?.group(0);
-        if (bvid != null) {
-          PiliScheme.videoPush(null, bvid);
-          return true;
-        }
-      } catch (_) {}
-    } else if (RegExp(
-            r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/playlist')
-        .hasMatch(url)) {
-      try {
-        String? bvid =
-            RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
-        if (bvid != null) {
-          PiliScheme.videoPush(null, bvid);
-          return true;
-        }
-      } catch (_) {}
-    } else if (RegExp(r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)')
-        .hasMatch(url)) {
-      toDupNamed(
-        '/webview',
-        parameters: {'url': url},
-      );
-      return true;
-    }
-    return false;
-  }
-
   static void handleWebview(
     String url, {
     bool off = false,
     bool inApp = false,
-  }) {
+  }) async {
     if (inApp.not && GStorage.openInBrowser) {
-      if (_handleInAppWebview(url).not) {
+      if ((await PiliScheme.routePushFromUrl(url, selfHandle: true)).not) {
         launchURL(url);
       }
     } else {
@@ -419,12 +386,7 @@ class Utils {
           parameters: {'url': url},
         );
       } else {
-        if (_handleInAppWebview(url).not) {
-          toDupNamed(
-            '/webview',
-            parameters: {'url': url},
-          );
-        }
+        PiliScheme.routePushFromUrl(url);
       }
     }
   }
@@ -807,13 +769,23 @@ class Utils {
     String page, {
     dynamic arguments,
     Map<String, String>? parameters,
+    bool off = false,
   }) {
-    Get.toNamed(
-      page,
-      arguments: arguments,
-      parameters: parameters,
-      preventDuplicates: false,
-    );
+    if (off) {
+      Get.offNamed(
+        page,
+        arguments: arguments,
+        parameters: parameters,
+        preventDuplicates: false,
+      );
+    } else {
+      Get.toNamed(
+        page,
+        arguments: arguments,
+        parameters: parameters,
+        preventDuplicates: false,
+      );
+    }
   }
 
   static Future copyText(

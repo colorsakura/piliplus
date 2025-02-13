@@ -5,8 +5,6 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -237,53 +235,20 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 }
               : null,
           shouldOverrideUrlLoading: (controller, navigationAction) async {
-            final String? str =
-                navigationAction.request.url!.pathSegments.getOrNull(0);
-            if (str != null) {
-              final Map matchRes = IdUtils.matchAvorBv(input: str);
-              if (matchRes.isNotEmpty) {
-                Get.back();
-                PiliScheme.videoPush(matchRes['AV'], matchRes['BV']);
-                return NavigationActionPolicy.CANCEL;
-              }
-            }
-
-            var url = navigationAction.request.url!.toString();
-
-            if (RegExp(
-                    r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/video/BV[a-zA-Z\d]+')
-                .hasMatch(url)) {
-              try {
-                String? bvid =
-                    RegExp(r'BV[a-zA-Z\d]+').firstMatch(url)?.group(0);
-                if (bvid != null) {
-                  Get.back();
-                  PiliScheme.videoPush(null, bvid);
-                  return NavigationActionPolicy.CANCEL;
-                }
-              } catch (_) {}
-            } else if (RegExp(
-                    r'^(https?://)?((www|m).)?(bilibili|b23).(com|tv)/playlist')
-                .hasMatch(url)) {
-              try {
-                String? bvid =
-                    RegExp(r'bvid=(BV[a-zA-Z\d]+)').firstMatch(url)?.group(1);
-                if (bvid != null) {
-                  PiliScheme.videoPush(null, bvid);
-                  return NavigationActionPolicy.CANCEL;
-                }
-              } catch (_) {}
+            late String url = navigationAction.request.url.toString();
+            bool hasMatch = await PiliScheme.routePush(
+              navigationAction.request.url?.uriValue ?? Uri(),
+              selfHandle: true,
+              off: true,
+            );
+            // debugPrint('webview: [$url], [$hasMatch]');
+            if (hasMatch) {
+              _progressStream.add(1.0);
+              return NavigationActionPolicy.CANCEL;
             } else if (RegExp(r'^(?!(https?://))\S+://', caseSensitive: false)
                 .hasMatch(url)) {
-              if (url.startsWith('bilibili://video/')) {
-                String? str =
-                    navigationAction.request.url!.pathSegments.getOrNull(0);
-                Get.offAndToNamed(
-                  '/searchResult',
-                  parameters: {'keyword': str ?? ''},
-                );
-              } else {
-                var snackBar = SnackBar(
+              if (context.mounted) {
+                SnackBar snackBar = SnackBar(
                   content: const Text('当前网页将要打开外部链接，是否打开'),
                   showCloseIcon: true,
                   action: SnackBarAction(

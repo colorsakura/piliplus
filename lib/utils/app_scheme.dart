@@ -26,240 +26,527 @@ class PiliScheme {
     });
   }
 
-  /// 路由跳转
-  static void routePush(Uri value) async {
-    final String scheme = value.scheme;
-    final String host = value.host;
-    final String path = value.path;
-
-    if (scheme == 'bilibili') {
-      debugPrint('$value');
-      if (host == 'root') {
-        Navigator.popUntil(
-            Get.context!, (Route<dynamic> route) => route.isFirst);
-      } else if (host == 'space') {
-        final String mid = path.split('/').last;
-        Utils.toDupNamed(
-          '/member?mid=$mid',
-          arguments: <String, dynamic>{'face': null},
-        );
-      } else if (host == 'video') {
-        String pathQuery = path.split('/').last;
-        if (value.queryParameters['comment_root_id'] != null) {
-          Get.to(
-            () => Scaffold(
-              resizeToAvoidBottomInset: false,
-              appBar: AppBar(
-                title: const Text('评论详情'),
-                actions: [
-                  IconButton(
-                    tooltip: '前往原视频',
-                    onPressed: () {
-                      String? enterUri = value.toString().split('?').first;
-                      routePush(Uri.parse(enterUri));
-                    },
-                    icon: const Icon(Icons.open_in_new),
-                  ),
-                ],
-              ),
-              body: VideoReplyReplyPanel(
-                oid: int.tryParse(pathQuery),
-                rpid: int.tryParse(value.queryParameters['comment_root_id']!),
-                source: 'routePush',
-                replyType: ReplyType.video,
-                firstFloor: null,
-              ),
-            ),
-          );
-          return;
-        }
-        final numericRegex = RegExp(r'^[0-9]+$');
-        if (numericRegex.hasMatch(pathQuery)) {
-          pathQuery = 'AV$pathQuery';
-        }
-        Map map = IdUtils.matchAvorBv(input: pathQuery);
-        if (map.isNotEmpty) {
-          videoPush(map['AV'], map['BV']);
-        } else {
-          SmartDialog.showToast('投稿匹配失败');
-        }
-      } else if (host == 'live') {
-        final String roomId = path.split('/').last;
-        Utils.toDupNamed('/liveRoom?roomid=$roomId');
-      } else if (host == 'bangumi') {
-        if (path.startsWith('/season')) {
-          final String seasonId = path.split('/').last;
-          bangumiPush(int.parse(seasonId), null);
-        }
-      } else if (host == 'opus') {
-        if (path.startsWith('/detail')) {
-          var opusId = path.split('/').last;
-          Utils.toDupNamed(
-            '/webview',
-            parameters: {
-              'url': 'https://www.bilibili.com/opus/$opusId',
-              'type': 'url',
-              'pageTitle': '',
-            },
-          );
-        }
-      } else if (host == 'search') {
-        Utils.toDupNamed('/searchResult', parameters: {'keyword': ''});
-      } else if (host == 'article') {
-        final String id = path.split('/').last.split('?').first;
-        Utils.toDupNamed(
-          '/htmlRender',
-          parameters: {
-            'url': 'www.bilibili.com/read/cv$id',
-            'title': '',
-            'id': 'cv$id',
-            'dynamicType': 'read'
-          },
-        );
-      } else if (host == 'comment' && path.startsWith("/detail/")) {
-        //bilibili://comment/detail/17/832703053858603029/238686570016/?subType=0&anchor=238686628816&showEnter=1&extraIntentId=0&scene=1&enterName=%E6%9F%A5%E7%9C%8B%E5%8A%A8%E6%80%81%E8%AF%A6%E6%83%85&enterUri=bilibili://following/detail/832703053858603029
-        //fmt.Sprintf("bilibili://comment/detail/%d/%d/%d/?subType=%d&anchor=%d&showEnter=1&extraIntentId=%d", rp.Type, rp.Oid, rootID, subType, rp.RpID, extraIntentID)
-        debugPrint('${value.queryParameters}');
-        List<String> pathParts = path.split('/');
-        int type = int.parse(pathParts[2]);
-        int oid = int.parse(pathParts[3]);
-        int rootId = int.parse(pathParts[4]);
-        // int subType = int.parse(value.queryParameters['subType'] ?? '0');
-        // int rpID = int.parse(value.queryParameters['anchor'] ?? '0');
-        // int extraIntentId =
-        // int.parse(value.queryParameters['extraIntentId'] ?? '0');
-        Get.to(
-          () => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              title: const Text('评论详情'),
-              actions: [
-                IconButton(
-                  tooltip: '前往',
-                  onPressed: () {
-                    String? enterUri = value.queryParameters['enterUri'];
-                    if (enterUri != null) {
-                      routePush(Uri.parse(enterUri));
-                    }
-                  },
-                  icon: const Icon(Icons.open_in_new),
-                ),
-              ],
-            ),
-            body: VideoReplyReplyPanel(
-              oid: oid,
-              rpid: rootId, // rpID,
-              source: 'routePush',
-              replyType: ReplyType.values[type],
-              firstFloor: null,
-            ),
-          ),
-        );
-      } else if (host == 'following' && path.startsWith("/detail/")) {
-        void getToOpusWeb() async {
-          String? id = RegExp(r'detail/(\d+)').firstMatch(path)?.group(1);
-          if (id != null) {
-            SmartDialog.showLoading();
-            dynamic res = await DynamicsHttp.dynamicDetail(id: id);
-            SmartDialog.dismiss();
-            if (res['status']) {
-              Get.toNamed('/dynamicDetail', arguments: {
-                'item': res['data'],
-                'floor': 1,
-                'action': 'detail'
-              });
-            } else {
-              SmartDialog.showToast(res['msg']);
-            }
-          } else {
-            var opusId = path.split('/').last;
-            Utils.toDupNamed(
-              '/webview',
-              parameters: {
-                'url': 'https://m.bilibili.com/dynamic/$opusId',
-                'type': 'url',
-                'pageTitle': '',
-              },
-            );
-          }
-        }
-
-        if (value.queryParameters['comment_root_id'] != null) {
-          Get.to(
-            () => Scaffold(
-              resizeToAvoidBottomInset: false,
-              appBar: AppBar(
-                title: const Text('评论详情'),
-                actions: [
-                  IconButton(
-                    tooltip: '前往',
-                    onPressed: () {
-                      getToOpusWeb();
-                    },
-                    icon: const Icon(Icons.open_in_new),
-                  ),
-                ],
-              ),
-              body: VideoReplyReplyPanel(
-                  oid: int.tryParse(path.split('/').last),
-                  rpid: int.tryParse(value.queryParameters['comment_root_id']!),
-                  source: 'routePush',
-                  replyType: ReplyType.dynamics,
-                  firstFloor: null),
-            ),
-          );
-        } else {
-          getToOpusWeb();
-        }
-      } else if (host == 'album') {
-        String? rid =
-            RegExp(r'album/(\d+)').firstMatch(value.toString())?.group(1);
-        if (rid != null) {
-          SmartDialog.showLoading();
-          dynamic res = await DynamicsHttp.dynamicDetail(rid: rid, type: 2);
-          SmartDialog.dismiss();
-          if (res['status']) {
-            Get.toNamed('/dynamicDetail', arguments: {
-              'item': res['data'],
-              'floor': 1,
-              'action': 'detail'
-            });
-          } else {
-            SmartDialog.showToast(res['msg']);
-          }
-        }
-      } else {
-        debugPrint('$value');
-        SmartDialog.showToast('未知路径:$value，请截图反馈给开发者');
-        //Utils.toDupNamed(
-        //   '/webview',
-        //   parameters: {
-        //     'url': ,
-        //     'type': 'url',
-        //     'pageTitle': ''
-        //   },
-        // );
+  static Future<bool> routePushFromUrl(
+    String url, {
+    bool selfHandle = false,
+    bool off = false,
+  }) async {
+    try {
+      if (url.startsWith('//')) {
+        url = 'https:$url';
+      } else if (RegExp(r'^\S+://').hasMatch(url).not) {
+        url = 'https://$url';
       }
-    } else if (['http', 'https'].contains(scheme)) {
-      fullPathPush(value);
-    } else if (path.toLowerCase().startsWith('av')) {
-      try {
-        videoPush(int.parse(path.substring(2)), null);
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    } else if (path.toLowerCase().startsWith('bv')) {
-      try {
-        videoPush(null, path);
-      } catch (e) {
-        debugPrint(e.toString());
-      }
+      return await routePush(Uri.parse(url), selfHandle: selfHandle, off: off);
+    } catch (_) {
+      return false;
     }
   }
 
+  /// 路由跳转
+  static Future<bool> routePush(
+    Uri uri, {
+    bool selfHandle = false,
+    bool off = false,
+  }) async {
+    final String scheme = uri.scheme;
+    final String host = uri.host.toLowerCase();
+    final String path = uri.path;
+
+    void launchURL() {
+      if (selfHandle.not) {
+        Utils.launchURL(uri.toString());
+      }
+    }
+
+    switch (scheme) {
+      case 'bilibili':
+        switch (host) {
+          case 'root':
+            Navigator.popUntil(
+              Get.context!,
+              (Route<dynamic> route) => route.isFirst,
+            );
+            return true;
+          case 'space':
+            // bilibili://space/12345678?frommodule=XX&h5awaken=random
+            String? mid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+            if (mid != null) {
+              Utils.toDupNamed('/member?mid=$mid', off: off);
+              return true;
+            }
+            launchURL();
+            return false;
+          case 'video':
+            if (uri.queryParameters['comment_root_id'] != null) {
+              // to check
+              // to video reply
+              String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+              if (oid != null) {
+                int? rpid =
+                    int.tryParse(uri.queryParameters['comment_root_id']!);
+                Get.to(
+                  () => Scaffold(
+                    resizeToAvoidBottomInset: false,
+                    appBar: AppBar(
+                      title: const Text('评论详情'),
+                      actions: [
+                        IconButton(
+                          tooltip: '前往原视频',
+                          onPressed: () {
+                            String? enterUri =
+                                uri.toString().split('?').first; // to check
+                            routePush(Uri.parse(enterUri));
+                          },
+                          icon: const Icon(Icons.open_in_new),
+                        ),
+                      ],
+                    ),
+                    body: VideoReplyReplyPanel(
+                      oid: int.parse(oid),
+                      rpid: rpid,
+                      source: 'routePush',
+                      replyType: ReplyType.video,
+                      firstFloor: null,
+                    ),
+                  ),
+                );
+                return true;
+              }
+              launchURL();
+              return false;
+            }
+
+            // to video
+            // bilibili://video/12345678?page=0&h5awaken=random
+            String? aid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+            String? bvid = RegExp(r'/(BV[a-z\d]{10})', caseSensitive: false)
+                .firstMatch(path)
+                ?.group(1);
+            if (aid != null || bvid != null) {
+              videoPush(
+                aid != null ? int.parse(aid) : null,
+                bvid,
+                off: off,
+              );
+              return true;
+            }
+            launchURL();
+            return false;
+          case 'live':
+            // bilibili://live/12345678?extra_jump_from=1&from=1&is_room_feed=1&h5awaken=random
+            String? roomId = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+            if (roomId != null) {
+              Utils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
+              return true;
+            }
+            launchURL();
+            return false;
+          case 'bangumi':
+            // to check
+            if (path.startsWith('/season')) {
+              String? seasonId = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+              if (seasonId != null) {
+                Utils.viewBangumi(seasonId: seasonId, epId: null);
+                return true;
+              }
+            }
+            launchURL();
+            return false;
+          case 'opus':
+            // bilibili://opus/detail/12345678?h5awaken=random
+            if (path.startsWith('/detail')) {
+              bool hasMatch = await _onPushDynDetail(path, off);
+              if (hasMatch.not) {
+                launchURL();
+              }
+              return hasMatch;
+            }
+            launchURL();
+            return false;
+          case 'search':
+            Utils.toDupNamed(
+              '/searchResult',
+              parameters: {'keyword': ''},
+              off: off,
+            );
+            return true;
+          case 'article':
+            // bilibili://article/40679479?jump_opus=1&jump_opus_type=1&opus_type=article&h5awaken=random
+            String? id = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+            if (id != null) {
+              Utils.toDupNamed(
+                '/htmlRender',
+                parameters: {
+                  'url': 'www.bilibili.com/read/cv$id',
+                  'title': '',
+                  'id': 'cv$id',
+                  'dynamicType': 'read'
+                },
+                off: off,
+              );
+              return true;
+            }
+            launchURL();
+            return false;
+          case 'comment':
+            if (path.startsWith("/detail/")) {
+              // bilibili://comment/detail/17/832703053858603029/238686570016/?subType=0&anchor=238686628816&showEnter=1&extraIntentId=0&scene=1&enterName=%E6%9F%A5%E7%9C%8B%E5%8A%A8%E6%80%81%E8%AF%A6%E6%83%85&enterUri=bilibili://following/detail/832703053858603029
+              List<String> pathSegments = uri.pathSegments;
+              int type = int.parse(pathSegments[1]);
+              int oid = int.parse(pathSegments[2]);
+              int rootId = int.parse(pathSegments[3]);
+              // int subType = int.parse(value.queryParameters['subType'] ?? '0');
+              // int rpID = int.parse(value.queryParameters['anchor'] ?? '0');
+              // int extraIntentId =
+              // int.parse(value.queryParameters['extraIntentId'] ?? '0');
+              Get.to(
+                () => Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  appBar: AppBar(
+                    title: const Text('评论详情'),
+                    actions: [
+                      IconButton(
+                        tooltip: '前往',
+                        onPressed: () {
+                          String? enterUri = uri.queryParameters['enterUri'];
+                          if (enterUri != null) {
+                            routePush(Uri.parse(enterUri));
+                          }
+                        },
+                        icon: const Icon(Icons.open_in_new),
+                      ),
+                    ],
+                  ),
+                  body: VideoReplyReplyPanel(
+                    oid: oid,
+                    rpid: rootId,
+                    source: 'routePush',
+                    replyType: ReplyType.values[type],
+                    firstFloor: null,
+                  ),
+                ),
+              );
+              return true;
+            }
+            launchURL();
+            return false;
+          case 'following':
+            if (path.startsWith("/detail/")) {
+              if (uri.queryParameters['comment_root_id'] != null) {
+                String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+                if (oid != null) {
+                  int? rpid =
+                      int.tryParse(uri.queryParameters['comment_root_id']!);
+                  Get.to(
+                    () => Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      appBar: AppBar(
+                        title: const Text('评论详情'),
+                        actions: [
+                          IconButton(
+                            tooltip: '前往',
+                            onPressed: () async {
+                              bool hasMatch = await _onPushDynDetail(path, off);
+                              if (hasMatch.not) {
+                                launchURL();
+                              }
+                            },
+                            icon: const Icon(Icons.open_in_new),
+                          ),
+                        ],
+                      ),
+                      body: VideoReplyReplyPanel(
+                          oid: int.tryParse(oid),
+                          rpid: rpid,
+                          source: 'routePush',
+                          replyType: ReplyType.dynamics,
+                          firstFloor: null),
+                    ),
+                  );
+                }
+                return true;
+              } else {
+                bool hasMatch = await _onPushDynDetail(path, off);
+                if (hasMatch.not) {
+                  launchURL();
+                }
+                return hasMatch;
+              }
+            }
+            launchURL();
+            return false;
+          case 'album':
+            String? rid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+            if (rid != null) {
+              SmartDialog.showLoading();
+              dynamic res = await DynamicsHttp.dynamicDetail(rid: rid, type: 2);
+              SmartDialog.dismiss();
+              if (res['status']) {
+                Utils.toDupNamed(
+                  '/dynamicDetail',
+                  arguments: {
+                    'item': res['data'],
+                    'floor': 1,
+                    'action': 'detail'
+                  },
+                  off: off,
+                );
+              } else {
+                SmartDialog.showToast(res['msg']);
+              }
+              return true;
+            }
+            launchURL();
+            return false;
+          default:
+            if (selfHandle.not) {
+              debugPrint('$uri');
+              SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
+            }
+            launchURL();
+            return false;
+        }
+      case 'http' || 'https':
+        return await _fullPathPush(uri, selfHandle: selfHandle, off: off);
+      default:
+        String? aid = RegExp(r'^av(\d+)', caseSensitive: false)
+            .firstMatch(path)
+            ?.group(1);
+        String? bvid = RegExp(r'^BV[a-z\d]{10}', caseSensitive: false)
+            .firstMatch(path)
+            ?.group(0);
+        if (aid != null || bvid != null) {
+          videoPush(
+            aid != null ? int.parse(aid) : null,
+            bvid,
+            off: off,
+          );
+          return true;
+        }
+        if (selfHandle.not) {
+          debugPrint('$uri');
+          SmartDialog.showToast('未知路径:$uri，请截图反馈给开发者');
+        }
+        launchURL();
+        return false;
+    }
+  }
+
+  static Future<bool> _fullPathPush(
+    Uri uri, {
+    bool selfHandle = false,
+    bool off = false,
+  }) async {
+    // https://m.bilibili.com/bangumi/play/ss39708
+    // https | m.bilibili.com | /bangumi/play/ss39708
+
+    String host = uri.host.toLowerCase();
+
+    if (selfHandle &&
+        host.contains('bilibili.com').not &&
+        host.contains('b23.tv').not) {
+      return false;
+    }
+
+    void launchURL() {
+      if (selfHandle.not) {
+        _toWebview(uri.toString(), off);
+      }
+    }
+
+    // b23.tv
+    // bilibili.com
+    // m.bilibili.com
+    // www.bilibili.com
+    // space.bilibili.com
+    // live.bilibili.com
+
+    // redirect
+    if (host.contains('b23.tv')) {
+      String? redirectUrl = await UrlUtils.parseRedirectUrl(uri.toString());
+      if (redirectUrl != null) {
+        uri = Uri.parse(redirectUrl);
+        host = uri.host.toLowerCase();
+      }
+      if (host.contains('bilibili.com').not) {
+        launchURL();
+        return false;
+      }
+    }
+
+    final String path = uri.path;
+
+    if (host.contains('t.bilibili.com')) {
+      bool hasMatch = await _onPushDynDetail(path, off);
+      if (hasMatch.not) {
+        launchURL();
+      }
+      return hasMatch;
+    }
+
+    if (host.contains('live.bilibili.com')) {
+      String? roomId = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+      if (roomId != null) {
+        Utils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
+        return true;
+      }
+      launchURL();
+      return false;
+    }
+
+    if (host.contains('space.bilibili.com')) {
+      String? mid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+      if (mid != null) {
+        Utils.toDupNamed('/member?mid=$mid', off: off);
+        return true;
+      }
+      launchURL();
+      return false;
+    }
+
+    List<String> pathSegments = uri.pathSegments;
+    if (pathSegments.isEmpty) {
+      launchURL();
+      return false;
+    }
+    final String? area = pathSegments.first == 'mobile'
+        ? pathSegments.getOrNull(1)
+        : pathSegments.first;
+    switch (area) {
+      case 'opus':
+        bool hasMatch = await _onPushDynDetail(path, off);
+        if (hasMatch.not) {
+          launchURL();
+        }
+        return hasMatch;
+      case 'playlist':
+        String? bvid = uri.queryParameters['bvid'] ??
+            RegExp(r'/(BV[a-z\d]{10})', caseSensitive: false)
+                .firstMatch(path)
+                ?.group(1);
+        if (bvid != null) {
+          videoPush(
+            null,
+            bvid,
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      case 'bangumi':
+        debugPrint('番剧');
+        String? id = RegExp(r'(ss|ep)\d+').firstMatch(path)?.group(0);
+        if (id != null) {
+          bool isSeason = id.startsWith('ss');
+          id = id.substring(2);
+          Utils.viewBangumi(
+            seasonId: isSeason ? id : null,
+            epId: isSeason ? null : id,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      case 'video':
+        debugPrint('投稿');
+        final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
+        if (map.isNotEmpty) {
+          videoPush(
+            map['AV'],
+            map['BV'],
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      case 'read':
+        debugPrint('专栏');
+        String? id =
+            RegExp(r'cv(\d+)', caseSensitive: false).firstMatch(path)?.group(1);
+        if (id != null) {
+          Utils.toDupNamed(
+            '/htmlRender',
+            parameters: {
+              'url': 'https://www.bilibili.com/read/cv$id',
+              'title': '',
+              'id': 'cv$id',
+              'dynamicType': 'read'
+            },
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      case 'space':
+        debugPrint('个人空间');
+        String? mid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+        if (mid != null) {
+          Utils.toDupNamed(
+            '/member?mid=$mid',
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      default:
+        Map map = IdUtils.matchAvorBv(input: area?.split('?').first);
+        if (map.isNotEmpty) {
+          videoPush(
+            map['AV'],
+            map['BV'],
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+    }
+  }
+
+  static Future<bool> _onPushDynDetail(path, off) async {
+    String? id = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
+    if (id != null) {
+      SmartDialog.showLoading();
+      dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+      SmartDialog.dismiss();
+      if (res['status']) {
+        Utils.toDupNamed(
+          '/dynamicDetail',
+          arguments: {
+            'item': res['data'],
+            'floor': 1,
+            'action': 'detail',
+          },
+          off: off,
+        );
+      } else {
+        SmartDialog.showToast(res['msg']);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  static void _toWebview(String url, bool off) {
+    Utils.toDupNamed(
+      '/webview',
+      parameters: {'url': url},
+      off: off,
+    );
+  }
+
   // 投稿跳转
-  static Future<void> videoPush(int? aid, String? bvid,
-      [bool showDialog = true]) async {
+  static Future<void> videoPush(
+    int? aid,
+    String? bvid, {
+    bool showDialog = true,
+    bool off = false,
+  }) async {
     try {
       aid ??= IdUtils.bv2av(bvid!);
       bvid ??= IdUtils.av2bv(aid);
@@ -272,187 +559,15 @@ class PiliScheme {
       }
       Utils.toDupNamed(
         '/video?bvid=$bvid&cid=$cid',
-        arguments: <String, String?>{
+        arguments: {
           'pic': null,
           'heroTag': Utils.makeHeroTag(aid),
         },
+        off: off,
       );
     } catch (e) {
       SmartDialog.dismiss();
       SmartDialog.showToast('video获取失败: $e');
     }
-  }
-
-  // 番剧跳转
-  static Future<void> bangumiPush(int? seasonId, int? epId) async {
-    debugPrint('seasonId: $seasonId, epId: $epId');
-    // SmartDialog.showLoading<dynamic>(msg: '获取中...');
-    try {
-      Utils.viewBangumi(seasonId: seasonId, epId: epId);
-      // var result = await SearchHttp.bangumiInfo(seasonId: seasonId, epId: epId);
-      // if (result['status']) {
-      //   var bangumiDetail = result['data'];
-      //   EpisodeItem episode = result['data'].episodes.first;
-      //   int? epId = result['data'].userStatus?.progress?.lastEpId;
-      //   if (epId == null) {
-      //     epId = episode.epId;
-      //   } else {
-      //     for (var item in result['data'].episodes) {
-      //       if (item.epId == epId) {
-      //         episode = item;
-      //         break;
-      //       }
-      //     }
-      //   }
-      //   String bvid = episode.bvid!;
-      //   int cid = episode.cid!;
-      //   dynamic pic = episode.cover;
-      //   final String heroTag = Utils.makeHeroTag(cid);
-      //   SmartDialog.dismiss().then(
-      //     (e) => Utils.toDupNamed(
-      //       '/video?bvid=$bvid&cid=$cid&seasonId=${bangumiDetail.seasonId}&epId=$epId',
-      //       arguments: <String, dynamic>{
-      //         'pic': pic,
-      //         'heroTag': heroTag,
-      //         'videoType': SearchType.media_bangumi,
-      //       },
-      //     ),
-      //   );
-      // } else {
-      //   SmartDialog.showToast(result['msg']);
-      // }
-    } catch (e) {
-      SmartDialog.showToast('番剧获取失败：$e');
-    }
-  }
-
-  static Future<void> fullPathPush(Uri value) async {
-    // https://m.bilibili.com/bangumi/play/ss39708
-    // https | m.bilibili.com | /bangumi/play/ss39708
-    // final String scheme = value.scheme!;
-    final String host = value.host;
-    final String path = value.path;
-    Map<String, String> query = value.queryParameters;
-    RegExp regExp = RegExp(r'^((www\.)|(m\.))?bilibili\.com$');
-    if (regExp.hasMatch(host)) {
-      debugPrint('bilibili.com');
-    } else if (host.contains('live')) {
-      int roomId = int.parse(path.split('/').last);
-      Utils.toDupNamed('/liveRoom?roomid=$roomId');
-      return;
-    } else if (host.contains('space')) {
-      var mid = path.split('/').last;
-      Utils.toDupNamed('/member?mid=$mid', arguments: {'face': ''});
-      return;
-    } else if (host == 'b23.tv') {
-      final String fullPath = 'https://$host$path';
-      final String redirectUrl =
-          (await UrlUtils.parseRedirectUrl(fullPath)) ?? fullPath;
-      final String pathSegment = Uri.parse(redirectUrl).path;
-      final String lastPathSegment = pathSegment.split('/').last;
-      final RegExp avRegex = RegExp(r'^[aA][vV]\d+', caseSensitive: false);
-      if (avRegex.hasMatch(lastPathSegment)) {
-        final Map<String, dynamic> map =
-            IdUtils.matchAvorBv(input: lastPathSegment);
-        if (map.isNotEmpty) {
-          videoPush(map['AV'], map['BV']);
-        } else {
-          SmartDialog.showToast('投稿匹配失败');
-        }
-      } else if (lastPathSegment.startsWith('ep')) {
-        handleEpisodePath(lastPathSegment, redirectUrl);
-      } else if (lastPathSegment.startsWith('ss')) {
-        handleSeasonPath(lastPathSegment, redirectUrl);
-      } else if (lastPathSegment.startsWith('BV')) {
-        UrlUtils.matchUrlPush(
-          lastPathSegment,
-          redirectUrl,
-        );
-      } else {
-        Utils.handleWebview(redirectUrl);
-      }
-      return;
-    }
-
-    List<String> pathPart = path.split('/');
-    if (pathPart.length < 3) {
-      Utils.handleWebview(value.toString());
-      return;
-    }
-    final String area = pathPart[1] == 'mobile' ? pathPart[2] : pathPart[1];
-    switch (area) {
-      case 'bangumi':
-        debugPrint('番剧');
-        for (var pathSegment in pathPart) {
-          if (pathSegment.startsWith('ss')) {
-            bangumiPush(matchNum(pathSegment).first, null);
-            return;
-          } else if (pathSegment.startsWith('ep')) {
-            bangumiPush(null, matchNum(pathSegment).first);
-            return;
-          }
-        }
-        Utils.handleWebview(value.toString());
-        break;
-      case 'video':
-        debugPrint('投稿');
-        final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
-        if (map.isNotEmpty) {
-          videoPush(map['AV'], map['BV']);
-        } else {
-          SmartDialog.showToast('投稿匹配失败');
-        }
-        break;
-      case 'read':
-        debugPrint('专栏');
-        late String id;
-        if (query['id'] != null) {
-          id = 'cv${matchNum(query['id']!).first}';
-        } else {
-          id = 'cv${matchNum(path).firstOrNull}';
-        }
-        Utils.toDupNamed('/htmlRender', parameters: {
-          'url': value.toString(),
-          'title': '',
-          'id': id,
-          'dynamicType': 'read'
-        });
-        break;
-      case 'space':
-        debugPrint('个人空间');
-        Utils.toDupNamed(
-            '/member?mid=${pathPart[1] == 'mobile' ? pathPart.getOrNull(3) : pathPart.getOrNull(2)}',
-            arguments: {'face': ''});
-        break;
-      default:
-        Map map = IdUtils.matchAvorBv(input: area.split('?').first);
-        if (map.isNotEmpty) {
-          videoPush(map['AV'], map['BV']);
-        } else {
-          // SmartDialog.showToast('未知路径或匹配错误:$value，先采用浏览器打开');
-          Utils.handleWebview(value.toString());
-        }
-    }
-  }
-
-  static List<int> matchNum(String str) {
-    final RegExp regExp = RegExp(r'\d+');
-    final Iterable<Match> matches = regExp.allMatches(str);
-
-    return matches.map((Match match) => int.parse(match.group(0)!)).toList();
-  }
-
-  static void handleEpisodePath(String lastPathSegment, String redirectUrl) {
-    final String seasonId = extractIdFromPath(lastPathSegment);
-    bangumiPush(null, matchNum(seasonId).first);
-  }
-
-  static void handleSeasonPath(String lastPathSegment, String redirectUrl) {
-    final String seasonId = extractIdFromPath(lastPathSegment);
-    bangumiPush(matchNum(seasonId).first, null);
-  }
-
-  static String extractIdFromPath(String lastPathSegment) {
-    return lastPathSegment.split('/').last;
   }
 }

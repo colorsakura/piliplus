@@ -142,7 +142,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
                     });
                   }
                 } else if (item1.type == 21) {
-                  PiliScheme.routePush(Uri.parse(item1.link ?? ''));
+                  PiliScheme.routePushFromUrl(item1.link ?? '');
                 } else if (item1.type == 11) {
                   Get.toNamed(
                     '/subDetail',

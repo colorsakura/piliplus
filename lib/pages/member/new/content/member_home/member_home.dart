@@ -118,9 +118,9 @@ class _MemberHomeState extends State<MemberHome>
                     child: ListTile(
                       dense: true,
                       onTap: () {
-                        PiliScheme.routePush(Uri.parse(
-                            loadingState.response.article.item.first.uri ??
-                                ''));
+                        PiliScheme.routePushFromUrl(
+                          loadingState.response.article.item.first.uri ?? '',
+                        );
                       },
                       leading: loadingState.response.article.item.first
                                   .originImageUrls?.isNotEmpty ==

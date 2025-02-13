@@ -104,13 +104,12 @@ InlineSpan? richNode(item, context) {
                     return;
                   }
                   if (url.startsWith('//')) {
-                    url = url.replaceFirst('//', 'https://');
-                    PiliScheme.routePush(Uri.parse(url));
+                    PiliScheme.routePushFromUrl('https:$url');
                     return;
                   }
-                  Utils.handleWebview(url.startsWith('//')
-                      ? "https://${url.split('//').last}"
-                      : url);
+                  Utils.handleWebview(
+                    url.startsWith('//') ? "https://$url" : url,
+                  );
                 },
                 child: Text(
                   i.text ?? '',

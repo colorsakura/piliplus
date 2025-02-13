@@ -73,7 +73,7 @@ class _AtMePageState extends State<AtMePage> {
                         String? nativeUri =
                             _atMeController.msgFeedAtMeList[i].item?.nativeUri;
                         if (nativeUri != null) {
-                          PiliScheme.routePush(Uri.parse(nativeUri));
+                          PiliScheme.routePushFromUrl(nativeUri);
                         }
                         // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
                       },
