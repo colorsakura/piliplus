@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -704,7 +705,7 @@ class ReplyItem extends StatelessWidget {
     if (jumpUrlKeysList.isNotEmpty) {
       patternStr += '|${jumpUrlKeysList.map(RegExp.escape).join('|')}';
     }
-    patternStr += r'|https?://\S+\b';
+    patternStr += '|${Constants.urlPattern}';
     final RegExp pattern = RegExp(patternStr);
     List<String> matchedStrs = [];
     void addPlainTextSpan(str) {
@@ -896,10 +897,10 @@ class ReplyItem extends StatelessWidget {
                   },
               ),
             );
-          } else if (RegExp(r'https?://\S+\b').hasMatch(matchStr)) {
+          } else if (RegExp(Constants.urlPattern).hasMatch(matchStr)) {
             spanChildren.add(
               TextSpan(
-                text: ' $matchStr ',
+                text: matchStr,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                 ),

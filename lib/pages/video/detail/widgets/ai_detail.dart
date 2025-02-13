@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -171,7 +172,7 @@ class AiDetail extends StatelessWidget {
       switch (currentDesc.type) {
         case 1:
           List<InlineSpan> spanChildren = [];
-          RegExp urlRegExp = RegExp(r'https?://\S+\b');
+          RegExp urlRegExp = RegExp(Constants.urlPattern);
           Iterable<Match> matches = urlRegExp.allMatches(currentDesc.rawText);
 
           int previousEndIndex = 0;

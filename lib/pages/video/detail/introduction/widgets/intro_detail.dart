@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +148,7 @@ class IntroDetail extends StatelessWidget {
       switch (currentDesc.type) {
         case 1:
           final List<InlineSpan> spanChildren = <InlineSpan>[];
-          final RegExp urlRegExp = RegExp(r'https?://\S+\b');
+          final RegExp urlRegExp = RegExp(Constants.urlPattern);
           final Iterable<Match> matches =
               urlRegExp.allMatches(currentDesc.rawText);
 

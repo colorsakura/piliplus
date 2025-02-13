@@ -26,6 +26,9 @@ class Constants {
       '%7B%22appId%22%3A5%2C%22platform%22%3A3%2C%22version%22%3A%221.46.2%22%2C%22abtest%22%3A%22%22%7D';
   //Uri.encodeComponent('{"appId": 5,"platform": 3,"version": "1.46.2","abtest": ""}');
 
+  static const urlPattern =
+      r'https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';
+
 // 超分辨率滤镜
   static const List<String> mpvAnime4KShaders = [
     'Anime4K_Clamp_Highlights.glsl',

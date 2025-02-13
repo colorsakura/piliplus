@@ -1002,8 +1002,10 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       switch (currentDesc.type) {
         case 1:
           final List<InlineSpan> spanChildren = <InlineSpan>[];
-          final RegExp urlRegExp =
-              RegExp(r'https?://\S+\b|av\d+|bv\S+\b', caseSensitive: false);
+          final RegExp urlRegExp = RegExp(
+            '${Constants.urlPattern}|av\\d+|bv\\S+\\b',
+            caseSensitive: false,
+          );
 
           (currentDesc.rawText as String).splitMapJoin(
             urlRegExp,
