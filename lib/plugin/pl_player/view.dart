@@ -49,7 +49,6 @@ class PLVideoPlayer extends StatefulWidget {
     this.headerControl,
     this.bottomControl,
     this.danmuWidget,
-    this.bottomList,
     this.customWidget,
     this.customWidgets,
     this.showEpisodes,
@@ -63,7 +62,6 @@ class PLVideoPlayer extends StatefulWidget {
   final PreferredSizeWidget? headerControl;
   final PreferredSizeWidget? bottomControl;
   final Widget? danmuWidget;
-  final List<BottomControlType>? bottomList;
   // List<Widget> or Widget
 
   final Widget? customWidget;
@@ -251,7 +249,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   }
 
   // 动态构建底部控制条
-  List<Widget> buildBottomControl() {
+  Widget buildBottomControl() {
     bool isSeason = videoIntroController?.videoDetail.value.ugcSeason != null;
     bool isPage = videoIntroController?.videoDetail.value.pages != null &&
         videoIntroController!.videoDetail.value.pages!.length > 1;
@@ -321,7 +319,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 时间进度
       BottomControlType.time: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: [
           // 播放时间
           Obx(() {
@@ -353,9 +351,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
         ],
       ),
-
-      /// 空白占位
-      BottomControlType.space: const Spacer(),
 
       /// 高能进度条
       BottomControlType.dmChart: Obx(() => plPlayerController.dmTrend.isEmpty
@@ -622,48 +617,61 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       BottomControlType.fullscreen: SizedBox(
         width: widgetWidth,
         height: 30,
-        child: Obx(() => ComBtn(
-              icon: Icon(
-                isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
-                semanticLabel: isFullScreen ? '退出全屏' : '全屏',
-                size: 24,
-                color: Colors.white,
-              ),
-              fuc: () =>
-                  plPlayerController.triggerFullScreen(status: !isFullScreen),
-            )),
+        child: Obx(
+          () => ComBtn(
+            icon: Icon(
+              isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+              semanticLabel: isFullScreen ? '退出全屏' : '全屏',
+              size: 24,
+              color: Colors.white,
+            ),
+            fuc: () =>
+                plPlayerController.triggerFullScreen(status: !isFullScreen),
+          ),
+        ),
       ),
     };
-    final List<Widget> list = [];
-    List<BottomControlType> userSpecifyItem = widget.bottomList ??
-        [
-          BottomControlType.playOrPause,
-          BottomControlType.time,
-          if (anySeason) BottomControlType.pre,
-          if (anySeason) BottomControlType.next,
-          BottomControlType.space,
-          BottomControlType.dmChart,
-          BottomControlType.superResolution,
-          BottomControlType.viewPoints,
-          if (anySeason) BottomControlType.episode,
-          if (isFullScreen) BottomControlType.fit,
-          BottomControlType.subtitle,
-          BottomControlType.speed,
-          BottomControlType.fullscreen,
-        ];
-    for (var i = 0; i < userSpecifyItem.length; i++) {
-      if (userSpecifyItem[i] == BottomControlType.custom) {
-        if (widget.customWidget != null && widget.customWidget is Widget) {
-          list.add(widget.customWidget!);
-        }
-        if (widget.customWidgets != null && widget.customWidgets!.isNotEmpty) {
-          list.addAll(widget.customWidgets!);
-        }
-      } else {
-        list.add(videoProgressWidgets[userSpecifyItem[i]]!);
-      }
-    }
-    return list;
+
+    List<BottomControlType> userSpecifyItemLeft = [
+      BottomControlType.playOrPause,
+      BottomControlType.time,
+      if (anySeason) BottomControlType.pre,
+      if (anySeason) BottomControlType.next,
+    ];
+
+    List<BottomControlType> userSpecifyItemRight = [
+      BottomControlType.dmChart,
+      BottomControlType.superResolution,
+      BottomControlType.viewPoints,
+      if (anySeason) BottomControlType.episode,
+      if (isFullScreen) BottomControlType.fit,
+      BottomControlType.subtitle,
+      BottomControlType.speed,
+      BottomControlType.fullscreen,
+    ];
+
+    return Row(
+      children: [
+        ...userSpecifyItemLeft.map((item) => videoProgressWidgets[item]!),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) => FittedBox(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: constraints.maxWidth,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: userSpecifyItemRight
+                      .map((item) => videoProgressWidgets[item]!)
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   PlPlayerController get plPlayerController => widget.plPlayerController;
@@ -1101,34 +1109,36 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
         // 头部、底部控制条
         Obx(
-          () => Column(
-            children: [
-              if (widget.headerControl != null ||
-                  plPlayerController.headerControl != null)
-                ClipRect(
-                  child: AppBarAni(
+          () => Positioned.fill(
+            child: Column(
+              children: [
+                if (widget.headerControl != null ||
+                    plPlayerController.headerControl != null)
+                  ClipRect(
+                    child: AppBarAni(
+                      controller: animationController,
+                      visible: !plPlayerController.controlsLock.value &&
+                          plPlayerController.showControls.value,
+                      position: 'top',
+                      child: widget.headerControl ??
+                          plPlayerController.headerControl!,
+                    ),
+                  ),
+                const Spacer(),
+                if (plPlayerController.showControls.value)
+                  AppBarAni(
                     controller: animationController,
                     visible: !plPlayerController.controlsLock.value &&
                         plPlayerController.showControls.value,
-                    position: 'top',
-                    child: widget.headerControl ??
-                        plPlayerController.headerControl!,
+                    position: 'bottom',
+                    child: widget.bottomControl ??
+                        BottomControl(
+                          controller: plPlayerController,
+                          buildBottomControl: buildBottomControl,
+                        ),
                   ),
-                ),
-              const Spacer(),
-              if (plPlayerController.showControls.value)
-                AppBarAni(
-                  controller: animationController,
-                  visible: !plPlayerController.controlsLock.value &&
-                      plPlayerController.showControls.value,
-                  position: 'bottom',
-                  child: widget.bottomControl ??
-                      BottomControl(
-                        controller: plPlayerController,
-                        buildBottomControl: buildBottomControl(),
-                      ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
 
