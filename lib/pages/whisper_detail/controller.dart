@@ -65,14 +65,17 @@ class WhisperDetailController extends GetxController {
     }
   }
 
+  late final ownerMid = GStorage.userInfo.get('userInfoCache')?.mid;
+
   Future sendMsg({
     required String message,
     dynamic picMsg,
     required VoidCallback onClearText,
+    int? msgType,
+    int? index,
   }) async {
     feedBack();
-    final userInfo = GStorage.userInfo.get('userInfoCache');
-    if (userInfo == null) {
+    if (ownerMid == null) {
       SmartDialog.dismiss();
       SmartDialog.showToast('请先登录');
       return;
@@ -88,19 +91,28 @@ class WhisperDetailController extends GetxController {
       return;
     }
     var result = await MsgHttp.sendMsg(
-      senderUid: userInfo.mid,
+      senderUid: ownerMid,
       receiverId: int.parse(mid!),
-      content: picMsg != null ? jsonEncode(picMsg) : '{"content":"$message"}',
-      msgType: picMsg != null ? 2 : 1,
+      content: msgType == 5
+          ? message
+          : picMsg != null
+              ? jsonEncode(picMsg)
+              : '{"content":"$message"}',
+      msgType: msgType ?? (picMsg != null ? 2 : 1),
     );
+    SmartDialog.dismiss();
     if (result['status']) {
       // debugPrint(result['data']);
-      querySessionMsg();
-      onClearText();
-      SmartDialog.dismiss();
-      SmartDialog.showToast('发送成功');
+      if (msgType == 5) {
+        messageList[index!].msgStatus = 1;
+        messageList.refresh();
+        SmartDialog.showToast('撤回成功');
+      } else {
+        querySessionMsg();
+        onClearText();
+        SmartDialog.showToast('发送成功');
+      }
     } else {
-      SmartDialog.dismiss();
       SmartDialog.showToast(result['msg']);
     }
   }

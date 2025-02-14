@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -108,7 +109,7 @@ class _WhisperDetailPageState
   Widget _buildList() {
     Widget resultWidget = Obx(
       () {
-        List messageList = _whisperDetailController.messageList;
+        List<MessageItem> messageList = _whisperDetailController.messageList;
         if (messageList.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -120,10 +121,52 @@ class _WhisperDetailPageState
             shrinkWrap: true,
             reverse: true,
             itemCount: messageList.length,
-            itemBuilder: (context, int i) {
+            itemBuilder: (context, int index) {
               return ChatItem(
-                item: messageList[i],
+                item: messageList[index],
                 eInfos: _whisperDetailController.eInfos,
+                onLongPress: messageList[index].senderUid ==
+                        _whisperDetailController.ownerMid
+                    ? () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              clipBehavior: Clip.hardEdge,
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    onTap: () {
+                                      Get.back();
+                                      _whisperDetailController.sendMsg(
+                                        message: '${messageList[index].msgKey}',
+                                        onClearText: editController.clear,
+                                        msgType: 5,
+                                        index: index,
+                                      );
+                                    },
+                                    dense: true,
+                                    title: const Text('撤回',
+                                        style: TextStyle(fontSize: 14)),
+                                  ),
+                                  // ListTile(
+                                  //   onTap: () {
+                                  //     Get.back();
+                                  //   },
+                                  //   dense: true,
+                                  //   title: const Text('删除',
+                                  //       style: TextStyle(fontSize: 14)),
+                                  // ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    : null,
               );
             },
             padding: const EdgeInsets.only(bottom: 20),

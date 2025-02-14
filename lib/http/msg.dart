@@ -560,9 +560,7 @@ class MsgHttp {
       return {
         'status': false,
         'date': [],
-        'msg': "message: ${res.data['message']},"
-            " msg: ${res.data['msg']},"
-            " code: ${res.data['code']}",
+        'msg': res.data['message'] ?? res.data['msg'],
       };
     }
   }

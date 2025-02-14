@@ -42,11 +42,13 @@ enum MsgType {
 class ChatItem extends StatelessWidget {
   final dynamic item;
   final List? eInfos;
+  final VoidCallback? onLongPress;
 
   const ChatItem({
     super.key,
     this.item,
     this.eInfos,
+    this.onLongPress,
   });
 
   @override
@@ -65,10 +67,10 @@ class ChatItem extends StatelessWidget {
         item.msgType == MsgType.pic_card.value ||
         item.msgType == MsgType.auto_reply_push.value;
     dynamic content = item.content ?? '';
-    Color textColor(BuildContext context) {
+    Color textColor() {
       return isOwner
-          ? Theme.of(context).colorScheme.onPrimary
-          : Theme.of(context).colorScheme.onSecondaryContainer;
+          ? Theme.of(context).colorScheme.onSecondaryContainer
+          : Theme.of(context).colorScheme.onSurfaceVariant;
     }
 
     Widget richTextMessage(BuildContext context) {
@@ -95,7 +97,7 @@ class ChatItem extends StatelessWidget {
               children.add(TextSpan(
                 text: emojiKey,
                 style: TextStyle(
-                  color: textColor(context),
+                  color: textColor(),
                   letterSpacing: 0.6,
                   height: 1.5,
                 ),
@@ -104,13 +106,16 @@ class ChatItem extends StatelessWidget {
             return '';
           },
           onNonMatch: (String text) {
-            children.add(TextSpan(
+            children.add(
+              TextSpan(
                 text: text,
                 style: TextStyle(
-                  color: textColor(context),
+                  color: textColor(),
                   letterSpacing: 0.6,
                   height: 1.5,
-                )));
+                ),
+              ),
+            );
             return '';
           },
         );
@@ -124,7 +129,7 @@ class ChatItem extends StatelessWidget {
           text,
           style: TextStyle(
             letterSpacing: 0.6,
-            color: textColor(context),
+            color: textColor(),
             height: 1.5,
           ),
         );
@@ -200,7 +205,7 @@ class ChatItem extends StatelessWidget {
                 style: TextStyle(
                   letterSpacing: 0.6,
                   height: 1.5,
-                  color: textColor(context),
+                  color: textColor(),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -210,7 +215,7 @@ class ChatItem extends StatelessWidget {
                 style: TextStyle(
                   letterSpacing: 0.6,
                   height: 1.5,
-                  color: textColor(context).withOpacity(0.6),
+                  color: textColor().withOpacity(0.6),
                   fontSize: 12,
                 ),
               ),
@@ -252,7 +257,7 @@ class ChatItem extends StatelessWidget {
                 style: TextStyle(
                   letterSpacing: 0.6,
                   height: 1.5,
-                  color: textColor(context),
+                  color: textColor(),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -262,7 +267,7 @@ class ChatItem extends StatelessWidget {
                 style: TextStyle(
                   letterSpacing: 0.6,
                   height: 1.5,
-                  color: textColor(context).withOpacity(0.6),
+                  color: textColor().withOpacity(0.6),
                   fontSize: 12,
                 ),
               ),
@@ -295,7 +300,7 @@ class ChatItem extends StatelessWidget {
                     style: TextStyle(
                       letterSpacing: 0.6,
                       height: 1.5,
-                      color: textColor(context),
+                      color: textColor(),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -348,7 +353,7 @@ class ChatItem extends StatelessWidget {
                                   style: TextStyle(
                                     letterSpacing: 0.6,
                                     height: 1.5,
-                                    color: textColor(context),
+                                    color: textColor(),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -357,7 +362,7 @@ class ChatItem extends StatelessWidget {
                                   style: TextStyle(
                                     letterSpacing: 0.6,
                                     height: 1.5,
-                                    color: textColor(context).withOpacity(0.6),
+                                    color: textColor().withOpacity(0.6),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -366,7 +371,7 @@ class ChatItem extends StatelessWidget {
                                   style: TextStyle(
                                     letterSpacing: 0.6,
                                     height: 1.5,
-                                    color: textColor(context).withOpacity(0.6),
+                                    color: textColor().withOpacity(0.6),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -385,7 +390,7 @@ class ChatItem extends StatelessWidget {
             style: TextStyle(
               letterSpacing: 0.6,
               height: 1.5,
-              color: textColor(context),
+              color: textColor(),
               fontWeight: FontWeight.bold,
             ),
           );
@@ -396,73 +401,81 @@ class ChatItem extends StatelessWidget {
         ? messageContent(context)
         : isRevoke
             ? const SizedBox()
-            : Row(
-                children: [
-                  if (!isOwner) const SizedBox(width: 12),
-                  if (isOwner) const Spacer(),
-                  Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 300.0, // 设置最大宽度为200.0
-                    ),
-                    decoration: BoxDecoration(
-                      color: isOwner
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(16),
-                        topRight: const Radius.circular(16),
-                        bottomLeft: Radius.circular(isOwner ? 16 : 6),
-                        bottomRight: Radius.circular(isOwner ? 6 : 16),
+            : GestureDetector(
+                onLongPress: onLongPress,
+                child: Row(
+                  children: [
+                    if (!isOwner) const SizedBox(width: 12),
+                    if (isOwner) const Spacer(),
+                    Container(
+                      constraints: const BoxConstraints(
+                        maxWidth: 300.0, // 设置最大宽度为200.0
+                      ),
+                      decoration: BoxDecoration(
+                        color: isOwner
+                            ? Theme.of(context).colorScheme.secondaryContainer
+                            : Theme.of(context).colorScheme.onInverseSurface,
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(16),
+                          topRight: const Radius.circular(16),
+                          bottomLeft: Radius.circular(isOwner ? 16 : 6),
+                          bottomRight: Radius.circular(isOwner ? 6 : 16),
+                        ),
+                      ),
+                      margin: const EdgeInsets.only(top: 12),
+                      padding: EdgeInsets.only(
+                        top: 8,
+                        bottom: 6,
+                        left: isPic ? 8 : 12,
+                        right: isPic ? 8 : 12,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: isOwner
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
+                        children: [
+                          messageContent(context),
+                          SizedBox(height: isPic ? 7 : 2),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                Utils.dateFormat(item.timestamp),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall!
+                                    .copyWith(
+                                        color: isOwner
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer
+                                                .withOpacity(0.8)
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant
+                                                .withOpacity(0.8)),
+                              ),
+                              if (item.msgStatus == 1)
+                                Text(
+                                  '  已撤回',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer,
+                                      ),
+                                ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
-                    margin: const EdgeInsets.only(top: 12),
-                    padding: EdgeInsets.only(
-                      top: 8,
-                      bottom: 6,
-                      left: isPic ? 8 : 12,
-                      right: isPic ? 8 : 12,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: isOwner
-                          ? CrossAxisAlignment.end
-                          : CrossAxisAlignment.start,
-                      children: [
-                        messageContent(context),
-                        SizedBox(height: isPic ? 7 : 2),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              Utils.dateFormat(item.timestamp),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
-                                  .copyWith(
-                                      color: isOwner
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary
-                                              .withOpacity(0.8)
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onSecondaryContainer
-                                              .withOpacity(0.8)),
-                            ),
-                            item.msgStatus == 1
-                                ? Text(
-                                    '  已撤回',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall!,
-                                  )
-                                : const SizedBox()
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  if (!isOwner) const Spacer(),
-                  if (isOwner) const SizedBox(width: 12),
-                ],
+                    if (!isOwner) const Spacer(),
+                    if (isOwner) const SizedBox(width: 12),
+                  ],
+                ),
               );
   }
 }
