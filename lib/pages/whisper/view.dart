@@ -177,11 +177,16 @@ class _WhisperPageState extends State<WhisperPage> {
                                   if (content == null || content == "") {
                                     content = '不支持的消息类型';
                                   } else {
-                                    content = content['text'] ??
+                                    dynamic msg = content['text'] ??
                                         content['content'] ??
                                         content['title'] ??
-                                        content['reply_content'] ??
-                                        content.toString();
+                                        content['reply_content'];
+                                    if (msg == null) {
+                                      if (content['imageType'] != null) {
+                                        msg = '[图片消息]';
+                                      }
+                                    }
+                                    content = msg ?? content.toString();
                                   }
                                   return ListTile(
                                     tileColor: sessionList[i].topTs == 0

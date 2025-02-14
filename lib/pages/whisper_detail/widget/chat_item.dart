@@ -7,7 +7,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:PiliPlus/utils/storage.dart';
 
 import '../../../http/search.dart';
 
@@ -49,13 +48,12 @@ class ChatItem extends StatelessWidget {
     this.item,
     this.eInfos,
     this.onLongPress,
-  });
+  }) : isOwner = onLongPress != null;
+
+  final bool isOwner;
 
   @override
   Widget build(BuildContext context) {
-    bool isOwner =
-        item.senderUid == GStorage.userInfo.get('userInfoCache')?.mid;
-
     bool isPic = item.msgType == MsgType.pic.value; // 图片
     // bool isText = item.msgType == MsgType.text.value; // 文本
     // bool isArchive = item.msgType == 11; // 投稿
