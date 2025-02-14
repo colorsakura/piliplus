@@ -60,11 +60,9 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
                     height: MediaQuery.of(context).padding.bottom,
                   );
                 } else {
-                  return Material(
-                    child: VideoCardH(
-                      videoItem: loadingState.response[index],
-                      showPubdate: true,
-                    ),
+                  return VideoCardH(
+                    videoItem: loadingState.response[index],
+                    showPubdate: true,
                   );
                 }
               }, childCount: loadingState.response.length + 1),

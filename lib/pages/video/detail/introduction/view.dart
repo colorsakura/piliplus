@@ -557,6 +557,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                 ? videoDetail.stat?.view ?? '-'
                                 : videoItem['stat']?.view ?? '-',
                             size: 'medium',
+                            textColor: t.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
                           statDanMu(
@@ -566,6 +567,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                 ? videoDetail.stat?.danmu ?? '-'
                                 : videoItem['stat']?.danmu ?? '-',
                             size: 'medium',
+                            textColor: t.colorScheme.outline,
                           ),
                           const SizedBox(width: 10),
                           Text(

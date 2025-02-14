@@ -481,6 +481,18 @@ List<SettingsModel> get styleSettings => [
         getSubtitle: () => '当前模式：${GStorage.themeType.description}',
       ),
       SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        leading: const Icon(Icons.invert_colors),
+        title: '纯黑主题',
+        setKey: SettingBoxKey.isPureBlackTheme,
+        defaultVal: false,
+        onChanged: (value) {
+          if (Theme.of(Get.context!).brightness == Brightness.dark) {
+            Get.forceAppUpdate();
+          }
+        },
+      ),
+      SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) => Get.toNamed('/colorSetting'),
         leading: const Icon(Icons.color_lens_outlined),

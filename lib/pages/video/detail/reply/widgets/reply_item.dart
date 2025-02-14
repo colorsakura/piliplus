@@ -134,10 +134,7 @@ class ReplyItem extends StatelessWidget {
                 indent: 55,
                 endIndent: 15,
                 height: 0.3,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onInverseSurface
-                    .withOpacity(0.5),
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.08),
               )
           ],
         ),

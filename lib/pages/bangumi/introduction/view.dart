@@ -450,6 +450,7 @@ class _BangumiInfoState extends State<BangumiInfo>
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Material(
+        color: Theme.of(context).colorScheme.surface,
         child: Padding(
           padding: const EdgeInsets.only(top: 1),
           child: SizedBox(

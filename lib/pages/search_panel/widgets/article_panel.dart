@@ -294,7 +294,6 @@ class ArticlePanelController extends GetxController {
                           await ctr.onRefresh();
                           SmartDialog.dismiss();
                         },
-                        onLongPress: (_) {},
                         bgColor: item['value'] == currentOrderFilterval.value
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
@@ -328,7 +327,6 @@ class ArticlePanelController extends GetxController {
                           await ctr.onRefresh();
                           SmartDialog.dismiss();
                         },
-                        onLongPress: (_) {},
                         bgColor: item['value'] == currentZoneFilterval.value
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : null,

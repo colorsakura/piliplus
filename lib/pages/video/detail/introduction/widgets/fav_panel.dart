@@ -88,6 +88,7 @@ class _FavPanelState extends State<FavPanel> {
             ),
             Expanded(
               child: Material(
+                color: Theme.of(context).colorScheme.surface,
                 child: FutureBuilder(
                   future: _futureBuilderFuture,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {

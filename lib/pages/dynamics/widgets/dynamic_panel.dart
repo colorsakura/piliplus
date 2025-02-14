@@ -39,7 +39,7 @@ class DynamicPanel extends StatelessWidget {
       child: Material(
         elevation: 0,
         clipBehavior: Clip.hardEdge,
-        color: Theme.of(context).cardColor.withOpacity(0.5),
+        color: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),

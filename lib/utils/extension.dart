@@ -97,3 +97,21 @@ extension Unique<E, Id> on List<E> {
     return list;
   }
 }
+
+extension ColorExtension on Color {
+  Color darken([double amount = .5]) {
+    assert(amount >= 0 && amount <= 1, 'Amount must be between 0 and 1');
+    return Color.lerp(this, Colors.black, amount)!;
+  }
+
+  Color blend(Color color, [double fraction = 0.5]) {
+    assert(fraction >= 0 && fraction <= 1, 'Fraction must be between 0 and 1');
+    final blendedRed = (red * (1 - fraction) + color.red * fraction).toInt();
+    final blendedGreen =
+        (green * (1 - fraction) + color.green * fraction).toInt();
+    final blendedBlue = (blue * (1 - fraction) + color.blue * fraction).toInt();
+    final blendedAlpha =
+        (alpha * (1 - fraction) + color.alpha * fraction).toInt();
+    return Color.fromARGB(blendedAlpha, blendedRed, blendedGreen, blendedBlue);
+  }
+}

@@ -31,9 +31,11 @@ class SearchText extends StatelessWidget {
         onTap: () {
           onTap?.call(text);
         },
-        onLongPress: () {
-          onLongPress?.call(text);
-        },
+        onLongPress: onLongPress != null
+            ? () {
+                onLongPress!(text);
+              }
+            : null,
         borderRadius: BorderRadius.circular(6),
         child: Padding(
           padding: padding ??

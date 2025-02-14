@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -177,6 +178,7 @@ class MyApp extends StatelessWidget {
             // tones: FlexTones.soft(Brightness.dark),
           );
         }
+
         // 图片缓存
         // PaintingBinding.instance.imageCache.maximumSizeBytes = 1000 << 20;
         return GetMaterialApp(
@@ -229,7 +231,7 @@ class MyApp extends StatelessWidget {
     bool isDark = false,
     required FlexSchemeVariant variant,
   }) {
-    return ThemeData(
+    ThemeData themeData = ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
       appBarTheme: AppBarTheme(
@@ -282,6 +284,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+    if (isDark && GStorage.isPureBlackTheme) {
+      themeData = Utils.darkenTheme(themeData);
+    }
+    return themeData;
   }
 }
 

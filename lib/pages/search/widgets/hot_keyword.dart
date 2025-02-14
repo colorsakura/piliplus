@@ -23,6 +23,7 @@ class HotKeyword extends StatelessWidget {
           SizedBox(
             width: width! / 2 - 4,
             child: Material(
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(3),
               clipBehavior: Clip.hardEdge,
               child: InkWell(

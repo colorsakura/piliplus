@@ -38,12 +38,15 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                         // spacing: ,
                         children: [
                           for (var i in controller.filterList) ...[
-                            CustomFilterChip(
-                              label: i['label'],
-                              type: i['type'],
-                              selectedType: controller.selectedType.value,
-                              callFn: (bool selected) async {
-                                debugPrint('selected: $selected');
+                            SearchText(
+                              fontSize: 13,
+                              text: i['label'],
+                              bgColor: Colors.transparent,
+                              textColor:
+                                  controller.selectedType.value == i['type']
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.outline,
+                              onTap: (value) async {
                                 controller.selectedType.value = i['type'];
                                 ctr.order.value =
                                     i['type'].toString().split('.').last;
@@ -120,51 +123,6 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
       },
     ],
   );
-}
-
-class CustomFilterChip extends StatelessWidget {
-  const CustomFilterChip({
-    this.label,
-    this.type,
-    this.selectedType,
-    this.callFn,
-    super.key,
-  });
-
-  final String? label;
-  final ArchiveFilterType? type;
-  final ArchiveFilterType? selectedType;
-  final Function? callFn;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 34,
-      child: FilterChip(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        labelPadding: EdgeInsets.zero,
-        label: Text(
-          label!,
-          style: const TextStyle(fontSize: 13),
-        ),
-        labelStyle: TextStyle(
-            color: type == selectedType
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.outline),
-        selected: type == selectedType,
-        showCheckmark: false,
-        shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        selectedColor: Colors.transparent,
-        // backgroundColor:
-        //     Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
-        backgroundColor: Colors.transparent,
-        side: BorderSide.none,
-        onSelected: (bool selected) => callFn?.call(selected),
-      ),
-    );
-  }
 }
 
 class VideoPanelController extends GetxController {
@@ -304,7 +262,6 @@ class VideoPanelController extends GetxController {
                   }
                 });
               },
-              onLongPress: (_) {},
               bgColor: currentPubTimeFilterval == -1 &&
                       (isFirst ? customPubBegin : customPubEnd)
                   ? Theme.of(context).colorScheme.secondaryContainer
@@ -380,7 +337,6 @@ class VideoPanelController extends GetxController {
                               await ctr.onRefresh();
                               SmartDialog.dismiss();
                             },
-                            onLongPress: (_) {},
                             bgColor: item['value'] == currentPubTimeFilterval
                                 ? Theme.of(context)
                                     .colorScheme
@@ -431,7 +387,6 @@ class VideoPanelController extends GetxController {
                               await ctr.onRefresh();
                               SmartDialog.dismiss();
                             },
-                            onLongPress: (_) {},
                             bgColor: item['value'] == currentTimeFilterval
                                 ? Theme.of(context)
                                     .colorScheme
@@ -469,7 +424,6 @@ class VideoPanelController extends GetxController {
                               await ctr.onRefresh();
                               SmartDialog.dismiss();
                             },
-                            onLongPress: (_) {},
                             bgColor: item['value'] == currentZoneFilterval
                                 ? Theme.of(context)
                                     .colorScheme

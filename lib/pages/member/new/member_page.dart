@@ -134,14 +134,17 @@ class _MemberPageNewState extends State<MemberPageNew>
     );
   }
 
-  Widget get _buildTab => TabBar(
-        controller: _userController.tabController,
-        tabs: _userController.tabs,
-        onTap: (value) {
-          if (_userController.tabController?.indexIsChanging == false) {
-            _key.currentState?.outerController.animToTop();
-          }
-        },
+  Widget get _buildTab => Material(
+        color: Theme.of(context).colorScheme.surface,
+        child: TabBar(
+          controller: _userController.tabController,
+          tabs: _userController.tabs,
+          onTap: (value) {
+            if (_userController.tabController?.indexIsChanging == false) {
+              _key.currentState?.outerController.animToTop();
+            }
+          },
+        ),
       );
 
   Widget get _buildBody => SafeArea(
@@ -198,9 +201,7 @@ class _MemberPageNewState extends State<MemberPageNew>
           bottom: needTab && (_userController.tab2?.length ?? -1) > 1
               ? PreferredSize(
                   preferredSize: Size.fromHeight(48),
-                  child: Material(
-                    child: _buildTab,
-                  ),
+                  child: _buildTab,
                 )
               : null,
           actions: [

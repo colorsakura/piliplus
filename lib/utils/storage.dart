@@ -367,6 +367,9 @@ class GStorage {
   static bool get coinWithLike =>
       GStorage.setting.get(SettingBoxKey.coinWithLike, defaultValue: false);
 
+  static bool get isPureBlackTheme =>
+      GStorage.setting.get(SettingBoxKey.isPureBlackTheme, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -599,6 +602,7 @@ class SettingBoxKey {
       showDmChart = 'showDmChart',
       enableCommAntifraud = 'enableCommAntifraud',
       coinWithLike = 'coinWithLike',
+      isPureBlackTheme = 'isPureBlackTheme',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

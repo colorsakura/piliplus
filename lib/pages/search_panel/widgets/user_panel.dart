@@ -222,7 +222,6 @@ class UserPanelController extends GetxController {
                           await ctr.onRefresh();
                           SmartDialog.dismiss();
                         },
-                        onLongPress: (_) {},
                         bgColor: item['value'] == currentOrderFilterval.value
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
@@ -256,7 +255,6 @@ class UserPanelController extends GetxController {
                           await ctr.onRefresh();
                           SmartDialog.dismiss();
                         },
-                        onLongPress: (_) {},
                         bgColor: item['value'] == currentUserTypeFilterval.value
                             ? Theme.of(context).colorScheme.secondaryContainer
                             : null,
