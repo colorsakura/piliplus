@@ -402,7 +402,7 @@ class PiliScheme {
         ? pathSegments.getOrNull(1)
         : pathSegments.first;
     switch (area) {
-      case 'opus':
+      case 'opus' || 'dynamic':
         bool hasMatch = await _onPushDynDetail(path, off);
         if (hasMatch.not) {
           launchURL();
