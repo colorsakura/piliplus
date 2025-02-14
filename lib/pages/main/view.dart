@@ -65,10 +65,17 @@ class _MainAppState extends State<MainApp>
 
   @override
   void didPopNext() {
+    WidgetsBinding.instance.addObserver(this);
     _mainController.checkUnreadDynamic();
     _checkDefaultSearch(true);
     _checkUnread(context.orientation == Orientation.portrait);
     super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.didPushNext();
   }
 
   @override

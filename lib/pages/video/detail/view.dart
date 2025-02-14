@@ -393,6 +393,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       return;
     }
 
+    WidgetsBinding.instance.removeObserver(this);
+
     ScreenBrightness().resetApplicationScreenBrightness();
 
     videoDetailController.positionSubscription?.cancel();
@@ -425,6 +427,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     if (videoDetailController.imageStatus) {
       return;
     }
+
+    WidgetsBinding.instance.addObserver(this);
 
     if (videoDetailController.plPlayerController.playerStatus.status.value ==
             PlayerStatus.playing &&

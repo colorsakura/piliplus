@@ -1003,7 +1003,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
         case 1:
           final List<InlineSpan> spanChildren = <InlineSpan>[];
           final RegExp urlRegExp = RegExp(
-            '${Constants.urlPattern}|av\\d+|bv\\S+\\b',
+            '${Constants.urlPattern}|av\\d+|bv[a-z\\d]{10}',
             caseSensitive: false,
           );
 
@@ -1030,7 +1030,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 } catch (e) {
                   spanChildren.add(TextSpan(text: matchStr));
                 }
-              } else if (RegExp(r'^bv\S+\b$', caseSensitive: false)
+              } else if (RegExp(r'^bv[a-z\d]{10}$', caseSensitive: false)
                   .hasMatch(matchStr)) {
                 try {
                   // validate
