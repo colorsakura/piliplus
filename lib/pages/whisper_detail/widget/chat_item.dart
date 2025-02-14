@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -150,10 +152,22 @@ class ChatItem extends StatelessWidget {
         case MsgType.text:
           return richTextMessage(context);
         case MsgType.pic:
-          return NetworkImgLayer(
-            width: 220,
-            height: 220 * content['height'] / content['width'],
-            src: content['url'],
+          return GestureDetector(
+            onTap: () {
+              context.imageView(
+                imgList: [
+                  SourceModel(url: content['url']),
+                ],
+              );
+            },
+            child: Hero(
+              tag: content['url'],
+              child: NetworkImgLayer(
+                width: 220,
+                height: 220 * content['height'] / content['width'],
+                src: content['url'],
+              ),
+            ),
           );
         case MsgType.share_v2:
           return Column(
