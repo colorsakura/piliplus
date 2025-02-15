@@ -223,6 +223,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     videoDetailCtr = Get.find<VideoDetailController>(tag: widget.heroTag);
 
     if (videoIntroController.expandableCtr == null) {
@@ -461,13 +462,47 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                     },
                                     child: Row(
                                       children: [
-                                        NetworkImgLayer(
-                                          type: 'avatar',
-                                          src: videoItem['staff'][index].face,
-                                          width: 35,
-                                          height: 35,
-                                          fadeInDuration: Duration.zero,
-                                          fadeOutDuration: Duration.zero,
+                                        Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            NetworkImgLayer(
+                                              type: 'avatar',
+                                              src: videoItem['staff'][index]
+                                                  .face,
+                                              width: 35,
+                                              height: 35,
+                                              fadeInDuration: Duration.zero,
+                                              fadeOutDuration: Duration.zero,
+                                            ),
+                                            if ((videoItem['staff'][index]
+                                                        .official?['type'] ??
+                                                    -1) !=
+                                                -1)
+                                              Positioned(
+                                                right: -2,
+                                                bottom: -2,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .surface,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.offline_bolt,
+                                                    color: videoItem['staff']
+                                                                        [index]
+                                                                    .official?[
+                                                                'type'] ==
+                                                            0
+                                                        ? Colors.yellow
+                                                        : Colors
+                                                            .lightBlueAccent,
+                                                    size: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
                                         ),
                                         const SizedBox(width: 8),
                                         Column(

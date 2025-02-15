@@ -291,6 +291,7 @@ class Staff {
   String? name;
   String? face;
   Vip? vip;
+  Map? official;
 
   Staff({
     this.mid,
@@ -306,6 +307,7 @@ class Staff {
     name = json["name"];
     face = json["face"];
     vip = json["vip"] == null ? null : Vip.fromJson(json["vip"]);
+    official = json['official'];
   }
 }
 
