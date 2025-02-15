@@ -44,8 +44,17 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
   final uaType = Get.parameters['uaType'] ?? 'mob';
   final _titleStream = StreamController<String?>();
   final _progressStream = StreamController<double>();
+  bool? _inApp;
 
   InAppWebViewController? _webViewController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (Get.arguments is Map) {
+      _inApp = Get.arguments['inApp'];
+    }
+  }
 
   @override
   void dispose() {
@@ -235,6 +244,9 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 }
               : null,
           shouldOverrideUrlLoading: (controller, navigationAction) async {
+            if (_inApp == false) {
+              return NavigationActionPolicy.ALLOW;
+            }
             late String url = navigationAction.request.url.toString();
             bool hasMatch = await PiliScheme.routePush(
               navigationAction.request.url?.uriValue ?? Uri(),

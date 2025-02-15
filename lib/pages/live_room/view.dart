@@ -298,7 +298,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                             IconButton(
                                 tooltip: '浏览器打开',
                                 onPressed: () {
-                                  Utils.handleWebview(
+                                  Utils.inAppWebview(
                                     'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
                                     off: true,
                                   );

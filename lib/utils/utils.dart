@@ -420,6 +420,29 @@ class Utils {
     );
   }
 
+  static void inAppWebview(
+    String url, {
+    bool off = false,
+  }) {
+    if (GStorage.openInBrowser) {
+      launchURL(url);
+    } else {
+      if (off) {
+        Get.offNamed(
+          '/webview',
+          parameters: {'url': url},
+          arguments: {'inApp': true},
+        );
+      } else {
+        Get.toNamed(
+          '/webview',
+          parameters: {'url': url},
+          arguments: {'inApp': true},
+        );
+      }
+    }
+  }
+
   static void handleWebview(
     String url, {
     bool off = false,

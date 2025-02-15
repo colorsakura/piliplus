@@ -230,9 +230,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               ),
             ),
           IconButton(
-            tooltip: '用内置浏览器打开',
+            tooltip: '浏览器打开',
             onPressed: () {
-              Utils.handleWebview(url.startsWith('http') ? url : 'https:$url');
+              Utils.inAppWebview(url.startsWith('http') ? url : 'https:$url');
             },
             icon: const Icon(Icons.open_in_browser_outlined, size: 19),
           ),
@@ -253,9 +253,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 ),
               ),
               PopupMenuItem(
-                onTap: () => {
-                  Utils.handleWebview(
-                      url.startsWith('http') ? url : 'https:$url')
+                onTap: () {
+                  Utils.inAppWebview(
+                      url.startsWith('http') ? url : 'https:$url');
                 },
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
