@@ -458,7 +458,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         children: [
                           Expanded(
                             child: Builder(
-                              builder: (context) => TextButton.icon(
+                              builder: (btnContext) => TextButton.icon(
                                 onPressed: () {
                                   showModalBottomSheet(
                                     context: context,
@@ -482,8 +482,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                             .moduleStat
                                             .forward!
                                             .count = (count + 1).toString();
-                                        if (context.mounted) {
-                                          (context as Element?)
+                                        if (btnContext.mounted) {
+                                          (btnContext as Element?)
                                               ?.markNeedsBuild();
                                         }
                                       },
