@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
+import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -15,6 +17,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
@@ -25,6 +28,7 @@ import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../utils/grid.dart';
 import '../widgets/dynamic_panel.dart';
@@ -402,30 +406,202 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           ),
           if (_fabAnimationCtr != null)
             Positioned(
-              bottom: MediaQuery.of(context).padding.bottom + 14,
-              right: 14,
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: SlideTransition(
                 position: Tween<Offset>(
-                  begin: const Offset(0, 2),
+                  begin: const Offset(0, 1),
                   end: const Offset(0, 0),
                 ).animate(CurvedAnimation(
                   parent: _fabAnimationCtr!,
                   curve: Curves.easeInOut,
                 )),
-                child: FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    feedBack();
-                    dynamic oid = _dynamicDetailController.oid ??
-                        IdUtils.bv2av(Get.parameters['bvid']!);
-                    _dynamicDetailController.onReply(
-                      context,
-                      oid: oid,
-                      replyType: ReplyType.values[replyType],
-                    );
-                  },
-                  tooltip: '评论动态',
-                  child: const Icon(Icons.reply),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 14, bottom: 14),
+                      child: FloatingActionButton(
+                        heroTag: null,
+                        onPressed: () {
+                          feedBack();
+                          dynamic oid = _dynamicDetailController.oid ??
+                              IdUtils.bv2av(Get.parameters['bvid']!);
+                          _dynamicDetailController.onReply(
+                            context,
+                            oid: oid,
+                            replyType: ReplyType.values[replyType],
+                          );
+                        },
+                        tooltip: '评论动态',
+                        child: const Icon(Icons.reply),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        border: Border(
+                          top: BorderSide(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outline
+                                .withOpacity(0.08),
+                          ),
+                        ),
+                      ),
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.paddingOf(context).bottom),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Builder(
+                              builder: (context) => TextButton.icon(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    useSafeArea: true,
+                                    builder: (context) => RepostPanel(
+                                      item: _dynamicDetailController.item,
+                                      callback: () {
+                                        int count = int.tryParse(
+                                                _dynamicDetailController
+                                                        .item
+                                                        .modules
+                                                        .moduleStat
+                                                        .forward
+                                                        ?.count ??
+                                                    '0') ??
+                                            0;
+                                        _dynamicDetailController
+                                            .item
+                                            .modules
+                                            .moduleStat
+                                            .forward!
+                                            .count = (count + 1).toString();
+                                        if (context.mounted) {
+                                          (context as Element?)
+                                              ?.markNeedsBuild();
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  FontAwesomeIcons.shareFromSquare,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.outline,
+                                  semanticLabel: "转发",
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.outline,
+                                ),
+                                label: Text(
+                                  _dynamicDetailController.item.modules
+                                              .moduleStat.forward!.count !=
+                                          null
+                                      ? Utils.numFormat(_dynamicDetailController
+                                          .item
+                                          .modules
+                                          .moduleStat
+                                          .forward!
+                                          .count)
+                                      : '转发',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton.icon(
+                              onPressed: () {
+                                Share.share(
+                                    '${HttpString.dynamicShareBaseUrl}/${_dynamicDetailController.item.idStr}');
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.shareNodes,
+                                size: 16,
+                                color: Theme.of(context).colorScheme.outline,
+                                semanticLabel: "分享",
+                              ),
+                              style: TextButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.outline,
+                              ),
+                              label: const Text('分享'),
+                            ),
+                          ),
+                          Expanded(
+                            child: Builder(
+                              builder: (context) => TextButton.icon(
+                                onPressed: () =>
+                                    _dynamicDetailController.onLikeDynamic(() {
+                                  if (context.mounted) {
+                                    (context as Element?)?.markNeedsBuild();
+                                  }
+                                }),
+                                icon: Icon(
+                                  _dynamicDetailController
+                                          .item.modules.moduleStat.like!.status!
+                                      ? FontAwesomeIcons.solidThumbsUp
+                                      : FontAwesomeIcons.thumbsUp,
+                                  size: 16,
+                                  color: _dynamicDetailController
+                                          .item.modules.moduleStat.like!.status!
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.outline,
+                                  semanticLabel: _dynamicDetailController
+                                          .item.modules.moduleStat.like!.status!
+                                      ? "已赞"
+                                      : "点赞",
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.outline,
+                                ),
+                                label: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 400),
+                                  transitionBuilder: (Widget child,
+                                      Animation<double> animation) {
+                                    return ScaleTransition(
+                                        scale: animation, child: child);
+                                  },
+                                  child: Text(
+                                    _dynamicDetailController.item.modules
+                                                .moduleStat.like!.count !=
+                                            null
+                                        ? Utils.numFormat(
+                                            _dynamicDetailController.item
+                                                .modules.moduleStat.like!.count)
+                                        : '点赞',
+                                    style: TextStyle(
+                                      color: _dynamicDetailController.item
+                                              .modules.moduleStat.like!.status!
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
