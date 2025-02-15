@@ -57,8 +57,8 @@ class Utils {
               ? isFullScreen
                   ? Column(
                       children: [
-                        const Spacer(),
-                        Expanded(child: child),
+                        const Spacer(flex: 4),
+                        Expanded(flex: 6, child: child),
                         if (padding != null) SizedBox(height: padding),
                       ],
                     )
