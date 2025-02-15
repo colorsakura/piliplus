@@ -33,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
@@ -43,6 +44,52 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static void showFSSheet({required Widget child, required bool isFullScreen}) {
+    Navigator.of(Get.context!).push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return MediaQuery.orientationOf(Get.context!) == Orientation.portrait
+              ? isFullScreen
+                  ? Column(
+                      children: [
+                        const Spacer(),
+                        Expanded(child: child),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        const Spacer(),
+                        ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxHeight: Get.height * 0.7),
+                          child: child,
+                        ),
+                      ],
+                    )
+              : Row(
+                  children: [
+                    const Spacer(),
+                    Expanded(child: child),
+                  ],
+                );
+        },
+        transitionDuration: const Duration(milliseconds: 400),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          Offset begin =
+              MediaQuery.orientationOf(Get.context!) == Orientation.portrait
+                  ? Offset(0.0, 1.0)
+                  : Offset(1.0, 0.0);
+          var tween = Tween(begin: begin, end: Offset.zero)
+              .chain(CurveTween(curve: Curves.linear));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+  }
 
   static darkenTheme(ThemeData themeData) {
     // return themeData;

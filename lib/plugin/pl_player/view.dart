@@ -1750,7 +1750,9 @@ Widget buildViewPointWidget(
                 return item.start >= seg;
               }).reduce((a, b) => a.start < b.start ? a : b);
               if (item.from != null) {
-                plPlayerController.seekTo(Duration(seconds: item.from!));
+                plPlayerController.danmakuController?.clear();
+                plPlayerController.videoPlayerController
+                    ?.seek(Duration(seconds: item.from!));
               }
               // debugPrint('${item.title},,${item.from}');
             } catch (e) {

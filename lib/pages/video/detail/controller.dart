@@ -126,8 +126,6 @@ class VideoDetailController extends GetxController
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
 
-  PersistentBottomSheetController? bsController;
-
   bool imageStatus = false;
 
   void onViewImage() {
@@ -1229,9 +1227,9 @@ class VideoDetailController extends GetxController
       );
     }
     if (plPlayerController.isFullScreen.value) {
-      bsController = scaffoldKey.currentState?.showBottomSheet(
-        enableDrag: false,
-        (context) => _postPanel(false),
+      Utils.showFSSheet(
+        child: _postPanel(),
+        isFullScreen: plPlayerController.isFullScreen.value,
       );
     } else {
       childKey.currentState?.showBottomSheet(
@@ -1241,7 +1239,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  Widget _postPanel([bool isChild = true]) => StatefulBuilder(
+  Widget _postPanel() => StatefulBuilder(
         builder: (context, setState) {
           void updateSegment({
             required bool isFirst,
@@ -1361,378 +1359,358 @@ class VideoDetailController extends GetxController
             ];
           }
 
-          return SizedBox(
-            height: isChild ? null : Utils.getSheetHeight(context),
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                titleSpacing: 16,
-                title: const Text('提交片段'),
-                actions: [
-                  iconButton(
-                    context: context,
-                    tooltip: '添加片段',
-                    onPressed: () {
-                      setState(() {
-                        list?.insert(
-                          0,
-                          PostSegmentModel(
-                            segment: Pair(
-                              first: 0,
-                              second: plPlayerController.positionSeconds.value,
-                            ),
-                            category: SegmentType.sponsor,
-                            actionType: ActionType.skip,
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 16,
+              title: const Text('提交片段'),
+              actions: [
+                iconButton(
+                  context: context,
+                  tooltip: '添加片段',
+                  onPressed: () {
+                    setState(() {
+                      list?.insert(
+                        0,
+                        PostSegmentModel(
+                          segment: Pair(
+                            first: 0,
+                            second: plPlayerController.positionSeconds.value,
                           ),
-                        );
-                      });
-                    },
-                    icon: Icons.add,
-                  ),
-                  const SizedBox(width: 10),
-                  iconButton(
-                    context: context,
-                    tooltip: '关闭',
-                    onPressed: () {
-                      if (bsController != null) {
-                        bsController!.close();
-                        bsController = null;
-                      } else {
-                        Get.back();
-                      }
-                    },
-                    icon: Icons.close,
-                  ),
-                  const SizedBox(width: 16),
-                ],
-              ),
-              body: list?.isNotEmpty == true
-                  ? Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              ...List.generate(
-                                list!.length,
-                                (index) => Stack(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 5,
-                                      ),
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onInverseSurface,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          if (list![index].actionType !=
-                                              ActionType.full) ...[
-                                            Row(
-                                              children: [
-                                                ...segmentWidget(
-                                                  isFirst: true,
-                                                  index: index,
-                                                ),
-                                                if (list![index].category !=
-                                                    SegmentType
-                                                        .poi_highlight) ...[
-                                                  const SizedBox(width: 16),
-                                                  ...segmentWidget(
-                                                    isFirst: false,
-                                                    index: index,
-                                                  ),
-                                                ],
-                                              ],
-                                            ),
-                                            const SizedBox(height: 8),
-                                          ],
+                          category: SegmentType.sponsor,
+                          actionType: ActionType.skip,
+                        ),
+                      );
+                    });
+                  },
+                  icon: Icons.add,
+                ),
+                const SizedBox(width: 10),
+                iconButton(
+                  context: context,
+                  tooltip: '关闭',
+                  onPressed: Get.back,
+                  icon: Icons.close,
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
+            body: list?.isNotEmpty == true
+                ? Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                              list!.length,
+                              (index) => Stack(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 5,
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onInverseSurface,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (list![index].actionType !=
+                                            ActionType.full) ...[
                                           Row(
                                             children: [
-                                              const Text('分类: '),
-                                              PopupMenuButton(
-                                                initialValue:
-                                                    list![index].category,
-                                                onSelected: (item) async {
-                                                  list![index].category = item;
-                                                  List<ActionType>
-                                                      constraintList =
-                                                      _segmentType2ActionType(
-                                                          item);
-                                                  if (constraintList
-                                                      .contains(list![index]
-                                                          .actionType)
-                                                      .not) {
-                                                    list![index].actionType =
-                                                        constraintList.first;
-                                                  }
-                                                  switch (item) {
-                                                    case SegmentType
-                                                          .poi_highlight:
-                                                      updateSegment(
-                                                        isFirst: false,
-                                                        index: index,
-                                                        value: list![index]
-                                                            .segment
-                                                            .first,
-                                                      );
-                                                      break;
-                                                    case SegmentType
-                                                          .exclusive_access:
-                                                      updateSegment(
-                                                        isFirst: true,
-                                                        index: index,
-                                                        value: 0,
-                                                      );
-                                                      break;
-                                                    case _:
-                                                  }
-                                                  setState(() {});
-                                                },
-                                                itemBuilder: (context) =>
-                                                    SegmentType.values
-                                                        .map((item) =>
-                                                            PopupMenuItem<
-                                                                SegmentType>(
-                                                              value: item,
-                                                              child: Text(
-                                                                  item.title),
-                                                            ))
-                                                        .toList(),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      list![index]
-                                                          .category
-                                                          .title,
-                                                      style: TextStyle(
-                                                        height: 1,
-                                                        fontSize: 14,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                      ),
-                                                      strutStyle: StrutStyle(
-                                                        height: 1,
-                                                        leading: 0,
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      MdiIcons
-                                                          .unfoldMoreHorizontal,
-                                                      size: MediaQuery
-                                                              .textScalerOf(
-                                                                  context)
-                                                          .scale(14),
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .secondary,
-                                                    ),
-                                                  ],
-                                                ),
+                                              ...segmentWidget(
+                                                isFirst: true,
+                                                index: index,
                                               ),
-                                              const SizedBox(width: 16),
-                                              const Text('行为类别: '),
-                                              PopupMenuButton(
-                                                initialValue:
-                                                    list![index].actionType,
-                                                onSelected: (item) async {
+                                              if (list![index].category !=
+                                                  SegmentType
+                                                      .poi_highlight) ...[
+                                                const SizedBox(width: 16),
+                                                ...segmentWidget(
+                                                  isFirst: false,
+                                                  index: index,
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                        ],
+                                        Row(
+                                          children: [
+                                            const Text('分类: '),
+                                            PopupMenuButton(
+                                              initialValue:
+                                                  list![index].category,
+                                              onSelected: (item) async {
+                                                list![index].category = item;
+                                                List<ActionType>
+                                                    constraintList =
+                                                    _segmentType2ActionType(
+                                                        item);
+                                                if (constraintList
+                                                    .contains(
+                                                        list![index].actionType)
+                                                    .not) {
                                                   list![index].actionType =
-                                                      item;
-                                                  if (item == ActionType.full) {
+                                                      constraintList.first;
+                                                }
+                                                switch (item) {
+                                                  case SegmentType
+                                                        .poi_highlight:
+                                                    updateSegment(
+                                                      isFirst: false,
+                                                      index: index,
+                                                      value: list![index]
+                                                          .segment
+                                                          .first,
+                                                    );
+                                                    break;
+                                                  case SegmentType
+                                                        .exclusive_access:
                                                     updateSegment(
                                                       isFirst: true,
                                                       index: index,
                                                       value: 0,
                                                     );
-                                                  }
-                                                  setState(() {});
-                                                },
-                                                itemBuilder: (context) =>
-                                                    ActionType.values
-                                                        .map(
-                                                          (item) =>
-                                                              PopupMenuItem<
-                                                                  ActionType>(
-                                                            enabled: _segmentType2ActionType(
-                                                                    list![index]
-                                                                        .category)
-                                                                .contains(item),
+                                                    break;
+                                                  case _:
+                                                }
+                                                setState(() {});
+                                              },
+                                              itemBuilder: (context) =>
+                                                  SegmentType.values
+                                                      .map((item) =>
+                                                          PopupMenuItem<
+                                                              SegmentType>(
                                                             value: item,
                                                             child: Text(
                                                                 item.title),
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      list![index]
-                                                          .actionType
-                                                          .title,
-                                                      style: TextStyle(
-                                                        height: 1,
-                                                        fontSize: 14,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                      ),
-                                                      strutStyle: StrutStyle(
-                                                        height: 1,
-                                                        leading: 0,
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      MdiIcons
-                                                          .unfoldMoreHorizontal,
-                                                      size: MediaQuery
-                                                              .textScalerOf(
-                                                                  context)
-                                                          .scale(14),
+                                                          ))
+                                                      .toList(),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    list![index].category.title,
+                                                    style: TextStyle(
+                                                      height: 1,
+                                                      fontSize: 14,
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .secondary,
                                                     ),
-                                                  ],
-                                                ),
+                                                    strutStyle: StrutStyle(
+                                                      height: 1,
+                                                      leading: 0,
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    MdiIcons
+                                                        .unfoldMoreHorizontal,
+                                                    size:
+                                                        MediaQuery.textScalerOf(
+                                                                context)
+                                                            .scale(14),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 10,
-                                      right: 21,
-                                      child: iconButton(
-                                        context: context,
-                                        size: 26,
-                                        tooltip: '移除',
-                                        icon: Icons.clear,
-                                        onPressed: () {
-                                          setState(() {
-                                            list!.removeAt(index);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height:
-                                    88 + MediaQuery.paddingOf(context).bottom,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          right: 16,
-                          bottom: 16 + MediaQuery.paddingOf(context).bottom,
-                          child: FloatingActionButton(
-                            tooltip: '提交',
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('确定无误再提交'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: Get.back,
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                            ),
+                                            const SizedBox(width: 16),
+                                            const Text('行为类别: '),
+                                            PopupMenuButton(
+                                              initialValue:
+                                                  list![index].actionType,
+                                              onSelected: (item) async {
+                                                list![index].actionType = item;
+                                                if (item == ActionType.full) {
+                                                  updateSegment(
+                                                    isFirst: true,
+                                                    index: index,
+                                                    value: 0,
+                                                  );
+                                                }
+                                                setState(() {});
+                                              },
+                                              itemBuilder: (context) =>
+                                                  ActionType.values
+                                                      .map(
+                                                        (item) => PopupMenuItem<
+                                                            ActionType>(
+                                                          enabled: _segmentType2ActionType(
+                                                                  list![index]
+                                                                      .category)
+                                                              .contains(item),
+                                                          value: item,
+                                                          child:
+                                                              Text(item.title),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    list![index]
+                                                        .actionType
+                                                        .title,
+                                                    style: TextStyle(
+                                                      height: 1,
+                                                      fontSize: 14,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
+                                                    ),
+                                                    strutStyle: StrutStyle(
+                                                      height: 1,
+                                                      leading: 0,
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    MdiIcons
+                                                        .unfoldMoreHorizontal,
+                                                    size:
+                                                        MediaQuery.textScalerOf(
+                                                                context)
+                                                            .scale(14),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 10,
+                                    right: 21,
+                                    child: iconButton(
+                                      context: context,
+                                      size: 26,
+                                      tooltip: '移除',
+                                      icon: Icons.clear,
+                                      onPressed: () {
+                                        setState(() {
+                                          list!.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 88 + MediaQuery.paddingOf(context).bottom,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        right: 16,
+                        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+                        child: FloatingActionButton(
+                          tooltip: '提交',
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('确定无误再提交'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: Get.back,
+                                    child: Text(
+                                      '取消',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
                                       ),
                                     ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        Request()
-                                            .post(
-                                          '${GStorage.blockServer}/api/skipSegments',
-                                          queryParameters: {
-                                            'videoID': bvid,
-                                            'cid': cid.value,
-                                            'userID': GStorage.blockUserID,
-                                            'userAgent': Constants.userAgent,
-                                            'videoDuration': plPlayerController
-                                                .durationSeconds
-                                                .value
-                                                .inSeconds,
-                                          },
-                                          data: {
-                                            'segments': list!
-                                                .map(
-                                                  (item) => {
-                                                    'segment': [
-                                                      item.segment.first,
-                                                      item.segment.second,
-                                                    ],
-                                                    'category':
-                                                        item.category.name,
-                                                    'actionType':
-                                                        item.actionType.name,
-                                                  },
-                                                )
-                                                .toList(),
-                                          },
-                                          options: _options,
-                                        )
-                                            .then(
-                                          (res) {
-                                            if (res.statusCode == 200) {
-                                              Get.back();
-                                              SmartDialog.showToast('提交成功');
-                                              list?.clear();
-                                              _handleSBData(res);
-                                              plPlayerController
-                                                      .segmentList.value =
-                                                  _segmentProgressList ??
-                                                      <Segment>[];
-                                              if (positionSubscription ==
-                                                  null) {
-                                                _initSkip();
-                                              }
-                                            } else {
-                                              SmartDialog.showToast(
-                                                '提交失败: ${{
-                                                  400: '参数错误',
-                                                  403: '被自动审核机制拒绝',
-                                                  429: '重复提交太快',
-                                                  409: '重复提交'
-                                                }[res.statusCode]}',
-                                              );
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      Request()
+                                          .post(
+                                        '${GStorage.blockServer}/api/skipSegments',
+                                        queryParameters: {
+                                          'videoID': bvid,
+                                          'cid': cid.value,
+                                          'userID': GStorage.blockUserID,
+                                          'userAgent': Constants.userAgent,
+                                          'videoDuration': plPlayerController
+                                              .durationSeconds.value.inSeconds,
+                                        },
+                                        data: {
+                                          'segments': list!
+                                              .map(
+                                                (item) => {
+                                                  'segment': [
+                                                    item.segment.first,
+                                                    item.segment.second,
+                                                  ],
+                                                  'category':
+                                                      item.category.name,
+                                                  'actionType':
+                                                      item.actionType.name,
+                                                },
+                                              )
+                                              .toList(),
+                                        },
+                                        options: _options,
+                                      )
+                                          .then(
+                                        (res) {
+                                          if (res.statusCode == 200) {
+                                            Get.back();
+                                            SmartDialog.showToast('提交成功');
+                                            list?.clear();
+                                            _handleSBData(res);
+                                            plPlayerController
+                                                    .segmentList.value =
+                                                _segmentProgressList ??
+                                                    <Segment>[];
+                                            if (positionSubscription == null) {
+                                              _initSkip();
                                             }
-                                          },
-                                        );
-                                      },
-                                      child: const Text('确定提交'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            child: Icon(Icons.check),
-                          ),
-                        )
-                      ],
-                    )
-                  : errorWidget(),
-            ),
+                                          } else {
+                                            SmartDialog.showToast(
+                                              '提交失败: ${{
+                                                400: '参数错误',
+                                                403: '被自动审核机制拒绝',
+                                                429: '重复提交太快',
+                                                409: '重复提交'
+                                              }[res.statusCode]}',
+                                            );
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: const Text('确定提交'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          child: Icon(Icons.check),
+                        ),
+                      )
+                    ],
+                  )
+                : errorWidget(),
           );
         },
       );

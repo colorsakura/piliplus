@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -35,23 +36,24 @@ class FavDetailController extends MultiSelectController {
 
   @override
   bool customHandleResponse(Success response) {
+    FavDetailData data = response.response;
     if (currentPage == 1) {
-      item.value = response.response.info;
-      isOwner.value = response.response.info.mid == mid;
+      item.value = data.info ?? FavFolderItemData();
+      isOwner.value = data.info?.mid == mid;
     }
-    if (response.response.medias.isEmpty) {
+    if (data.medias.isNullOrEmpty) {
       isEnd = true;
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response.medias?.insertAll(
+      data.medias?.insertAll(
         0,
         List<FavDetailItemData>.from((loadingState.value as Success).response),
       );
     }
-    if (response.response.medias.length >= response.response.info.mediaCount) {
+    if ((data.medias?.length ?? 0) >= (data.info?.mediaCount ?? 0)) {
       isEnd = true;
     }
-    loadingState.value = LoadingState.success(response.response.medias);
+    loadingState.value = LoadingState.success(data.medias);
     return true;
   }
 
