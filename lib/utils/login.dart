@@ -176,7 +176,7 @@ class LoginUtils {
     try {
       Get.find<LiveController>()
         ..isLogin.value = false
-        ..loadingState.value = LoadingState.loading();
+        ..followListState.value = LoadingState.loading();
     } catch (_) {}
 
     for (int i = 0; i < tabsConfig.length; i++) {
