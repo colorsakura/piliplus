@@ -1170,6 +1170,7 @@ class Utils {
 
   // 检查更新
   static Future checkUpdate([bool isAuto = true]) async {
+    if (BuildConfig.isDebug) return;
     SmartDialog.dismiss();
     try {
       dynamic res = await Request().get(Api.latestApp, extra: {'ua': 'mob'});
