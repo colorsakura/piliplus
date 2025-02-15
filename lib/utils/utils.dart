@@ -240,18 +240,10 @@ class Utils {
           arguments: {'item': item, 'floor': floor, 'action': action});
       return;
     }
-    switch (item!.type) {
-      /// 转发的动态
-      case 'DYNAMIC_TYPE_FORWARD':
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
-        break;
 
-      /// 图文动态查看
-      case 'DYNAMIC_TYPE_DRAW':
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
-        break;
+    debugPrint('pushDynDetail: ${item.type}');
+
+    switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
         if (item.modules.moduleDynamic.major.archive.type == 2) {
           if (item.modules.moduleDynamic.major.archive.jumpUrl
@@ -356,38 +348,17 @@ class Utils {
         DynamicArchiveModel pgc = item.modules.moduleDynamic.major.pgc;
         if (pgc.epid != null) {
           Utils.viewBangumi(epId: pgc.epid);
-          // SmartDialog.showLoading(msg: '获取中...');
-          // var res = await SearchHttp.bangumiInfo(epId: pgc.epid);
-          // SmartDialog.dismiss();
-          // if (res['status']) {
-          //   // dynamic episode -> progress episode -> first episode
-          //   EpisodeItem episode = (res['data'].episodes as List)
-          //           .firstWhereOrNull(
-          //         (item) => item.epId == pgc.epid,
-          //       ) ??
-          //       (res['data'].episodes as List).firstWhereOrNull(
-          //         (item) =>
-          //             item.epId == res['data'].userStatus?.progress?.lastEpId,
-          //       ) ??
-          //       res['data'].episodes.first;
-          //   dynamic epId = episode.epId;
-          //   dynamic bvid = episode.bvid;
-          //   dynamic cid = episode.cid;
-          //   dynamic pic = episode.cover;
-          //   dynamic heroTag = Utils.makeHeroTag(cid);
-          //   Utils.toDupNamed(
-          //     '/video?bvid=$bvid&cid=$cid&seasonId=${res['data'].seasonId}&epId=$epId',
-          //     arguments: {
-          //       'pic': pic,
-          //       'heroTag': heroTag,
-          //       'videoType': SearchType.media_bangumi,
-          //       'bangumiItem': res['data'],
-          //     },
-          //   );
-          // } else {
-          //   SmartDialog.showToast(res['msg']);
-          // }
         }
+        break;
+
+      // case 'DYNAMIC_TYPE_COMMON_SQUARE':
+      // /// 转发的动态
+      // case 'DYNAMIC_TYPE_FORWARD':
+      // /// 图文动态查看
+      // case 'DYNAMIC_TYPE_DRAW':
+      default:
+        Utils.toDupNamed('/dynamicDetail',
+            arguments: {'item': item, 'floor': floor});
         break;
     }
   }
