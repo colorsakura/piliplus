@@ -651,7 +651,15 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                   final res =
                                       await videoIntroController.aiConclusion();
                                   if (res['status']) {
-                                    widget.showAiBottomSheet();
+                                    if (videoIntroController.modelResult.summary
+                                            .isNullOrEmpty &&
+                                        videoIntroController
+                                                .modelResult.outline ==
+                                            null) {
+                                      SmartDialog.showToast("当前视频不支持AI视频总结");
+                                    } else {
+                                      widget.showAiBottomSheet();
+                                    }
                                   }
                                 },
                                 child: Image.asset('assets/images/ai.png',

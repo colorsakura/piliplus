@@ -8,11 +8,11 @@ import 'package:PiliPlus/pages/video/detail/index.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
 class AiDetail extends StatelessWidget {
-  final ModelResult? modelResult;
+  final ModelResult modelResult;
 
   const AiDetail({
     super.key,
-    this.modelResult,
+    required this.modelResult,
   });
 
   @override
@@ -24,7 +24,7 @@ class AiDetail extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () => Get.back(),
+            onTap: Get.back,
             child: Container(
               height: 35,
               padding: const EdgeInsets.only(bottom: 2),
@@ -44,115 +44,118 @@ class AiDetail extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (modelResult!.summary != null &&
-                      modelResult!.summary!.isNotEmpty) ...[
+                  if (modelResult.summary?.isNotEmpty == true) ...[
                     SelectableText(
-                      '总结: ${modelResult!.summary!}',
+                      '总结: ${modelResult.summary}',
                       style: const TextStyle(
                         fontSize: 15,
                         height: 1.5,
                       ),
                     ),
-                    if (modelResult!.outline!.isNotEmpty)
+                    if (modelResult.outline?.isNotEmpty == true)
                       Divider(
                         height: 20,
                         color: Theme.of(context).dividerColor.withOpacity(0.1),
                         thickness: 6,
                       )
                   ],
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: modelResult!.outline!.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          SelectableText(
-                            modelResult!.outline![index].title!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              height: 1.5,
+                  if (modelResult.outline?.isNotEmpty == true)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: modelResult.outline!.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            SelectableText(
+                              modelResult.outline![index].title!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                height: 1.5,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: modelResult!
-                                .outline![index].partOutline!.length,
-                            itemBuilder: (context, i) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Wrap(
+                            const SizedBox(height: 6),
+                            if (modelResult
+                                    .outline![index].partOutline?.isNotEmpty ==
+                                true)
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: modelResult
+                                    .outline![index].partOutline!.length,
+                                itemBuilder: (context, i) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      SelectableText.rich(
-                                        TextSpan(
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            height: 1.5,
-                                          ),
-                                          children: [
+                                      Wrap(
+                                        children: [
+                                          SelectableText.rich(
                                             TextSpan(
-                                              text: Utils.tampToSeektime(
-                                                  modelResult!
-                                                      .outline![index]
-                                                      .partOutline![i]
-                                                      .timestamp!),
                                               style: TextStyle(
+                                                fontSize: 13,
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .primary,
+                                                    .onSurface,
+                                                height: 1.5,
                                               ),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () {
-                                                  // 跳转到指定位置
-                                                  try {
-                                                    Get.find<VideoDetailController>(
-                                                            tag: Get.arguments[
-                                                                'heroTag'])
-                                                        .plPlayerController
-                                                        .seekTo(
-                                                          Duration(
-                                                            seconds:
-                                                                Utils.duration(
-                                                              Utils.tampToSeektime(modelResult!
-                                                                      .outline![
-                                                                          index]
-                                                                      .partOutline![
-                                                                          i]
-                                                                      .timestamp!)
-                                                                  .toString(),
-                                                            ),
-                                                          ),
-                                                        );
-                                                  } catch (_) {}
-                                                },
+                                              children: [
+                                                TextSpan(
+                                                  text: Utils.tampToSeektime(
+                                                      modelResult
+                                                          .outline![index]
+                                                          .partOutline![i]
+                                                          .timestamp!),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                  ),
+                                                  recognizer:
+                                                      TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          // 跳转到指定位置
+                                                          try {
+                                                            Get.find<VideoDetailController>(
+                                                                    tag: Get.arguments[
+                                                                        'heroTag'])
+                                                                .plPlayerController
+                                                                .seekTo(
+                                                                  Duration(
+                                                                    seconds: Utils
+                                                                        .duration(
+                                                                      Utils.tampToSeektime(modelResult
+                                                                              .outline![index]
+                                                                              .partOutline![i]
+                                                                              .timestamp!)
+                                                                          .toString(),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                          } catch (_) {}
+                                                        },
+                                                ),
+                                                const TextSpan(text: ' '),
+                                                TextSpan(
+                                                    text: modelResult
+                                                        .outline![index]
+                                                        .partOutline![i]
+                                                        .content!),
+                                              ],
                                             ),
-                                            const TextSpan(text: ' '),
-                                            TextSpan(
-                                                text: modelResult!
-                                                    .outline![index]
-                                                    .partOutline![i]
-                                                    .content!),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      );
-                    },
-                  )
+                                  );
+                                },
+                              ),
+                            const SizedBox(height: 20),
+                          ],
+                        );
+                      },
+                    )
                 ],
               ),
             ),
