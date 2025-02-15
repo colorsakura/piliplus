@@ -1099,6 +1099,7 @@ class _HeaderControlState extends State<HeaderControl> {
         widget.controller.danmakuController;
     Utils.showFSSheet(
       isFullScreen: isFullScreen,
+      padding: isFullScreen ? 70 : null,
       child: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return Container(

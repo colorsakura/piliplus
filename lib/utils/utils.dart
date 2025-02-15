@@ -45,7 +45,11 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
-  static void showFSSheet({required Widget child, required bool isFullScreen}) {
+  static void showFSSheet({
+    required Widget child,
+    required bool isFullScreen,
+    double? padding,
+  }) {
     Navigator.of(Get.context!).push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
@@ -55,16 +59,13 @@ class Utils {
                       children: [
                         const Spacer(),
                         Expanded(child: child),
+                        if (padding != null) SizedBox(height: padding),
                       ],
                     )
                   : Column(
                       children: [
-                        const Spacer(),
-                        ConstrainedBox(
-                          constraints:
-                              BoxConstraints(maxHeight: Get.height * 0.7),
-                          child: child,
-                        ),
+                        const Spacer(flex: 3),
+                        Expanded(flex: 7, child: child),
                       ],
                     )
               : Row(
@@ -74,14 +75,14 @@ class Utils {
                   ],
                 );
         },
-        transitionDuration: const Duration(milliseconds: 400),
+        transitionDuration: const Duration(milliseconds: 350),
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           Offset begin =
               MediaQuery.orientationOf(Get.context!) == Orientation.portrait
                   ? Offset(0.0, 1.0)
                   : Offset(1.0, 0.0);
           var tween = Tween(begin: begin, end: Offset.zero)
-              .chain(CurveTween(curve: Curves.linear));
+              .chain(CurveTween(curve: Curves.easeInOut));
           return SlideTransition(
             position: animation.drive(tween),
             child: child,
