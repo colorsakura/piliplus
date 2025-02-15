@@ -244,7 +244,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 }
               : null,
           shouldOverrideUrlLoading: (controller, navigationAction) async {
-            if (_inApp == false) {
+            if (_inApp == true) {
               return NavigationActionPolicy.ALLOW;
             }
             late String url = navigationAction.request.url.toString();

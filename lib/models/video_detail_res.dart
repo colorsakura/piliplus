@@ -46,7 +46,7 @@ class VideoDetailData {
   List<DescV2>? descV2;
   int? state;
   int? duration;
-  Map<String, int>? rights;
+  Map? rights;
   Owner? owner;
   Stat? stat;
   String? argueMsg;
