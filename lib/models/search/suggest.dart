@@ -11,8 +11,8 @@ class SearchSuggestModel {
   String? term;
 
   SearchSuggestModel.fromJson(Map<String, dynamic> json) {
-    tag = json['tag']
-        .map<SearchSuggestItem>(
+    tag = (json['tag'] as List?)
+        ?.map<SearchSuggestItem>(
             (e) => SearchSuggestItem.fromJson(e, json['term']))
         .toList();
   }

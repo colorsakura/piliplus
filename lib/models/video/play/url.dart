@@ -49,17 +49,16 @@ class PlayUrlModel {
     timeLength = json['timelength'];
     acceptFormat = json['accept_format'];
     acceptDesc = json['accept_description'];
-    acceptQuality = json['accept_quality'].map<int>((e) => e as int).toList();
+    acceptQuality =
+        (json['accept_quality'] as List?)?.map<int>((e) => e as int).toList();
     videoCodecid = json['video_codecid'];
     seekParam = json['seek_param'];
     seekType = json['seek_type'];
     dash = json['dash'] != null ? Dash.fromJson(json['dash']) : null;
-    durl = json['durl']?.map<Durl>((e) => Durl.fromJson(e)).toList();
-    supportFormats = json['support_formats'] != null
-        ? json['support_formats']
-            .map<FormatItem>((e) => FormatItem.fromJson(e))
-            .toList()
-        : [];
+    durl = (json['durl'] as List?)?.map<Durl>((e) => Durl.fromJson(e)).toList();
+    supportFormats = (json['support_formats'] as List?)
+        ?.map<FormatItem>((e) => FormatItem.fromJson(e))
+        .toList();
     lastPlayTime = json['last_play_time'];
     lastPlayCid = json['last_play_cid'];
   }
@@ -85,10 +84,12 @@ class Dash {
   Dash.fromJson(Map<String, dynamic> json) {
     duration = json['duration'];
     minBufferTime = json['minBufferTime'];
-    video = json['video'].map<VideoItem>((e) => VideoItem.fromJson(e)).toList();
-    audio = json['audio'] != null
-        ? json['audio'].map<AudioItem>((e) => AudioItem.fromJson(e)).toList()
-        : [];
+    video = (json['video'] as List?)
+        ?.map<VideoItem>((e) => VideoItem.fromJson(e))
+        .toList();
+    audio = (json['audio'] as List?)
+        ?.map<AudioItem>((e) => AudioItem.fromJson(e))
+        .toList();
     dolby = json['dolby'] != null ? Dolby.fromJson(json['dolby']) : null;
     flac = json['flac'] != null ? Flac.fromJson(json['flac']) : null;
   }
@@ -288,9 +289,9 @@ class Dolby {
 
   Dolby.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    audio = json['audio'] != null
-        ? json['audio'].map<AudioItem>((e) => AudioItem.fromJson(e)).toList()
-        : [];
+    audio = (json['audio'] as List?)
+        ?.map<AudioItem>((e) => AudioItem.fromJson(e))
+        .toList();
   }
 }
 

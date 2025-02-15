@@ -86,10 +86,9 @@ class ReplyItemModel {
     action = json['action'];
     member = ReplyMember.fromJson(json['member']);
     content = ReplyContent.fromJson(json['content']);
-    replies = json['replies'] != null
-        ? List<ReplyItemModel>.from(json['replies']
-            .map((item) => ReplyItemModel.fromJson(item, upperMid)))
-        : <ReplyItemModel>[];
+    replies = (json['replies'] as List?)
+        ?.map((item) => ReplyItemModel.fromJson(item, upperMid))
+        .toList();
     assist = json['assist'];
     upAction = UpAction.fromJson(json['up_action']);
     invisible = json['invisible'];
@@ -98,9 +97,8 @@ class ReplyItemModel {
         : ReplyControl.fromJson(json['reply_control']);
     isUp = upperMid.toString() == json['member']['mid'];
     isTop = isTopStatus;
-    cardLabel = json['card_label'] != null
-        ? json['card_label'].map((e) => e['text_content']).toList()
-        : [];
+    cardLabel =
+        (json['card_label'] as List?)?.map((e) => e['text_content']).toList();
     rcount = json['rcount'];
   }
 }

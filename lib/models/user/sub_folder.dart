@@ -10,11 +10,9 @@ class SubFolderModelData {
   factory SubFolderModelData.fromJson(Map<String, dynamic> json) {
     return SubFolderModelData(
       count: json['count'],
-      list: json['list'] != null
-          ? (json['list'] as List)
-              .map<SubFolderItemData>((i) => SubFolderItemData.fromJson(i))
-              .toList()
-          : null,
+      list: (json['list'] as List?)
+          ?.map<SubFolderItemData>((i) => SubFolderItemData.fromJson(i))
+          .toList(),
     );
   }
 }

@@ -245,9 +245,7 @@ class EmoteMeta {
 
   EmoteMeta.fromJson(Map<String, dynamic> json) {
     size = json['size'];
-    suggest = json['suggest'] == null
-        ? null
-        : List<String>.from(json['suggest'].map((x) => x));
+    suggest = json['suggest'];
     alias = json['alias'];
     gifUrl = json['gif_url'];
   }

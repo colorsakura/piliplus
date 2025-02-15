@@ -17,9 +17,9 @@ class LatestDataModel {
     url = json['url'];
     tagName = json['tag_name'];
     createdAt = json['created_at'];
-    assets = json['assets'] != null
-        ? json['assets'].map<AssetItem>((e) => AssetItem.fromJson(e)).toList()
-        : [];
+    assets = (json['assets'] as List?)
+        ?.map<AssetItem>((e) => AssetItem.fromJson(e))
+        .toList();
     body = json['body'];
   }
 }

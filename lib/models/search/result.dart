@@ -12,9 +12,9 @@ class SearchVideoModel {
 
   SearchVideoModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
-    list = json['result']
+    list = (json['result'] as List?)
         ?.where((e) => e['available'] == true)
-        ?.map<SearchVideoItemModel>((e) => SearchVideoItemModel.fromJson(e))
+        .map<SearchVideoItemModel>((e) => SearchVideoItemModel.fromJson(e))
         .toList();
   }
 }
@@ -161,7 +161,7 @@ class SearchUserModel {
 
   SearchUserModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
-    list = json['result']
+    list = (json['result'] as List?)
         ?.map<SearchUserItemModel>((e) => SearchUserItemModel.fromJson(e))
         .toList();
   }
@@ -316,12 +316,10 @@ class SearchMBangumiModel {
 
   SearchMBangumiModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
-    list = json['result'] != null
-        ? json['result']
-            .map<SearchMBangumiItemModel>(
-                (e) => SearchMBangumiItemModel.fromJson(e))
-            .toList()
-        : [];
+    list = (json['result'] as List?)
+        ?.map<SearchMBangumiItemModel>(
+            (e) => SearchMBangumiItemModel.fromJson(e))
+        .toList();
   }
 }
 
@@ -420,12 +418,9 @@ class SearchArticleModel {
 
   SearchArticleModel.fromJson(Map<String, dynamic> json) {
     numResults = (json['numResults'] as num?)?.toInt();
-    list = json['result'] != null
-        ? json['result']
-            .map<SearchArticleItemModel>(
-                (e) => SearchArticleItemModel.fromJson(e))
-            .toList()
-        : [];
+    list = (json['result'] as List?)
+        ?.map<SearchArticleItemModel>((e) => SearchArticleItemModel.fromJson(e))
+        .toList();
   }
 }
 

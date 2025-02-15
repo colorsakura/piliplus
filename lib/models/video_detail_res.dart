@@ -125,13 +125,11 @@ class VideoDetailData {
     pubdate = json["pubdate"];
     ctime = json["ctime"];
     desc = json["desc"];
-    descV2 = json["desc_v2"] == null
-        ? []
-        : List<DescV2>.from(json["desc_v2"]!.map((e) => DescV2.fromJson(e)));
+    descV2 =
+        (json["desc_v2"] as List?)?.map((e) => DescV2.fromJson(e)).toList();
     state = json["state"];
     duration = json["duration"];
-    rights =
-        Map.from(json["rights"]!).map((k, v) => MapEntry<String, int>(k, v));
+    rights = json["rights"];
     owner = json["owner"] == null ? null : Owner.fromJson(json["owner"]);
     stat = json["stat"] == null ? null : Stat.fromJson(json["stat"]);
     argueMsg = json['argue_info']?['argue_msg'];
@@ -145,9 +143,7 @@ class VideoDetailData {
     isChargeableSeason = json["is_chargeable_season"];
     isStory = json["is_story"];
     noCache = json["no_cache"];
-    pages = json["pages"] == null
-        ? []
-        : List<Part>.from(json["pages"]!.map((e) => Part.fromJson(e)));
+    pages = (json["pages"] as List?)?.map((e) => Part.fromJson(e)).toList();
     subtitle =
         json["subtitle"] == null ? null : Subtitle.fromJson(json["subtitle"]);
     ugcSeason = json["ugc_season"] != null
@@ -161,9 +157,8 @@ class VideoDetailData {
         : HonorReply.fromJson(json["honor_reply"]);
     likeIcon = json["like_icon"];
     needJumpBv = json["need_jump_bv"];
-    staff = json["staff"] == null
-        ? null
-        : (json["staff"] as List).map((item) => Staff.fromJson(item)).toList();
+    staff =
+        (json["staff"] as List?)?.map((item) => Staff.fromJson(item)).toList();
     if (json['redirect_url'] != null) {
       epId = resolveEpId(json['redirect_url']);
     }
@@ -341,9 +336,7 @@ class HonorReply {
   String toRawJson() => json.encode(toJson());
 
   HonorReply.fromJson(Map<String, dynamic> json) {
-    honor = json["honor"] == null
-        ? []
-        : List<Honor>.from(json["honor"]!.map((x) => Honor.fromJson(x)));
+    honor = (json["honor"] as List?)?.map((x) => Honor.fromJson(x)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -563,9 +556,7 @@ class Subtitle {
 
   Subtitle.fromJson(Map<String, dynamic> json) {
     allowSubmit = json["allow_submit"];
-    list = json["list"] == null
-        ? []
-        : List<dynamic>.from(json["list"]!.map((x) => x));
+    list = json["list"];
   }
 
   Map<String, dynamic> toJson() {
@@ -634,11 +625,9 @@ class UgcSeason {
     intro = json['intro'];
     signState = json['sign_state'];
     attribute = json['attribute'];
-    sections = json['sections'] != null
-        ? json['sections']
-            .map<SectionItem>((e) => SectionItem.fromJson(e))
-            .toList()
-        : [];
+    sections = (json['sections'] as List?)
+        ?.map<SectionItem>((e) => SectionItem.fromJson(e))
+        .toList();
     stat = Stat.fromJson(json['stat']);
     epCount = json['ep_count'];
     seasonType = json['season_type'];
@@ -680,8 +669,8 @@ class SectionItem {
     id = json['id'];
     title = json['title'];
     type = json['type'];
-    episodes = json['episodes']
-        .map<EpisodeItem>((e) => EpisodeItem.fromJson(e))
+    episodes = (json['episodes'] as List?)
+        ?.map<EpisodeItem>((e) => EpisodeItem.fromJson(e))
         .toList();
   }
 }

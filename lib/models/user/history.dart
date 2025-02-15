@@ -13,12 +13,12 @@ class HistoryData {
 
   HistoryData.fromJson(Map<String, dynamic> json) {
     cursor = json['cursor'] != null ? Cursor.fromJson(json['cursor']) : null;
-    tab = json['tab'] != null
-        ? json['tab'].map<HisTabItem>((e) => HisTabItem.fromJson(e)).toList()
-        : [];
-    list = json['list'] != null
-        ? json['list'].map<HisListItem>((e) => HisListItem.fromJson(e)).toList()
-        : [];
+    tab = (json['tab'] as List?)
+        ?.map<HisTabItem>((e) => HisTabItem.fromJson(e))
+        .toList();
+    list = (json['list'] as List?)
+        ?.map<HisListItem>((e) => HisListItem.fromJson(e))
+        .toList();
     page = json['page'];
   }
 }

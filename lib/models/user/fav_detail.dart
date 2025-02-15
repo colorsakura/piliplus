@@ -15,11 +15,9 @@ class FavDetailData {
   FavDetailData.fromJson(Map<String, dynamic> json) {
     info =
         json['info'] == null ? null : FavFolderItemData.fromJson(json['info']);
-    medias = json['medias'] != null
-        ? json['medias']
-            .map<FavDetailItemData>((e) => FavDetailItemData.fromJson(e))
-            .toList()
-        : [];
+    medias = (json['medias'] as List?)
+        ?.map<FavDetailItemData>((e) => FavDetailItemData.fromJson(e))
+        .toList();
     hasMore = json['has_more'];
   }
 }

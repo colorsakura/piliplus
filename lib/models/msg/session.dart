@@ -12,7 +12,7 @@ class SessionDataModel {
   int? hasMore;
 
   SessionDataModel.fromJson(Map<String, dynamic> json) {
-    sessionList = json['session_list']
+    sessionList = (json['session_list'] as List?)
         ?.map<SessionList>((e) => SessionList.fromJson(e))
         .toList();
     hasMore = json['has_more'];
@@ -175,8 +175,8 @@ class SessionMsgDataModel {
   List<dynamic>? eInfos;
 
   SessionMsgDataModel.fromJson(Map<String, dynamic> json) {
-    messages = json['messages']
-        .map<MessageItem>((e) => MessageItem.fromJson(e))
+    messages = (json['messages'] as List?)
+        ?.map<MessageItem>((e) => MessageItem.fromJson(e))
         .toList();
     hasMore = json['has_more'];
     minSeqno = json['min_seqno'];

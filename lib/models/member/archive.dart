@@ -27,8 +27,8 @@ class ArchiveListModel {
         ? Map.from(json['tlist']).map((k, v) =>
             MapEntry<String, TListItemModel>(k, TListItemModel.fromJson(v)))
         : {};
-    vlist = json['vlist']
-        .map<VListItemModel>((e) => VListItemModel.fromJson(e))
+    vlist = (json['vlist'] as List?)
+        ?.map<VListItemModel>((e) => VListItemModel.fromJson(e))
         .toList();
   }
 }

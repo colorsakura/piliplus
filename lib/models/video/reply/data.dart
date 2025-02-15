@@ -27,15 +27,15 @@ class ReplyData {
         json['cursor'] == null ? null : ReplyCursor.fromJson(json['cursor']);
     config =
         json['config'] == null ? null : ReplyConfig.fromJson(json['config']);
-    replies = json['replies'] != null
-        ? List<ReplyItemModel>.from(json['replies'].map<ReplyItemModel>(
-            (item) => ReplyItemModel.fromJson(item, json['upper']['mid'])))
-        : <ReplyItemModel>[];
-    topReplies = json['top_replies'] != null
-        ? List<ReplyItemModel>.from(json['top_replies'].map<ReplyItemModel>(
-            (item) => ReplyItemModel.fromJson(item, json['upper']['mid'],
-                isTopStatus: true)))
-        : <ReplyItemModel>[];
+    replies = (json['replies'] as List?)
+        ?.map<ReplyItemModel>(
+            (item) => ReplyItemModel.fromJson(item, json['upper']['mid']))
+        .toList();
+    topReplies = (json['top_replies'] as List?)
+        ?.map<ReplyItemModel>((item) => ReplyItemModel.fromJson(
+            item, json['upper']['mid'],
+            isTopStatus: true))
+        .toList();
     upper = json['upper'] == null ? null : ReplyUpper.fromJson(json['upper']);
   }
 }
@@ -60,15 +60,15 @@ class ReplyReplyData {
   ReplyReplyData.fromJson(Map<String, dynamic> json) {
     page = ReplyPage.fromJson(json['page']);
     config = ReplyConfig.fromJson(json['config']);
-    replies = json['replies'] != null
-        ? List<ReplyItemModel>.from(json['replies'].map<ReplyItemModel>(
-            (item) => ReplyItemModel.fromJson(item, json['upper']['mid'])))
-        : <ReplyItemModel>[];
-    topReplies = json['top_replies'] != null
-        ? List<ReplyItemModel>.from(json['top_replies'].map<ReplyItemModel>(
-            (item) => ReplyItemModel.fromJson(item, json['upper']['mid'],
-                isTopStatus: true)))
-        : <ReplyItemModel>[];
+    replies = (json['replies'] as List?)
+        ?.map<ReplyItemModel>(
+            (item) => ReplyItemModel.fromJson(item, json['upper']['mid']))
+        .toList();
+    topReplies = (json['top_replies'] as List?)
+        ?.map<ReplyItemModel>((item) => ReplyItemModel.fromJson(
+            item, json['upper']['mid'],
+            isTopStatus: true))
+        .toList();
     upper = ReplyUpper.fromJson(json['upper']);
     root = ReplyItemModel.fromJson(json['root'], json['upper']['mid']);
   }

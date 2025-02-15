@@ -14,7 +14,7 @@ class DynamicsDataModel {
 
   DynamicsDataModel.fromJson(Map<String, dynamic> json) {
     hasMore = json['has_more'];
-    items = json['items']
+    items = (json['items'] as List?)
         ?.map<DynamicItemModel>((e) => DynamicItemModel.fromJson(e))
         .toList();
     offset = json['offset'];
@@ -364,7 +364,9 @@ class Good {
   Good.fromJson(Map<String, dynamic> json) {
     headIcon = json['head_icon'];
     headText = json['head_text'];
-    items = json['items'].map<GoodItem>((e) => GoodItem.fromJson(e)).toList();
+    items = (json['items'] as List?)
+        ?.map<GoodItem>((e) => GoodItem.fromJson(e))
+        .toList();
     jumpUrl = json['jump_url'];
   }
 }
@@ -409,11 +411,9 @@ class DynamicDescModel {
   String? text;
 
   DynamicDescModel.fromJson(Map<String, dynamic> json) {
-    richTextNodes = json['rich_text_nodes'] != null
-        ? json['rich_text_nodes']
-            .map<RichTextNodeItem>((e) => RichTextNodeItem.fromJson(e))
-            .toList()
-        : [];
+    richTextNodes = (json['rich_text_nodes'] as List?)
+        ?.map<RichTextNodeItem>((e) => RichTextNodeItem.fromJson(e))
+        .toList();
     text = json['text'];
   }
 }
@@ -557,12 +557,9 @@ class DynamicDrawModel {
 
   DynamicDrawModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    // ignore: prefer_null_aware_operators
-    items = json['items'] != null
-        ? json['items']
-            .map<DynamicDrawItemModel>((e) => DynamicDrawItemModel.fromJson(e))
-            .toList()
-        : null;
+    items = (json['items'] as List?)
+        ?.map<DynamicDrawItemModel>((e) => DynamicDrawItemModel.fromJson(e))
+        .toList();
   }
 }
 
@@ -580,7 +577,7 @@ class DynamicOpusModel {
   String? title;
   DynamicOpusModel.fromJson(Map<String, dynamic> json) {
     jumpUrl = json['jump_url'];
-    pics = json['pics']
+    pics = (json['pics'] as List?)
         ?.map<OpusPicsModel>((e) => OpusPicsModel.fromJson(e))
         .toList();
     summary =
@@ -599,8 +596,8 @@ class SummaryModel {
   String? text;
 
   SummaryModel.fromJson(Map<String, dynamic> json) {
-    richTextNodes = json['rich_text_nodes']
-        .map<RichTextNodeItem>((e) => RichTextNodeItem.fromJson(e))
+    richTextNodes = (json['rich_text_nodes'] as List?)
+        ?.map<RichTextNodeItem>((e) => RichTextNodeItem.fromJson(e))
         .toList();
     text = json['text'];
   }

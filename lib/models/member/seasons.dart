@@ -9,11 +9,9 @@ class MemberSeasonsDataModel {
 
   MemberSeasonsDataModel.fromJson(Map<String, dynamic> json) {
     page = json['page'];
-    seasonsList = json['seasons_list'] != null
-        ? json['seasons_list']
-            .map<MemberSeasonsList>((e) => MemberSeasonsList.fromJson(e))
-            .toList()
-        : [];
+    seasonsList = (json['seasons_list'] as List?)
+        ?.map<MemberSeasonsList>((e) => MemberSeasonsList.fromJson(e))
+        .toList();
   }
 }
 
@@ -31,11 +29,9 @@ class MemberSeasonsList {
   Map? page;
 
   MemberSeasonsList.fromJson(Map<String, dynamic> json) {
-    archives = json['archives'] != null
-        ? json['archives']
-            .map<MemberArchiveItem>((e) => MemberArchiveItem.fromJson(e))
-            .toList()
-        : [];
+    archives = (json['archives'] as List?)
+        ?.map<MemberArchiveItem>((e) => MemberArchiveItem.fromJson(e))
+        .toList();
     meta = MamberMeta.fromJson(json['meta']);
     page = json['page'];
   }

@@ -8,7 +8,6 @@ class ReplyContent {
     this.pictures, // {}
     this.vote,
     this.richText,
-    this.isText,
     this.topicsMeta,
   });
 
@@ -20,27 +19,19 @@ class ReplyContent {
   List? pictures;
   Map? vote;
   Map? richText;
-  bool? isText;
   Map? topicsMeta;
 
   ReplyContent.fromJson(Map<String, dynamic> json) {
-    message = json['message']
-        .replaceAll('&gt;', '>')
-        .replaceAll('&#34;', '"')
-        .replaceAll('&#39;', "'");
+    message = json['message'];
     atNameToMid = json['at_name_to_mid'] ?? {};
-    members = json['members'] != null
-        ? json['members']
-            .map<MemberItemModel>((e) => MemberItemModel.fromJson(e))
-            .toList()
-        : [];
+    members = (json['members'] as List?)
+        ?.map<MemberItemModel>((e) => MemberItemModel.fromJson(e))
+        .toList();
     emote = json['emote'] ?? {};
     jumpUrl = json['jump_url'] ?? {};
     pictures = json['pictures'] ?? [];
     vote = json['vote'] ?? {};
     richText = json['rich_text'] ?? {};
-    // 不包含@ 笔记 图片的时候，文字可折叠
-    isText = atNameToMid!.isEmpty && vote!.isEmpty && pictures!.isEmpty;
     topicsMeta = json['topics_meta'] ?? {};
   }
 }

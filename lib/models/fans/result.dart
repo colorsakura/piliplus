@@ -9,8 +9,8 @@ class FansDataModel {
 
   FansDataModel.fromJson(Map<String, dynamic> json) {
     total = json['total'];
-    list = json['list']
-        .map<FansItemModel>((e) => FansItemModel.fromJson(e))
+    list = (json['list'] as List?)
+        ?.map<FansItemModel>((e) => FansItemModel.fromJson(e))
         .toList();
   }
 }

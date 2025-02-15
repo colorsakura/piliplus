@@ -12,9 +12,9 @@ class FollowUpModel {
     liveUsers = json['live_users'] != null
         ? LiveUsers.fromJson(json['live_users'])
         : null;
-    upList = json['up_list'] != null
-        ? json['up_list'].map<UpItem>((e) => UpItem.fromJson(e)).toList()
-        : [];
+    upList = (json['up_list'] as List?)
+        ?.map<UpItem>((e) => UpItem.fromJson(e))
+        .toList();
   }
 }
 
@@ -32,8 +32,8 @@ class LiveUsers {
   LiveUsers.fromJson(Map<String, dynamic> json) {
     count = json['count'];
     group = json['group'];
-    items = json['items']
-        .map<LiveUserItem>((e) => LiveUserItem.fromJson(e))
+    items = (json['items'] as List?)
+        ?.map<LiveUserItem>((e) => LiveUserItem.fromJson(e))
         .toList();
   }
 }

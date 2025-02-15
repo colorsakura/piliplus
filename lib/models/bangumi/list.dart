@@ -15,11 +15,9 @@ class BangumiListDataModel {
 
   BangumiListDataModel.fromJson(Map<String, dynamic> json) {
     hasNext = json['has_next'];
-    list = json['list'] != null
-        ? json['list']
-            .map<BangumiListItemModel>((e) => BangumiListItemModel.fromJson(e))
-            .toList()
-        : [];
+    list = (json['list'] as List?)
+        ?.map<BangumiListItemModel>((e) => BangumiListItemModel.fromJson(e))
+        .toList();
     num = json['num'];
     size = json['size'];
     total = json['total'];

@@ -84,10 +84,7 @@ class MediaVideoItemModel {
         likeState: json["like_state"],
         favState: json["fav_state"],
         page: json["page"],
-        // json["pages"] 可能为null
-        pages: json["pages"] == null
-            ? []
-            : List<Page>.from(json["pages"].map((x) => Page.fromJson(x))),
+        pages: (json["pages"] as List?)?.map((x) => Page.fromJson(x)).toList(),
         title: json["title"],
         type: json["type"],
         upper: Upper.fromJson(json["upper"]),
@@ -149,7 +146,7 @@ class Page {
         duration: json["duration"],
         link: json["link"],
         page: json["page"],
-        metas: List<Meta>.from(json["metas"].map((x) => Meta.fromJson(x))),
+        metas: (json["metas"] as List?)?.map((x) => Meta.fromJson(x)).toList(),
         from: json["from"],
         dimension: Dimension.fromJson(json["dimension"]),
       );

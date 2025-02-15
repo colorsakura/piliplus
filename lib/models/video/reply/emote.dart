@@ -6,7 +6,7 @@ class EmoteModelData {
 
   EmoteModelData.fromJson(Map<String, dynamic> json) {
     setting =
-    json['setting'] != null ? Setting.fromJson(json['setting']) : null;
+        json['setting'] != null ? Setting.fromJson(json['setting']) : null;
     if (json['packages'] != null) {
       packages = <Packages>[];
       json['packages'].forEach((v) {
@@ -68,17 +68,17 @@ class Packages {
 
   Packages(
       {this.id,
-        this.text,
-        this.url,
-        this.mtime,
-        this.type,
-        this.attr,
-        this.meta,
-        this.emote,
-        this.flags,
-        this.label,
-        this.packageSubTitle,
-        this.refMid});
+      this.text,
+      this.url,
+      this.mtime,
+      this.type,
+      this.attr,
+      this.meta,
+      this.emote,
+      this.flags,
+      this.label,
+      this.packageSubTitle,
+      this.refMid});
 
   Packages.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -95,7 +95,7 @@ class Packages {
       });
     }
     flags =
-    json['flags'] != null ? PackagesFlags.fromJson(json['flags']) : null;
+        json['flags'] != null ? PackagesFlags.fromJson(json['flags']) : null;
     label = json['label'] != null ? Label.fromJson(json['label']) : null;
     packageSubTitle = json['package_sub_title'];
     refMid = json['ref_mid'];
@@ -189,16 +189,16 @@ class Emote {
 
   Emote(
       {this.id,
-        this.packageId,
-        this.text,
-        this.url,
-        this.mtime,
-        this.type,
-        this.attr,
-        this.meta,
-        this.flags,
-        this.activity,
-        this.gifUrl});
+      this.packageId,
+      this.text,
+      this.url,
+      this.mtime,
+      this.type,
+      this.attr,
+      this.meta,
+      this.flags,
+      this.activity,
+      this.gifUrl});
 
   Emote.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -245,9 +245,7 @@ class EmoteMeta {
 
   EmoteMeta.fromJson(Map<String, dynamic> json) {
     size = json['size'];
-    suggest = json['suggest'] == null
-        ? null
-        : List<String>.from(json['suggest'].map((x) => x));
+    suggest = json['suggest'];
     alias = json['alias'];
     gifUrl = json['gif_url'];
   }

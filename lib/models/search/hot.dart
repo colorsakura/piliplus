@@ -12,8 +12,8 @@ class HotSearchModel {
   List<HotSearchItem>? list;
 
   HotSearchModel.fromJson(Map<String, dynamic> json) {
-    list = json['list']
-        .map<HotSearchItem>((e) => HotSearchItem.fromJson(e))
+    list = (json['list'] as List?)
+        ?.map<HotSearchItem>((e) => HotSearchItem.fromJson(e))
         .toList();
   }
 }

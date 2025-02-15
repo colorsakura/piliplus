@@ -45,9 +45,12 @@ class Playurl {
 
   Playurl.fromJson(Map<String, dynamic> json) {
     cid = json['cid'];
-    gQnDesc =
-        json['g_qn_desc'].map<GQnDesc>((e) => GQnDesc.fromJson(e)).toList();
-    stream = json['stream'].map<Streams>((e) => Streams.fromJson(e)).toList();
+    gQnDesc = (json['g_qn_desc'] as List?)
+        ?.map<GQnDesc>((e) => GQnDesc.fromJson(e))
+        .toList();
+    stream = (json['stream'] as List?)
+        ?.map<Streams>((e) => Streams.fromJson(e))
+        .toList();
   }
 }
 
@@ -83,8 +86,9 @@ class Streams {
 
   Streams.fromJson(Map<String, dynamic> json) {
     protocolName = json['protocol_name'];
-    format =
-        json['format'].map<FormatItem>((e) => FormatItem.fromJson(e)).toList();
+    format = (json['format'] as List?)
+        ?.map<FormatItem>((e) => FormatItem.fromJson(e))
+        .toList();
   }
 }
 
@@ -99,7 +103,9 @@ class FormatItem {
 
   FormatItem.fromJson(Map<String, dynamic> json) {
     formatName = json['format_name'];
-    codec = json['codec'].map<CodecItem>((e) => CodecItem.fromJson(e)).toList();
+    codec = (json['codec'] as List?)
+        ?.map<CodecItem>((e) => CodecItem.fromJson(e))
+        .toList();
   }
 }
 
@@ -129,8 +135,8 @@ class CodecItem {
     currentQn = json['current_qn'];
     acceptQn = json['accept_qn'];
     baseUrl = json['base_url'];
-    urlInfo = json['url_info']
-        .map<UrlInfoItem>((e) => UrlInfoItem.fromJson(e))
+    urlInfo = (json['url_info'] as List?)
+        ?.map<UrlInfoItem>((e) => UrlInfoItem.fromJson(e))
         .toList();
     hdrQn = json['hdr_n'];
     dolbyType = json['dolby_type'];
