@@ -78,7 +78,8 @@ class MemberControllerNew extends CommonController
             '：至 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(data.card!.endTime! * 1000))}';
       }
     }
-    if (tab2 != null && tab2!.isNotEmpty) {
+    tab2?.retainWhere((item) => implTabs.contains(item.param));
+    if (tab2?.isNotEmpty == true) {
       if (!data.tab!.toJson().values.contains(true) &&
           tab2!.first.param == 'home') {
         // remove empty home tab
@@ -100,7 +101,6 @@ class MemberControllerNew extends CommonController
             return item.param == data.defaultTab;
           });
         }
-        tab2!.retainWhere((item) => implTabs.contains(item.param));
         tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
         tabController = TabController(
           vsync: this,
