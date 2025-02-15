@@ -438,6 +438,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                   gapSize: 25,
                                   itemCount: videoItem['staff'].length,
                                   childBuilder: (index) => GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
                                     onTap: () {
                                       int? ownerMid = !widget.loadingStatus
                                           ? videoDetail.owner?.mid

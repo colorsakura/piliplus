@@ -26,7 +26,7 @@ import 'package:html/parser.dart' show parse;
 class ReplyItem extends StatelessWidget {
   const ReplyItem({
     super.key,
-    this.replyItem,
+    required this.replyItem,
     this.replyLevel,
     this.showReplyRow = true,
     this.replyReply,
@@ -39,7 +39,7 @@ class ReplyItem extends StatelessWidget {
     this.getTag,
     this.callback,
   });
-  final ReplyItemModel? replyItem;
+  final ReplyItemModel replyItem;
   final String? replyLevel;
   final bool? showReplyRow;
   final Function? replyReply;
@@ -69,7 +69,7 @@ class ReplyItem extends StatelessWidget {
             isScrollControlled: true,
             builder: (context) {
               return MorePanel(
-                item: replyItem!,
+                item: replyItem,
                 onDelete: (rpid) {
                   onDelete?.call(rpid, null);
                 },
@@ -80,7 +80,7 @@ class ReplyItem extends StatelessWidget {
         child: Column(
           children: [
             if (ModuleAuthorModel.showDynDecorate &&
-                (replyItem?.member?.userSailing?.cardbg?['image'] as String?)
+                (replyItem.member?.userSailing?.cardbg?['image'] as String?)
                         ?.isNotEmpty ==
                     true)
               Stack(
@@ -95,16 +95,16 @@ class ReplyItem extends StatelessWidget {
                         CachedNetworkImage(
                           height: 38,
                           imageUrl:
-                              replyItem?.member?.userSailing?.cardbg?['image'],
+                              replyItem.member?.userSailing?.cardbg?['image'],
                         ),
-                        if ((replyItem?.member?.userSailing?.cardbg?['fan']
+                        if ((replyItem.member?.userSailing?.cardbg?['fan']
                                     ?['num_desc'] as String?)
                                 ?.isNotEmpty ==
                             true)
                           Text(
-                            'NO.\n${replyItem?.member?.userSailing?.cardbg?['fan']?['num_desc']}',
+                            'NO.\n${replyItem.member?.userSailing?.cardbg?['fan']?['num_desc']}',
                             style:
-                                (replyItem?.member?.userSailing?.cardbg?['fan']
+                                (replyItem.member?.userSailing?.cardbg?['fan']
                                                 ?['color'] as String?)
                                             ?.startsWith('#') ==
                                         true
@@ -113,7 +113,7 @@ class ReplyItem extends StatelessWidget {
                                         fontFamily: 'digital_id_num',
                                         color: Color(
                                           int.parse(
-                                            replyItem?.member?.userSailing
+                                            replyItem.member?.userSailing
                                                 ?.cardbg?['fan']?['color']
                                                 .replaceFirst('#', '0xFF'),
                                           ),
@@ -152,11 +152,11 @@ class ReplyItem extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         if (ModuleAuthorModel.showDynDecorate &&
-            replyItem?.member?.pendant?.image?.isNotEmpty == true) ...[
+            replyItem.member?.pendant?.image?.isNotEmpty == true) ...[
           Padding(
             padding: const EdgeInsets.all(2),
             child: NetworkImgLayer(
-              src: replyItem!.member!.avatar,
+              src: replyItem.member?.avatar,
               width: 30,
               height: 30,
               type: 'avatar',
@@ -169,18 +169,18 @@ class ReplyItem extends StatelessWidget {
               child: CachedNetworkImage(
                 width: 52,
                 height: 52,
-                imageUrl: replyItem!.member!.pendant!.image!,
+                imageUrl: replyItem.member!.pendant!.image!,
               ),
             ),
           ),
         ] else
           NetworkImgLayer(
-            src: replyItem!.member!.avatar,
+            src: replyItem.member?.avatar,
             width: 34,
             height: 34,
             type: 'avatar',
           ),
-        if (replyItem!.member!.vip!['vipStatus'] > 0)
+        if ((replyItem.member?.vip?['vipStatus'] ?? -1) > 0)
           Positioned(
             right: 0,
             bottom: 0,
@@ -198,8 +198,7 @@ class ReplyItem extends StatelessWidget {
             ),
           ),
         //https://www.bilibili.com/blackboard/activity-whPrHsYJ2.html
-        if (replyItem!.member!.officialVerify != null &&
-            replyItem!.member!.officialVerify!['type'] == 0)
+        if (replyItem.member?.officialVerify?['type'] == 0)
           Positioned(
             left: 0,
             bottom: 0,
@@ -217,8 +216,7 @@ class ReplyItem extends StatelessWidget {
               ),
             ),
           ),
-        if (replyItem!.member!.officialVerify != null &&
-            replyItem!.member!.officialVerify!['type'] == 1)
+        if (replyItem.member?.officialVerify?['type'] == 1)
           Positioned(
             left: 0,
             bottom: 0,
@@ -241,7 +239,7 @@ class ReplyItem extends StatelessWidget {
   }
 
   Widget content(BuildContext context) {
-    if (replyItem?.member == null) return const SizedBox();
+    if (replyItem.member == null) return const SizedBox();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -251,7 +249,7 @@ class ReplyItem extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           onTap: () {
             feedBack();
-            Get.toNamed('/member?mid=${replyItem!.mid}');
+            Get.toNamed('/member?mid=${replyItem.mid}');
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -266,10 +264,9 @@ class ReplyItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        replyItem!.member!.uname!,
+                        '${replyItem.member?.uname}',
                         style: TextStyle(
-                          color: (replyItem!.member!.vip!['vipStatus'] > 0 &&
-                                  replyItem!.member!.vip!['vipType'] == 2)
+                          color: (replyItem.member?.vip?['vipType'] == 2)
                               ? context.vipColor
                               : Theme.of(context).colorScheme.outline,
                           fontSize: 13,
@@ -277,12 +274,11 @@ class ReplyItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Image.asset(
-                        'assets/images/lv/lv${replyItem!.member!.level}.png',
+                        'assets/images/lv/lv${replyItem.member?.level}.png',
                         height: 11,
-                        semanticLabel: "等级：${replyItem!.member!.level}",
                       ),
                       const SizedBox(width: 6),
-                      if (replyItem!.isUp!)
+                      if (replyItem.isUp == true)
                         const PBadge(
                           text: 'UP',
                           size: 'small',
@@ -295,17 +291,16 @@ class ReplyItem extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        Utils.dateFormat(replyItem!.ctime),
+                        Utils.dateFormat(replyItem.ctime),
                         style: TextStyle(
                           fontSize:
                               Theme.of(context).textTheme.labelSmall!.fontSize,
                           color: Theme.of(context).colorScheme.outline,
                         ),
                       ),
-                      if (replyItem!.replyControl != null &&
-                          replyItem!.replyControl!.location != '')
+                      if (replyItem.replyControl?.location?.isNotEmpty == true)
                         Text(
-                          ' • ${replyItem!.replyControl!.location!}',
+                          ' • ${replyItem.replyControl!.location!}',
                           style: TextStyle(
                               fontSize: Theme.of(context)
                                   .textTheme
@@ -326,7 +321,7 @@ class ReplyItem extends StatelessWidget {
               const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              String text = replyItem?.content?.message ?? '';
+              String text = replyItem.content?.message ?? '';
               TextStyle style = TextStyle(
                 height: 1.75,
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
@@ -347,7 +342,7 @@ class ReplyItem extends StatelessWidget {
                   style: style,
                   TextSpan(
                     children: [
-                      if (replyItem!.isTop!) ...[
+                      if (replyItem.isTop == true) ...[
                         const WidgetSpan(
                           alignment: PlaceholderAlignment.top,
                           child: PBadge(
@@ -364,7 +359,7 @@ class ReplyItem extends StatelessWidget {
                       ],
                       buildContent(
                         context,
-                        replyItem!,
+                        replyItem,
                         replyReply,
                         null,
                         textPainter,
@@ -378,27 +373,26 @@ class ReplyItem extends StatelessWidget {
           ),
         ),
         // 操作区域
-        buttonAction(context, replyItem!.replyControl),
+        buttonAction(context, replyItem.replyControl),
         // 一楼的评论
-        if ((replyItem!.replyControl!.isShow! ||
-                replyItem!.replies!.isNotEmpty ||
-                replyItem!.replyControl!.entryText != null) &&
-            showReplyRow!) ...[
+        if (showReplyRow == true &&
+            (replyItem.replyControl?.isShow == true ||
+                replyItem.replies?.isNotEmpty == true ||
+                replyItem.replyControl?.entryText?.isNotEmpty == true))
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: replyItemRow(
               context: context,
-              replies: replyItem!.replies,
-              replyControl: replyItem!.replyControl,
-              // f_rpid: replyItem!.rpid,
+              replies: replyItem.replies,
+              replyControl: replyItem.replyControl,
+              // f_rpid: replyItem.rpid,
               replyItem: replyItem,
               replyReply: replyReply,
               onDelete: (rpid) {
-                onDelete?.call(rpid, replyItem!.rpid);
+                onDelete?.call(rpid, replyItem.rpid);
               },
             ),
           ),
-        ],
       ],
     );
   }
@@ -433,7 +427,7 @@ class ReplyItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 2),
-        if (replyItem!.upAction!.like!) ...[
+        if (replyItem.upAction?.like == true) ...[
           SizedBox(
             height: 32,
             child: TextButton(
@@ -450,8 +444,7 @@ class ReplyItem extends StatelessWidget {
           ),
           const SizedBox(width: 2),
         ],
-        if (replyItem!.cardLabel!.isNotEmpty &&
-            replyItem!.cardLabel!.contains('热评'))
+        if (replyItem.cardLabel?.contains('热评') == true)
           Text(
             '热评',
             style: TextStyle(
@@ -467,16 +460,15 @@ class ReplyItem extends StatelessWidget {
 
   Widget replyItemRow({
     context,
-    replies,
-    replyControl,
-    replyItem,
+    List<ReplyItemModel>? replies,
+    ReplyControl? replyControl,
+    required ReplyItemModel replyItem,
     replyReply,
     onDelete,
   }) {
-    final int extraRow = replyControl?.isShow == true ||
-            (replyControl?.entryText != null && replies!.isEmpty)
-        ? 1
-        : 0;
+    final bool hasExtraRow = replyControl?.isShow == true ||
+        (replyControl?.entryText?.isNotEmpty == true &&
+            replies?.isEmpty == true);
     return Container(
       margin: const EdgeInsets.only(left: 42, right: 4, top: 0),
       child: Material(
@@ -487,7 +479,7 @@ class ReplyItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (replies!.isNotEmpty)
+            if (replies?.isNotEmpty == true)
               for (int i = 0; i < replies!.length; i++) ...[
                 InkWell(
                   // 一楼点击评论展开评论详情
@@ -500,7 +492,7 @@ class ReplyItem extends StatelessWidget {
                       isScrollControlled: true,
                       builder: (context) {
                         return MorePanel(
-                          item: replies![i],
+                          item: replies[i],
                           onDelete: onDelete,
                         );
                       },
@@ -510,13 +502,13 @@ class ReplyItem extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(
                       8,
-                      i == 0 && (extraRow == 1 || replies!.length > 1) ? 8 : 4,
+                      i == 0 && (hasExtraRow || replies.length > 1) ? 8 : 4,
                       8,
-                      i == 0 && (extraRow == 1 || replies!.length > 1) ? 4 : 6,
+                      i == 0 && (hasExtraRow || replies.length > 1) ? 4 : 6,
                     ),
                     child: Semantics(
                       label:
-                          '${replies![i].member!.uname} ${replies![i].content!.message}',
+                          '${replies[i].member?.uname} ${replies[i].content?.message}',
                       excludeSemantics: true,
                       child: Text.rich(
                         style: TextStyle(
@@ -534,7 +526,7 @@ class ReplyItem extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: '${replies![i].member!.uname}',
+                              text: '${replies[i].member?.uname}',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -542,10 +534,10 @@ class ReplyItem extends StatelessWidget {
                                 ..onTap = () {
                                   feedBack();
                                   Get.toNamed(
-                                      '/member?mid=${replies![i].member!.mid}');
+                                      '/member?mid=${replies[i].member?.mid}');
                                 },
                             ),
-                            if (replies![i].isUp!) ...[
+                            if (replies[i].isUp == true) ...[
                               const TextSpan(text: ' '),
                               const WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
@@ -560,14 +552,14 @@ class ReplyItem extends StatelessWidget {
                               const TextSpan(text: ' '),
                             ],
                             TextSpan(
-                                text: replies![i].root == replies![i].parent
+                                text: replies[i].root == replies[i].parent
                                     ? ': '
-                                    : replies![i].isUp!
+                                    : replies[i].isUp == true
                                         ? ''
                                         : ' '),
                             buildContent(
                               context,
-                              replies![i],
+                              replies[i],
                               replyReply,
                               replyItem,
                               null,
@@ -580,7 +572,7 @@ class ReplyItem extends StatelessWidget {
                   ),
                 )
               ],
-            if (extraRow == 1)
+            if (hasExtraRow)
               InkWell(
                 // 一楼点击【共xx条回复】展开评论详情
                 onTap: () => replyReply?.call(replyItem, null, null),
@@ -594,7 +586,7 @@ class ReplyItem extends StatelessWidget {
                             Theme.of(context).textTheme.labelMedium!.fontSize,
                       ),
                       children: [
-                        if (replyControl!.upReply!)
+                        if (replyControl?.upReply == true)
                           TextSpan(
                               text: 'UP主等人 ',
                               style: TextStyle(
@@ -604,7 +596,7 @@ class ReplyItem extends StatelessWidget {
                                     .withOpacity(0.85),
                               )),
                         TextSpan(
-                          text: replyControl!.entryText!,
+                          text: replyControl?.entryText,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                           ),
