@@ -1280,72 +1280,76 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           ),
         ),
       ),
-      child: Row(
-        children: [
-          if (tabs.isEmpty)
-            const Spacer()
-          else
+      child: Material(
+        color: Theme.of(context).colorScheme.surface,
+        child: Row(
+          children: [
+            if (tabs.isEmpty)
+              const Spacer()
+            else
+              Flexible(
+                flex: tabs.length == 3 ? 2 : 1,
+                child: showReply ? Obx(() => tabbar()) : tabbar(),
+              ),
             Flexible(
-              flex: tabs.length == 3 ? 2 : 1,
-              child: showReply ? Obx(() => tabbar()) : tabbar(),
-            ),
-          Flexible(
-            flex: 1,
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 32,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-                      onPressed: videoDetailController.showShootDanmakuSheet,
-                      child: Text(
-                        '发弹幕',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+              flex: 1,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 32,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        ),
+                        onPressed: videoDetailController.showShootDanmakuSheet,
+                        child: Text(
+                          '发弹幕',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 38,
-                    height: 38,
-                    child: Obx(
-                      () => IconButton(
-                        onPressed: () {
-                          videoDetailController
-                                  .plPlayerController.isOpenDanmu.value =
-                              !videoDetailController
-                                  .plPlayerController.isOpenDanmu.value;
-                          setting.put(
-                              SettingBoxKey.enableShowDanmaku,
-                              videoDetailController
-                                  .plPlayerController.isOpenDanmu.value);
-                        },
-                        icon: SvgPicture.asset(
-                          videoDetailController
-                                  .plPlayerController.isOpenDanmu.value
-                              ? 'assets/images/video/danmu_open.svg'
-                              : 'assets/images/video/danmu_close.svg',
-                          // ignore: deprecated_member_use
-                          color: videoDetailController
-                                  .plPlayerController.isOpenDanmu.value
-                              ? Theme.of(context).colorScheme.secondary
-                              : Theme.of(context).colorScheme.outline,
+                    SizedBox(
+                      width: 38,
+                      height: 38,
+                      child: Obx(
+                        () => IconButton(
+                          onPressed: () {
+                            videoDetailController
+                                    .plPlayerController.isOpenDanmu.value =
+                                !videoDetailController
+                                    .plPlayerController.isOpenDanmu.value;
+                            setting.put(
+                                SettingBoxKey.enableShowDanmaku,
+                                videoDetailController
+                                    .plPlayerController.isOpenDanmu.value);
+                          },
+                          icon: SvgPicture.asset(
+                            videoDetailController
+                                    .plPlayerController.isOpenDanmu.value
+                                ? 'assets/images/video/danmu_open.svg'
+                                : 'assets/images/video/danmu_close.svg',
+                            // ignore: deprecated_member_use
+                            color: videoDetailController
+                                    .plPlayerController.isOpenDanmu.value
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.outline,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 14),
-                ],
+                    const SizedBox(width: 14),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
