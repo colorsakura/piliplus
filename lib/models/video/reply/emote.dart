@@ -237,7 +237,7 @@ class Emote {
 
 class EmoteMeta {
   int? size;
-  List<String>? suggest;
+  List? suggest;
   String? alias;
   String? gifUrl;
 

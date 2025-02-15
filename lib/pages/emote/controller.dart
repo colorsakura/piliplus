@@ -7,7 +7,7 @@ import '../../http/reply.dart';
 
 class EmotePanelController extends CommonController
     with GetTickerProviderStateMixin {
-  late TabController tabController;
+  TabController? tabController;
 
   @override
   void onInit() {
@@ -29,7 +29,7 @@ class EmotePanelController extends CommonController
 
   @override
   void onClose() {
-    tabController.dispose();
+    tabController?.dispose();
     super.onClose();
   }
 }

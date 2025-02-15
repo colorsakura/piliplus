@@ -54,7 +54,8 @@ class ReplyCursor {
     mode = json['mode'];
     modeText = json['mode_text'];
     allCount = json['all_count'] ?? 0;
-    supportMode = json['support_mode'].cast<int>();
+    supportMode =
+        (json['support_mode'] as List?)?.map((e) => e as int).toList();
     name = json['name'];
     paginationReply = json['pagination_reply'] != null
         ? PaginationReply.fromJson(json['pagination_reply'])
