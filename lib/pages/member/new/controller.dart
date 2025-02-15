@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -46,6 +48,14 @@ class MemberControllerNew extends CommonController
   int? silence;
   String? endTime;
 
+  late final implTabs = const [
+    'home',
+    'dynamic',
+    'contribute',
+    'favorite',
+    'bangumi',
+  ];
+
   @override
   bool customHandleResponse(Success response) {
     Data data = response.response;
@@ -90,11 +100,12 @@ class MemberControllerNew extends CommonController
             return item.param == data.defaultTab;
           });
         }
+        tab2!.retainWhere((item) => implTabs.contains(item.param));
         tabs = tab2!.map((item) => Tab(text: item.title ?? '')).toList();
         tabController = TabController(
           vsync: this,
-          length: tab2!.length,
-          initialIndex: initialIndex == -1 ? 0 : initialIndex,
+          length: tabs.length,
+          initialIndex: max(0, initialIndex),
         );
       }
     }
