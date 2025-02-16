@@ -106,7 +106,8 @@ class _PayCoinsPageState extends State<PayCoinsPage>
           : Row(
               children: [
                 const Spacer(),
-                Expanded(child: _buildBody(isV)),
+                Expanded(flex: 3, child: _buildBody(isV)),
+                const Spacer(),
               ],
             );
     });
