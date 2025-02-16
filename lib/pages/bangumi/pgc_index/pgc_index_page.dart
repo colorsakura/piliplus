@@ -22,14 +22,19 @@ class PgcIndexPage extends StatefulWidget {
   State<PgcIndexPage> createState() => _PgcIndexPageState();
 }
 
-class _PgcIndexPageState extends State<PgcIndexPage> {
+class _PgcIndexPageState extends State<PgcIndexPage>
+    with AutomaticKeepAliveClientMixin {
   late final _ctr = Get.put(
     PgcIndexController(widget.indexType),
     tag: '${widget.indexType}',
   );
 
   @override
+  bool get wantKeepAlive => widget.indexType != null;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return widget.indexType == null
         ? Scaffold(
             appBar: AppBar(title: const Text('索引')),
