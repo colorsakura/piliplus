@@ -54,20 +54,14 @@ class Utils {
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return MediaQuery.orientationOf(Get.context!) == Orientation.portrait
-              ? isFullScreen
-                  ? Column(
-                      children: [
-                        const Spacer(flex: 4),
-                        Expanded(flex: 6, child: child),
-                        if (padding != null) SizedBox(height: padding),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        const Spacer(flex: 3),
-                        Expanded(flex: 7, child: child),
-                      ],
-                    )
+              ? Column(
+                  children: [
+                    const Spacer(flex: 3),
+                    Expanded(flex: 7, child: child),
+                    if (isFullScreen && padding != null)
+                      SizedBox(height: padding),
+                  ],
+                )
               : Row(
                   children: [
                     const Spacer(),

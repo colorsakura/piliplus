@@ -132,6 +132,7 @@ class _HeaderControlState extends State<HeaderControl> {
             ),
             Expanded(
               child: Material(
+                color: Colors.transparent,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeBottom: true,
@@ -835,6 +836,7 @@ class _HeaderControlState extends State<HeaderControl> {
             ),
             Expanded(
               child: Material(
+                color: Colors.transparent,
                 child: Scrollbar(
                   child: MediaQuery.removePadding(
                     context: context,
@@ -920,6 +922,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 child: Center(child: Text('选择音质', style: titleStyle))),
             Expanded(
               child: Material(
+                color: Colors.transparent,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeBottom: true,
@@ -1010,6 +1013,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 child: Center(child: Text('选择解码格式', style: titleStyle))),
             Expanded(
               child: Material(
+                color: Colors.transparent,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeBottom: true,
@@ -1739,6 +1743,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 child: Center(child: Text('选择播放顺序', style: titleStyle))),
             Expanded(
               child: Material(
+                color: Colors.transparent,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeBottom: true,
