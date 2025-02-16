@@ -358,7 +358,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
                           SliverPadding(
-                            padding: EdgeInsets.only(left: padding / 4),
+                            padding: EdgeInsets.only(
+                              left: padding / 4,
+                              bottom: MediaQuery.paddingOf(context).bottom + 80,
+                            ),
                             sliver: SliverToBoxAdapter(
                               child: DynamicPanel(
                                 item: _dynamicDetailController.item,
@@ -541,12 +544,14 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                           Expanded(
                             child: Builder(
                               builder: (context) => TextButton.icon(
-                                onPressed: () =>
-                                    _dynamicDetailController.onLikeDynamic(() {
-                                  if (context.mounted) {
-                                    (context as Element?)?.markNeedsBuild();
-                                  }
-                                }),
+                                onPressed: () => Utils.onLikeDynamic(
+                                  _dynamicDetailController.item,
+                                  () {
+                                    if (context.mounted) {
+                                      (context as Element?)?.markNeedsBuild();
+                                    }
+                                  },
+                                ),
                                 icon: Icon(
                                   _dynamicDetailController
                                           .item.modules.moduleStat.like!.status!

@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/article_content.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
+import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -14,6 +16,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/html_render.dart';
@@ -323,7 +326,11 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                         SliverPadding(
                           padding: orientation == Orientation.portrait
                               ? EdgeInsets.symmetric(horizontal: padding)
-                              : EdgeInsets.only(left: padding / 4),
+                              : EdgeInsets.only(
+                                  left: padding / 4,
+                                  bottom:
+                                      MediaQuery.paddingOf(context).bottom + 80,
+                                ),
                           sliver: _buildContent,
                         ),
                         if (orientation == Orientation.portrait) ...[
@@ -388,28 +395,265 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             },
           ),
           Positioned(
-            bottom: MediaQuery.of(context).padding.bottom + 14,
-            right: 14,
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: SlideTransition(
               position: Tween<Offset>(
-                begin: const Offset(0, 2),
+                begin: const Offset(0, 1),
                 end: const Offset(0, 0),
               ).animate(CurvedAnimation(
                 parent: fabAnimationCtr,
                 curve: Curves.easeInOut,
               )),
-              child: FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  feedBack();
-                  _htmlRenderCtr.onReply(
-                    context,
-                    oid: _htmlRenderCtr.oid.value,
-                    replyType: ReplyType.values[type],
-                  );
-                },
-                tooltip: '评论动态',
-                child: const Icon(Icons.reply),
+              child: Obx(
+                () => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: 14,
+                        bottom: 14 +
+                            (_htmlRenderCtr.item.value.idStr != null
+                                ? 0
+                                : MediaQuery.of(context).padding.bottom),
+                      ),
+                      child: FloatingActionButton(
+                        heroTag: null,
+                        onPressed: () {
+                          feedBack();
+                          _htmlRenderCtr.onReply(
+                            context,
+                            oid: _htmlRenderCtr.oid.value,
+                            replyType: ReplyType.values[type],
+                          );
+                        },
+                        tooltip: '评论动态',
+                        child: const Icon(Icons.reply),
+                      ),
+                    ),
+                    _htmlRenderCtr.item.value.idStr != null
+                        ? Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              border: Border(
+                                top: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outline
+                                      .withOpacity(0.08),
+                                ),
+                              ),
+                            ),
+                            padding: EdgeInsets.only(
+                                bottom: MediaQuery.paddingOf(context).bottom),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: Builder(
+                                    builder: (btnContext) => TextButton.icon(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          useSafeArea: true,
+                                          builder: (context) => RepostPanel(
+                                            item: _htmlRenderCtr.item.value,
+                                            callback: () {
+                                              int count = int.tryParse(
+                                                      _htmlRenderCtr
+                                                              .item
+                                                              .value
+                                                              .modules
+                                                              ?.moduleStat
+                                                              ?.forward
+                                                              ?.count ??
+                                                          '0') ??
+                                                  0;
+                                              _htmlRenderCtr
+                                                      .item
+                                                      .value
+                                                      .modules
+                                                      ?.moduleStat
+                                                      ?.forward!
+                                                      .count =
+                                                  (count + 1).toString();
+                                              if (btnContext.mounted) {
+                                                (btnContext as Element?)
+                                                    ?.markNeedsBuild();
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        FontAwesomeIcons.shareFromSquare,
+                                        size: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        semanticLabel: "转发",
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 0),
+                                        foregroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                      ),
+                                      label: Text(
+                                        _htmlRenderCtr
+                                                    .item
+                                                    .value
+                                                    .modules
+                                                    ?.moduleStat
+                                                    ?.forward!
+                                                    .count !=
+                                                null
+                                            ? Utils.numFormat(_htmlRenderCtr
+                                                .item
+                                                .value
+                                                .modules
+                                                ?.moduleStat
+                                                ?.forward!
+                                                .count)
+                                            : '转发',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: TextButton.icon(
+                                    onPressed: () {
+                                      Share.share(
+                                          '${HttpString.dynamicShareBaseUrl}/${_htmlRenderCtr.item.value.idStr}');
+                                    },
+                                    icon: Icon(
+                                      FontAwesomeIcons.shareNodes,
+                                      size: 16,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      semanticLabel: "分享",
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 15, 0),
+                                      foregroundColor:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                    label: const Text('分享'),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Builder(
+                                    builder: (context) => TextButton.icon(
+                                      onPressed: () => Utils.onLikeDynamic(
+                                        _htmlRenderCtr.item.value,
+                                        () {
+                                          if (context.mounted) {
+                                            (context as Element?)
+                                                ?.markNeedsBuild();
+                                          }
+                                        },
+                                      ),
+                                      icon: Icon(
+                                        _htmlRenderCtr
+                                                    .item
+                                                    .value
+                                                    .modules
+                                                    ?.moduleStat
+                                                    ?.like
+                                                    ?.status ==
+                                                true
+                                            ? FontAwesomeIcons.solidThumbsUp
+                                            : FontAwesomeIcons.thumbsUp,
+                                        size: 16,
+                                        color: _htmlRenderCtr
+                                                    .item
+                                                    .value
+                                                    .modules
+                                                    ?.moduleStat
+                                                    ?.like
+                                                    ?.status ==
+                                                true
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                        semanticLabel: _htmlRenderCtr
+                                                    .item
+                                                    .value
+                                                    .modules
+                                                    ?.moduleStat
+                                                    ?.like
+                                                    ?.status ==
+                                                true
+                                            ? "已赞"
+                                            : "点赞",
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 0),
+                                        foregroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                      ),
+                                      label: AnimatedSwitcher(
+                                        duration:
+                                            const Duration(milliseconds: 400),
+                                        transitionBuilder: (Widget child,
+                                            Animation<double> animation) {
+                                          return ScaleTransition(
+                                              scale: animation, child: child);
+                                        },
+                                        child: Text(
+                                          _htmlRenderCtr
+                                                      .item
+                                                      .value
+                                                      .modules
+                                                      ?.moduleStat
+                                                      ?.like
+                                                      ?.count !=
+                                                  null
+                                              ? Utils.numFormat(_htmlRenderCtr
+                                                  .item
+                                                  .value
+                                                  .modules!
+                                                  .moduleStat!
+                                                  .like!
+                                                  .count)
+                                              : '点赞',
+                                          style: TextStyle(
+                                            color: _htmlRenderCtr
+                                                        .item
+                                                        .value
+                                                        .modules
+                                                        ?.moduleStat
+                                                        ?.like
+                                                        ?.status ==
+                                                    true
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
               ),
             ),
           ),

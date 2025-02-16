@@ -1,8 +1,12 @@
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/url_utils.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/html.dart';
 import 'package:PiliPlus/http/reply.dart';
@@ -16,6 +20,8 @@ class HtmlRenderController extends ReplyController {
   late Map response;
   int? floor;
 
+  Rx<DynamicItemModel> item = DynamicItemModel().obs;
+
   RxBool loaded = false.obs;
 
   late final horizontalPreview = GStorage.horizontalPreview;
@@ -26,8 +32,27 @@ class HtmlRenderController extends ReplyController {
     id = Get.parameters['id']!;
     dynamicType = Get.parameters['dynamicType']!;
     type = dynamicType == 'picture' ? 11 : 12;
-
+    if (RegExp(r'^cv', caseSensitive: false).hasMatch(id)) {
+      UrlUtils.parseRedirectUrl('https://www.bilibili.com/read/$id/')
+          .then((url) {
+        if (url != null) {
+          _queryDyn(url.split('/').last);
+        }
+      });
+    } else {
+      _queryDyn(id);
+    }
     reqHtml();
+  }
+
+  _queryDyn(id) {
+    DynamicsHttp.dynamicDetail(id: id).then((res) {
+      if (res['status']) {
+        item.value = res['data'];
+      } else {
+        debugPrint('${res['msg']}');
+      }
+    });
   }
 
   // 请求动态内容

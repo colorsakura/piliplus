@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
@@ -44,6 +45,35 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  // 动态点赞
+  static Future onLikeDynamic(item, VoidCallback callback) async {
+    feedBack();
+    String dynamicId = item.idStr!;
+    // 1 已点赞 2 不喜欢 0 未操作
+    Like like = item.modules.moduleStat.like;
+    int count = like.count == '点赞' ? 0 : int.parse(like.count ?? '0');
+    bool status = like.status!;
+    int up = status ? 2 : 1;
+    var res = await DynamicsHttp.likeDynamic(dynamicId: dynamicId, up: up);
+    if (res['status']) {
+      SmartDialog.showToast(!status ? '点赞成功' : '取消赞');
+      if (up == 1) {
+        item.modules.moduleStat.like.count = (count + 1).toString();
+        item.modules.moduleStat.like.status = true;
+      } else {
+        if (count == 1) {
+          item.modules.moduleStat.like.count = '点赞';
+        } else {
+          item.modules.moduleStat.like.count = (count - 1).toString();
+        }
+        item.modules.moduleStat.like.status = false;
+      }
+      callback();
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
 
   static void showFSSheet({
     required Widget child,
