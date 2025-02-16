@@ -34,6 +34,8 @@ class GStorage {
 
   static bool get isLogin => userInfo.get('userInfoCache') != null;
 
+  static get ownerMid => GStorage.userInfo.get('userInfoCache')?.mid;
+
   static List<double> get speedList => List<double>.from(
         video.get(
           VideoBoxKey.speedsList,

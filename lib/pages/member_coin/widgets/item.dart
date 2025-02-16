@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -19,7 +20,6 @@ class MemberCoinsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
       clipBehavior: Clip.hardEdge,
       margin: EdgeInsets.zero,
       child: InkWell(
@@ -34,7 +34,13 @@ class MemberCoinsItem extends StatelessWidget {
             },
           );
         },
+        onLongPress: () => imageSaveDialog(
+          context: context,
+          title: coinItem.title,
+          cover: coinItem.pic,
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AspectRatio(
               aspectRatio: StyleString.aspectRatio,
@@ -62,10 +68,11 @@ class MemberCoinsItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 6, 0, 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    coinItem.title!,
+                    '${coinItem.title}\n',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

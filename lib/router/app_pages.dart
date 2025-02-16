@@ -32,9 +32,7 @@ import '../pages/live_room/view.dart';
 import '../pages/login/index.dart';
 import '../pages/media/index.dart';
 import '../pages/member_archive/index.dart';
-import '../pages/member_coin/index.dart';
 import '../pages/member_dynamics/index.dart';
-import '../pages/member_like/index.dart';
 import '../pages/member_search/index.dart';
 import '../pages/member_seasons/index.dart';
 import '../pages/msg_feed_top/sys_msg/view.dart';
@@ -154,9 +152,9 @@ class Routes {
     CustomGetPage(
         name: '/memberArchive', page: () => const MemberArchivePage()),
     // 用户最近投币
-    CustomGetPage(name: '/memberCoin', page: () => const MemberCoinPage()),
+    // CustomGetPage(name: '/memberCoin', page: () => const MemberCoinPage()),
     // 用户最近喜欢
-    CustomGetPage(name: '/memberLike', page: () => const MemberLikePage()),
+    // CustomGetPage(name: '/memberLike', page: () => const MemberLikePage()),
     // 用户专栏
     CustomGetPage(
         name: '/memberSeasons', page: () => const MemberSeasonsPage()),

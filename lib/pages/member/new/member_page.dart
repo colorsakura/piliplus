@@ -26,7 +26,7 @@ class MemberPageNew extends StatefulWidget {
 
 class _MemberPageNewState extends State<MemberPageNew>
     with TickerProviderStateMixin {
-  int? _mid;
+  late final int _mid;
   late final String _heroTag;
   late final MemberControllerNew _userController;
   final _key = GlobalKey<ExtendedNestedScrollViewState>();
@@ -161,16 +161,16 @@ class _MemberPageNewState extends State<MemberPageNew>
                   () => MemberContribute(
                     heroTag: _heroTag,
                     initialIndex: _userController.contributeInitialIndex.value,
-                    mid: _mid ?? -1,
+                    mid: _mid,
                   ),
                 ),
               'bangumi' => MemberBangumi(
                   heroTag: _heroTag,
-                  mid: _mid ?? -1,
+                  mid: _mid,
                 ),
               'favorite' => MemberFavorite(
                   heroTag: _heroTag,
-                  mid: _mid ?? -1,
+                  mid: _mid,
                 ),
               _ => Center(child: Text(item.title ?? '')),
             };

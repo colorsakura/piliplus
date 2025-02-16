@@ -254,10 +254,10 @@ class MemberController extends GetxController {
 
   // 请求投币视频
   Future getRecentCoinVideo() async {
-    if (userInfo == null) return;
-    var res = await MemberHttp.getRecentCoinVideo(mid: mid!);
-    recentCoinsList.value = res['data'];
-    return res;
+    // if (userInfo == null) return;
+    // var res = await MemberHttp.getRecentCoinVideo(mid: mid!);
+    // recentCoinsList.value = res['data'];
+    // return res;
   }
 
   // 跳转查看动态

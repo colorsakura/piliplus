@@ -598,7 +598,7 @@ class MemberHttp {
   }
 
   // 最近投币
-  static Future getRecentCoinVideo({required int mid}) async {
+  static Future<LoadingState> getRecentCoinVideo({required int mid}) async {
     Map params = await WbiSign().makSign({
       'mid': mid,
       'gaia_source': 'main_web',
@@ -615,23 +615,16 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data']
-            .map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
-            .toList(),
-      };
+      return LoadingState.success(res.data['data']
+          .map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
+          .toList());
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 
   // 最近点赞
-  static Future getRecentLikeVideo({required int mid}) async {
+  static Future<LoadingState> getRecentLikeVideo({required int mid}) async {
     Map params = await WbiSign().makSign({
       'mid': mid,
       'gaia_source': 'main_web',
@@ -648,16 +641,11 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': MemberSeasonsDataModel.fromJson(res.data['data']['items_lists'])
-      };
+      return LoadingState.success(res.data['data']['list']
+          .map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
+          .toList());
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 

@@ -10,6 +10,8 @@ import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute_ctr.dart';
 import 'package:PiliPlus/pages/member/new/controller.dart';
+import 'package:PiliPlus/pages/member_coin/index.dart';
+import 'package:PiliPlus/pages/member_like/index.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -271,6 +273,21 @@ class _MemberHomeState extends State<MemberHome>
                     }
                     _ctr.tabController?.animateTo(index);
                   } else {
+                    if (param == 'coinArchive') {
+                      Get.to(MemberCoinPage(
+                        mid: _ctr.mid,
+                        name: _ctr.username,
+                      ));
+                      return;
+                    }
+
+                    if (param == 'likeArchive') {
+                      Get.to(MemberLikePage(
+                        mid: _ctr.mid,
+                        name: _ctr.username,
+                      ));
+                      return;
+                    }
                     // TODO
                     SmartDialog.showToast('view $param');
                   }

@@ -21,47 +21,8 @@ class VideoCardVMemberHome extends StatelessWidget {
     String goto = videoItem.goto ?? '';
     switch (goto) {
       case 'bangumi':
-        //   if (videoItem.bangumiBadge == '电影') {
-        //     SmartDialog.showToast('暂不支持电影观看');
-        //     return;
-        //   }
-        //   int epId = videoItem.param;
         Utils.viewBangumi(epId: videoItem.param);
-
-      // SmartDialog.showLoading(msg: '资源获取中');
-      // var result = await SearchHttp.bangumiInfo(seasonId: null, epId: epId);
-      // SmartDialog.dismiss();
-      // if (result['status']) {
-      //   var bangumiDetail = result['data'];
-      //   EpisodeItem episode = result['data'].episodes.first;
-      //   int? epId = result['data'].userStatus?.progress?.lastEpId;
-      //   if (epId == null) {
-      //     epId = episode.epId;
-      //   } else {
-      //     for (var item in result['data'].episodes) {
-      //       if (item.epId == epId) {
-      //         episode = item;
-      //         break;
-      //       }
-      //     }
-      //   }
-      //   String bvid = episode.bvid!;
-      //   int cid = episode.cid!;
-      //   String pic = episode.cover!;
-      //   String seasonId = bangumiDetail.seasonId;
-      //   dynamic heroTag = Utils.makeHeroTag(cid);
-      //   Get.toNamed(
-      //     '/video?bvid=$bvid&cid=$cid&seasonId=$seasonId&epId=$epId',
-      //     arguments: {
-      //       'pic': pic,
-      //       'heroTag': heroTag,
-      //       'videoType': SearchType.media_bangumi,
-      //     },
-      //   );
-      // } else {
-      //   SmartDialog.showToast(result['msg']);
-      // }
-      // break;
+        break;
       case 'av':
         if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
           if (Utils.viewPgcFromUri(videoItem.uri!)) {

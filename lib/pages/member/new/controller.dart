@@ -23,7 +23,7 @@ extension MemberTabTypeExt on MemberTabType {
 class MemberControllerNew extends CommonController
     with GetTickerProviderStateMixin {
   MemberControllerNew({required this.mid});
-  int? mid;
+  int mid;
   RxDouble scrollRatio = 0.0.obs;
   String? username;
   int? ownerMid;
@@ -154,7 +154,7 @@ class MemberControllerNew extends CommonController
 
   void _onBlock() async {
     dynamic res = await VideoHttp.relationMod(
-      mid: mid ?? -1,
+      mid: mid,
       act: relation.value != -1 ? 5 : 6,
       reSrc: 11,
     );
