@@ -29,36 +29,25 @@ class MemberContributeCtr extends CommonController
     super.onInit();
     Tab2 contribute =
         _ctr.tab2!.firstWhere((item) => item.param == 'contribute');
-    if (contribute.items?.isNullOrEmpty == false &&
-        contribute.items!.length > 1) {
+    if (contribute.items?.isNullOrEmpty == false) {
       items = contribute.items;
-      // if (_ctr.ugcSeasonCount != null) {
-      //   int currentSeasonCount =
-      //       items!.where((item) => item.param == 'season_video').length;
-      //   if (currentSeasonCount < _ctr.ugcSeasonCount!) {
-      //     items!.add(
-      //       Item(
-      //         param: 'ugcSeason',
-      //         title: '全部合集/列表',
-      //       ),
-      //     );
-      //   }
-      // }
-      // show if exist
-      if (_ctr.hasSeasonOrSeries == true) {
-        items!.add(
-          Item(
-            param: 'ugcSeason',
-            title: '全部合集/列表',
-          ),
+      if (contribute.items!.length > 1) {
+        // show if exist
+        if (_ctr.hasSeasonOrSeries == true) {
+          items!.add(
+            Item(
+              param: 'ugcSeason',
+              title: '全部合集/列表',
+            ),
+          );
+        }
+        tabs = items!.map((item) => Tab(text: item.title)).toList();
+        tabController = TabController(
+          vsync: this,
+          length: items!.length,
+          initialIndex: max(0, initialIndex ?? 0),
         );
       }
-      tabs = items!.map((item) => Tab(text: item.title)).toList();
-      tabController = TabController(
-        vsync: this,
-        length: items!.length,
-        initialIndex: max(0, initialIndex ?? 0),
-      );
     }
   }
 

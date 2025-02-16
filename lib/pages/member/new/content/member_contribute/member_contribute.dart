@@ -77,57 +77,54 @@ class _MemberContributeState extends State<MemberContribute>
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _controller.tabController,
-                  children: _controller.items!
-                      .map(
-                        (item) => switch (item.param) {
-                          'video' => MemberVideo(
-                              type: ContributeType.video,
-                              heroTag: widget.heroTag,
-                              mid: widget.mid,
-                              title: item.title,
-                            ),
-                          'charging_video' => MemberVideo(
-                              type: ContributeType.charging,
-                              heroTag: widget.heroTag,
-                              mid: widget.mid,
-                              title: item.title,
-                            ),
-                          'article' => MemberArticle(
-                              heroTag: widget.heroTag,
-                              mid: widget.mid,
-                            ),
-                          'audio' => MemberAudio(heroTag: widget.heroTag),
-                          'season_video' => MemberVideo(
-                              type: ContributeType.season,
-                              heroTag: widget.heroTag,
-                              mid: widget.mid,
-                              seasonId: item.seasonId,
-                              title: item.title,
-                            ),
-                          'series' => MemberVideo(
-                              type: ContributeType.series,
-                              heroTag: widget.heroTag,
-                              mid: widget.mid,
-                              seriesId: item.seriesId,
-                              title: item.title,
-                            ),
-                          'ugcSeason' => SeasonSeriesPage(
-                              mid: widget.mid,
-                              heroTag: widget.heroTag,
-                            ),
-                          _ => Center(child: Text(item.title!))
-                        },
-                      )
-                      .toList(),
+                  children: _controller.items!.map(_getPageFromType).toList(),
                 ),
               ),
             ],
           )
-        : MemberVideo(
-            type: ContributeType.video,
-            heroTag: widget.heroTag,
-            mid: widget.mid,
-            title: '视频',
-          );
+        : _controller.items?.isNotEmpty == true
+            ? _getPageFromType(_controller.items!.first)
+            : const SizedBox.shrink();
+  }
+
+  Widget _getPageFromType(item) {
+    return switch (item.param) {
+      'video' => MemberVideo(
+          type: ContributeType.video,
+          heroTag: widget.heroTag,
+          mid: widget.mid,
+          title: item.title,
+        ),
+      'charging_video' => MemberVideo(
+          type: ContributeType.charging,
+          heroTag: widget.heroTag,
+          mid: widget.mid,
+          title: item.title,
+        ),
+      'article' => MemberArticle(
+          heroTag: widget.heroTag,
+          mid: widget.mid,
+        ),
+      'audio' => MemberAudio(heroTag: widget.heroTag),
+      'season_video' => MemberVideo(
+          type: ContributeType.season,
+          heroTag: widget.heroTag,
+          mid: widget.mid,
+          seasonId: item.seasonId,
+          title: item.title,
+        ),
+      'series' => MemberVideo(
+          type: ContributeType.series,
+          heroTag: widget.heroTag,
+          mid: widget.mid,
+          seriesId: item.seriesId,
+          title: item.title,
+        ),
+      'ugcSeason' => SeasonSeriesPage(
+          mid: widget.mid,
+          heroTag: widget.heroTag,
+        ),
+      _ => Center(child: Text(item.title!))
+    };
   }
 }
