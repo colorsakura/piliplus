@@ -822,8 +822,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               ],
             );
           }
-          final double videoWidth =
+          double videoWidth =
               max(context.height / context.width * 1.04, 1 / 2) * context.width;
+          if (context.width >= 560) {
+            videoWidth = min(videoWidth, context.width - 280);
+          }
           final double videoHeight = videoWidth * 9 / 16;
           return Row(
             children: [
