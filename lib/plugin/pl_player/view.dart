@@ -1110,12 +1110,12 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         // 头部、底部控制条
         Obx(
           () => Positioned.fill(
-            child: Column(
-              children: [
-                if (widget.headerControl != null ||
-                    plPlayerController.headerControl != null)
-                  ClipRect(
-                    child: AppBarAni(
+            child: ClipRect(
+              child: Column(
+                children: [
+                  if (widget.headerControl != null ||
+                      plPlayerController.headerControl != null)
+                    AppBarAni(
                       controller: animationController,
                       visible: !plPlayerController.controlsLock.value &&
                           plPlayerController.showControls.value,
@@ -1123,21 +1123,21 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       child: widget.headerControl ??
                           plPlayerController.headerControl!,
                     ),
-                  ),
-                const Spacer(),
-                if (plPlayerController.showControls.value)
-                  AppBarAni(
-                    controller: animationController,
-                    visible: !plPlayerController.controlsLock.value &&
-                        plPlayerController.showControls.value,
-                    position: 'bottom',
-                    child: widget.bottomControl ??
-                        BottomControl(
-                          controller: plPlayerController,
-                          buildBottomControl: buildBottomControl,
-                        ),
-                  ),
-              ],
+                  const Spacer(),
+                  if (plPlayerController.showControls.value)
+                    AppBarAni(
+                      controller: animationController,
+                      visible: !plPlayerController.controlsLock.value &&
+                          plPlayerController.showControls.value,
+                      position: 'bottom',
+                      child: widget.bottomControl ??
+                          BottomControl(
+                            controller: plPlayerController,
+                            buildBottomControl: buildBottomControl,
+                          ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
