@@ -1,3 +1,4 @@
+import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/pages/about/index.dart';
 import 'package:PiliPlus/pages/setting/extra_setting.dart';
 import 'package:PiliPlus/pages/setting/play_setting.dart';
@@ -203,15 +204,20 @@ class _SettingPageState extends State<SettingPage> {
                               ),
                             ),
                           ),
-                          // TextButton(
-                          //   onPressed: () async {
-                          //     await LoginUtils.onLogout();
-                          //     _isLogin.value = false;
-                          //     SmartDialog.dismiss();
-                          //     Get.back();
-                          //   },
-                          //   child: const Text('仅登出'),
-                          // ),
+                          if (BuildConfig.isDebug)
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                                _isLogin.value = false;
+                                LoginUtils.onLogout();
+                              },
+                              child: Text(
+                                '仅登出',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                            ),
                           TextButton(
                             onPressed: () async {
                               SmartDialog.showLoading();
