@@ -39,7 +39,13 @@ class _SelfSizedHorizontalListState extends State<SelfSizedHorizontalList> {
       WidgetsBinding.instance.addPostFrameCallback((v) => setState(() {}));
     }
     if (widget.itemCount == 0) return const SizedBox();
-    if (isInit) return Container(key: infoKey, child: widget.childBuilder(0));
+    if (isInit) {
+      return Container(
+        key: infoKey,
+        padding: widget.padding,
+        child: widget.childBuilder(0),
+      );
+    }
 
     return SizedBox(
       height: height,

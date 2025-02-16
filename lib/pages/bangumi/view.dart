@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
+import 'package:PiliPlus/pages/bangumi/pgc_index/pgc_index_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -128,13 +129,68 @@ class _BangumiPageState extends State<BangumiPage>
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
+              padding: const EdgeInsets.only(
+                top: 10,
+                bottom: 10,
+                left: 16,
+                right: 10,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '推荐',
                     style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (widget.tabType == TabType.bangumi) {
+                        Get.to(PgcIndexPage());
+                      } else {
+                        List titles = const ['全部', '电影', '电视剧', '纪录片', '综艺'];
+                        List types = const [102, 2, 5, 3, 7];
+                        Get.to(
+                          Scaffold(
+                            appBar: AppBar(title: const Text('索引')),
+                            body: DefaultTabController(
+                              length: types.length,
+                              child: Column(
+                                children: [
+                                  TabBar(
+                                      tabs: titles
+                                          .map((title) => Tab(text: title))
+                                          .toList()),
+                                  Expanded(
+                                    child: TabBarView(
+                                        children: types
+                                            .map((type) =>
+                                                PgcIndexPage(indexType: type))
+                                            .toList()),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '查看更多',
+                          strutStyle: StrutStyle(leading: 0, height: 1),
+                          style: TextStyle(
+                            height: 1,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

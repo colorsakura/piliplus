@@ -718,4 +718,8 @@ class Api {
   /// 我的关注 - 正在直播
   static const String getFollowingLive =
       '${HttpString.liveBaseUrl}/xlive/web-ucenter/user/following';
+
+  static const String pgcIndexCondition = '/pgc/season/index/condition';
+
+  static const String pgcIndexResult = '/pgc/season/index/result';
 }
