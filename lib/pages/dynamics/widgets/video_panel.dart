@@ -1,5 +1,4 @@
 // 视频or合集
-import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -159,7 +158,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
         if (richNodes != null) Text.rich(richNodes),
         const SizedBox(height: 6),
       ],
-      if (item is ItemOrigModel)
+      if (item.isForwarded == true)
         buildCover()
       else
         Padding(

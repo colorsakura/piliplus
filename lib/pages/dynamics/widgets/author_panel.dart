@@ -1,6 +1,5 @@
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/http/index.dart';
-import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -98,7 +97,7 @@ class AuthorPanel extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Text(item is ItemOrigModel
+                        Text(item.isForwarded == true
                             ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
                             : item.modules.moduleAuthor.pubTime),
                         if (item.modules.moduleAuthor.pubTime != '' &&

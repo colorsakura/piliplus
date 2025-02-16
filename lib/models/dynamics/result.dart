@@ -35,44 +35,20 @@ class DynamicItemModel {
   Map? basic;
   dynamic idStr;
   ItemModulesModel? modules;
-  ItemOrigModel? orig;
+  DynamicItemModel? orig;
   String? type;
   bool? visible;
+  bool? isForwarded;
 
   DynamicItemModel.fromJson(Map<String, dynamic> json) {
     basic = json['basic'];
     idStr = json['id_str'];
     modules = ItemModulesModel.fromJson(json['modules']);
-    orig = json['orig'] != null ? ItemOrigModel.fromJson(json['orig']) : null;
+    orig =
+        json['orig'] != null ? DynamicItemModel.fromJson(json['orig']) : null;
+    orig?.isForwarded = true;
     type = json['type'];
     visible = json['visible'];
-  }
-}
-
-class ItemOrigModel {
-  ItemOrigModel({
-    this.basic,
-    this.isStr,
-    this.modules,
-    this.type,
-    this.visible,
-    this.idStr,
-  });
-
-  Map? basic;
-  String? isStr;
-  ItemModulesModel? modules;
-  String? type;
-  bool? visible;
-  dynamic idStr;
-
-  ItemOrigModel.fromJson(Map<String, dynamic> json) {
-    basic = json['basic'];
-    isStr = json['is_str'];
-    modules = ItemModulesModel.fromJson(json['modules']);
-    type = json['type'];
-    visible = json['visible'];
-    idStr = json['id_str'];
   }
 }
 

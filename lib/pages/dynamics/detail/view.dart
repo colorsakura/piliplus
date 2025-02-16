@@ -474,15 +474,19 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                                 _dynamicDetailController
                                                         .item
                                                         .modules
-                                                        .moduleStat
-                                                        .forward
+                                                        ?.moduleStat
+                                                        ?.forward
                                                         ?.count ??
                                                     '0') ??
                                             0;
+                                        _dynamicDetailController.item.modules
+                                            ?.moduleStat ??= ModuleStatModel();
+                                        _dynamicDetailController.item.modules!
+                                            .moduleStat?.forward ??= ForWard();
                                         _dynamicDetailController
                                             .item
-                                            .modules
-                                            .moduleStat
+                                            .modules!
+                                            .moduleStat!
                                             .forward!
                                             .count = (count + 1).toString();
                                         if (btnContext.mounted) {
@@ -507,12 +511,12 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                 ),
                                 label: Text(
                                   _dynamicDetailController.item.modules
-                                              .moduleStat.forward!.count !=
+                                              ?.moduleStat?.forward?.count !=
                                           null
                                       ? Utils.numFormat(_dynamicDetailController
                                           .item
-                                          .modules
-                                          .moduleStat
+                                          .modules!
+                                          .moduleStat!
                                           .forward!
                                           .count)
                                       : '转发',
@@ -553,17 +557,24 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   },
                                 ),
                                 icon: Icon(
-                                  _dynamicDetailController
-                                          .item.modules.moduleStat.like!.status!
+                                  _dynamicDetailController.item.modules
+                                              ?.moduleStat?.like?.status ==
+                                          true
                                       ? FontAwesomeIcons.solidThumbsUp
                                       : FontAwesomeIcons.thumbsUp,
                                   size: 16,
-                                  color: _dynamicDetailController
-                                          .item.modules.moduleStat.like!.status!
+                                  color: _dynamicDetailController.item.modules
+                                              ?.moduleStat?.like?.status ==
+                                          true
                                       ? Theme.of(context).colorScheme.primary
                                       : Theme.of(context).colorScheme.outline,
                                   semanticLabel: _dynamicDetailController
-                                          .item.modules.moduleStat.like!.status!
+                                              .item
+                                              .modules
+                                              ?.moduleStat
+                                              ?.like
+                                              ?.status ==
+                                          true
                                       ? "已赞"
                                       : "点赞",
                                 ),
@@ -582,15 +593,24 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                   },
                                   child: Text(
                                     _dynamicDetailController.item.modules
-                                                .moduleStat.like!.count !=
+                                                ?.moduleStat?.like?.count !=
                                             null
                                         ? Utils.numFormat(
-                                            _dynamicDetailController.item
-                                                .modules.moduleStat.like!.count)
+                                            _dynamicDetailController
+                                                .item
+                                                .modules!
+                                                .moduleStat!
+                                                .like!
+                                                .count)
                                         : '点赞',
                                     style: TextStyle(
-                                      color: _dynamicDetailController.item
-                                              .modules.moduleStat.like!.status!
+                                      color: _dynamicDetailController
+                                                  .item
+                                                  .modules
+                                                  ?.moduleStat
+                                                  ?.like
+                                                  ?.status ==
+                                              true
                                           ? Theme.of(context)
                                               .colorScheme
                                               .primary
