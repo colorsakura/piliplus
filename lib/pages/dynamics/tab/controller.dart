@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -41,11 +42,14 @@ class DynamicsTabController extends CommonController {
     return true;
   }
 
+  late final antiGoodsDyn = GStorage.antiGoodsDyn;
+
   @override
   Future<LoadingState> customGetData() => DynamicsHttp.followDynamic(
         type: dynamicsType == "up" ? "all" : dynamicsType,
         offset: offset,
         mid: dynamicsType == "up" ? mid : -1,
+        antiGoodsDyn: antiGoodsDyn,
       );
 
   Future onRemove(dynamic dynamicId) async {

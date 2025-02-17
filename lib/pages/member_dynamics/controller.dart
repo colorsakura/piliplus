@@ -4,12 +4,14 @@ import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class MemberDynamicsController extends CommonController {
   MemberDynamicsController(this.mid);
   int mid;
   String offset = '';
+  late final antiGoodsDyn = GStorage.antiGoodsDyn;
 
   @override
   void onInit() async {
@@ -47,6 +49,7 @@ class MemberDynamicsController extends CommonController {
   Future<LoadingState> customGetData() => MemberHttp.memberDynamic(
         offset: offset,
         mid: mid,
+        antiGoodsDyn: antiGoodsDyn,
       );
 
   Future onRemove(dynamicId) async {

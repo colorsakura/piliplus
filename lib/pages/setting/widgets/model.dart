@@ -1969,6 +1969,19 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '屏蔽带货动态',
+        leading: Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(Icons.shopping_bag_outlined, size: 14),
+            Icon(Icons.not_interested),
+          ],
+        ),
+        setKey: SettingBoxKey.antiGoodsDyn,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

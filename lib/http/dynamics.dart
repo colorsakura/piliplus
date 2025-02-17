@@ -9,6 +9,7 @@ class DynamicsHttp {
     String? type,
     String? offset,
     int? mid,
+    required bool antiGoodsDyn,
   }) async {
     Map<String, dynamic> data = {
       'type': type ?? 'all',
@@ -24,6 +25,11 @@ class DynamicsHttp {
     if (res.data['code'] == 0) {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+        if (antiGoodsDyn) {
+          data.items?.removeWhere((item) =>
+              item.modules?.moduleDynamic?.additional?.type ==
+              'ADDITIONAL_TYPE_GOODS');
+        }
         return LoadingState.success(data);
       } catch (err) {
         return LoadingState.error(err.toString());

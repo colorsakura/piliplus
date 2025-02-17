@@ -402,7 +402,11 @@ class MemberHttp {
   }
 
   // 用户动态
-  static Future<LoadingState> memberDynamic({String? offset, int? mid}) async {
+  static Future<LoadingState> memberDynamic({
+    String? offset,
+    int? mid,
+    required bool antiGoodsDyn,
+  }) async {
     String dmImgStr = Utils.base64EncodeRandomString(16, 64);
     String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
     Map params = await WbiSign().makSign({
@@ -421,7 +425,13 @@ class MemberHttp {
     });
     var res = await Request().get(Api.memberDynamic, queryParameters: params);
     if (res.data['code'] == 0) {
-      return LoadingState.success(DynamicsDataModel.fromJson(res.data['data']));
+      DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
+      if (antiGoodsDyn) {
+        data.items?.removeWhere((item) =>
+            item.modules?.moduleDynamic?.additional?.type ==
+            'ADDITIONAL_TYPE_GOODS');
+      }
+      return LoadingState.success(data);
     } else {
       Map errMap = {
         -352: '风控校验失败，请检查登录状态',
