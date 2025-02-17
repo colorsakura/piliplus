@@ -121,8 +121,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
     if (videoDetailController.showReply) {
       _videoReplyController = Get.put(
-          VideoReplyController(videoDetailController.oid.value, '0', '1'),
-          tag: heroTag);
+        VideoReplyController(aid: videoDetailController.oid.value),
+        tag: heroTag,
+      );
     }
     videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
     _listenerDetail = videoIntroController.videoDetail.listen((value) {

@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,9 +28,9 @@ class VideoReplyReplyController extends ReplyController
   bool hasRoot = false;
   int? id;
   // 视频aid 请求时使用的oid
-  int? oid;
+  int oid;
   // rpid 请求楼中楼回复
-  int? rpid;
+  int rpid;
   ReplyType replyType; // = ReplyType.video;
 
   int? upMid;
@@ -43,30 +44,14 @@ class VideoReplyReplyController extends ReplyController
   late final horizontalPreview = GStorage.horizontalPreview;
 
   @override
+  dynamic get sourceId =>
+      replyType == ReplyType.video ? IdUtils.av2bv(oid) : oid;
+
+  @override
   void onInit() {
     super.onInit();
     mode.value = Mode.MAIN_LIST_TIME;
     queryData();
-  }
-
-  @override
-  Future queryData([bool isRefresh = true]) async {
-    // if (GlobalData().grpcReply &&
-    //     !isDialogue &&
-    //     currentPage == 1 &&
-    //     !hasRoot &&
-    //     firstFloor == null &&
-    //     rpid != null) {
-    //   await GrpcRepo.replyInfo(
-    //     rpid: rpid!,
-    //   ).then((res) {
-    //     if (res['status'] && (res['data']?.mid ?? -1) > 0) {
-    //       firstFloor = res['data'];
-    //       hasRoot = true;
-    //     }
-    //   });
-    // }
-    return super.queryData(isRefresh);
   }
 
   @override
@@ -177,8 +162,8 @@ class VideoReplyReplyController extends ReplyController
   Future<LoadingState> customGetData() => isDialogue
       ? ReplyHttp.dialogListGrpc(
           type: replyType.index,
-          oid: oid!,
-          root: rpid!,
+          oid: oid,
+          root: rpid,
           rpid: dialog!,
           cursor: CursorReq(
             next: cursor?.next,
@@ -190,8 +175,8 @@ class VideoReplyReplyController extends ReplyController
       : GlobalData().grpcReply
           ? ReplyHttp.replyReplyListGrpc(
               type: replyType.index,
-              oid: oid!,
-              root: rpid!,
+              oid: oid,
+              root: rpid,
               rpid: id ?? 0,
               cursor: CursorReq(
                 next: cursor?.next,
@@ -202,8 +187,8 @@ class VideoReplyReplyController extends ReplyController
             )
           : ReplyHttp.replyReplyList(
               isLogin: isLogin,
-              oid: oid!,
-              root: rpid!,
+              oid: oid,
+              root: rpid,
               pageNum: currentPage,
               type: replyType.index,
               banWordForReply: banWordForReply,

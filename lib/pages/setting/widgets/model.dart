@@ -42,6 +42,7 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -1965,6 +1966,14 @@ List<SettingsModel> get extraSettings => [
           ],
         ),
         setKey: SettingBoxKey.enableCommAntifraud,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '使用「哔哩发评反诈」检查评论',
+        subtitle: '仅对Android生效',
+        leading: Icon(FontAwesomeIcons.b),
+        setKey: SettingBoxKey.biliSendCommAntifraud,
         defaultVal: false,
       ),
       SettingsModel(

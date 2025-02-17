@@ -27,6 +27,9 @@ class HtmlRenderController extends ReplyController {
   late final horizontalPreview = GStorage.horizontalPreview;
 
   @override
+  dynamic get sourceId => id;
+
+  @override
   void onInit() {
     super.onInit();
     id = Get.parameters['id']!;

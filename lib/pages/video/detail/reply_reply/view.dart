@@ -22,8 +22,8 @@ class VideoReplyReplyPanel extends StatefulWidget {
   const VideoReplyReplyPanel({
     super.key,
     this.id,
-    this.oid,
-    this.rpid,
+    required this.oid,
+    required this.rpid,
     this.dialog,
     this.firstFloor,
     this.source,
@@ -34,8 +34,8 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.onDismissed,
   });
   final int? id;
-  final int? oid;
-  final int? rpid;
+  final int oid;
+  final int rpid;
   final int? dialog;
   final dynamic firstFloor;
   final String? source;
@@ -366,12 +366,20 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
               LoadingState.success(list);
           if (_videoReplyReplyController.enableCommAntifraud && mounted) {
             _videoReplyReplyController.checkReply(
-              context,
-              oid,
-              root,
-              widget.replyType.index,
-              replyInfo.id.toInt(),
-              replyInfo.content.message,
+              context: context,
+              oid: oid,
+              rpid: root,
+              replyType: widget.replyType.index,
+              replyId: replyInfo.id.toInt(),
+              message: replyInfo.content.message,
+              //
+              root: replyInfo.root.toInt(),
+              parent: replyInfo.parent.toInt(),
+              ctime: replyInfo.ctime.toInt(),
+              pictures: replyInfo.content.pictures
+                  .map((item) => item.toProto3Json())
+                  .toList(),
+              mid: replyInfo.mid.toInt(),
             );
           }
         } else {
@@ -386,12 +394,18 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
               LoadingState.success(list);
           if (_videoReplyReplyController.enableCommAntifraud && mounted) {
             _videoReplyReplyController.checkReply(
-              context,
-              oid,
-              root,
-              widget.replyType.index,
-              replyInfo.rpid ?? 0,
-              replyInfo.content?.message ?? '',
+              context: context,
+              oid: oid,
+              rpid: root,
+              replyType: widget.replyType.index,
+              replyId: replyInfo.rpid ?? 0,
+              message: replyInfo.content?.message ?? '',
+              //
+              root: replyInfo.root,
+              parent: replyInfo.parent,
+              ctime: replyInfo.ctime,
+              pictures: replyInfo.content?.pictures,
+              mid: replyInfo.mid,
             );
           }
         }

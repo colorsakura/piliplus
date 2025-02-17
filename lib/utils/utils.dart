@@ -310,8 +310,11 @@ class Utils {
 
     /// 点击评论action 直接查看评论
     if (action == 'comment') {
-      Utils.toDupNamed('/dynamicDetail',
-          arguments: {'item': item, 'floor': floor, 'action': action});
+      Utils.toDupNamed('/dynamicDetail', arguments: {
+        'item': item,
+        'floor': floor,
+        'action': action,
+      });
       return;
     }
 

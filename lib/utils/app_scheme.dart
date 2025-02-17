@@ -90,9 +90,8 @@ class PiliScheme {
               // to check
               // to video reply
               String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
-              if (oid != null) {
-                int? rpid =
-                    int.tryParse(uri.queryParameters['comment_root_id']!);
+              int? rpid = int.tryParse(uri.queryParameters['comment_root_id']!);
+              if (oid != null && rpid != null) {
                 Get.to(
                   () => Scaffold(
                     resizeToAvoidBottomInset: false,
@@ -233,9 +232,9 @@ class PiliScheme {
             if (path.startsWith("/detail/")) {
               if (uri.queryParameters['comment_root_id'] != null) {
                 String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
-                if (oid != null) {
-                  int? rpid =
-                      int.tryParse(uri.queryParameters['comment_root_id']!);
+                int? rpid =
+                    int.tryParse(uri.queryParameters['comment_root_id']!);
+                if (oid != null && rpid != null) {
                   Get.to(
                     () => Scaffold(
                       resizeToAvoidBottomInset: false,
@@ -252,7 +251,7 @@ class PiliScheme {
                         ],
                       ),
                       body: VideoReplyReplyPanel(
-                          oid: int.tryParse(oid),
+                          oid: int.parse(oid),
                           rpid: rpid,
                           source: 'routePush',
                           replyType: ReplyType.dynamics,

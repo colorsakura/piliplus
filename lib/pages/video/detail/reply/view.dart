@@ -14,12 +14,11 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'controller.dart';
 
 class VideoReplyPanel extends StatefulWidget {
   final String? bvid;
-  final int? oid;
+  final int oid;
   final int rpid;
   final String? replyLevel;
   final String heroTag;
@@ -31,7 +30,7 @@ class VideoReplyPanel extends StatefulWidget {
   const VideoReplyPanel({
     super.key,
     this.bvid,
-    this.oid,
+    required this.oid,
     this.rpid = 0,
     this.replyLevel,
     required this.heroTag,
@@ -65,13 +64,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     // heroTag = Get.arguments['heroTag'];
     heroTag = widget.heroTag;
     replyLevel = widget.replyLevel ?? '1';
-    if (replyLevel == '2') {
-      _videoReplyController = Get.put(
-          VideoReplyController(widget.oid, widget.rpid.toString(), replyLevel),
-          tag: widget.rpid.toString());
-    } else {
-      _videoReplyController = Get.find<VideoReplyController>(tag: heroTag);
-    }
+    _videoReplyController = Get.find<VideoReplyController>(tag: heroTag);
 
     fabAnimationCtr = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
@@ -196,11 +189,9 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 heroTag: null,
                 onPressed: () {
                   feedBack();
-                  dynamic oid = _videoReplyController.aid ??
-                      IdUtils.bv2av(Get.parameters['bvid']!);
                   _videoReplyController.onReply(
                     context,
-                    oid: oid,
+                    oid: _videoReplyController.aid,
                     replyType: ReplyType.video,
                   );
                 },

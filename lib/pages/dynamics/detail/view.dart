@@ -27,7 +27,6 @@ import 'package:PiliPlus/pages/dynamics/detail/index.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../utils/grid.dart';
@@ -430,11 +429,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         heroTag: null,
                         onPressed: () {
                           feedBack();
-                          dynamic oid = _dynamicDetailController.oid ??
-                              IdUtils.bv2av(Get.parameters['bvid']!);
                           _dynamicDetailController.onReply(
                             context,
-                            oid: oid,
+                            oid: _dynamicDetailController.oid,
                             replyType: ReplyType.values[replyType],
                           );
                         },

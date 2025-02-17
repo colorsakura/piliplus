@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
+import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
@@ -8,6 +13,7 @@ import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -33,8 +39,14 @@ abstract class ReplyController extends CommonController {
   late bool hasUpTop = false;
 
   late final banWordForReply = GStorage.banWordForReply;
-  late final enableCommAntifraud = GStorage.enableCommAntifraud;
   late final antiGoodsReply = GStorage.antiGoodsReply;
+
+  // comment antifraud
+  late final _enableCommAntifraud = GStorage.enableCommAntifraud;
+  late final _biliSendCommAntifraud = GStorage.biliSendCommAntifraud;
+  bool get enableCommAntifraud =>
+      _enableCommAntifraud || _biliSendCommAntifraud;
+  dynamic get sourceId;
 
   @override
   void onInit() {
@@ -210,14 +222,22 @@ abstract class ReplyController extends CommonController {
             loadingState.value = LoadingState.success(response);
             if (enableCommAntifraud && context.mounted) {
               checkReply(
-                context,
-                oid ?? replyItem.oid.toInt(),
-                replyItem?.id.toInt(),
-                replyItem?.type.toInt() ??
+                context: context,
+                oid: oid ?? replyItem.oid.toInt(),
+                rpid: replyItem?.id.toInt(),
+                replyType: replyItem?.type.toInt() ??
                     replyType?.index ??
                     ReplyType.video.index,
-                replyInfo.id.toInt(),
-                replyInfo.content.message,
+                replyId: replyInfo.id.toInt(),
+                message: replyInfo.content.message,
+                //
+                root: replyInfo.root.toInt(),
+                parent: replyInfo.parent.toInt(),
+                ctime: replyInfo.ctime.toInt(),
+                pictures: replyInfo.content.pictures
+                    .map((item) => item.toProto3Json())
+                    .toList(),
+                mid: replyInfo.mid.toInt(),
               );
             }
           } else {
@@ -236,14 +256,20 @@ abstract class ReplyController extends CommonController {
             loadingState.value = LoadingState.success(response);
             if (enableCommAntifraud && context.mounted) {
               checkReply(
-                context,
-                oid ?? replyItem.oid,
-                replyItem?.rpid,
-                replyItem?.type.toInt() ??
+                context: context,
+                oid: oid ?? replyItem.oid,
+                rpid: replyItem?.rpid,
+                replyType: replyItem?.type.toInt() ??
                     replyType?.index ??
                     ReplyType.video.index,
-                replyInfo.rpid ?? 0,
-                replyInfo.content?.message ?? '',
+                replyId: replyInfo.rpid ?? 0,
+                message: replyInfo.content?.message ?? '',
+                //
+                root: replyInfo.root,
+                parent: replyInfo.parent,
+                ctime: replyInfo.ctime,
+                pictures: replyInfo.content?.pictures,
+                mid: replyInfo.mid,
               );
             }
           }
@@ -291,14 +317,56 @@ abstract class ReplyController extends CommonController {
   }
 
   // ref https://github.com/freedom-introvert/biliSendCommAntifraud
-  void checkReply(
-    BuildContext context,
-    dynamic oid,
-    dynamic rpid,
-    int replyType,
-    int replyId,
-    String message,
-  ) async {
+  void checkReply({
+    required BuildContext context,
+    required dynamic oid,
+    required dynamic rpid,
+    required int replyType,
+    required int replyId,
+    required String message,
+    dynamic root,
+    dynamic parent,
+    dynamic ctime,
+    dynamic pictures,
+    dynamic mid,
+  }) async {
+    await Future.delayed(const Duration(seconds: 5));
+
+    // biliSendCommAntifraud
+    if (_biliSendCommAntifraud && Platform.isAndroid) {
+      try {
+        List<Cookie> cookies = await Request.cookieManager.cookieJar
+            .loadForRequest(Uri.parse(HttpString.apiBaseUrl));
+        final List<String> cookieString = cookies
+            .map((Cookie cookie) => '${cookie.name}=${cookie.value}')
+            .toList();
+        AndroidIntent intent = AndroidIntent(
+          package: 'icu.freedomIntrovert.biliSendCommAntifraud',
+          componentName:
+              'icu.freedomIntrovert.biliSendCommAntifraud.ByXposedLaunchedActivity',
+          arguments: {
+            'action': 0,
+            'oid': oid,
+            'type': replyType,
+            'rpid': replyId,
+            'root': root,
+            'parent': parent,
+            'ctime': ctime,
+            'comment_text': message,
+            if (pictures.isNotEmpty == true) 'pictures': jsonEncode(pictures),
+            'source_id': sourceId,
+            'uid': mid,
+            'cookies': cookieString,
+          },
+        );
+        intent.launch();
+      } catch (e) {
+        debugPrint('biliSendCommAntifraud: $e');
+      }
+      return;
+    }
+
+    // CommAntifraud
     void showReplyCheckResult(String message) {
       showDialog(
         context: context,
@@ -309,7 +377,6 @@ abstract class ReplyController extends CommonController {
       );
     }
 
-    await Future.delayed(const Duration(seconds: 5));
     if (context.mounted.not) return;
     // root reply
     if (rpid == null) {
