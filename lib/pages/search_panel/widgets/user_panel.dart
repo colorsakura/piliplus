@@ -126,11 +126,9 @@ Widget searchUserPanel(context, searchPanelCtr, LoadingState loadingState) {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    Text('粉丝：${i.fans} ', style: style),
-                                    Text(' 视频：${i.videos}', style: style)
-                                  ],
+                                Text(
+                                  '粉丝：${Utils.numFormat(i.fans)}  视频：${Utils.numFormat(i.videos)}',
+                                  style: style,
                                 ),
                                 if (i.officialVerify['desc'] != '')
                                   Text(
