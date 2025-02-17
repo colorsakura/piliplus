@@ -83,6 +83,7 @@ class HtmlRenderController extends ReplyController {
             mode: mode.value,
           ),
           banWordForReply: banWordForReply,
+          antiGoodsReply: antiGoodsReply,
         )
       : ReplyHttp.replyList(
           isLogin: isLogin,
@@ -92,5 +93,6 @@ class HtmlRenderController extends ReplyController {
           sort: sortType.value.index,
           page: currentPage,
           banWordForReply: banWordForReply,
+          antiGoodsReply: antiGoodsReply,
         );
 }

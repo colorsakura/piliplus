@@ -34,6 +34,7 @@ abstract class ReplyController extends CommonController {
 
   late final banWordForReply = GStorage.banWordForReply;
   late final enableCommAntifraud = GStorage.enableCommAntifraud;
+  late final antiGoodsReply = GStorage.antiGoodsReply;
 
   @override
   void onInit() {
@@ -321,6 +322,7 @@ abstract class ReplyController extends CommonController {
         sort: ReplySortType.time.index,
         page: 1,
         banWordForReply: '',
+        antiGoodsReply: false,
       );
       if (context.mounted.not) return;
       if (res is Error) {
@@ -348,6 +350,7 @@ abstract class ReplyController extends CommonController {
             pageNum: 1,
             type: replyType,
             banWordForReply: '',
+            antiGoodsReply: false,
           );
           if (context.mounted.not) return;
           if (res1 is Error) {
@@ -369,6 +372,7 @@ abstract class ReplyController extends CommonController {
               type: replyType,
               banWordForReply: '',
               isCheck: true,
+              antiGoodsReply: false,
             );
             if (context.mounted.not) return;
             if (res2 is Error) {
@@ -405,6 +409,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
           type: replyType,
           banWordForReply: '',
           isCheck: true,
+          antiGoodsReply: false,
         );
         if (res3 is Error) {
           break;
@@ -439,6 +444,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
           type: replyType,
           banWordForReply: '',
           isCheck: true,
+          antiGoodsReply: false,
         );
         if (res4 is Error) {
           break;

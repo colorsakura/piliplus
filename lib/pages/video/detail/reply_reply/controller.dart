@@ -185,6 +185,7 @@ class VideoReplyReplyController extends ReplyController
             mode: mode.value,
           ),
           banWordForReply: banWordForReply,
+          antiGoodsReply: antiGoodsReply,
         )
       : GlobalData().grpcReply
           ? ReplyHttp.replyReplyListGrpc(
@@ -197,6 +198,7 @@ class VideoReplyReplyController extends ReplyController
                 mode: mode.value,
               ),
               banWordForReply: banWordForReply,
+              antiGoodsReply: antiGoodsReply,
             )
           : ReplyHttp.replyReplyList(
               isLogin: isLogin,
@@ -205,6 +207,7 @@ class VideoReplyReplyController extends ReplyController
               pageNum: currentPage,
               type: replyType.index,
               banWordForReply: banWordForReply,
+              antiGoodsReply: antiGoodsReply,
             );
 
   @override

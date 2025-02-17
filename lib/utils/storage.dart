@@ -375,6 +375,9 @@ class GStorage {
   static bool get antiGoodsDyn =>
       GStorage.setting.get(SettingBoxKey.antiGoodsDyn, defaultValue: false);
 
+  static bool get antiGoodsReply =>
+      GStorage.setting.get(SettingBoxKey.antiGoodsReply, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -609,6 +612,7 @@ class SettingBoxKey {
       coinWithLike = 'coinWithLike',
       isPureBlackTheme = 'isPureBlackTheme',
       antiGoodsDyn = 'antiGoodsDyn',
+      antiGoodsReply = 'antiGoodsReply',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

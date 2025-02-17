@@ -1,6 +1,8 @@
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
 
@@ -20,6 +22,7 @@ class ReplyHttp {
     required int page,
     int sort = 1,
     required String banWordForReply,
+    required bool antiGoodsReply,
   }) async {
     var res = !isLogin
         ? await Request().get(
@@ -81,6 +84,37 @@ class ReplyHttp {
           });
         }
       }
+
+      // antiGoodsReply
+      if (antiGoodsReply) {
+        // topReplies
+        if (replyData.topReplies?.isNotEmpty == true) {
+          replyData.topReplies!.removeWhere((item) {
+            bool hasMatch = needRemove(item);
+            // remove subreplies
+            if (hasMatch.not) {
+              if (item.replies?.isNotEmpty == true) {
+                item.replies!.removeWhere(needRemove);
+              }
+            }
+            return hasMatch;
+          });
+        }
+
+        // replies
+        if (replyData.replies?.isNotEmpty == true) {
+          replyData.replies!.removeWhere((item) {
+            bool hasMatch = needRemove(item);
+            // remove subreplies
+            if (hasMatch.not) {
+              if (item.replies?.isNotEmpty == true) {
+                item.replies!.removeWhere(needRemove);
+              }
+            }
+            return hasMatch;
+          });
+        }
+      }
       return LoadingState.success(replyData);
     } else {
       return LoadingState.error(res.data['message']);
@@ -92,10 +126,12 @@ class ReplyHttp {
     required int oid,
     required CursorReq cursor,
     required String banWordForReply,
+    required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.mainList(type: type, oid: oid, cursor: cursor);
     if (res['status']) {
       MainListReply mainListReply = res['data'];
+      // keyword filter
       if (banWordForReply.isNotEmpty) {
         // upTop
         if (mainListReply.hasUpTop() &&
@@ -121,10 +157,63 @@ class ReplyHttp {
           });
         }
       }
+
+      // antiGoodsReply
+      if (antiGoodsReply) {
+        // upTop
+        if (mainListReply.hasUpTop() && needRemoveGrpc(mainListReply.upTop)) {
+          mainListReply.clearUpTop();
+        }
+
+        // replies
+        if (mainListReply.replies.isNotEmpty) {
+          mainListReply.replies.removeWhere((item) {
+            bool hasMatch = needRemoveGrpc(item);
+            // remove subreplies
+            if (hasMatch.not) {
+              if (item.replies.isNotEmpty) {
+                item.replies.removeWhere(needRemoveGrpc);
+              }
+            }
+            return hasMatch;
+          });
+        }
+      }
       return LoadingState.success(mainListReply);
     } else {
       return LoadingState.error(res['msg']);
     }
+  }
+
+  // ref BiliRoamingX
+  static bool needRemoveGrpc(ReplyInfo reply) {
+    if ((reply.content.url.isNotEmpty &&
+            reply.content.url.values.any((url) {
+              return url.hasExtra() &&
+                  (url.extra.goodsCmControl == 1 ||
+                      url.extra.goodsItemId != 0 ||
+                      url.extra.goodsPrefetchedCache.isNotEmpty);
+            })) ||
+        reply.content.message.contains(Constants.goodsUrlPrefix)) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool needRemove(ReplyItemModel reply) {
+    try {
+      if ((reply.content?.jumpUrl?.isNotEmpty == true &&
+              reply.content!.jumpUrl!.values.any((url) {
+                return url['extra'] != null &&
+                    (url['extra']['goods_cm_control'] == 1 ||
+                        url['extra']['goods_item_id'] != 0 ||
+                        url['extra']['goods_prefetched_cache'].isNotEmpty);
+              })) ||
+          reply.content?.message?.contains(Constants.goodsUrlPrefix) == true) {
+        return true;
+      }
+    } catch (_) {}
+    return false;
   }
 
   static Future<LoadingState> replyReplyList({
@@ -134,6 +223,7 @@ class ReplyHttp {
     required int pageNum,
     required int type,
     required String banWordForReply,
+    required bool antiGoodsReply,
     bool? isCheck,
   }) async {
     var res = await Request().get(
@@ -157,6 +247,11 @@ class ReplyHttp {
                   .hasMatch(item.content?.message ?? ''));
         }
       }
+      if (antiGoodsReply) {
+        if (replyData.replies?.isNotEmpty == true) {
+          replyData.replies!.removeWhere(needRemove);
+        }
+      }
       return LoadingState.success(replyData);
     } else {
       return LoadingState.error(
@@ -174,6 +269,7 @@ class ReplyHttp {
     required int rpid,
     required CursorReq cursor,
     required String banWordForReply,
+    required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.detailList(
       type: type,
@@ -191,6 +287,11 @@ class ReplyHttp {
                   .hasMatch(item.content.message));
         }
       }
+      if (antiGoodsReply) {
+        if (detailListReply.root.replies.isNotEmpty) {
+          detailListReply.root.replies.removeWhere(needRemoveGrpc);
+        }
+      }
       return LoadingState.success(detailListReply);
     } else {
       return LoadingState.error(res['msg']);
@@ -204,6 +305,7 @@ class ReplyHttp {
     required int rpid,
     required CursorReq cursor,
     required String banWordForReply,
+    required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.dialogList(
       type: type,
@@ -219,6 +321,11 @@ class ReplyHttp {
           dialogListReply.replies.removeWhere((item) =>
               RegExp(banWordForReply, caseSensitive: false)
                   .hasMatch(item.content.message));
+        }
+      }
+      if (antiGoodsReply) {
+        if (dialogListReply.replies.isNotEmpty) {
+          dialogListReply.replies.removeWhere(needRemoveGrpc);
         }
       }
       return LoadingState.success(dialogListReply);

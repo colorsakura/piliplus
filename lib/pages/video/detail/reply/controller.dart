@@ -28,6 +28,7 @@ class VideoReplyController extends ReplyController {
             mode: mode.value,
           ),
           banWordForReply: banWordForReply,
+          antiGoodsReply: antiGoodsReply,
         )
       : ReplyHttp.replyList(
           isLogin: isLogin,
@@ -37,5 +38,6 @@ class VideoReplyController extends ReplyController {
           sort: sortType.value.index,
           page: currentPage,
           banWordForReply: banWordForReply,
+          antiGoodsReply: antiGoodsReply,
         );
 }
