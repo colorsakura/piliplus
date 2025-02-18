@@ -19,6 +19,7 @@ import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
@@ -46,17 +47,44 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
-  static void checkCreatedDyn(id, dynText) async {
-    if (id != null) {
-      dynamic res = await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
-      showDialog(
-        context: Get.context!,
-        builder: (context) => AlertDialog(
-          title: Text('动态检查结果'),
-          content: SelectableText(
-              '${res['status'] ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'} \n\n动态内容: $dynText'),
-        ),
-      );
+  static Future insertCreatedDyn(result) async {
+    try {
+      dynamic id = result['data']['dyn_id'];
+      if (id != null) {
+        await Future.delayed(const Duration(milliseconds: 200));
+        dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+        if (res['status']) {
+          final ctr = Get.find<DynamicsTabController>(tag: 'all');
+          List list = ctr.loadingState.value is Success
+              ? (ctr.loadingState.value as Success).response
+              : <DynamicItemModel>[];
+          list.insert(0, res['data']);
+          ctr.loadingState.value = LoadingState.success(list);
+        }
+      }
+    } catch (e) {
+      debugPrint('create dyn $e');
+    }
+  }
+
+  static Future checkCreatedDyn(result, dynText) async {
+    if (GStorage.enableCreateDynAntifraud) {
+      try {
+        dynamic id = result['data']['dyn_id'];
+        if (id != null) {
+          await Future.delayed(const Duration(milliseconds: 200));
+          dynamic res =
+              await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
+          showDialog(
+            context: Get.context!,
+            builder: (context) => AlertDialog(
+              title: Text('动态检查结果'),
+              content: SelectableText(
+                  '${res['status'] ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'} \n\n动态内容: $dynText'),
+            ),
+          );
+        }
+      } catch (e) {}
     }
   }
 
