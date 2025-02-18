@@ -351,7 +351,7 @@ abstract class ReplyController extends CommonController {
             'ctime': ctime,
             'comment_text': message,
             if (pictures.isNotEmpty == true) 'pictures': jsonEncode(pictures),
-            'source_id': sourceId,
+            'source_id': '$sourceId',
             'uid': mid,
             'cookies': [cookieString],
           },

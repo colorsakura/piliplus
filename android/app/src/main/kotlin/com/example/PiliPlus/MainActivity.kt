@@ -23,36 +23,38 @@ class MainActivity : AudioServiceActivity() {
             if (call.method == "back") {
                 back()
             } else if (call.method == "biliSendCommAntifraud") {
-                val action = call.argument<Int>("action") ?: 0
-                val oid = call.argument<Number>("oid") ?: 0L
-                val type = call.argument<Int>("type") ?: 0
-                val rpid = call.argument<Number>("rpid") ?: 0L
-                val root = call.argument<Number>("root") ?: 0L
-                val parent = call.argument<Number>("parent") ?: 0L
-                val ctime = call.argument<Number>("ctime") ?: 0L
-                val commentText = call.argument<String>("comment_text") ?: ""
-                val pictures = call.argument<String?>("pictures")
-                val sourceId = call.argument<String>("source_id") ?: ""
-                val uid = call.argument<Number>("uid") ?: 0L
-                val cookies = call.argument<List<String>>("cookies") ?: emptyList<String>()
+                try {
+                    val action = call.argument<Int>("action") ?: 0
+                    val oid = call.argument<Number>("oid") ?: 0L
+                    val type = call.argument<Int>("type") ?: 0
+                    val rpid = call.argument<Number>("rpid") ?: 0L
+                    val root = call.argument<Number>("root") ?: 0L
+                    val parent = call.argument<Number>("parent") ?: 0L
+                    val ctime = call.argument<Number>("ctime") ?: 0L
+                    val commentText = call.argument<String>("comment_text") ?: ""
+                    val pictures = call.argument<String?>("pictures")
+                    val sourceId = call.argument<String>("source_id") ?: ""
+                    val uid = call.argument<Number>("uid") ?: 0L
+                    val cookies = call.argument<List<String>>("cookies") ?: emptyList<String>()
 
-                val intent = Intent().apply {
-                    component = ComponentName("icu.freedomIntrovert.biliSendCommAntifraud", "icu.freedomIntrovert.biliSendCommAntifraud.ByXposedLaunchedActivity")
-                    putExtra("action", action)
-                    putExtra("oid", oid.toLong())
-                    putExtra("type", type)
-                    putExtra("rpid", rpid.toLong())
-                    putExtra("root", root.toLong())
-                    putExtra("parent", parent.toLong())
-                    putExtra("ctime", ctime.toLong())
-                    putExtra("comment_text", commentText)
-                    if(pictures != null)
-                        putExtra("pictures", pictures)
-                    putExtra("source_id", sourceId)
-                    putExtra("uid", uid.toLong())
-                    putStringArrayListExtra("cookies", ArrayList(cookies))
-                }
-                startActivity(intent)
+                    val intent = Intent().apply {
+                        component = ComponentName("icu.freedomIntrovert.biliSendCommAntifraud", "icu.freedomIntrovert.biliSendCommAntifraud.ByXposedLaunchedActivity")
+                        putExtra("action", action)
+                        putExtra("oid", oid.toLong())
+                        putExtra("type", type)
+                        putExtra("rpid", rpid.toLong())
+                        putExtra("root", root.toLong())
+                        putExtra("parent", parent.toLong())
+                        putExtra("ctime", ctime.toLong())
+                        putExtra("comment_text", commentText)
+                        if(pictures != null)
+                            putExtra("pictures", pictures)
+                        putExtra("source_id", sourceId)
+                        putExtra("uid", uid.toLong())
+                        putStringArrayListExtra("cookies", ArrayList(cookies))
+                    }
+                    startActivity(intent)
+                } catch (e: Exception) {}
             } else {
                 result.notImplemented()
             }
