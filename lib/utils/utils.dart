@@ -72,7 +72,7 @@ class Utils {
       try {
         dynamic id = result['data']['dyn_id'];
         if (id != null) {
-          await Future.delayed(const Duration(milliseconds: 200));
+          await Future.delayed(const Duration(seconds: 5));
           dynamic res =
               await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
           showDialog(
