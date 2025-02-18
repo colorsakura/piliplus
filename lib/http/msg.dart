@@ -144,11 +144,13 @@ class MsgHttp {
 
   static Future createDynamic({
     dynamic mid,
-    dynamic dynIdStr, // repost
+    dynamic dynIdStr, // repost dyn
+    dynamic rid, // repost video
+    dynamic dynType,
     dynamic rawText,
     List? pics,
     int? publishTime,
-    ReplyOption replyOption = ReplyOption.allow,
+    ReplyOption? replyOption,
     int? privatePub,
   }) async {
     String csrf = await Request.getCsrf();
@@ -171,17 +173,21 @@ class MsgHttp {
               }
             ]
           },
-          if (dynIdStr == null)
+          if (replyOption != null || publishTime != null)
             "option": {
               if (publishTime != null) "timer_pub_time": publishTime,
-              if (replyOption == ReplyOption.close) "close_comment": 1,
-              if (replyOption == ReplyOption.choose) "up_choose_comment": 1,
+              if (replyOption == ReplyOption.close)
+                "close_comment": 1
+              else if (replyOption == ReplyOption.choose)
+                "up_choose_comment": 1,
             },
-          "scene": dynIdStr != null
-              ? 4
-              : pics != null
-                  ? 2
-                  : 1,
+          "scene": rid != null
+              ? 5
+              : dynIdStr != null
+                  ? 4
+                  : pics != null
+                      ? 2
+                      : 1,
           if (privatePub != null)
             'create_option': {
               'private_pub': privatePub,
@@ -189,12 +195,20 @@ class MsgHttp {
           if (pics != null) 'pics': pics,
           "attach_card": null,
           "upload_id":
-              "${mid}_${DateTime.now().millisecondsSinceEpoch ~/ 1000}_${Random().nextInt(9000) + 1000}",
+              "${rid != null ? 0 : mid}_${DateTime.now().millisecondsSinceEpoch ~/ 1000}_${Random().nextInt(9000) + 1000}",
           "meta": {
             "app_meta": {"from": "create.dynamic.web", "mobi_app": "web"}
           }
         },
-        if (dynIdStr != null) "web_repost_src": {"dyn_id_str": dynIdStr}
+        if (dynIdStr != null || rid != null)
+          "web_repost_src": {
+            if (dynIdStr != null) "dyn_id_str": dynIdStr,
+            if (rid != null)
+              "revs_id": {
+                "dyn_type": dynType,
+                "rid": rid,
+              }
+          }
       },
     );
     if (res.data['code'] == 0) {

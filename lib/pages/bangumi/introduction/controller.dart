@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -396,6 +397,43 @@ class BangumiIntroController extends CommonController {
                   onTap: () {
                     Get.back();
                     Share.share(videoUrl);
+                  },
+                ),
+                ListTile(
+                  title: const Text(
+                    '分享至动态',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      builder: (context) => RepostPanel(
+                        rid: epId,
+                        /**
+                         *  1：番剧 // 4097
+                            2：电影 // 4098
+                            3：纪录片 // 4101
+                            4：国创 // 4100
+                            5：电视剧 // 4099
+                            6：漫画
+                            7：综艺 // 4099
+                         */
+                        dynType: switch (Get.parameters['type']) {
+                          '1' => 4097,
+                          '2' => 4098,
+                          '3' => 4101,
+                          '4' => 4100,
+                          '5' || '7' => 4099,
+                          _ => -1,
+                        },
+                        pic: bangumiItem?.cover,
+                        title: bangumiItem?.title,
+                        uname: '',
+                      ),
+                    );
                   },
                 ),
               ],

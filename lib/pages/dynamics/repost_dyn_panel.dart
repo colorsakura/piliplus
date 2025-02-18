@@ -14,20 +14,37 @@ import 'package:get/get.dart';
 class RepostPanel extends CommonPublishPage {
   const RepostPanel({
     super.key,
-    required this.item,
-    required this.callback,
+    this.item,
+    this.callback,
+    // video
+    this.rid,
+    this.dynType,
+    this.pic,
+    this.title,
+    this.uname,
+    this.isMax,
   });
 
+  // video
+  final int? rid;
+  final int? dynType;
+  final String? pic;
+  final String? title;
+  final String? uname;
+  final bool? isMax;
+
   final dynamic item;
-  final Function callback;
+  final VoidCallback? callback;
 
   @override
   State<RepostPanel> createState() => _RepostPanelState();
 }
 
 class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
-  bool _isMax = false;
-  late final dynamic _pic = (widget.item as DynamicItemModel?)
+  late bool _isMax = widget.isMax ?? false;
+
+  late final dynamic _pic = widget.pic ??
+      (widget.item as DynamicItemModel?)
           ?.modules
           ?.moduleDynamic
           ?.major
@@ -47,7 +64,9 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           ?.pics
           ?.firstOrNull
           ?.url;
-  late final _text = (widget.item as DynamicItemModel?)
+
+  late final _text = widget.title ??
+      (widget.item as DynamicItemModel?)
           ?.modules
           ?.moduleDynamic
           ?.major
@@ -68,6 +87,9 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           ?.pgc
           ?.title ??
       '';
+
+  late final _uname = widget.uname ??
+      (widget.item as DynamicItemModel?)?.modules?.moduleAuthor?.name;
 
   @override
   void dispose() {
@@ -139,6 +161,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (_pic != null) ...[
               NetworkImgLayer(
@@ -154,13 +177,14 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '@${(widget.item as DynamicItemModel?)?.modules?.moduleAuthor?.name}',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 13,
+                  if (_uname?.isNotEmpty == true)
+                    Text(
+                      '@$_uname',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 13,
+                      ),
                     ),
-                  ),
                   Text(
                     _text,
                     maxLines: 2,
@@ -353,13 +377,15 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   Future onCustomPublish({required String message, List? pictures}) async {
     dynamic result = await MsgHttp.createDynamic(
       mid: GStorage.userInfo.get('userInfoCache')?.mid,
-      dynIdStr: widget.item.idStr,
+      dynIdStr: widget.item?.idStr,
+      rid: widget.rid,
+      dynType: widget.dynType,
       rawText: editController.text,
     );
     if (result['status']) {
       Get.back();
       SmartDialog.showToast('转发成功');
-      widget.callback();
+      widget.callback?.call();
     } else {
       SmartDialog.showToast(result['msg']);
     }

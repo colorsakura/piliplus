@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -501,6 +502,27 @@ class VideoIntroController extends GetxController
                     Share.share('${videoDetail.value.title} '
                         'UP主: ${videoDetail.value.owner!.name!}'
                         ' - $videoUrl');
+                  },
+                ),
+                ListTile(
+                  title: const Text(
+                    '分享至动态',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      builder: (context) => RepostPanel(
+                        rid: videoDetail.value.aid,
+                        dynType: 8,
+                        pic: videoDetail.value.pic,
+                        title: videoDetail.value.title,
+                        uname: videoDetail.value.owner?.name,
+                      ),
+                    );
                   },
                 ),
               ],
