@@ -212,7 +212,10 @@ class MsgHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return {'status': true};
+      return {
+        'status': true,
+        'data': res.data['data'],
+      };
     } else {
       return {
         'status': false,

@@ -1957,11 +1957,10 @@ List<SettingsModel> get extraSettings => [
         leading: Stack(
           alignment: Alignment.center,
           children: [
-            const Icon(Icons.shield),
+            const Icon(Icons.shield_outlined),
             Icon(
               Icons.reply,
-              size: 16,
-              color: Theme.of(Get.context!).colorScheme.surface,
+              size: 14,
             ),
           ],
         ),
@@ -1972,8 +1971,28 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '使用「哔哩发评反诈」检查评论',
         subtitle: '仅对Android生效',
-        leading: Icon(FontAwesomeIcons.b),
+        leading: Icon(
+          FontAwesomeIcons.b,
+          size: 22,
+        ),
         setKey: SettingBoxKey.biliSendCommAntifraud,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '发布/转发动态反诈',
+        subtitle: '发布/转发动态后检查动态是否可见',
+        leading: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Icon(Icons.shield_outlined),
+            Icon(
+              Icons.motion_photos_on,
+              size: 12,
+            ),
+          ],
+        ),
+        setKey: SettingBoxKey.enableCreateDynAntifraud,
         defaultVal: false,
       ),
       SettingsModel(

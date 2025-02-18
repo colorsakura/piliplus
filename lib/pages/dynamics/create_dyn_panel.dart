@@ -1,10 +1,15 @@
+import 'package:PiliPlus/http/dynamics.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
+import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/toolbar_icon_button.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -483,12 +488,36 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
       replyOption: _replyOption,
       privatePub: _isPrivate ? 1 : null,
     );
+    SmartDialog.dismiss();
     if (result['status']) {
       Get.back();
-      SmartDialog.dismiss();
       SmartDialog.showToast('发布成功');
+      try {
+        // insert
+        dynamic id = result['data']['dyn_id'];
+        if (id != null) {
+          await Future.delayed(const Duration(milliseconds: 200));
+          dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+          if (res['status']) {
+            final ctr = Get.find<DynamicsTabController>(tag: 'all');
+            List list = ctr.loadingState.value is Success
+                ? (ctr.loadingState.value as Success).response
+                : <DynamicItemModel>[];
+            list.insert(0, res['data']);
+            ctr.loadingState.value = LoadingState.success(list);
+          }
+        }
+      } catch (e) {
+        debugPrint('create dyn $e');
+      }
+      if (GStorage.enableCreateDynAntifraud) {
+        try {
+          Utils.checkCreatedDyn(result['data']['dyn_id'], editController.text);
+        } catch (e) {
+          SmartDialog.showToast(e.toString());
+        }
+      }
     } else {
-      SmartDialog.dismiss();
       SmartDialog.showToast(result['msg']);
       debugPrint('failed to publish: ${result['msg']}');
     }

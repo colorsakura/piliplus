@@ -1,4 +1,5 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:dio/dio.dart';
 
 import '../models/dynamics/result.dart';
 import '../models/dynamics/up.dart';
@@ -84,17 +85,23 @@ class DynamicsHttp {
 
   //
   static Future dynamicDetail({
-    String? id,
+    dynamic id,
     dynamic rid,
     dynamic type,
+    bool? clearCookie,
   }) async {
-    var res = await Request().get(Api.dynamicDetail, queryParameters: {
-      'timezone_offset': -480,
-      if (id != null) 'id': id,
-      if (rid != null) 'rid': rid,
-      if (type != null) 'type': type,
-      'features': 'itemOpusStyle',
-    });
+    var res = await Request().get(
+      Api.dynamicDetail,
+      queryParameters: {
+        'timezone_offset': -480,
+        if (id != null) 'id': id,
+        if (rid != null) 'rid': rid,
+        if (type != null) 'type': type,
+        'features': 'itemOpusStyle',
+      },
+      options:
+          clearCookie == true ? Options(extra: {'clearCookie': true}) : null,
+    );
     if (res.data['code'] == 0) {
       try {
         return {

@@ -369,6 +369,9 @@ class GStorage {
   static bool get biliSendCommAntifraud => GStorage.setting
       .get(SettingBoxKey.biliSendCommAntifraud, defaultValue: false);
 
+  static bool get enableCreateDynAntifraud => GStorage.setting
+      .get(SettingBoxKey.enableCreateDynAntifraud, defaultValue: false);
+
   static bool get coinWithLike =>
       GStorage.setting.get(SettingBoxKey.coinWithLike, defaultValue: false);
 
@@ -613,6 +616,7 @@ class SettingBoxKey {
       showDmChart = 'showDmChart',
       enableCommAntifraud = 'enableCommAntifraud',
       biliSendCommAntifraud = 'biliSendCommAntifraud',
+      enableCreateDynAntifraud = 'enableCreateDynAntifraud',
       coinWithLike = 'coinWithLike',
       isPureBlackTheme = 'isPureBlackTheme',
       antiGoodsDyn = 'antiGoodsDyn',

@@ -46,6 +46,20 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
+  static void checkCreatedDyn(id, dynText) async {
+    if (id != null) {
+      dynamic res = await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
+      showDialog(
+        context: Get.context!,
+        builder: (context) => AlertDialog(
+          title: Text('动态检查结果'),
+          content: SelectableText(
+              '${res['status'] ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'} \n\n动态内容: $dynText'),
+        ),
+      );
+    }
+  }
+
   // 动态点赞
   static Future onLikeDynamic(item, VoidCallback callback) async {
     feedBack();
