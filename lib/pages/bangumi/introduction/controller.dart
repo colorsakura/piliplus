@@ -406,6 +406,8 @@ class BangumiIntroController extends CommonController {
                   ),
                   onTap: () {
                     Get.back();
+                    EpisodeItem? item = bangumiItem?.episodes
+                        ?.firstWhereOrNull((item) => item.epId == epId);
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -430,7 +432,8 @@ class BangumiIntroController extends CommonController {
                           _ => -1,
                         },
                         pic: bangumiItem?.cover,
-                        title: bangumiItem?.title,
+                        title:
+                            '${bangumiItem?.title}${item != null ? '\n${item.showTitle}' : ''}',
                         uname: '',
                       ),
                     );

@@ -175,6 +175,7 @@ class EpisodeItem {
     this.subtitle,
     this.title,
     this.vid,
+    this.showTitle,
   });
 
   int? aid;
@@ -205,6 +206,7 @@ class EpisodeItem {
   String? subtitle;
   String? title;
   String? vid;
+  String? showTitle;
 
   EpisodeItem.fromJson(Map<String, dynamic> json) {
     aid = json['aid'];
@@ -235,6 +237,7 @@ class EpisodeItem {
     subtitle = json['subtitle'];
     title = json['title'];
     vid = json['vid'];
+    showTitle = json['show_title'];
   }
 }
 

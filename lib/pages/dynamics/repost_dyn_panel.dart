@@ -161,7 +161,6 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (_pic != null) ...[
               NetworkImgLayer(
@@ -248,8 +247,8 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
       ? Row(
           children: [
             const SizedBox(width: 16),
-            const Text(
-              '转发动态',
+            Text(
+              widget.rid != null ? '分享至动态' : '转发动态',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const Spacer(),
@@ -263,7 +262,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                   vertical: -2,
                 ),
               ),
-              child: const Text('立即转发'),
+              child: Text(widget.rid != null ? '立即发布' : '立即转发'),
             ),
             const SizedBox(width: 16),
           ],
@@ -298,8 +297,8 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                 ),
               ),
               Center(
-                child: const Text(
-                  '转发动态',
+                child: Text(
+                  widget.rid != null ? '分享至动态' : '转发动态',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -318,7 +317,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
                       vertical: -2,
                     ),
                   ),
-                  child: const Text('转发'),
+                  child: Text(widget.rid != null ? '发布' : '转发'),
                 ),
               ),
             ],
