@@ -13,7 +13,6 @@ import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -337,14 +336,12 @@ abstract class ReplyController extends CommonController {
       try {
         List<Cookie> cookies = await Request.cookieManager.cookieJar
             .loadForRequest(Uri.parse(HttpString.apiBaseUrl));
-        final List<String> cookieString = cookies
+        final String cookieString = cookies
             .map((Cookie cookie) => '${cookie.name}=${cookie.value}')
-            .toList();
-        AndroidIntent intent = AndroidIntent(
-          package: 'icu.freedomIntrovert.biliSendCommAntifraud',
-          componentName:
-              'icu.freedomIntrovert.biliSendCommAntifraud.ByXposedLaunchedActivity',
-          arguments: {
+            .join(';');
+        Utils.channel.invokeMethod(
+          'biliSendCommAntifraud',
+          {
             'action': 0,
             'oid': oid,
             'type': replyType,
@@ -356,10 +353,9 @@ abstract class ReplyController extends CommonController {
             if (pictures.isNotEmpty == true) 'pictures': jsonEncode(pictures),
             'source_id': sourceId,
             'uid': mid,
-            'cookies': cookieString,
+            'cookies': [cookieString],
           },
         );
-        intent.launch();
       } catch (e) {
         debugPrint('biliSendCommAntifraud: $e');
       }
