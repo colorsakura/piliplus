@@ -45,6 +45,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
   final _titleStream = StreamController<String?>();
   final _progressStream = StreamController<double>();
   bool? _inApp;
+  bool? _off;
 
   InAppWebViewController? _webViewController;
 
@@ -53,6 +54,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
     super.initState();
     if (Get.arguments is Map) {
       _inApp = Get.arguments['inApp'];
+      _off = Get.arguments['off'];
     }
   }
 
@@ -251,7 +253,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             bool hasMatch = await PiliScheme.routePush(
               navigationAction.request.url?.uriValue ?? Uri(),
               selfHandle: true,
-              off: true,
+              off: _off ?? true,
             );
             // debugPrint('webview: [$url], [$hasMatch]');
             if (hasMatch) {

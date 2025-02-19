@@ -5,7 +5,6 @@ import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/pages/rank/view.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -129,9 +128,13 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                                 'http://i0.hdslb.com/bfs/archive/552ebe8c4794aeef30ebd1568b59ad35f15e21ad.png',
                             title: '每周必看',
                             onTap: () {
-                              Utils.handleWebview(
-                                'https://www.bilibili.com/h5/weekly-recommend',
-                                inApp: true,
+                              Get.toNamed(
+                                '/webview',
+                                parameters: {
+                                  'url':
+                                      'https://www.bilibili.com/h5/weekly-recommend'
+                                },
+                                arguments: {'off': false},
                               );
                             },
                           ),
@@ -140,9 +143,13 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
                                 'http://i0.hdslb.com/bfs/archive/3693ec9335b78ca57353ac0734f36a46f3d179a9.png',
                             title: '入站必刷',
                             onTap: () {
-                              Utils.handleWebview(
-                                'https://www.bilibili.com/h5/good-history',
-                                inApp: true,
+                              Get.toNamed(
+                                '/webview',
+                                parameters: {
+                                  'url':
+                                      'https://www.bilibili.com/h5/good-history'
+                                },
+                                arguments: {'off': false},
                               );
                             },
                           ),

@@ -413,7 +413,7 @@ class PiliScheme {
                 .firstMatch(path)
                 ?.group(1);
         if (bvid != null) {
-          videoPush(null, bvid, off: false);
+          videoPush(null, bvid, off: off);
           return true;
         }
         launchURL();
