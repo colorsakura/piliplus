@@ -8,7 +8,8 @@ class RecommendFilter {
   static late int minLikeRatioForRecommend;
   static late bool exemptFilterForFollowed;
   static late bool applyFilterToRelatedVideos;
-  static late String banWords;
+  static RegExp rcmdRegExp =
+      RegExp(GStorage.banWordForRecommend, caseSensitive: false);
 
   RecommendFilter() {
     update();
@@ -23,7 +24,6 @@ class RecommendFilter {
         setting.get(SettingBoxKey.minDurationForRcmd, defaultValue: 0);
     minLikeRatioForRecommend =
         setting.get(SettingBoxKey.minLikeRatioForRecommend, defaultValue: 0);
-    banWords = setting.get(SettingBoxKey.banWordForRecommend, defaultValue: '');
     exemptFilterForFollowed =
         setting.get(SettingBoxKey.exemptFilterForFollowed, defaultValue: true);
     applyFilterToRelatedVideos = setting
@@ -67,8 +67,7 @@ class RecommendFilter {
     if (exemptFilterForFollowed && isFollowed == true) {
       return false;
     }
-    if (banWords.isNotEmpty &&
-        RegExp(banWords, caseSensitive: false).hasMatch(title)) {
+    if (rcmdRegExp.pattern.isNotEmpty && rcmdRegExp.hasMatch(title)) {
       return true;
     }
     return false;

@@ -169,7 +169,6 @@ class VideoReplyReplyController extends ReplyController
             next: cursor?.next,
             mode: mode.value,
           ),
-          banWordForReply: banWordForReply,
           antiGoodsReply: antiGoodsReply,
         )
       : GlobalData().grpcReply
@@ -182,7 +181,6 @@ class VideoReplyReplyController extends ReplyController
                 next: cursor?.next,
                 mode: mode.value,
               ),
-              banWordForReply: banWordForReply,
               antiGoodsReply: antiGoodsReply,
             )
           : ReplyHttp.replyReplyList(
@@ -191,7 +189,6 @@ class VideoReplyReplyController extends ReplyController
               root: rpid,
               pageNum: currentPage,
               type: replyType.index,
-              banWordForReply: banWordForReply,
               antiGoodsReply: antiGoodsReply,
             );
 

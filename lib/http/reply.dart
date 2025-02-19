@@ -4,6 +4,7 @@ import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 import '../models/video/reply/data.dart';
@@ -14,6 +15,9 @@ import 'init.dart';
 class ReplyHttp {
   static Options get _options => Options(extra: {'clearCookie': true});
 
+  static RegExp replyRegExp =
+      RegExp(GStorage.banWordForReply, caseSensitive: false);
+
   static Future<LoadingState> replyList({
     required bool isLogin,
     required int oid,
@@ -21,8 +25,8 @@ class ReplyHttp {
     required int type,
     required int page,
     int sort = 1,
-    required String banWordForReply,
     required bool antiGoodsReply,
+    bool? enableFilter,
   }) async {
     var res = !isLogin
         ? await Request().get(
@@ -49,18 +53,16 @@ class ReplyHttp {
           );
     if (res.data['code'] == 0) {
       ReplyData replyData = ReplyData.fromJson(res.data['data']);
-      if (banWordForReply.isNotEmpty) {
+      if (enableFilter != false && replyRegExp.pattern.isNotEmpty) {
         // topReplies
         if (replyData.topReplies?.isNotEmpty == true) {
           replyData.topReplies!.removeWhere((item) {
-            bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
-                .hasMatch(item.content?.message ?? '');
+            bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
             // remove subreplies
             if (hasMatch.not) {
               if (item.replies?.isNotEmpty == true) {
                 item.replies!.removeWhere((item) =>
-                    RegExp(banWordForReply, caseSensitive: false)
-                        .hasMatch(item.content?.message ?? ''));
+                    replyRegExp.hasMatch(item.content?.message ?? ''));
               }
             }
             return hasMatch;
@@ -70,14 +72,12 @@ class ReplyHttp {
         // replies
         if (replyData.replies?.isNotEmpty == true) {
           replyData.replies!.removeWhere((item) {
-            bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
-                .hasMatch(item.content?.message ?? '');
+            bool hasMatch = replyRegExp.hasMatch(item.content?.message ?? '');
             // remove subreplies
             if (hasMatch.not) {
               if (item.replies?.isNotEmpty == true) {
                 item.replies!.removeWhere((item) =>
-                    RegExp(banWordForReply, caseSensitive: false)
-                        .hasMatch(item.content?.message ?? ''));
+                    replyRegExp.hasMatch(item.content?.message ?? ''));
               }
             }
             return hasMatch;
@@ -125,32 +125,28 @@ class ReplyHttp {
     int type = 1,
     required int oid,
     required CursorReq cursor,
-    required String banWordForReply,
     required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.mainList(type: type, oid: oid, cursor: cursor);
     if (res['status']) {
       MainListReply mainListReply = res['data'];
       // keyword filter
-      if (banWordForReply.isNotEmpty) {
+      if (replyRegExp.pattern.isNotEmpty) {
         // upTop
         if (mainListReply.hasUpTop() &&
-            RegExp(banWordForReply, caseSensitive: false)
-                .hasMatch(mainListReply.upTop.content.message)) {
+            replyRegExp.hasMatch(mainListReply.upTop.content.message)) {
           mainListReply.clearUpTop();
         }
 
         // replies
         if (mainListReply.replies.isNotEmpty) {
           mainListReply.replies.removeWhere((item) {
-            bool hasMatch = RegExp(banWordForReply, caseSensitive: false)
-                .hasMatch(item.content.message);
+            bool hasMatch = replyRegExp.hasMatch(item.content.message);
             // remove subreplies
             if (hasMatch.not) {
               if (item.replies.isNotEmpty) {
-                item.replies.removeWhere((item) =>
-                    RegExp(banWordForReply, caseSensitive: false)
-                        .hasMatch(item.content.message));
+                item.replies.removeWhere(
+                    (item) => replyRegExp.hasMatch(item.content.message));
               }
             }
             return hasMatch;
@@ -222,9 +218,9 @@ class ReplyHttp {
     required int root,
     required int pageNum,
     required int type,
-    required String banWordForReply,
     required bool antiGoodsReply,
     bool? isCheck,
+    bool? filterBanWord,
   }) async {
     var res = await Request().get(
       Api.replyReplyList,
@@ -240,11 +236,10 @@ class ReplyHttp {
     );
     if (res.data['code'] == 0) {
       ReplyReplyData replyData = ReplyReplyData.fromJson(res.data['data']);
-      if (banWordForReply.isNotEmpty) {
+      if (filterBanWord != false && replyRegExp.pattern.isNotEmpty) {
         if (replyData.replies?.isNotEmpty == true) {
-          replyData.replies!.removeWhere((item) =>
-              RegExp(banWordForReply, caseSensitive: false)
-                  .hasMatch(item.content?.message ?? ''));
+          replyData.replies!.removeWhere(
+              (item) => replyRegExp.hasMatch(item.content?.message ?? ''));
         }
       }
       if (antiGoodsReply) {
@@ -268,7 +263,6 @@ class ReplyHttp {
     required int root,
     required int rpid,
     required CursorReq cursor,
-    required String banWordForReply,
     required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.detailList(
@@ -280,11 +274,10 @@ class ReplyHttp {
     );
     if (res['status']) {
       DetailListReply detailListReply = res['data'];
-      if (banWordForReply.isNotEmpty) {
+      if (replyRegExp.pattern.isNotEmpty) {
         if (detailListReply.root.replies.isNotEmpty) {
-          detailListReply.root.replies.removeWhere((item) =>
-              RegExp(banWordForReply, caseSensitive: false)
-                  .hasMatch(item.content.message));
+          detailListReply.root.replies.removeWhere(
+              (item) => replyRegExp.hasMatch(item.content.message));
         }
       }
       if (antiGoodsReply) {
@@ -304,7 +297,6 @@ class ReplyHttp {
     required int root,
     required int rpid,
     required CursorReq cursor,
-    required String banWordForReply,
     required bool antiGoodsReply,
   }) async {
     dynamic res = await GrpcRepo.dialogList(
@@ -316,11 +308,10 @@ class ReplyHttp {
     );
     if (res['status']) {
       DialogListReply dialogListReply = res['data'];
-      if (banWordForReply.isNotEmpty) {
+      if (replyRegExp.pattern.isNotEmpty) {
         if (dialogListReply.replies.isNotEmpty) {
-          dialogListReply.replies.removeWhere((item) =>
-              RegExp(banWordForReply, caseSensitive: false)
-                  .hasMatch(item.content.message));
+          dialogListReply.replies.removeWhere(
+              (item) => replyRegExp.hasMatch(item.content.message));
         }
       }
       if (antiGoodsReply) {

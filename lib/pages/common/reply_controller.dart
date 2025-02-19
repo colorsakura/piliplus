@@ -37,7 +37,6 @@ abstract class ReplyController extends CommonController {
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
 
-  late final banWordForReply = GStorage.banWordForReply;
   late final antiGoodsReply = GStorage.antiGoodsReply;
 
   // comment antifraud
@@ -384,7 +383,7 @@ abstract class ReplyController extends CommonController {
         type: replyType,
         sort: ReplySortType.time.index,
         page: 1,
-        banWordForReply: '',
+        enableFilter: false,
         antiGoodsReply: false,
       );
       if (context.mounted.not) return;
@@ -412,7 +411,7 @@ abstract class ReplyController extends CommonController {
             root: rpid ?? replyId,
             pageNum: 1,
             type: replyType,
-            banWordForReply: '',
+            filterBanWord: false,
             antiGoodsReply: false,
           );
           if (context.mounted.not) return;
@@ -433,7 +432,7 @@ abstract class ReplyController extends CommonController {
               root: rpid ?? replyId,
               pageNum: 1,
               type: replyType,
-              banWordForReply: '',
+              filterBanWord: false,
               isCheck: true,
               antiGoodsReply: false,
             );
@@ -470,7 +469,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
           root: rpid ?? replyId,
           pageNum: i,
           type: replyType,
-          banWordForReply: '',
+          filterBanWord: false,
           isCheck: true,
           antiGoodsReply: false,
         );
@@ -505,7 +504,7 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
           root: rpid ?? replyId,
           pageNum: i,
           type: replyType,
-          banWordForReply: '',
+          filterBanWord: false,
           isCheck: true,
           antiGoodsReply: false,
         );

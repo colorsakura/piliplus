@@ -85,7 +85,6 @@ class HtmlRenderController extends ReplyController {
             next: cursor?.next ?? $fixnum.Int64(0),
             mode: mode.value,
           ),
-          banWordForReply: banWordForReply,
           antiGoodsReply: antiGoodsReply,
         )
       : ReplyHttp.replyList(
@@ -95,7 +94,6 @@ class HtmlRenderController extends ReplyController {
           type: type,
           sort: sortType.value.index,
           page: currentPage,
-          banWordForReply: banWordForReply,
           antiGoodsReply: antiGoodsReply,
         );
 }

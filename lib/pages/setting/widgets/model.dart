@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
 import 'package:PiliPlus/http/interceptor.dart';
+import 'package:PiliPlus/http/reply.dart';
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
@@ -2320,6 +2322,16 @@ SettingsModel getBanwordModel({
                   await GStorage.setting.put(key, banWord);
                   setState();
                   SmartDialog.showToast('已保存');
+                  if (key == SettingBoxKey.banWordForReply) {
+                    ReplyHttp.replyRegExp =
+                        RegExp(banWord, caseSensitive: false);
+                  } else if (key == SettingBoxKey.banWordForRecommend) {
+                    RecommendFilter.rcmdRegExp =
+                        RegExp(banWord, caseSensitive: false);
+                  } else if (key == SettingBoxKey.banWordForZone) {
+                    VideoHttp.zoneRegExp =
+                        RegExp(banWord, caseSensitive: false);
+                  }
                 },
               ),
             ],
