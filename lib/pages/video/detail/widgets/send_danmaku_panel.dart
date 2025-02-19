@@ -414,7 +414,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
   @override
   Future onCustomPublish({required String message, List? pictures}) async {
     SmartDialog.showLoading(msg: '发送中...');
-    final dynamic res = await DanmakaHttp.shootDanmaku(
+    final dynamic res = await DanmakuHttp.shootDanmaku(
       oid: widget.cid,
       bvid: widget.bvid,
       progress: widget.progress,

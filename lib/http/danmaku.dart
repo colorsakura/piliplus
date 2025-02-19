@@ -3,7 +3,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'index.dart';
 
-class DanmakaHttp {
+class DanmakuHttp {
   // 获取视频弹幕
   static Future queryDanmaku({
     required int cid,

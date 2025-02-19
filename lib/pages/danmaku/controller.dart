@@ -44,7 +44,7 @@ class PlDanmakuController {
     }
     assert(requestedSeg[segmentIndex] == false);
     requestedSeg[segmentIndex] = true;
-    final DmSegMobileReply result = await DanmakaHttp.queryDanmaku(
+    final DmSegMobileReply result = await DanmakuHttp.queryDanmaku(
       cid: cid,
       segmentIndex: segmentIndex + 1,
       mergeDanmaku: plPlayerController.mergeDanmaku,
