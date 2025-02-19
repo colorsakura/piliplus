@@ -328,8 +328,6 @@ abstract class ReplyController extends CommonController {
     dynamic pictures,
     dynamic mid,
   }) async {
-    await Future.delayed(const Duration(seconds: 5));
-
     // biliSendCommAntifraud
     if (_biliSendCommAntifraud && Platform.isAndroid) {
       try {
@@ -362,6 +360,7 @@ abstract class ReplyController extends CommonController {
     }
 
     // CommAntifraud
+    await Future.delayed(const Duration(seconds: 5));
     void showReplyCheckResult(String message) {
       showDialog(
         context: context,
