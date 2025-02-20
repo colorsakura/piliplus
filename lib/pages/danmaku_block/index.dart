@@ -36,21 +36,34 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
+    final regExp = RegExp(r'^/(.*)/$');
     List<Map<String, dynamic>> simpleRuleList = _danmakuBlockController
         .ruleTypes.values
         .expand((element) => element)
         .map<Map<String, dynamic>>((e) {
       //当正则表达式前后都有"/"时，去掉，避免RegExp解析错误
-      if (e.type == 1 && e.filter.startsWith('/') && e.filter.endsWith('/')) {
-        e.filter = e.filter.substring(1, e.filter.length - 1);
+      if (e.type == 1) {
+        String? filter = regExp.firstMatch(e.filter)?.group(1);
+        if (filter != null) {
+          e.filter = filter;
+        }
       }
       return e.toMap();
     }).toList();
     // debugPrint("simpleRuleList:$simpleRuleList");
-    plPlayerController.danmakuFilterRule = simpleRuleList;
+    List regex = [];
+    plPlayerController.danmakuFilterRule = simpleRuleList.where((item) {
+      if (item['type'] != 1) {
+        return true;
+      } else {
+        regex.add(item['filter']);
+        return false;
+      }
+    }).toList();
+    plPlayerController.dmRegExp =
+        regex.isNotEmpty ? RegExp(regex.join('|'), caseSensitive: false) : null;
     scrollController.dispose();
-    await GStorage.localCache.delete(LocalCacheKey.danmakuFilterRule);
     GStorage.localCache.put(LocalCacheKey.danmakuFilterRule, simpleRuleList);
     super.dispose();
   }
