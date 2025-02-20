@@ -184,8 +184,12 @@ class _HeaderControlState extends State<HeaderControl> {
                       ),
                       ListTile(
                         dense: true,
-                        onTap: () =>
-                            {Get.back(), widget.videoDetailCtr.queryVideoUrl()},
+                        onTap: () => {
+                          Get.back(),
+                          widget.videoDetailCtr.queryVideoUrl(
+                            widget.videoDetailCtr.playedTime,
+                          )
+                        },
                         leading: const Icon(Icons.refresh_outlined, size: 20),
                         title: const Text('重载视频', style: titleStyle),
                       ),
@@ -288,7 +292,9 @@ class _HeaderControlState extends State<HeaderControl> {
                             SmartDialog.showToast(
                                 '已设置为 ${CDNServiceCode.fromCode(result)!.description}，正在重载视频');
                             setState(() {});
-                            widget.videoDetailCtr.queryVideoUrl();
+                            widget.videoDetailCtr.queryVideoUrl(
+                              widget.videoDetailCtr.playedTime,
+                            );
                           }
                         },
                       ),
