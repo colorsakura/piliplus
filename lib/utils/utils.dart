@@ -31,6 +31,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -578,8 +579,12 @@ class Utils {
 
   static Future<dynamic> getWwebid(mid) async {
     try {
-      dynamic response =
-          await Request().get('${HttpString.spaceBaseUrl}/$mid/dynamic');
+      dynamic response = await Request().get(
+        '${HttpString.spaceBaseUrl}/$mid/dynamic',
+        options: Options(
+          extra: {'clearCookie': true},
+        ),
+      );
       dom.Document document = html_parser.parse(response.data);
       dom.Element? scriptElement =
           document.querySelector('script#__RENDER_DATA__');
