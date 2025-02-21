@@ -53,19 +53,20 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
     }).toList();
     // debugPrint("simpleRuleList:$simpleRuleList");
     plPlayerController.filterCount = simpleRuleList.length;
-    simpleRuleList.forEach((item) {
+    for (var item in simpleRuleList) {
       switch (item['type']) {
         case 0:
           plPlayerController.dmFilterString.add(item['filter']);
           break;
         case 1:
-          plPlayerController.dmRegExp.add(RegExp(item['filter'], caseSensitive: false));
+          plPlayerController.dmRegExp
+              .add(RegExp(item['filter'], caseSensitive: false));
           break;
         case 2:
           plPlayerController.dmUid.add(item['filter']);
           break;
       }
-    });
+    }
     scrollController.dispose();
     GStorage.localCache.put(LocalCacheKey.danmakuFilterRule, simpleRuleList);
     super.dispose();

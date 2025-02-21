@@ -395,11 +395,10 @@ class PlPlayerController {
     isOpenDanmu.value =
         setting.get(SettingBoxKey.enableShowDanmaku, defaultValue: true);
     danmakuWeight = setting.get(SettingBoxKey.danmakuWeight, defaultValue: 0);
-    List regex = [];
     List rules = GStorage.localCache
         .get(LocalCacheKey.danmakuFilterRule, defaultValue: []);
     filterCount = rules.length;
-    rules.forEach((item) {
+    for (var item in rules) {
       switch (item['type']) {
         case 0:
           dmFilterString.add(item['filter']);
@@ -411,7 +410,7 @@ class PlPlayerController {
           dmUid.add(item['filter']);
           break;
       }
-    });
+    }
     blockTypes = setting.get(SettingBoxKey.danmakuBlockType, defaultValue: []);
     showArea = setting.get(SettingBoxKey.danmakuShowArea, defaultValue: 0.5);
     // 不透明度
