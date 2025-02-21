@@ -284,7 +284,7 @@ class Request {
     token.cancel("cancelled");
   }
 
-  String headerUa({type = 'mob'}) {
+  static String headerUa({type = 'mob'}) {
     String headerUa = '';
     if (type == 'mob') {
       if (Platform.isIOS) {

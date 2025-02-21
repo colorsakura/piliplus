@@ -171,7 +171,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             useHybridComposition: false,
             algorithmicDarkeningAllowed: true,
             useShouldOverrideUrlLoading: true,
-            userAgent: Request().headerUa(type: uaType),
+            userAgent: Request.headerUa(type: uaType),
             mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
           ),
           initialUrlRequest:
