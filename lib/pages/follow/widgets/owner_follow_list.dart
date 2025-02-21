@@ -105,6 +105,11 @@ class _OwnerFollowListState extends State<OwnerFollowList>
                             return FollowItem(
                               item: followList[index],
                               ctr: widget.ctr,
+                              callback: (attr) {
+                                followList[index].attribute =
+                                    attr == 0 ? -1 : 0;
+                                followList.refresh();
+                              },
                             );
                           }
                         },

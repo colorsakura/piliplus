@@ -638,7 +638,7 @@ class Utils {
     required BuildContext context,
     required dynamic mid,
     required bool isFollow,
-    required Function callback,
+    required ValueChanged? callback,
   }) async {
     if (mid == null) {
       return;
@@ -652,9 +652,7 @@ class Utils {
       );
       SmartDialog.showToast(res['status'] ? "关注成功" : res['msg']);
       if (res['status']) {
-        callback(1);
-        // followStatus['attribute'] = 2;
-        // followStatus.refresh();
+        callback?.call(1);
       }
     } else {
       dynamic result = await VideoHttp.hasFollow(mid: mid);
@@ -680,20 +678,11 @@ class Utils {
                         isAdd: !isSpecialFollowed,
                       );
                       if (res['status']) {
-                        // followStatus['special'] = isSpecialFollowed ? 0 : 1;
-                        // List tags = followStatus['tag'] ?? [];
-                        // if (isSpecialFollowed) {
-                        //   tags.remove(-10);
-                        // } else {
-                        //   tags.add(-10);
-                        // }
-                        // followStatus['tag'] = tags;
-                        // followStatus.refresh();
                         SmartDialog.showToast('$text成功');
                         if (isSpecialFollowed) {
-                          callback(1);
+                          callback?.call(1);
                         } else {
-                          callback(2);
+                          callback?.call(2);
                         }
                       } else {
                         SmartDialog.showToast(res['msg']);
@@ -733,9 +722,9 @@ class Utils {
                         },
                       );
                       if (result == true) {
-                        callback(2);
+                        callback?.call(2);
                       } else if (result == false) {
-                        callback(1);
+                        callback?.call(1);
                       }
                     },
                     title: const Text(
@@ -755,9 +744,7 @@ class Utils {
                       SmartDialog.showToast(
                           res['status'] ? "取消关注成功" : res['msg']);
                       if (res['status']) {
-                        callback(0);
-                        // followStatus['attribute'] = 0;
-                        // followStatus.refresh();
+                        callback?.call(0);
                       }
                     },
                     title: const Text(
@@ -772,14 +759,6 @@ class Utils {
         );
       }
     }
-
-    // MemberController _ = Get.put<MemberController>(MemberController(mid: mid),
-    //     tag: mid.toString());
-    // await _.getInfo();
-    // if (context.mounted) await _.actionRelationMod(context);
-    // followStatus['attribute'] = _.attribute.value;
-    // followStatus.refresh();
-    // Get.delete<MemberController>(tag: mid.toString());
   }
 
   static String generateRandomString(int length) {

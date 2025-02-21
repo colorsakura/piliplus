@@ -9,7 +9,14 @@ import 'package:PiliPlus/utils/utils.dart';
 class FollowItem extends StatelessWidget {
   final FollowItemModel item;
   final FollowController? ctr;
-  const FollowItem({super.key, required this.item, this.ctr});
+  final ValueChanged? callback;
+
+  const FollowItem({
+    super.key,
+    required this.item,
+    this.callback,
+    this.ctr,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,31 +48,34 @@ class FollowItem extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       dense: true,
-      trailing: ctr != null && ctr!.isOwner.value
+      trailing: ctr?.isOwner.value == true
           ? SizedBox(
               height: 34,
-              child: TextButton(
+              child: FilledButton.tonal(
                 onPressed: () {
                   Utils.actionRelationMod(
                     context: context,
                     mid: item.mid,
-                    isFollow: true,
-                    callback: (attribute) {},
+                    isFollow: item.attribute != -1,
+                    callback: callback,
                   );
                 },
-                style: TextButton.styleFrom(
+                style: FilledButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  foregroundColor: Theme.of(context).colorScheme.outline,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.onInverseSurface,
+                  foregroundColor: item.attribute == -1
+                      ? null
+                      : Theme.of(context).colorScheme.outline,
+                  backgroundColor: item.attribute == -1
+                      ? null
+                      : Theme.of(context).colorScheme.onInverseSurface,
                 ),
-                child: const Text(
-                  '已关注',
+                child: Text(
+                  '${item.attribute == -1 ? '' : '已'}关注',
                   style: TextStyle(fontSize: 12),
                 ),
               ),
             )
-          : const SizedBox(),
+          : null,
     );
   }
 }
