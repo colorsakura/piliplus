@@ -81,8 +81,9 @@ class PlDanmakuController {
   }
 
   bool filterDanmaku(DanmakuElem elem) {
-    return !(plPlayerController.dmUid.contains(elem.content) ||
-             plPlayerController.dmFilterString.any((i) => elem.content.contains(i)) ||
-             plPlayerController.dmRegExp.any((i) => i.hasMatch(elem.content)));
+    return !(plPlayerController.dmUid.contains(elem.midHash) ||
+        plPlayerController.dmFilterString
+            .any((i) => elem.content.contains(i)) ||
+        plPlayerController.dmRegExp.any((i) => i.hasMatch(elem.content)));
   }
 }
