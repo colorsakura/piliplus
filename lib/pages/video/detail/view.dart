@@ -887,13 +887,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               if (videoDetailController.videoType ==
                                       SearchType.video &&
                                   videoDetailController.showRelatedVideo)
-                                CustomScrollView(
-                                  controller: _introController,
-                                  slivers: [
-                                    RelatedVideoPanel(
-                                        key: relatedVideoPanelKey,
-                                        heroTag: heroTag),
-                                  ],
+                                Material(
+                                  color: Colors.transparent,
+                                  child: CustomScrollView(
+                                    controller: _introController,
+                                    slivers: [
+                                      RelatedVideoPanel(
+                                          key: relatedVideoPanelKey,
+                                          heroTag: heroTag),
+                                    ],
+                                  ),
                                 ),
                               if (videoDetailController.showReply)
                                 videoReplyPanel,
@@ -1502,62 +1505,67 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   Widget videoIntro([bool needRelated = true]) {
-    Widget introPanel() => CustomScrollView(
-          key: const PageStorageKey<String>('简介'),
-          controller: needRelated ? _introController : null,
-          slivers: [
-            if (videoDetailController.videoType == SearchType.video) ...[
-              VideoIntroPanel(
-                heroTag: heroTag,
-                showAiBottomSheet: showAiBottomSheet,
-                showIntroDetail: showIntroDetail,
-                showEpisodes: showEpisodes,
-                onShowMemberPage: onShowMemberPage,
-              ),
-              if (needRelated && videoDetailController.showRelatedVideo) ...[
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: StyleString.safeSpace),
-                    child: Divider(
-                      height: 1,
-                      indent: 12,
-                      endIndent: 12,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.08),
+    Widget introPanel() => Material(
+          color: Colors.transparent,
+          child: CustomScrollView(
+            key: const PageStorageKey<String>('简介'),
+            controller: needRelated ? _introController : null,
+            slivers: [
+              if (videoDetailController.videoType == SearchType.video) ...[
+                VideoIntroPanel(
+                  heroTag: heroTag,
+                  showAiBottomSheet: showAiBottomSheet,
+                  showIntroDetail: showIntroDetail,
+                  showEpisodes: showEpisodes,
+                  onShowMemberPage: onShowMemberPage,
+                ),
+                if (needRelated && videoDetailController.showRelatedVideo) ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(top: StyleString.safeSpace),
+                      child: Divider(
+                        height: 1,
+                        indent: 12,
+                        endIndent: 12,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .outline
+                            .withOpacity(0.08),
+                      ),
                     ),
                   ),
-                ),
-                RelatedVideoPanel(key: relatedVideoPanelKey, heroTag: heroTag),
-              ] else
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.paddingOf(context).bottom +
-                        StyleString.safeSpace,
+                  RelatedVideoPanel(
+                      key: relatedVideoPanelKey, heroTag: heroTag),
+                ] else
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.paddingOf(context).bottom +
+                          StyleString.safeSpace,
+                    ),
+                  ),
+              ] else if (videoDetailController.videoType ==
+                  SearchType.media_bangumi)
+                Obx(
+                  () => BangumiIntroPanel(
+                    heroTag: heroTag,
+                    cid: videoDetailController.cid.value,
+                    showEpisodes: showEpisodes,
+                    showIntroDetail: showIntroDetail,
                   ),
                 ),
-            ] else if (videoDetailController.videoType ==
-                SearchType.media_bangumi)
-              Obx(
-                () => BangumiIntroPanel(
-                  heroTag: heroTag,
-                  cid: videoDetailController.cid.value,
-                  showEpisodes: showEpisodes,
-                  showIntroDetail: showIntroDetail,
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.paddingOf(context).bottom +
+                      (videoDetailController.isPlayAll &&
+                              MediaQuery.orientationOf(context) ==
+                                  Orientation.landscape
+                          ? 75
+                          : 0),
                 ),
-              ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MediaQuery.paddingOf(context).bottom +
-                    (videoDetailController.isPlayAll &&
-                            MediaQuery.orientationOf(context) ==
-                                Orientation.landscape
-                        ? 75
-                        : 0),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         );
     if (videoDetailController.isPlayAll) {
       return Stack(
@@ -1570,7 +1578,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: videoDetailController.showMediaListPanel,
+                onTap: () => videoDetailController.showMediaListPanel(context),
                 borderRadius: const BorderRadius.all(Radius.circular(14)),
                 child: Container(
                   height: 54,
@@ -1745,6 +1753,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
       videoDetailController.childKey.currentState?.showBottomSheet(
+        backgroundColor: Colors.transparent,
         (context) => VideoReplyReplyPanel(
           id: id,
           oid: oid,
@@ -1764,6 +1773,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   showAiBottomSheet() {
     videoDetailController.childKey.currentState?.showBottomSheet(
       enableDrag: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       (context) => AiDetail(modelResult: videoIntroController.modelResult),
     );
   }
@@ -1771,6 +1781,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       enableDrag: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       (context) => videoDetail is BangumiInfoModel
           ? bangumi.IntroDetail(
               bangumiDetail: videoDetail,
@@ -1814,9 +1825,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           },
         );
     if (isFullScreen) {
-      Utils.showFSSheet(child: listSheetContent(), isFullScreen: isFullScreen);
+      Utils.showFSSheet(
+        child: Material(
+          color: Theme.of(context).colorScheme.surface,
+          child: listSheetContent(),
+        ),
+        isFullScreen: isFullScreen,
+      );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         (context) => listSheetContent(),
       );
     }
@@ -2035,6 +2053,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       Utils.showFSSheet(child: listSheetContent(), isFullScreen: isFullScreen);
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
+        backgroundColor: Colors.transparent,
         (context) => listSheetContent(),
       );
     }
@@ -2056,6 +2075,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   void onShowMemberPage(mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       (context) {
         return HorizontalMemberPage(
           mid: mid,

@@ -497,6 +497,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
             upMid: _videoReplyReplyController.upMid,
             showDialogue: () {
               _key.currentState?.showBottomSheet(
+                backgroundColor: Colors.transparent,
                 (context) => VideoReplyReplyPanel(
                   oid: replyItem.oid.toInt(),
                   rpid: replyItem.root.toInt(),

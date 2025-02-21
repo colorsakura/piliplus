@@ -28,7 +28,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../http/search.dart';
 import '../../../../models/model_hot_video_item.dart';
 import '../related/index.dart';
-import 'widgets/group_panel.dart';
 
 class VideoIntroController extends GetxController
     with GetTickerProviderStateMixin {
@@ -850,17 +849,6 @@ class VideoIntroController extends GetxController
       SmartDialog.showToast(err.toString());
     }
     return true;
-  }
-
-  // 设置关注分组
-  void setFollowGroup() {
-    if (videoDetail.value.owner == null) {
-      return;
-    }
-    Get.bottomSheet(
-      GroupPanel(mid: videoDetail.value.owner!.mid!),
-      isScrollControlled: true,
-    );
   }
 
   // ai总结

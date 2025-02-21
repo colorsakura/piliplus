@@ -42,133 +42,135 @@ class VideoCardH extends StatelessWidget {
     try {
       type = videoItem.type;
     } catch (_) {}
-    return Stack(children: [
-      Semantics(
-        label: Utils.videoItemSemantics(videoItem),
-        excludeSemantics: true,
-        // customSemanticsActions: <CustomSemanticsAction, void Function()>{
-        //   for (var item in actions)
-        //     CustomSemanticsAction(
-        //         label: item.title.isEmpty ? 'label' : item.title): item.onTap!,
-        // },
-        child: InkWell(
-          onLongPress: () {
-            if (onLongPress != null) {
-              onLongPress!();
-            } else {
-              imageSaveDialog(
-                context: context,
-                title: videoItem.title is String
-                    ? videoItem.title
-                    : videoItem.title is List
-                        ? (videoItem.title as List)
-                            .map((item) => item['text'])
-                            .join()
-                        : '',
-                cover: videoItem.pic,
-              );
-            }
-          },
-          onTap: () async {
-            if (onTap != null) {
-              onTap?.call();
-              return;
-            }
-            if (type == 'ketang') {
-              SmartDialog.showToast('课堂视频暂不支持播放');
-              return;
-            }
-            if (videoItem is HotVideoItemModel &&
-                videoItem.redirectUrl?.isNotEmpty == true) {
-              if (Utils.viewPgcFromUri(videoItem.redirectUrl!)) {
+    return Stack(
+      children: [
+        Semantics(
+          label: Utils.videoItemSemantics(videoItem),
+          excludeSemantics: true,
+          // customSemanticsActions: <CustomSemanticsAction, void Function()>{
+          //   for (var item in actions)
+          //     CustomSemanticsAction(
+          //         label: item.title.isEmpty ? 'label' : item.title): item.onTap!,
+          // },
+          child: InkWell(
+            onLongPress: () {
+              if (onLongPress != null) {
+                onLongPress!();
+              } else {
+                imageSaveDialog(
+                  context: context,
+                  title: videoItem.title is String
+                      ? videoItem.title
+                      : videoItem.title is List
+                          ? (videoItem.title as List)
+                              .map((item) => item['text'])
+                              .join()
+                          : '',
+                  cover: videoItem.pic,
+                );
+              }
+            },
+            onTap: () async {
+              if (onTap != null) {
+                onTap?.call();
                 return;
               }
-            }
-            try {
-              final int cid =
-                  videoItem.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
-              Get.toNamed(
-                '/video?bvid=$bvid&cid=$cid',
-                arguments: {
-                  'videoItem': videoItem,
-                  'heroTag': Utils.makeHeroTag(aid)
-                },
-              );
-            } catch (err) {
-              SmartDialog.showToast(err.toString());
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: StyleString.safeSpace,
-              vertical: 5,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: StyleString.aspectRatio,
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints boxConstraints) {
-                      final double maxWidth = boxConstraints.maxWidth;
-                      final double maxHeight = boxConstraints.maxHeight;
-                      return Stack(
-                        children: [
-                          NetworkImgLayer(
-                            src: videoItem.pic as String,
-                            width: maxWidth,
-                            height: maxHeight,
-                          ),
-                          if (videoItem is HotVideoItemModel &&
-                              videoItem.pgcLabel?.isNotEmpty == true)
-                            PBadge(
-                              text: videoItem.pgcLabel,
-                              top: 6.0,
-                              right: 6.0,
+              if (type == 'ketang') {
+                SmartDialog.showToast('课堂视频暂不支持播放');
+                return;
+              }
+              if (videoItem is HotVideoItemModel &&
+                  videoItem.redirectUrl?.isNotEmpty == true) {
+                if (Utils.viewPgcFromUri(videoItem.redirectUrl!)) {
+                  return;
+                }
+              }
+              try {
+                final int cid = videoItem.cid ??
+                    await SearchHttp.ab2c(aid: aid, bvid: bvid);
+                Get.toNamed(
+                  '/video?bvid=$bvid&cid=$cid',
+                  arguments: {
+                    'videoItem': videoItem,
+                    'heroTag': Utils.makeHeroTag(aid)
+                  },
+                );
+              } catch (err) {
+                SmartDialog.showToast(err.toString());
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: StyleString.safeSpace,
+                vertical: 5,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: StyleString.aspectRatio,
+                    child: LayoutBuilder(
+                      builder: (BuildContext context,
+                          BoxConstraints boxConstraints) {
+                        final double maxWidth = boxConstraints.maxWidth;
+                        final double maxHeight = boxConstraints.maxHeight;
+                        return Stack(
+                          children: [
+                            NetworkImgLayer(
+                              src: videoItem.pic as String,
+                              width: maxWidth,
+                              height: maxHeight,
                             ),
-                          if (videoItem.duration != 0)
-                            PBadge(
-                              text: Utils.timeFormat(videoItem.duration!),
-                              right: 6.0,
-                              bottom: 6.0,
-                              type: 'gray',
-                            ),
-                          if (type != 'video')
-                            PBadge(
-                              text: type,
-                              left: 6.0,
-                              bottom: 6.0,
-                              type: 'primary',
-                            ),
-                          // if (videoItem.rcmdReason != null &&
-                          //     videoItem.rcmdReason.content != '')
-                          //   pBadge(videoItem.rcmdReason.content, context,
-                          //       6.0, 6.0, null, null),
-                        ],
-                      );
-                    },
+                            if (videoItem is HotVideoItemModel &&
+                                videoItem.pgcLabel?.isNotEmpty == true)
+                              PBadge(
+                                text: videoItem.pgcLabel,
+                                top: 6.0,
+                                right: 6.0,
+                              ),
+                            if (videoItem.duration != 0)
+                              PBadge(
+                                text: Utils.timeFormat(videoItem.duration!),
+                                right: 6.0,
+                                bottom: 6.0,
+                                type: 'gray',
+                              ),
+                            if (type != 'video')
+                              PBadge(
+                                text: type,
+                                left: 6.0,
+                                bottom: 6.0,
+                                type: 'primary',
+                              ),
+                            // if (videoItem.rcmdReason != null &&
+                            //     videoItem.rcmdReason.content != '')
+                            //   pBadge(videoItem.rcmdReason.content, context,
+                            //       6.0, 6.0, null, null),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                videoContent(context),
-              ],
+                  const SizedBox(width: 10),
+                  videoContent(context),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      if (source == 'normal')
-        Positioned(
-          bottom: 0,
-          right: 12,
-          child: VideoPopupMenu(
-            size: 29,
-            iconSize: 17,
-            videoItem: videoItem,
+        if (source == 'normal')
+          Positioned(
+            bottom: 0,
+            right: 12,
+            child: VideoPopupMenu(
+              size: 29,
+              iconSize: 17,
+              videoItem: videoItem,
+            ),
           ),
-        ),
-    ]);
+      ],
+    );
   }
 
   Widget videoContent(context) {

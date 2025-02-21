@@ -133,6 +133,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
       context: context,
       isScrollControlled: true,
       clipBehavior: Clip.hardEdge,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       builder: (context) {
         return Column(
           mainAxisSize: MainAxisSize.min,

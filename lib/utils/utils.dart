@@ -320,6 +320,7 @@ class Utils {
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
@@ -701,6 +702,7 @@ class Utils {
                         context: context,
                         useSafeArea: true,
                         isScrollControlled: true,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
                         sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
                         builder: (BuildContext context) {
                           return DraggableScrollableSheet(

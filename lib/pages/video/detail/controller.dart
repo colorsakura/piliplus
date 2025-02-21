@@ -298,9 +298,10 @@ class VideoDetailController extends GetxController
   }
 
   // 稍后再看面板展开
-  showMediaListPanel() {
+  showMediaListPanel(context) {
     if (mediaList.isNotEmpty) {
       childKey.currentState?.showBottomSheet(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         (context) => MediaListPanel(
           mediaList: mediaList,
           changeMediaList: (bvid, cid, aid, cover) {
@@ -1235,6 +1236,7 @@ class VideoDetailController extends GetxController
       childKey.currentState?.showBottomSheet(
         enableDrag: false,
         (context) => _postPanel(),
+        backgroundColor: Colors.transparent,
       );
     }
   }

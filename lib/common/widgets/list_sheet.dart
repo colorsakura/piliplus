@@ -275,174 +275,168 @@ class _ListSheetContentState extends State<ListSheetContent>
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Theme.of(context).colorScheme.surface,
-      child: Column(
-        children: [
-          Container(
-            height: 45,
-            padding: EdgeInsets.symmetric(
-                horizontal: widget.showTitle != false ? 14 : 6),
-            child: Row(
-              children: [
-                if (widget.showTitle != false)
-                  Text(
-                    '合集(${_isList ? widget.season.epCount : episodes?.length ?? ''})',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                StreamBuilder(
-                  stream: _favStream?.stream,
-                  builder: (context, snapshot) => snapshot.hasData
-                      ? mediumButton(
-                          tooltip: _seasonFav == 1 ? '取消订阅' : '订阅',
-                          icon: _seasonFav == 1
-                              ? Icons.notifications_off_outlined
-                              : Icons.notifications_active_outlined,
-                          onPressed: () async {
-                            dynamic result = await VideoHttp.seasonFav(
-                              isFav: _seasonFav == 1,
-                              seasonId: widget.season.id,
-                            );
-                            if (result['status']) {
-                              SmartDialog.showToast(
-                                  '${_seasonFav == 1 ? '取消' : ''}订阅成功');
-                              _seasonFav = _seasonFav == 1 ? 0 : 1;
-                              _favStream?.add(_seasonFav);
-                            } else {
-                              SmartDialog.showToast(result['msg']);
-                            }
-                          },
-                        )
-                      : const SizedBox.shrink(),
+    return Column(
+      children: [
+        Container(
+          height: 45,
+          padding: EdgeInsets.symmetric(
+              horizontal: widget.showTitle != false ? 14 : 6),
+          child: Row(
+            children: [
+              if (widget.showTitle != false)
+                Text(
+                  '合集(${_isList ? widget.season.epCount : episodes?.length ?? ''})',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                mediumButton(
-                  tooltip: '跳至顶部',
-                  icon: Icons.vertical_align_top,
-                  onPressed: () {
-                    try {
-                      itemScrollController[_ctr?.index ?? 0].scrollTo(
-                        index: !reverse[_ctr?.index ?? 0]
-                            ? 0
-                            : _isList
-                                ? widget.season.sections[_ctr?.index].episodes
-                                        .length -
-                                    1
-                                : episodes.length - 1,
-                        duration: const Duration(milliseconds: 200),
-                      );
-                    } catch (_) {}
-                  },
-                ),
-                mediumButton(
-                  tooltip: '跳至底部',
-                  icon: Icons.vertical_align_bottom,
-                  onPressed: () {
-                    try {
-                      itemScrollController[_ctr?.index ?? 0].scrollTo(
-                        index: !reverse[_ctr?.index ?? 0]
-                            ? _isList
-                                ? widget.season.sections[_ctr?.index].episodes
-                                        .length -
-                                    1
-                                : episodes.length - 1
-                            : 0,
-                        duration: const Duration(milliseconds: 200),
-                      );
-                    } catch (_) {}
-                  },
-                ),
-                mediumButton(
-                  tooltip: '跳至当前',
-                  icon: Icons.my_location,
-                  onPressed: () async {
-                    if (_ctr != null && _ctr?.index != (_index)) {
-                      _ctr?.animateTo(_index);
-                      await Future.delayed(const Duration(milliseconds: 225));
-                    }
-                    try {
-                      itemScrollController[_ctr?.index ?? 0].scrollTo(
-                        index: currentIndex,
-                        duration: const Duration(milliseconds: 200),
-                      );
-                    } catch (_) {}
-                  },
-                ),
-                if (widget.isSupportReverse == true)
-                  if (!_isList)
-                    _reverseButton
-                  else
-                    StreamBuilder(
-                      stream: _indexStream?.stream,
-                      initialData: _index,
-                      builder: (context, snapshot) {
-                        return snapshot.data == _index
-                            ? _reverseButton
-                            : const SizedBox.shrink();
-                      },
-                    ),
-                const Spacer(),
-                StreamBuilder(
-                  stream: _indexStream?.stream,
-                  initialData: _index,
-                  builder: (context, snapshot) => mediumButton(
-                    tooltip: reverse[snapshot.data] ? '顺序' : '倒序',
-                    icon: !reverse[snapshot.data]
-                        ? MdiIcons.sortNumericAscending
-                        : MdiIcons.sortNumericDescending,
-                    onPressed: () {
-                      setState(() {
-                        reverse[_ctr?.index ?? 0] = !reverse[_ctr?.index ?? 0];
-                      });
+              StreamBuilder(
+                stream: _favStream?.stream,
+                builder: (context, snapshot) => snapshot.hasData
+                    ? mediumButton(
+                        tooltip: _seasonFav == 1 ? '取消订阅' : '订阅',
+                        icon: _seasonFav == 1
+                            ? Icons.notifications_off_outlined
+                            : Icons.notifications_active_outlined,
+                        onPressed: () async {
+                          dynamic result = await VideoHttp.seasonFav(
+                            isFav: _seasonFav == 1,
+                            seasonId: widget.season.id,
+                          );
+                          if (result['status']) {
+                            SmartDialog.showToast(
+                                '${_seasonFav == 1 ? '取消' : ''}订阅成功');
+                            _seasonFav = _seasonFav == 1 ? 0 : 1;
+                            _favStream?.add(_seasonFav);
+                          } else {
+                            SmartDialog.showToast(result['msg']);
+                          }
+                        },
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              mediumButton(
+                tooltip: '跳至顶部',
+                icon: Icons.vertical_align_top,
+                onPressed: () {
+                  try {
+                    itemScrollController[_ctr?.index ?? 0].scrollTo(
+                      index: !reverse[_ctr?.index ?? 0]
+                          ? 0
+                          : _isList
+                              ? widget.season.sections[_ctr?.index].episodes
+                                      .length -
+                                  1
+                              : episodes.length - 1,
+                      duration: const Duration(milliseconds: 200),
+                    );
+                  } catch (_) {}
+                },
+              ),
+              mediumButton(
+                tooltip: '跳至底部',
+                icon: Icons.vertical_align_bottom,
+                onPressed: () {
+                  try {
+                    itemScrollController[_ctr?.index ?? 0].scrollTo(
+                      index: !reverse[_ctr?.index ?? 0]
+                          ? _isList
+                              ? widget.season.sections[_ctr?.index].episodes
+                                      .length -
+                                  1
+                              : episodes.length - 1
+                          : 0,
+                      duration: const Duration(milliseconds: 200),
+                    );
+                  } catch (_) {}
+                },
+              ),
+              mediumButton(
+                tooltip: '跳至当前',
+                icon: Icons.my_location,
+                onPressed: () async {
+                  if (_ctr != null && _ctr?.index != (_index)) {
+                    _ctr?.animateTo(_index);
+                    await Future.delayed(const Duration(milliseconds: 225));
+                  }
+                  try {
+                    itemScrollController[_ctr?.index ?? 0].scrollTo(
+                      index: currentIndex,
+                      duration: const Duration(milliseconds: 200),
+                    );
+                  } catch (_) {}
+                },
+              ),
+              if (widget.isSupportReverse == true)
+                if (!_isList)
+                  _reverseButton
+                else
+                  StreamBuilder(
+                    stream: _indexStream?.stream,
+                    initialData: _index,
+                    builder: (context, snapshot) {
+                      return snapshot.data == _index
+                          ? _reverseButton
+                          : const SizedBox.shrink();
                     },
                   ),
+              const Spacer(),
+              StreamBuilder(
+                stream: _indexStream?.stream,
+                initialData: _index,
+                builder: (context, snapshot) => mediumButton(
+                  tooltip: reverse[snapshot.data] ? '顺序' : '倒序',
+                  icon: !reverse[snapshot.data]
+                      ? MdiIcons.sortNumericAscending
+                      : MdiIcons.sortNumericDescending,
+                  onPressed: () {
+                    setState(() {
+                      reverse[_ctr?.index ?? 0] = !reverse[_ctr?.index ?? 0];
+                    });
+                  },
                 ),
-                if (widget.onClose != null)
-                  mediumButton(
-                    tooltip: '关闭',
-                    icon: Icons.close,
-                    onPressed: widget.onClose,
-                  ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 1,
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
-          ),
-          if (_isList)
-            Material(
-              color: Theme.of(context).colorScheme.surface,
-              child: TabBar(
-                controller: _ctr,
-                padding: const EdgeInsets.only(right: 60),
-                isScrollable: true,
-                tabs: (widget.season.sections as List)
-                    .map((item) => Tab(text: item.title))
-                    .toList(),
-                dividerHeight: 1,
-                dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
               ),
-            ),
-          Expanded(
-            child: _isList
-                ? Material(
-                    color: Theme.of(context).colorScheme.surface,
-                    child: TabBarView(
-                      controller: _ctr,
-                      children: List.generate(
-                        widget.season.sections.length,
-                        (index) => _buildBody(
-                            index, widget.season.sections[index].episodes),
-                      ),
-                    ),
-                  )
-                : Material(
-                    color: Theme.of(context).colorScheme.surface,
-                    child: _buildBody(null, episodes),
-                  ),
+              if (widget.onClose != null)
+                mediumButton(
+                  tooltip: '关闭',
+                  icon: Icons.close,
+                  onPressed: widget.onClose,
+                ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Divider(
+          height: 1,
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+        ),
+        if (_isList)
+          TabBar(
+            controller: _ctr,
+            padding: const EdgeInsets.only(right: 60),
+            isScrollable: true,
+            tabs: (widget.season.sections as List)
+                .map((item) => Tab(text: item.title))
+                .toList(),
+            dividerHeight: 1,
+            dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
+          ),
+        Expanded(
+          child: _isList
+              ? Material(
+                  color: Colors.transparent,
+                  child: TabBarView(
+                    controller: _ctr,
+                    children: List.generate(
+                      widget.season.sections.length,
+                      (index) => _buildBody(
+                          index, widget.season.sections[index].episodes),
+                    ),
+                  ),
+                )
+              : Material(
+                  color: Colors.transparent,
+                  child: _buildBody(null, episodes),
+                ),
+        ),
+      ],
     );
   }
 

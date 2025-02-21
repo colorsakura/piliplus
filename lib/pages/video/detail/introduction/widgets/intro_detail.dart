@@ -19,10 +19,8 @@ class IntroDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Theme.of(context).colorScheme.surface,
+    return Padding(
         padding: const EdgeInsets.only(left: 14, right: 14),
-        // height: Utils.getSheetHeight(context),
         child: Column(
           children: [
             InkWell(

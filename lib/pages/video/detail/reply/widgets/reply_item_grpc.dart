@@ -1159,7 +1159,7 @@ class ReplyItemGrpc extends StatelessWidget {
     }
 
     Color errorColor = Theme.of(context).colorScheme.error;
-    return Container(
+    return Padding(
       padding: EdgeInsets.only(
           bottom: MediaQueryData.fromView(
                       WidgetsBinding.instance.platformDispatcher.views.single)

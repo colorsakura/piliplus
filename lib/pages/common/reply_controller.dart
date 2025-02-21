@@ -329,7 +329,7 @@ abstract class ReplyController extends CommonController {
     dynamic mid,
   }) async {
     // biliSendCommAntifraud
-    if (_biliSendCommAntifraud && Platform.isAndroid) {
+    if (Platform.isAndroid && _biliSendCommAntifraud) {
       try {
         List<Cookie> cookies = await Request.cookieManager.cookieJar
             .loadForRequest(Uri.parse(HttpString.apiBaseUrl));

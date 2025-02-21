@@ -63,53 +63,45 @@ class _MediaListPanelState extends State<MediaListPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-      ),
-      child: Column(
-        children: [
-          AppBar(
-            toolbarHeight: 45,
-            automaticallyImplyLeading: false,
-            titleSpacing: 16,
-            title: Text(widget.panelTitle ?? '稍后再看'),
-            actions: [
-              Obx(
-                () => mediumButton(
-                  tooltip: desc.value ? '顺序播放' : '倒序播放',
-                  icon: desc.value
-                      ? MdiIcons.sortAscending
-                      : MdiIcons.sortDescending,
-                  onPressed: () {
-                    widget.onReverse();
-                    desc.value = !desc.value;
-                  },
-                ),
+    return Column(
+      children: [
+        AppBar(
+          toolbarHeight: 45,
+          automaticallyImplyLeading: false,
+          titleSpacing: 16,
+          title: Text(widget.panelTitle ?? '稍后再看'),
+          actions: [
+            Obx(
+              () => mediumButton(
+                tooltip: desc.value ? '顺序播放' : '倒序播放',
+                icon: desc.value
+                    ? MdiIcons.sortAscending
+                    : MdiIcons.sortDescending,
+                onPressed: () {
+                  widget.onReverse();
+                  desc.value = !desc.value;
+                },
               ),
-              mediumButton(
-                tooltip: '关闭',
-                icon: Icons.close,
-                onPressed: Get.back,
-              ),
-              const SizedBox(width: 14),
-            ],
-          ),
-          Expanded(
-            child: Material(
-              color: Theme.of(context).colorScheme.surface,
-              child: widget.loadPrevious != null
-                  ? refreshIndicator(
-                      onRefresh: () async {
-                        await widget.loadPrevious!();
-                      },
-                      child: _buildList,
-                    )
-                  : _buildList,
             ),
-          ),
-        ],
-      ),
+            mediumButton(
+              tooltip: '关闭',
+              icon: Icons.close,
+              onPressed: Get.back,
+            ),
+            const SizedBox(width: 14),
+          ],
+        ),
+        Expanded(
+          child: widget.loadPrevious != null
+              ? refreshIndicator(
+                  onRefresh: () async {
+                    await widget.loadPrevious!();
+                  },
+                  child: _buildList,
+                )
+              : _buildList,
+        ),
+      ],
     );
   }
 

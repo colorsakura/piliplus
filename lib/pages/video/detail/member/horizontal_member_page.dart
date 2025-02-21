@@ -64,24 +64,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 36,
-        actions: [
-          iconButton(
-            context: context,
-            onPressed: Get.back,
-            tooltip: '关闭',
-            icon: Icons.clear,
-            size: 28,
-          ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: Obx(
-        () => _buildUserPage(_controller.userState.value),
-      ),
+    return Obx(
+      () => _buildUserPage(_controller.userState.value),
     );
   }
 
@@ -90,11 +74,25 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
       Loading() => loadingWidget,
       Success() => Column(
           children: [
+            const SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                iconButton(
+                  context: context,
+                  onPressed: Get.back,
+                  tooltip: '关闭',
+                  icon: Icons.clear,
+                  size: 32,
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
             _buildUserInfo(userState.response),
             const SizedBox(height: 5),
             Expanded(
               child: Obx(() => _buildVideoList(_controller.loadingState.value)),
-            )
+            ),
           ],
         ),
       Error() => errorWidget(
@@ -159,46 +157,49 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
   Widget _buildVideoList(LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => CustomScrollView(
-          slivers: [
-            _buildSliverHeader,
-            SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom + 80,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.2,
+      Success() => Material(
+          color: Colors.transparent,
+          child: CustomScrollView(
+            slivers: [
+              _buildSliverHeader,
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom + 80,
                 ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == loadingState.response.length - 1) {
-                      _controller.onLoadMore();
-                    }
-                    return VideoCardHMemberVideo(
-                      videoItem: loadingState.response[index],
-                      bvid: _bvid,
-                      onTap: () {
-                        final Item videoItem = loadingState.response[index];
-                        widget.videoIntroController.changeSeasonOrbangu(
-                          null,
-                          videoItem.bvid,
-                          videoItem.firstCid,
-                          IdUtils.bv2av(videoItem.bvid!),
-                          videoItem.cover,
-                        );
-                        _bvid = videoItem.bvid;
-                        setState(() {});
-                      },
-                    );
-                  },
-                  childCount: loadingState.response.length,
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                    mainAxisSpacing: 2,
+                    maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                    childAspectRatio: StyleString.aspectRatio * 2.2,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index == loadingState.response.length - 1) {
+                        _controller.onLoadMore();
+                      }
+                      return VideoCardHMemberVideo(
+                        videoItem: loadingState.response[index],
+                        bvid: _bvid,
+                        onTap: () {
+                          final Item videoItem = loadingState.response[index];
+                          widget.videoIntroController.changeSeasonOrbangu(
+                            null,
+                            videoItem.bvid,
+                            videoItem.firstCid,
+                            IdUtils.bv2av(videoItem.bvid!),
+                            videoItem.cover,
+                          );
+                          _bvid = videoItem.bvid;
+                          setState(() {});
+                        },
+                      );
+                    },
+                    childCount: loadingState.response.length,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,

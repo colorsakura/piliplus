@@ -168,6 +168,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
           scaffoldState.showBottomSheet(
+            backgroundColor: Colors.transparent,
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,

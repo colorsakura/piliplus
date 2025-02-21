@@ -120,6 +120,7 @@ class MemberController extends GetxController {
                   await Get.bottomSheet(
                     GroupPanel(mid: mid),
                     isScrollControlled: true,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                   );
                   Get.back();
                 },

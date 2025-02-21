@@ -53,7 +53,7 @@ void main() async {
       ],
     );
   }
-  if (GStorage.badCertificateCallback) {
+  if (BuildConfig.isDebug || GStorage.badCertificateCallback) {
     HttpOverrides.global = _CustomHttpOverrides();
   }
   await setupServiceLocator();

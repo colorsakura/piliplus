@@ -1116,7 +1116,7 @@ class MorePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color errorColor = Theme.of(context).colorScheme.error;
-    return Container(
+    return Padding(
       padding: EdgeInsets.only(
           bottom: MediaQueryData.fromView(
                       WidgetsBinding.instance.platformDispatcher.views.single)
