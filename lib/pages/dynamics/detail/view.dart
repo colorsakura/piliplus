@@ -64,6 +64,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
+          bool needReverse =
+              _fabAnimationCtr?.status.isForwardOrCompleted == true;
+          if (needReverse) {
+            _fabAnimationCtr?.reverse();
+          }
           final ctr = AnimationController(
             vsync: this,
             duration: const Duration(milliseconds: 200),
@@ -77,10 +82,20 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             ctr,
             imgList,
             index,
-            () async {
-              await ctr.reverse();
-              ctr.dispose();
-              Get.back();
+            (value) async {
+              if (needReverse) {
+                needReverse = false;
+                _fabAnimationCtr?.forward();
+              }
+              if (value == false) {
+                await ctr.reverse();
+              }
+              try {
+                ctr.dispose();
+              } catch (_) {}
+              if (value == false) {
+                Get.back();
+              }
             },
           );
         }
@@ -155,7 +170,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
-      Widget replyReplyPage([bool automaticallyImplyLeading = true]) =>
+      Widget replyReplyPage(
+              [bool automaticallyImplyLeading = true,
+              VoidCallback? onDispose]) =>
           Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -171,6 +188,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               replyType: ReplyType.values[replyType],
               firstFloor: replyItem,
               isTop: isTop ?? false,
+              onDispose: onDispose,
             ),
           );
       if (this.context.orientation == Orientation.portrait) {
@@ -178,12 +196,24 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
+          bool needReverse =
+              _fabAnimationCtr?.status.isForwardOrCompleted == true;
+          if (needReverse) {
+            _fabAnimationCtr?.reverse();
+          }
           scaffoldState.showBottomSheet(
             backgroundColor: Colors.transparent,
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,
-              child: replyReplyPage(false),
+              child: replyReplyPage(
+                false,
+                () {
+                  if (needReverse) {
+                    _fabAnimationCtr?.forward();
+                  }
+                },
+              ),
             ),
           );
         } else {

@@ -32,6 +32,7 @@ class VideoReplyReplyPanel extends StatefulWidget {
     this.isTop = false,
     this.onViewImage,
     this.onDismissed,
+    this.onDispose,
   });
   final int? id;
   final int oid;
@@ -44,13 +45,14 @@ class VideoReplyReplyPanel extends StatefulWidget {
   final bool isTop;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
+  final VoidCallback? onDispose;
 
   @override
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
 }
 
 class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late VideoReplyReplyController _videoReplyReplyController;
   late final _savedReplies = {};
   late final itemPositionsListener = ItemPositionsListener.create();
@@ -82,6 +84,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
 
   @override
   void dispose() {
+    widget.onDispose?.call();
     _videoReplyReplyController.controller?.stop();
     _videoReplyReplyController.controller?.dispose();
     _videoReplyReplyController.controller = null;
@@ -305,10 +308,16 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
             ctr,
             imgList,
             index,
-            () async {
-              await ctr.reverse();
-              ctr.dispose();
-              Get.back();
+            (value) async {
+              if (value == false) {
+                await ctr.reverse();
+              }
+              try {
+                ctr.dispose();
+              } catch (_) {}
+              if (value == false) {
+                Get.back();
+              }
             },
           );
         }

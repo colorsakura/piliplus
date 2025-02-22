@@ -57,6 +57,11 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
+          bool needReverse =
+              fabAnimationCtr.status.isForwardOrCompleted == true;
+          if (needReverse) {
+            fabAnimationCtr.reverse();
+          }
           final ctr = AnimationController(
             vsync: this,
             duration: const Duration(milliseconds: 200),
@@ -70,10 +75,20 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             ctr,
             imgList,
             index,
-            () async {
-              await ctr.reverse();
-              ctr.dispose();
-              Get.back();
+            (value) async {
+              if (needReverse) {
+                needReverse = false;
+                fabAnimationCtr.forward();
+              }
+              if (value == false) {
+                await ctr.reverse();
+              }
+              try {
+                ctr.dispose();
+              } catch (_) {}
+              if (value == false) {
+                Get.back();
+              }
             },
           );
         }
@@ -144,7 +159,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
-      Widget replyReplyPage([bool automaticallyImplyLeading = true]) =>
+      Widget replyReplyPage(
+              [bool automaticallyImplyLeading = true,
+              VoidCallback? onDispose]) =>
           Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -160,6 +177,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               replyType: ReplyType.values[type],
               firstFloor: replyItem,
               isTop: isTop ?? false,
+              onDispose: onDispose,
             ),
           );
       if (this.context.orientation == Orientation.portrait) {
@@ -167,12 +185,24 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
+          bool needReverse =
+              fabAnimationCtr.status.isForwardOrCompleted == true;
+          if (needReverse) {
+            fabAnimationCtr.reverse();
+          }
           scaffoldState.showBottomSheet(
             backgroundColor: Colors.transparent,
             (context) => MediaQuery.removePadding(
               context: context,
               removeLeft: true,
-              child: replyReplyPage(false),
+              child: replyReplyPage(
+                false,
+                () {
+                  if (needReverse) {
+                    fabAnimationCtr.forward();
+                  }
+                },
+              ),
             ),
           );
         } else {

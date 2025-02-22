@@ -1736,10 +1736,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     ctr,
                     imgList,
                     index,
-                    () async {
-                      await ctr.reverse();
-                      ctr.dispose();
-                      Get.back();
+                    (value) async {
+                      if (value == false) {
+                        await ctr.reverse();
+                      }
+                      try {
+                        ctr.dispose();
+                      } catch (_) {}
+                      if (value == false) {
+                        Get.back();
+                      }
                     },
                   );
                 }

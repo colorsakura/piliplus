@@ -67,7 +67,7 @@ class InteractiveviewerGallery<T> extends StatefulWidget {
     this.onClose,
   });
 
-  final VoidCallback? onClose;
+  final ValueChanged? onClose;
 
   final bool? setStatusBar;
 
@@ -152,6 +152,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   @override
   void dispose() async {
+    widget.onClose?.call(true);
     _player?.dispose();
     _pageController?.dispose();
     _animationController.removeListener(() {});
@@ -259,7 +260,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   void onClose() {
     if (widget.onClose != null) {
-      widget.onClose!();
+      widget.onClose!(false);
     } else {
       Get.back();
       widget.onDismissed?.call(_pageController!.page!.floor());
