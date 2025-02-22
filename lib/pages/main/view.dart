@@ -184,146 +184,155 @@ class _MainAppState extends State<MainApp>
           }
         }
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        extendBody: true,
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (useSideBar || context.orientation == Orientation.landscape)
-              Obx(
-                () => _mainController.navigationBars.length > 1
-                    ? NavigationRail(
-                        groupAlignment: 0.5,
-                        selectedIndex: _mainController.selectedIndex.value,
-                        onDestinationSelected: setIndex,
-                        labelType: NavigationRailLabelType.selected,
-                        leading: userAndSearchVertical,
-                        destinations: _mainController.navigationBars
-                            .map(
-                              (e) => NavigationRailDestination(
-                                icon: _buildIcon(
-                                  id: e['id'],
-                                  count: e['count'],
-                                  icon: e['icon'],
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness:
+              Theme.of(context).brightness == Brightness.light
+                  ? Brightness.dark
+                  : Brightness.light, // 设置虚拟按键图标颜色
+        ),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: true,
+          body: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (useSideBar || context.orientation == Orientation.landscape)
+                Obx(
+                  () => _mainController.navigationBars.length > 1
+                      ? NavigationRail(
+                          groupAlignment: 0.5,
+                          selectedIndex: _mainController.selectedIndex.value,
+                          onDestinationSelected: setIndex,
+                          labelType: NavigationRailLabelType.selected,
+                          leading: userAndSearchVertical,
+                          destinations: _mainController.navigationBars
+                              .map(
+                                (e) => NavigationRailDestination(
+                                  icon: _buildIcon(
+                                    id: e['id'],
+                                    count: e['count'],
+                                    icon: e['icon'],
+                                  ),
+                                  selectedIcon: _buildIcon(
+                                    id: e['id'],
+                                    count: e['count'],
+                                    icon: e['selectIcon'],
+                                  ),
+                                  label: Text(e['label']),
                                 ),
-                                selectedIcon: _buildIcon(
-                                  id: e['id'],
-                                  count: e['count'],
-                                  icon: e['selectIcon'],
-                                ),
-                                label: Text(e['label']),
-                              ),
-                            )
-                            .toList(),
-                      )
-                    : Container(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.paddingOf(context).top + 10,
+                              )
+                              .toList(),
+                        )
+                      : Container(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery.paddingOf(context).top + 10,
+                          ),
+                          width: 56,
+                          child: userAndSearchVertical,
                         ),
-                        width: 56,
-                        child: userAndSearchVertical,
+                ),
+              VerticalDivider(
+                width: 1,
+                indent: MediaQuery.of(context).padding.top,
+                endIndent: MediaQuery.of(context).padding.bottom,
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
+              ),
+              Expanded(
+                child: _mainController.mainTabBarView
+                    ? CustomTabBarView(
+                        scrollDirection:
+                            context.orientation == Orientation.portrait
+                                ? Axis.horizontal
+                                : Axis.vertical,
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: _mainController.controller,
+                        children: _mainController.pages,
+                      )
+                    : PageView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: _mainController.controller,
+                        children: _mainController.pages,
                       ),
               ),
-            VerticalDivider(
-              width: 1,
-              indent: MediaQuery.of(context).padding.top,
-              endIndent: MediaQuery.of(context).padding.bottom,
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.06),
-            ),
-            Expanded(
-              child: _mainController.mainTabBarView
-                  ? CustomTabBarView(
-                      scrollDirection:
-                          context.orientation == Orientation.portrait
-                              ? Axis.horizontal
-                              : Axis.vertical,
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _mainController.controller,
-                      children: _mainController.pages,
-                    )
-                  : PageView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _mainController.controller,
-                      children: _mainController.pages,
-                    ),
-            ),
-          ],
-        ),
-        bottomNavigationBar:
-            useSideBar || context.orientation == Orientation.landscape
-                ? null
-                : StreamBuilder(
-                    stream: _mainController.hideTabBar
-                        ? _mainController.bottomBarStream.stream
-                        : StreamController<bool>.broadcast().stream,
-                    initialData: true,
-                    builder: (context, AsyncSnapshot snapshot) {
-                      return AnimatedSlide(
-                        curve: Curves.easeInOutCubicEmphasized,
-                        duration: const Duration(milliseconds: 500),
-                        offset: Offset(0, snapshot.data ? 0 : 1),
-                        child: enableMYBar
-                            ? Obx(
-                                () => _mainController.navigationBars.length > 1
-                                    ? NavigationBar(
-                                        onDestinationSelected: setIndex,
-                                        selectedIndex:
-                                            _mainController.selectedIndex.value,
-                                        destinations:
-                                            _mainController.navigationBars.map(
-                                          (e) {
-                                            return NavigationDestination(
+            ],
+          ),
+          bottomNavigationBar: useSideBar ||
+                  context.orientation == Orientation.landscape
+              ? null
+              : StreamBuilder(
+                  stream: _mainController.hideTabBar
+                      ? _mainController.bottomBarStream.stream
+                      : StreamController<bool>.broadcast().stream,
+                  initialData: true,
+                  builder: (context, AsyncSnapshot snapshot) {
+                    return AnimatedSlide(
+                      curve: Curves.easeInOutCubicEmphasized,
+                      duration: const Duration(milliseconds: 500),
+                      offset: Offset(0, snapshot.data ? 0 : 1),
+                      child: enableMYBar
+                          ? Obx(
+                              () => _mainController.navigationBars.length > 1
+                                  ? NavigationBar(
+                                      onDestinationSelected: setIndex,
+                                      selectedIndex:
+                                          _mainController.selectedIndex.value,
+                                      destinations:
+                                          _mainController.navigationBars.map(
+                                        (e) {
+                                          return NavigationDestination(
+                                            icon: _buildIcon(
+                                              id: e['id'],
+                                              count: e['count'],
+                                              icon: e['icon'],
+                                            ),
+                                            selectedIcon: _buildIcon(
+                                              id: e['id'],
+                                              count: e['count'],
+                                              icon: e['selectIcon'],
+                                            ),
+                                            label: e['label'],
+                                          );
+                                        },
+                                      ).toList(),
+                                    )
+                                  : const SizedBox.shrink(),
+                            )
+                          : Obx(
+                              () => _mainController.navigationBars.length > 1
+                                  ? BottomNavigationBar(
+                                      currentIndex:
+                                          _mainController.selectedIndex.value,
+                                      onTap: setIndex,
+                                      iconSize: 16,
+                                      selectedFontSize: 12,
+                                      unselectedFontSize: 12,
+                                      type: BottomNavigationBarType.fixed,
+                                      items: _mainController.navigationBars
+                                          .map(
+                                            (e) => BottomNavigationBarItem(
                                               icon: _buildIcon(
                                                 id: e['id'],
                                                 count: e['count'],
                                                 icon: e['icon'],
                                               ),
-                                              selectedIcon: _buildIcon(
+                                              activeIcon: _buildIcon(
                                                 id: e['id'],
                                                 count: e['count'],
                                                 icon: e['selectIcon'],
                                               ),
                                               label: e['label'],
-                                            );
-                                          },
-                                        ).toList(),
-                                      )
-                                    : const SizedBox.shrink(),
-                              )
-                            : Obx(
-                                () => _mainController.navigationBars.length > 1
-                                    ? BottomNavigationBar(
-                                        currentIndex:
-                                            _mainController.selectedIndex.value,
-                                        onTap: setIndex,
-                                        iconSize: 16,
-                                        selectedFontSize: 12,
-                                        unselectedFontSize: 12,
-                                        type: BottomNavigationBarType.fixed,
-                                        items: _mainController.navigationBars
-                                            .map(
-                                              (e) => BottomNavigationBarItem(
-                                                icon: _buildIcon(
-                                                  id: e['id'],
-                                                  count: e['count'],
-                                                  icon: e['icon'],
-                                                ),
-                                                activeIcon: _buildIcon(
-                                                  id: e['id'],
-                                                  count: e['count'],
-                                                  icon: e['selectIcon'],
-                                                ),
-                                                label: e['label'],
-                                              ),
-                                            )
-                                            .toList(),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ),
-                      );
-                    },
-                  ),
+                                            ),
+                                          )
+                                          .toList(),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }
