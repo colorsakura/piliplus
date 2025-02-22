@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/spring_physics.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -538,8 +539,7 @@ class _LoginPageState extends State<LoginPage> {
             }
             return true;
           },
-          child: TabBarView(
-            physics: const AlwaysScrollableScrollPhysics(),
+          child: tabBarView(
             controller: _loginPageCtr.tabController,
             children: [
               tabViewOuter(loginByPassword()),

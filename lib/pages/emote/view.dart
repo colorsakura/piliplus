@@ -36,8 +36,7 @@ class _EmotePanelState extends State<EmotePanel>
           ? Column(
               children: [
                 Expanded(
-                  child: TabBarView(
-                    physics: customTabBarViewScrollPhysics,
+                  child: tabBarView(
                     controller: _emotePanelController.tabController,
                     children: (loadingState.response as List<Packages>).map(
                       (e) {

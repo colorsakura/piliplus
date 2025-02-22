@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
     show kDragContainerExtentPercentage, displacement;
@@ -415,11 +416,18 @@ class GStorage {
     };
   }
 
-  static final _defaultSpring = const ClampingScrollPhysics().spring;
-
-  static final List springDescription = setting
-      .get(SettingBoxKey.springDescription,
-        defaultValue: [_defaultSpring.mass, _defaultSpring.stiffness, _defaultSpring.damping]);
+  // static final SpringDescription _kDefaultSpring = SpringDescription.withDampingRatio(
+  // mass: 0.5,
+  // stiffness: 100.0,
+  // ratio: 1.1,
+  // );
+  // damping = ratio * 2.0 * math.sqrt(mass * stiffness)
+  static List<double> get springDescription => List<double>.from(
+        setting.get(
+          SettingBoxKey.springDescription, // [mass, stiffness, damping]
+          defaultValue: [0.5, 100.0, 2.2 * sqrt(50)],
+        ),
+      );
 
   // static Brightness get brightness {
   //   return switch (_themeMode) {

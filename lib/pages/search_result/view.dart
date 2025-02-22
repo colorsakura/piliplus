@@ -119,8 +119,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             ),
           ),
           Expanded(
-            child: TabBarView(
-              physics: customTabBarViewScrollPhysics,
+            child: tabBarView(
               controller: _tabController,
               children: SearchType.values
                   .map(

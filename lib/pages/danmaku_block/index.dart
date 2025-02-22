@@ -142,8 +142,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
                         '${ruleLabels[i]}(${_danmakuBlockController.ruleTypes[i]!.length})')),
             ]),
       ),
-      body: TabBarView(
-        physics: customTabBarViewScrollPhysics,
+      body: tabBarView(
         controller: _danmakuBlockController.tabController,
         children: [
           for (var i = 0; i < ruleLabels.length; i++)

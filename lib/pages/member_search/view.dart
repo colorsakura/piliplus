@@ -69,8 +69,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                     ),
                   ),
                   Expanded(
-                    child: TabBarView(
-                      physics: customTabBarViewScrollPhysics,
+                    child: tabBarView(
                       controller: _memberSearchCtr.tabController,
                       children: [
                         SearchArchive(ctr: _memberSearchCtr),

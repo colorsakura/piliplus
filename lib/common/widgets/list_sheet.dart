@@ -423,8 +423,7 @@ class _ListSheetContentState extends State<ListSheetContent>
           child: _isList
               ? Material(
                   color: Colors.transparent,
-                  child: TabBarView(
-                    physics: customTabBarViewScrollPhysics,
+                  child: tabBarView(
                     controller: _ctr,
                     children: List.generate(
                       widget.season.sections.length,

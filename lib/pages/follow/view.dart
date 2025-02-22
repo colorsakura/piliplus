@@ -83,8 +83,7 @@ class _FollowPageState extends State<FollowPage> {
                                 ]
                               ]),
                           Expanded(
-                            child: TabBarView(
-                              physics: customTabBarViewScrollPhysics,
+                            child: tabBarView(
                               controller: _followController.tabController,
                               children: [
                                 for (var i = 0;

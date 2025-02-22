@@ -621,8 +621,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             showReply: videoDetailController.showReply,
                           ),
                           Expanded(
-                            child: TabBarView(
-                              physics: customTabBarViewScrollPhysics,
+                            child: tabBarView(
                               controller: videoDetailController.tabCtr,
                               children: [
                                 videoIntro(),
@@ -672,8 +671,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       children: [
                         buildTabbar(showReply: videoDetailController.showReply),
                         Expanded(
-                          child: TabBarView(
-                            physics: customTabBarViewScrollPhysics,
+                          child: tabBarView(
                             controller: videoDetailController.tabCtr,
                             children: [
                               videoIntro(),
@@ -772,8 +770,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             showReply: videoDetailController.showReply,
                           ),
                           Expanded(
-                            child: TabBarView(
-                              physics: customTabBarViewScrollPhysics,
+                            child: tabBarView(
                               controller: videoDetailController.tabCtr,
                               children: [
                                 if (videoDetailController.showReply)
@@ -882,8 +879,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           showReply: videoDetailController.showReply,
                         ),
                         Expanded(
-                          child: TabBarView(
-                            physics: customTabBarViewScrollPhysics,
+                          child: tabBarView(
                             controller: videoDetailController.tabCtr,
                             children: [
                               if (videoDetailController.videoType ==

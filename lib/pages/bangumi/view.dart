@@ -162,8 +162,7 @@ class _BangumiPageState extends State<BangumiPage>
                                           .map((title) => Tab(text: title))
                                           .toList()),
                                   Expanded(
-                                    child: TabBarView(
-                                        physics: customTabBarViewScrollPhysics,
+                                    child: tabBarView(
                                         children: types
                                             .map((type) =>
                                                 PgcIndexPage(indexType: type))

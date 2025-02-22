@@ -183,8 +183,7 @@ class _DynamicsPageState extends State<DynamicsPage>
         body: Row(children: [
           if (upPanelPosition == UpPanelPosition.leftFixed) upPanelPart(),
           Expanded(
-              child: TabBarView(
-            physics: customTabBarViewScrollPhysics,
+              child: tabBarView(
             controller: _dynamicsController.tabController,
             children: _dynamicsController.tabsPageList,
           )),

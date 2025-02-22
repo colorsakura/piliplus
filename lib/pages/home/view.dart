@@ -73,8 +73,7 @@ class _HomePageState extends State<HomePage>
           ] else
             const SizedBox(height: 6),
           Expanded(
-            child: TabBarView(
-              physics: customTabBarViewScrollPhysics,
+            child: tabBarView(
               controller: _homeController.tabController,
               children: _homeController.tabsPageList,
             ),

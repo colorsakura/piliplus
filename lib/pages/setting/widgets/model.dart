@@ -542,7 +542,8 @@ List<SettingsModel> get styleSettings => [
         leading: const Icon(Icons.chrome_reader_mode_outlined),
         onTap: (setState) {
           final numberRegExp = RegExp(r'[\d\.]+');
-          List springDescription = GStorage.springDescription.map((i) => i.toString()).toList();
+          List springDescription =
+              GStorage.springDescription.map((i) => i.toString()).toList();
           showDialog(
             context: Get.context!,
             builder: (context) {
@@ -550,32 +551,28 @@ List<SettingsModel> get styleSettings => [
                 title: const Text('弹簧参数'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      autofocus: true,
-                      initialValue: springDescription[0],
-                      keyboardType: TextInputType.numberWithOptions(),
-                      onChanged: (value) { springDescription[0] = value; },
-                      inputFormatters: [FilteringTextInputFormatter.allow(numberRegExp)],
-                      decoration: InputDecoration(labelText: 'mass'),
+                  children: List.generate(
+                    3,
+                    (index) => TextFormField(
+                      autofocus: index == 0,
+                      initialValue: springDescription[index],
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      onChanged: (value) {
+                        springDescription[index] = value;
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(numberRegExp)
+                      ],
+                      decoration: InputDecoration(
+                        labelText: const [
+                          'mass',
+                          'stiffness',
+                          'damping'
+                        ][index],
+                      ),
                     ),
-                    TextFormField(
-                      autofocus: true,
-                      initialValue: springDescription[1],
-                      keyboardType: TextInputType.numberWithOptions(),
-                      onChanged: (value) { springDescription[1] = value; },
-                      inputFormatters: [FilteringTextInputFormatter.allow(numberRegExp)],
-                      decoration: InputDecoration(labelText: 'stiffness'),
-                    ),
-                    TextFormField(
-                      autofocus: true,
-                      initialValue: springDescription[2],
-                      keyboardType: TextInputType.numberWithOptions(),
-                      onChanged: (value) { springDescription[2] = value; },
-                      inputFormatters: [FilteringTextInputFormatter.allow(numberRegExp)],
-                      decoration: InputDecoration(labelText: 'damping'),
-                    )
-                  ]
+                  ),
                 ),
                 actions: [
                   TextButton(
@@ -590,9 +587,15 @@ List<SettingsModel> get styleSettings => [
                   TextButton(
                     onPressed: () async {
                       Get.back();
+                      late final spring = GStorage.springDescription;
                       await GStorage.setting.put(
                         SettingBoxKey.springDescription,
-                        List<double>.generate(3, (i) => double.tryParse(springDescription[i]) ?? GStorage.springDescription[i]),
+                        List<double>.generate(
+                          3,
+                          (i) =>
+                              double.tryParse(springDescription[i]) ??
+                              spring[i],
+                        ),
                       );
                       SmartDialog.showToast('设置成功，重启生效');
                       setState();
