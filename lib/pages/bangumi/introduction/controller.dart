@@ -480,11 +480,9 @@ class BangumiIntroController extends CommonController {
     // 重新请求评论
     if (videoDetailCtr.showReply) {
       try {
-        /// 未渲染回复组件时可能异常
-        VideoReplyController videoReplyCtr =
-            Get.find<VideoReplyController>(tag: Get.arguments['heroTag']);
-        videoReplyCtr.aid = aid;
-        videoReplyCtr.onRefresh();
+        Get.find<VideoReplyController>(tag: Get.arguments['heroTag'])
+          ..aid = aid
+          ..onReload();
       } catch (_) {}
     }
 

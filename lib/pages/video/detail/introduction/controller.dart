@@ -639,7 +639,7 @@ class VideoIntroController extends GetxController
       try {
         Get.find<VideoReplyController>(tag: heroTag)
           ..aid = aid
-          ..onRefresh();
+          ..onReload();
       } catch (_) {}
     }
 

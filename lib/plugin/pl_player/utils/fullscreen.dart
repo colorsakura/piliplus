@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 
 import '../../../utils/storage.dart';
 
@@ -74,6 +75,7 @@ Future<void> hideStatusBar() async {
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,
   );
+  StatusBarControl.setHidden(true);
 }
 
 //退出全屏显示
@@ -92,6 +94,7 @@ Future<void> showStatusBar() async {
         mode,
         overlays: SystemUiOverlay.values,
       );
+      StatusBarControl.setHidden(false);
     } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       await const MethodChannel('com.alexmercerind/media_kit_video')
           .invokeMethod(

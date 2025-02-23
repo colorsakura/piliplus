@@ -584,7 +584,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           !isFullScreen &&
                           isShowing &&
                           mounted) {
-                        if (!removeSafeArea) showStatusBar();
+                        if (videoDetailController.imageStatus.not &&
+                            removeSafeArea.not) {
+                          showStatusBar();
+                        }
                       }
                       return Container(
                         color: Colors.black,
@@ -1228,9 +1231,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoDetailController.tabCtr = TabController(
         vsync: this,
         length: tabs.length,
-        initialIndex: tabs.length > videoDetailController.tabCtr.length
-            ? videoDetailController.tabCtr.index
-            : 0,
+        initialIndex:
+            videoDetailController.tabCtr.index.clamp(0, tabs.length - 1),
       );
     }
 
