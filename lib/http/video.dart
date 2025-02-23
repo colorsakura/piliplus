@@ -455,7 +455,7 @@ class VideoHttp {
   }
 
   // 一键三连 bangumi
-  static Future triple({dynamic epId}) async {
+  static Future triple({dynamic epId, required dynamic seasonId}) async {
     var res = await Request().post(
       Api.triple,
       data: {
@@ -463,8 +463,11 @@ class VideoHttp {
         'csrf': await Request.getCsrf(),
       },
       options: Options(
+        contentType: Headers.formUrlEncodedContentType,
         headers: {
-          'Content-Type': Headers.formUrlEncodedContentType,
+          'origin': 'https://www.bilibili.com',
+          'referer': 'https://www.bilibili.com/bangumi/play/ss$seasonId',
+          'user-agent': Request.headerUa(type: 'pc'),
         },
       ),
     );
@@ -489,6 +492,11 @@ class VideoHttp {
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
+        headers: {
+          'origin': 'https://www.bilibili.com',
+          'referer': 'https://www.bilibili.com/video/$bvid',
+          'user-agent': Request.headerUa(type: 'pc'),
+        },
       ),
     );
     if (res.data['code'] == 0) {
