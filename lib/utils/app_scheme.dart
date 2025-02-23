@@ -453,10 +453,13 @@ class PiliScheme {
         debugPrint('投稿');
         final Map<String, dynamic> map = IdUtils.matchAvorBv(input: path);
         if (map.isNotEmpty) {
+          final queryParameters = uri.queryParameters;
           videoPush(
             map['AV'],
             map['BV'],
             off: off,
+            progress: queryParameters['dm_progress'],
+            part: queryParameters['p'],
           );
           return true;
         }
@@ -547,6 +550,7 @@ class PiliScheme {
     bool showDialog = true,
     bool off = false,
     String? progress,
+    String? part,
   }) async {
     try {
       aid ??= IdUtils.bv2av(bvid!);
@@ -554,7 +558,11 @@ class PiliScheme {
       if (showDialog) {
         SmartDialog.showLoading<dynamic>(msg: '获取中...');
       }
-      final int cid = await SearchHttp.ab2c(bvid: bvid, aid: aid);
+      final int cid = await SearchHttp.ab2c(
+        bvid: bvid,
+        aid: aid,
+        part: part != null ? int.tryParse(part) : null,
+      );
       if (showDialog) {
         SmartDialog.dismiss();
       }
