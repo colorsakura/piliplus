@@ -53,6 +53,7 @@ class PLVideoPlayer extends StatefulWidget {
     this.customWidgets,
     this.showEpisodes,
     this.showViewPoints,
+    this.fill,
     super.key,
   });
 
@@ -68,6 +69,7 @@ class PLVideoPlayer extends StatefulWidget {
   final List<Widget>? customWidgets;
   final Function? showEpisodes;
   final VoidCallback? showViewPoints;
+  final Color? fill;
 
   @override
   State<PLVideoPlayer> createState() => _PLVideoPlayerState();
@@ -844,6 +846,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               flipX: plPlayerController.flipX.value,
               flipY: plPlayerController.flipY.value,
               child: Video(
+                fill: widget.fill ?? Colors.black,
                 key: plPlayerController.key,
                 controller: videoController,
                 controls: NoVideoControls,

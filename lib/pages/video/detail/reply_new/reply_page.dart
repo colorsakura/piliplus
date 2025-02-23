@@ -34,7 +34,7 @@ class ReplyPage extends CommonPublishPage {
 }
 
 class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
-  RxBool _syncToDynamic = false.obs;
+  final RxBool _syncToDynamic = false.obs;
 
   @override
   Widget build(BuildContext context) {

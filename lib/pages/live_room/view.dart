@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
@@ -73,11 +74,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         _updateFontSize();
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (context.orientation == Orientation.landscape) {
-        plPlayerController.triggerFullScreen(status: true);
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (context.orientation == Orientation.landscape) {
+    //     plPlayerController.triggerFullScreen(status: true);
+    //   }
+    // });
   }
 
   void _updateFontSize() async {
@@ -130,12 +131,18 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     }
   }
 
-  Widget get videoPlayerPanel {
+  final GlobalKey videoPlayerKey = GlobalKey();
+  final GlobalKey playerKey = GlobalKey();
+
+  Widget videoPlayerPanel([Color? fill]) {
     return FutureBuilder(
+      key: videoPlayerKey,
       future: _futureBuilderFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData && snapshot.data['status']) {
           return PLVideoPlayer(
+            key: playerKey,
+            fill: fill,
             plPlayerController: plPlayerController,
             bottomControl: BottomControl(
               controller: plPlayerController,
@@ -176,11 +183,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget get childWhenDisabled {
-    return Scaffold(
-      primary: true,
-      backgroundColor: Colors.black,
-      body: Stack(
+  Widget childWhenDisabled(bool isPortrait) {
+    return ColoredBox(
+      color: Colors.black,
+      child: Stack(
         children: [
           Positioned(
             left: 0,
@@ -221,211 +227,22 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                   : const SizedBox(),
             ),
           ),
-          Column(
-            children: [
-              AppBar(
-                backgroundColor: Colors.transparent,
-                foregroundColor: Colors.white,
-                titleTextStyle: TextStyle(color: Colors.white),
-                toolbarHeight:
-                    MediaQuery.of(context).orientation == Orientation.portrait
-                        ? 56
-                        : 0,
-                title: FutureBuilder(
-                  future: _futureBuilder,
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null) {
-                      return const SizedBox();
-                    }
-                    Map data = snapshot.data as Map;
-                    if (data['status']) {
-                      return Obx(
-                        () => Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _node.unfocus();
-                                dynamic uid = _liveRoomController
-                                    .roomInfoH5.value.roomInfo?.uid;
-                                Get.toNamed(
-                                  '/member?mid=$uid',
-                                  arguments: {
-                                    'heroTag': Utils.makeHeroTag(uid),
-                                  },
-                                );
-                              },
-                              child: NetworkImgLayer(
-                                width: 34,
-                                height: 34,
-                                type: 'avatar',
-                                src: _liveRoomController.roomInfoH5.value
-                                    .anchorInfo!.baseInfo!.face,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _liveRoomController.roomInfoH5.value
-                                      .anchorInfo!.baseInfo!.uname!,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                const SizedBox(height: 1),
-                                if (_liveRoomController
-                                        .roomInfoH5.value.watchedShow !=
-                                    null)
-                                  Text(
-                                    _liveRoomController.roomInfoH5.value
-                                            .watchedShow!['text_large'] ??
-                                        '',
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                              ],
-                            ),
-                            const Spacer(),
-                            //刷新
-                            IconButton(
-                              tooltip: '刷新',
-                              onPressed: () {
-                                _futureBuilderFuture =
-                                    _liveRoomController.queryLiveInfo();
-                                // videoSourceInit();
-                              },
-                              icon: const Icon(Icons.refresh),
-                            ),
-                            //内置浏览器打开
-                            IconButton(
-                                tooltip: '浏览器打开',
-                                onPressed: () {
-                                  Utils.inAppWebview(
-                                    'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
-                                    off: true,
-                                  );
-                                },
-                                icon: const Icon(Icons.open_in_browser)),
-                          ],
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              ),
-              Obx(
-                () => PopScope(
-                  canPop: plPlayerController.isFullScreen.value != true,
-                  onPopInvokedWithResult: (bool didPop, Object? result) {
-                    if (plPlayerController.isFullScreen.value == true) {
-                      plPlayerController.triggerFullScreen(status: false);
-                      // if (MediaQuery.of(context).orientation ==
-                      //     Orientation.landscape) {
-                      //   verticalScreenForTwoSeconds();
-                      // }
-                    }
-                  },
-                  child: Listener(
-                    onPointerDown: (_) {
-                      _node.unfocus();
-                    },
-                    child: SizedBox(
-                      width: Get.size.width,
-                      height: MediaQuery.of(context).orientation ==
-                              Orientation.landscape
-                          ? Get.size.height
-                          : Get.size.width * 9 / 16,
-                      child: videoPlayerPanel,
-                    ),
+          isPortrait
+              ? Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Column(
+                    children: [
+                      _buildAppBar,
+                      ..._buildBodyP,
+                    ],
                   ),
-                ),
-              ),
-              Expanded(
-                child: Listener(
-                  onPointerDown: (_) {
-                    _node.unfocus();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: LiveRoomChat(
-                      roomId: _roomId,
-                      liveRoomController: _liveRoomController,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                  left: 10,
-                  top: 10,
-                  right: 10,
-                  bottom: 25 + MediaQuery.of(context).padding.bottom,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  border: Border(
-                    top: BorderSide(color: Color(0x1AFFFFFF)),
-                  ),
-                  color: Color(0x1AFFFFFF),
-                ),
-                child: Row(
+                )
+              : Column(
                   children: [
-                    Obx(
-                      () => IconButton(
-                        onPressed: () {
-                          plPlayerController.isOpenDanmu.value =
-                              !plPlayerController.isOpenDanmu.value;
-                          GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
-                              plPlayerController.isOpenDanmu.value);
-                        },
-                        icon: Icon(
-                          plPlayerController.isOpenDanmu.value
-                              ? Icons.subtitles_outlined
-                              : Icons.subtitles_off_outlined,
-                          color: _color,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        focusNode: _node,
-                        controller: _ctr,
-                        textInputAction: TextInputAction.send,
-                        cursorColor: _color,
-                        style: TextStyle(color: _color),
-                        onSubmitted: (value) {
-                          if (value.isNotEmpty) {
-                            _onSendMsg(value);
-                          }
-                        },
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '发送弹幕',
-                          hintStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        if (_ctr.text.isNotEmpty) {
-                          _onSendMsg(_ctr.text);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.send,
-                        color: _color,
-                      ),
-                    ),
+                    _buildAppBar,
+                    _buildBodyH,
                   ],
                 ),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -436,18 +253,279 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateFontSize();
     });
-    if (Platform.isAndroid) {
-      return PiPSwitcher(
-        getChildWhenDisabled: () => childWhenDisabled,
-        getChildWhenEnabled: () => videoPlayerPanel,
-        floating: floating,
-      );
-    } else {
-      return childWhenDisabled;
-    }
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        if (Platform.isAndroid) {
+          return PiPSwitcher(
+            getChildWhenDisabled: () =>
+                childWhenDisabled(orientation == Orientation.portrait),
+            getChildWhenEnabled: () => videoPlayerPanel,
+            floating: floating,
+          );
+        } else {
+          return childWhenDisabled(orientation == Orientation.portrait);
+        }
+      },
+    );
   }
 
   Color get _color => Color(0xFFEEEEEE);
+
+  Widget get _buildAppBar => AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        titleTextStyle: TextStyle(color: Colors.white),
+        toolbarHeight:
+            MediaQuery.of(context).orientation == Orientation.portrait ? 56 : 0,
+        title: FutureBuilder(
+          future: _futureBuilder,
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return const SizedBox();
+            }
+            Map data = snapshot.data as Map;
+            if (data['status']) {
+              return Obx(
+                () => Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _node.unfocus();
+                        dynamic uid =
+                            _liveRoomController.roomInfoH5.value.roomInfo?.uid;
+                        Get.toNamed(
+                          '/member?mid=$uid',
+                          arguments: {
+                            'heroTag': Utils.makeHeroTag(uid),
+                          },
+                        );
+                      },
+                      child: NetworkImgLayer(
+                        width: 34,
+                        height: 34,
+                        type: 'avatar',
+                        src: _liveRoomController
+                            .roomInfoH5.value.anchorInfo!.baseInfo!.face,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _liveRoomController
+                              .roomInfoH5.value.anchorInfo!.baseInfo!.uname!,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        const SizedBox(height: 1),
+                        if (_liveRoomController.roomInfoH5.value.watchedShow !=
+                            null)
+                          Text(
+                            _liveRoomController.roomInfoH5.value
+                                    .watchedShow!['text_large'] ??
+                                '',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                      ],
+                    ),
+                    const Spacer(),
+                    //刷新
+                    IconButton(
+                      tooltip: '刷新',
+                      onPressed: () {
+                        _futureBuilderFuture =
+                            _liveRoomController.queryLiveInfo();
+                        // videoSourceInit();
+                      },
+                      icon: const Icon(Icons.refresh),
+                    ),
+                    //内置浏览器打开
+                    IconButton(
+                        tooltip: '浏览器打开',
+                        onPressed: () {
+                          Utils.inAppWebview(
+                            'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
+                            off: true,
+                          );
+                        },
+                        icon: const Icon(Icons.open_in_browser)),
+                  ],
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          },
+        ),
+      );
+
+  Widget get _buildBodyH {
+    double videoWidth =
+        max(context.height / context.width * 1.04, 0.58) * context.width;
+    return Expanded(
+      child: Row(
+        children: [
+          Obx(
+            () => PopScope(
+              canPop: plPlayerController.isFullScreen.value != true,
+              onPopInvokedWithResult: (bool didPop, Object? result) {
+                if (plPlayerController.isFullScreen.value == true) {
+                  plPlayerController.triggerFullScreen(status: false);
+                }
+              },
+              child: Listener(
+                onPointerDown: (_) {
+                  _node.unfocus();
+                },
+                child: SizedBox(
+                  width: plPlayerController.isFullScreen.value
+                      ? Get.size.width
+                      : videoWidth,
+                  height: plPlayerController.isFullScreen.value
+                      ? Get.size.height
+                      : Get.size.width * 9 / 16,
+                  child: MediaQuery.removePadding(
+                    removeRight: true,
+                    context: context,
+                    child: videoPlayerPanel(Colors.transparent),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
+                left: false,
+                top: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _buildBottomWidget,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> get _buildBodyP => [
+        Obx(
+          () => PopScope(
+            canPop: plPlayerController.isFullScreen.value != true,
+            onPopInvokedWithResult: (bool didPop, Object? result) {
+              if (plPlayerController.isFullScreen.value == true) {
+                plPlayerController.triggerFullScreen(status: false);
+              }
+            },
+            child: Listener(
+              onPointerDown: (_) {
+                _node.unfocus();
+              },
+              child: SizedBox(
+                width: Get.size.width,
+                height: plPlayerController.isFullScreen.value
+                    ? Get.size.height
+                    : Get.size.width * 9 / 16,
+                child: videoPlayerPanel(),
+              ),
+            ),
+          ),
+        ),
+        ..._buildBottomWidget,
+      ];
+
+  final GlobalKey chatKey = GlobalKey();
+
+  List<Widget> get _buildBottomWidget => [
+        Expanded(
+          child: Listener(
+            onPointerDown: (_) {
+              _node.unfocus();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: LiveRoomChat(
+                key: chatKey,
+                roomId: _roomId,
+                liveRoomController: _liveRoomController,
+              ),
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(
+            left: 10,
+            top: 10,
+            right: 10,
+            bottom: 25 + MediaQuery.of(context).padding.bottom,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            border: Border(
+              top: BorderSide(color: Color(0x1AFFFFFF)),
+            ),
+            color: Color(0x1AFFFFFF),
+          ),
+          child: Row(
+            children: [
+              Obx(
+                () => IconButton(
+                  onPressed: () {
+                    plPlayerController.isOpenDanmu.value =
+                        !plPlayerController.isOpenDanmu.value;
+                    GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
+                        plPlayerController.isOpenDanmu.value);
+                  },
+                  icon: Icon(
+                    plPlayerController.isOpenDanmu.value
+                        ? Icons.subtitles_outlined
+                        : Icons.subtitles_off_outlined,
+                    color: _color,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TextField(
+                  focusNode: _node,
+                  controller: _ctr,
+                  textInputAction: TextInputAction.send,
+                  cursorColor: _color,
+                  style: TextStyle(color: _color),
+                  onSubmitted: (value) {
+                    if (value.isNotEmpty) {
+                      _onSendMsg(value);
+                    }
+                  },
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: '发送弹幕',
+                    hintStyle: TextStyle(
+                      color: Colors.white.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  if (_ctr.text.isNotEmpty) {
+                    _onSendMsg(_ctr.text);
+                  }
+                },
+                icon: Icon(
+                  Icons.send,
+                  color: _color,
+                ),
+              ),
+            ],
+          ),
+        )
+      ];
 
   void _onSendMsg(msg) async {
     if (!_isLogin) {
@@ -458,6 +536,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         roomId: _liveRoomController.roomId, msg: msg);
     if (res['status']) {
       _ctr.clear();
+      if (mounted) {
+        FocusScope.of(context).unfocus();
+      }
       SmartDialog.showToast('发送成功');
     } else {
       SmartDialog.showToast(res['msg']);
