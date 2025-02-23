@@ -87,11 +87,12 @@ class PiliScheme {
             return false;
           case 'video':
             // bilibili://video/12345678?dm_progress=123000&cid=12345678&dmid=12345678
-            if (uri.queryParameters['comment_root_id'] != null) {
+            final queryParameters = uri.queryParameters;
+            if (queryParameters['comment_root_id'] != null) {
               // to check
               // to video reply
               String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
-              int? rpid = int.tryParse(uri.queryParameters['comment_root_id']!);
+              int? rpid = int.tryParse(queryParameters['comment_root_id']!);
               if (oid != null && rpid != null) {
                 Get.to(
                   () => Scaffold(
@@ -131,16 +132,15 @@ class PiliScheme {
                 .firstMatch(path)
                 ?.group(1);
             if (aid != null || bvid != null) {
-              if (uri.queryParameters['cid'] != null) {
+              if (queryParameters['cid'] != null) {
                 bvid ??= IdUtils.av2bv(int.parse(aid!));
                 Utils.toDupNamed(
-                  '/video?bvid=$bvid&cid=${uri.queryParameters['cid']}',
+                  '/video?bvid=$bvid&cid=${queryParameters['cid']}',
                   arguments: {
                     'pic': null,
                     'heroTag': Utils.makeHeroTag(aid),
-                    if (uri.queryParameters['dm_progress'] != null)
-                      'progress':
-                          int.tryParse(uri.queryParameters['dm_progress']!),
+                    if (queryParameters['dm_progress'] != null)
+                      'progress': int.tryParse(queryParameters['dm_progress']!),
                   },
                   off: off,
                 );
@@ -149,7 +149,7 @@ class PiliScheme {
                   aid != null ? int.parse(aid) : null,
                   bvid,
                   off: off,
-                  progress: uri.queryParameters['dm_progress'],
+                  progress: queryParameters['dm_progress'],
                 );
               }
               return true;
@@ -247,10 +247,10 @@ class PiliScheme {
             return false;
           case 'following':
             if (path.startsWith("/detail/")) {
-              if (uri.queryParameters['comment_root_id'] != null) {
+              final commentRootId = uri.queryParameters['comment_root_id'];
+              if (commentRootId != null) {
                 String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
-                int? rpid =
-                    int.tryParse(uri.queryParameters['comment_root_id']!);
+                int? rpid = int.tryParse(commentRootId);
                 if (oid != null && rpid != null) {
                   Get.to(
                     () => Scaffold(
