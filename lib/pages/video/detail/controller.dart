@@ -1070,7 +1070,12 @@ class VideoDetailController extends GetxController
       if (data.dash == null && data.durl != null) {
         videoUrl = data.durl!.first.url!;
         audioUrl = '';
-        this.defaultST = defaultST ?? Duration.zero;
+        if (Get.arguments['progress'] != null) {
+          this.defaultST = Duration(milliseconds: Get.arguments['progress']);
+          Get.arguments['progress'] = null;
+        } else {
+          this.defaultST = defaultST ?? Duration.zero;
+        }
         // 实际为FLV/MP4格式，但已被淘汰，这里仅做兜底处理
         firstVideo = VideoItem(
             id: data.quality!,
@@ -1188,7 +1193,13 @@ class VideoDetailController extends GetxController
         audioUrl = '';
       }
       //
-      this.defaultST = defaultST ?? Duration(milliseconds: data.lastPlayTime!);
+      if (Get.arguments['progress'] != null) {
+        this.defaultST = Duration(milliseconds: Get.arguments['progress']);
+        Get.arguments['progress'] = null;
+      } else {
+        this.defaultST =
+            defaultST ?? Duration(milliseconds: data.lastPlayTime!);
+      }
       if (autoPlay.value) {
         isShowCover.value = false;
         await playerInit();

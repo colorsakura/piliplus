@@ -86,6 +86,7 @@ class PiliScheme {
             }
             return false;
           case 'video':
+            // bilibili://video/12345678?dm_progress=123000&cid=12345678&dmid=12345678
             if (uri.queryParameters['comment_root_id'] != null) {
               // to check
               // to video reply
@@ -130,11 +131,27 @@ class PiliScheme {
                 .firstMatch(path)
                 ?.group(1);
             if (aid != null || bvid != null) {
-              videoPush(
-                aid != null ? int.parse(aid) : null,
-                bvid,
-                off: off,
-              );
+              if (uri.queryParameters['cid'] != null) {
+                bvid ??= IdUtils.av2bv(int.parse(aid!));
+                Utils.toDupNamed(
+                  '/video?bvid=$bvid&cid=${uri.queryParameters['cid']}',
+                  arguments: {
+                    'pic': null,
+                    'heroTag': Utils.makeHeroTag(aid),
+                    if (uri.queryParameters['dm_progress'] != null)
+                      'progress':
+                          int.tryParse(uri.queryParameters['dm_progress']!),
+                  },
+                  off: off,
+                );
+              } else {
+                videoPush(
+                  aid != null ? int.parse(aid) : null,
+                  bvid,
+                  off: off,
+                  progress: uri.queryParameters['dm_progress'],
+                );
+              }
               return true;
             }
             return false;
@@ -529,6 +546,7 @@ class PiliScheme {
     String? bvid, {
     bool showDialog = true,
     bool off = false,
+    String? progress,
   }) async {
     try {
       aid ??= IdUtils.bv2av(bvid!);
@@ -545,6 +563,7 @@ class PiliScheme {
         arguments: {
           'pic': null,
           'heroTag': Utils.makeHeroTag(aid),
+          if (progress != null) 'progress': int.tryParse(progress),
         },
         off: off,
       );
