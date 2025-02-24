@@ -46,7 +46,7 @@ class _SearchPanelState extends State<SearchPanel>
         searchType: widget.searchType,
         tag: widget.tag,
       ),
-      tag: widget.searchType.name + widget.keyword,
+      tag: widget.searchType.name + widget.tag,
     );
   }
 

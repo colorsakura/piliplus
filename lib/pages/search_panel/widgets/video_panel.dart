@@ -14,10 +14,11 @@ import 'package:intl/intl.dart';
 import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
 
-Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
-  final controller = Get.put(VideoPanelController());
+Widget searchVideoPanel(BuildContext context,
+    SearchPanelController searchPanelCtr, LoadingState loadingState) {
+  final controller = Get.put(VideoPanelController(), tag: searchPanelCtr.tag);
   return CustomScrollView(
-    controller: ctr.scrollController,
+    controller: searchPanelCtr.scrollController,
     slivers: [
       SliverPersistentHeader(
         pinned: false,
@@ -48,10 +49,10 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                                       : Theme.of(context).colorScheme.outline,
                               onTap: (value) async {
                                 controller.selectedType.value = i['type'];
-                                ctr.order.value =
+                                searchPanelCtr.order.value =
                                     i['type'].toString().split('.').last;
                                 SmartDialog.showLoading(msg: 'loading');
-                                await ctr.onReload();
+                                await searchPanelCtr.onReload();
                                 SmartDialog.dismiss();
                               },
                             ),
@@ -72,7 +73,7 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                     ),
                     onPressed: () =>
-                        controller.onShowFilterDialog(context, ctr),
+                        controller.onShowFilterDialog(context, searchPanelCtr),
                     icon: Icon(
                       Icons.filter_list_outlined,
                       size: 18,
@@ -101,7 +102,7 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       if (index == loadingState.response.length - 1) {
-                        ctr.onLoadMore();
+                        searchPanelCtr.onLoadMore();
                       }
                       return VideoCardH(
                         videoItem: loadingState.response[index],
@@ -113,11 +114,11 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                 ),
               )
             : HttpError(
-                callback: ctr.onReload,
+                callback: searchPanelCtr.onReload,
               ),
         Error() => HttpError(
             errMsg: loadingState.errMsg,
-            callback: ctr.onReload,
+            callback: searchPanelCtr.onReload,
           ),
         _ => throw UnimplementedError(),
       },
@@ -236,7 +237,8 @@ class VideoPanelController extends GetxController {
                     SmartDialog.dismiss();
                     // SmartDialog.showToast("「${item['label']}」的筛选结果");
                     SearchPanelController ctr = Get.find<SearchPanelController>(
-                        tag: 'video${searchPanelCtr.keyword}');
+                      tag: searchPanelCtr.searchType.name + searchPanelCtr.tag,
+                    );
                     ctr.pubBegin = DateTime(
                           pubBegin.year,
                           pubBegin.month,
@@ -303,7 +305,9 @@ class VideoPanelController extends GetxController {
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
                               SearchPanelController ctr =
                                   Get.find<SearchPanelController>(
-                                      tag: 'video${searchPanelCtr.keyword}');
+                                tag: searchPanelCtr.searchType.name +
+                                    searchPanelCtr.tag,
+                              );
                               DateTime now = DateTime.now();
                               if (item['value'] == 0) {
                                 ctr.pubBegin = null;
@@ -381,7 +385,9 @@ class VideoPanelController extends GetxController {
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
                               SearchPanelController ctr =
                                   Get.find<SearchPanelController>(
-                                      tag: 'video${searchPanelCtr.keyword}');
+                                tag: searchPanelCtr.searchType.name +
+                                    searchPanelCtr.tag,
+                              );
                               ctr.duration.value = item['value'];
                               SmartDialog.showLoading(msg: 'loading');
                               await ctr.onReload();
@@ -418,7 +424,9 @@ class VideoPanelController extends GetxController {
                               SmartDialog.showToast("「${item['label']}」的筛选结果");
                               SearchPanelController ctr =
                                   Get.find<SearchPanelController>(
-                                      tag: 'video${searchPanelCtr.keyword}');
+                                tag: searchPanelCtr.searchType.name +
+                                    searchPanelCtr.tag,
+                              );
                               ctr.tids = item['tids'];
                               SmartDialog.showLoading(msg: 'loading');
                               await ctr.onReload();

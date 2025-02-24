@@ -14,11 +14,12 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchArticlePanel(context, searchPanelCtr, LoadingState loadingState) {
+Widget searchArticlePanel(BuildContext context,
+    SearchPanelController searchPanelCtr, LoadingState loadingState) {
   TextStyle textStyle = TextStyle(
       fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
       color: Theme.of(context).colorScheme.outline);
-  final ctr = Get.put(ArticlePanelController());
+  final ctr = Get.put(ArticlePanelController(), tag: searchPanelCtr.tag);
 
   return CustomScrollView(
     controller: searchPanelCtr.scrollController,
@@ -288,7 +289,9 @@ class ArticlePanelController extends GetxController {
                           SmartDialog.showToast("「${item['label']}」的筛选结果");
                           SearchPanelController ctr =
                               Get.find<SearchPanelController>(
-                                  tag: 'article${searchPanelCtr.keyword}');
+                            tag: searchPanelCtr.searchType.name +
+                                searchPanelCtr.tag,
+                          );
                           ctr.order.value = item['order'];
                           SmartDialog.showLoading(msg: 'loading');
                           await ctr.onReload();
@@ -321,7 +324,9 @@ class ArticlePanelController extends GetxController {
                           SmartDialog.showToast("「${item['label']}」的筛选结果");
                           SearchPanelController ctr =
                               Get.find<SearchPanelController>(
-                                  tag: 'article${searchPanelCtr.keyword}');
+                            tag: searchPanelCtr.searchType.name +
+                                searchPanelCtr.tag,
+                          );
                           ctr.categoryId = item['categoryId'];
                           SmartDialog.showLoading(msg: 'loading');
                           await ctr.onReload();

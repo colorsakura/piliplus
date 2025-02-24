@@ -32,11 +32,15 @@ class _SearchResultPageState extends State<SearchResultPage>
       vsync: this,
       initialIndex: Get.arguments is int ? Get.arguments : 0,
       length: SearchType.values.length,
-    )..addListener(() {
+    );
+
+    if (Get.arguments is int) {
+      _tabController.addListener(() {
         if (Get.isRegistered<SSearchController>()) {
           Get.find<SSearchController>().initIndex = _tabController.index;
         }
       });
+    }
   }
 
   @override
@@ -110,8 +114,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 onTap: (index) {
                   if (_tabController.indexIsChanging.not) {
                     Get.find<SearchPanelController>(
-                            tag: SearchType.values[index].name +
-                                _searchResultController.keyword)
+                            tag: SearchType.values[index].name + _tag)
                         .animateToTop();
                   }
                 },
