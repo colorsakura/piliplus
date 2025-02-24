@@ -27,9 +27,13 @@ class DynamicsHttp {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
         if (antiGoodsDyn) {
-          data.items?.removeWhere((item) =>
-              item.modules?.moduleDynamic?.additional?.type ==
-              'ADDITIONAL_TYPE_GOODS');
+          data.items?.removeWhere(
+            (item) =>
+                item.orig?.modules?.moduleDynamic?.additional?.type ==
+                    'ADDITIONAL_TYPE_GOODS' ||
+                item.modules?.moduleDynamic?.additional?.type ==
+                    'ADDITIONAL_TYPE_GOODS',
+          );
         }
         return LoadingState.success(data);
       } catch (err) {
