@@ -1070,7 +1070,7 @@ class VideoDetailController extends GetxController
       if (data.dash == null && data.durl != null) {
         videoUrl = data.durl!.first.url!;
         audioUrl = '';
-        if (Get.arguments['progress'] != null) {
+        if (Get.arguments?['progress'] != null) {
           this.defaultST = Duration(milliseconds: Get.arguments['progress']);
           Get.arguments['progress'] = null;
         } else {
@@ -1193,7 +1193,7 @@ class VideoDetailController extends GetxController
         audioUrl = '';
       }
       //
-      if (Get.arguments['progress'] != null) {
+      if (Get.arguments?['progress'] != null) {
         this.defaultST = Duration(milliseconds: Get.arguments['progress']);
         Get.arguments['progress'] = null;
       } else {
