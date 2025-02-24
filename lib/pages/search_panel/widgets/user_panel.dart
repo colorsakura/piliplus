@@ -217,7 +217,7 @@ class UserPanelController extends GetxController {
                           ctr.orderSort = item['orderSort'];
                           ctr.order.value = item['order'];
                           SmartDialog.showLoading(msg: 'loading');
-                          await ctr.onRefresh();
+                          await ctr.onReload();
                           SmartDialog.dismiss();
                         },
                         bgColor: item['value'] == currentOrderFilterval.value
@@ -250,7 +250,7 @@ class UserPanelController extends GetxController {
                                   tag: 'bili_user${searchPanelCtr.keyword}');
                           ctr.userType = item['userType'];
                           SmartDialog.showLoading(msg: 'loading');
-                          await ctr.onRefresh();
+                          await ctr.onReload();
                           SmartDialog.dismiss();
                         },
                         bgColor: item['value'] == currentUserTypeFilterval.value

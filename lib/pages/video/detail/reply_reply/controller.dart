@@ -197,7 +197,6 @@ class VideoReplyReplyController extends ReplyController
     mode.value = mode.value == Mode.MAIN_LIST_HOT
         ? Mode.MAIN_LIST_TIME
         : Mode.MAIN_LIST_HOT;
-    loadingState.value = LoadingState.loading();
-    onRefresh();
+    onReload();
   }
 }

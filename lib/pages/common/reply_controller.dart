@@ -139,8 +139,7 @@ abstract class ReplyController extends CommonController {
           break;
       }
       nextOffset = '';
-      loadingState.value = LoadingState.loading();
-      onRefresh();
+      onReload();
     });
   }
 

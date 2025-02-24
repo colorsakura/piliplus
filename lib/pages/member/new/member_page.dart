@@ -297,10 +297,7 @@ class _MemberPageNewState extends State<MemberPageNew>
   Widget _errorWidget(msg) {
     return errorWidget(
       errMsg: msg,
-      callback: () {
-        _userController.loadingState.value = LoadingState.loading();
-        _userController.onRefresh();
-      },
+      callback: _userController.onReload,
     );
   }
 

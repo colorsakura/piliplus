@@ -50,7 +50,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
               onPressed: _favSearchCtr.onClear,
             ),
           ),
-          onSubmitted: (value) => _favSearchCtr.onRefresh(),
+          onSubmitted: (value) => _favSearchCtr.onReload(),
         ),
       ),
       body: Obx(() => _buildBody(_favSearchCtr.loadingState.value)),

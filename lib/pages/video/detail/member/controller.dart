@@ -95,7 +95,6 @@ class HorizontalMemberPageController extends CommonController {
 
   queryBySort() {
     order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
-    loadingState.value = LoadingState.loading();
-    onRefresh();
+    onReload();
   }
 }

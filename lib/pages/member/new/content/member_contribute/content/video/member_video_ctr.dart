@@ -91,8 +91,7 @@ class MemberVideoCtr extends CommonController {
     } else {
       sort.value = sort.value == 'desc' ? 'asc' : 'desc';
     }
-    loadingState.value = LoadingState.loading();
-    onRefresh();
+    onReload();
   }
 
   void toViewPlayAll() async {

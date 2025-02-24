@@ -51,7 +51,7 @@ Widget searchVideoPanel(context, ctr, LoadingState loadingState) {
                                 ctr.order.value =
                                     i['type'].toString().split('.').last;
                                 SmartDialog.showLoading(msg: 'loading');
-                                await ctr.onRefresh();
+                                await ctr.onReload();
                                 SmartDialog.dismiss();
                               },
                             ),
@@ -257,7 +257,7 @@ class VideoPanelController extends GetxController {
                         1000;
                     setState(() {});
                     SmartDialog.showLoading(msg: 'loading');
-                    await ctr.onRefresh();
+                    await ctr.onReload();
                     SmartDialog.dismiss();
                   }
                 });
@@ -334,7 +334,7 @@ class VideoPanelController extends GetxController {
                                     1000;
                               }
                               SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onRefresh();
+                              await ctr.onReload();
                               SmartDialog.dismiss();
                             },
                             bgColor: item['value'] == currentPubTimeFilterval
@@ -384,7 +384,7 @@ class VideoPanelController extends GetxController {
                                       tag: 'video${searchPanelCtr.keyword}');
                               ctr.duration.value = item['value'];
                               SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onRefresh();
+                              await ctr.onReload();
                               SmartDialog.dismiss();
                             },
                             bgColor: item['value'] == currentTimeFilterval
@@ -421,7 +421,7 @@ class VideoPanelController extends GetxController {
                                       tag: 'video${searchPanelCtr.keyword}');
                               ctr.tids = item['tids'];
                               SmartDialog.showLoading(msg: 'loading');
-                              await ctr.onRefresh();
+                              await ctr.onReload();
                               SmartDialog.dismiss();
                             },
                             bgColor: item['value'] == currentZoneFilterval

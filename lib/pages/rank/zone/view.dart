@@ -66,7 +66,7 @@ class _ZonePageState extends State<ZonePage>
     super.build(context);
     return refreshIndicator(
       onRefresh: () async {
-        return await _zoneController.onRefresh();
+        await _zoneController.onRefresh();
       },
       child: CustomScrollView(
         controller: _zoneController.scrollController,

@@ -291,7 +291,7 @@ class ArticlePanelController extends GetxController {
                                   tag: 'article${searchPanelCtr.keyword}');
                           ctr.order.value = item['order'];
                           SmartDialog.showLoading(msg: 'loading');
-                          await ctr.onRefresh();
+                          await ctr.onReload();
                           SmartDialog.dismiss();
                         },
                         bgColor: item['value'] == currentOrderFilterval.value
@@ -324,7 +324,7 @@ class ArticlePanelController extends GetxController {
                                   tag: 'article${searchPanelCtr.keyword}');
                           ctr.categoryId = item['categoryId'];
                           SmartDialog.showLoading(msg: 'loading');
-                          await ctr.onRefresh();
+                          await ctr.onReload();
                           SmartDialog.dismiss();
                         },
                         bgColor: item['value'] == currentZoneFilterval.value

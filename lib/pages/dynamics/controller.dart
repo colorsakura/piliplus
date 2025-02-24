@@ -162,11 +162,9 @@ class DynamicsController extends GetxController
 
   onRefresh() async {
     queryFollowUp();
-    await Future.wait(<Future>[
-      Get.find<DynamicsTabController>(
-              tag: tabsConfig[tabController.index]['tag'])
-          .onRefresh()
-    ]);
+    await Get.find<DynamicsTabController>(
+            tag: tabsConfig[tabController.index]['tag'])
+        .onRefresh();
   }
 
   // 返回顶部并刷新

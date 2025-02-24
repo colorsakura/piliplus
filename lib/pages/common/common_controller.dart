@@ -64,9 +64,9 @@ abstract class CommonController extends GetxController {
     scrollController.animToTop();
   }
 
-  void onReload() {
+  Future onReload() async {
     loadingState.value = LoadingState.loading();
-    onRefresh();
+    await onRefresh();
   }
 
   @override

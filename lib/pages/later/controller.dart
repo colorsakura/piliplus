@@ -67,8 +67,7 @@ class LaterController extends MultiSelectController {
                     count.value -= 1;
                     loadingState.value = LoadingState.success(list);
                   } else {
-                    loadingState.value = LoadingState.loading();
-                    onRefresh();
+                    onReload();
                   }
                 }
                 Get.back();
