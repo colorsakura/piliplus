@@ -19,7 +19,6 @@ class ApiInterceptor extends Interceptor {
     Api.bangumiInfo,
     Api.liveRoomInfo,
     Api.onlineTotal,
-    Api.webDanmaku,
     Api.dynamicDetail,
     Api.aiConclusion,
     Api.getSeasonDetailApi,
@@ -42,6 +41,11 @@ class ApiInterceptor extends Interceptor {
         options.data.remove('csrf');
         options.data.remove('csrf_token');
       }
+    }
+
+    // app端不需要cookie
+    if (options.uri.host == 'app.bilibili.com') {
+      options.headers['cookie'] = '';
     }
 
     if (options.extra['clearCookie'] == true) {
