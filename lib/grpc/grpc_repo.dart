@@ -122,8 +122,7 @@ class GrpcRepo {
     'x-bili-exps-bin': '',
   };
 
-  static final unprintableRegExp =
-      RegExp(r"[^\0u0020-\u007e\u4e00-\u9fa5，。；！？]");
+  static final unprintableRegExp = RegExp(r"[^\u4e00-\u9fa5，。；！？UP]");
 
   static Uint8List compressProtobuf(Uint8List proto) {
     proto = gzipEncoder.encodeBytes(proto, level: 0);
@@ -156,31 +155,35 @@ class GrpcRepo {
     if (response.data is Map) {
       return {'status': false, 'msg': response.data['message']};
     }
-    Uint8List data = response.data;
 
-    // if (int.tryParse(response.headers.value('grpc-status') ?? '0') == 0) {
-    //   try {
-    data = decompressProtobuf(data);
-    final grpcResponse = grpcParser(data);
-    return {
-      'status': true,
-      'data': onSuccess == null ? grpcResponse : onSuccess(grpcResponse)
-    };
-    //   } catch (e) {}
-    // }
-
-    // if (data.isNotEmpty) {
-    //   try {
-    //     String msg = utf8
-    //         .decode(data, allowMalformed: true)
-    //         .replaceAll(unprintableRegExp, '');
-    //     if (msg.isNotEmpty) {
-    //       return {'status': false, 'msg': msg};
-    //     }
-    //   } catch (e1) {}
-    // }
-
-    // return {'status': false, 'msg': response.headers.map.toString()};
+    if (response.headers.value('Grpc-Status') == '0') {
+      try {
+        Uint8List data = response.data;
+        data = decompressProtobuf(data);
+        final grpcResponse = grpcParser(data);
+        return {
+          'status': true,
+          'data': onSuccess == null ? grpcResponse : onSuccess(grpcResponse),
+        };
+      } catch (e) {
+        return {'status': false, 'msg': e.toString()};
+      }
+    } else {
+      try {
+        String msg = response.headers.value('Grpc-Status-Details-Bin') ?? '';
+        if (msg != '') {
+          while (msg.length % 4 != 0) {
+            msg += '=';
+          }
+          msg = utf8
+              .decode(base64Decode(msg), allowMalformed: true)
+              .replaceAll(unprintableRegExp, '');
+        }
+        return {'status': false, 'msg': msg};
+      } catch (e) {
+        return {'status': false, 'msg': e.toString()};
+      }
+    }
   }
 
   static Future playerOnline({
