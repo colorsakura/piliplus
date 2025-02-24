@@ -587,14 +587,13 @@ List<SettingsModel> get styleSettings => [
                   TextButton(
                     onPressed: () async {
                       Get.back();
-                      late final spring = GStorage.springDescription;
                       await GStorage.setting.put(
                         SettingBoxKey.springDescription,
                         List<double>.generate(
                           3,
                           (i) =>
                               double.tryParse(springDescription[i]) ??
-                              spring[i],
+                              GStorage.springDescription[i],
                         ),
                       );
                       SmartDialog.showToast('设置成功，重启生效');

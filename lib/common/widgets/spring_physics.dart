@@ -1,32 +1,54 @@
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 
+Widget videoTabBarView({
+  required List<Widget> children,
+  TabController? controller,
+}) =>
+    TabBarView(
+      physics: const CustomTabBarViewClampingScrollPhysics(),
+      controller: controller,
+      children: children,
+    );
+
 Widget tabBarView({
   required List<Widget> children,
   TabController? controller,
 }) =>
     TabBarView(
-      physics: customTabBarViewScrollPhysics,
+      physics: const CustomTabBarViewScrollPhysics(),
       controller: controller,
       children: children,
     );
 
 class CustomTabBarViewScrollPhysics extends ScrollPhysics {
-  CustomTabBarViewScrollPhysics({super.parent});
+  const CustomTabBarViewScrollPhysics({super.parent});
 
   @override
   CustomTabBarViewScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor)!);
+    return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor));
   }
-
-  final springDescription = GStorage.springDescription;
 
   @override
   SpringDescription get spring => SpringDescription(
-        mass: springDescription[0],
-        stiffness: springDescription[1],
-        damping: springDescription[2],
+        mass: GStorage.springDescription[0],
+        stiffness: GStorage.springDescription[1],
+        damping: GStorage.springDescription[2],
       );
 }
 
-final customTabBarViewScrollPhysics = CustomTabBarViewScrollPhysics();
+class CustomTabBarViewClampingScrollPhysics extends ClampingScrollPhysics {
+  const CustomTabBarViewClampingScrollPhysics({super.parent});
+
+  @override
+  CustomTabBarViewClampingScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return CustomTabBarViewClampingScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => SpringDescription(
+        mass: GStorage.springDescription[0],
+        stiffness: GStorage.springDescription[1],
+        damping: GStorage.springDescription[2],
+      );
+}

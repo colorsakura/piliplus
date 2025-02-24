@@ -422,12 +422,12 @@ class GStorage {
   // ratio: 1.1,
   // );
   // damping = ratio * 2.0 * math.sqrt(mass * stiffness)
-  static List<double> get springDescription => List<double>.from(
-        setting.get(
-          SettingBoxKey.springDescription, // [mass, stiffness, damping]
-          defaultValue: [0.5, 100.0, 2.2 * sqrt(50)],
-        ),
-      );
+  static final List<double> springDescription = List<double>.from(
+    setting.get(
+      SettingBoxKey.springDescription, // [mass, stiffness, damping]
+      defaultValue: [0.5, 100.0, 2.2 * sqrt(50)],
+    ),
+  );
 
   // static Brightness get brightness {
   //   return switch (_themeMode) {
