@@ -771,6 +771,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         curSliderPosition + (delta.dx * scale).round());
                 final Duration result =
                     pos.clamp(Duration.zero, plPlayerController.duration.value);
+                plPlayerController.updateSlideDy(delta.dy);
                 plPlayerController.onUpdatedSliderProgress(result);
                 plPlayerController.onChangedSliderStart();
                 if (plPlayerController.showSeekPreview) {
@@ -778,7 +779,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     plPlayerController.previewDx.value = result.inMilliseconds /
                         plPlayerController
                             .durationSeconds.value.inMilliseconds *
-                        context.size!.width;
+                        renderBox.size.width;
                     if (plPlayerController.showPreview.value.not) {
                       plPlayerController.showPreview.value = true;
                     }
@@ -834,10 +835,19 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 plPlayerController.showPreview.value = false;
               }
               if (plPlayerController.isSliderMoving.value) {
-                plPlayerController.onChangedSliderEnd();
-                plPlayerController.seekTo(
+                bool isCancel = plPlayerController.slideDy != null &&
+                    plPlayerController.slideDy!.abs() >= 100;
+                plPlayerController.onChangedSliderEnd(isCancel);
+                if (isCancel) {
+                  plPlayerController.onUpdatedSliderProgress(
+                    plPlayerController.position.value,
+                  );
+                } else {
+                  plPlayerController.seekTo(
                     plPlayerController.sliderPosition.value,
-                    type: 'slider');
+                    type: 'slider',
+                  );
+                }
               }
               interacting = false;
               _initialFocalPoint = Offset.zero;
