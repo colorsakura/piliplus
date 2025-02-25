@@ -772,12 +772,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 final Duration result =
                     pos.clamp(Duration.zero, plPlayerController.duration.value);
                 final height = renderBox.size.height * 0.125;
-                if ((details.localFocalPoint.dx >=
-                            renderBox.size.width * 0.875 &&
-                        details.localFocalPoint.dy <= height) ||
-                    (details.localFocalPoint.dx <=
-                            renderBox.size.width * 0.125 &&
-                        details.localFocalPoint.dy <= height)) {
+                if (details.localFocalPoint.dy <= height &&
+                    (details.localFocalPoint.dx >=
+                            renderBox.size.width * 0.875 ||
+                        details.localFocalPoint.dx <=
+                            renderBox.size.width * 0.125)) {
                   plPlayerController.cancelSeek = true;
                   plPlayerController.showPreview.value = false;
                   if (plPlayerController.hasToast != true) {

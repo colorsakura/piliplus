@@ -99,11 +99,37 @@ Widget searchUserPanel(BuildContext context,
                         child: Row(
                           children: [
                             const SizedBox(width: 15),
-                            NetworkImgLayer(
-                              width: 42,
-                              height: 42,
-                              src: i.upic,
-                              type: 'avatar',
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                NetworkImgLayer(
+                                  width: 42,
+                                  height: 42,
+                                  src: i.upic,
+                                  type: 'avatar',
+                                ),
+                                if (i.officialVerify?['type'] == 0 ||
+                                    i.officialVerify?['type'] == 1)
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                      ),
+                                      child: Icon(
+                                        Icons.offline_bolt,
+                                        color: i.officialVerify?['type'] == 0
+                                            ? Colors.yellow
+                                            : Colors.lightBlueAccent,
+                                        size: 14,
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                             const SizedBox(width: 10),
                             Column(
