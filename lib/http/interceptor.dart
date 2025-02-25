@@ -107,8 +107,8 @@ class ApiInterceptor extends Interceptor {
     } else {
       SmartDialog.showToast(
         await dioError(err) + url,
-        displayType: SmartToastType.onlyRefresh,
-        displayTime: const Duration(milliseconds: 1200),
+        // displayType: SmartToastType.onlyRefresh,
+        // displayTime: const Duration(milliseconds: 1200),
       );
     }
     super.onError(err, handler);
