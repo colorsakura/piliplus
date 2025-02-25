@@ -1152,27 +1152,8 @@ class PlPlayerController {
     _isSliderMoving.value = true;
   }
 
-  double? slideDy;
+  bool? cancelSeek;
   bool? hasToast;
-  void updateSlideDy(double dy) {
-    slideDy ??= 0;
-    slideDy = slideDy! + dy;
-    if (slideDy!.abs() >= 100) {
-      if (hasToast != true) {
-        hasToast = true;
-        SmartDialog.showToast(
-          '取消${sliderPosition.value > position.value ? '快进' : '快退'}',
-        );
-      }
-    } else {
-      if (hasToast == true) {
-        hasToast = null;
-        SmartDialog.showToast(
-          sliderPosition.value > position.value ? '快进' : '快退',
-        );
-      }
-    }
-  }
 
   void onUpdatedSliderProgress(Duration value) {
     _sliderTempPosition.value = value;
@@ -1180,11 +1161,11 @@ class PlPlayerController {
     updateSliderPositionSecond();
   }
 
-  void onChangedSliderEnd([bool? isCancel]) {
-    if (isCancel != true) {
+  void onChangedSliderEnd() {
+    if (cancelSeek != true) {
       feedBack();
     }
-    slideDy = null;
+    cancelSeek = null;
     hasToast = null;
     _isSliderMoving.value = false;
     _hideTaskControls();

@@ -771,10 +771,53 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         curSliderPosition + (delta.dx * scale).round());
                 final Duration result =
                     pos.clamp(Duration.zero, plPlayerController.duration.value);
-                plPlayerController.updateSlideDy(delta.dy);
+                final height = renderBox.size.height * 0.125;
+                if ((details.localFocalPoint.dx >=
+                            renderBox.size.width * 0.875 &&
+                        details.localFocalPoint.dy <= height) ||
+                    (details.localFocalPoint.dx <=
+                            renderBox.size.width * 0.125 &&
+                        details.localFocalPoint.dy <= height)) {
+                  plPlayerController.cancelSeek = true;
+                  plPlayerController.showPreview.value = false;
+                  if (plPlayerController.hasToast != true) {
+                    plPlayerController.hasToast = true;
+                    SmartDialog.showAttach(
+                      targetContext: context,
+                      alignment: Alignment.center,
+                      animationTime: const Duration(milliseconds: 200),
+                      animationType: SmartAnimationType.fade,
+                      displayTime: const Duration(milliseconds: 1500),
+                      maskColor: Colors.transparent,
+                      builder: (context) => Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                        ),
+                        child: Text(
+                          '松开手指，取消进退',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  if (plPlayerController.cancelSeek == true) {
+                    plPlayerController.cancelSeek = null;
+                    plPlayerController.hasToast = null;
+                  }
+                }
                 plPlayerController.onUpdatedSliderProgress(result);
                 plPlayerController.onChangedSliderStart();
-                if (plPlayerController.showSeekPreview) {
+                if (plPlayerController.showSeekPreview &&
+                    plPlayerController.cancelSeek != true) {
                   try {
                     plPlayerController.previewDx.value = result.inMilliseconds /
                         plPlayerController
@@ -835,10 +878,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 plPlayerController.showPreview.value = false;
               }
               if (plPlayerController.isSliderMoving.value) {
-                bool isCancel = plPlayerController.slideDy != null &&
-                    plPlayerController.slideDy!.abs() >= 100;
-                plPlayerController.onChangedSliderEnd(isCancel);
-                if (isCancel) {
+                if (plPlayerController.cancelSeek == true) {
                   plPlayerController.onUpdatedSliderProgress(
                     plPlayerController.position.value,
                   );
@@ -848,6 +888,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     type: 'slider',
                   );
                 }
+                plPlayerController.onChangedSliderEnd();
               }
               interacting = false;
               _initialFocalPoint = Offset.zero;
