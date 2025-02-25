@@ -35,28 +35,28 @@ class _SubDetailPageState extends State<SubDetailPage> {
     id = Get.parameters['id']!;
     _futureBuilderFuture = _subDetailController.queryUserSubFolderDetail();
     titleStreamC = StreamController<bool>();
-    _controller.addListener(
-      () {
-        if (_controller.offset > 160) {
-          titleStreamC.add(true);
-        } else if (_controller.offset <= 160) {
-          titleStreamC.add(false);
-        }
+    _controller.addListener(listener);
+  }
 
-        if (_controller.position.pixels >=
-            _controller.position.maxScrollExtent - 200) {
-          EasyThrottle.throttle('subDetail', const Duration(seconds: 1), () {
-            _subDetailController.onLoad();
-          });
-        }
-      },
-    );
+  void listener() {
+    if (_controller.offset > 160) {
+      titleStreamC.add(true);
+    } else if (_controller.offset <= 160) {
+      titleStreamC.add(false);
+    }
+
+    if (_controller.position.pixels >=
+        _controller.position.maxScrollExtent - 200) {
+      EasyThrottle.throttle('subDetail', const Duration(seconds: 1), () {
+        _subDetailController.onLoad();
+      });
+    }
   }
 
   @override
   void dispose() {
     titleStreamC.close();
-    _controller.removeListener(() {});
+    _controller.removeListener(listener);
     _controller.dispose();
     super.dispose();
   }

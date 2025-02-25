@@ -82,22 +82,22 @@ class _DynamicsPageState extends State<DynamicsPage>
     debugPrint('upPanelPosition: $upPanelPosition');
     if (GStorage.setting
         .get(SettingBoxKey.dynamicsShowAllFollowedUp, defaultValue: false)) {
-      _dynamicsController.scrollController.addListener(() {
-        if (_dynamicsController.scrollController.position.pixels >=
-            _dynamicsController.scrollController.position.maxScrollExtent -
-                300) {
-          EasyThrottle.throttle('following', const Duration(seconds: 1), () {
-            _dynamicsController.queryFollowing2();
-          });
-        }
+      _dynamicsController.scrollController.addListener(listener);
+    }
+  }
+
+  void listener() {
+    if (_dynamicsController.scrollController.position.pixels >=
+        _dynamicsController.scrollController.position.maxScrollExtent - 300) {
+      EasyThrottle.throttle('following', const Duration(seconds: 1), () {
+        _dynamicsController.queryFollowing2();
       });
     }
   }
 
   @override
   void dispose() {
-    _dynamicsController.tabController.removeListener(() {});
-    _dynamicsController.scrollController.removeListener(() {});
+    _dynamicsController.scrollController.removeListener(listener);
     super.dispose();
   }
 

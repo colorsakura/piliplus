@@ -36,28 +36,28 @@ class _ZonePageState extends State<ZonePage>
     super.initState();
     _zoneController =
         Get.put(ZoneController(zoneID: widget.rid), tag: widget.rid.toString());
+    _zoneController.scrollController.addListener(listener);
+  }
+
+  void listener() {
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    _zoneController.scrollController.addListener(
-      () {
-        final ScrollDirection direction =
-            _zoneController.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          mainStream.add(true);
-          searchBarStream.add(true);
-        } else if (direction == ScrollDirection.reverse) {
-          mainStream.add(false);
-          searchBarStream.add(false);
-        }
-      },
-    );
+    final ScrollDirection direction =
+        _zoneController.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      mainStream.add(true);
+      searchBarStream.add(true);
+    } else if (direction == ScrollDirection.reverse) {
+      mainStream.add(false);
+      searchBarStream.add(false);
+    }
   }
 
   @override
   void dispose() {
-    _zoneController.scrollController.removeListener(() {});
+    _zoneController.scrollController.removeListener(listener);
     super.dispose();
   }
 

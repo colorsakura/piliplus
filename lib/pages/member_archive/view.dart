@@ -22,7 +22,7 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
 
   @override
   void dispose() {
-    _memberArchivesController.scrollController.removeListener(() {});
+    _memberArchivesController.scrollController.removeListener(listener);
     super.dispose();
   }
 
@@ -34,19 +34,18 @@ class _MemberArchivePageState extends State<MemberArchivePage> {
     _memberArchivesController =
         Get.put(MemberArchiveController(), tag: heroTag);
     _futureBuilderFuture = _memberArchivesController.getMemberArchive('init');
-    _memberArchivesController.scrollController.addListener(
-      () {
-        if (_memberArchivesController.scrollController.position.pixels >=
-            _memberArchivesController
-                    .scrollController.position.maxScrollExtent -
-                200) {
-          EasyThrottle.throttle(
-              'member_archives', const Duration(milliseconds: 500), () {
-            _memberArchivesController.onLoad();
-          });
-        }
-      },
-    );
+    _memberArchivesController.scrollController.addListener(listener);
+  }
+
+  void listener() {
+    if (_memberArchivesController.scrollController.position.pixels >=
+        _memberArchivesController.scrollController.position.maxScrollExtent -
+            200) {
+      EasyThrottle.throttle(
+          'member_archives', const Duration(milliseconds: 500), () {
+        _memberArchivesController.onLoad();
+      });
+    }
   }
 
   @override

@@ -1193,11 +1193,13 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               CurveTween(curve: Curves.easeOut)
                                   .animate(animController),
                             );
-                            animController.addListener(() {
+                            void listener() {
                               transformationController.value = anim.value;
-                            });
+                            }
+
+                            animController.addListener(listener);
                             await animController.forward(from: 0);
-                            animController.removeListener(() {});
+                            animController.removeListener(listener);
                             animController.dispose();
                           },
                           child: Text('还原屏幕'),

@@ -75,27 +75,27 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
 
   @override
   void dispose() {
-    _videoReplyController.scrollController.removeListener(() {});
+    _videoReplyController.scrollController.removeListener(listener);
     fabAnimationCtr.dispose();
     super.dispose();
   }
 
   void scrollListener() {
-    _videoReplyController.scrollController.addListener(
-      () {
-        final ScrollDirection direction =
-            _videoReplyController.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          if (mounted) {
-            _showFab();
-          }
-        } else if (direction == ScrollDirection.reverse) {
-          if (mounted) {
-            _hideFab();
-          }
-        }
-      },
-    );
+    _videoReplyController.scrollController.addListener(listener);
+  }
+
+  void listener() {
+    final ScrollDirection direction =
+        _videoReplyController.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      if (mounted) {
+        _showFab();
+      }
+    } else if (direction == ScrollDirection.reverse) {
+      if (mounted) {
+        _hideFab();
+      }
+    }
   }
 
   void _showFab() {

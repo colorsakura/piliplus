@@ -127,10 +127,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
-    )..addListener(() {
-        _transformationController!.value =
-            _animation?.value ?? Matrix4.identity();
-      });
+    )..addListener(listener);
 
     if (widget.setStatusBar != false) {
       setStatusBar();
@@ -139,6 +136,10 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     if (widget.sources[currentIndex.value].sourceType == SourceType.livePhoto) {
       _onPlay(currentIndex.value);
     }
+  }
+
+  void listener() {
+    _transformationController!.value = _animation?.value ?? Matrix4.identity();
   }
 
   setStatusBar() async {
@@ -155,7 +156,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     widget.onClose?.call(true);
     _player?.dispose();
     _pageController?.dispose();
-    _animationController.removeListener(() {});
+    _animationController.removeListener(listener);
     _animationController.dispose();
     if (widget.setStatusBar != false) {
       if (Platform.isIOS || Platform.isAndroid) {

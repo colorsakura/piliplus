@@ -82,18 +82,20 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
       );
 
       _animation = Tween<double>(begin: 0, end: -2 * pi).animate(controller!)
-        ..addListener(() {
-          setState(() {
-            _hideCircle = _animation?.value == -2 * pi;
-            if (_hideCircle) {
-              controller?.reset();
-              if (_isThumbUp) {
-                widget.onLongPress?.call();
-              }
-            }
-          });
-        });
+        ..addListener(listener);
     }
+  }
+
+  void listener() {
+    setState(() {
+      _hideCircle = _animation?.value == -2 * pi;
+      if (_hideCircle) {
+        controller?.reset();
+        if (_isThumbUp) {
+          widget.onLongPress?.call();
+        }
+      }
+    });
   }
 
   void cancelTimer() {
@@ -104,7 +106,7 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
   @override
   void dispose() {
     cancelTimer();
-    _animation?.removeListener(() {});
+    _animation?.removeListener(listener);
     controller?.dispose();
     super.dispose();
   }

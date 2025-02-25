@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -21,9 +22,12 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
 
   final ValueNotifier<int> page = ValueNotifier<int>(0);
   late final PageController controller = PageController()
-    ..addListener(() {
-      page.value = controller.page!.round();
-    });
+    ..addListener(listener);
+
+  void listener() {
+    page.value = controller.page!.round();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +39,7 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
 
   @override
   void dispose() {
-    controller.removeListener(() {});
+    controller.removeListener(listener);
     controller.dispose();
     super.dispose();
   }

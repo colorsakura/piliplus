@@ -60,19 +60,21 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
 
   _autoFocus() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    if (context.mounted) {
+    if (mounted) {
       FocusScope.of(context).requestFocus(replyContentFocusNode);
     }
   }
 
   _focusListener() {
-    replyContentFocusNode.addListener(() {
-      if (replyContentFocusNode.hasFocus) {
-        setState(() {
-          toolbarType = 'input';
-        });
-      }
-    });
+    replyContentFocusNode.addListener(listener);
+  }
+
+  void listener() {
+    if (replyContentFocusNode.hasFocus) {
+      setState(() {
+        toolbarType = 'input';
+      });
+    }
   }
 
   Future submitReplyAdd() async {
@@ -140,7 +142,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
     _publishStream.close();
     WidgetsBinding.instance.removeObserver(this);
     _replyContentController.dispose();
-    replyContentFocusNode.removeListener(() {});
+    replyContentFocusNode.removeListener(listener);
     replyContentFocusNode.dispose();
     super.dispose();
   }

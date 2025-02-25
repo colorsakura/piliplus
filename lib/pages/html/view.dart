@@ -113,32 +113,32 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   @override
   void dispose() {
     fabAnimationCtr.dispose();
-    _htmlRenderCtr.scrollController.removeListener(() {});
+    _htmlRenderCtr.scrollController.removeListener(listener);
     super.dispose();
   }
 
   void scrollListener() {
-    _htmlRenderCtr.scrollController.addListener(
-      () {
-        // 标题
-        // if (scrollController.offset > 55 && !_visibleTitle) {
-        //   _visibleTitle = true;
-        //   titleStreamC.add(true);
-        // } else if (scrollController.offset <= 55 && _visibleTitle) {
-        //   _visibleTitle = false;
-        //   titleStreamC.add(false);
-        // }
+    _htmlRenderCtr.scrollController.addListener(listener);
+  }
 
-        // fab按钮
-        final ScrollDirection direction =
-            _htmlRenderCtr.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          _showFab();
-        } else if (direction == ScrollDirection.reverse) {
-          _hideFab();
-        }
-      },
-    );
+  void listener() {
+    // 标题
+    // if (scrollController.offset > 55 && !_visibleTitle) {
+    //   _visibleTitle = true;
+    //   titleStreamC.add(true);
+    // } else if (scrollController.offset <= 55 && _visibleTitle) {
+    //   _visibleTitle = false;
+    //   titleStreamC.add(false);
+    // }
+
+    // fab按钮
+    final ScrollDirection direction =
+        _htmlRenderCtr.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      _showFab();
+    } else if (direction == ScrollDirection.reverse) {
+      _hideFab();
+    }
   }
 
   void _showFab() {

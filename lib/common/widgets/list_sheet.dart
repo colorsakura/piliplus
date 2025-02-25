@@ -105,6 +105,10 @@ class _ListSheetContentState extends State<ListSheetContent>
               .indexWhere((e) => e.cid == widget.currentCid)
           : episodes.indexWhere((e) => e.cid == widget.currentCid));
 
+  void listener() {
+    _indexStream?.add(_ctr?.index);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -114,9 +118,7 @@ class _ListSheetContentState extends State<ListSheetContent>
         vsync: this,
         length: widget.season.sections.length,
         initialIndex: _index,
-      )..addListener(() {
-          _indexStream?.add(_ctr?.index);
-        });
+      )..addListener(listener);
     }
     itemScrollController = _isList
         ? List.generate(
@@ -148,7 +150,7 @@ class _ListSheetContentState extends State<ListSheetContent>
     _favStream = null;
     _indexStream?.close();
     _indexStream = null;
-    _ctr?.removeListener(() {});
+    _ctr?.removeListener(listener);
     _ctr?.dispose();
     super.dispose();
   }

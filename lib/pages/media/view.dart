@@ -28,25 +28,24 @@ class _MediaPageState extends State<MediaPage>
   void initState() {
     super.initState();
     mediaController = Get.put(MediaController());
+    mediaController.scrollController.addListener(listener);
+  }
+
+  void listener() {
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
-
-    mediaController.scrollController.addListener(
-      () {
-        final ScrollDirection direction =
-            mediaController.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          mainStream.add(true);
-        } else if (direction == ScrollDirection.reverse) {
-          mainStream.add(false);
-        }
-      },
-    );
+    final ScrollDirection direction =
+        mediaController.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      mainStream.add(true);
+    } else if (direction == ScrollDirection.reverse) {
+      mainStream.add(false);
+    }
   }
 
   @override
   void dispose() {
-    mediaController.scrollController.removeListener(() {});
+    mediaController.scrollController.removeListener(listener);
     super.dispose();
   }
 

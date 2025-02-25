@@ -37,16 +37,16 @@ class _OwnerFollowListState extends State<OwnerFollowList>
     mid = widget.ctr.mid;
     tagItem = widget.tagItem!;
     _futureBuilderFuture = followUpGroup('init');
-    scrollController.addListener(
-      () async {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
-          EasyThrottle.throttle('follow', const Duration(seconds: 1), () {
-            followUpGroup('onLoad');
-          });
-        }
-      },
-    );
+    scrollController.addListener(listener);
+  }
+
+  void listener() {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
+      EasyThrottle.throttle('follow', const Duration(seconds: 1), () {
+        followUpGroup('onLoad');
+      });
+    }
   }
 
   // 获取分组下up
@@ -70,7 +70,7 @@ class _OwnerFollowListState extends State<OwnerFollowList>
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    scrollController.removeListener(listener);
     scrollController.dispose();
     super.dispose();
   }

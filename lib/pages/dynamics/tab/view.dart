@@ -47,23 +47,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         ..mid = dynamicsController.mid.value,
       tag: widget.dynamicsType,
     );
-    _dynamicsTabController.scrollController.addListener(() {
-      try {
-        StreamController<bool> mainStream =
-            Get.find<MainController>().bottomBarStream;
-        StreamController<bool> searchBarStream =
-            Get.find<HomeController>().searchBarStream;
-        final ScrollDirection direction = _dynamicsTabController
-            .scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          mainStream.add(true);
-          searchBarStream.add(true);
-        } else if (direction == ScrollDirection.reverse) {
-          mainStream.add(false);
-          searchBarStream.add(false);
-        }
-      } catch (_) {}
-    });
+    _dynamicsTabController.scrollController.addListener(listener);
     if (widget.dynamicsType == 'up') {
       _listener = dynamicsController.mid.listen((mid) {
         // debugPrint('midListen: $mid');
@@ -76,10 +60,28 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   }
 
+  void listener() {
+    try {
+      StreamController<bool> mainStream =
+          Get.find<MainController>().bottomBarStream;
+      StreamController<bool> searchBarStream =
+          Get.find<HomeController>().searchBarStream;
+      final ScrollDirection direction =
+          _dynamicsTabController.scrollController.position.userScrollDirection;
+      if (direction == ScrollDirection.forward) {
+        mainStream.add(true);
+        searchBarStream.add(true);
+      } else if (direction == ScrollDirection.reverse) {
+        mainStream.add(false);
+        searchBarStream.add(false);
+      }
+    } catch (_) {}
+  }
+
   @override
   void dispose() {
     _listener?.cancel();
-    _dynamicsTabController.scrollController.removeListener(() {});
+    _dynamicsTabController.scrollController.removeListener(listener);
     dynamicsController.mid.close();
     super.dispose();
   }

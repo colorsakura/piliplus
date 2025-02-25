@@ -33,28 +33,28 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
+    _hotController.scrollController.addListener(listener);
+  }
+
+  void listener() {
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    _hotController.scrollController.addListener(
-      () {
-        final ScrollDirection direction =
-            _hotController.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          mainStream.add(true);
-          searchBarStream.add(true);
-        } else if (direction == ScrollDirection.reverse) {
-          mainStream.add(false);
-          searchBarStream.add(false);
-        }
-      },
-    );
+    final ScrollDirection direction =
+        _hotController.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      mainStream.add(true);
+      searchBarStream.add(true);
+    } else if (direction == ScrollDirection.reverse) {
+      mainStream.add(false);
+      searchBarStream.add(false);
+    }
   }
 
   @override
   void dispose() {
-    _hotController.scrollController.removeListener(() {});
+    _hotController.scrollController.removeListener(listener);
     super.dispose();
   }
 

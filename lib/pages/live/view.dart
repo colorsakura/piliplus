@@ -37,28 +37,28 @@ class _LivePageState extends State<LivePage>
   @override
   void initState() {
     super.initState();
+    _controller.scrollController.addListener(listener);
+  }
+
+  void listener() {
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    _controller.scrollController.addListener(
-      () {
-        final ScrollDirection direction =
-            _controller.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          mainStream.add(true);
-          searchBarStream.add(true);
-        } else if (direction == ScrollDirection.reverse) {
-          mainStream.add(false);
-          searchBarStream.add(false);
-        }
-      },
-    );
+    final ScrollDirection direction =
+        _controller.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      mainStream.add(true);
+      searchBarStream.add(true);
+    } else if (direction == ScrollDirection.reverse) {
+      mainStream.add(false);
+      searchBarStream.add(false);
+    }
   }
 
   @override
   void dispose() {
-    _controller.scrollController.removeListener(() {});
+    _controller.scrollController.removeListener(listener);
     super.dispose();
   }
 

@@ -27,21 +27,21 @@ class _FollowListState extends State<FollowList> {
   void initState() {
     super.initState();
     _futureBuilderFuture = widget.ctr.queryFollowings('init');
-    scrollController.addListener(
-      () async {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
-          EasyThrottle.throttle('follow', const Duration(seconds: 1), () {
-            widget.ctr.queryFollowings('onLoad');
-          });
-        }
-      },
-    );
+    scrollController.addListener(listener);
+  }
+
+  void listener() {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
+      EasyThrottle.throttle('follow', const Duration(seconds: 1), () {
+        widget.ctr.queryFollowings('onLoad');
+      });
+    }
   }
 
   @override
   void dispose() {
-    scrollController.removeListener(() {});
+    scrollController.removeListener(listener);
     scrollController.dispose();
     super.dispose();
   }

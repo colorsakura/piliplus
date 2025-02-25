@@ -225,29 +225,29 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   // 滑动事件监听
   void scrollListener() {
-    _dynamicDetailController.scrollController.addListener(
-      () {
-        // 标题
-        if (_dynamicDetailController.scrollController.offset > 55 &&
-            !_visibleTitle) {
-          _visibleTitle = true;
-          _titleStreamC.add(true);
-        } else if (_dynamicDetailController.scrollController.offset <= 55 &&
-            _visibleTitle) {
-          _visibleTitle = false;
-          _titleStreamC.add(false);
-        }
+    _dynamicDetailController.scrollController.addListener(listener);
+  }
 
-        // fab按钮
-        final ScrollDirection direction = _dynamicDetailController
-            .scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          _showFab();
-        } else if (direction == ScrollDirection.reverse) {
-          _hideFab();
-        }
-      },
-    );
+  void listener() {
+    // 标题
+    if (_dynamicDetailController.scrollController.offset > 55 &&
+        !_visibleTitle) {
+      _visibleTitle = true;
+      _titleStreamC.add(true);
+    } else if (_dynamicDetailController.scrollController.offset <= 55 &&
+        _visibleTitle) {
+      _visibleTitle = false;
+      _titleStreamC.add(false);
+    }
+
+    // fab按钮
+    final ScrollDirection direction =
+        _dynamicDetailController.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      _showFab();
+    } else if (direction == ScrollDirection.reverse) {
+      _hideFab();
+    }
   }
 
   void _showFab() {
@@ -269,7 +269,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     _titleStreamC.close();
     _fabAnimationCtr?.dispose();
     _fabAnimationCtr = null;
-    _dynamicDetailController.scrollController.removeListener(() {});
+    _dynamicDetailController.scrollController.removeListener(listener);
     super.dispose();
   }
 

@@ -21,7 +21,7 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
 
   @override
   void dispose() {
-    _memberSeasonsController.scrollController.removeListener(() {});
+    _memberSeasonsController.scrollController.removeListener(listener);
     super.dispose();
   }
 
@@ -30,18 +30,18 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
     super.initState();
     _futureBuilderFuture =
         _memberSeasonsController.getSeasonDetail('onRefresh');
-    _memberSeasonsController.scrollController.addListener(
-      () {
-        if (_memberSeasonsController.scrollController.position.pixels >=
-            _memberSeasonsController.scrollController.position.maxScrollExtent -
-                200) {
-          EasyThrottle.throttle(
-              'member_archives', const Duration(milliseconds: 500), () {
-            _memberSeasonsController.onLoad();
-          });
-        }
-      },
-    );
+    _memberSeasonsController.scrollController.addListener(listener);
+  }
+
+  void listener() {
+    if (_memberSeasonsController.scrollController.position.pixels >=
+        _memberSeasonsController.scrollController.position.maxScrollExtent -
+            200) {
+      EasyThrottle.throttle(
+          'member_archives', const Duration(milliseconds: 500), () {
+        _memberSeasonsController.onLoad();
+      });
+    }
   }
 
   @override

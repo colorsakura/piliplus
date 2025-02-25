@@ -43,28 +43,28 @@ class _BangumiPageState extends State<BangumiPage>
   @override
   void initState() {
     super.initState();
+    _bangumiController.scrollController.addListener(listener);
+  }
+
+  void listener() {
     StreamController<bool> mainStream =
         Get.find<MainController>().bottomBarStream;
     StreamController<bool> searchBarStream =
         Get.find<HomeController>().searchBarStream;
-    _bangumiController.scrollController.addListener(
-      () async {
-        final ScrollDirection direction =
-            _bangumiController.scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.forward) {
-          mainStream.add(true);
-          searchBarStream.add(true);
-        } else if (direction == ScrollDirection.reverse) {
-          mainStream.add(false);
-          searchBarStream.add(false);
-        }
-      },
-    );
+    final ScrollDirection direction =
+        _bangumiController.scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      mainStream.add(true);
+      searchBarStream.add(true);
+    } else if (direction == ScrollDirection.reverse) {
+      mainStream.add(false);
+      searchBarStream.add(false);
+    }
   }
 
   @override
   void dispose() {
-    _bangumiController.scrollController.removeListener(() {});
+    _bangumiController.scrollController.removeListener(listener);
     super.dispose();
   }
 

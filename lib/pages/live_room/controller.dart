@@ -181,24 +181,27 @@ class LiveRoomController extends GetxController {
           }
         });
         msgStream?.init();
-        scrollController.addListener(() {
-          if (scrollController.position.userScrollDirection ==
-              ScrollDirection.forward) {
-            disableAutoScroll.value = true;
-          } else if (scrollController.position.userScrollDirection ==
-              ScrollDirection.reverse) {
-            final pos = scrollController.position;
-            if (pos.maxScrollExtent - pos.pixels <= 100) {
-              disableAutoScroll.value = false;
-            }
-          }
-        });
+        scrollController.addListener(listener);
       }
     });
   }
 
+  void listener() {
+    if (scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      disableAutoScroll.value = true;
+    } else if (scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      final pos = scrollController.position;
+      if (pos.maxScrollExtent - pos.pixels <= 100) {
+        disableAutoScroll.value = false;
+      }
+    }
+  }
+
   @override
   void onClose() {
+    scrollController.removeListener(listener);
     scrollController.dispose();
     super.onClose();
   }

@@ -33,20 +33,20 @@ class _FavDetailPageState extends State<FavDetailPage> {
   void initState() {
     super.initState();
     mediaId = Get.parameters['mediaId']!;
-    _favDetailController.scrollController.addListener(
-      () {
-        if (_favDetailController.scrollController.offset > 160) {
-          _favDetailController.titleCtr.value = true;
-        } else if (_favDetailController.scrollController.offset <= 160) {
-          _favDetailController.titleCtr.value = false;
-        }
-      },
-    );
+    _favDetailController.scrollController.addListener(listener);
+  }
+
+  void listener() {
+    if (_favDetailController.scrollController.offset > 160) {
+      _favDetailController.titleCtr.value = true;
+    } else if (_favDetailController.scrollController.offset <= 160) {
+      _favDetailController.titleCtr.value = false;
+    }
   }
 
   @override
   void dispose() {
-    _favDetailController.scrollController.removeListener(() {});
+    _favDetailController.scrollController.removeListener(listener);
     super.dispose();
   }
 

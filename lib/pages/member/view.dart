@@ -44,21 +44,21 @@ class _MemberPageState extends State<MemberPage>
     _futureBuilderFuture = _memberController.getInfo();
     _memberSeasonsFuture = _memberController.getMemberSeasons();
     _memberCoinsFuture = _memberController.getRecentCoinVideo();
-    _extendNestCtr.addListener(
-      () {
-        final double offset = _extendNestCtr.position.pixels;
-        if (offset > 100) {
-          appbarStream.add(true);
-        } else {
-          appbarStream.add(false);
-        }
-      },
-    );
+    _extendNestCtr.addListener(listener);
+  }
+
+  void listener() {
+    final double offset = _extendNestCtr.position.pixels;
+    if (offset > 100) {
+      appbarStream.add(true);
+    } else {
+      appbarStream.add(false);
+    }
   }
 
   @override
   void dispose() {
-    _extendNestCtr.removeListener(() {});
+    _extendNestCtr.removeListener(listener);
     _extendNestCtr.dispose();
     appbarStream.close();
     super.dispose();

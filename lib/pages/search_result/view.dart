@@ -35,17 +35,19 @@ class _SearchResultPageState extends State<SearchResultPage>
     );
 
     if (Get.arguments is int) {
-      _tabController.addListener(() {
-        if (Get.isRegistered<SSearchController>()) {
-          Get.find<SSearchController>().initIndex = _tabController.index;
-        }
-      });
+      _tabController.addListener(listener);
+    }
+  }
+
+  void listener() {
+    if (Get.isRegistered<SSearchController>()) {
+      Get.find<SSearchController>().initIndex = _tabController.index;
     }
   }
 
   @override
   void dispose() {
-    _tabController.removeListener(() {});
+    _tabController.removeListener(listener);
     _tabController.dispose();
     super.dispose();
   }

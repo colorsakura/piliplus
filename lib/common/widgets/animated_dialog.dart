@@ -31,13 +31,17 @@ class AnimatedDialogState extends State<AnimatedDialog>
     opacityAnimation = Tween<double>(begin: 0.0, end: 0.6)
         .animate(CurvedAnimation(parent: controller, curve: Curves.linear));
     scaleAnimation = CurvedAnimation(parent: controller, curve: Curves.linear);
-    controller.addListener(() => setState(() {}));
+    controller.addListener(listener);
     controller.forward();
+  }
+
+  void listener() {
+    setState(() {});
   }
 
   @override
   void dispose() {
-    controller.removeListener(() {});
+    controller.removeListener(listener);
     controller.dispose();
     super.dispose();
   }

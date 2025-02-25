@@ -41,10 +41,18 @@ class _MemberPageNewState extends State<MemberPageNew>
       MemberControllerNew(mid: _mid),
       tag: _heroTag,
     );
-    _userController.scrollController.addListener(() {
-      _userController.scrollRatio.value =
-          min(1.0, _userController.scrollController.offset.round() / 120);
-    });
+    _userController.scrollController.addListener(listener);
+  }
+
+  void listener() {
+    _userController.scrollRatio.value =
+        min(1.0, _userController.scrollController.offset.round() / 120);
+  }
+
+  @override
+  void dispose() {
+    _userController.scrollController.removeListener(listener);
+    super.dispose();
   }
 
   @override
