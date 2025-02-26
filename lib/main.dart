@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/pages/video/detail/view_v.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
@@ -218,6 +219,7 @@ class MyApp extends StatelessWidget {
           },
           navigatorObservers: [
             VideoDetailPage.routeObserver,
+            VideoDetailPageV.routeObserver,
             MainApp.routeObserver,
           ],
         );

@@ -24,6 +24,7 @@ import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
@@ -1629,12 +1630,19 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   child: GestureDetector(
                     onTap: handlePlay,
                     child: Obx(
-                      () => NetworkImgLayer(
-                        key: Key('cover'),
-                        type: 'emote',
-                        src: videoDetailController.videoItem['pic'],
+                      () => CachedNetworkImage(
+                        imageUrl:
+                            (videoDetailController.videoItem['pic'] as String)
+                                .http2https,
                         width: videoWidth,
                         height: videoHeight,
+                        fit: BoxFit.cover,
+                        fadeOutDuration: const Duration(milliseconds: 120),
+                        fadeInDuration: const Duration(milliseconds: 120),
+                        memCacheWidth: videoWidth.cacheSize(context),
+                        placeholder: (context, url) => Center(
+                          child: Image.asset('assets/images/loading.png'),
+                        ),
                       ),
                     ),
                   ),
