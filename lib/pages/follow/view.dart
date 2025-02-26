@@ -74,27 +74,33 @@ class _FollowPageState extends State<FollowPage> {
                       return Column(
                         children: [
                           TabBar(
-                              controller: _followController.tabController,
-                              isScrollable: true,
-                              tabAlignment: TabAlignment.start,
-                              tabs: [
-                                for (var i in data['data']) ...[
-                                  Tab(text: i.name),
-                                ]
-                              ]),
+                            controller: _followController.tabController,
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start,
+                            tabs: [
+                              for (var i in data['data']) ...[
+                                Tab(text: i.name),
+                              ]
+                            ],
+                          ),
                           Expanded(
-                            child: tabBarView(
-                              controller: _followController.tabController,
-                              children: [
-                                for (var i = 0;
-                                    i < _followController.tabController.length;
-                                    i++) ...[
-                                  OwnerFollowList(
-                                    ctr: _followController,
-                                    tagItem: _followController.followTags[i],
-                                  )
-                                ]
-                              ],
+                            child: Material(
+                              color: Colors.transparent,
+                              child: tabBarView(
+                                controller: _followController.tabController,
+                                children: [
+                                  for (var i = 0;
+                                      i <
+                                          _followController
+                                              .tabController.length;
+                                      i++) ...[
+                                    OwnerFollowList(
+                                      ctr: _followController,
+                                      tagItem: _followController.followTags[i],
+                                    )
+                                  ]
+                                ],
+                              ),
                             ),
                           ),
                         ],
