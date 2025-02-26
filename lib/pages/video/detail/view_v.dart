@@ -1631,9 +1631,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     onTap: handlePlay,
                     child: Obx(
                       () => CachedNetworkImage(
-                        imageUrl:
-                            (videoDetailController.videoItem['pic'] as String)
-                                .http2https,
+                        imageUrl: videoDetailController.videoItem['pic'] != null
+                            ? (videoDetailController.videoItem['pic'] as String)
+                                .http2https
+                            : '',
                         width: videoWidth,
                         height: videoHeight,
                         fit: BoxFit.cover,

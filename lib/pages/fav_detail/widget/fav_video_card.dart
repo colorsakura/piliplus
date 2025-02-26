@@ -59,17 +59,8 @@ class FavVideoCardH extends StatelessWidget {
           }
         }
 
-        Map<String, String> parameters = {
-          'bvid': bvid,
-          'cid': videoItem.cid.toString(),
-          if (epId?.isNotEmpty == true) 'epId': epId!,
-        };
-        // if (seasonId != null) {
-        //   parameters['seasonId'] = seasonId.toString();
-        // }
         Utils.toViewPage(
-          '',
-          parameters: parameters,
+          'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
           arguments: {
             'videoItem': videoItem,
             'heroTag': Utils.makeHeroTag(id),

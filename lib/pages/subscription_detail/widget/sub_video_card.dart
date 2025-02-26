@@ -28,14 +28,8 @@ class SubVideoCardH extends StatelessWidget {
     return InkWell(
       onTap: () async {
         int cid = await SearchHttp.ab2c(bvid: bvid);
-        Map<String, String> parameters = {
-          'bvid': bvid,
-          'cid': cid.toString(),
-        };
-
         Utils.toViewPage(
-          '',
-          parameters: parameters,
+          'bvid=$bvid&cid=$cid',
           arguments: {
             'videoItem': videoItem,
             'heroTag': Utils.makeHeroTag(id),

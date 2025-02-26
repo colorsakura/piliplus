@@ -1997,20 +1997,22 @@ class VideoDetailController extends GetxController
         plPlayerController.playerStatus.status.value !=
             PlayerStatus.completed &&
         playedTime != null) {
-      plPlayerController.makeHeartBeat(
-        data.timeLength != null
-            ? (data.timeLength! - playedTime!.inMilliseconds).abs() <= 1000
-                ? -1
-                : playedTime!.inSeconds
-            : playedTime!.inSeconds,
-        type: 'status',
-        isManual: true,
-        bvid: bvid,
-        cid: cid.value,
-        epid: videoType == SearchType.media_bangumi ? epId : null,
-        seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
-        subType: videoType == SearchType.media_bangumi ? subType : null,
-      );
+      try {
+        plPlayerController.makeHeartBeat(
+          data.timeLength != null
+              ? (data.timeLength! - playedTime!.inMilliseconds).abs() <= 1000
+                  ? -1
+                  : playedTime!.inSeconds
+              : playedTime!.inSeconds,
+          type: 'status',
+          isManual: true,
+          bvid: bvid,
+          cid: cid.value,
+          epid: videoType == SearchType.media_bangumi ? epId : null,
+          seasonId: videoType == SearchType.media_bangumi ? seasonId : null,
+          subType: videoType == SearchType.media_bangumi ? subType : null,
+        );
+      } catch (_) {}
     }
   }
 
