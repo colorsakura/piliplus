@@ -27,14 +27,38 @@ class FollowItem extends StatelessWidget {
         Get.toNamed('/member?mid=${item.mid}',
             arguments: {'face': item.face, 'heroTag': heroTag});
       },
-      leading: Hero(
-        tag: heroTag,
-        child: NetworkImgLayer(
-          width: 45,
-          height: 45,
-          type: 'avatar',
-          src: item.face,
-        ),
+      leading: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Hero(
+            tag: heroTag,
+            child: NetworkImgLayer(
+              width: 45,
+              height: 45,
+              type: 'avatar',
+              src: item.face,
+            ),
+          ),
+          if (item.officialVerify?['type'] == 0 ||
+              item.officialVerify?['type'] == 1)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                child: Icon(
+                  Icons.offline_bolt,
+                  color: item.officialVerify?['type'] == 0
+                      ? Colors.yellow
+                      : Colors.lightBlueAccent,
+                  size: 14,
+                ),
+              ),
+            ),
+        ],
       ),
       title: Text(
         item.uname!,
