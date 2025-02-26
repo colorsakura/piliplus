@@ -129,6 +129,7 @@ class VideoDetailController extends GetxController
 
   late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
   late final RxString direction = 'horizontal'.obs;
+  late final RxDouble scrollRatio = 0.0.obs;
 
   bool imageStatus = false;
 
@@ -2026,6 +2027,10 @@ class VideoDetailController extends GetxController
     playedTime = null;
     videoUrl = null;
     audioUrl = null;
+
+    if (Get.currentRoute.startsWith('/videoV') && scrollRatio.value != 0) {
+      scrollRatio.refresh();
+    }
 
     // danmaku
     dmTrend = null;

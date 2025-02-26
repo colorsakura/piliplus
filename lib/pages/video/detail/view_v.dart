@@ -565,7 +565,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     ..addListener(scrollListener);
   late final double defVideoHeight = MediaQuery.sizeOf(context).width * 9 / 16;
   late double videoHeight = MediaQuery.sizeOf(context).width * 9 / 16;
-  late RxDouble scrollRatio = 0.0.obs;
   late bool isExpanding = false;
 
   void animListener() {
@@ -577,19 +576,19 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void scrollListener() {
     if (scrollController.hasClients) {
       if (scrollController.offset == 0) {
-        scrollRatio.value = 0;
+        videoDetailController.scrollRatio.value = 0;
       } else {
         double offset =
             scrollController.offset - (videoHeight - defVideoHeight);
         if (offset > 0) {
-          scrollRatio.value = clampDouble(
+          videoDetailController.scrollRatio.value = clampDouble(
             offset.toPrecision(2) /
                 (defVideoHeight - kToolbarHeight).toPrecision(2),
             0.0,
             1.0,
           );
         } else {
-          scrollRatio.value = 0;
+          videoDetailController.scrollRatio.value = 0;
         }
       }
     }
@@ -638,13 +637,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           backgroundColor: Colors.black,
                           toolbarHeight: 0,
                         ),
-                        if (scrollRatio.value != 0 &&
+                        if (videoDetailController.scrollRatio.value != 0 &&
                             scrollController.offset != 0)
                           AppBar(
                             backgroundColor: Theme.of(context)
                                 .colorScheme
                                 .surface
-                                .withOpacity(scrollRatio.value),
+                                .withOpacity(
+                                    videoDetailController.scrollRatio.value),
                             toolbarHeight: 0,
                           ),
                       ],
@@ -748,7 +748,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           Obx(
                             () {
                               Widget toolbar() => Opacity(
-                                    opacity: scrollRatio.value,
+                                    opacity:
+                                        videoDetailController.scrollRatio.value,
                                     child: Container(
                                       color:
                                           Theme.of(context).colorScheme.surface,
@@ -810,7 +811,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                         .primary,
                                                   ),
                                                   Text(
-                                                    '${plPlayerController == null ? '立即' : plPlayerController!.playerStatus.status.value == PlayerStatus.completed ? '重新' : '继续'}播放',
+                                                    '${videoDetailController.playedTime == null ? '立即' : plPlayerController!.playerStatus.status.value == PlayerStatus.completed ? '重新' : '继续'}播放',
                                                     style: TextStyle(
                                                       color: Theme.of(context)
                                                           .colorScheme
@@ -825,14 +826,31 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                       ),
                                     ),
                                   );
-                              return scrollRatio.value == 0 ||
+                              return videoDetailController.scrollRatio.value ==
+                                          0 ||
                                       scrollController.offset == 0
                                   ? const SizedBox.shrink()
                                   : Positioned.fill(
                                       bottom: -2,
                                       child: GestureDetector(
                                         onTap: () async {
-                                          scrollRatio.value = 0;
+                                          if (videoDetailController
+                                              .isQuerying) {
+                                            debugPrint('handlePlay: querying');
+                                            return;
+                                          }
+                                          if (videoDetailController.videoUrl ==
+                                                  null ||
+                                              videoDetailController.audioUrl ==
+                                                  null) {
+                                            debugPrint(
+                                                'handlePlay: videoUrl/audioUrl not initialized');
+                                            videoDetailController
+                                                .queryVideoUrl();
+                                            return;
+                                          }
+                                          videoDetailController
+                                              .scrollRatio.value = 0;
                                           if (plPlayerController == null) {
                                             handlePlay();
                                           } else {
