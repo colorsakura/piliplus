@@ -134,8 +134,8 @@ class PiliScheme {
             if (aid != null || bvid != null) {
               if (queryParameters['cid'] != null) {
                 bvid ??= IdUtils.av2bv(int.parse(aid!));
-                Utils.toDupNamed(
-                  '/video?bvid=$bvid&cid=${queryParameters['cid']}',
+                Utils.toViewPage(
+                  'bvid=$bvid&cid=${queryParameters['cid']}',
                   arguments: {
                     'pic': null,
                     'heroTag': Utils.makeHeroTag(aid),
@@ -143,6 +143,7 @@ class PiliScheme {
                       'progress': int.tryParse(queryParameters['dm_progress']!),
                   },
                   off: off,
+                  preventDuplicates: false,
                 );
               } else {
                 videoPush(
@@ -566,14 +567,15 @@ class PiliScheme {
       if (showDialog) {
         SmartDialog.dismiss();
       }
-      Utils.toDupNamed(
-        '/video?bvid=$bvid&cid=$cid',
+      Utils.toViewPage(
+        'bvid=$bvid&cid=$cid',
         arguments: {
           'pic': null,
           'heroTag': Utils.makeHeroTag(aid),
           if (progress != null) 'progress': int.tryParse(progress),
         },
         off: off,
+        preventDuplicates: false,
       );
     } catch (e) {
       SmartDialog.dismiss();

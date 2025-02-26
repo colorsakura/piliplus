@@ -164,8 +164,8 @@ class LaterController extends MultiSelectController {
           if (item.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
-          Get.toNamed(
-            '/video?bvid=${item.bvid}&cid=${item.cid}',
+          Utils.toViewPage(
+            'bvid=${item.bvid}&cid=${item.cid}',
             arguments: {
               'videoItem': item,
               'heroTag': Utils.makeHeroTag(item.bvid),

@@ -305,8 +305,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     final ThemeData t = Theme.of(context);
     return SliverLayoutBuilder(
       builder: (BuildContext context, SliverConstraints constraints) {
-        bool isHorizontal = constraints.crossAxisExtent >
-            constraints.viewportMainAxisExtent * 1.25;
+        // bool isHorizontal = constraints.crossAxisExtent >
+        //     constraints.viewportMainAxisExtent * 1.25;
+        bool isHorizontal = context.orientation == Orientation.landscape;
         return SliverPadding(
           padding: const EdgeInsets.only(
             left: StyleString.safeSpace,

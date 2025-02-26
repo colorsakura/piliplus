@@ -4,7 +4,6 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactivevie
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
@@ -182,8 +181,8 @@ class ChatItem extends StatelessWidget {
                   var bvid = content["bvid"];
                   final int cid = await SearchHttp.ab2c(bvid: bvid);
                   SmartDialog.dismiss<dynamic>().then(
-                    (e) => Get.toNamed<dynamic>(
-                      '/video?bvid=$bvid&cid=$cid',
+                    (e) => Utils.toViewPage(
+                      'bvid=$bvid&cid=$cid',
                       arguments: <String, String?>{
                         'pic': content['thumb'],
                         'heroTag': Utils.makeHeroTag(bvid),
@@ -230,8 +229,8 @@ class ChatItem extends StatelessWidget {
                     var bvid = content["bvid"];
                     final int cid = await SearchHttp.ab2c(bvid: bvid);
                     SmartDialog.dismiss().then(
-                      (_) => Get.toNamed(
-                        '/video?bvid=$bvid&cid=$cid',
+                      (_) => Utils.toViewPage(
+                        'bvid=$bvid&cid=$cid',
                         arguments: {
                           'pic': content['thumb'],
                           'heroTag': Utils.makeHeroTag(bvid),
@@ -317,8 +316,7 @@ class ChatItem extends StatelessWidget {
                               SmartDialog.showLoading();
                               final int cid = await SearchHttp.ab2c(bvid: bvid);
                               SmartDialog.dismiss<dynamic>().then(
-                                (e) => Get.toNamed<dynamic>(
-                                    '/video?bvid=$bvid&cid=$cid',
+                                (e) => Utils.toViewPage('bvid=$bvid&cid=$cid',
                                     arguments: <String, String?>{
                                       'pic': i['cover_url'],
                                       'heroTag': Utils.makeHeroTag(bvid),

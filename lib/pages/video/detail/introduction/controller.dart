@@ -821,13 +821,6 @@ class VideoIntroController extends GetxController
         (relatedCtr.loadingState.value as Success).response[0];
     try {
       if (videoItem.cid != null) {
-        // Get.offNamed(
-        //   '/video?bvid=${videoItem.bvid}&cid=${videoItem.cid}',
-        //   arguments: {
-        //     'videoItem': videoItem,
-        //     'heroTag': heroTag,
-        //   },
-        // );
         changeSeasonOrbangu(
           null,
           videoItem.bvid,
@@ -837,12 +830,14 @@ class VideoIntroController extends GetxController
         );
       } else {
         SearchHttp.ab2c(aid: videoItem.aid, bvid: videoItem.bvid).then(
-          (cid) => Get.offNamed(
-              '/video?bvid=${videoItem.bvid}&cid=${videoItem.cid}',
-              arguments: {
-                'videoItem': videoItem,
-                'heroTag': heroTag,
-              }),
+          (cid) => Utils.toViewPage(
+            'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
+            arguments: {
+              'videoItem': videoItem,
+              'heroTag': heroTag,
+            },
+            off: true,
+          ),
         );
       }
     } catch (err) {

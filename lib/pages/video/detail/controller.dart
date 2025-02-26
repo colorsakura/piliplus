@@ -27,6 +27,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_throttle.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -125,6 +126,9 @@ class VideoDetailController extends GetxController
   late final bool enableSponsorBlock;
   PlayerStatus? playerStatus;
   StreamSubscription<Duration>? positionSubscription;
+
+  late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
+  late final RxString direction = 'horizontal'.obs;
 
   bool imageStatus = false;
 
@@ -1082,6 +1086,11 @@ class VideoDetailController extends GetxController
             baseUrl: videoUrl,
             codecs: 'avc1',
             quality: VideoQualityCode.fromCode(data.quality!)!);
+        direction.value = firstVideo.width != null && firstVideo.height != null
+            ? firstVideo.width! > firstVideo.height!
+                ? 'horizontal'
+                : 'vertical'
+            : 'horizontal';
         currentDecodeFormats = VideoDecodeFormatsCode.fromString('avc1')!;
         currentVideoQa = VideoQualityCode.fromCode(data.quality!)!;
         if (autoPlay.value) {
@@ -1152,6 +1161,11 @@ class VideoDetailController extends GetxController
       firstVideo = videosList.firstWhere(
           (e) => e.codecs!.startsWith(currentDecodeFormats.code),
           orElse: () => videosList.first);
+      direction.value = firstVideo.width != null && firstVideo.height != null
+          ? firstVideo.width! > firstVideo.height!
+              ? 'horizontal'
+              : 'vertical'
+          : 'horizontal';
 
       // videoUrl = enableCDN
       //     ? VideoUtils.getCdnUrl(firstVideo)

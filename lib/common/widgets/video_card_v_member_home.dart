@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/models/space/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
 import 'badge.dart';
@@ -30,8 +29,8 @@ class VideoCardVMemberHome extends StatelessWidget {
           }
         }
         String bvid = videoItem.bvid ?? '';
-        Get.toNamed(
-          '/video?bvid=$bvid&cid=${videoItem.firstCid}',
+        Utils.toViewPage(
+          'bvid=$bvid&cid=${videoItem.firstCid}',
           arguments: {
             // 'videoItem': videoItem,
             'pic': videoItem.cover,

@@ -67,8 +67,8 @@ class FavVideoCardH extends StatelessWidget {
         // if (seasonId != null) {
         //   parameters['seasonId'] = seasonId.toString();
         // }
-        Get.toNamed(
-          '/video',
+        Utils.toViewPage(
+          '',
           parameters: parameters,
           arguments: {
             'videoItem': videoItem,

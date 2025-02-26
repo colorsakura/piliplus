@@ -2103,6 +2103,16 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '使用可折叠的播放页面',
+        leading: Icon(Icons.video_settings),
+        setKey: SettingBoxKey.collapsibleVideoPage,
+        defaultVal: false,
+        onChanged: (value) {
+          GStorage.collapsibleVideoPage = value;
+        },
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

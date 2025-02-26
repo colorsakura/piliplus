@@ -48,6 +48,33 @@ class Utils {
 
   static const channel = MethodChannel("PiliPlus");
 
+  static void toViewPage(
+    String page, {
+    dynamic arguments,
+    int? id,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    bool off = false,
+  }) {
+    if (off) {
+      Get.offNamed(
+        '${GStorage.collapsibleVideoPage ? '/videoV' : '/video'}?$page',
+        arguments: arguments,
+        id: id,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+      );
+    } else {
+      Get.toNamed(
+        '${GStorage.collapsibleVideoPage ? '/videoV' : '/video'}?$page',
+        arguments: arguments,
+        id: id,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+      );
+    }
+  }
+
   static Future insertCreatedDyn(result) async {
     try {
       dynamic id = result['data']['dyn_id'];
@@ -384,12 +411,13 @@ class Utils {
           String bvid = item.modules.moduleDynamic.major.archive.bvid;
           String cover = item.modules.moduleDynamic.major.archive.cover;
           int cid = await SearchHttp.ab2c(bvid: bvid);
-          Utils.toDupNamed(
-            '/video?bvid=$bvid&cid=$cid',
+          Utils.toViewPage(
+            'bvid=$bvid&cid=$cid',
             arguments: {
               'pic': cover,
               'heroTag': Utils.makeHeroTag(bvid),
             },
+            preventDuplicates: false,
           );
         } catch (err) {
           SmartDialog.showToast(err.toString());
@@ -454,12 +482,13 @@ class Utils {
         String bvid = IdUtils.av2bv(aid);
         String cover = ugcSeason.cover!;
         int cid = await SearchHttp.ab2c(bvid: bvid);
-        Utils.toDupNamed(
-          '/video?bvid=$bvid&cid=$cid',
+        Utils.toViewPage(
+          'bvid=$bvid&cid=$cid',
           arguments: {
             'pic': cover,
             'heroTag': Utils.makeHeroTag(bvid),
           },
+          preventDuplicates: false,
         );
         break;
 
@@ -845,14 +874,15 @@ class Utils {
                 for (EpisodeItem item in item.episodes!) {
                   if (item.epId.toString() == epId.toString()) {
                     // view as normal video
-                    Utils.toDupNamed(
-                      '/video?bvid=${item.bvid}&cid=${item.cid}&seasonId=${data.seasonId}&epId=${item.epId}',
+                    Utils.toViewPage(
+                      'bvid=${item.bvid}&cid=${item.cid}&seasonId=${data.seasonId}&epId=${item.epId}',
                       arguments: {
                         'pgcApi': true,
                         'pic': item.cover,
                         'heroTag': Utils.makeHeroTag(item.cid),
                         'videoType': SearchType.video,
                       },
+                      preventDuplicates: false,
                     );
                     return;
                   }
@@ -873,14 +903,15 @@ class Utils {
                 ) ??
                 data.episodes!.first
             : data.episodes!.first;
-        Utils.toDupNamed(
-          '/video?bvid=${episode.bvid}&cid=${episode.cid}&seasonId=${data.seasonId}&epId=${episode.epId}&type=${data.type}',
+        Utils.toViewPage(
+          'bvid=${episode.bvid}&cid=${episode.cid}&seasonId=${data.seasonId}&epId=${episode.epId}&type=${data.type}',
           arguments: {
             'pic': episode.cover,
             'heroTag': Utils.makeHeroTag(episode.cid),
             'videoType': SearchType.media_bangumi,
             'bangumiItem': data,
           },
+          preventDuplicates: false,
         );
       } else {
         SmartDialog.showToast(result['msg']);

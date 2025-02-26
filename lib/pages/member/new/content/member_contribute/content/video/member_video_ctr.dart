@@ -104,8 +104,8 @@ class MemberVideoCtr extends CommonController {
             ?.group(1);
         dynamic bvid = IdUtils.av2bv(int.tryParse(oid) ?? 0);
         dynamic cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
-        Get.toNamed(
-          '/video?bvid=$bvid&cid=$cid',
+        Utils.toViewPage(
+          'bvid=$bvid&cid=$cid',
           arguments: {
             'heroTag': Utils.makeHeroTag(oid),
             'sourceType': 'archive',
@@ -145,8 +145,8 @@ class MemberVideoCtr extends CommonController {
                       : sort.value == 'asc')
               ? desc.not
               : desc;
-          Get.toNamed(
-            '/video?bvid=${element.bvid}&cid=${element.firstCid}',
+          Utils.toViewPage(
+            'bvid=${element.bvid}&cid=${element.firstCid}',
             arguments: {
               'videoItem': element,
               'heroTag': Utils.makeHeroTag(element.bvid),

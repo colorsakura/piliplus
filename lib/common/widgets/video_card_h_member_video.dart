@@ -6,7 +6,6 @@ import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
 import 'badge.dart';
@@ -48,8 +47,8 @@ class VideoCardHMemberVideo extends StatelessWidget {
               return;
             }
             try {
-              Get.toNamed(
-                '/video?bvid=${videoItem.bvid}&cid=${videoItem.firstCid}',
+              Utils.toViewPage(
+                'bvid=${videoItem.bvid}&cid=${videoItem.firstCid}',
                 arguments: {
                   'heroTag': Utils.makeHeroTag(videoItem.bvid),
                 },

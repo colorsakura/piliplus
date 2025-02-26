@@ -256,8 +256,8 @@ class SearchDynamic extends StatelessWidget {
     return ListTile(
       dense: true,
       onTap: () {
-        Get.toNamed(
-          '/video?bvid=${IdUtils.av2bv(json['aid'])}&cid=${json['cid']}',
+        Utils.toViewPage(
+          'bvid=${IdUtils.av2bv(json['aid'])}&cid=${json['cid']}',
           arguments: {
             'heroTag': Utils.makeHeroTag(json['aid']),
           },

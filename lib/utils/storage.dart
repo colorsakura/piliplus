@@ -388,6 +388,9 @@ class GStorage {
   static bool get expandDynLivePanel => GStorage.setting
       .get(SettingBoxKey.expandDynLivePanel, defaultValue: false);
 
+  static bool collapsibleVideoPage = GStorage.setting
+      .get(SettingBoxKey.collapsibleVideoPage, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -640,6 +643,7 @@ class SettingBoxKey {
       antiGoodsReply = 'antiGoodsReply',
       expandDynLivePanel = 'expandDynLivePanel',
       springDescription = 'springDescription',
+      collapsibleVideoPage = 'collapsibleVideoPage',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 
 import '../http/init.dart';
 import '../http/search.dart';
@@ -66,8 +65,8 @@ class UrlUtils {
       String? bvid = matchRes['BV'];
       bvid ??= IdUtils.av2bv(aid!);
       final int cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
-      await Get.toNamed(
-        '/video?bvid=$bvid&cid=$cid',
+      Utils.toViewPage(
+        'bvid=$bvid&cid=$cid',
         arguments: <String, String?>{
           'pic': '',
           'heroTag': Utils.makeHeroTag(bvid),

@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/stat/danmu.dart';
@@ -34,8 +33,8 @@ class SubVideoCardH extends StatelessWidget {
           'cid': cid.toString(),
         };
 
-        Get.toNamed(
-          '/video',
+        Utils.toViewPage(
+          '',
           parameters: parameters,
           arguments: {
             'videoItem': videoItem,

@@ -26,6 +26,7 @@ class VideoReplyPanel extends StatefulWidget {
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
+  final bool? needController;
 
   const VideoReplyPanel({
     super.key,
@@ -38,6 +39,7 @@ class VideoReplyPanel extends StatefulWidget {
     this.onViewImage,
     this.onDismissed,
     this.callback,
+    this.needController,
   });
 
   @override
@@ -47,9 +49,7 @@ class VideoReplyPanel extends StatefulWidget {
 class _VideoReplyPanelState extends State<VideoReplyPanel>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   late VideoReplyController _videoReplyController;
-  late AnimationController fabAnimationCtr;
 
-  bool _isFabVisible = true;
   String replyLevel = '1';
   late String heroTag;
 
@@ -66,22 +66,17 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     replyLevel = widget.replyLevel ?? '1';
     _videoReplyController = Get.find<VideoReplyController>(tag: heroTag);
 
-    fabAnimationCtr = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 100));
-
-    fabAnimationCtr.forward();
-    scrollListener();
+    if (widget.needController != false) {
+      _videoReplyController.scrollController.addListener(listener);
+    }
   }
 
   @override
   void dispose() {
-    _videoReplyController.scrollController.removeListener(listener);
-    fabAnimationCtr.dispose();
+    if (widget.needController != false) {
+      _videoReplyController.scrollController.removeListener(listener);
+    }
     super.dispose();
-  }
-
-  void scrollListener() {
-    _videoReplyController.scrollController.addListener(listener);
   }
 
   void listener() {
@@ -89,26 +84,12 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
         _videoReplyController.scrollController.position.userScrollDirection;
     if (direction == ScrollDirection.forward) {
       if (mounted) {
-        _showFab();
+        _videoReplyController.showFab();
       }
     } else if (direction == ScrollDirection.reverse) {
       if (mounted) {
-        _hideFab();
+        _videoReplyController.hideFab();
       }
-    }
-  }
-
-  void _showFab() {
-    if (!_isFabVisible) {
-      _isFabVisible = true;
-      fabAnimationCtr.forward();
-    }
-  }
-
-  void _hideFab() {
-    if (_isFabVisible) {
-      _isFabVisible = false;
-      fabAnimationCtr.reverse();
     }
   }
 
@@ -122,8 +103,14 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
       child: Stack(
         children: [
           CustomScrollView(
-            controller: _videoReplyController.scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
+            controller: widget.needController == false
+                ? null
+                : _videoReplyController.scrollController,
+            physics: widget.needController == false
+                ? const NeverScrollableScrollPhysics(
+                    parent: ClampingScrollPhysics(),
+                  )
+                : const AlwaysScrollableScrollPhysics(),
             // key: const PageStorageKey<String>('评论'),
             slivers: <Widget>[
               SliverPersistentHeader(
@@ -182,7 +169,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 begin: const Offset(0, 2),
                 end: const Offset(0, 0),
               ).animate(CurvedAnimation(
-                parent: fabAnimationCtr,
+                parent: _videoReplyController.fabAnimationCtr,
                 curve: Curves.easeInOut,
               )),
               child: FloatingActionButton(

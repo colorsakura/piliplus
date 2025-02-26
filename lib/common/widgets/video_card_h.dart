@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import '../../http/search.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
@@ -88,8 +87,8 @@ class VideoCardH extends StatelessWidget {
               try {
                 final int cid = videoItem.cid ??
                     await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                Get.toNamed(
-                  '/video?bvid=$bvid&cid=$cid',
+                Utils.toViewPage(
+                  'bvid=$bvid&cid=$cid',
                   arguments: {
                     'videoItem': videoItem,
                     'heroTag': Utils.makeHeroTag(aid)

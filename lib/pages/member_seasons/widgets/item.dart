@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -25,8 +24,8 @@ class MemberSeasonsItem extends StatelessWidget {
         onTap: () async {
           int cid =
               await SearchHttp.ab2c(aid: seasonItem.aid, bvid: seasonItem.bvid);
-          Get.toNamed(
-            '/video?bvid=${seasonItem.bvid}&cid=$cid',
+          Utils.toViewPage(
+            'bvid=${seasonItem.bvid}&cid=$cid',
             arguments: {
               'videoItem': seasonItem,
               'heroTag': Utils.makeHeroTag(seasonItem.aid)

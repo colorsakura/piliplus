@@ -5,6 +5,7 @@ import 'package:PiliPlus/pages/setting/search_page.dart';
 import 'package:PiliPlus/pages/setting/sponsor_block_page.dart';
 import 'package:PiliPlus/pages/setting/view.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/create_fav_page.dart';
+import 'package:PiliPlus/pages/video/detail/view_v.dart';
 import 'package:PiliPlus/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,6 +64,7 @@ class Routes {
     CustomGetPage(name: '/hot', page: () => const HotPage()),
     // 视频详情
     CustomGetPage(name: '/video', page: () => const VideoDetailPage()),
+    CustomGetPage(name: '/videoV', page: () => const VideoDetailPageV()),
     //
     CustomGetPage(name: '/webview', page: () => const WebviewPageNew()),
     // 设置
