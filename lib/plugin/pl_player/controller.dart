@@ -777,7 +777,6 @@ class PlPlayerController {
   }
 
   Future<bool> refreshPlayer() async {
-    Duration currentPos = _position.value;
     if (_videoPlayerController == null) {
       SmartDialog.showToast('视频播放器为空，请重新进入本页面');
       return false;
@@ -800,7 +799,7 @@ class PlPlayerController {
       Media(
         dataSource.videoSource!,
         httpHeaders: dataSource.httpHeaders,
-        start: currentPos,
+        start: _position.value,
       ),
       play: true,
     );

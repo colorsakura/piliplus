@@ -204,8 +204,18 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
     // 转发
     case 'DYNAMIC_TYPE_FORWARD':
       return InkWell(
-        onTap: () => Utils.pushDynDetail(item.orig, floor + 1),
+        onTap: () {
+          if (item.orig.modules.moduleDynamic.major?.type ==
+              'MAJOR_TYPE_NONE') {
+            return;
+          }
+          Utils.pushDynDetail(item.orig, floor + 1);
+        },
         onLongPress: () {
+          if (item.orig.modules.moduleDynamic.major?.type ==
+              'MAJOR_TYPE_NONE') {
+            return;
+          }
           if (item.orig.type == 'DYNAMIC_TYPE_AV') {
             imageSaveDialog(
               context: context,

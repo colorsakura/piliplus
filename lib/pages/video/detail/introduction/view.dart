@@ -559,7 +559,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     controller: videoIntroController.expandableCtr,
                     collapsed: GestureDetector(
                       onLongPress: () {
-                        feedBack();
+                        Feedback.forLongPress(context);
                         Utils.copyText(
                             '${videoDetail.title ?? videoItem['title'] ?? ''}');
                       },
@@ -567,7 +567,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     ),
                     expanded: GestureDetector(
                       onLongPress: () {
-                        feedBack();
+                        Feedback.forLongPress(context);
                         Utils.copyText(
                             '${videoDetail.title ?? videoItem['title'] ?? ''}');
                       },

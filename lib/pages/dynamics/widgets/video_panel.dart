@@ -9,6 +9,27 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'rich_node_panel.dart';
 
 Widget videoSeasonWidget(item, context, type, {floor = 1}) {
+  if (item.modules.moduleDynamic.major?.type == 'MAJOR_TYPE_NONE') {
+    return item.modules.moduleDynamic.major?.none?.tips != null
+        ? Row(
+            children: [
+              Icon(
+                Icons.error,
+                size: 18,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                '${item.modules.moduleDynamic.major.none.tips}',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
+  }
+
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
   // type archive  ugcSeason
@@ -27,6 +48,9 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
   InlineSpan? richNodes = richNode(item, context);
 
   Widget buildCover() {
+    if (content?.cover == null) {
+      return const SizedBox.shrink();
+    }
     return LayoutBuilder(builder: (context, box) {
       double width = box.maxWidth;
       return Stack(
@@ -166,17 +190,18 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
           child: buildCover(),
         ),
       const SizedBox(height: 6),
-      Padding(
-        padding: floor == 1
-            ? const EdgeInsets.only(left: 12, right: 12)
-            : EdgeInsets.zero,
-        child: Text(
-          content.title,
-          maxLines: 1,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-          overflow: TextOverflow.ellipsis,
+      if (content?.title != null)
+        Padding(
+          padding: floor == 1
+              ? const EdgeInsets.only(left: 12, right: 12)
+              : EdgeInsets.zero,
+          child: Text(
+            content.title,
+            maxLines: 1,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
     ],
   );
 }

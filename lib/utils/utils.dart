@@ -366,7 +366,7 @@ class Utils {
 
     switch (item.type) {
       case 'DYNAMIC_TYPE_AV':
-        if (item.modules.moduleDynamic.major.archive.type == 2) {
+        if (item.modules.moduleDynamic.major.archive?.type == 2) {
           if (item.modules.moduleDynamic.major.archive.jumpUrl
               .startsWith('//')) {
             item.modules.moduleDynamic.major.archive.jumpUrl =
@@ -380,9 +380,9 @@ class Utils {
           }
         }
 
-        String bvid = item.modules.moduleDynamic.major.archive.bvid;
-        String cover = item.modules.moduleDynamic.major.archive.cover;
         try {
+          String bvid = item.modules.moduleDynamic.major.archive.bvid;
+          String cover = item.modules.moduleDynamic.major.archive.cover;
           int cid = await SearchHttp.ab2c(bvid: bvid);
           Utils.toDupNamed(
             '/video?bvid=$bvid&cid=$cid',

@@ -26,10 +26,13 @@ class IntroDetail extends StatelessWidget {
       padding: const EdgeInsets.only(left: 14, right: 14),
       child: Column(
         children: [
-          Container(
-            height: 35,
-            padding: const EdgeInsets.only(bottom: 2),
-            child: Center(
+          GestureDetector(
+            onTap: Get.back,
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              height: 35,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(bottom: 2),
               child: Container(
                 width: 32,
                 height: 3,

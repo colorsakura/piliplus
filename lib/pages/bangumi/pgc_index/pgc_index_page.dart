@@ -183,7 +183,6 @@ class _PgcIndexPageState extends State<PgcIndexPage>
                 _ctr.isExpand.value = _ctr.isExpand.value.not;
               },
               child: Container(
-                width: double.infinity,
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

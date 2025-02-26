@@ -88,15 +88,11 @@ class MemberHttp {
       Constants.appSec,
     );
     data['sign'] = sign;
-    int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       Api.spaceArticle,
       queryParameters: data,
       options: Options(
         headers: {
-          'env': 'prod',
-          'app-key': 'android_hd',
-          'x-bili-mid': _mid,
           'bili-http-engine': 'cronet',
           'user-agent': Constants.userAgent,
         },
@@ -133,15 +129,11 @@ class MemberHttp {
       Constants.appSec,
     );
     data['sign'] = sign;
-    int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       Api.spaceFav,
       queryParameters: data,
       options: Options(
         headers: {
-          'env': 'prod',
-          'app-key': 'android_hd',
-          'x-bili-mid': _mid,
           'bili-http-engine': 'cronet',
           'user-agent': Constants.userAgent,
         },
@@ -214,7 +206,6 @@ class MemberHttp {
       Constants.appSec,
     );
     data['sign'] = sign;
-    int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       type == ContributeType.video
           ? Api.spaceArchive
@@ -228,9 +219,6 @@ class MemberHttp {
       queryParameters: data,
       options: Options(
         headers: {
-          'env': 'prod',
-          'app-key': 'android_hd',
-          'x-bili-mid': _mid,
           'bili-http-engine': 'cronet',
           'user-agent': Constants.userAgent,
         },
@@ -267,15 +255,11 @@ class MemberHttp {
       Constants.appSec,
     );
     data['sign'] = sign;
-    int? _mid = GStorage.userInfo.get('userInfoCache')?.mid;
     dynamic res = await Request().get(
       Api.space,
       queryParameters: data,
       options: Options(
         headers: {
-          'env': 'prod',
-          'app-key': 'android_hd',
-          'x-bili-mid': _mid,
           'bili-http-engine': 'cronet',
           'user-agent': Constants.userAgent,
         },
