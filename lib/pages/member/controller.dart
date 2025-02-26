@@ -9,7 +9,6 @@ import 'package:PiliPlus/models/member/archive.dart';
 import 'package:PiliPlus/models/member/coin.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../video/detail/introduction/widgets/group_panel.dart';
 
@@ -240,7 +239,8 @@ class MemberController extends GetxController {
   }
 
   void shareUser() {
-    Share.share('${memberInfo.value.name} - https://space.bilibili.com/$mid');
+    Utils.shareText(
+        '${memberInfo.value.name} - https://space.bilibili.com/$mid');
   }
 
   // 请求专栏

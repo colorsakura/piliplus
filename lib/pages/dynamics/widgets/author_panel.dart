@@ -12,7 +12,6 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../http/constants.dart';
 import '../controller.dart';
@@ -290,7 +289,8 @@ class AuthorPanel extends StatelessWidget {
             leading: const Icon(Icons.share_outlined, size: 19),
             onTap: () {
               Get.back();
-              Share.share('${HttpString.dynamicShareBaseUrl}/${item.idStr}');
+              Utils.shareText(
+                  '${HttpString.dynamicShareBaseUrl}/${item.idStr}');
             },
             minLeadingWidth: 0,
           ),

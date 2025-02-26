@@ -38,6 +38,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
@@ -47,6 +48,33 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static bool? _isIpad;
+
+  static Future<bool> isIpad() async {
+    if (_isIpad != null) {
+      return _isIpad!;
+    }
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    IosDeviceInfo info = await deviceInfo.iosInfo;
+    _isIpad = info.model.toLowerCase().contains("ipad");
+    return _isIpad!;
+  }
+
+  static void shareText(String text) async {
+    try {
+      Rect? sharePositionOrigin;
+      if (Platform.isIOS && (await isIpad())) {
+        sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
+      }
+      Share.share(
+        text,
+        sharePositionOrigin: sharePositionOrigin,
+      );
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
+    }
+  }
 
   static void toViewPage(
     String page, {

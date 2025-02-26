@@ -24,7 +24,6 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../utils/grid.dart';
 import 'controller.dart';
@@ -312,7 +311,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                 ),
               ),
               PopupMenuItem(
-                onTap: () => Share.share(url),
+                onTap: () => Utils.shareText(url),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -558,7 +557,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                 Expanded(
                                   child: TextButton.icon(
                                     onPressed: () {
-                                      Share.share(
+                                      Utils.shareText(
                                           '${HttpString.dynamicShareBaseUrl}/${_htmlRenderCtr.item.value.idStr}');
                                     },
                                     icon: Icon(

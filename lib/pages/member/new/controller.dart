@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:share_plus/share_plus.dart';
 
 enum MemberTabType { none, home, dynamic, contribute, favorite, bangumi }
 
@@ -149,7 +148,7 @@ class MemberControllerNew extends CommonController
   }
 
   void shareUser() {
-    Share.share('https://space.bilibili.com/$mid');
+    Utils.shareText('https://space.bilibili.com/$mid');
   }
 
   void _onBlock() async {

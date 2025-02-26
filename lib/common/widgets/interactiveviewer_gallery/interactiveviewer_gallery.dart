@@ -437,16 +437,30 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   // 图片分享
   void onShareImg(String imgUrl) async {
-    SmartDialog.showLoading();
-    var response = await Request()
-        .get(imgUrl, options: Options(responseType: ResponseType.bytes));
-    final temp = await getTemporaryDirectory();
-    SmartDialog.dismiss();
-    String imgName =
-        "plpl_pic_${DateTime.now().toString().split('-').join()}.jpg";
-    var path = '${temp.path}/$imgName';
-    File(path).writeAsBytesSync(response.data);
-    Share.shareXFiles([XFile(path)], subject: imgUrl);
+    try {
+      SmartDialog.showLoading();
+      var response = await Request()
+          .get(imgUrl, options: Options(responseType: ResponseType.bytes));
+      final temp = await getTemporaryDirectory();
+      SmartDialog.dismiss();
+      String imgName =
+          "plpl_pic_${DateTime.now().toString().split('-').join()}.jpg";
+      var path = '${temp.path}/$imgName';
+      File(path).writeAsBytesSync(response.data);
+
+      Rect? sharePositionOrigin;
+      if (Platform.isIOS && (await Utils.isIpad())) {
+        sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
+      }
+
+      Share.shareXFiles(
+        [XFile(path)],
+        subject: imgUrl,
+        sharePositionOrigin: sharePositionOrigin,
+      );
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
+    }
   }
 
   Widget _itemBuilder(index) {

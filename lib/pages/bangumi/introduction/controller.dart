@@ -23,7 +23,6 @@ import 'package:PiliPlus/pages/video/detail/reply/index.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 
@@ -396,7 +395,7 @@ class BangumiIntroController extends CommonController {
                   ),
                   onTap: () {
                     Get.back();
-                    Share.share(videoUrl);
+                    Utils.shareText(videoUrl);
                   },
                 ),
                 ListTile(

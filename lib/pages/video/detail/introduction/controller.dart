@@ -23,7 +23,6 @@ import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../../http/search.dart';
 import '../../../../models/model_hot_video_item.dart';
@@ -498,7 +497,7 @@ class VideoIntroController extends GetxController
                   ),
                   onTap: () {
                     Get.back();
-                    Share.share('${videoDetail.value.title} '
+                    Utils.shareText('${videoDetail.value.title} '
                         'UP主: ${videoDetail.value.owner!.name!}'
                         ' - $videoUrl');
                   },

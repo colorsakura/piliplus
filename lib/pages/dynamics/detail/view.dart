@@ -27,7 +27,6 @@ import 'package:PiliPlus/pages/dynamics/detail/index.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/author_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../utils/grid.dart';
 import '../widgets/dynamic_panel.dart';
@@ -555,7 +554,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                           Expanded(
                             child: TextButton.icon(
                               onPressed: () {
-                                Share.share(
+                                Utils.shareText(
                                     '${HttpString.dynamicShareBaseUrl}/${_dynamicDetailController.item.idStr}');
                               },
                               icon: Icon(
