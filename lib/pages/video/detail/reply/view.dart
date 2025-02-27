@@ -107,7 +107,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                 ? null
                 : _videoReplyController.scrollController,
             physics: widget.needController == false
-                ? const NeverScrollableScrollPhysics(
+                ? const AlwaysScrollableScrollPhysics(
                     parent: ClampingScrollPhysics(),
                   )
                 : const AlwaysScrollableScrollPhysics(),

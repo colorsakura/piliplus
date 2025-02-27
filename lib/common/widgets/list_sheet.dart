@@ -109,9 +109,18 @@ class _ListSheetContentState extends State<ListSheetContent>
     _indexStream?.add(_ctr?.index);
   }
 
+  late bool _isInit = true;
+
   @override
   void initState() {
     super.initState();
+    if (GStorage.collapsibleVideoPage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          _isInit = false;
+        });
+      });
+    }
     if (_isList) {
       _indexStream ??= StreamController<int>.broadcast();
       _ctr = TabController(
@@ -127,7 +136,7 @@ class _ListSheetContentState extends State<ListSheetContent>
     reverse = _isList
         ? List.generate(widget.season.sections.length, (_) => false)
         : [false];
-    if (widget.bvid != null && widget.season != null) {
+    if (GStorage.isLogin && widget.bvid != null && widget.season != null) {
       _favStream ??= StreamController<int>();
       () async {
         dynamic result = await VideoHttp.videoRelation(bvid: widget.bvid);
@@ -278,6 +287,12 @@ class _ListSheetContentState extends State<ListSheetContent>
 
   @override
   Widget build(BuildContext context) {
+    if (GStorage.collapsibleVideoPage && _isInit) {
+      return CustomScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+      );
+    }
+
     return Column(
       children: [
         Container(
@@ -473,6 +488,7 @@ class _ListSheetContentState extends State<ListSheetContent>
         ),
         reverse: reverse[i ?? 0],
         itemCount: episodes.length,
+        physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return buildEpisodeListItem(
             episodes[index],

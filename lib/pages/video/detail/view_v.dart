@@ -1796,13 +1796,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       );
 
   Widget videoIntro([bool needRelated = true, bool needCtr = true]) {
-    Widget introPanel() => Material(
-          color: Colors.transparent,
-          child: CustomScrollView(
+    Widget introPanel() => Scaffold(
+          backgroundColor: Colors.transparent,
+          body: CustomScrollView(
             key: const PageStorageKey<String>('简介'),
             controller: needCtr ? _introController : null,
             physics: needCtr.not
-                ? const NeverScrollableScrollPhysics(
+                ? const AlwaysScrollableScrollPhysics(
                     parent: ClampingScrollPhysics(),
                   )
                 : null,
@@ -2260,6 +2260,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             ],
           ),
           body: SingleChildScrollView(
+            controller: ScrollController(),
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 ...List.generate(
@@ -2358,7 +2360,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
-        (context) => listSheetContent(),
+        (context) => ViewPointsPage(
+          child: listSheetContent(),
+        ),
       );
     }
   }
@@ -2389,5 +2393,37 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       },
       enableDrag: true,
     );
+  }
+}
+
+class ViewPointsPage extends StatefulWidget {
+  const ViewPointsPage({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<ViewPointsPage> createState() => _ViewPointsPageState();
+}
+
+class _ViewPointsPageState extends State<ViewPointsPage> {
+  bool _isInit = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _isInit = false;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isInit
+        ? CustomScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+          )
+        : widget.child;
   }
 }

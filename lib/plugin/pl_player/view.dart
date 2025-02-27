@@ -1125,6 +1125,81 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           child: Semantics(
             label: '双击开关控件',
             child: GestureDetector(
+              onVerticalDragStart: (details) {
+                if (plPlayerController.controlsLock.value) return;
+                if (details.localPosition.dy < 40) return;
+                _initialFocalPoint = details.localPosition;
+                _gestureType = null;
+              },
+              onVerticalDragUpdate: (details) {
+                if (plPlayerController.controlsLock.value) return;
+                RenderBox renderBox =
+                    _playerKey.currentContext!.findRenderObject() as RenderBox;
+                final double totalWidth = renderBox.size.width;
+                final double tapPosition = details.localPosition.dx;
+                final double sectionWidth = totalWidth / 3;
+                if (tapPosition < sectionWidth) {
+                  // 左边区域
+                  _gestureType = 'left';
+                } else if (tapPosition < sectionWidth * 2) {
+                  // 全屏
+                  _gestureType = 'center';
+                } else {
+                  // 右边区域
+                  _gestureType = 'right';
+                }
+                if (_gestureType == 'left') {
+                  // 左边区域 👈
+                  final double level = renderBox.size.height * 3;
+                  final double brightness =
+                      _brightnessValue.value - details.delta.dy / level;
+                  final double result = brightness.clamp(0.0, 1.0);
+                  setBrightness(result);
+                } else if (_gestureType == 'center') {
+                  // 全屏
+                  const double threshold = 2.5; // 滑动阈值
+                  double cumulativeDy =
+                      details.localPosition.dy - _initialFocalPoint.dy;
+
+                  void fullScreenTrigger(bool status) {
+                    EasyThrottle.throttle(
+                        'fullScreen', const Duration(milliseconds: 800),
+                        () async {
+                      await plPlayerController.triggerFullScreen(
+                          status: status);
+                    });
+                  }
+
+                  if (cumulativeDy > threshold) {
+                    _gestureType = 'center_down';
+                    if (isFullScreen ^ fullScreenGestureReverse) {
+                      fullScreenTrigger(fullScreenGestureReverse);
+                    }
+                    // debugPrint('center_down:$cumulativeDy');
+                  } else if (cumulativeDy < -threshold) {
+                    _gestureType = 'center_up';
+                    if (!isFullScreen ^ fullScreenGestureReverse) {
+                      fullScreenTrigger(!fullScreenGestureReverse);
+                    }
+                    // debugPrint('center_up:$cumulativeDy');
+                  }
+                } else if (_gestureType == 'right') {
+                  // 右边区域
+                  final double level = renderBox.size.height * 0.5;
+                  EasyThrottle.throttle(
+                      'setVolume', const Duration(milliseconds: 20), () {
+                    final double volume =
+                        _volumeValue.value - details.delta.dy / level;
+                    final double result = volume.clamp(0.0, 1.0);
+                    setVolume(result);
+                  });
+                }
+              },
+              onVerticalDragEnd: (details) {
+                interacting = false;
+                _initialFocalPoint = Offset.zero;
+                _gestureType = null;
+              },
               onTap: () {
                 plPlayerController.controls =
                     !plPlayerController.showControls.value;

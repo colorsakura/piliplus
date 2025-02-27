@@ -22,6 +22,7 @@ import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/related/controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply/controller.dart';
+import 'package:PiliPlus/pages/video/detail/view_v.dart' show ViewPointsPage;
 import 'package:PiliPlus/pages/video/detail/widgets/send_danmaku_panel.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/watch_later_list.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -1329,8 +1330,10 @@ class VideoDetailController extends GetxController
     } else {
       childKey.currentState?.showBottomSheet(
         enableDrag: false,
-        (context) => _postPanel(),
         backgroundColor: Colors.transparent,
+        (context) => ViewPointsPage(
+          child: _postPanel(),
+        ),
       );
     }
   }
@@ -1496,6 +1499,8 @@ class VideoDetailController extends GetxController
                 ? Stack(
                     children: [
                       SingleChildScrollView(
+                        controller: ScrollController(),
+                        physics: const AlwaysScrollableScrollPhysics(),
                         child: Column(
                           children: [
                             ...List.generate(
