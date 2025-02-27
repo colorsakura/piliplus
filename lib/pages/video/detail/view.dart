@@ -193,7 +193,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     //   begin: MediaQuery.of(context).orientation == Orientation.landscape
     //       ? context.height
     //       : ((enableVerticalExpand &&
-    //               plPlayerController?.direction.value == 'vertical')
+    //               videoDetailController.direction.value == 'vertical')
     //           ? context.width * 5 / 4
     //           : context.width * 9 / 16),
     //   end: 0,
@@ -568,7 +568,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       final double videoWidth = context.width;
                       // debugPrint(videoDetailController.tabCtr.index);
                       if (enableVerticalExpand &&
-                          plPlayerController?.direction.value == 'vertical') {
+                          videoDetailController.direction.value == 'vertical') {
                         videoHeight = context.width;
                       }
                       if (MediaQuery.of(context).orientation ==
@@ -648,7 +648,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Widget get childWhenDisabledAlmostSquareInner => Obx(
         () {
           if (enableVerticalExpand &&
-              plPlayerController?.direction.value == 'vertical') {
+              videoDetailController.direction.value == 'vertical') {
             final double videoHeight = context.height -
                 (removeSafeArea
                     ? 0
@@ -743,7 +743,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   Widget get childWhenDisabledLandscapeInner => Obx(
         () {
           if (enableVerticalExpand &&
-              plPlayerController?.direction.value == 'vertical') {
+              videoDetailController.direction.value == 'vertical') {
             final double videoHeight = context.height -
                 (removeSafeArea ? 0 : MediaQuery.of(context).padding.top);
             final double videoWidth = videoHeight * 9 / 16;

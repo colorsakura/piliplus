@@ -130,7 +130,7 @@ class VideoDetailController extends GetxController
   StreamSubscription<Duration>? positionSubscription;
 
   late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
-  late String _direction = 'horizontal';
+  late RxString direction = 'horizontal'.obs;
   late final RxDouble scrollRatio = 0.0.obs;
   late final ScrollController scrollCtr = ScrollController()
     ..addListener(scrollListener);
@@ -140,8 +140,9 @@ class VideoDetailController extends GetxController
     vsync: this,
     duration: const Duration(milliseconds: 200),
   );
-  late final double minVideoHeight = Get.width * 9 / 16;
-  late final double maxVideoHeight = max(Get.height * 0.65, Get.width);
+  late final double minVideoHeight = min(Get.height, Get.width) * 9 / 16;
+  late final double maxVideoHeight =
+      max(max(Get.height, Get.width) * 0.65, min(Get.height, Get.width));
   late double videoHeight = minVideoHeight;
 
   void setVideoHeight() {
@@ -150,11 +151,17 @@ class VideoDetailController extends GetxController
             ? 'horizontal'
             : 'vertical'
         : 'horizontal';
-    if (GStorage.collapsibleVideoPage.not || scrollCtr.hasClients.not) {
+    if (GStorage.collapsibleVideoPage.not) {
+      this.direction.value = direction;
       return;
     }
-    if (_direction != direction) {
-      _direction = direction;
+    if (scrollCtr.hasClients.not) {
+      videoHeight = direction == 'vertical' ? maxVideoHeight : minVideoHeight;
+      this.direction.value = direction;
+      return;
+    }
+    if (this.direction.value != direction) {
+      this.direction.value = direction;
       double videoHeight =
           direction == 'vertical' ? maxVideoHeight : minVideoHeight;
       if (this.videoHeight != videoHeight) {
@@ -1077,7 +1084,7 @@ class VideoDetailController extends GetxController
           ? null
           : Duration(milliseconds: data.timeLength!),
       // 宽>高 水平 否则 垂直
-      direction: _direction,
+      direction: direction.value,
       bvid: bvid,
       cid: cid.value,
       enableHeart: enableHeart,

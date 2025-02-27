@@ -934,7 +934,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   Widget get childWhenDisabledAlmostSquareInner => Obx(
         () {
           if (enableVerticalExpand &&
-              plPlayerController?.direction.value == 'vertical') {
+              videoDetailController.direction.value == 'vertical') {
             final double videoHeight = context.height -
                 (removeSafeArea
                     ? 0
@@ -1029,7 +1029,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   Widget get childWhenDisabledLandscapeInner => Obx(
         () {
           if (enableVerticalExpand &&
-              plPlayerController?.direction.value == 'vertical') {
+              videoDetailController.direction.value == 'vertical') {
             final double videoHeight = context.height -
                 (removeSafeArea ? 0 : MediaQuery.of(context).padding.top);
             final double videoWidth = videoHeight * 9 / 16;
