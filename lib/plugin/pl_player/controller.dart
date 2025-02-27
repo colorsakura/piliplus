@@ -1370,49 +1370,52 @@ class PlPlayerController {
   }
 
   // 全屏
-  Future<void> triggerFullScreen({bool status = true}) async {
-    stopScreenTimer();
-    FullScreenMode mode = FullScreenModeCode.fromCode(
-        setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
-    bool removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
-        defaultValue: false);
-    if (!isFullScreen.value && status) {
-      // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
-      hideStatusBar();
+  void triggerFullScreen({bool status = true, int duration = 500}) {
+    EasyThrottle.throttle('fullScreen', Duration(milliseconds: duration),
+        () async {
+      stopScreenTimer();
+      FullScreenMode mode = FullScreenModeCode.fromCode(
+          setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
+      bool removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
+          defaultValue: false);
+      if (!isFullScreen.value && status) {
+        // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
+        hideStatusBar();
 
-      /// 按照视频宽高比决定全屏方向
-      toggleFullScreen(true);
+        /// 按照视频宽高比决定全屏方向
+        toggleFullScreen(true);
 
-      /// 进入全屏
-      if (mode == FullScreenMode.none) {
-        return;
+        /// 进入全屏
+        if (mode == FullScreenMode.none) {
+          return;
+        }
+        if (mode == FullScreenMode.gravity) {
+          fullAutoModeForceSensor();
+          return;
+        }
+        if (mode == FullScreenMode.vertical ||
+            (mode == FullScreenMode.auto && direction.value == 'vertical') ||
+            (mode == FullScreenMode.ratio &&
+                (Get.height / Get.width < 1.25 ||
+                    direction.value == 'vertical'))) {
+          await verticalScreenForTwoSeconds();
+        } else {
+          await landScape();
+        }
+      } else if (isFullScreen.value && !status) {
+        // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+        if (!removeSafeArea) showStatusBar();
+        toggleFullScreen(false);
+        if (mode == FullScreenMode.none) {
+          return;
+        }
+        if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
+          await verticalScreenForTwoSeconds();
+        } else {
+          await autoScreen();
+        }
       }
-      if (mode == FullScreenMode.gravity) {
-        fullAutoModeForceSensor();
-        return;
-      }
-      if (mode == FullScreenMode.vertical ||
-          (mode == FullScreenMode.auto && direction.value == 'vertical') ||
-          (mode == FullScreenMode.ratio &&
-              (Get.height / Get.width < 1.25 ||
-                  direction.value == 'vertical'))) {
-        await verticalScreenForTwoSeconds();
-      } else {
-        await landScape();
-      }
-    } else if (isFullScreen.value && !status) {
-      // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
-      if (!removeSafeArea) showStatusBar();
-      toggleFullScreen(false);
-      if (mode == FullScreenMode.none) {
-        return;
-      }
-      if (!setting.get(SettingBoxKey.horizontalScreen, defaultValue: false)) {
-        await verticalScreenForTwoSeconds();
-      } else {
-        await autoScreen();
-      }
-    }
+    });
   }
 
   void addPositionListener(Function(Duration position) listener) =>

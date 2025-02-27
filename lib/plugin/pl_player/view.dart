@@ -629,8 +629,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               size: 24,
               color: Colors.white,
             ),
-            fuc: () =>
-                plPlayerController.triggerFullScreen(status: !isFullScreen),
+            fuc: () => plPlayerController.triggerFullScreen(
+                status: !isFullScreen, duration: 800),
           ),
         ),
       ),
@@ -842,11 +842,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     details.localFocalPoint.dy - _initialFocalPoint.dy;
 
                 void fullScreenTrigger(bool status) {
-                  EasyThrottle.throttle(
-                      'fullScreen', const Duration(milliseconds: 800),
-                      () async {
-                    await plPlayerController.triggerFullScreen(status: status);
-                  });
+                  plPlayerController.triggerFullScreen(
+                      status: status, duration: 800);
                 }
 
                 if (cumulativeDy > threshold) {
@@ -1170,12 +1167,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       details.localPosition.dy - _initialFocalPoint.dy;
 
                   void fullScreenTrigger(bool status) {
-                    EasyThrottle.throttle(
-                        'fullScreen', const Duration(milliseconds: 800),
-                        () async {
-                      await plPlayerController.triggerFullScreen(
-                          status: status);
-                    });
+                    plPlayerController.triggerFullScreen(status: status);
                   }
 
                   if (cumulativeDy > threshold) {
