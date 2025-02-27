@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
@@ -50,7 +51,7 @@ import '../../../utils/id_utils.dart';
 import 'widgets/header_control.dart';
 
 class VideoDetailController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+    with GetTickerProviderStateMixin {
   /// 路由传参
   String bvid = Get.parameters['bvid']!;
   RxInt cid = int.parse(Get.parameters['cid']!).obs;
@@ -128,8 +129,87 @@ class VideoDetailController extends GetxController
   StreamSubscription<Duration>? positionSubscription;
 
   late final scrollKey = GlobalKey<ExtendedNestedScrollViewState>();
-  late final RxString direction = 'horizontal'.obs;
+  late String _direction = 'horizontal';
   late final RxDouble scrollRatio = 0.0.obs;
+  late final ScrollController scrollCtr = ScrollController()
+    ..addListener(scrollListener);
+  late bool isExpanding = false;
+  late bool isCollapsing = false;
+  late final AnimationController animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 200),
+  );
+  late final double minVideoHeight = Get.width * 9 / 16;
+  late final double maxVideoHeight = max(Get.height * 0.65, Get.width);
+  late double videoHeight = minVideoHeight;
+
+  void setVideoHeight() {
+    String direction = firstVideo.width != null && firstVideo.height != null
+        ? firstVideo.width! > firstVideo.height!
+            ? 'horizontal'
+            : 'vertical'
+        : 'horizontal';
+    if (_direction != direction) {
+      _direction = direction;
+      double videoHeight =
+          direction == 'vertical' ? maxVideoHeight : minVideoHeight;
+      if (this.videoHeight != videoHeight) {
+        if (videoHeight > this.videoHeight) {
+          // current minVideoHeight
+          isExpanding = true;
+          animationController.forward(
+              from: (minVideoHeight - scrollCtr.offset) / maxVideoHeight);
+          this.videoHeight = maxVideoHeight;
+        } else {
+          // current maxVideoHeight
+          final currentHeight =
+              (maxVideoHeight - scrollCtr.offset).toPrecision(2);
+          double minVideoHeightPrecise = minVideoHeight.toPrecision(2);
+          if (currentHeight == minVideoHeightPrecise) {
+            isExpanding = true;
+            this.videoHeight = minVideoHeight;
+            animationController.forward(from: 1);
+          } else if (currentHeight < minVideoHeightPrecise) {
+            // expande
+            isExpanding = true;
+            animationController.forward(from: currentHeight / minVideoHeight);
+            this.videoHeight = minVideoHeight;
+          } else {
+            // collapse
+            isCollapsing = true;
+            animationController.forward(
+                from: scrollCtr.offset / (maxVideoHeight - minVideoHeight));
+            this.videoHeight = minVideoHeight;
+          }
+        }
+      }
+    } else {
+      if (scrollCtr.offset != 0) {
+        isExpanding = true;
+        animationController.forward(from: 1 - scrollCtr.offset / videoHeight);
+      }
+    }
+  }
+
+  void scrollListener() {
+    if (scrollCtr.hasClients) {
+      if (scrollCtr.offset == 0) {
+        scrollRatio.value = 0;
+      } else {
+        double offset = scrollCtr.offset - (videoHeight - minVideoHeight);
+        if (offset > 0) {
+          scrollRatio.value = clampDouble(
+            offset.toPrecision(2) /
+                (minVideoHeight - kToolbarHeight).toPrecision(2),
+            0.0,
+            1.0,
+          );
+        } else {
+          scrollRatio.value = 0;
+        }
+      }
+    }
+  }
 
   bool imageStatus = false;
 
@@ -993,11 +1073,7 @@ class VideoDetailController extends GetxController
           ? null
           : Duration(milliseconds: data.timeLength!),
       // 宽>高 水平 否则 垂直
-      direction: firstVideo.width != null && firstVideo.height != null
-          ? ((firstVideo.width! - firstVideo.height!) > 0
-              ? 'horizontal'
-              : 'vertical')
-          : null,
+      direction: _direction,
       bvid: bvid,
       cid: cid.value,
       enableHeart: enableHeart,
@@ -1087,11 +1163,7 @@ class VideoDetailController extends GetxController
             baseUrl: videoUrl,
             codecs: 'avc1',
             quality: VideoQualityCode.fromCode(data.quality!)!);
-        direction.value = firstVideo.width != null && firstVideo.height != null
-            ? firstVideo.width! > firstVideo.height!
-                ? 'horizontal'
-                : 'vertical'
-            : 'horizontal';
+        setVideoHeight();
         currentDecodeFormats = VideoDecodeFormatsCode.fromString('avc1')!;
         currentVideoQa = VideoQualityCode.fromCode(data.quality!)!;
         if (autoPlay.value) {
@@ -1162,11 +1234,7 @@ class VideoDetailController extends GetxController
       firstVideo = videosList.firstWhere(
           (e) => e.codecs!.startsWith(currentDecodeFormats.code),
           orElse: () => videosList.first);
-      direction.value = firstVideo.width != null && firstVideo.height != null
-          ? firstVideo.width! > firstVideo.height!
-              ? 'horizontal'
-              : 'vertical'
-          : 'horizontal';
+      setVideoHeight();
 
       // videoUrl = enableCDN
       //     ? VideoUtils.getCdnUrl(firstVideo)
@@ -2020,6 +2088,11 @@ class VideoDetailController extends GetxController
   @override
   void onClose() {
     tabCtr.dispose();
+    if (Get.currentRoute.startsWith('/videoV')) {
+      scrollCtr.removeListener(scrollListener);
+      scrollCtr.dispose;
+      animationController.dispose();
+    }
     super.onClose();
   }
 

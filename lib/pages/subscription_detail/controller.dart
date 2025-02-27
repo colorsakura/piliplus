@@ -63,8 +63,8 @@ class SubDetailController extends GetxController {
       if (subList.length >= mediaCount) {
         loadingText.value = '没有更多了';
       }
+      currentPage += 1;
     }
-    currentPage += 1;
     isLoadingMore = false;
     return res;
   }

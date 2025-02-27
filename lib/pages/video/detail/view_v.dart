@@ -197,6 +197,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       });
     }
 
+    videoDetailController.animationController.addListener(animListener);
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -243,10 +245,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     try {
       bool isPlaying = status == PlayerStatus.playing;
       if (isPlaying) {
-        if (scrollController.offset != 0) {
-          isExpanding = true;
-          animationController.value = 0;
-          animationController.forward();
+        if (videoDetailController.isExpanding.not &&
+            videoDetailController.scrollCtr.offset != 0 &&
+            videoDetailController.animationController.isAnimating.not) {
+          videoDetailController.isExpanding = true;
+          videoDetailController.animationController.forward(
+              from: 1 -
+                  videoDetailController.scrollCtr.offset /
+                      videoDetailController.videoHeight);
         } else {
           videoDetailController.scrollKey.currentState?.setState(() {});
         }
@@ -371,14 +377,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.skipTimer = null;
 
     try {
-      animationController.removeListener(animListener);
-      animationController.dispose();
+      videoDetailController.animationController.removeListener(animListener);
       if (videoDetailController.showReply) {
         videoDetailController.scrollKey.currentState?.innerController
             .removeListener(innerScrollListener);
       }
-      scrollController.removeListener(scrollListener);
-      scrollController.dispose();
     } catch (_) {}
 
     WidgetsBinding.instance.removeObserver(this);
@@ -557,40 +560,30 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
   }
 
-  late final AnimationController animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-  )..addListener(animListener);
-  late final ScrollController scrollController = ScrollController()
-    ..addListener(scrollListener);
-  late final double defVideoHeight = MediaQuery.sizeOf(context).width * 9 / 16;
-  late double videoHeight = MediaQuery.sizeOf(context).width * 9 / 16;
-  late bool isExpanding = false;
-
   void animListener() {
-    if (animationController.isForwardOrCompleted) {
+    if (videoDetailController.animationController.isForwardOrCompleted &&
+        videoDetailController.scrollKey.currentState?.mounted == true) {
+      cal();
       videoDetailController.scrollKey.currentState?.setState(() {});
     }
   }
 
-  void scrollListener() {
-    if (scrollController.hasClients) {
-      if (scrollController.offset == 0) {
-        videoDetailController.scrollRatio.value = 0;
-      } else {
-        double offset =
-            scrollController.offset - (videoHeight - defVideoHeight);
-        if (offset > 0) {
-          videoDetailController.scrollRatio.value = clampDouble(
-            offset.toPrecision(2) /
-                (defVideoHeight - kToolbarHeight).toPrecision(2),
-            0.0,
-            1.0,
-          );
-        } else {
-          videoDetailController.scrollRatio.value = 0;
-        }
-      }
+  late double animHeight;
+  void cal() {
+    if (videoDetailController.isExpanding) {
+      animHeight = clampDouble(
+          videoDetailController.videoHeight *
+              videoDetailController.animationController.value,
+          kToolbarHeight,
+          videoDetailController.videoHeight);
+    } else if (videoDetailController.isCollapsing) {
+      animHeight = clampDouble(
+          videoDetailController.maxVideoHeight -
+              (videoDetailController.maxVideoHeight -
+                      videoDetailController.minVideoHeight) *
+                  videoDetailController.animationController.value,
+          videoDetailController.minVideoHeight,
+          videoDetailController.maxVideoHeight);
     }
   }
 
@@ -638,7 +631,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           toolbarHeight: 0,
                         ),
                         if (videoDetailController.scrollRatio.value != 0 &&
-                            scrollController.offset != 0)
+                            videoDetailController.scrollCtr.offset != 0)
                           AppBar(
                             backgroundColor: Theme.of(context)
                                 .colorScheme
@@ -651,33 +644,37 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     ),
                   ),
                 ),
-          body: Obx(
-            () {
-              if (videoDetailController.direction.value == 'vertical') {
-                videoHeight = max(context.height * 0.7, context.width);
-              } else {
-                videoHeight = context.width * 9 / 16;
-              }
+          body: Builder(
+            builder: (context) {
               return ExtendedNestedScrollView(
                 key: videoDetailController.scrollKey,
                 physics: const NeverScrollableScrollPhysics(
                   parent: ClampingScrollPhysics(),
                 ),
-                controller: scrollController,
+                controller: videoDetailController.scrollCtr,
                 onlyOneScrollInBody: true,
                 pinnedHeaderSliverHeightBuilder: () {
                   double height = isFullScreen
                       ? MediaQuery.sizeOf(context).height
-                      : isExpanding
-                          ? clampDouble(videoHeight * animationController.value,
-                                  kToolbarHeight, videoHeight) +
-                              45
-                          : plPlayerController?.playerStatus.status.value ==
-                                  PlayerStatus.playing
-                              ? defVideoHeight + 45
+                      : videoDetailController.isExpanding ||
+                              videoDetailController.isCollapsing
+                          ? animHeight
+                          : videoDetailController.isCollapsing ||
+                                  plPlayerController
+                                          ?.playerStatus.status.value ==
+                                      PlayerStatus.playing
+                              ? videoDetailController.minVideoHeight
                               : kToolbarHeight;
-                  if (isExpanding && animationController.value == 1) {
-                    isExpanding = false;
+                  if (videoDetailController.isExpanding &&
+                      videoDetailController.animationController.value == 1) {
+                    videoDetailController.isExpanding = false;
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      videoDetailController.scrollKey.currentState
+                          ?.setState(() {});
+                    });
+                  } else if (videoDetailController.isCollapsing &&
+                      videoDetailController.animationController.value == 1) {
+                    videoDetailController.isCollapsing = false;
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       videoDetailController.scrollKey.currentState
                           ?.setState(() {});
@@ -693,7 +690,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       pinned: true,
                       expandedHeight: isFullScreen
                           ? MediaQuery.sizeOf(context).height
-                          : videoHeight,
+                          : videoDetailController.isExpanding ||
+                                  videoDetailController.isCollapsing
+                              ? animHeight
+                              : videoDetailController.videoHeight,
                       flexibleSpace: Stack(
                         children: [
                           Obx(
@@ -731,7 +731,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                             : MediaQuery.of(context)
                                                 .padding
                                                 .top)
-                                    : videoHeight,
+                                    : videoDetailController.isExpanding ||
+                                            videoDetailController.isCollapsing
+                                        ? animHeight
+                                        : videoDetailController.videoHeight,
                                 width: context.width,
                                 child: PopScope(
                                   canPop: !isFullScreen &&
@@ -740,7 +743,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                               Orientation.portrait),
                                   onPopInvokedWithResult:
                                       _onPopInvokedWithResult,
-                                  child: videoPlayer(videoWidth, videoHeight),
+                                  child: videoPlayer(
+                                    videoWidth,
+                                    videoDetailController.isExpanding ||
+                                            videoDetailController.isCollapsing
+                                        ? animHeight
+                                        : videoDetailController.videoHeight,
+                                  ),
                                 ),
                               );
                             },
@@ -828,7 +837,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                   );
                               return videoDetailController.scrollRatio.value ==
                                           0 ||
-                                      scrollController.offset == 0
+                                      videoDetailController.scrollCtr.offset ==
+                                          0
                                   ? const SizedBox.shrink()
                                   : Positioned.fill(
                                       bottom: -2,
