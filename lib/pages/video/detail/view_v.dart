@@ -658,7 +658,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             controller: videoDetailController.scrollCtr,
             onlyOneScrollInBody: true,
             pinnedHeaderSliverHeightBuilder: () {
-              double height = isFullScreen
+              double height = isFullScreen ||
+                      context.orientation == Orientation.landscape
                   ? MediaQuery.sizeOf(context).height
                   : videoDetailController.isExpanding ||
                           videoDetailController.isCollapsing
@@ -698,7 +699,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   pinned: true,
-                  expandedHeight: isFullScreen
+                  expandedHeight: isFullScreen ||
+                          context.orientation == Orientation.landscape
                       ? MediaQuery.sizeOf(context).height
                       : videoDetailController.isExpanding ||
                               videoDetailController.isCollapsing
@@ -752,10 +754,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               onPopInvokedWithResult: _onPopInvokedWithResult,
                               child: videoPlayer(
                                 videoWidth,
-                                videoDetailController.isExpanding ||
-                                        videoDetailController.isCollapsing
-                                    ? animHeight
-                                    : videoDetailController.videoHeight,
+                                context.orientation == Orientation.landscape ||
+                                        isFullScreen
+                                    ? context.height
+                                    : videoDetailController.isExpanding ||
+                                            videoDetailController.isCollapsing
+                                        ? animHeight
+                                        : videoDetailController.videoHeight,
                               ),
                             ),
                           );
