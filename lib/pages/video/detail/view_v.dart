@@ -1804,11 +1804,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           child: CustomScrollView(
             key: const PageStorageKey<String>('简介'),
             controller: needCtr ? _introController : null,
-            physics: needCtr.not
-                ? const NeverScrollableScrollPhysics(
-                    parent: ClampingScrollPhysics(),
-                  )
-                : null,
+            physics: needCtr.not ? const ClampingScrollPhysics() : null,
             slivers: [
               if (videoDetailController.videoType == SearchType.video) ...[
                 VideoIntroPanel(
