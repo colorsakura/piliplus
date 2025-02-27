@@ -1138,16 +1138,23 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 final double totalWidth = renderBox.size.width;
                 final double tapPosition = details.localPosition.dx;
                 final double sectionWidth = totalWidth / 3;
+                late String gestureType;
                 if (tapPosition < sectionWidth) {
                   // 左边区域
-                  _gestureType = 'left';
+                  gestureType = 'left';
                 } else if (tapPosition < sectionWidth * 2) {
                   // 全屏
-                  _gestureType = 'center';
+                  gestureType = 'center';
                 } else {
                   // 右边区域
-                  _gestureType = 'right';
+                  gestureType = 'right';
                 }
+
+                if (_gestureType != null && _gestureType != gestureType) {
+                  return;
+                }
+                _gestureType = gestureType;
+
                 if (_gestureType == 'left') {
                   // 左边区域 👈
                   final double level = renderBox.size.height * 3;

@@ -150,6 +150,9 @@ class VideoDetailController extends GetxController
             ? 'horizontal'
             : 'vertical'
         : 'horizontal';
+    if (GStorage.collapsibleVideoPage.not || scrollCtr.hasClients.not) {
+      return;
+    }
     if (_direction != direction) {
       _direction = direction;
       double videoHeight =
