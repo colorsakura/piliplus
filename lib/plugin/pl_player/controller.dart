@@ -289,8 +289,6 @@ class PlPlayerController {
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
 
-  GlobalKey<VideoState> key = GlobalKey<VideoState>();
-
   TextStyle get subTitleStyle => TextStyle(
         height: 1.5,
         fontSize:
@@ -313,10 +311,12 @@ class PlPlayerController {
         textScaleFactor: MediaQuery.textScalerOf(Get.context!).scale(1),
       );
 
+  late Function getPlayerKey;
+
   void updateSubtitleStyle() {
-    key.currentState?.update(
-      subtitleViewConfiguration: subtitleViewConfiguration,
-    );
+    getPlayerKey().currentState?.update(
+          subtitleViewConfiguration: subtitleViewConfiguration,
+        );
   }
 
   void updateSliderPositionSecond() {

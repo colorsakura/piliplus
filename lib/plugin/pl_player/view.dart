@@ -84,6 +84,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   late BangumiIntroController? bangumiIntroController;
 
   final GlobalKey _playerKey = GlobalKey();
+  final GlobalKey<VideoState> key = GlobalKey<VideoState>();
 
   final RxBool _mountSeekBackwardButton = false.obs;
   final RxBool _mountSeekForwardButton = false.obs;
@@ -160,7 +161,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   @override
   void initState() {
     super.initState();
-    plPlayerController.key = GlobalKey<VideoState>();
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
     videoController = plPlayerController.videoController!;
@@ -169,6 +169,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.headerControl = widget.headerControl;
     plPlayerController.bottomControl = widget.bottomControl;
     plPlayerController.danmuWidget = widget.danmuWidget;
+    plPlayerController.getPlayerKey = () => key;
     defaultBtmProgressBehavior = GStorage.setting.get(
         SettingBoxKey.btmProgressBehavior,
         defaultValue: BtmProgressBehavior.values.first.code);
@@ -898,7 +899,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               flipY: plPlayerController.flipY.value,
               child: Video(
                 fill: widget.fill ?? Colors.black,
-                key: plPlayerController.key,
+                key: key,
                 controller: videoController,
                 controls: NoVideoControls,
                 pauseUponEnteringBackgroundMode:

@@ -243,24 +243,26 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   // 播放器状态监听
   void playerListener(PlayerStatus? status) async {
     try {
-      bool isPlaying = status == PlayerStatus.playing;
-      if (isPlaying) {
-        if (videoDetailController.isExpanding.not &&
-            videoDetailController.scrollCtr.offset != 0 &&
-            videoDetailController.animationController.isAnimating.not) {
-          videoDetailController.isExpanding = true;
-          videoDetailController.animationController.forward(
-              from: 1 -
-                  videoDetailController.scrollCtr.offset /
-                      videoDetailController.videoHeight);
+      if (videoDetailController.scrollCtr.hasClients) {
+        bool isPlaying = status == PlayerStatus.playing;
+        if (isPlaying) {
+          if (videoDetailController.isExpanding.not &&
+              videoDetailController.scrollCtr.offset != 0 &&
+              videoDetailController.animationController.isAnimating.not) {
+            videoDetailController.isExpanding = true;
+            videoDetailController.animationController.forward(
+                from: 1 -
+                    videoDetailController.scrollCtr.offset /
+                        videoDetailController.videoHeight);
+          } else {
+            if (videoDetailController.scrollKey.currentState?.mounted == true) {
+              videoDetailController.scrollKey.currentState?.setState(() {});
+            }
+          }
         } else {
           if (videoDetailController.scrollKey.currentState?.mounted == true) {
             videoDetailController.scrollKey.currentState?.setState(() {});
           }
-        }
-      } else {
-        if (videoDetailController.scrollKey.currentState?.mounted == true) {
-          videoDetailController.scrollKey.currentState?.setState(() {});
         }
       }
     } catch (e) {
