@@ -116,9 +116,11 @@ class _ListSheetContentState extends State<ListSheetContent>
     super.initState();
     if (GStorage.collapsibleVideoPage) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          _isInit = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isInit = false;
+          });
+        }
       });
     }
     if (_isList) {

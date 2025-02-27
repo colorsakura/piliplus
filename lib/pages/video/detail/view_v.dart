@@ -1134,7 +1134,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           (removeSafeArea
                               ? 0
                               : MediaQuery.of(context).padding.top),
-                      child: videoIntro(false),
+                      child: videoIntro(false, false),
                     ),
                   ),
                 ],
@@ -2417,9 +2417,11 @@ class _ViewPointsPageState extends State<ViewPointsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _isInit = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isInit = false;
+        });
+      }
     });
   }
 

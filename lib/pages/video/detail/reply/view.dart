@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -68,6 +69,19 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
 
     if (widget.needController != false) {
       _videoReplyController.scrollController.addListener(listener);
+    }
+  }
+
+  @override
+  void didUpdateWidget(VideoReplyPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (GStorage.collapsibleVideoPage) {
+      _videoReplyController.showFab();
+      if (widget.needController != false) {
+        _videoReplyController.scrollController.addListener(listener);
+      } else {
+        _videoReplyController.scrollController.removeListener(listener);
+      }
     }
   }
 
