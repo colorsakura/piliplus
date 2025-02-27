@@ -2113,6 +2113,19 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '侧滑关闭二级评论页面',
+        leading: Transform.rotate(
+          angle: pi * 1.5,
+          child: Icon(Icons.touch_app),
+        ),
+        setKey: SettingBoxKey.slideDismissReplyPage,
+        defaultVal: Platform.isIOS,
+        onChanged: (value) {
+          GStorage.slideDismissReplyPage = value;
+        },
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

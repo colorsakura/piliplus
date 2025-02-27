@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,6 +58,7 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
   late final _savedReplies = {};
   late final itemPositionsListener = ItemPositionsListener.create();
   late final _key = GlobalKey<ScaffoldState>();
+  late final _listKey = GlobalKey();
 
   dynamic get firstFloor =>
       widget.firstFloor ?? _videoReplyReplyController.firstFloor;
@@ -114,133 +116,200 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
           },
         );
 
+  Offset? _downPos;
+  bool? _isSliding;
+  late final Rx<double> padding = 0.0.obs;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          widget.source == 'videoDetail'
-              ? Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Theme.of(context).dividerColor.withOpacity(0.1),
+    return GStorage.slideDismissReplyPage
+        ? GestureDetector(
+            onPanDown: (event) {
+              _downPos = event.localPosition;
+            },
+            onPanUpdate: (event) {
+              if (_isSliding == false) {
+                return;
+              } else if (_isSliding == null) {
+                if (_downPos != null && _downPos!.dx <= 25) {
+                  Offset cumulativeDelta = event.localPosition - _downPos!;
+                  if (cumulativeDelta.dx.abs() > 3 * cumulativeDelta.dy.abs()) {
+                    _isSliding = true;
+                    setState(() {
+                      padding.value = event.localPosition.dx;
+                    });
+                  } else {
+                    _isSliding = false;
+                  }
+                }
+              } else if (_isSliding == true) {
+                setState(() {
+                  padding.value = event.localPosition.dx;
+                });
+              }
+            },
+            onPanCancel: () {
+              if (_isSliding == true) {
+                if (padding.value >= 100) {
+                  Get.back();
+                } else {
+                  setState(() {
+                    padding.value = 0;
+                  });
+                }
+              }
+              _downPos = null;
+              _isSliding = null;
+            },
+            onPanEnd: (event) {
+              if (_isSliding == true) {
+                if (padding.value >= 100) {
+                  Get.back();
+                } else {
+                  setState(() {
+                    padding.value = 0;
+                  });
+                }
+              }
+              _downPos = null;
+              _isSliding = null;
+            },
+            child: Padding(
+              padding: EdgeInsets.only(top: padding.value),
+              child: _buildPage,
+            ),
+          )
+        : _buildPage;
+  }
+
+  Widget get _buildPage => Scaffold(
+        key: _key,
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            widget.source == 'videoDetail'
+                ? Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color:
+                              Theme.of(context).dividerColor.withOpacity(0.1),
+                        ),
                       ),
                     ),
+                    padding: const EdgeInsets.only(left: 12, right: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(widget.isDialogue ? '对话列表' : '评论详情'),
+                        IconButton(
+                          tooltip: '关闭',
+                          icon: const Icon(Icons.close, size: 20),
+                          onPressed: Get.back,
+                        ),
+                      ],
+                    ),
+                  )
+                : Divider(
+                    height: 1,
+                    color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
-                  padding: const EdgeInsets.only(left: 12, right: 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(widget.isDialogue ? '对话列表' : '评论详情'),
-                      IconButton(
-                        tooltip: '关闭',
-                        icon: const Icon(Icons.close, size: 20),
-                        onPressed: Get.back,
-                      ),
-                    ],
-                  ),
-                )
-              : Divider(
-                  height: 1,
-                  color: Theme.of(context).dividerColor.withOpacity(0.1),
-                ),
-          Expanded(
-            child: ClipRect(
-              child: refreshIndicator(
-                onRefresh: () async {
-                  await _videoReplyReplyController.onRefresh();
-                },
-                child: Obx(
-                  () => Stack(
-                    children: [
-                      ScrollablePositionedList.builder(
-                        itemPositionsListener: itemPositionsListener,
-                        itemCount: _itemCount(
-                            _videoReplyReplyController.loadingState.value),
-                        itemScrollController:
-                            _videoReplyReplyController.itemScrollCtr,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          if (widget.isDialogue) {
-                            return _buildBody(
-                                _videoReplyReplyController.loadingState.value,
-                                index);
-                          } else if (firstFloor != null) {
-                            if (index == 0) {
-                              return GlobalData().grpcReply
-                                  ? ReplyItemGrpc(
-                                      replyItem: firstFloor,
-                                      replyLevel: '2',
-                                      showReplyRow: false,
-                                      replyType: widget.replyType,
-                                      needDivider: false,
-                                      onReply: () {
-                                        _onReply(firstFloor, -1);
-                                      },
-                                      upMid: _videoReplyReplyController.upMid,
-                                      isTop: widget.isTop,
-                                      onViewImage: widget.onViewImage,
-                                      onDismissed: widget.onDismissed,
-                                      callback: _getImageCallback,
-                                    )
-                                  : ReplyItem(
-                                      replyItem: firstFloor,
-                                      replyLevel: '2',
-                                      showReplyRow: false,
-                                      replyType: widget.replyType,
-                                      needDivider: false,
-                                      onReply: () {
-                                        _onReply(firstFloor, -1);
-                                      },
-                                      onViewImage: widget.onViewImage,
-                                      onDismissed: widget.onDismissed,
-                                      callback: _getImageCallback,
-                                    );
-                            } else if (index == 1) {
-                              return Divider(
-                                height: 20,
-                                color: Theme.of(context)
-                                    .dividerColor
-                                    .withOpacity(0.1),
-                                thickness: 6,
-                              );
-                            } else if (index == 2) {
-                              return _sortWidget;
-                            } else {
+            Expanded(
+              child: ClipRect(
+                child: refreshIndicator(
+                  onRefresh: () async {
+                    await _videoReplyReplyController.onRefresh();
+                  },
+                  child: Obx(
+                    () => Stack(
+                      children: [
+                        ScrollablePositionedList.builder(
+                          key: _listKey,
+                          itemPositionsListener: itemPositionsListener,
+                          itemCount: _itemCount(
+                              _videoReplyReplyController.loadingState.value),
+                          itemScrollController:
+                              _videoReplyReplyController.itemScrollCtr,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            if (widget.isDialogue) {
                               return _buildBody(
                                   _videoReplyReplyController.loadingState.value,
-                                  index - 3);
-                            }
-                          } else {
-                            if (index == 0) {
-                              return _sortWidget;
+                                  index);
+                            } else if (firstFloor != null) {
+                              if (index == 0) {
+                                return GlobalData().grpcReply
+                                    ? ReplyItemGrpc(
+                                        replyItem: firstFloor,
+                                        replyLevel: '2',
+                                        showReplyRow: false,
+                                        replyType: widget.replyType,
+                                        needDivider: false,
+                                        onReply: () {
+                                          _onReply(firstFloor, -1);
+                                        },
+                                        upMid: _videoReplyReplyController.upMid,
+                                        isTop: widget.isTop,
+                                        onViewImage: widget.onViewImage,
+                                        onDismissed: widget.onDismissed,
+                                        callback: _getImageCallback,
+                                      )
+                                    : ReplyItem(
+                                        replyItem: firstFloor,
+                                        replyLevel: '2',
+                                        showReplyRow: false,
+                                        replyType: widget.replyType,
+                                        needDivider: false,
+                                        onReply: () {
+                                          _onReply(firstFloor, -1);
+                                        },
+                                        onViewImage: widget.onViewImage,
+                                        onDismissed: widget.onDismissed,
+                                        callback: _getImageCallback,
+                                      );
+                              } else if (index == 1) {
+                                return Divider(
+                                  height: 20,
+                                  color: Theme.of(context)
+                                      .dividerColor
+                                      .withOpacity(0.1),
+                                  thickness: 6,
+                                );
+                              } else if (index == 2) {
+                                return _sortWidget;
+                              } else {
+                                return _buildBody(
+                                    _videoReplyReplyController
+                                        .loadingState.value,
+                                    index - 3);
+                              }
                             } else {
-                              return _buildBody(
-                                  _videoReplyReplyController.loadingState.value,
-                                  index - 1);
+                              if (index == 0) {
+                                return _sortWidget;
+                              } else {
+                                return _buildBody(
+                                    _videoReplyReplyController
+                                        .loadingState.value,
+                                    index - 1);
+                              }
                             }
-                          }
-                        },
-                      ),
-                      if (!widget.isDialogue &&
-                          _videoReplyReplyController.loadingState.value
-                              is Success)
-                        _header,
-                    ],
+                          },
+                        ),
+                        if (!widget.isDialogue &&
+                            _videoReplyReplyController.loadingState.value
+                                is Success)
+                          _header,
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   Widget get _sortWidget => Container(
         height: 40,

@@ -391,6 +391,9 @@ class GStorage {
   static bool collapsibleVideoPage = GStorage.setting
       .get(SettingBoxKey.collapsibleVideoPage, defaultValue: true);
 
+  static bool slideDismissReplyPage = GStorage.setting
+      .get(SettingBoxKey.slideDismissReplyPage, defaultValue: Platform.isIOS);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -645,6 +648,7 @@ class SettingBoxKey {
       springDescription = 'springDescription',
       collapsibleVideoPage = 'collapsibleVideoPage',
       enableHttp2 = 'enableHttp2',
+      slideDismissReplyPage = 'slideDismissReplyPage',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
