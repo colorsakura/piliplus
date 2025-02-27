@@ -2088,7 +2088,7 @@ class VideoDetailController extends GetxController
   @override
   void onClose() {
     tabCtr.dispose();
-    if (Get.currentRoute.startsWith('/videoV')) {
+    if (GStorage.collapsibleVideoPage) {
       scrollCtr.removeListener(scrollListener);
       scrollCtr.dispose;
       animationController.dispose();
@@ -2101,7 +2101,7 @@ class VideoDetailController extends GetxController
     videoUrl = null;
     audioUrl = null;
 
-    if (Get.currentRoute.startsWith('/videoV') && scrollRatio.value != 0) {
+    if (GStorage.collapsibleVideoPage && scrollRatio.value != 0) {
       scrollRatio.refresh();
     }
 
