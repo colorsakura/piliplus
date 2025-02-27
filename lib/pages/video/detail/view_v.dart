@@ -862,7 +862,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                       }
                                       videoDetailController.scrollRatio.value =
                                           0;
-                                      if (plPlayerController == null) {
+                                      if (plPlayerController == null ||
+                                          videoDetailController.playedTime ==
+                                              null) {
                                         handlePlay();
                                       } else {
                                         if (plPlayerController!
@@ -1641,161 +1643,162 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     );
   }
 
-  Widget videoPlayer(double videoWidth, double videoHeight) => Stack(
-        children: [
-          if (isShowing) plPlayer,
+  Widget videoPlayer(double videoWidth, double videoHeight) {
+    return Stack(
+      children: [
+        if (isShowing) plPlayer,
 
-          /// 关闭自动播放时 手动播放
-          if (!videoDetailController.autoPlay.value) ...[
-            Obx(
-              () => Visibility(
-                visible: videoDetailController.isShowCover.value,
-                child: Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: handlePlay,
-                    child: Obx(
-                      () => CachedNetworkImage(
-                        imageUrl: videoDetailController.videoItem['pic'] != null
-                            ? (videoDetailController.videoItem['pic'] as String)
-                                .http2https
-                            : '',
-                        width: videoWidth,
-                        height: videoHeight,
-                        fit: BoxFit.cover,
-                        fadeOutDuration: const Duration(milliseconds: 120),
-                        fadeInDuration: const Duration(milliseconds: 120),
-                        memCacheWidth: videoWidth.cacheSize(context),
-                        placeholder: (context, url) => Center(
-                          child: Image.asset('assets/images/loading.png'),
+        if (!videoDetailController.autoPlay.value) ...[
+          Obx(
+            () => videoDetailController.isShowCover.value
+                ? Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: handlePlay,
+                      child: Obx(
+                        () => CachedNetworkImage(
+                          imageUrl:
+                              videoDetailController.videoItem['pic'] != null
+                                  ? (videoDetailController.videoItem['pic']
+                                          as String)
+                                      .http2https
+                                  : '',
+                          width: videoWidth,
+                          height: videoHeight,
+                          fit: BoxFit.cover,
+                          fadeOutDuration: const Duration(milliseconds: 120),
+                          fadeInDuration: const Duration(milliseconds: 120),
+                          memCacheWidth: videoWidth.cacheSize(context),
+                          placeholder: (context, url) => Center(
+                            child: Image.asset('assets/images/loading.png'),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ),
-            manualPlayerWidget,
-          ],
-
-          if (videoDetailController.enableSponsorBlock ||
-              videoDetailController.continuePlayingPart)
-            Positioned(
-              left: 16,
-              bottom: isFullScreen ? max(75, Get.height * 0.25) : 75,
-              child: SizedBox(
-                width: MediaQuery.textScalerOf(context).scale(120),
-                child: AnimatedList(
-                  padding: EdgeInsets.zero,
-                  key: videoDetailController.listKey,
-                  reverse: true,
-                  shrinkWrap: true,
-                  initialItemCount: videoDetailController.listData.length,
-                  itemBuilder: (context, index, animation) {
-                    return videoDetailController.buildItem(
-                      videoDetailController.listData[index],
-                      animation,
-                    );
-                  },
-                ),
-              ),
-            ),
-
-          // for debug
-          // Positioned(
-          //   right: 16,
-          //   bottom: 75,
-          //   child: FilledButton.tonal(
-          //     onPressed: () {
-          //       videoDetailController.onAddItem(
-          //         SegmentModel(
-          //           UUID: '',
-          //           segmentType: SegmentType.sponsor,
-          //           segment: Pair(first: 0, second: 0),
-          //           skipType: SkipType.alwaysSkip,
-          //         ),
-          //       );
-          //     },
-          //     child: Text('skip'),
-          //   ),
-          // ),
-          // Positioned(
-          //   right: 16,
-          //   bottom: 120,
-          //   child: FilledButton.tonal(
-          //     onPressed: () {
-          //       videoDetailController.onAddItem(2);
-          //     },
-          //     child: Text('index'),
-          //   ),
-          // ),
-
-          Obx(
-            () {
-              if (videoDetailController.showSteinEdgeInfo.value) {
-                try {
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: plPlayerController?.showControls.value == true
-                            ? 75
-                            : 16,
-                      ),
-                      child: Wrap(
-                        spacing: 25,
-                        runSpacing: 10,
-                        children: (videoDetailController.steinEdgeInfo!['edges']
-                                ['questions'][0]['choices'] as List)
-                            .map((item) {
-                          return FilledButton.tonal(
-                            style: FilledButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer
-                                  .withOpacity(0.8),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 10,
-                              ),
-                              visualDensity:
-                                  VisualDensity(horizontal: -2, vertical: -2),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () {
-                              videoIntroController.changeSeasonOrbangu(
-                                null,
-                                videoDetailController.bvid,
-                                item['cid'],
-                                IdUtils.bv2av(videoDetailController.bvid),
-                                null,
-                                true,
-                              );
-                              videoDetailController
-                                  .getSteinEdgeInfo(item['id']);
-                            },
-                            child: Text(item['option']),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  );
-                } catch (e) {
-                  debugPrint('build stein edges: $e');
-                  return const SizedBox.shrink();
-                }
-              }
-              return const SizedBox.shrink();
-            },
+                  )
+                : const SizedBox.shrink(),
           ),
+          manualPlayerWidget,
         ],
-      );
+
+        if (videoDetailController.enableSponsorBlock ||
+            videoDetailController.continuePlayingPart)
+          Positioned(
+            left: 16,
+            bottom: isFullScreen ? max(75, Get.height * 0.25) : 75,
+            child: SizedBox(
+              width: MediaQuery.textScalerOf(context).scale(120),
+              child: AnimatedList(
+                padding: EdgeInsets.zero,
+                key: videoDetailController.listKey,
+                reverse: true,
+                shrinkWrap: true,
+                initialItemCount: videoDetailController.listData.length,
+                itemBuilder: (context, index, animation) {
+                  return videoDetailController.buildItem(
+                    videoDetailController.listData[index],
+                    animation,
+                  );
+                },
+              ),
+            ),
+          ),
+
+        // for debug
+        // Positioned(
+        //   right: 16,
+        //   bottom: 75,
+        //   child: FilledButton.tonal(
+        //     onPressed: () {
+        //       videoDetailController.onAddItem(
+        //         SegmentModel(
+        //           UUID: '',
+        //           segmentType: SegmentType.sponsor,
+        //           segment: Pair(first: 0, second: 0),
+        //           skipType: SkipType.alwaysSkip,
+        //         ),
+        //       );
+        //     },
+        //     child: Text('skip'),
+        //   ),
+        // ),
+        // Positioned(
+        //   right: 16,
+        //   bottom: 120,
+        //   child: FilledButton.tonal(
+        //     onPressed: () {
+        //       videoDetailController.onAddItem(2);
+        //     },
+        //     child: Text('index'),
+        //   ),
+        // ),
+
+        Obx(
+          () {
+            if (videoDetailController.showSteinEdgeInfo.value) {
+              try {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: plPlayerController?.showControls.value == true
+                          ? 75
+                          : 16,
+                    ),
+                    child: Wrap(
+                      spacing: 25,
+                      runSpacing: 10,
+                      children: (videoDetailController.steinEdgeInfo!['edges']
+                              ['questions'][0]['choices'] as List)
+                          .map((item) {
+                        return FilledButton.tonal(
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer
+                                .withOpacity(0.8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 10,
+                            ),
+                            visualDensity:
+                                VisualDensity(horizontal: -2, vertical: -2),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () {
+                            videoIntroController.changeSeasonOrbangu(
+                              null,
+                              videoDetailController.bvid,
+                              item['cid'],
+                              IdUtils.bv2av(videoDetailController.bvid),
+                              null,
+                              true,
+                            );
+                            videoDetailController.getSteinEdgeInfo(item['id']);
+                          },
+                          child: Text(item['option']),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              } catch (e) {
+                debugPrint('build stein edges: $e');
+                return const SizedBox.shrink();
+              }
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
+    );
+  }
 
   Widget videoIntro([bool needRelated = true, bool needCtr = true]) {
     Widget introPanel() => Scaffold(

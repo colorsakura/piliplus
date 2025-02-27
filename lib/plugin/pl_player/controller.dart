@@ -856,13 +856,13 @@ class PlPlayerController {
     }
   }
 
-  List<StreamSubscription> subscriptions = [];
-  final List<Function(Duration position)> _positionListeners = [];
-  final List<Function(PlayerStatus status)> _statusListeners = [];
+  Set<StreamSubscription> subscriptions = {};
+  final Set<Function(Duration position)> _positionListeners = {};
+  final Set<Function(PlayerStatus status)> _statusListeners = {};
 
   /// 播放事件监听
   void startListeners() {
-    subscriptions = [
+    subscriptions = {
       videoPlayerController!.stream.playing.listen((event) {
         if (event) {
           playerStatus.status.value = PlayerStatus.playing;
@@ -973,7 +973,7 @@ class PlPlayerController {
             const Duration(seconds: 1),
             () => videoPlayerServiceHandler.onPositionChange(event));
       }),
-    ];
+    };
   }
 
   /// 移除事件监听
