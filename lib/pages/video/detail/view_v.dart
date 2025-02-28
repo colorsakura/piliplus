@@ -200,14 +200,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     videoDetailController.animationController.addListener(animListener);
 
-    if (removeSafeArea) {
-      _listenerFS =
-          videoDetailController.plPlayerController.isFullScreen.listen((value) {
-        if (videoDetailController.direction.value == 'vertical') {
-          refreshPage();
-        }
-      });
-    }
+    _listenerFS =
+        videoDetailController.plPlayerController.isFullScreen.listen((value) {
+      refreshPage();
+    });
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -714,8 +710,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           : videoDetailController.videoHeight,
                   flexibleSpace: Stack(
                     children: [
-                      Obx(
-                        () {
+                      Builder(
+                        builder: (context) {
                           final double videoWidth = context.width;
                           if (MediaQuery.of(context).orientation ==
                                   Orientation.landscape &&
