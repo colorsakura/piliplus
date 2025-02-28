@@ -908,6 +908,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             body: Scaffold(
               key: videoDetailController.childKey,
               resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.transparent,
               body: Column(
                 children: [
                   buildTabbar(
@@ -961,6 +962,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   child: Scaffold(
                     key: videoDetailController.childKey,
                     resizeToAvoidBottomInset: false,
+                    backgroundColor: Colors.transparent,
                     body: Column(
                       children: [
                         buildTabbar(showReply: videoDetailController.showReply),
@@ -1005,6 +1007,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 child: Scaffold(
                   key: videoDetailController.childKey,
                   resizeToAvoidBottomInset: false,
+                  backgroundColor: Colors.transparent,
                   body: Column(
                     children: [
                       buildTabbar(
@@ -1057,6 +1060,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     child: Scaffold(
                       key: videoDetailController.childKey,
                       resizeToAvoidBottomInset: false,
+                      backgroundColor: Colors.transparent,
                       body: Column(
                         children: [
                           buildTabbar(
@@ -1163,6 +1167,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   child: Scaffold(
                     key: videoDetailController.childKey,
                     resizeToAvoidBottomInset: false,
+                    backgroundColor: Colors.transparent,
                     body: Column(
                       children: [
                         buildTabbar(
@@ -1179,16 +1184,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               if (videoDetailController.videoType ==
                                       SearchType.video &&
                                   videoDetailController.showRelatedVideo)
-                                Material(
-                                  color: Colors.transparent,
-                                  child: CustomScrollView(
-                                    controller: _introController,
-                                    slivers: [
-                                      RelatedVideoPanel(
-                                          key: relatedVideoPanelKey,
-                                          heroTag: heroTag),
-                                    ],
-                                  ),
+                                CustomScrollView(
+                                  controller: _introController,
+                                  slivers: [
+                                    RelatedVideoPanel(
+                                        key: relatedVideoPanelKey,
+                                        heroTag: heroTag),
+                                  ],
                                 ),
                               if (videoDetailController.showReply)
                                 videoReplyPanel(),

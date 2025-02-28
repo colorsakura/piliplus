@@ -399,6 +399,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                       flex: _ratio[1].toInt(),
                       child: Scaffold(
                         key: _key,
+                        backgroundColor: Colors.transparent,
                         body: CustomScrollView(
                           controller: _htmlRenderCtr.scrollController,
                           slivers: [

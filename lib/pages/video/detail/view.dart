@@ -618,6 +618,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     child: Scaffold(
                       key: videoDetailController.childKey,
                       resizeToAvoidBottomInset: false,
+                      backgroundColor: Colors.transparent,
                       body: Column(
                         children: [
                           buildTabbar(
@@ -670,6 +671,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   child: Scaffold(
                     key: videoDetailController.childKey,
                     resizeToAvoidBottomInset: false,
+                    backgroundColor: Colors.transparent,
                     body: Column(
                       children: [
                         buildTabbar(showReply: videoDetailController.showReply),
@@ -714,6 +716,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 child: Scaffold(
                   key: videoDetailController.childKey,
                   resizeToAvoidBottomInset: false,
+                  backgroundColor: Colors.transparent,
                   body: Column(
                     children: [
                       buildTabbar(
@@ -766,6 +769,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     child: Scaffold(
                       key: videoDetailController.childKey,
                       resizeToAvoidBottomInset: false,
+                      backgroundColor: Colors.transparent,
                       body: Column(
                         children: [
                           buildTabbar(
@@ -872,6 +876,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   child: Scaffold(
                     key: videoDetailController.childKey,
                     resizeToAvoidBottomInset: false,
+                    backgroundColor: Colors.transparent,
                     body: Column(
                       children: [
                         buildTabbar(
@@ -888,16 +893,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               if (videoDetailController.videoType ==
                                       SearchType.video &&
                                   videoDetailController.showRelatedVideo)
-                                Material(
-                                  color: Colors.transparent,
-                                  child: CustomScrollView(
-                                    controller: _introController,
-                                    slivers: [
-                                      RelatedVideoPanel(
-                                          key: relatedVideoPanelKey,
-                                          heroTag: heroTag),
-                                    ],
-                                  ),
+                                CustomScrollView(
+                                  controller: _introController,
+                                  slivers: [
+                                    RelatedVideoPanel(
+                                        key: relatedVideoPanelKey,
+                                        heroTag: heroTag),
+                                  ],
                                 ),
                               if (videoDetailController.showReply)
                                 videoReplyPanel,
@@ -1505,67 +1507,62 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       );
 
   Widget videoIntro([bool needRelated = true]) {
-    Widget introPanel() => Material(
-          color: Colors.transparent,
-          child: CustomScrollView(
-            key: const PageStorageKey<String>('简介'),
-            controller: needRelated ? _introController : null,
-            slivers: [
-              if (videoDetailController.videoType == SearchType.video) ...[
-                VideoIntroPanel(
+    Widget introPanel() => CustomScrollView(
+          key: const PageStorageKey<String>('简介'),
+          controller: needRelated ? _introController : null,
+          slivers: [
+            if (videoDetailController.videoType == SearchType.video) ...[
+              VideoIntroPanel(
+                heroTag: heroTag,
+                showAiBottomSheet: showAiBottomSheet,
+                showIntroDetail: showIntroDetail,
+                showEpisodes: showEpisodes,
+                onShowMemberPage: onShowMemberPage,
+              ),
+              if (needRelated && videoDetailController.showRelatedVideo) ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: StyleString.safeSpace),
+                    child: Divider(
+                      height: 1,
+                      indent: 12,
+                      endIndent: 12,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withOpacity(0.08),
+                    ),
+                  ),
+                ),
+                RelatedVideoPanel(key: relatedVideoPanelKey, heroTag: heroTag),
+              ] else
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.paddingOf(context).bottom +
+                        StyleString.safeSpace,
+                  ),
+                ),
+            ] else if (videoDetailController.videoType ==
+                SearchType.media_bangumi)
+              Obx(
+                () => BangumiIntroPanel(
                   heroTag: heroTag,
-                  showAiBottomSheet: showAiBottomSheet,
-                  showIntroDetail: showIntroDetail,
+                  cid: videoDetailController.cid.value,
                   showEpisodes: showEpisodes,
-                  onShowMemberPage: onShowMemberPage,
+                  showIntroDetail: showIntroDetail,
                 ),
-                if (needRelated && videoDetailController.showRelatedVideo) ...[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: StyleString.safeSpace),
-                      child: Divider(
-                        height: 1,
-                        indent: 12,
-                        endIndent: 12,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .outline
-                            .withOpacity(0.08),
-                      ),
-                    ),
-                  ),
-                  RelatedVideoPanel(
-                      key: relatedVideoPanelKey, heroTag: heroTag),
-                ] else
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: MediaQuery.paddingOf(context).bottom +
-                          StyleString.safeSpace,
-                    ),
-                  ),
-              ] else if (videoDetailController.videoType ==
-                  SearchType.media_bangumi)
-                Obx(
-                  () => BangumiIntroPanel(
-                    heroTag: heroTag,
-                    cid: videoDetailController.cid.value,
-                    showEpisodes: showEpisodes,
-                    showIntroDetail: showIntroDetail,
-                  ),
-                ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: MediaQuery.paddingOf(context).bottom +
-                      (videoDetailController.isPlayAll &&
-                              MediaQuery.orientationOf(context) ==
-                                  Orientation.landscape
-                          ? 75
-                          : 0),
-                ),
-              )
-            ],
-          ),
+              ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.paddingOf(context).bottom +
+                    (videoDetailController.isPlayAll &&
+                            MediaQuery.orientationOf(context) ==
+                                Orientation.landscape
+                        ? 75
+                        : 0),
+              ),
+            )
+          ],
         );
     if (videoDetailController.isPlayAll) {
       return Stack(

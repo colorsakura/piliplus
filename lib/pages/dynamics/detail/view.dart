@@ -406,6 +406,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       flex: _ratio[1].toInt(),
                       child: Scaffold(
                         key: _key,
+                        backgroundColor: Colors.transparent,
                         body: refreshIndicator(
                           onRefresh: () async {
                             await _dynamicDetailController.onRefresh();
