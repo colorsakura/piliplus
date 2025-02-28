@@ -911,6 +911,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
         ),
 
+        /// 弹幕面板
+        if (widget.danmuWidget != null)
+          Positioned.fill(top: 4, child: widget.danmuWidget!),
+
         /// 长按倍速 toast
         Obx(
           () => Align(
@@ -1109,10 +1113,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         //     return Container();
         //   }
         // }),
-
-        /// 弹幕面板
-        if (widget.danmuWidget != null)
-          Positioned.fill(top: 4, child: widget.danmuWidget!),
 
         /// 手势
         Positioned.fill(
