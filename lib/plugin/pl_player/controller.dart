@@ -1376,8 +1376,6 @@ class PlPlayerController {
       stopScreenTimer();
       FullScreenMode mode = FullScreenModeCode.fromCode(
           setting.get(SettingBoxKey.fullScreenMode, defaultValue: 0))!;
-      bool removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
-          defaultValue: false);
       if (!isFullScreen.value && status) {
         hideStatusBar();
 
@@ -1402,7 +1400,11 @@ class PlPlayerController {
           await landScape();
         }
       } else if (isFullScreen.value && !status) {
-        if (!removeSafeArea) showStatusBar();
+        late bool removeSafeArea = setting
+            .get(SettingBoxKey.videoPlayerRemoveSafeArea, defaultValue: false);
+        if (Get.currentRoute.startsWith('/liveRoom') || !removeSafeArea) {
+          showStatusBar();
+        }
         toggleFullScreen(false);
         if (mode == FullScreenMode.none) {
           return;
