@@ -311,10 +311,10 @@ class PlPlayerController {
         textScaleFactor: MediaQuery.textScalerOf(Get.context!).scale(1),
       );
 
-  late Function getPlayerKey;
+  Function? getPlayerKey;
 
   void updateSubtitleStyle() {
-    getPlayerKey().currentState?.update(
+    getPlayerKey?.call()?.currentState?.update(
           subtitleViewConfiguration: subtitleViewConfiguration,
         );
   }

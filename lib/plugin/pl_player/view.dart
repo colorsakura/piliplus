@@ -161,6 +161,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
   @override
   void initState() {
     super.initState();
+    plPlayerController.getPlayerKey = () => key;
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
     videoController = plPlayerController.videoController!;
@@ -169,7 +170,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     plPlayerController.headerControl = widget.headerControl;
     plPlayerController.bottomControl = widget.bottomControl;
     plPlayerController.danmuWidget = widget.danmuWidget;
-    plPlayerController.getPlayerKey = () => key;
     defaultBtmProgressBehavior = GStorage.setting.get(
         SettingBoxKey.btmProgressBehavior,
         defaultValue: BtmProgressBehavior.values.first.code);
