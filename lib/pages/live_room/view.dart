@@ -259,7 +259,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           return PiPSwitcher(
             getChildWhenDisabled: () =>
                 childWhenDisabled(orientation == Orientation.portrait),
-            getChildWhenEnabled: () => videoPlayerPanel,
+            getChildWhenEnabled: () => videoPlayerPanel(),
             floating: floating,
           );
         } else {
