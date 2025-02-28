@@ -255,14 +255,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     videoDetailController.scrollCtr.offset /
                         videoDetailController.videoHeight);
           } else {
-            if (videoDetailController.scrollKey.currentState?.mounted == true) {
-              videoDetailController.scrollKey.currentState?.setState(() {});
-            }
+            refreshPage();
           }
         } else {
-          if (videoDetailController.scrollKey.currentState?.mounted == true) {
-            videoDetailController.scrollKey.currentState?.setState(() {});
-          }
+          refreshPage();
         }
       }
     } catch (e) {
@@ -567,10 +563,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   void animListener() {
-    if (videoDetailController.animationController.isForwardOrCompleted &&
-        videoDetailController.scrollKey.currentState?.mounted == true) {
+    if (videoDetailController.animationController.isForwardOrCompleted) {
       cal();
-      videoDetailController.scrollKey.currentState?.setState(() {});
+      refreshPage();
     }
   }
 
@@ -609,6 +604,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       if (mounted) {
         _videoReplyController.hideFab();
       }
+    }
+  }
+
+  void refreshPage() {
+    if (videoDetailController.scrollKey.currentState?.mounted == true) {
+      videoDetailController.scrollKey.currentState?.setState(() {});
     }
   }
 
@@ -729,6 +730,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                 removeSafeArea.not) {
                               showStatusBar();
                             }
+                          }
+                          if (removeSafeArea && isFullScreen) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              refreshPage();
+                            });
                           }
                           return Container(
                             color: Colors.black,
