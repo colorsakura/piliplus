@@ -1379,7 +1379,6 @@ class PlPlayerController {
       bool removeSafeArea = setting.get(SettingBoxKey.videoPlayerRemoveSafeArea,
           defaultValue: false);
       if (!isFullScreen.value && status) {
-        // StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
         hideStatusBar();
 
         /// 按照视频宽高比决定全屏方向
@@ -1403,7 +1402,6 @@ class PlPlayerController {
           await landScape();
         }
       } else if (isFullScreen.value && !status) {
-        // StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
         if (!removeSafeArea) showStatusBar();
         toggleFullScreen(false);
         if (mode == FullScreenMode.none) {

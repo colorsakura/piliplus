@@ -6,15 +6,16 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import 'interactive_viewer_boundary.dart';
 import 'interactive_viewer.dart' as custom;
 
@@ -142,17 +143,21 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _transformationController!.value = _animation?.value ?? Matrix4.identity();
   }
 
+  SystemUiMode? mode;
   setStatusBar() async {
     if (Platform.isIOS || Platform.isAndroid) {
-      await StatusBarControl.setHidden(
-        true,
-        animation: StatusBarAnimation.FADE,
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.immersiveSticky,
       );
+    }
+    if (Platform.isAndroid &&
+        (await DeviceInfoPlugin().androidInfo).version.sdkInt < 29) {
+      mode = SystemUiMode.manual;
     }
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     widget.onClose?.call(true);
     _player?.dispose();
     _pageController?.dispose();
@@ -160,7 +165,10 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     _animationController.dispose();
     if (widget.setStatusBar != false) {
       if (Platform.isIOS || Platform.isAndroid) {
-        StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+        SystemChrome.setEnabledSystemUIMode(
+          mode ?? SystemUiMode.edgeToEdge,
+          overlays: SystemUiOverlay.values,
+        );
       }
     }
     for (int index = 0; index < widget.sources.length; index++) {

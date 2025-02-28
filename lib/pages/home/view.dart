@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
       body: Column(
@@ -45,12 +44,12 @@ class _HomePageState extends State<HomePage>
           if (!_homeController.useSideBar &&
               context.orientation == Orientation.portrait)
             customAppBar,
-          if (_homeController.tabs.length > 1) ...[
-            const SizedBox(height: 4),
+          if (_homeController.tabs.length > 1)
             Material(
               color: Theme.of(context).colorScheme.surface,
-              child: SizedBox(
+              child: Container(
                 height: 42,
+                padding: const EdgeInsets.only(top: 4),
                 child: TabBar(
                   controller: _homeController.tabController,
                   tabs: [
@@ -69,8 +68,8 @@ class _HomePageState extends State<HomePage>
                   },
                 ),
               ),
-            ),
-          ] else
+            )
+          else
             const SizedBox(height: 6),
           Expanded(
             child: tabBarView(

@@ -637,7 +637,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           toolbarHeight: 0,
                         ),
                         if (videoDetailController.scrollRatio.value != 0 &&
-                            videoDetailController.scrollCtr.offset != 0)
+                            videoDetailController.scrollCtr.offset != 0 &&
+                            context.orientation == Orientation.portrait)
                           AppBar(
                             backgroundColor: Theme.of(context)
                                 .colorScheme
@@ -846,7 +847,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                 ),
                               );
                           return videoDetailController.scrollRatio.value == 0 ||
-                                  videoDetailController.scrollCtr.offset == 0
+                                  videoDetailController.scrollCtr.offset == 0 ||
+                                  context.orientation != Orientation.portrait
                               ? const SizedBox.shrink()
                               : Positioned.fill(
                                   bottom: -2,
@@ -1807,6 +1809,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   Widget videoIntro([bool needRelated = true, bool needCtr = true]) {
     Widget introPanel() => Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           body: CustomScrollView(
             key: const PageStorageKey<String>('简介'),

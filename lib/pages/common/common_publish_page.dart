@@ -72,7 +72,7 @@ abstract class CommonPublishPageState<T extends CommonPublishPage>
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     focusNode.dispose();
     editController.dispose();
     WidgetsBinding.instance.removeObserver(this);

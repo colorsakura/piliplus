@@ -157,11 +157,10 @@ class _MainAppState extends State<MainApp>
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     MainApp.routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
-    // await GrpcClient.instance.shutdown();
-    await GStorage.close();
+    GStorage.close();
     EventBus().off(EventName.loginEvent);
     PiliScheme.listener?.cancel();
     super.dispose();

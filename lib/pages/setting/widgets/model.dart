@@ -213,7 +213,6 @@ List<SettingsModel> get styleSettings => [
         leading: Icon(Icons.fit_screen_outlined),
         setKey: SettingBoxKey.videoPlayerRemoveSafeArea,
         defaultVal: false,
-        needReboot: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

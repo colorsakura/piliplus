@@ -75,9 +75,9 @@ class _SearchResultPageState extends State<SearchResultPage>
       ),
       body: Column(
         children: [
-          const SizedBox(height: 4),
           Container(
             width: double.infinity,
+            padding: const EdgeInsets.only(top: 4),
             color: Theme.of(context).colorScheme.surface,
             child: Theme(
               data: ThemeData(
