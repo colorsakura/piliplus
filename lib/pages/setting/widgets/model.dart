@@ -2105,7 +2105,7 @@ List<SettingsModel> get extraSettings => [
         title: '使用可折叠的播放页面',
         leading: Icon(Icons.video_settings),
         setKey: SettingBoxKey.collapsibleVideoPage,
-        defaultVal: false,
+        defaultVal: true,
         onChanged: (value) {
           GStorage.collapsibleVideoPage = value;
         },

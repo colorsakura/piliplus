@@ -107,6 +107,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   StreamSubscription? _listenerDetail;
   StreamSubscription? _listenerLoadingState;
   StreamSubscription? _listenerCid;
+  StreamSubscription? _listenerFS;
 
   Box get setting => GStorage.setting;
 
@@ -198,6 +199,15 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
 
     videoDetailController.animationController.addListener(animListener);
+
+    if (removeSafeArea) {
+      _listenerFS =
+          videoDetailController.plPlayerController.isFullScreen.listen((value) {
+        if (videoDetailController.direction.value == 'vertical') {
+          refreshPage();
+        }
+      });
+    }
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -374,6 +384,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     _listenerDetail?.cancel();
     _listenerLoadingState?.cancel();
     _listenerCid?.cancel();
+    _listenerFS?.cancel();
 
     videoDetailController.skipTimer?.cancel();
     videoDetailController.skipTimer = null;
@@ -691,6 +702,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverAppBar(
+                  primary: false,
                   automaticallyImplyLeading: false,
                   pinned: true,
                   expandedHeight: isFullScreen ||
@@ -723,14 +735,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               showStatusBar();
                             }
                           }
-                          if (removeSafeArea &&
-                              isFullScreen &&
-                              videoDetailController.direction.value ==
-                                  'vertical') {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              refreshPage();
-                            });
-                          }
                           return Container(
                             color: Colors.black,
                             // showStatusBarBackgroundColor ? null : Colors.black,
@@ -742,7 +746,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                 Orientation.landscape ||
                                             removeSafeArea
                                         ? 0
-                                        : MediaQuery.of(context).padding.top)
+                                        : MediaQuery.of(this.context)
+                                            .padding
+                                            .top)
                                 : videoDetailController.isExpanding ||
                                         videoDetailController.isCollapsing
                                     ? animHeight
