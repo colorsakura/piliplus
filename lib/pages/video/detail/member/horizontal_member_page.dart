@@ -160,6 +160,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
       Success() => Material(
           color: Colors.transparent,
           child: CustomScrollView(
+            controller: ScrollController(),
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               _buildSliverHeader,
               SliverPadding(

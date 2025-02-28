@@ -42,6 +42,8 @@ class AiDetail extends StatelessWidget {
           ),
           Expanded(
             child: SingleChildScrollView(
+              controller: ScrollController(),
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
                   if (modelResult.summary?.isNotEmpty == true) ...[

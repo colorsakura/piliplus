@@ -114,15 +114,6 @@ class _ListSheetContentState extends State<ListSheetContent>
   @override
   void initState() {
     super.initState();
-    if (GStorage.collapsibleVideoPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-        }
-      });
-    }
     if (_isList) {
       _indexStream ??= StreamController<int>.broadcast();
       _ctr = TabController(
@@ -149,9 +140,22 @@ class _ListSheetContentState extends State<ListSheetContent>
       }();
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        itemScrollController[_index].jumpTo(index: currentIndex);
-      } catch (_) {}
+      if (GStorage.collapsibleVideoPage) {
+        if (mounted) {
+          setState(() {
+            _isInit = false;
+          });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            try {
+              itemScrollController[_index].jumpTo(index: currentIndex);
+            } catch (_) {}
+          });
+        }
+      } else {
+        try {
+          itemScrollController[_index].jumpTo(index: currentIndex);
+        } catch (_) {}
+      }
     });
   }
 
