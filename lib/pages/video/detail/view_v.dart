@@ -675,22 +675,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   videoDetailController.animationController.value == 1) {
                 videoDetailController.isExpanding = false;
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (videoDetailController.scrollKey.currentState?.mounted ==
-                      true) {
-                    videoDetailController.scrollRatio.value = 0;
-                    videoDetailController.scrollKey.currentState
-                        ?.setState(() {});
-                  }
+                  videoDetailController.scrollRatio.value = 0;
+                  refreshPage();
                 });
               } else if (videoDetailController.isCollapsing &&
                   videoDetailController.animationController.value == 1) {
                 videoDetailController.isCollapsing = false;
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (videoDetailController.scrollKey.currentState?.mounted ==
-                      true) {
-                    videoDetailController.scrollKey.currentState
-                        ?.setState(() {});
-                  }
+                  refreshPage();
                 });
               }
               return height;
@@ -731,7 +723,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               showStatusBar();
                             }
                           }
-                          if (removeSafeArea && isFullScreen) {
+                          if (removeSafeArea &&
+                              isFullScreen &&
+                              videoDetailController.direction.value ==
+                                  'vertical') {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               refreshPage();
                             });

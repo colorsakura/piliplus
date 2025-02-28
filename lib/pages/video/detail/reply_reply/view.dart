@@ -125,15 +125,19 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
     return GStorage.slideDismissReplyPage
         ? GestureDetector(
             onPanDown: (event) {
-              _downPos = event.localPosition;
+              if (event.localPosition.dx > 30) {
+                _isSliding = false;
+              } else {
+                _downPos = event.localPosition;
+              }
             },
             onPanUpdate: (event) {
               if (_isSliding == false) {
                 return;
               } else if (_isSliding == null) {
-                if (_downPos != null && _downPos!.dx <= 25) {
+                if (_downPos != null) {
                   Offset cumulativeDelta = event.localPosition - _downPos!;
-                  if (cumulativeDelta.dx.abs() > 3 * cumulativeDelta.dy.abs()) {
+                  if (cumulativeDelta.dx.abs() >= cumulativeDelta.dy.abs()) {
                     _isSliding = true;
                     setState(() {
                       padding.value = event.localPosition.dx;
