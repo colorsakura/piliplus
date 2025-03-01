@@ -1,40 +1,32 @@
 import 'dart:io';
 
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/pages/live_room/index.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:get/get.dart';
 
-class BottomControl extends StatefulWidget implements PreferredSizeWidget {
-  final PlPlayerController controller;
-  final LiveRoomController liveRoomCtr;
-  final Floating? floating;
+class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   const BottomControl({
-    required this.controller,
+    required this.plPlayerController,
     required this.liveRoomCtr,
     this.floating,
+    required this.onRefresh,
     super.key,
   });
 
-  @override
-  State<BottomControl> createState() => _BottomControlState();
+  final PlPlayerController plPlayerController;
+  final LiveRoomController liveRoomCtr;
+  final Floating? floating;
+  final VoidCallback onRefresh;
+
+  final TextStyle subTitleStyle = const TextStyle(fontSize: 12);
+
+  final TextStyle titleStyle = const TextStyle(fontSize: 14);
 
   @override
-  Size get preferredSize => throw UnimplementedError();
-}
-
-class _BottomControlState extends State<BottomControl> {
-  late PlayUrlModel videoInfo;
-  TextStyle subTitleStyle = const TextStyle(fontSize: 12);
-  TextStyle titleStyle = const TextStyle(fontSize: 14);
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +38,15 @@ class _BottomControlState extends State<BottomControl> {
       titleSpacing: 14,
       title: Row(
         children: [
-          // ComBtn(
+          ComBtn(
+            icon: const Icon(
+              Icons.refresh,
+              size: 18,
+              color: Colors.white,
+            ),
+            fuc: onRefresh,
+          ),
+          //   // ComBtn(
           //   icon: const Icon(
           //     Icons.subtitles_outlined,
           //     size: 18,
@@ -78,12 +78,29 @@ class _BottomControlState extends State<BottomControl> {
           // ),
           // const SizedBox(width: 4),
           Obx(
+            () => IconButton(
+              onPressed: () {
+                plPlayerController.isOpenDanmu.value =
+                    !plPlayerController.isOpenDanmu.value;
+                GStorage.setting.put(SettingBoxKey.enableShowDanmaku,
+                    plPlayerController.isOpenDanmu.value);
+              },
+              icon: Icon(
+                size: 18,
+                plPlayerController.isOpenDanmu.value
+                    ? Icons.subtitles_outlined
+                    : Icons.subtitles_off_outlined,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Obx(
             () => Container(
               height: 30,
               margin: const EdgeInsets.symmetric(horizontal: 10),
               alignment: Alignment.center,
               child: PopupMenuButton<BoxFit>(
-                initialValue: widget.controller.videoFit.value,
+                initialValue: plPlayerController.videoFit.value,
                 color: Colors.black.withOpacity(0.8),
                 itemBuilder: (BuildContext context) {
                   return BoxFit.values.map((BoxFit boxFit) {
@@ -92,7 +109,7 @@ class _BottomControlState extends State<BottomControl> {
                       padding: const EdgeInsets.only(left: 30),
                       value: boxFit,
                       onTap: () {
-                        widget.controller.toggleVideoFit(boxFit);
+                        plPlayerController.toggleVideoFit(boxFit);
                       },
                       child: Text(
                         "${PlPlayerController.videoFitType[boxFit.index]['desc']}",
@@ -103,7 +120,7 @@ class _BottomControlState extends State<BottomControl> {
                   }).toList();
                 },
                 child: Text(
-                  "${PlPlayerController.videoFitType[widget.controller.videoFit.value.index]['desc']}",
+                  "${PlPlayerController.videoFitType[plPlayerController.videoFit.value.index]['desc']}",
                   style: const TextStyle(color: Colors.white, fontSize: 13),
                 ),
               ),
@@ -120,14 +137,12 @@ class _BottomControlState extends State<BottomControl> {
                   padding: WidgetStateProperty.all(EdgeInsets.zero),
                 ),
                 onPressed: () async {
-                  bool canUsePiP = false;
-                  widget.controller.hiddenControls(false);
                   try {
-                    canUsePiP = await widget.floating!.isPipAvailable;
+                    if ((await floating?.isPipAvailable) == true) {
+                      plPlayerController.hiddenControls(false);
+                      floating!.enable(const EnableManual());
+                    }
                   } catch (_) {}
-                  if (canUsePiP) {
-                    await widget.floating!.enable(const EnableManual());
-                  } else {}
                 },
                 icon: const Icon(
                   Icons.picture_in_picture_outlined,
@@ -143,19 +158,26 @@ class _BottomControlState extends State<BottomControl> {
               width: 30,
               child: PopupMenuButton<int>(
                 padding: EdgeInsets.zero,
-                initialValue: widget.liveRoomCtr.currentQn,
+                initialValue: liveRoomCtr.currentQn,
+                color: Colors.black.withOpacity(0.8),
                 child: Text(
-                  widget.liveRoomCtr.currentQnDesc.value,
+                  liveRoomCtr.currentQnDesc.value,
                   style: const TextStyle(color: Colors.white, fontSize: 13),
                 ),
                 itemBuilder: (BuildContext context) {
-                  return widget.liveRoomCtr.acceptQnList.map((e) {
+                  return liveRoomCtr.acceptQnList.map((e) {
                     return PopupMenuItem<int>(
+                      height: 35,
+                      padding: const EdgeInsets.only(left: 30),
                       value: e['code'],
                       onTap: () {
-                        widget.liveRoomCtr.changeQn(e['code']);
+                        liveRoomCtr.changeQn(e['code']);
                       },
-                      child: Text(e['desc']),
+                      child: Text(
+                        e['desc'],
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13),
+                      ),
                     );
                   }).toList();
                 },
@@ -170,8 +192,8 @@ class _BottomControlState extends State<BottomControl> {
               size: 20,
               color: Colors.white,
             ),
-            fuc: () => widget.controller.triggerFullScreen(
-                status: !widget.controller.isFullScreen.value),
+            fuc: () => plPlayerController.triggerFullScreen(
+                status: !plPlayerController.isFullScreen.value),
           ),
         ],
       ),
@@ -179,20 +201,20 @@ class _BottomControlState extends State<BottomControl> {
   }
 }
 
-class MSliderTrackShape extends RoundedRectSliderTrackShape {
-  @override
-  Rect getPreferredRect({
-    required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    SliderThemeData? sliderTheme,
-    bool isEnabled = false,
-    bool isDiscrete = false,
-  }) {
-    const double trackHeight = 3;
-    final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2 + 4;
-    final double trackWidth = parentBox.size.width;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-  }
-}
+// class MSliderTrackShape extends RoundedRectSliderTrackShape {
+//   @override
+//   Rect getPreferredRect({
+//     required RenderBox parentBox,
+//     Offset offset = Offset.zero,
+//     SliderThemeData? sliderTheme,
+//     bool isEnabled = false,
+//     bool isDiscrete = false,
+//   }) {
+//     const double trackHeight = 3;
+//     final double trackLeft = offset.dx;
+//     final double trackTop =
+//         offset.dy + (parentBox.size.height - trackHeight) / 2 + 4;
+//     final double trackWidth = parentBox.size.width;
+//     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+//   }
+// }

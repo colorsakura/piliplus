@@ -145,9 +145,12 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             fill: fill,
             plPlayerController: plPlayerController,
             bottomControl: BottomControl(
-              controller: plPlayerController,
+              plPlayerController: plPlayerController,
               liveRoomCtr: _liveRoomController,
               floating: floating,
+              onRefresh: () {
+                _futureBuilderFuture = _liveRoomController.queryLiveInfo();
+              },
             ),
             danmuWidget: Obx(
               () => AnimatedOpacity(
