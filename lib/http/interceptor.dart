@@ -32,7 +32,7 @@ class ApiInterceptor extends Interceptor {
       options.headers.remove('x-bili-mid');
       options.headers.remove('x-bili-aurora-eid');
       options.headers.remove('x-bili-aurora-zone');
-      options.headers.remove('cookie');
+      options.headers['cookie'] = '';
       options.queryParameters.remove('access_key');
       options.queryParameters.remove('csrf');
       options.queryParameters.remove('csrf_token');
@@ -44,9 +44,9 @@ class ApiInterceptor extends Interceptor {
     }
 
     // app端不需要cookie
-    if (options.uri.host == 'app.bilibili.com') {
-      options.headers.remove('cookie');
-    }
+    // if (options.uri.host == 'app.bilibili.com') {
+    //   options.headers.remove('cookie');
+    // }
 
     if (options.extra['clearCookie'] == true) {
       onRemoveCookie();
