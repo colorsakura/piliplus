@@ -1,5 +1,5 @@
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
@@ -67,7 +67,9 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> setPlaybackState(PlayerStatus status, bool isBuffering) async {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay || PlPlayerController.instanceExists().not) {
+      return;
+    }
 
     final AudioProcessingState processingState;
     final playing = status == PlayerStatus.playing;
@@ -103,20 +105,21 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     setPlaybackState(status, isBuffering);
   }
 
-  onVideoDetailChange(dynamic data, int cid) {
+  onVideoDetailChange(dynamic data, int cid, String herotag) {
     if (!enableBackgroundPlay) return;
     // debugPrint('当前调用栈为：');
     // debugPrint(StackTrace.current);
     if (!PlPlayerController.instanceExists()) return;
     if (data == null) return;
 
+    late final id = '$cid$herotag';
     MediaItem? mediaItem;
     if (data is VideoDetailData) {
       if ((data.pages?.length ?? 0) > 1) {
         final current =
             data.pages?.firstWhereOrNull((element) => element.cid == cid);
         mediaItem = MediaItem(
-          id: UniqueKey().toString(),
+          id: id,
           title: current?.pagePart ?? "",
           artist: data.title ?? "",
           album: data.title ?? "",
@@ -125,7 +128,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         );
       } else {
         mediaItem = MediaItem(
-          id: UniqueKey().toString(),
+          id: id,
           title: data.title ?? "",
           artist: data.owner?.name ?? "",
           duration: Duration(seconds: data.duration ?? 0),
@@ -136,7 +139,7 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       final current =
           data.episodes?.firstWhereOrNull((element) => element.cid == cid);
       mediaItem = MediaItem(
-        id: UniqueKey().toString(),
+        id: id,
         title: current?.longTitle ?? "",
         artist: data.title ?? "",
         duration: Duration(milliseconds: current?.duration ?? 0),
@@ -150,33 +153,42 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     setMediaItem(mediaItem);
   }
 
-  onVideoDetailDispose() {
+  onVideoDetailDispose(String herotag) {
     if (!enableBackgroundPlay) return;
 
-    playbackState.add(playbackState.value.copyWith(
-      processingState: AudioProcessingState.idle,
-      playing: false,
-    ));
     if (_item.isNotEmpty) {
-      _item.removeLast();
+      _item.removeWhere((item) => item.id.endsWith(herotag));
     }
     if (_item.isNotEmpty) {
+      playbackState.add(playbackState.value.copyWith(
+        processingState: AudioProcessingState.idle,
+        playing: false,
+      ));
       setMediaItem(_item.last);
       stop();
-    } else {
-      clear();
     }
   }
 
   clear() {
     if (!enableBackgroundPlay) return;
     mediaItem.add(null);
+    _item.clear();
+    /**
+     * if (playbackState.processingState == AudioProcessingState.idle &&
+            previousState?.processingState != AudioProcessingState.idle) {
+          await AudioService._stop();
+        }
+     */
+    if (playbackState.value.processingState == AudioProcessingState.idle) {
+      playbackState.add(PlaybackState(
+        processingState: AudioProcessingState.completed,
+        playing: false,
+      ));
+    }
     playbackState.add(PlaybackState(
       processingState: AudioProcessingState.idle,
       playing: false,
     ));
-    _item.clear();
-    stop();
   }
 
   onPositionChange(Duration position) {

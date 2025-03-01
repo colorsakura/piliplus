@@ -1809,6 +1809,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     color: Colors.white,
                   ),
                   onPressed: () {
+                    widget.videoDetailCtr.backToHome = true;
                     Get.until((route) => route.isFirst);
                   },
                 ),

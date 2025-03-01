@@ -135,7 +135,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     _listenerDetail = videoIntroController.videoDetail.listen((value) {
       if (!context.mounted) return;
       videoPlayerServiceHandler.onVideoDetailChange(
-          value, videoDetailController.cid.value);
+          value, videoDetailController.cid.value, heroTag);
     });
     if (videoDetailController.videoType == SearchType.media_bangumi) {
       bangumiIntroController = Get.put(BangumiIntroController(), tag: heroTag);
@@ -144,18 +144,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         if (!context.mounted) return;
         if (value is Success) {
           videoPlayerServiceHandler.onVideoDetailChange(
-            value.response,
-            videoDetailController.cid.value,
-          );
+              value.response, videoDetailController.cid.value, heroTag);
         }
       });
       _listenerCid = videoDetailController.cid.listen((p0) {
         if (!context.mounted) return;
         if (bangumiIntroController.loadingState.value is Success) {
           videoPlayerServiceHandler.onVideoDetailChange(
-            (bangumiIntroController.loadingState.value as Success).response,
-            p0,
-          );
+              (bangumiIntroController.loadingState.value as Success).response,
+              p0,
+              heroTag);
         }
       });
     }
@@ -410,6 +408,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     shutdownTimerService.handleWaitingFinished();
     // _bufferedListener?.cancel();
+    if (videoDetailController.backToHome != true) {
+      videoPlayerServiceHandler.onVideoDetailDispose(heroTag);
+    }
     if (plPlayerController != null) {
       videoDetailController.makeHeartBeat();
       plPlayerController!.removeStatusLister(playerListener);
@@ -418,7 +419,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       PlPlayerController.updatePlayCount();
     }
-    videoPlayerServiceHandler.onVideoDetailDispose();
     VideoDetailPageV.routeObserver.unsubscribe(this);
     // _lifecycleListener.dispose();
     showStatusBar();
@@ -815,6 +815,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                         .onSurface,
                                                   ),
                                                   onPressed: () {
+                                                    videoDetailController
+                                                        .backToHome = true;
                                                     Get.until((route) =>
                                                         route.isFirst);
                                                   },
@@ -1359,6 +1361,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             ],
                           ),
                           onPressed: () {
+                            videoDetailController.backToHome = true;
                             Get.until((route) => route.isFirst);
                           },
                         ),
