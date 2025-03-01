@@ -253,7 +253,8 @@ class PiliScheme {
             return false;
           case 'following':
             if (path.startsWith("/detail/")) {
-              final commentRootId = uri.queryParameters['comment_root_id'];
+              final queryParameters = uri.queryParameters;
+              final commentRootId = queryParameters['comment_root_id'];
               if (commentRootId != null) {
                 String? oid = RegExp(r'/(\d+)').firstMatch(path)?.group(1);
                 int? rpid = int.tryParse(commentRootId);
@@ -274,11 +275,16 @@ class PiliScheme {
                         ],
                       ),
                       body: VideoReplyReplyPanel(
-                          oid: int.parse(oid),
-                          rpid: rpid,
-                          source: 'routePush',
-                          replyType: ReplyType.dynamics,
-                          firstFloor: null),
+                        oid: int.parse(oid),
+                        rpid: rpid,
+                        source: 'routePush',
+                        replyType: ReplyType.dynamics,
+                        firstFloor: null,
+                        id: queryParameters['comment_secondary_id'] != null
+                            ? int.tryParse(
+                                queryParameters['comment_secondary_id']!)
+                            : null,
+                      ),
                     ),
                   );
                 }
