@@ -87,6 +87,7 @@ class PiliScheme {
             return false;
           case 'video':
             // bilibili://video/12345678?dm_progress=123000&cid=12345678&dmid=12345678
+            // bilibili://video/{aid}/?comment_root_id=***&comment_secondary_id=***
             final queryParameters = uri.queryParameters;
             if (queryParameters['comment_root_id'] != null) {
               // to check
@@ -117,6 +118,10 @@ class PiliScheme {
                       source: 'routePush',
                       replyType: ReplyType.video,
                       firstFloor: null,
+                      id: queryParameters['comment_secondary_id'] != null
+                          ? int.tryParse(
+                              queryParameters['comment_secondary_id']!)
+                          : null,
                     ),
                   ),
                 );
