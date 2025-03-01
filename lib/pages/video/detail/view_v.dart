@@ -1332,6 +1332,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             FontAwesomeIcons.arrowLeft,
                             size: 15,
                             color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 1.5,
+                                color: Colors.black,
+                              ),
+                            ],
                           ),
                           onPressed: Get.back,
                         ),
@@ -1345,6 +1351,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             FontAwesomeIcons.house,
                             size: 15,
                             color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 1.5,
+                                color: Colors.black,
+                              ),
+                            ],
                           ),
                           onPressed: () {
                             Get.until((route) => route.isFirst);
@@ -1355,6 +1367,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   ),
                   actions: [
                     PopupMenuButton<String>(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 1.5,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
                       onSelected: (String type) async {
                         switch (type) {
                           case 'later':
