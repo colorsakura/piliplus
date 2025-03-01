@@ -1529,7 +1529,6 @@ class PlPlayerController {
       return;
     }
     _playerCount.value = 0;
-    videoPlayerServiceHandler.clear();
     Utils.channel.setMethodCallHandler(null);
     pause();
     try {
@@ -1560,6 +1559,7 @@ class PlPlayerController {
         _videoPlayerController = null;
       }
       _instance = null;
+      videoPlayerServiceHandler.clear();
     } catch (err) {
       debugPrint(err.toString());
     }

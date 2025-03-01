@@ -67,7 +67,9 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> setPlaybackState(PlayerStatus status, bool isBuffering) async {
-    if (!enableBackgroundPlay || PlPlayerController.instanceExists().not) {
+    if (!enableBackgroundPlay ||
+        _item.isEmpty ||
+        PlPlayerController.instanceExists().not) {
       return;
     }
 
@@ -192,7 +194,9 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
   }
 
   onPositionChange(Duration position) {
-    if (!enableBackgroundPlay) return;
+    if (!enableBackgroundPlay ||
+        _item.isEmpty ||
+        PlPlayerController.instanceExists().not) return;
 
     playbackState.add(playbackState.value.copyWith(
       updatePosition: position,
