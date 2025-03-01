@@ -1,4 +1,5 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:dio/dio.dart';
 
 import '../models/dynamics/result.dart';
@@ -10,7 +11,6 @@ class DynamicsHttp {
     String? type,
     String? offset,
     int? mid,
-    required bool antiGoodsDyn,
   }) async {
     Map<String, dynamic> data = {
       'type': type ?? 'all',
@@ -26,7 +26,7 @@ class DynamicsHttp {
     if (res.data['code'] == 0) {
       try {
         DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
-        if (antiGoodsDyn) {
+        if (GStorage.antiGoodsDyn) {
           data.items?.removeWhere(
             (item) =>
                 item.orig?.modules?.moduleDynamic?.additional?.type ==

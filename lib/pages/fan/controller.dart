@@ -1,6 +1,8 @@
 import 'package:PiliPlus/http/fan.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/fans/result.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
@@ -28,11 +30,12 @@ class FansController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     if ((currentPage == 1 && response.response.total < ps) ||
-        response.response.list.isEmpty) {
+        (response.response.list as List?).isNullOrEmpty) {
       isEnd = true;
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response.list
+      response.response.list ??= <FansItemModel>[];
+      response.response.list!
           .insertAll(0, (loadingState.value as Success).response);
     }
     loadingState.value = LoadingState.success(response.response.list);

@@ -379,7 +379,7 @@ class GStorage {
   static bool get isPureBlackTheme =>
       GStorage.setting.get(SettingBoxKey.isPureBlackTheme, defaultValue: false);
 
-  static bool get antiGoodsDyn =>
+  static bool antiGoodsDyn =
       GStorage.setting.get(SettingBoxKey.antiGoodsDyn, defaultValue: false);
 
   static bool get antiGoodsReply =>

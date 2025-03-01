@@ -35,7 +35,8 @@ class HistoryController extends MultiSelectController {
     max = data.list?.lastOrNull?.history?.oid;
     viewAt = data.list?.lastOrNull?.viewAt;
     if (currentPage != 1 && loadingState.value is Success) {
-      data.list?.insertAll(
+      data.list ??= <HisListItem>[];
+      data.list!.insertAll(
         0,
         List<HisListItem>.from((loadingState.value as Success).response),
       );

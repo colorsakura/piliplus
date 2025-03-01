@@ -59,14 +59,18 @@ class MemberVideoCtr extends CommonController {
     episodicButton.refresh();
     next = data.next;
     aid = data.item?.lastOrNull?.param;
-    isEnd =
-        type == ContributeType.video ? data.hasNext == false : data.next == 0;
-    if (currentPage == 0) {
-      count.value = type == ContributeType.season
-          ? (data.item?.length ?? -1)
-          : (data.count ?? -1);
-    } else if (loadingState.value is Success) {
-      data.item?.insertAll(0, (loadingState.value as Success).response);
+    if ((type == ContributeType.video
+            ? data.hasNext == false
+            : data.next == 0) ||
+        data.item.isNullOrEmpty) {
+      isEnd = true;
+    }
+    count.value = type == ContributeType.season
+        ? (data.item?.length ?? -1)
+        : (data.count ?? -1);
+    if (currentPage != 0 && loadingState.value is Success) {
+      data.item ??= <Item>[];
+      data.item!.insertAll(0, (loadingState.value as Success).response);
     }
     loadingState.value = LoadingState.success(data.item);
     return true;

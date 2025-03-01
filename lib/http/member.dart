@@ -389,7 +389,6 @@ class MemberHttp {
   static Future<LoadingState> memberDynamic({
     String? offset,
     int? mid,
-    required bool antiGoodsDyn,
   }) async {
     String dmImgStr = Utils.base64EncodeRandomString(16, 64);
     String dmCoverImgStr = Utils.base64EncodeRandomString(32, 128);
@@ -410,7 +409,7 @@ class MemberHttp {
     var res = await Request().get(Api.memberDynamic, queryParameters: params);
     if (res.data['code'] == 0) {
       DynamicsDataModel data = DynamicsDataModel.fromJson(res.data['data']);
-      if (antiGoodsDyn) {
+      if (GStorage.antiGoodsDyn) {
         data.items?.removeWhere((item) =>
             item.orig?.modules?.moduleDynamic?.additional?.type ==
                 'ADDITIONAL_TYPE_GOODS' ||

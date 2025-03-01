@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/bangumi.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:get/get.dart' hide Condition;
 
 class PgcIndexController extends CommonController {
@@ -55,13 +56,13 @@ class PgcIndexController extends CommonController {
         response.response['has_next'] == 0) {
       isEnd = true;
     }
-    if (response.response['list'] == null ||
-        (response.response['list'] as List?)?.isEmpty == true) {
+    if (isEnd.not && (response.response['list'] as List?).isNullOrEmpty) {
       isEnd = true;
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response['list']
-          ?.insertAll(0, (loadingState.value as Success).response);
+      response.response['list'] ??= [];
+      response.response['list']!
+          .insertAll(0, (loadingState.value as Success).response);
     }
     loadingState.value = LoadingState.success(response.response['list']);
     return true;

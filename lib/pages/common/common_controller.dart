@@ -29,7 +29,9 @@ abstract class CommonController extends GetxController {
     LoadingState response = await customGetData();
     if (response is Success) {
       if (!customHandleResponse(response)) {
-        isEnd = response.response.isEmpty;
+        if ((response.response as List?).isNullOrEmpty) {
+          isEnd = true;
+        }
         List currentList = loadingState.value is Success
             ? (loadingState.value as Success).response
             : [];

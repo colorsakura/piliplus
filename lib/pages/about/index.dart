@@ -27,11 +27,9 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   final AboutController _aboutController = Get.put(AboutController());
-  static const String _sourceCodeUrl =
-      'https://github.com/bggRGjQaUbCoE/PiliPlus';
-  static const String _originSourceCodeUrl =
-      'https://github.com/guozhigq/pilipala';
-  static const String _upstreamUrl = 'https://github.com/orz12/PiliPalaX';
+  final String _sourceCodeUrl = 'https://github.com/bggRGjQaUbCoE/PiliPlus';
+  final String _originSourceCodeUrl = 'https://github.com/guozhigq/pilipala';
+  final String _upstreamUrl = 'https://github.com/orz12/PiliPalaX';
 
   late int _pressCount = 0;
 

@@ -2086,6 +2086,9 @@ List<SettingsModel> get extraSettings => [
         ),
         setKey: SettingBoxKey.antiGoodsDyn,
         defaultVal: false,
+        onChanged: (value) {
+          GStorage.antiGoodsDyn = value;
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

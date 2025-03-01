@@ -1,9 +1,11 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -55,11 +57,13 @@ class HorizontalMemberPageController extends CommonController {
     Data data = response.response;
     next = data.next;
     aid = data.item?.lastOrNull?.param;
-    isEnd = data.hasNext == false;
-    if (currentPage == 0) {
-      count.value = data.count ?? -1;
-    } else if (loadingState.value is Success) {
-      data.item?.insertAll(0, (loadingState.value as Success).response);
+    if (data.hasNext == false || data.item.isNullOrEmpty) {
+      isEnd = true;
+    }
+    count.value = data.count ?? -1;
+    if (currentPage != 0 && loadingState.value is Success) {
+      data.item ??= <Item>[];
+      data.item!.insertAll(0, (loadingState.value as Success).response);
     }
     loadingState.value = LoadingState.success(data.item);
     return true;

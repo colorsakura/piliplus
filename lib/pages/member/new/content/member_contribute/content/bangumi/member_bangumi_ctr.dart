@@ -1,6 +1,7 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
@@ -36,7 +37,8 @@ class MemberBangumiCtr extends CommonController {
       isEnd = true;
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      data.item?.insertAll(0, (loadingState.value as Success).response);
+      data.item ??= <Item>[];
+      data.item!.insertAll(0, (loadingState.value as Success).response);
     }
     if (data.item!.length >= count) {
       isEnd = true;

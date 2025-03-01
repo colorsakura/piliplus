@@ -46,10 +46,10 @@ class FavSearchController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    List currentList = loadingState.value is Success
+    late List currentList = loadingState.value is Success
         ? (loadingState.value as Success).response
         : [];
-    List dataList = searchType == SearchType.fav
+    List? dataList = searchType == SearchType.fav
         ? (currentPage == 1
             ? response.response.medias
             : currentList + response.response.medias)
@@ -57,7 +57,7 @@ class FavSearchController extends CommonController {
             ? response.response.list
             : currentList + response.response.list);
     isEnd = searchType == SearchType.fav
-        ? !response.response.hasMore
+        ? response.response.hasMore == false
         : response.response.list.isEmpty;
     loadingState.value = LoadingState.success(dataList);
     return true;

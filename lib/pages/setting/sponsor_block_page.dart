@@ -24,7 +24,7 @@ class SponsorBlockPage extends StatefulWidget {
 }
 
 class _SponsorBlockPageState extends State<SponsorBlockPage> {
-  static const _url = 'https://github.com/hanydd/BilibiliSponsorBlock';
+  final _url = 'https://github.com/hanydd/BilibiliSponsorBlock';
   final _textController = TextEditingController();
   late double _blockLimit;
   late List<Pair<SegmentType, SkipType>> _blockSettings;

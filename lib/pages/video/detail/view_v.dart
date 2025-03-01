@@ -2378,9 +2378,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
-        (context) => ViewPointsPage(
-          child: listSheetContent(),
-        ),
+        (context) => GStorage.collapsibleVideoPage
+            ? ViewPointsPage(
+                child: listSheetContent(),
+              )
+            : listSheetContent(),
       );
     }
   }

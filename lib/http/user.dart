@@ -180,8 +180,10 @@ class UserHttp {
         });
       }
       List<HotVideoItemModel> list = [];
-      for (var i in res.data['data']['list']) {
-        list.add(HotVideoItemModel.fromJson(i));
+      if (res.data['data']?['list'] != null) {
+        for (var i in res.data['data']['list']) {
+          list.add(HotVideoItemModel.fromJson(i));
+        }
       }
       return LoadingState.success({
         'list': list,

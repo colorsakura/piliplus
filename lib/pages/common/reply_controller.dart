@@ -116,7 +116,7 @@ abstract class ReplyController extends CommonController {
       } else if (loadingState.value is Success) {
         replies.insertAll(0, (loadingState.value as Success).response.replies);
       }
-      if (replies.length >= count.value) {
+      if (isEnd.not && replies.length >= count.value) {
         isEnd = true;
       }
       loadingState.value = LoadingState.success(response.response);

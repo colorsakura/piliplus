@@ -1,7 +1,9 @@
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/user/black.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -24,9 +26,9 @@ class _BlackListPageState extends State<BlackListPage> {
   void dispose() {
     List list = _blackListController.loadingState.value is Success
         ? (_blackListController.loadingState.value as Success).response
-        : <int>[];
+        : <BlackListItem>[];
     GStorage.setBlackMidsList(
-        list.isNotEmpty ? list.map<int>((e) => e.mid!).toList() : <int>[]);
+        list.isNotEmpty ? list.map((e) => e.mid!).toList() : <int>[]);
     super.dispose();
   }
 
@@ -111,18 +113,20 @@ class BlackListController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     total.value = response.response.total;
-    if (response.response.list.isEmpty) {
+    if ((response.response.list as List?).isNullOrEmpty) {
       isEnd = true;
     }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response.list
-          ?.insertAll(0, (loadingState.value as Success).response);
+      response.response.list ??= <BlackListItem>[];
+      response.response.list!
+          .insertAll(0, (loadingState.value as Success).response);
     }
-    if (response.response.list.length >= total.value) {
+    if (isEnd.not && response.response.list.length >= total.value) {
       isEnd = true;
     }
-    loadingState.value = LoadingState.success(
-        response.response.list.isNotEmpty ? response.response.list : <int>[]);
+    loadingState.value = LoadingState.success(response.response.list.isNotEmpty
+        ? response.response.list
+        : <BlackListItem>[]);
     return true;
   }
 
@@ -133,7 +137,7 @@ class BlackListController extends CommonController {
       list.removeWhere((e) => e.mid == mid);
       total.value = total.value - 1;
       loadingState.value =
-          LoadingState.success(list.isNotEmpty ? list : <int>[]);
+          LoadingState.success(list.isNotEmpty ? list : <BlackListItem>[]);
       SmartDialog.showToast(result['msg']);
     }
   }

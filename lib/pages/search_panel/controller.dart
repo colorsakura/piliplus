@@ -46,7 +46,7 @@ class SearchPanelController extends CommonController {
       isEnd = response.response.list.isEmpty;
       if (currentPage != 1 && loadingState.value is Success) {
         response.response.list
-            ?.insertAll(0, (loadingState.value as Success).response);
+            .insertAll(0, (loadingState.value as Success).response);
       }
       loadingState.value = LoadingState.success(response.response.list);
       if (searchType == SearchType.video &&

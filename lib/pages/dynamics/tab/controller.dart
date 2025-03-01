@@ -1,8 +1,9 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -33,23 +34,23 @@ class DynamicsTabController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     offset = response.response.offset;
-    isEnd = response.response.items.isEmpty;
+    if ((response.response.items as List?).isNullOrEmpty) {
+      isEnd = true;
+    }
     if (currentPage != 1 && loadingState.value is Success) {
-      response.response.items
+      response.response.items ??= <DynamicItemModel>[];
+      response.response.items!
           .insertAll(0, (loadingState.value as Success).response);
     }
     loadingState.value = LoadingState.success(response.response.items);
     return true;
   }
 
-  late final antiGoodsDyn = GStorage.antiGoodsDyn;
-
   @override
   Future<LoadingState> customGetData() => DynamicsHttp.followDynamic(
         type: dynamicsType == "up" ? "all" : dynamicsType,
         offset: offset,
         mid: dynamicsType == "up" ? mid : -1,
-        antiGoodsDyn: antiGoodsDyn,
       );
 
   Future onRemove(dynamic dynamicId) async {
