@@ -123,65 +123,9 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
   @override
   Widget build(BuildContext context) {
     return GStorage.slideDismissReplyPage
-        ? GestureDetector(
-            onPanDown: (event) {
-              if (event.localPosition.dx > 30) {
-                _isSliding = false;
-              } else {
-                _downPos = event.localPosition;
-              }
-            },
-            onPanUpdate: (event) {
-              if (_isSliding == false) {
-                return;
-              } else if (_isSliding == null) {
-                if (_downPos != null) {
-                  Offset cumulativeDelta = event.localPosition - _downPos!;
-                  if (cumulativeDelta.dx.abs() >= cumulativeDelta.dy.abs()) {
-                    _isSliding = true;
-                    setState(() {
-                      padding.value = event.localPosition.dx;
-                    });
-                  } else {
-                    _isSliding = false;
-                  }
-                }
-              } else if (_isSliding == true) {
-                setState(() {
-                  padding.value = event.localPosition.dx;
-                });
-              }
-            },
-            onPanCancel: () {
-              if (_isSliding == true) {
-                if (padding.value >= 100) {
-                  Get.back();
-                } else {
-                  setState(() {
-                    padding.value = 0;
-                  });
-                }
-              }
-              _downPos = null;
-              _isSliding = null;
-            },
-            onPanEnd: (event) {
-              if (_isSliding == true) {
-                if (padding.value >= 100) {
-                  Get.back();
-                } else {
-                  setState(() {
-                    padding.value = 0;
-                  });
-                }
-              }
-              _downPos = null;
-              _isSliding = null;
-            },
-            child: Padding(
-              padding: EdgeInsets.only(top: padding.value),
-              child: _buildPage,
-            ),
+        ? Padding(
+            padding: EdgeInsets.only(top: padding.value),
+            child: _buildPage,
           )
         : _buildPage;
   }
@@ -221,97 +165,154 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
                     color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
             Expanded(
-              child: ClipRect(
-                child: refreshIndicator(
-                  onRefresh: () async {
-                    await _videoReplyReplyController.onRefresh();
-                  },
-                  child: Obx(
-                    () => Stack(
-                      children: [
-                        ScrollablePositionedList.builder(
-                          key: _listKey,
-                          itemPositionsListener: itemPositionsListener,
-                          itemCount: _itemCount(
-                              _videoReplyReplyController.loadingState.value),
-                          itemScrollController:
-                              _videoReplyReplyController.itemScrollCtr,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            if (widget.isDialogue) {
-                              return _buildBody(
-                                  _videoReplyReplyController.loadingState.value,
-                                  index);
-                            } else if (firstFloor != null) {
-                              if (index == 0) {
-                                return GlobalData().grpcReply
-                                    ? ReplyItemGrpc(
-                                        replyItem: firstFloor,
-                                        replyLevel: '2',
-                                        showReplyRow: false,
-                                        replyType: widget.replyType,
-                                        needDivider: false,
-                                        onReply: () {
-                                          _onReply(firstFloor, -1);
-                                        },
-                                        upMid: _videoReplyReplyController.upMid,
-                                        isTop: widget.isTop,
-                                        onViewImage: widget.onViewImage,
-                                        onDismissed: widget.onDismissed,
-                                        callback: _getImageCallback,
-                                      )
-                                    : ReplyItem(
-                                        replyItem: firstFloor,
-                                        replyLevel: '2',
-                                        showReplyRow: false,
-                                        replyType: widget.replyType,
-                                        needDivider: false,
-                                        onReply: () {
-                                          _onReply(firstFloor, -1);
-                                        },
-                                        onViewImage: widget.onViewImage,
-                                        onDismissed: widget.onDismissed,
-                                        callback: _getImageCallback,
-                                      );
-                              } else if (index == 1) {
-                                return Divider(
-                                  height: 20,
-                                  color: Theme.of(context)
-                                      .dividerColor
-                                      .withOpacity(0.1),
-                                  thickness: 6,
-                                );
-                              } else if (index == 2) {
-                                return _sortWidget;
-                              } else {
-                                return _buildBody(
-                                    _videoReplyReplyController
-                                        .loadingState.value,
-                                    index - 3);
-                              }
+              child: GStorage.slideDismissReplyPage
+                  ? GestureDetector(
+                      onPanDown: (event) {
+                        if (event.localPosition.dx > 30) {
+                          _isSliding = false;
+                        } else {
+                          _downPos = event.localPosition;
+                        }
+                      },
+                      onPanUpdate: (event) {
+                        if (_isSliding == false) {
+                          return;
+                        } else if (_isSliding == null) {
+                          if (_downPos != null) {
+                            Offset cumulativeDelta =
+                                event.localPosition - _downPos!;
+                            if (cumulativeDelta.dx.abs() >=
+                                cumulativeDelta.dy.abs()) {
+                              _isSliding = true;
+                              setState(() {
+                                padding.value = event.localPosition.dx;
+                              });
                             } else {
-                              if (index == 0) {
-                                return _sortWidget;
-                              } else {
-                                return _buildBody(
-                                    _videoReplyReplyController
-                                        .loadingState.value,
-                                    index - 1);
-                              }
+                              _isSliding = false;
                             }
-                          },
-                        ),
-                        if (!widget.isDialogue &&
-                            _videoReplyReplyController.loadingState.value
-                                is Success)
-                          _header,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                          }
+                        } else if (_isSliding == true) {
+                          setState(() {
+                            padding.value = event.localPosition.dx;
+                          });
+                        }
+                      },
+                      onPanCancel: () {
+                        if (_isSliding == true) {
+                          if (padding.value >= 100) {
+                            Get.back();
+                          } else {
+                            setState(() {
+                              padding.value = 0;
+                            });
+                          }
+                        }
+                        _downPos = null;
+                        _isSliding = null;
+                      },
+                      onPanEnd: (event) {
+                        if (_isSliding == true) {
+                          if (padding.value >= 100) {
+                            Get.back();
+                          } else {
+                            setState(() {
+                              padding.value = 0;
+                            });
+                          }
+                        }
+                        _downPos = null;
+                        _isSliding = null;
+                      },
+                      child: _buildList,
+                    )
+                  : _buildList,
             ),
           ],
+        ),
+      );
+
+  Widget get _buildList => ClipRect(
+        child: refreshIndicator(
+          onRefresh: () async {
+            await _videoReplyReplyController.onRefresh();
+          },
+          child: Obx(
+            () => Stack(
+              children: [
+                ScrollablePositionedList.builder(
+                  key: _listKey,
+                  itemPositionsListener: itemPositionsListener,
+                  itemCount:
+                      _itemCount(_videoReplyReplyController.loadingState.value),
+                  itemScrollController:
+                      _videoReplyReplyController.itemScrollCtr,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    if (widget.isDialogue) {
+                      return _buildBody(
+                          _videoReplyReplyController.loadingState.value, index);
+                    } else if (firstFloor != null) {
+                      if (index == 0) {
+                        return GlobalData().grpcReply
+                            ? ReplyItemGrpc(
+                                replyItem: firstFloor,
+                                replyLevel: '2',
+                                showReplyRow: false,
+                                replyType: widget.replyType,
+                                needDivider: false,
+                                onReply: () {
+                                  _onReply(firstFloor, -1);
+                                },
+                                upMid: _videoReplyReplyController.upMid,
+                                isTop: widget.isTop,
+                                onViewImage: widget.onViewImage,
+                                onDismissed: widget.onDismissed,
+                                callback: _getImageCallback,
+                              )
+                            : ReplyItem(
+                                replyItem: firstFloor,
+                                replyLevel: '2',
+                                showReplyRow: false,
+                                replyType: widget.replyType,
+                                needDivider: false,
+                                onReply: () {
+                                  _onReply(firstFloor, -1);
+                                },
+                                onViewImage: widget.onViewImage,
+                                onDismissed: widget.onDismissed,
+                                callback: _getImageCallback,
+                              );
+                      } else if (index == 1) {
+                        return Divider(
+                          height: 20,
+                          color:
+                              Theme.of(context).dividerColor.withOpacity(0.1),
+                          thickness: 6,
+                        );
+                      } else if (index == 2) {
+                        return _sortWidget;
+                      } else {
+                        return _buildBody(
+                            _videoReplyReplyController.loadingState.value,
+                            index - 3);
+                      }
+                    } else {
+                      if (index == 0) {
+                        return _sortWidget;
+                      } else {
+                        return _buildBody(
+                            _videoReplyReplyController.loadingState.value,
+                            index - 1);
+                      }
+                    }
+                  },
+                ),
+                if (!widget.isDialogue &&
+                    _videoReplyReplyController.loadingState.value is Success)
+                  _header,
+              ],
+            ),
+          ),
         ),
       );
 
