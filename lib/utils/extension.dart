@@ -55,11 +55,8 @@ extension ListExt<T> on List<T>? {
 final _regExp = RegExp("^(http:)?//", caseSensitive: false);
 
 extension StringExt on String? {
-  String get http2https =>
-      this == null ? '' : this!.replaceFirst(_regExp, "https://");
-}
+  String get http2https => this?.replaceFirst(_regExp, "https://") ?? '';
 
-extension StringNullExt on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 }
 
