@@ -28,12 +28,6 @@ Widget htmlRender({
             String imgUrl = key.contains('src')
                 ? attributes['src'] as String
                 : attributes['data-src'] as String;
-            if (imgUrl.startsWith('//')) {
-              imgUrl = 'https:$imgUrl';
-            }
-            if (imgUrl.startsWith('http://')) {
-              imgUrl = imgUrl.replaceAll('http://', 'https://');
-            }
             imgUrl = imgUrl.contains('@') ? imgUrl.split('@').first : imgUrl;
             final bool isEmote = imgUrl.contains('/emote/');
             final bool isMall = imgUrl.contains('/mall/');

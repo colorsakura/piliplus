@@ -26,6 +26,7 @@ import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dar
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
@@ -48,6 +49,30 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static final regExp =
+      RegExp(r'(@(\d+[a-z]_?)*)(\..*)?$', caseSensitive: false);
+
+  static String thumbnailImgUrl(String? src, [int? quality]) {
+    if (src != null) {
+      bool hasMatch = false;
+      src = src.splitMapJoin(
+        regExp,
+        onMatch: (Match match) {
+          hasMatch = true;
+          String suffix = match.group(3) ?? '.webp';
+          return '${match.group(1)}_${quality ?? GlobalData().imgQuality}q$suffix';
+        },
+        onNonMatch: (String str) {
+          return str;
+        },
+      );
+      if (hasMatch.not) {
+        src += '@${quality ?? GlobalData().imgQuality}q.webp';
+      }
+    }
+    return src.http2https;
+  }
 
   static bool? _isIpad;
 

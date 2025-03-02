@@ -1,7 +1,7 @@
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import '../constants.dart';
 
 class NetworkImgLayer extends StatelessWidget {
@@ -56,8 +56,6 @@ class NetworkImgLayer extends StatelessWidget {
   }
 
   Widget _buildImage(context) {
-    late final int defaultImgQuality = GlobalData().imgQuality;
-    bool thumbnail = true;
     int? memCacheWidth, memCacheHeight;
     if (callback?.call() == true || width <= height) {
       memCacheWidth = width.cacheSize(context);
@@ -65,8 +63,7 @@ class NetworkImgLayer extends StatelessWidget {
       memCacheHeight = height.cacheSize(context);
     }
     return CachedNetworkImage(
-      imageUrl:
-          '${src?.startsWith('//') == true ? 'https:$src' : src?.http2https}${type != 'emote' && type != 'cover' && thumbnail ? '@${quality ?? defaultImgQuality}q.webp' : ''}',
+      imageUrl: Utils.thumbnailImgUrl(src, quality),
       width: width,
       height: ignoreHeight == null || ignoreHeight == false ? height : null,
       memCacheWidth: memCacheWidth,
@@ -77,17 +74,9 @@ class NetworkImgLayer extends StatelessWidget {
       fadeOutDuration: fadeOutDuration ?? const Duration(milliseconds: 120),
       fadeInDuration: fadeInDuration ?? const Duration(milliseconds: 120),
       filterQuality: FilterQuality.low,
-      // errorWidget: (BuildContext context, String url, Object error) =>
-      //     placeholder(context),
       placeholder: (BuildContext context, String url) =>
           getPlaceHolder?.call() ?? placeholder(context),
       imageBuilder: imageBuilder,
-      // errorListener: (value) {
-      //   thumbnail = false;
-      //   if (context.mounted) {
-      //     (context as Element).markNeedsBuild();
-      //   }
-      // },
     );
   }
 

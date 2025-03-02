@@ -112,14 +112,11 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   late final RxInt currentIndex = widget.initIndex.obs;
 
-  late List<bool> _thumbList;
   late final int _quality = GStorage.previewQ;
 
   @override
   void initState() {
     super.initState();
-
-    _thumbList = List.generate(widget.sources.length, (_) => true);
 
     _pageController = PageController(initialPage: widget.initIndex);
 
@@ -263,9 +260,11 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
     }
   }
 
-  String _getActualUrl(int index) => _thumbList[index] && _quality != 100
-      ? '${widget.sources[index].url}@${_quality}q.webp'.http2https
-      : widget.sources[index].url.http2https;
+  String _getActualUrl(int index) {
+    return _quality != 100
+        ? Utils.thumbnailImgUrl(widget.sources[index].url)
+        : widget.sources[index].url.http2https;
+  }
 
   void onClose() {
     if (widget.onClose != null) {
