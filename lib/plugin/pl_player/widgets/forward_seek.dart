@@ -34,17 +34,17 @@ class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
     super.dispose();
   }
 
-  // void increment() {
-  //   timer?.cancel();
-  //   timer = Timer(const Duration(milliseconds: 400), () {
-  //     widget.onSubmitted.call(value);
-  //   });
-  //   widget.onChanged.call(value);
-  //   // 重复点击 快进秒数累加10
-  //   setState(() {
-  //     value += const Duration(seconds: 10);
-  //   });
-  // }
+  void increment() {
+    timer?.cancel();
+    timer = Timer(const Duration(milliseconds: 400), () {
+      widget.onSubmitted.call(value);
+    });
+    // widget.onChanged.call(value);
+    // 重复点击 快进秒数累加10
+    setState(() {
+      value += const Duration(seconds: 10);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,31 +59,31 @@ class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
           end: Alignment.centerRight,
         ),
       ),
-      // child: InkWell(
-      //   splashColor: const Color(0x44767676),
-      //   onTap: increment,
       alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.fast_forward,
-            size: 24.0,
-            color: Colors.white,
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            '快进${value.inSeconds}秒',
-            style: const TextStyle(
-              fontSize: 12.0,
+      child: InkWell(
+        splashColor: const Color(0x44767676),
+        onTap: increment,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.fast_forward,
+              size: 24.0,
               color: Colors.white,
             ),
-          ),
-        ],
+            const SizedBox(height: 8.0),
+            Text(
+              '快进${value.inSeconds}秒',
+              style: const TextStyle(
+                fontSize: 12.0,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
-      // ),
     );
   }
 }
