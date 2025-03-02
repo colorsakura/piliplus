@@ -48,23 +48,22 @@ class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0x00767676),
-            Color(0x88767676),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+    return InkWell(
+      splashColor: const Color(0x44767676),
+      onTap: increment,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0x00767676),
+              Color(0x88767676),
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
         ),
-      ),
-      alignment: Alignment.center,
-      child: InkWell(
-        splashColor: const Color(0x44767676),
-        onTap: increment,
+        alignment: Alignment.center,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
