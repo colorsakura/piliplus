@@ -252,7 +252,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: ecf4a8457ec9d128095240d96dbfa5cc53b6cf6b
+      resolved-ref: "77c76f6595c6862cc623b036718173619c02af75"
       url: "https://github.com/bggRGjQaUbCoE/canvas_danmaku.git"
     source: git
     version: "0.2.6"

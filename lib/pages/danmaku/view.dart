@@ -117,6 +117,9 @@ class _PlDanmakuState extends State<PlDanmaku> {
                     e.colorful == DmColorfulType.VipGradualColor
                 ? true
                 : null,
+            count: widget.playerController.mergeDanmaku && e.hasAttr()
+                ? e.attr
+                : null,
           ),
         );
       }

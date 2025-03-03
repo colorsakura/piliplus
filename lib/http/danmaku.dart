@@ -1,6 +1,5 @@
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:PiliPlus/grpc/grpc_repo.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'index.dart';
 
@@ -18,8 +17,20 @@ class DanmakuHttp {
       return DmSegMobileReply();
     }
     DmSegMobileReply data = response['data'];
-    if (mergeDanmaku) {
-      data.elems.unique((item) => item.content);
+    if (mergeDanmaku && data.elems.isNotEmpty) {
+      final Map counts = <String, int>{};
+      data.elems.retainWhere((item) {
+        int? count = counts[item.content];
+        counts[item.content] = count != null ? count + 1 : 1;
+        return count == null;
+      });
+      for (DanmakuElem item in data.elems) {
+        item.clearAttr();
+        final count = counts[item.content];
+        if (count != 1) {
+          item.attr = count;
+        }
+      }
     }
     return data;
   }
