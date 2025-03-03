@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -132,8 +133,14 @@ class SSearchController extends GetxController {
   }
 
   onClearHistory() {
-    historyList.clear();
-    GStorage.historyWord.put('cacheList', []);
+    showConfirmDialog(
+      context: Get.context!,
+      title: '确定清空搜索历史？',
+      onConfirm: () {
+        historyList.clear();
+        GStorage.historyWord.put('cacheList', []);
+      },
+    );
   }
 
   @override

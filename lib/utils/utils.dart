@@ -165,7 +165,7 @@ class Utils {
             ),
           );
         }
-      } catch (e) {}
+      } catch (_) {}
     }
   }
 
