@@ -24,7 +24,6 @@ import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/duration.dart';
 import 'package:PiliPlus/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:PiliPlus/plugin/pl_player/utils.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screen_brightness/screen_brightness.dart';
@@ -1396,32 +1395,32 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         thumbColor: colorTheme,
                         barHeight: 3.5,
                         thumbRadius: draggingFixedProgressBar.value ? 7 : 2.5,
-                        onDragStart: (duration) {
-                          feedBack();
-                          plPlayerController.onChangedSliderStart();
-                        },
-                        onDragUpdate: (duration) {
-                          plPlayerController
-                              .onUpdatedSliderProgress(duration.timeStamp);
-                          if (plPlayerController.showSeekPreview) {
-                            if (plPlayerController.showPreview.value.not) {
-                              plPlayerController.showPreview.value = true;
-                            }
-                            plPlayerController.previewDx.value =
-                                duration.localPosition.dx;
-                          }
-                        },
-                        onSeek: (duration) {
-                          if (plPlayerController.showSeekPreview) {
-                            plPlayerController.showPreview.value = false;
-                          }
-                          plPlayerController.onChangedSliderEnd();
-                          plPlayerController
-                              .onChangedSlider(duration.inSeconds.toDouble());
-                          plPlayerController.seekTo(
-                              Duration(seconds: duration.inSeconds),
-                              type: 'slider');
-                        },
+                        // onDragStart: (duration) {
+                        //   feedBack();
+                        //   plPlayerController.onChangedSliderStart();
+                        // },
+                        // onDragUpdate: (duration) {
+                        //   plPlayerController
+                        //       .onUpdatedSliderProgress(duration.timeStamp);
+                        //   if (plPlayerController.showSeekPreview) {
+                        //     if (plPlayerController.showPreview.value.not) {
+                        //       plPlayerController.showPreview.value = true;
+                        //     }
+                        //     plPlayerController.previewDx.value =
+                        //         duration.localPosition.dx;
+                        //   }
+                        // },
+                        // onSeek: (duration) {
+                        //   if (plPlayerController.showSeekPreview) {
+                        //     plPlayerController.showPreview.value = false;
+                        //   }
+                        //   plPlayerController.onChangedSliderEnd();
+                        //   plPlayerController
+                        //       .onChangedSlider(duration.inSeconds.toDouble());
+                        //   plPlayerController.seekTo(
+                        //       Duration(seconds: duration.inSeconds),
+                        //       type: 'slider');
+                        // },
                       ),
                       if (plPlayerController.segmentList.isNotEmpty)
                         Positioned(

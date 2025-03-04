@@ -484,6 +484,9 @@ class _RenderProgressBar extends RenderBox {
   }
 
   void _onDragStart(DragStartDetails details) {
+    if (onDragStart == null) {
+      return;
+    }
     _userIsDraggingThumb = true;
     _updateThumbPosition(details.localPosition);
     onDragStart?.call(ThumbDragDetails(
@@ -494,6 +497,9 @@ class _RenderProgressBar extends RenderBox {
   }
 
   void _onDragUpdate(DragUpdateDetails details) {
+    if (onDragUpdate == null) {
+      return;
+    }
     _updateThumbPosition(details.localPosition);
     onDragUpdate?.call(ThumbDragDetails(
       timeStamp: _currentThumbDuration(),
@@ -503,6 +509,9 @@ class _RenderProgressBar extends RenderBox {
   }
 
   void _onDragEnd(DragEndDetails details) {
+    if (onSeek == null) {
+      return;
+    }
     onDragEnd?.call();
     onSeek?.call(_currentThumbDuration());
     _finishDrag();
