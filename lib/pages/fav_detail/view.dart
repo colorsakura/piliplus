@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/dialog.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
@@ -71,249 +72,274 @@ class _FavDetailPageState extends State<FavDetailPage> {
                   )
                 : const SizedBox.shrink(),
           ),
-          body: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _favDetailController.scrollController,
-            slivers: [
-              SliverAppBar(
-                leading: _favDetailController.enableMultiSelect.value
-                    ? IconButton(
-                        tooltip: '取消',
-                        onPressed: _favDetailController.handleSelect,
-                        icon: const Icon(Icons.close_outlined),
-                      )
-                    : null,
-                expandedHeight: 220 - MediaQuery.of(context).padding.top,
-                pinned: true,
-                title: _favDetailController.enableMultiSelect.value
-                    ? Text(
-                        '已选: ${_favDetailController.checkedCount.value}',
-                      )
-                    : Obx(
-                        () => AnimatedOpacity(
-                          opacity: _favDetailController.titleCtr.value ? 1 : 0,
-                          curve: Curves.easeOut,
-                          duration: const Duration(milliseconds: 500),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _favDetailController.item.value.title ?? '',
-                                style: Theme.of(context).textTheme.titleMedium,
+          body: refreshIndicator(
+            onRefresh: () async {
+              await _favDetailController.onRefresh();
+            },
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _favDetailController.scrollController,
+              slivers: [
+                SliverAppBar(
+                  leading: _favDetailController.enableMultiSelect.value
+                      ? IconButton(
+                          tooltip: '取消',
+                          onPressed: _favDetailController.handleSelect,
+                          icon: const Icon(Icons.close_outlined),
+                        )
+                      : null,
+                  expandedHeight: 220 - MediaQuery.of(context).padding.top,
+                  pinned: true,
+                  title: _favDetailController.enableMultiSelect.value
+                      ? Text(
+                          '已选: ${_favDetailController.checkedCount.value}',
+                        )
+                      : Obx(
+                          () => AnimatedOpacity(
+                            opacity:
+                                _favDetailController.titleCtr.value ? 1 : 0,
+                            curve: Curves.easeOut,
+                            duration: const Duration(milliseconds: 500),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _favDetailController.item.value.title ?? '',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                Text(
+                                  '共${_favDetailController.item.value.mediaCount}条视频',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                  actions: _favDetailController.enableMultiSelect.value
+                      ? [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              visualDensity:
+                                  VisualDensity(horizontal: -2, vertical: -2),
+                            ),
+                            onPressed: () =>
+                                _favDetailController.handleSelect(true),
+                            child: const Text('全选'),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              visualDensity:
+                                  VisualDensity(horizontal: -2, vertical: -2),
+                            ),
+                            onPressed: () => Utils.onCopyOrMove(
+                              context: context,
+                              isCopy: true,
+                              ctr: _favDetailController,
+                              mediaId: _favDetailController.mediaId,
+                            ),
+                            child: Text(
+                              '复制',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
                               ),
-                              Text(
-                                '共${_favDetailController.item.value.mediaCount}条视频',
-                                style: Theme.of(context).textTheme.labelMedium,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                actions: _favDetailController.enableMultiSelect.value
-                    ? [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            visualDensity:
-                                VisualDensity(horizontal: -2, vertical: -2),
-                          ),
-                          onPressed: () =>
-                              _favDetailController.handleSelect(true),
-                          child: const Text('全选'),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            visualDensity:
-                                VisualDensity(horizontal: -2, vertical: -2),
-                          ),
-                          onPressed: () => Utils.onCopyOrMove(
-                            context: context,
-                            isCopy: true,
-                            ctr: _favDetailController,
-                            mediaId: _favDetailController.mediaId,
-                          ),
-                          child: Text(
-                            '复制',
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
                             ),
                           ),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            visualDensity:
-                                VisualDensity(horizontal: -2, vertical: -2),
-                          ),
-                          onPressed: () => Utils.onCopyOrMove(
-                            context: context,
-                            isCopy: false,
-                            ctr: _favDetailController,
-                            mediaId: _favDetailController.mediaId,
-                          ),
-                          child: Text(
-                            '移动',
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              visualDensity:
+                                  VisualDensity(horizontal: -2, vertical: -2),
+                            ),
+                            onPressed: () => Utils.onCopyOrMove(
+                              context: context,
+                              isCopy: false,
+                              ctr: _favDetailController,
+                              mediaId: _favDetailController.mediaId,
+                            ),
+                            child: Text(
+                              '移动',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
                             ),
                           ),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            visualDensity:
-                                VisualDensity(horizontal: -2, vertical: -2),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              visualDensity:
+                                  VisualDensity(horizontal: -2, vertical: -2),
+                            ),
+                            onPressed: () =>
+                                _favDetailController.onDelChecked(context),
+                            child: Text(
+                              '删除',
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error),
+                            ),
                           ),
-                          onPressed: () =>
-                              _favDetailController.onDelChecked(context),
-                          child: Text(
-                            '删除',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.error),
+                          const SizedBox(width: 6),
+                        ]
+                      : [
+                          IconButton(
+                            tooltip: '搜索',
+                            onPressed: () =>
+                                Get.toNamed('/favSearch', arguments: {
+                              'type': 0,
+                              'mediaId': int.parse(mediaId),
+                              'searchType': SearchType.fav,
+                            }),
+                            icon: const Icon(Icons.search_outlined),
                           ),
-                        ),
-                        const SizedBox(width: 6),
-                      ]
-                    : [
-                        IconButton(
-                          tooltip: '搜索',
-                          onPressed: () =>
-                              Get.toNamed('/favSearch', arguments: {
-                            'type': 0,
-                            'mediaId': int.parse(mediaId),
-                            'searchType': SearchType.fav,
-                          }),
-                          icon: const Icon(Icons.search_outlined),
-                        ),
-                        //   IconButton(
-                        //     onPressed: () {},
-                        //     icon: const Icon(Icons.more_vert),
-                        //   ),
-                        Obx(
-                          () => _favDetailController.isOwner.value
-                              ? PopupMenuButton(
-                                  icon: const Icon(Icons.more_vert),
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      onTap: () {
-                                        Get.toNamed(
-                                          '/createFav',
-                                          parameters: {'mediaId': mediaId},
-                                        )?.then((res) {
-                                          if (res is FavFolderItemData) {
-                                            _favDetailController.item.value =
-                                                res;
-                                          }
-                                        });
-                                      },
-                                      child: Text('编辑信息'),
-                                    ),
-                                    PopupMenuItem(
-                                      onTap: () {
-                                        UserHttp.cleanFav(mediaId: mediaId)
-                                            .then((data) {
-                                          if (data['status']) {
-                                            SmartDialog.showToast('清除成功');
-                                            Future.delayed(
-                                                const Duration(
-                                                    milliseconds: 200), () {
-                                              _favDetailController.onReload();
-                                            });
-                                          } else {
-                                            SmartDialog.showToast(data['msg']);
-                                          }
-                                        });
-                                      },
-                                      child: Text('清除失效内容'),
-                                    ),
-                                    if (!Utils.isDefault(
-                                        _favDetailController.item.value.attr ??
-                                            0))
+                          //   IconButton(
+                          //     onPressed: () {},
+                          //     icon: const Icon(Icons.more_vert),
+                          //   ),
+                          Obx(
+                            () => _favDetailController.isOwner.value
+                                ? PopupMenuButton(
+                                    icon: const Icon(Icons.more_vert),
+                                    itemBuilder: (context) => [
                                       PopupMenuItem(
                                         onTap: () {
-                                          showConfirmDialog(
-                                            context: context,
-                                            title: '确定删除该收藏夹?',
-                                            onConfirm: () {
-                                              Get.back();
-                                              UserHttp.deleteFolder(
-                                                      mediaIds: [mediaId])
-                                                  .then((data) {
-                                                if (data['status']) {
-                                                  SmartDialog.showToast('删除成功');
-                                                  Get.back(result: true);
-                                                } else {
-                                                  SmartDialog.showToast(
-                                                      data['msg']);
-                                                }
-                                              });
-                                            },
-                                          );
+                                          Get.toNamed(
+                                            '/createFav',
+                                            parameters: {'mediaId': mediaId},
+                                          )?.then((res) {
+                                            if (res is FavFolderItemData) {
+                                              _favDetailController.item.value =
+                                                  res;
+                                            }
+                                          });
                                         },
-                                        child: Text(
-                                          '删除',
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .error,
+                                        child: Text('编辑信息'),
+                                      ),
+                                      PopupMenuItem(
+                                        onTap: () {
+                                          UserHttp.cleanFav(mediaId: mediaId)
+                                              .then((data) {
+                                            if (data['status']) {
+                                              SmartDialog.showToast('清除成功');
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 200), () {
+                                                _favDetailController.onReload();
+                                              });
+                                            } else {
+                                              SmartDialog.showToast(
+                                                  data['msg']);
+                                            }
+                                          });
+                                        },
+                                        child: Text('清除失效内容'),
+                                      ),
+                                      if (!Utils.isDefault(_favDetailController
+                                              .item.value.attr ??
+                                          0))
+                                        PopupMenuItem(
+                                          onTap: () {
+                                            showConfirmDialog(
+                                              context: context,
+                                              title: '确定删除该收藏夹?',
+                                              onConfirm: () {
+                                                Get.back();
+                                                UserHttp.deleteFolder(
+                                                        mediaIds: [mediaId])
+                                                    .then((data) {
+                                                  if (data['status']) {
+                                                    SmartDialog.showToast(
+                                                        '删除成功');
+                                                    Get.back(result: true);
+                                                  } else {
+                                                    SmartDialog.showToast(
+                                                        data['msg']);
+                                                  }
+                                                });
+                                              },
+                                            );
+                                          },
+                                          child: Text(
+                                            '删除',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                        const SizedBox(width: 6),
-                      ],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    padding: EdgeInsets.only(
-                      top: kTextTabBarHeight +
-                          MediaQuery.of(context).padding.top +
-                          10,
-                      left: 14,
-                      right: 20,
-                    ),
-                    child: SizedBox(
-                      height: 110,
-                      child: Obx(
-                        () => Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Hero(
-                              tag: _favDetailController.heroTag,
-                              child: NetworkImgLayer(
-                                width: 180,
-                                height: 110,
-                                src: _favDetailController.item.value.cover,
+                                    ],
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                          const SizedBox(width: 6),
+                        ],
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Container(
+                      padding: EdgeInsets.only(
+                        top: kTextTabBarHeight +
+                            MediaQuery.of(context).padding.top +
+                            10,
+                        left: 14,
+                        right: 20,
+                      ),
+                      child: SizedBox(
+                        height: 110,
+                        child: Obx(
+                          () => Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Hero(
+                                tag: _favDetailController.heroTag,
+                                child: NetworkImgLayer(
+                                  width: 180,
+                                  height: 110,
+                                  src: _favDetailController.item.value.cover,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: SizedBox(
-                                height: 110,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      _favDetailController.item.value.title ??
-                                          '',
-                                      style: TextStyle(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .fontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    if (_favDetailController
-                                            .item.value.intro?.isNotEmpty ==
-                                        true)
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 110,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 4),
                                       Text(
-                                        _favDetailController.item.value.intro ??
+                                        _favDetailController.item.value.title ??
+                                            '',
+                                        style: TextStyle(
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .fontSize,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      if (_favDetailController
+                                              .item.value.intro?.isNotEmpty ==
+                                          true)
+                                        Text(
+                                          _favDetailController
+                                                  .item.value.intro ??
+                                              '',
+                                          style: TextStyle(
+                                              fontSize: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall!
+                                                  .fontSize,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline),
+                                        ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        _favDetailController
+                                                .item.value.upper?.name ??
                                             '',
                                         style: TextStyle(
                                             fontSize: Theme.of(context)
@@ -324,47 +350,35 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                                 .colorScheme
                                                 .outline),
                                       ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      _favDetailController
-                                              .item.value.upper?.name ??
-                                          '',
-                                      style: TextStyle(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall!
-                                              .fontSize,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline),
-                                    ),
-                                    const Spacer(),
-                                    if (_favDetailController.item.value.attr !=
-                                        null)
-                                      Text(
-                                        '共${_favDetailController.item.value.mediaCount}条视频 · ${Utils.isPublicText(_favDetailController.item.value.attr ?? 0)}',
-                                        style: TextStyle(
-                                            fontSize: Theme.of(context)
-                                                .textTheme
-                                                .labelSmall!
-                                                .fontSize,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline),
-                                      ),
-                                  ],
+                                      const Spacer(),
+                                      if (_favDetailController
+                                              .item.value.attr !=
+                                          null)
+                                        Text(
+                                          '共${_favDetailController.item.value.mediaCount}条视频 · ${Utils.isPublicText(_favDetailController.item.value.attr ?? 0)}',
+                                          style: TextStyle(
+                                              fontSize: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall!
+                                                  .fontSize,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Obx(() => _buildBody(_favDetailController.loadingState.value)),
-            ],
+                Obx(() => _buildBody(_favDetailController.loadingState.value)),
+              ],
+            ),
           ),
         ),
       ),

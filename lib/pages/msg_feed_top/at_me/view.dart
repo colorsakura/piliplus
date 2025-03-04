@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -52,92 +53,85 @@ class _AtMePageState extends State<AtMePage> {
         onRefresh: () async {
           await _atMeController.onRefresh();
         },
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return Obx(
-              () {
-                if (_atMeController.msgFeedAtMeList.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.separated(
-                  itemCount: _atMeController.msgFeedAtMeList.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, int i) {
-                    return ListTile(
-                      onTap: () {
-                        String? nativeUri =
-                            _atMeController.msgFeedAtMeList[i].item?.nativeUri;
-                        if (nativeUri != null) {
-                          PiliScheme.routePushFromUrl(nativeUri);
-                        }
-                        // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
-                      },
-                      leading: NetworkImgLayer(
-                        width: 45,
-                        height: 45,
-                        type: 'avatar',
-                        src: _atMeController.msgFeedAtMeList[i].user?.avatar,
-                      ),
-                      title: Text(
-                          "${_atMeController.msgFeedAtMeList[i].user?.nickname}  "
-                          "在${_atMeController.msgFeedAtMeList[i].item?.business}中@了我",
+        child: Obx(
+          () {
+            // TODO: refactor
+            if (_atMeController.msgFeedAtMeList.isEmpty) {
+              if (_atMeController.cursor == -1 &&
+                  _atMeController.cursorTime == -1) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return scrollErrorWidget(
+                    callback: _atMeController.queryMsgFeedAtMe);
+              }
+            }
+            return ListView.separated(
+              controller: _scrollController,
+              itemCount: _atMeController.msgFeedAtMeList.length,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, int i) {
+                return ListTile(
+                  onTap: () {
+                    String? nativeUri =
+                        _atMeController.msgFeedAtMeList[i].item?.nativeUri;
+                    if (nativeUri != null) {
+                      PiliScheme.routePushFromUrl(nativeUri);
+                    }
+                    // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
+                  },
+                  leading: NetworkImgLayer(
+                    width: 45,
+                    height: 45,
+                    type: 'avatar',
+                    src: _atMeController.msgFeedAtMeList[i].user?.avatar,
+                  ),
+                  title: Text(
+                      "${_atMeController.msgFeedAtMeList[i].user?.nickname}  "
+                      "在${_atMeController.msgFeedAtMeList[i].item?.business}中@了我",
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          )),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                          _atMeController
+                                  .msgFeedAtMeList[i].item?.sourceContent ??
+                              "",
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .titleMedium!
+                              .bodyMedium!
                               .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              )),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 4),
-                          Text(
-                              _atMeController
-                                      .msgFeedAtMeList[i].item?.sourceContent ??
-                                  "",
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outline))
-                        ],
-                      ),
-                      trailing: _atMeController
-                                      .msgFeedAtMeList[i].item?.image !=
-                                  null &&
-                              _atMeController.msgFeedAtMeList[i].item?.image !=
-                                  ""
-                          ? NetworkImgLayer(
-                              width: 45,
-                              height: 45,
-                              type: 'cover',
-                              src: _atMeController
-                                  .msgFeedAtMeList[i].item?.image,
-                            )
-                          : null,
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      indent: 72,
-                      endIndent: 20,
-                      height: 6,
-                      color: Colors.grey.withOpacity(0.1),
-                    );
-                  },
+                                  color: Theme.of(context).colorScheme.outline))
+                    ],
+                  ),
+                  trailing: _atMeController.msgFeedAtMeList[i].item?.image !=
+                              null &&
+                          _atMeController.msgFeedAtMeList[i].item?.image != ""
+                      ? NetworkImgLayer(
+                          width: 45,
+                          height: 45,
+                          type: 'cover',
+                          src: _atMeController.msgFeedAtMeList[i].item?.image,
+                        )
+                      : null,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider(
+                  indent: 72,
+                  endIndent: 20,
+                  height: 6,
+                  color: Colors.grey.withOpacity(0.1),
                 );
               },
             );
-          }),
+          },
         ),
       ),
     );

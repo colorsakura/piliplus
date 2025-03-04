@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/subscription/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -22,15 +23,20 @@ class _SubPageState extends State<SubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('我的订阅')),
-      body: CustomScrollView(
-        slivers: [
-          Obx(() => _buildBody(_subController.loadingState.value)),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).padding.bottom + 80,
+      body: refreshIndicator(
+        onRefresh: () async {
+          await _subController.onRefresh();
+        },
+        child: CustomScrollView(
+          slivers: [
+            Obx(() => _buildBody(_subController.loadingState.value)),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MediaQuery.of(context).padding.bottom + 80,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

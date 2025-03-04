@@ -51,106 +51,100 @@ class _ReplyMePageState extends State<ReplyMePage> {
         onRefresh: () async {
           await _replyMeController.onRefresh();
         },
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return Obx(
-              () {
-                if (_replyMeController.msgFeedReplyMeList.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.separated(
-                  itemCount: _replyMeController.msgFeedReplyMeList.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, int i) {
-                    return ListTile(
-                      onTap: () {
-                        String? nativeUri = _replyMeController
-                            .msgFeedReplyMeList[i].item?.nativeUri;
-                        if (nativeUri != null) {
-                          PiliScheme.routePushFromUrl(nativeUri);
-                        }
-                        // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
-                      },
-                      leading: NetworkImgLayer(
-                        width: 45,
-                        height: 45,
-                        type: 'avatar',
-                        src: _replyMeController
-                            .msgFeedReplyMeList[i].user?.avatar,
-                      ),
-                      title: Text(
-                        "${_replyMeController.msgFeedReplyMeList[i].user?.nickname}  "
-                        "回复了我的${_replyMeController.msgFeedReplyMeList[i].item?.business}",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                      subtitle: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text(
-                                _replyMeController.msgFeedReplyMeList[i].item
-                                        ?.sourceContent ??
-                                    "",
-                                style: Theme.of(context).textTheme.bodyMedium),
-                            const SizedBox(height: 4),
-                            if (_replyMeController.msgFeedReplyMeList[i].item
-                                        ?.targetReplyContent !=
-                                    null &&
-                                _replyMeController.msgFeedReplyMeList[i].item
-                                        ?.targetReplyContent !=
-                                    "")
-                              Text(
-                                  "| ${_replyMeController.msgFeedReplyMeList[i].item?.targetReplyContent}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          height: 1.5)),
-                            if (_replyMeController.msgFeedReplyMeList[i].item
-                                        ?.rootReplyContent !=
-                                    null &&
-                                _replyMeController.msgFeedReplyMeList[i].item
-                                        ?.rootReplyContent !=
-                                    "")
-                              Text(
-                                  " | ${_replyMeController.msgFeedReplyMeList[i].item?.rootReplyContent}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          height: 1.5)),
-                          ]),
-                    );
+        // TODO: refactor
+        child: Obx(
+          () {
+            if (_replyMeController.msgFeedReplyMeList.isEmpty) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ListView.separated(
+              controller: _scrollController,
+              itemCount: _replyMeController.msgFeedReplyMeList.length,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, int i) {
+                return ListTile(
+                  onTap: () {
+                    String? nativeUri = _replyMeController
+                        .msgFeedReplyMeList[i].item?.nativeUri;
+                    if (nativeUri != null) {
+                      PiliScheme.routePushFromUrl(nativeUri);
+                    }
+                    // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
                   },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      indent: 72,
-                      endIndent: 20,
-                      height: 6,
-                      color: Colors.grey.withOpacity(0.1),
-                    );
-                  },
+                  leading: NetworkImgLayer(
+                    width: 45,
+                    height: 45,
+                    type: 'avatar',
+                    src: _replyMeController.msgFeedReplyMeList[i].user?.avatar,
+                  ),
+                  title: Text(
+                    "${_replyMeController.msgFeedReplyMeList[i].user?.nickname}  "
+                    "回复了我的${_replyMeController.msgFeedReplyMeList[i].item?.business}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  subtitle: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                            _replyMeController.msgFeedReplyMeList[i].item
+                                    ?.sourceContent ??
+                                "",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                        const SizedBox(height: 4),
+                        if (_replyMeController.msgFeedReplyMeList[i].item
+                                    ?.targetReplyContent !=
+                                null &&
+                            _replyMeController.msgFeedReplyMeList[i].item
+                                    ?.targetReplyContent !=
+                                "")
+                          Text(
+                              "| ${_replyMeController.msgFeedReplyMeList[i].item?.targetReplyContent}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      height: 1.5)),
+                        if (_replyMeController.msgFeedReplyMeList[i].item
+                                    ?.rootReplyContent !=
+                                null &&
+                            _replyMeController.msgFeedReplyMeList[i].item
+                                    ?.rootReplyContent !=
+                                "")
+                          Text(
+                              " | ${_replyMeController.msgFeedReplyMeList[i].item?.rootReplyContent}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      height: 1.5)),
+                      ]),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider(
+                  indent: 72,
+                  endIndent: 20,
+                  height: 6,
+                  color: Colors.grey.withOpacity(0.1),
                 );
               },
             );
-          }),
+          },
         ),
       ),
     );

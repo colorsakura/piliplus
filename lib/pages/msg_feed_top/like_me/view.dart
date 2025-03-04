@@ -53,6 +53,7 @@ class _LikeMePageState extends State<LikeMePage> {
         onRefresh: () async {
           await _likeMeController.onRefresh();
         },
+        // TODO: refactor
         child: SingleChildScrollView(
           controller: _scrollController,
           child: LayoutBuilder(

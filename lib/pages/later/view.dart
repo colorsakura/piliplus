@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
 import 'package:PiliPlus/utils/extension.dart';
@@ -146,19 +147,24 @@ class _LaterPageState extends State<LaterPage> {
                   )
                 : const SizedBox(),
           ),
-          body: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _laterController.scrollController,
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 85,
+          body: refreshIndicator(
+            onRefresh: () async {
+              await _laterController.onRefresh();
+            },
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _laterController.scrollController,
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom + 85,
+                  ),
+                  sliver: Obx(
+                    () => _buildBody(_laterController.loadingState.value),
+                  ),
                 ),
-                sliver: Obx(
-                  () => _buildBody(_laterController.loadingState.value),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

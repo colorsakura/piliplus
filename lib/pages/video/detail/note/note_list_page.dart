@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/skeleton/video_reply.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/video/detail/note/note_list_page_ctr.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
@@ -79,7 +80,7 @@ class _NoteListPageState extends State<NoteListPage> {
           ],
         ),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? RefreshIndicator(
+          ? refreshIndicator(
               onRefresh: () async {
                 await _controller.onRefresh();
               },
