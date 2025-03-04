@@ -132,15 +132,12 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: TabBar(
-            controller: _danmakuBlockController.tabController,
-            dividerColor: Colors.transparent,
-            tabs: [
-              for (var i = 0; i < ruleLabels.length; i++)
-                Obx(() => Tab(
-                    text:
-                        '${ruleLabels[i]}(${_danmakuBlockController.ruleTypes[i]!.length})')),
-            ]),
+        title: TabBar(controller: _danmakuBlockController.tabController, tabs: [
+          for (var i = 0; i < ruleLabels.length; i++)
+            Obx(() => Tab(
+                text:
+                    '${ruleLabels[i]}(${_danmakuBlockController.ruleTypes[i]!.length})')),
+        ]),
       ),
       body: tabBarView(
         controller: _danmakuBlockController.tabController,

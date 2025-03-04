@@ -1565,14 +1565,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           labelColor: needIndicator.not || tabs.length == 1
               ? Theme.of(context).colorScheme.onSurface
               : null,
-          indicatorColor:
-              needIndicator.not || tabs.length == 1 ? Colors.transparent : null,
+          indicator: needIndicator.not || tabs.length == 1
+              ? const BoxDecoration()
+              : null,
           padding: EdgeInsets.zero,
           controller: videoDetailController.tabCtr,
           labelStyle: const TextStyle(fontSize: 13),
           labelPadding:
               const EdgeInsets.symmetric(horizontal: 10.0), // 设置每个标签的宽度
           dividerColor: Colors.transparent,
+          dividerHeight: 0,
           onTap: (value) {
             void animToTop() {
               if (onTap != null) {

@@ -111,6 +111,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 labelStyle: const TextStyle(fontSize: 13),
                 dividerColor: Colors.transparent,
+                dividerHeight: 0,
                 unselectedLabelColor: Theme.of(context).colorScheme.outline,
                 tabAlignment: TabAlignment.start,
                 onTap: (index) {

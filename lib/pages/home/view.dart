@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage>
                   ],
                   isScrollable: true,
                   dividerColor: Colors.transparent,
+                  dividerHeight: 0,
                   enableFeedback: true,
                   splashBorderRadius: BorderRadius.circular(10),
                   tabAlignment: TabAlignment.center,
