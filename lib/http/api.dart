@@ -719,4 +719,6 @@ class Api {
   static const String pgcIndexCondition = '/pgc/season/index/condition';
 
   static const String pgcIndexResult = '/pgc/season/index/result';
+
+  static const String noteList = '/x/note/publish/list/archive';
 }

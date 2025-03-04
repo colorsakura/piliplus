@@ -142,7 +142,7 @@ class SearchDynamic extends StatelessWidget {
                   name,
                   style: TextStyle(
                     color: vip != null
-                        ? (vip?['status'] ?? vip?['vipStatus']) > 0 &&
+                        ? (vip?['status'] ?? vip?['vipStatus'] ?? 0) > 0 &&
                                 (vip?['type'] ?? vip?['vipType']) == 2
                             ? context.vipColor
                             : null

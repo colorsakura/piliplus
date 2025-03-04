@@ -20,6 +20,7 @@ import 'package:PiliPlus/models/video/play/subtitle.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
+import 'package:PiliPlus/pages/video/detail/note/note_list_page.dart';
 import 'package:PiliPlus/pages/video/detail/related/controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply/controller.dart';
 import 'package:PiliPlus/pages/video/detail/view_v.dart' show ViewPointsPage;
@@ -1343,9 +1344,9 @@ class VideoDetailController extends GetxController
       childKey.currentState?.showBottomSheet(
         enableDrag: false,
         backgroundColor: Colors.transparent,
-        (context) => ViewPointsPage(
-          child: _postPanel(),
-        ),
+        (context) => GStorage.collapsibleVideoPage
+            ? ViewPointsPage(child: _postPanel())
+            : _postPanel(),
       );
     }
   }
@@ -2173,6 +2174,20 @@ class VideoDetailController extends GetxController
       }
     } catch (e) {
       debugPrint('_getDmTrend: $e');
+    }
+  }
+
+  void showNoteList() async {
+    if (plPlayerController.isFullScreen.value) {
+      Utils.showFSSheet(
+        child: NoteListPage(oid: oid.value),
+        isFullScreen: plPlayerController.isFullScreen.value,
+      );
+    } else {
+      childKey.currentState?.showBottomSheet(
+        backgroundColor: Colors.transparent,
+        (context) => NoteListPage(oid: oid.value),
+      );
     }
   }
 }

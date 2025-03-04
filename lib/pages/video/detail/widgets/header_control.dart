@@ -157,6 +157,16 @@ class _HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.watch_later_outlined, size: 20),
                   title: const Text('添加至「稍后再看」', style: titleStyle),
                 ),
+                if (widget.videoDetailCtr.epId == null)
+                  ListTile(
+                    dense: true,
+                    onTap: () {
+                      Get.back();
+                      widget.videoDetailCtr.showNoteList();
+                    },
+                    leading: const Icon(Icons.note_alt_outlined, size: 20),
+                    title: const Text('查看笔记', style: titleStyle),
+                  ),
                 ListTile(
                   dense: true,
                   onTap: () => {Get.back(), scheduleExit()},

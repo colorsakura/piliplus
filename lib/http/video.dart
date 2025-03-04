@@ -1134,4 +1134,27 @@ class VideoHttp {
       return LoadingState.error(res.data['message']);
     }
   }
+
+  static Future<LoadingState> getVideoNoteList({
+    dynamic oid,
+    dynamic uperMid,
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.noteList,
+      queryParameters: {
+        'csrf': await Request.getCsrf(),
+        'oid': oid,
+        'oid_type': 0,
+        'pn': page,
+        'ps': 10,
+        if (uperMid != null) 'uper_mid': uperMid,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
 }

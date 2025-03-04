@@ -11,6 +11,7 @@ Widget errorWidget({errMsg, callback}) => HttpError(
     );
 
 Widget scrollErrorWidget({errMsg, callback}) => CustomScrollView(
+      controller: ScrollController(),
       slivers: [
         HttpError(
           errMsg: errMsg,

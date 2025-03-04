@@ -406,12 +406,11 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                                                       'status'] ??
                                                                   -1) >
                                                               0 &&
-                                                          (videoIntroController
-                                                                          .userStat
-                                                                          .value['card']?['vip']
-                                                                      ?[
-                                                                      'type'] ??
-                                                                  -1) ==
+                                                          videoIntroController
+                                                                      .userStat
+                                                                      .value['card']
+                                                                  ?[
+                                                                  'vip']?['type'] ==
                                                               2
                                                       ? context.vipColor
                                                       : null,

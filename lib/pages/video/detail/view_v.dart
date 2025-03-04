@@ -1397,6 +1397,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               });
                             }
                             break;
+                          case 'note':
+                            videoDetailController.showNoteList();
+                            break;
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -1405,6 +1408,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           value: 'later',
                           child: Text('稍后再看'),
                         ),
+                        if (videoDetailController.epId == null)
+                          const PopupMenuItem<String>(
+                            value: 'note',
+                            child: Text('查看笔记'),
+                          ),
                         const PopupMenuItem<String>(
                           value: 'report',
                           child: Text('举报'),
@@ -2404,9 +2412,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
         (context) => GStorage.collapsibleVideoPage
-            ? ViewPointsPage(
-                child: listSheetContent(),
-              )
+            ? ViewPointsPage(child: listSheetContent())
             : listSheetContent(),
       );
     }

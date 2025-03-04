@@ -430,7 +430,29 @@ class PiliScheme {
     final String? area = pathSegments.first == 'mobile'
         ? pathSegments.getOrNull(1)
         : pathSegments.first;
+    debugPrint('area: $area');
     switch (area) {
+      case 'h5':
+        if (path.startsWith('/h5/note')) {
+          String? id = RegExp(r'cvid=(\d+)', caseSensitive: false)
+              .firstMatch(uri.query)
+              ?.group(1);
+          if (id != null) {
+            Utils.toDupNamed(
+              '/htmlRender',
+              parameters: {
+                'url': 'https://www.bilibili.com/read/cv$id',
+                'title': '',
+                'id': 'cv$id',
+                'dynamicType': 'read'
+              },
+              off: off,
+            );
+            return true;
+          }
+        }
+        launchURL();
+        return false;
       case 'opus' || 'dynamic':
         bool hasMatch = await _onPushDynDetail(path, off);
         if (hasMatch.not) {

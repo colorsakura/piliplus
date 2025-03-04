@@ -266,9 +266,11 @@ class ReplyItem extends StatelessWidget {
                       Text(
                         '${replyItem.member?.uname}',
                         style: TextStyle(
-                          color: (replyItem.member?.vip?['vipType'] == 2)
-                              ? context.vipColor
-                              : Theme.of(context).colorScheme.outline,
+                          color:
+                              (replyItem.member?.vip?['vipStatus'] ?? 0) > 0 &&
+                                      replyItem.member?.vip?['vipType'] == 2
+                                  ? context.vipColor
+                                  : Theme.of(context).colorScheme.outline,
                           fontSize: 13,
                         ),
                       ),

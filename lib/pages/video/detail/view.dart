@@ -1104,6 +1104,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               });
                             }
                             break;
+                          case 'note':
+                            videoDetailController.showNoteList();
+                            break;
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -1112,6 +1115,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           value: 'later',
                           child: Text('稍后再看'),
                         ),
+                        if (videoDetailController.epId == null)
+                          const PopupMenuItem<String>(
+                            value: 'note',
+                            child: Text('查看笔记'),
+                          ),
                         const PopupMenuItem<String>(
                           value: 'report',
                           child: Text('举报'),
