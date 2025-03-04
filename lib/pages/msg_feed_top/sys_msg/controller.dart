@@ -1,38 +1,27 @@
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
 import 'package:PiliPlus/http/msg.dart';
 
-import '../../../models/msg/msgfeed_sys_msg.dart';
-
-class SysMsgController extends GetxController {
-  static const pageSize = 20;
-  RxList<SystemNotifyList> msgFeedSysMsgList = <SystemNotifyList>[].obs;
-  bool isLoading = false;
+class SysMsgController extends CommonController {
+  final pageSize = 20;
   int cursor = -1;
-  bool isEnd = false;
 
-  Future queryMsgFeedSysMsg() async {
-    if (isLoading) return;
-    isLoading = true;
-    final res = await MsgHttp.msgFeedNotify(cursor: cursor, pageSize: pageSize);
-    isLoading = false;
-    if (res['status']) {
-      final data = (res['data'] as List)
-          .map((i) => SystemNotifyList.fromJson(i))
-          .toList();
-      isEnd = data.length + 1 < pageSize; // data.length会比pageSize小1
-      if (data.isNotEmpty) {
-        if (cursor == -1) {
-          msgFeedSysMsgList.assignAll(data);
-        } else {
-          msgFeedSysMsgList.addAll(data);
-        }
-        cursor = data.last.cursor ?? -1;
-        msgSysUpdateCursor(msgFeedSysMsgList.first.cursor!);
-      }
-    } else {
-      SmartDialog.showToast(res['msg']);
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
+  }
+
+  @override
+  List? handleListResponse(List currentList, List dataList) {
+    cursor = dataList.last.cursor ?? -1;
+    msgSysUpdateCursor(dataList.first.cursor!);
+    if (isEnd.not && dataList.length + 1 < pageSize) {
+      isEnd = true;
     }
+    return null;
   }
 
   Future msgSysUpdateCursor(int cursor) async {
@@ -46,23 +35,27 @@ class SysMsgController extends GetxController {
     }
   }
 
-  Future onLoad() async {
-    if (isEnd) return;
-    queryMsgFeedSysMsg();
-  }
-
-  Future onRefresh() async {
+  @override
+  Future onRefresh() {
     cursor = -1;
-    queryMsgFeedSysMsg();
+    return super.onRefresh();
   }
 
-  Future onRemove(int index) async {
-    var res = await MsgHttp.removeSysMsg(msgFeedSysMsgList[index].id);
-    if (res['status']) {
-      msgFeedSysMsgList.removeAt(index);
-      SmartDialog.showToast('删除成功');
-    } else {
-      SmartDialog.showToast(res['msg']);
-    }
+  Future onRemove(dynamic id, int index) async {
+    try {
+      var res = await MsgHttp.removeSysMsg(id);
+      if (res['status']) {
+        List list = (loadingState.value as Success).response;
+        list.removeAt(index);
+        loadingState.value = LoadingState.success(list);
+        SmartDialog.showToast('删除成功');
+      } else {
+        SmartDialog.showToast(res['msg']);
+      }
+    } catch (_) {}
   }
+
+  @override
+  Future<LoadingState> customGetData() =>
+      MsgHttp.msgFeedNotify(cursor: cursor, pageSize: pageSize);
 }

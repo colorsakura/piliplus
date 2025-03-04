@@ -1,10 +1,12 @@
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:easy_debounce/easy_throttle.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 
-import '../../../models/msg/msgfeed_like_me.dart';
 import '../../../utils/app_scheme.dart';
 import 'controller.dart';
 
@@ -17,31 +19,6 @@ class LikeMePage extends StatefulWidget {
 
 class _LikeMePageState extends State<LikeMePage> {
   late final LikeMeController _likeMeController = Get.put(LikeMeController());
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _likeMeController.queryMsgFeedLikeMe();
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future _scrollListener() async {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      EasyThrottle.throttle('my-throttler', const Duration(milliseconds: 800),
-          () async {
-        await _likeMeController.onLoad();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,155 +30,173 @@ class _LikeMePageState extends State<LikeMePage> {
         onRefresh: () async {
           await _likeMeController.onRefresh();
         },
-        // TODO: refactor
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return Obx(
-              () {
-                if (_likeMeController.msgFeedLikeMeLatestList.isEmpty &&
-                    _likeMeController.msgFeedLikeMeTotalList.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (_likeMeController
-                          .msgFeedLikeMeLatestList.isNotEmpty) ...<Widget>[
-                        Text("    最新",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline)),
-                        LikeMeList(
-                            msgFeedLikeMeList:
-                                _likeMeController.msgFeedLikeMeLatestList),
-                      ],
-                      if (_likeMeController
-                          .msgFeedLikeMeTotalList.isNotEmpty) ...<Widget>[
-                        Text("    累计",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline)),
-                        LikeMeList(
-                            msgFeedLikeMeList:
-                                _likeMeController.msgFeedLikeMeTotalList),
-                      ]
-                    ]);
-              },
-            );
-          }),
-        ),
+        child: Obx(() => _buildBody(_likeMeController.loadingState.value)),
       ),
     );
   }
-}
 
-class LikeMeList extends StatelessWidget {
-  const LikeMeList({
-    super.key,
-    required this.msgFeedLikeMeList,
-  });
-  final RxList<LikeMeItems> msgFeedLikeMeList;
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => () {
+          Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
+              loadingState.response;
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: msgFeedLikeMeList.length,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, int i) {
-        return ListTile(
-          onTap: () {
-            String? nativeUri = msgFeedLikeMeList[i].item?.nativeUri;
-            if (nativeUri != null) {
-              PiliScheme.routePushFromUrl(nativeUri);
+          int length = pair.first.length + pair.second.length;
+          if (pair.first.isNotEmpty) {
+            length++;
+          }
+          if (pair.second.isNotEmpty) {
+            length++;
+          }
+
+          LikeMeItems getCurrentItem(int index) {
+            if (pair.first.isEmpty) {
+              return pair.second[index - 1];
+            } else {
+              return index <= pair.first.length
+                  ? pair.first[index - 1]
+                  : pair.second[index - pair.first.length - 2];
             }
-            // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
-          },
-          leading: Column(
-            children: [
-              const Spacer(),
-              SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Stack(
-                    children: [
-                      for (var j = 0;
-                          j < msgFeedLikeMeList[i].users!.length && j < 4;
-                          j++) ...<Widget>[
-                        Positioned(
-                            left: 15 * (j % 2).toDouble(),
-                            top: 15 * (j ~/ 2).toDouble(),
-                            child: NetworkImgLayer(
-                              width: msgFeedLikeMeList[i].users!.length > 1
-                                  ? 30
-                                  : 45,
-                              height: msgFeedLikeMeList[i].users!.length > 1
-                                  ? 30
-                                  : 45,
-                              type: 'avatar',
-                              src: msgFeedLikeMeList[i].users![j].avatar,
-                            )),
-                      ]
-                    ],
-                  )),
-              const Spacer(),
-            ],
-          ),
-          title: Text(
-            // "${msgFeedLikeMeList[i].users!.map((e) => e.nickname).join("/")}"
-            "${msgFeedLikeMeList[i].users?[0].nickname}"
-            "${msgFeedLikeMeList[i].users!.length > 1 ? '、' + msgFeedLikeMeList[i].users![1].nickname.toString() + ' 等' : ''} "
-            "${msgFeedLikeMeList[i].counts! > 1 ? '共 ' + msgFeedLikeMeList[i].counts.toString() + ' 人' : ''}"
-            "赞了我的${msgFeedLikeMeList[i].item?.business}",
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                height: 1.5, color: Theme.of(context).colorScheme.primary),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: msgFeedLikeMeList[i].item?.title != null &&
-                  msgFeedLikeMeList[i].item?.title != ""
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    Text(msgFeedLikeMeList[i].item?.title ?? "",
-                        maxLines: 3,
+          }
+
+          return length > 0
+              ? ListView.separated(
+                  itemCount: length,
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.paddingOf(context).bottom + 80),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, int index) {
+                    if (index == length - 1) {
+                      _likeMeController.onLoadMore();
+                    }
+
+                    // title
+                    if (index == 0) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          pair.first.isNotEmpty ? '最新' : '累计',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                      );
+                    } else if (pair.first.isNotEmpty &&
+                        index == pair.first.length + 1) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          "累计",
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                      );
+                    }
+
+                    // item
+                    final item = getCurrentItem(index);
+                    return ListTile(
+                      onTap: () {
+                        String? nativeUri = item.item?.nativeUri;
+                        if (nativeUri != null) {
+                          PiliScheme.routePushFromUrl(nativeUri);
+                        }
+                      },
+                      leading: Column(
+                        children: [
+                          const Spacer(),
+                          SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Stack(
+                                children: [
+                                  for (var j = 0;
+                                      j < item.users!.length && j < 4;
+                                      j++) ...<Widget>[
+                                    Positioned(
+                                        left: 15 * (j % 2).toDouble(),
+                                        top: 15 * (j ~/ 2).toDouble(),
+                                        child: NetworkImgLayer(
+                                          width:
+                                              item.users!.length > 1 ? 30 : 45,
+                                          height:
+                                              item.users!.length > 1 ? 30 : 45,
+                                          type: 'avatar',
+                                          src: item.users![j].avatar,
+                                        )),
+                                  ]
+                                ],
+                              )),
+                          const Spacer(),
+                        ],
+                      ),
+                      title: Text(
+                        // "${msgFeedLikeMeList[i].users!.map((e) => e.nickname).join("/")}"
+                        "${item.users?[0].nickname}"
+                        "${item.users!.length > 1 ? '、${item.users![1].nickname} 等' : ''} "
+                        "${item.counts! > 1 ? '共 ${item.counts} 人' : ''}"
+                        "赞了我的${item.item?.business}",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            height: 1.5,
+                            color: Theme.of(context).colorScheme.primary),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                            height: 1.5))
-                  ],
+                      ),
+                      subtitle:
+                          item.item?.title != null && item.item?.title != ""
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 4),
+                                    Text(item.item?.title ?? "",
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                                height: 1.5))
+                                  ],
+                                )
+                              : null,
+                      trailing:
+                          item.item?.image != null && item.item?.image != ""
+                              ? NetworkImgLayer(
+                                  width: 45,
+                                  height: 45,
+                                  type: 'cover',
+                                  src: item.item?.image,
+                                )
+                              : null,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider(
+                      indent: 72,
+                      endIndent: 20,
+                      height: 6,
+                      color: Colors.grey.withOpacity(0.1),
+                    );
+                  },
                 )
-              : null,
-          trailing: msgFeedLikeMeList[i].item?.image != null &&
-                  msgFeedLikeMeList[i].item?.image != ""
-              ? NetworkImgLayer(
-                  width: 45,
-                  height: 45,
-                  type: 'cover',
-                  src: msgFeedLikeMeList[i].item?.image,
-                )
-              : null,
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return Divider(
-          indent: 72,
-          endIndent: 20,
-          height: 6,
-          color: Colors.grey.withOpacity(0.1),
-        );
-      },
-    );
+              : scrollErrorWidget(callback: _likeMeController.onReload);
+        }(),
+      Error() => scrollErrorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _likeMeController.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

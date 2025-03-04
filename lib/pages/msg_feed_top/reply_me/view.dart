@@ -1,5 +1,6 @@
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:easy_debounce/easy_throttle.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -15,33 +16,7 @@ class ReplyMePage extends StatefulWidget {
 }
 
 class _ReplyMePageState extends State<ReplyMePage> {
-  late final ReplyMeController _replyMeController =
-      Get.put(ReplyMeController());
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _replyMeController.queryMsgFeedReplyMe();
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future _scrollListener() async {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      EasyThrottle.throttle('my-throttler', const Duration(milliseconds: 800),
-          () async {
-        await _replyMeController.onLoad();
-      });
-    }
-  }
+  late final _replyMeController = Get.put(ReplyMeController());
 
   @override
   Widget build(BuildContext context) {
@@ -51,37 +26,42 @@ class _ReplyMePageState extends State<ReplyMePage> {
         onRefresh: () async {
           await _replyMeController.onRefresh();
         },
-        // TODO: refactor
-        child: Obx(
-          () {
-            if (_replyMeController.msgFeedReplyMeList.isEmpty) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.separated(
-              controller: _scrollController,
-              itemCount: _replyMeController.msgFeedReplyMeList.length,
+        child: Obx(() => _buildBody(_replyMeController.loadingState.value)),
+      ),
+    );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? ListView.separated(
+              itemCount: loadingState.response.length,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, int i) {
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              itemBuilder: (context, int index) {
+                if (index == loadingState.response.length - 1) {
+                  _replyMeController.onLoadMore();
+                }
+
                 return ListTile(
                   onTap: () {
-                    String? nativeUri = _replyMeController
-                        .msgFeedReplyMeList[i].item?.nativeUri;
+                    String? nativeUri =
+                        loadingState.response[index].item?.nativeUri;
                     if (nativeUri != null) {
                       PiliScheme.routePushFromUrl(nativeUri);
                     }
-                    // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
                   },
                   leading: NetworkImgLayer(
                     width: 45,
                     height: 45,
                     type: 'avatar',
-                    src: _replyMeController.msgFeedReplyMeList[i].user?.avatar,
+                    src: loadingState.response[index].user?.avatar,
                   ),
                   title: Text(
-                    "${_replyMeController.msgFeedReplyMeList[i].user?.nickname}  "
-                    "回复了我的${_replyMeController.msgFeedReplyMeList[i].item?.business}",
+                    "${loadingState.response[index].user?.nickname}  "
+                    "回复了我的${loadingState.response[index].item?.business}",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
@@ -93,19 +73,18 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       children: [
                         const SizedBox(height: 4),
                         Text(
-                            _replyMeController.msgFeedReplyMeList[i].item
-                                    ?.sourceContent ??
+                            loadingState.response[index].item?.sourceContent ??
                                 "",
                             style: Theme.of(context).textTheme.bodyMedium),
                         const SizedBox(height: 4),
-                        if (_replyMeController.msgFeedReplyMeList[i].item
-                                    ?.targetReplyContent !=
+                        if (loadingState
+                                    .response[index].item?.targetReplyContent !=
                                 null &&
-                            _replyMeController.msgFeedReplyMeList[i].item
-                                    ?.targetReplyContent !=
+                            loadingState
+                                    .response[index].item?.targetReplyContent !=
                                 "")
                           Text(
-                              "| ${_replyMeController.msgFeedReplyMeList[i].item?.targetReplyContent}",
+                              "| ${loadingState.response[index].item?.targetReplyContent}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
@@ -115,23 +94,25 @@ class _ReplyMePageState extends State<ReplyMePage> {
                                       color:
                                           Theme.of(context).colorScheme.outline,
                                       height: 1.5)),
-                        if (_replyMeController.msgFeedReplyMeList[i].item
-                                    ?.rootReplyContent !=
+                        if (loadingState
+                                    .response[index].item?.rootReplyContent !=
                                 null &&
-                            _replyMeController.msgFeedReplyMeList[i].item
-                                    ?.rootReplyContent !=
+                            loadingState
+                                    .response[index].item?.rootReplyContent !=
                                 "")
                           Text(
-                              " | ${_replyMeController.msgFeedReplyMeList[i].item?.rootReplyContent}",
+                              " | ${loadingState.response[index].item?.rootReplyContent}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      height: 1.5)),
+                              style:
+                                  Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          height: 1.5)),
                       ]),
                 );
               },
@@ -143,10 +124,13 @@ class _ReplyMePageState extends State<ReplyMePage> {
                   color: Colors.grey.withOpacity(0.1),
                 );
               },
-            );
-          },
+            )
+          : scrollErrorWidget(callback: _replyMeController.onReload),
+      Error() => scrollErrorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _replyMeController.onReload,
         ),
-      ),
-    );
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

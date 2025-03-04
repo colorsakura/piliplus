@@ -1,11 +1,11 @@
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:easy_debounce/easy_throttle.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 
-import '../../../utils/app_scheme.dart';
 import 'controller.dart';
 
 class AtMePage extends StatefulWidget {
@@ -17,31 +17,6 @@ class AtMePage extends StatefulWidget {
 
 class _AtMePageState extends State<AtMePage> {
   late final AtMeController _atMeController = Get.put(AtMeController());
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _atMeController.queryMsgFeedAtMe();
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future _scrollListener() async {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      EasyThrottle.throttle('my-throttler', const Duration(milliseconds: 800),
-          () async {
-        await _atMeController.onLoad();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,53 +28,51 @@ class _AtMePageState extends State<AtMePage> {
         onRefresh: () async {
           await _atMeController.onRefresh();
         },
-        child: Obx(
-          () {
-            // TODO: refactor
-            if (_atMeController.msgFeedAtMeList.isEmpty) {
-              if (_atMeController.cursor == -1 &&
-                  _atMeController.cursorTime == -1) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return scrollErrorWidget(
-                    callback: _atMeController.queryMsgFeedAtMe);
-              }
-            }
-            return ListView.separated(
-              controller: _scrollController,
-              itemCount: _atMeController.msgFeedAtMeList.length,
+        child: Obx(() => _buildBody(_atMeController.loadingState.value)),
+      ),
+    );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? ListView.separated(
+              itemCount: loadingState.response.length,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, int i) {
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              itemBuilder: (context, int index) {
+                if (index == loadingState.response.length - 1) {
+                  _atMeController.onLoadMore();
+                }
                 return ListTile(
                   onTap: () {
                     String? nativeUri =
-                        _atMeController.msgFeedAtMeList[i].item?.nativeUri;
+                        loadingState.response[index].item?.nativeUri;
                     if (nativeUri != null) {
                       PiliScheme.routePushFromUrl(nativeUri);
                     }
-                    // SmartDialog.showToast("跳转至：$nativeUri（暂未实现）");
                   },
                   leading: NetworkImgLayer(
                     width: 45,
                     height: 45,
                     type: 'avatar',
-                    src: _atMeController.msgFeedAtMeList[i].user?.avatar,
+                    src: loadingState.response[index].user?.avatar,
                   ),
                   title: Text(
-                      "${_atMeController.msgFeedAtMeList[i].user?.nickname}  "
-                      "在${_atMeController.msgFeedAtMeList[i].item?.business}中@了我",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          )),
+                    "${loadingState.response[index].user?.nickname}  "
+                    "在${loadingState.response[index].item?.business}中@了我",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 4),
                       Text(
-                          _atMeController
-                                  .msgFeedAtMeList[i].item?.sourceContent ??
+                          loadingState.response[index].item?.sourceContent ??
                               "",
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
@@ -110,14 +83,13 @@ class _AtMePageState extends State<AtMePage> {
                                   color: Theme.of(context).colorScheme.outline))
                     ],
                   ),
-                  trailing: _atMeController.msgFeedAtMeList[i].item?.image !=
-                              null &&
-                          _atMeController.msgFeedAtMeList[i].item?.image != ""
+                  trailing: loadingState.response[index].item?.image != null &&
+                          loadingState.response[index].item?.image != ""
                       ? NetworkImgLayer(
                           width: 45,
                           height: 45,
                           type: 'cover',
-                          src: _atMeController.msgFeedAtMeList[i].item?.image,
+                          src: loadingState.response[index].item?.image,
                         )
                       : null,
                 );
@@ -130,10 +102,13 @@ class _AtMePageState extends State<AtMePage> {
                   color: Colors.grey.withOpacity(0.1),
                 );
               },
-            );
-          },
+            )
+          : scrollErrorWidget(callback: _atMeController.onReload),
+      Error() => scrollErrorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _atMeController.onReload,
         ),
-      ),
-    );
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 }

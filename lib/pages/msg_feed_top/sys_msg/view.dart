@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -20,32 +21,7 @@ class SysMsgPage extends StatefulWidget {
 }
 
 class _SysMsgPageState extends State<SysMsgPage> {
-  late final SysMsgController _sysMsgController = Get.put(SysMsgController());
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _sysMsgController.queryMsgFeedSysMsg();
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future _scrollListener() async {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      EasyThrottle.throttle('my-throttler', const Duration(milliseconds: 800),
-          () async {
-        await _sysMsgController.onLoad();
-      });
-    }
-  }
+  late final _sysMsgController = Get.put(SysMsgController());
 
   @override
   Widget build(BuildContext context) {
@@ -57,21 +33,26 @@ class _SysMsgPageState extends State<SysMsgPage> {
         onRefresh: () async {
           await _sysMsgController.onRefresh();
         },
-        // TODO: refactor
-        child: Obx(
-          () {
-            if (_sysMsgController.msgFeedSysMsgList.isEmpty) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.separated(
-              controller: _scrollController,
-              itemCount: _sysMsgController.msgFeedSysMsgList.length,
+        child: Obx(() => _buildBody(_sysMsgController.loadingState.value)),
+      ),
+    );
+  }
+
+  Widget _buildBody(LoadingState loadingState) {
+    return switch (loadingState) {
+      Loading() => loadingWidget,
+      Success() => (loadingState.response as List?)?.isNotEmpty == true
+          ? ListView.separated(
+              itemCount: loadingState.response.length,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, int i) {
-                String? content =
-                    _sysMsgController.msgFeedSysMsgList[i].content;
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 80),
+              itemBuilder: (context, int index) {
+                if (index == loadingState.response.length - 1) {
+                  _sysMsgController.onLoadMore();
+                }
+
+                String? content = loadingState.response[index].content;
                 if (content != null) {
                   try {
                     dynamic jsonContent = json.decode(content);
@@ -101,7 +82,10 @@ class _SysMsgPageState extends State<SysMsgPage> {
                                 TextButton(
                                   onPressed: () {
                                     Get.back();
-                                    _sysMsgController.onRemove(i);
+                                    _sysMsgController.onRemove(
+                                      loadingState.response[index].id,
+                                      index,
+                                    );
                                   },
                                   child: const Text('确定'),
                                 ),
@@ -109,7 +93,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                             ));
                   },
                   title: Text(
-                    "${_sysMsgController.msgFeedSysMsgList[i].title}",
+                    "${loadingState.response[index].title}",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   subtitle: Column(
@@ -130,7 +114,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                       SizedBox(
                         width: double.infinity,
                         child: Text(
-                          "${_sysMsgController.msgFeedSysMsgList[i].timeAt}",
+                          "${loadingState.response[index].timeAt}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
@@ -154,11 +138,14 @@ class _SysMsgPageState extends State<SysMsgPage> {
                   color: Colors.grey.withOpacity(0.1),
                 );
               },
-            );
-          },
+            )
+          : scrollErrorWidget(callback: _sysMsgController.onReload),
+      Error() => scrollErrorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _sysMsgController.onReload,
         ),
-      ),
-    );
+      LoadingState() => throw UnimplementedError(),
+    };
   }
 
   InlineSpan _buildContent(String content) {

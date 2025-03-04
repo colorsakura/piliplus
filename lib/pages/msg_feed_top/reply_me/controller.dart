@@ -1,45 +1,44 @@
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/http/msg.dart';
 
 import '../../../models/msg/msgfeed_reply_me.dart';
 
-class ReplyMeController extends GetxController {
-  RxList<ReplyMeItems> msgFeedReplyMeList = <ReplyMeItems>[].obs;
-  bool isLoading = false;
+class ReplyMeController extends CommonController {
   int cursor = -1;
   int cursorTime = -1;
-  bool isEnd = false;
 
-  Future queryMsgFeedReplyMe() async {
-    if (isLoading) return;
-    isLoading = true;
-    var res =
-        await MsgHttp.msgFeedReplyMe(cursor: cursor, cursorTime: cursorTime);
-    isLoading = false;
-    if (res['status']) {
-      MsgFeedReplyMe data = MsgFeedReplyMe.fromJson(res['data']);
-      isEnd = data.cursor?.isEnd ?? false;
-      if (cursor == -1) {
-        msgFeedReplyMeList.assignAll(data.items!);
-      } else {
-        msgFeedReplyMeList.addAll(data.items!);
-      }
-      cursor = data.cursor?.id ?? -1;
-      cursorTime = data.cursor?.time ?? -1;
-    } else {
-      SmartDialog.showToast(res['msg']);
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
+  }
+
+  @override
+  bool customHandleResponse(Success response) {
+    MsgFeedReplyMe data = response.response;
+    if (data.cursor?.isEnd == true || data.items.isNullOrEmpty) {
+      isEnd = true;
     }
+    cursor = data.cursor?.id ?? -1;
+    cursorTime = data.cursor?.time ?? -1;
+    if (currentPage != 1 && loadingState.value is Success) {
+      data.items ??= <ReplyMeItems>[];
+      data.items!.insert(0, (loadingState.value as Success).response);
+    }
+    loadingState.value = LoadingState.success(data.items);
+    return true;
   }
 
-  Future onLoad() async {
-    if (isEnd) return;
-    queryMsgFeedReplyMe();
-  }
-
-  Future onRefresh() async {
+  @override
+  Future onRefresh() {
     cursor = -1;
     cursorTime = -1;
-    queryMsgFeedReplyMe();
+    return super.onRefresh();
   }
+
+  @override
+  Future<LoadingState> customGetData() =>
+      MsgHttp.msgFeedReplyMe(cursor: cursor, cursorTime: cursorTime);
 }

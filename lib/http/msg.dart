@@ -1,5 +1,10 @@
 import 'dart:math';
 import 'package:PiliPlus/http/constants.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
+import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
+import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
+import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart' show ReplyOption;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +17,8 @@ import 'api.dart';
 import 'init.dart';
 
 class MsgHttp {
-  static Future msgFeedReplyMe({int cursor = -1, int cursorTime = -1}) async {
+  static Future<LoadingState> msgFeedReplyMe(
+      {int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedReply, queryParameters: {
       'id': cursor == -1 ? null : cursor,
       'reply_time': cursorTime == -1 ? null : cursorTime,
@@ -21,20 +27,15 @@ class MsgHttp {
       'build': '8350200',
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data'],
-      };
+      MsgFeedReplyMe data = MsgFeedReplyMe.fromJson(res.data['data']);
+      return LoadingState.success(data);
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 
-  static Future msgFeedAtMe({int cursor = -1, int cursorTime = -1}) async {
+  static Future<LoadingState> msgFeedAtMe(
+      {int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedAt, queryParameters: {
       'id': cursor == -1 ? null : cursor,
       'at_time': cursorTime == -1 ? null : cursorTime,
@@ -43,20 +44,15 @@ class MsgHttp {
       'build': '8350200',
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data'],
-      };
+      MsgFeedAtMe data = MsgFeedAtMe.fromJson(res.data['data']);
+      return LoadingState.success(data);
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 
-  static Future msgFeedLikeMe({int cursor = -1, int cursorTime = -1}) async {
+  static Future<LoadingState> msgFeedLikeMe(
+      {int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedLike, queryParameters: {
       'id': cursor == -1 ? null : cursor,
       'like_time': cursorTime == -1 ? null : cursorTime,
@@ -65,35 +61,26 @@ class MsgHttp {
       'build': '8350200',
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data'],
-      };
+      MsgFeedLikeMe data = MsgFeedLikeMe.fromJson(res.data['data']);
+      return LoadingState.success(data);
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 
-  static Future msgFeedNotify({int cursor = -1, int pageSize = 20}) async {
+  static Future<LoadingState> msgFeedNotify(
+      {int cursor = -1, int pageSize = 20}) async {
     var res = await Request().get(Api.msgSysNotify, queryParameters: {
       'cursor': cursor == -1 ? null : cursor,
       'page_size': pageSize,
     });
     if (res.data['code'] == 0) {
-      return {
-        'status': true,
-        'data': res.data['data'],
-      };
+      List<SystemNotifyList>? list = (res.data['data'] as List?)
+          ?.map((e) => SystemNotifyList.fromJson(e))
+          .toList();
+      return LoadingState.success(list);
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return LoadingState.error(res.data['message']);
     }
   }
 

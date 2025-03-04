@@ -86,6 +86,7 @@ class _NoteListPageState extends State<NoteListPage> {
               },
               child: CustomScrollView(
                 controller: ScrollController(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   SliverList.separated(
                     itemBuilder: (context, index) {

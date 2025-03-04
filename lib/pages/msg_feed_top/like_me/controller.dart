@@ -1,47 +1,57 @@
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/get.dart';
+import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import '../../../models/msg/msgfeed_like_me.dart';
 
-class LikeMeController extends GetxController {
-  RxList<LikeMeItems> msgFeedLikeMeLatestList = <LikeMeItems>[].obs;
-  RxList<LikeMeItems> msgFeedLikeMeTotalList = <LikeMeItems>[].obs;
-  bool isLoading = false;
+class LikeMeController extends CommonController {
   int cursor = -1;
   int cursorTime = -1;
-  bool isEnd = false;
 
-  Future queryMsgFeedLikeMe() async {
-    if (isLoading) return;
-    isLoading = true;
-    var res =
-        await MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
-    isLoading = false;
-    if (res['status']) {
-      MsgFeedLikeMe data = MsgFeedLikeMe.fromJson(res['data']);
-      isEnd = data.total?.cursor?.isEnd ?? false;
-      if (cursor == -1) {
-        msgFeedLikeMeLatestList.assignAll(data.latest?.items ?? []);
-        msgFeedLikeMeTotalList.assignAll(data.total?.items ?? []);
-      } else {
-        msgFeedLikeMeLatestList.addAll(data.latest?.items ?? []);
-        msgFeedLikeMeTotalList.addAll(data.total?.items ?? []);
-      }
-      cursor = data.total?.cursor?.id ?? -1;
-      cursorTime = data.total?.cursor?.time ?? -1;
-    } else {
-      SmartDialog.showToast(res['msg']);
+  @override
+  void onInit() {
+    super.onInit();
+    queryData();
+  }
+
+  @override
+  bool customHandleResponse(Success response) {
+    MsgFeedLikeMe data = response.response;
+    if (data.total?.cursor?.isEnd == true ||
+        data.total?.items.isNullOrEmpty == true) {
+      isEnd = true;
     }
+    cursor = data.total?.cursor?.id ?? -1;
+    cursorTime = data.total?.cursor?.time ?? -1;
+    List<LikeMeItems> latest = <LikeMeItems>[];
+    List<LikeMeItems> total = <LikeMeItems>[];
+    if (data.latest?.items?.isNotEmpty == true) {
+      latest.addAll(data.latest!.items!);
+    }
+    if (data.total?.items?.isNotEmpty == true) {
+      total.addAll(data.total!.items!);
+    }
+    if (currentPage != 1 && loadingState.value is Success) {
+      Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
+          (loadingState.value as Success).response;
+      latest.insertAll(0, pair.first);
+      total.insertAll(0, pair.second);
+    }
+    loadingState.value = LoadingState.success(
+      Pair(first: latest, second: total),
+    );
+    return true;
   }
 
-  Future onLoad() async {
-    if (isEnd) return;
-    queryMsgFeedLikeMe();
-  }
-
-  Future onRefresh() async {
+  @override
+  Future onRefresh() {
     cursor = -1;
     cursorTime = -1;
-    queryMsgFeedLikeMe();
+    return super.onRefresh();
   }
+
+  @override
+  Future<LoadingState> customGetData() =>
+      MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
 }
