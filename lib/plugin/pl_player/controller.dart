@@ -311,10 +311,10 @@ class PlPlayerController {
         textScaleFactor: MediaQuery.textScalerOf(Get.context!).scale(1),
       );
 
-  Function? getPlayerKey;
+  GlobalKey<VideoState> Function()? getPlayerKey;
 
   void updateSubtitleStyle() {
-    getPlayerKey?.call()?.currentState?.update(
+    getPlayerKey?.call().currentState?.update(
           subtitleViewConfiguration: subtitleViewConfiguration,
         );
   }
@@ -1235,6 +1235,7 @@ class PlPlayerController {
     _videoFit.value = videoFitType[value.index]['attr'];
     _videoFitDesc.value = videoFitType[value.index]['desc'];
     setVideoFit();
+    getPlayerKey?.call().currentState?.update(fit: value);
     // showDialog(
     //   context: Get.context!,
     //   builder: (context) {
