@@ -33,9 +33,6 @@ abstract class CommonPublishPage extends StatefulWidget {
   final int? imageLengthLimit;
   final ValueChanged<String>? onSave;
   final bool autofocus;
-
-  @override
-  State<CommonPublishPage> createState();
 }
 
 abstract class CommonPublishPageState<T extends CommonPublishPage>

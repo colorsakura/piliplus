@@ -202,7 +202,7 @@ class Utils {
 
   static void showFSSheet({
     required Widget child,
-    required bool isFullScreen,
+    required Function isFullScreen,
     double? padding,
   }) {
     Navigator.of(Get.context!).push(
@@ -212,15 +212,28 @@ class Utils {
               ? Column(
                   children: [
                     const Spacer(flex: 3),
-                    Expanded(flex: 7, child: child),
-                    if (isFullScreen && padding != null)
+                    Expanded(
+                      flex: 7,
+                      child: MediaQuery.removePadding(
+                        context: Get.context!,
+                        removeTop: true,
+                        child: child,
+                      ),
+                    ),
+                    if (isFullScreen() && padding != null)
                       SizedBox(height: padding),
                   ],
                 )
               : Row(
                   children: [
                     const Spacer(),
-                    Expanded(child: child),
+                    Expanded(
+                      child: MediaQuery.removePadding(
+                        context: Get.context!,
+                        removeLeft: true,
+                        child: child,
+                      ),
+                    ),
                   ],
                 );
         },

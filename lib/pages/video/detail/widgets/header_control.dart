@@ -100,7 +100,7 @@ class _HeaderControlState extends State<HeaderControl> {
   /// 设置面板
   void showSettingSheet() {
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -162,7 +162,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     dense: true,
                     onTap: () {
                       Get.back();
-                      widget.videoDetailCtr.showNoteList();
+                      widget.videoDetailCtr.showNoteList(context);
                     },
                     leading: const Icon(Icons.note_alt_outlined, size: 20),
                     title: const Text('查看笔记', style: titleStyle),
@@ -570,7 +570,7 @@ class _HeaderControlState extends State<HeaderControl> {
   void scheduleExit() async {
     const List<int> scheduleTimeChoices = [0, 15, 30, 45, 60];
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       child: StatefulBuilder(
         builder: (context, setState) {
           return Container(
@@ -778,7 +778,7 @@ class _HeaderControlState extends State<HeaderControl> {
     }
 
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -882,7 +882,7 @@ class _HeaderControlState extends State<HeaderControl> {
     final AudioQuality currentAudioQa = widget.videoDetailCtr.currentAudioQa!;
     final List<AudioItem> audio = videoInfo.dash!.audio!;
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -973,7 +973,7 @@ class _HeaderControlState extends State<HeaderControl> {
     }
 
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -1082,7 +1082,7 @@ class _HeaderControlState extends State<HeaderControl> {
     final DanmakuController? danmakuController =
         widget.controller.danmakuController;
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       padding: isFullScreen ? 70 : null,
       child: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
@@ -1702,7 +1702,7 @@ class _HeaderControlState extends State<HeaderControl> {
   /// 播放顺序
   void showSetRepeat() async {
     Utils.showFSSheet(
-      isFullScreen: isFullScreen,
+      isFullScreen: () => isFullScreen,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(

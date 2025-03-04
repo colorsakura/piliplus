@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/danmu.dart';
 import 'package:PiliPlus/common/widgets/stat/view.dart';
+import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class MediaListPanel extends StatefulWidget {
+class MediaListPanel extends CommonSlidePage {
   const MediaListPanel({
     super.key,
     required this.mediaList,
@@ -42,7 +43,7 @@ class MediaListPanel extends StatefulWidget {
   State<MediaListPanel> createState() => _MediaListPanelState();
 }
 
-class _MediaListPanelState extends State<MediaListPanel> {
+class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
   final _scrollController = ItemScrollController();
   late RxBool desc;
 
@@ -62,7 +63,7 @@ class _MediaListPanelState extends State<MediaListPanel> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget get buildPage {
     return Column(
       children: [
         AppBar(
@@ -92,18 +93,21 @@ class _MediaListPanelState extends State<MediaListPanel> {
           ],
         ),
         Expanded(
-          child: widget.loadPrevious != null
-              ? refreshIndicator(
-                  onRefresh: () async {
-                    await widget.loadPrevious!();
-                  },
-                  child: _buildList,
-                )
-              : _buildList,
+          child: enableSlide ? slideList() : buildList,
         ),
       ],
     );
   }
+
+  @override
+  Widget get buildList => widget.loadPrevious != null
+      ? refreshIndicator(
+          onRefresh: () async {
+            await widget.loadPrevious!();
+          },
+          child: _buildList,
+        )
+      : _buildList;
 
   Widget get _buildList => Obx(
         () => ScrollablePositionedList.builder(

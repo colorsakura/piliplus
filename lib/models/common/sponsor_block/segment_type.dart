@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
+
 enum SegmentType {
   sponsor,
   selfpromo,
@@ -11,6 +13,74 @@ enum SegmentType {
   poi_highlight,
   filler,
   exclusive_access
+}
+
+// List<SegmentType> _actionType2SegmentType(ActionType actionType) {
+//   return switch (actionType) {
+//     ActionType.skip => [
+//         SegmentType.sponsor,
+//         SegmentType.selfpromo,
+//         SegmentType.interaction,
+//         SegmentType.intro,
+//         SegmentType.outro,
+//         SegmentType.preview,
+//         SegmentType.filler,
+//       ],
+//     ActionType.mute => [
+//         SegmentType.sponsor,
+//         SegmentType.selfpromo,
+//         SegmentType.interaction,
+//         SegmentType.intro,
+//         SegmentType.outro,
+//         SegmentType.preview,
+//         SegmentType.music_offtopic,
+//         SegmentType.filler,
+//       ],
+//     ActionType.full => [
+//         SegmentType.sponsor,
+//         SegmentType.selfpromo,
+//         SegmentType.exclusive_access,
+//       ],
+//     ActionType.poi => [
+//         SegmentType.poi_highlight,
+//       ],
+//   };
+// }
+
+List<ActionType> segmentType2ActionType(SegmentType segmentType) {
+  return switch (segmentType) {
+    SegmentType.sponsor => [ActionType.skip, ActionType.mute, ActionType.full],
+    SegmentType.selfpromo => [
+        ActionType.skip,
+        ActionType.mute,
+        ActionType.full
+      ],
+    SegmentType.interaction => [
+        ActionType.skip,
+        ActionType.mute,
+      ],
+    SegmentType.intro => [
+        ActionType.skip,
+        ActionType.mute,
+      ],
+    SegmentType.outro => [
+        ActionType.skip,
+        ActionType.mute,
+      ],
+    SegmentType.preview => [
+        ActionType.skip,
+        ActionType.mute,
+      ],
+    SegmentType.music_offtopic => [
+        ActionType.skip,
+      ],
+    SegmentType.poi_highlight => [ActionType.poi],
+    SegmentType.filler => [
+        ActionType.skip,
+        ActionType.mute,
+      ],
+    SegmentType.exclusive_access => [ActionType.full],
+  };
 }
 
 extension SegmentTypeExt on SegmentType {

@@ -4,9 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/list_sheet.dart';
-import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
@@ -18,6 +16,7 @@ import 'package:PiliPlus/pages/video/detail/introduction/widgets/page.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/season.dart';
 import 'package:PiliPlus/pages/video/detail/member/horizontal_member_page.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/view.dart';
+import 'package:PiliPlus/pages/video/detail/view_point/view_points_page.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -35,7 +34,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/bangumi/introduction/index.dart';
@@ -1398,7 +1396,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             }
                             break;
                           case 'note':
-                            videoDetailController.showNoteList();
+                            videoDetailController.showNoteList(context);
                             break;
                         }
                       },
@@ -1862,7 +1860,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 VideoIntroPanel(
                   heroTag: heroTag,
                   showAiBottomSheet: showAiBottomSheet,
-                  showIntroDetail: showIntroDetail,
                   showEpisodes: showEpisodes,
                   onShowMemberPage: onShowMemberPage,
                 ),
@@ -2126,15 +2123,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   // ai总结
   showAiBottomSheet() {
     videoDetailController.childKey.currentState?.showBottomSheet(
-      enableDrag: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
       (context) => AiDetail(modelResult: videoIntroController.modelResult),
     );
   }
 
   showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
-      enableDrag: true,
+      shape: const RoundedRectangleBorder(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       (context) => videoDetail is BangumiInfoModel
           ? bangumi.IntroDetail(
@@ -2149,7 +2145,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   showEpisodes(index, season, episodes, bvid, aid, cid) {
-    Widget listSheetContent() => ListSheetContent(
+    Widget listSheetContent([bool? enableSlide]) => ListSheetContent(
+          enableSlide: enableSlide,
           index: index,
           season: season,
           bvid: bvid,
@@ -2180,15 +2177,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         );
     if (isFullScreen) {
       Utils.showFSSheet(
-        child: Material(
-          color: Theme.of(context).colorScheme.surface,
-          child: listSheetContent(),
-        ),
-        isFullScreen: isFullScreen,
+        child: listSheetContent(false),
+        isFullScreen: () => isFullScreen,
       );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.transparent,
         (context) => listSheetContent(),
       );
     }
@@ -2265,155 +2259,22 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   }
 
   void showViewPoints() {
-    Widget listSheetContent() {
-      int currentIndex = -1;
-      return StatefulBuilder(
-        builder: (context, setState) => Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            titleSpacing: 16,
-            title: const Text('分段信息'),
-            actions: [
-              Text(
-                '分段进度条',
-                style: TextStyle(fontSize: 16),
-              ),
-              Obx(
-                () => Transform.scale(
-                  alignment: Alignment.centerLeft,
-                  scale: 0.8,
-                  child: Switch(
-                    thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
-                      if (states.isNotEmpty &&
-                          states.first == WidgetState.selected) {
-                        return const Icon(Icons.done);
-                      }
-                      return null;
-                    }),
-                    value:
-                        videoDetailController.plPlayerController.showVP.value,
-                    onChanged: (value) {
-                      videoDetailController.plPlayerController.showVP.value =
-                          value;
-                    },
-                  ),
-                ),
-              ),
-              iconButton(
-                context: context,
-                size: 30,
-                icon: Icons.clear,
-                tooltip: '关闭',
-                onPressed: Get.back,
-              ),
-              const SizedBox(width: 16),
-            ],
-          ),
-          body: SingleChildScrollView(
-            controller: ScrollController(),
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                ...List.generate(
-                    videoDetailController.viewPointList.length * 2 - 1,
-                    (rawIndex) {
-                  if (rawIndex % 2 == 1) {
-                    return Divider(
-                      height: 1,
-                      color: Theme.of(context).dividerColor.withOpacity(0.1),
-                    );
-                  }
-                  int index = rawIndex ~/ 2;
-                  Segment segment = videoDetailController.viewPointList[index];
-                  if (currentIndex == -1 &&
-                      segment.from != null &&
-                      segment.to != null) {
-                    if (videoDetailController
-                                .plPlayerController.positionSeconds.value >=
-                            segment.from! &&
-                        videoDetailController
-                                .plPlayerController.positionSeconds.value <
-                            segment.to!) {
-                      currentIndex = index;
-                    }
-                  }
-                  return ListTile(
-                    dense: true,
-                    onTap: segment.from != null
-                        ? () {
-                            currentIndex = index;
-                            plPlayerController?.danmakuController?.clear();
-                            plPlayerController?.videoPlayerController
-                                ?.seek(Duration(seconds: segment.from!));
-                            Get.back();
-                          }
-                        : null,
-                    leading: segment.url?.isNotEmpty == true
-                        ? Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            decoration: currentIndex == index
-                                ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                      width: 1.8,
-                                      strokeAlign:
-                                          BorderSide.strokeAlignOutside,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  )
-                                : null,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) =>
-                                  NetworkImgLayer(
-                                radius: 6,
-                                src: segment.url,
-                                width: constraints.maxHeight *
-                                    StyleString.aspectRatio,
-                                height: constraints.maxHeight,
-                              ),
-                            ),
-                          )
-                        : null,
-                    title: Text(
-                      segment.title ?? '',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight:
-                            currentIndex == index ? FontWeight.bold : null,
-                        color: currentIndex == index
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
-                      ),
-                    ),
-                    subtitle: Text(
-                      '${segment.from != null ? Utils.timeFormat(segment.from) : ''} - ${segment.to != null ? Utils.timeFormat(segment.to) : ''}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: currentIndex == index
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                  );
-                }),
-                SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     if (isFullScreen) {
-      Utils.showFSSheet(child: listSheetContent(), isFullScreen: isFullScreen);
+      Utils.showFSSheet(
+        child: ViewPointsPage(
+          enableSlide: false,
+          videoDetailController: videoDetailController,
+          plPlayerController: plPlayerController,
+        ),
+        isFullScreen: () => isFullScreen,
+      );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
-        (context) => GStorage.collapsibleVideoPage
-            ? ViewPointsPage(child: listSheetContent())
-            : listSheetContent(),
+        (context) => ViewPointsPage(
+          videoDetailController: videoDetailController,
+          plPlayerController: plPlayerController,
+        ),
       );
     }
   }
@@ -2434,6 +2295,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   void onShowMemberPage(mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
+      shape: const RoundedRectangleBorder(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       (context) {
         return HorizontalMemberPage(
@@ -2442,41 +2304,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           videoIntroController: videoIntroController,
         );
       },
-      enableDrag: true,
     );
-  }
-}
-
-class ViewPointsPage extends StatefulWidget {
-  const ViewPointsPage({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  State<ViewPointsPage> createState() => _ViewPointsPageState();
-}
-
-class _ViewPointsPageState extends State<ViewPointsPage> {
-  bool _isInit = true;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          _isInit = false;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _isInit
-        ? CustomScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-          )
-        : widget.child;
   }
 }

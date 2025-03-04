@@ -2,9 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/icon_button.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -21,9 +18,9 @@ import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/note/note_list_page.dart';
+import 'package:PiliPlus/pages/video/detail/post_panel/post_panel.dart';
 import 'package:PiliPlus/pages/video/detail/related/controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply/controller.dart';
-import 'package:PiliPlus/pages/video/detail/view_v.dart' show ViewPointsPage;
 import 'package:PiliPlus/pages/video/detail/widgets/send_danmaku_panel.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/watch_later_list.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -33,7 +30,6 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/constants.dart';
@@ -47,7 +43,6 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:hive/hive.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../../utils/id_utils.dart';
 import 'widgets/header_control.dart';
@@ -400,6 +395,7 @@ class VideoDetailController extends GetxController
   showMediaListPanel(context) {
     if (mediaList.isNotEmpty) {
       childKey.currentState?.showBottomSheet(
+        shape: const RoundedRectangleBorder(),
         backgroundColor: Theme.of(context).colorScheme.surface,
         (context) => MediaListPanel(
           mediaList: mediaList,
@@ -463,7 +459,7 @@ class VideoDetailController extends GetxController
   List<Color>? _blockColor;
   RxList<SegmentModel> segmentList = <SegmentModel>[].obs;
   List<Segment> viewPointList = <Segment>[];
-  List<Segment>? _segmentProgressList;
+  List<Segment>? segmentProgressList;
   Color _getColor(SegmentType segment) =>
       _blockColor?[segment.index] ?? segment.color;
   late RxString videoLabel = ''.obs;
@@ -481,7 +477,7 @@ class VideoDetailController extends GetxController
         'userID': GStorage.blockUserID,
         'type': type,
       },
-      options: _options,
+      options: options,
     )
         .then((res) {
       SmartDialog.showToast(res.statusCode == 200 ? '投票成功' : '投票失败');
@@ -510,7 +506,7 @@ class VideoDetailController extends GetxController
                             'userID': GStorage.blockUserID,
                             'category': item.name,
                           },
-                          options: _options,
+                          options: options,
                         )
                             .then((res) {
                           SmartDialog.showToast(
@@ -705,25 +701,25 @@ class VideoDetailController extends GetxController
     );
   }
 
-  Options get _options => Options(extra: {'clearCookie': true});
+  Options get options => Options(extra: {'clearCookie': true});
 
   Future _querySponsorBlock() async {
     positionSubscription?.cancel();
     videoLabel.value = '';
     segmentList.clear();
-    _segmentProgressList = null;
+    segmentProgressList = null;
     dynamic result = await Request().get(
       '${GStorage.blockServer}/api/skipSegments',
       queryParameters: {
         'videoID': bvid,
         'cid': cid.value,
       },
-      options: _options,
+      options: options,
     );
-    _handleSBData(result);
+    handleSBData(result);
   }
 
-  void _handleSBData(result) {
+  void handleSBData(result) {
     if (result.data is List && result.data.isNotEmpty) {
       try {
         List<String> list =
@@ -767,8 +763,8 @@ class VideoDetailController extends GetxController
         ).toList());
 
         // _segmentProgressList
-        _segmentProgressList ??= <Segment>[];
-        _segmentProgressList!.addAll(segmentList.map((item) {
+        segmentProgressList ??= <Segment>[];
+        segmentProgressList!.addAll(segmentList.map((item) {
           double start = (item.segment.first / ((data.timeLength ?? 0) / 1000))
               .clamp(0.0, 1.0);
           double end = (item.segment.second / ((data.timeLength ?? 0) / 1000))
@@ -789,7 +785,7 @@ class VideoDetailController extends GetxController
             : -1;
   }
 
-  void _initSkip() {
+  void initSkip() {
     if (segmentList.isNotEmpty) {
       positionSubscription = plPlayerController
           .videoPlayerController?.stream.position
@@ -920,7 +916,7 @@ class VideoDetailController extends GetxController
         Request().post(
           '${GStorage.blockServer}/api/viewedVideoSponsorTime',
           queryParameters: {'UUID': item.UUID},
-          options: _options,
+          options: options,
         );
       }
     } catch (e) {
@@ -1073,7 +1069,7 @@ class VideoDetailController extends GetxController
           'referer': HttpString.baseUrl
         },
       ),
-      segmentList: _segmentProgressList,
+      segmentList: segmentProgressList,
       viewPointList: viewPointList,
       vttSubtitles: _vttSubtitles,
       vttSubtitlesIndex: vttSubtitlesIndex,
@@ -1102,7 +1098,7 @@ class VideoDetailController extends GetxController
       },
     );
 
-    _initSkip();
+    initSkip();
 
     if (vttSubtitlesIndex == null) {
       _getSubtitle();
@@ -1337,599 +1333,22 @@ class VideoDetailController extends GetxController
     }
     if (plPlayerController.isFullScreen.value) {
       Utils.showFSSheet(
-        child: _postPanel(),
-        isFullScreen: plPlayerController.isFullScreen.value,
+        child: PostPanel(
+          enableSlide: false,
+          videoDetailController: this,
+          plPlayerController: plPlayerController,
+        ),
+        isFullScreen: () => plPlayerController.isFullScreen.value,
       );
     } else {
       childKey.currentState?.showBottomSheet(
-        enableDrag: false,
         backgroundColor: Colors.transparent,
-        (context) => GStorage.collapsibleVideoPage
-            ? ViewPointsPage(child: _postPanel())
-            : _postPanel(),
+        (context) => PostPanel(
+          videoDetailController: this,
+          plPlayerController: plPlayerController,
+        ),
       );
     }
-  }
-
-  Widget _postPanel() => StatefulBuilder(
-        builder: (context, setState) {
-          void updateSegment({
-            required bool isFirst,
-            required int index,
-            required int value,
-          }) {
-            if (isFirst) {
-              list![index].segment.first = value;
-            } else {
-              list![index].segment.second = value;
-            }
-            if (list![index].category == SegmentType.poi_highlight ||
-                list![index].actionType == ActionType.full) {
-              list![index].segment.second = value;
-            }
-          }
-
-          List<Widget> segmentWidget({
-            required int index,
-            required bool isFirst,
-          }) {
-            String value = Utils.timeFormat(isFirst
-                ? list![index].segment.first
-                : list![index].segment.second);
-            return [
-              Text(
-                '${isFirst ? '开始' : '结束'}: $value',
-              ),
-              const SizedBox(width: 5),
-              iconButton(
-                context: context,
-                size: 26,
-                tooltip: '使用当前位置时间',
-                icon: Icons.my_location,
-                onPressed: () {
-                  setState(() {
-                    updateSegment(
-                      isFirst: isFirst,
-                      index: index,
-                      value: plPlayerController.positionSeconds.value,
-                    );
-                  });
-                },
-              ),
-              const SizedBox(width: 5),
-              iconButton(
-                context: context,
-                size: 26,
-                tooltip: '编辑',
-                icon: Icons.edit,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      String initV = value;
-                      return AlertDialog(
-                        content: TextFormField(
-                          initialValue: value,
-                          autofocus: true,
-                          onChanged: (value) {
-                            initV = value;
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'[\d:]+'),
-                            ),
-                          ],
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: Get.back,
-                            child: Text(
-                              '取消',
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => Get.back(result: initV),
-                            child: Text('确定'),
-                          ),
-                        ],
-                      );
-                    },
-                  ).then((res) {
-                    if (res != null) {
-                      try {
-                        List<int> split = (res as String)
-                            .split(':')
-                            .toList()
-                            .reversed
-                            .toList()
-                            .map((e) => int.parse(e))
-                            .toList();
-                        int duration = 0;
-                        for (int i = 0; i < split.length; i++) {
-                          duration += split[i] * pow(60, i).toInt();
-                        }
-                        if (duration <=
-                            plPlayerController
-                                .durationSeconds.value.inSeconds) {
-                          setState(() {
-                            updateSegment(
-                              isFirst: isFirst,
-                              index: index,
-                              value: duration,
-                            );
-                          });
-                        }
-                      } catch (e) {
-                        debugPrint(e.toString());
-                      }
-                    }
-                  });
-                },
-              ),
-            ];
-          }
-
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              titleSpacing: 16,
-              title: const Text('提交片段'),
-              actions: [
-                iconButton(
-                  context: context,
-                  tooltip: '添加片段',
-                  onPressed: () {
-                    setState(() {
-                      list?.insert(
-                        0,
-                        PostSegmentModel(
-                          segment: Pair(
-                            first: 0,
-                            second: plPlayerController.positionSeconds.value,
-                          ),
-                          category: SegmentType.sponsor,
-                          actionType: ActionType.skip,
-                        ),
-                      );
-                    });
-                  },
-                  icon: Icons.add,
-                ),
-                const SizedBox(width: 10),
-                iconButton(
-                  context: context,
-                  tooltip: '关闭',
-                  onPressed: Get.back,
-                  icon: Icons.close,
-                ),
-                const SizedBox(width: 16),
-              ],
-            ),
-            body: list?.isNotEmpty == true
-                ? Stack(
-                    children: [
-                      SingleChildScrollView(
-                        controller: ScrollController(),
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            ...List.generate(
-                              list!.length,
-                              (index) => Stack(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 5,
-                                    ),
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onInverseSurface,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (list![index].actionType !=
-                                            ActionType.full) ...[
-                                          Wrap(
-                                            runSpacing: 8,
-                                            spacing: 16,
-                                            children: [
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: segmentWidget(
-                                                  isFirst: true,
-                                                  index: index,
-                                                ),
-                                              ),
-                                              if (list![index].category !=
-                                                  SegmentType.poi_highlight)
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: segmentWidget(
-                                                    isFirst: false,
-                                                    index: index,
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                        ],
-                                        Wrap(
-                                          runSpacing: 8,
-                                          spacing: 16,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const Text('分类: '),
-                                                PopupMenuButton(
-                                                  initialValue:
-                                                      list![index].category,
-                                                  onSelected: (item) async {
-                                                    list![index].category =
-                                                        item;
-                                                    List<ActionType>
-                                                        constraintList =
-                                                        _segmentType2ActionType(
-                                                            item);
-                                                    if (constraintList
-                                                        .contains(list![index]
-                                                            .actionType)
-                                                        .not) {
-                                                      list![index].actionType =
-                                                          constraintList.first;
-                                                    }
-                                                    switch (item) {
-                                                      case SegmentType
-                                                            .poi_highlight:
-                                                        updateSegment(
-                                                          isFirst: false,
-                                                          index: index,
-                                                          value: list![index]
-                                                              .segment
-                                                              .first,
-                                                        );
-                                                        break;
-                                                      case SegmentType
-                                                            .exclusive_access:
-                                                        updateSegment(
-                                                          isFirst: true,
-                                                          index: index,
-                                                          value: 0,
-                                                        );
-                                                        break;
-                                                      case _:
-                                                    }
-                                                    setState(() {});
-                                                  },
-                                                  itemBuilder: (context) =>
-                                                      SegmentType.values
-                                                          .map((item) =>
-                                                              PopupMenuItem<
-                                                                  SegmentType>(
-                                                                value: item,
-                                                                child: Text(
-                                                                    item.title),
-                                                              ))
-                                                          .toList(),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        list![index]
-                                                            .category
-                                                            .title,
-                                                        style: TextStyle(
-                                                          height: 1,
-                                                          fontSize: 14,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .secondary,
-                                                        ),
-                                                        strutStyle: StrutStyle(
-                                                          height: 1,
-                                                          leading: 0,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        MdiIcons
-                                                            .unfoldMoreHorizontal,
-                                                        size: MediaQuery
-                                                                .textScalerOf(
-                                                                    context)
-                                                            .scale(14),
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const Text('行为类别: '),
-                                                PopupMenuButton(
-                                                  initialValue:
-                                                      list![index].actionType,
-                                                  onSelected: (item) async {
-                                                    list![index].actionType =
-                                                        item;
-                                                    if (item ==
-                                                        ActionType.full) {
-                                                      updateSegment(
-                                                        isFirst: true,
-                                                        index: index,
-                                                        value: 0,
-                                                      );
-                                                    }
-                                                    setState(() {});
-                                                  },
-                                                  itemBuilder: (context) =>
-                                                      ActionType.values
-                                                          .map(
-                                                            (item) =>
-                                                                PopupMenuItem<
-                                                                    ActionType>(
-                                                              enabled: _segmentType2ActionType(
-                                                                      list![index]
-                                                                          .category)
-                                                                  .contains(
-                                                                      item),
-                                                              value: item,
-                                                              child: Text(
-                                                                  item.title),
-                                                            ),
-                                                          )
-                                                          .toList(),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        list![index]
-                                                            .actionType
-                                                            .title,
-                                                        style: TextStyle(
-                                                          height: 1,
-                                                          fontSize: 14,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .secondary,
-                                                        ),
-                                                        strutStyle: StrutStyle(
-                                                          height: 1,
-                                                          leading: 0,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        MdiIcons
-                                                            .unfoldMoreHorizontal,
-                                                        size: MediaQuery
-                                                                .textScalerOf(
-                                                                    context)
-                                                            .scale(14),
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 10,
-                                    right: 21,
-                                    child: iconButton(
-                                      context: context,
-                                      size: 26,
-                                      tooltip: '移除',
-                                      icon: Icons.clear,
-                                      onPressed: () {
-                                        setState(() {
-                                          list!.removeAt(index);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 88 + MediaQuery.paddingOf(context).bottom,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        right: 16,
-                        bottom: 16 + MediaQuery.paddingOf(context).bottom,
-                        child: FloatingActionButton(
-                          tooltip: '提交',
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('确定无误再提交'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: Get.back,
-                                    child: Text(
-                                      '取消',
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                      Request()
-                                          .post(
-                                        '${GStorage.blockServer}/api/skipSegments',
-                                        queryParameters: {
-                                          'videoID': bvid,
-                                          'cid': cid.value,
-                                          'userID': GStorage.blockUserID,
-                                          'userAgent': Constants.userAgent,
-                                          'videoDuration': plPlayerController
-                                              .durationSeconds.value.inSeconds,
-                                        },
-                                        data: {
-                                          'segments': list!
-                                              .map(
-                                                (item) => {
-                                                  'segment': [
-                                                    item.segment.first,
-                                                    item.segment.second,
-                                                  ],
-                                                  'category':
-                                                      item.category.name,
-                                                  'actionType':
-                                                      item.actionType.name,
-                                                },
-                                              )
-                                              .toList(),
-                                        },
-                                        options: _options,
-                                      )
-                                          .then(
-                                        (res) {
-                                          if (res.statusCode == 200) {
-                                            Get.back();
-                                            SmartDialog.showToast('提交成功');
-                                            list?.clear();
-                                            _handleSBData(res);
-                                            plPlayerController
-                                                    .segmentList.value =
-                                                _segmentProgressList ??
-                                                    <Segment>[];
-                                            if (positionSubscription == null) {
-                                              _initSkip();
-                                            }
-                                          } else {
-                                            SmartDialog.showToast(
-                                              '提交失败: ${{
-                                                400: '参数错误',
-                                                403: '被自动审核机制拒绝',
-                                                429: '重复提交太快',
-                                                409: '重复提交'
-                                              }[res.statusCode]}',
-                                            );
-                                          }
-                                        },
-                                      );
-                                    },
-                                    child: const Text('确定提交'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          child: Icon(Icons.check),
-                        ),
-                      )
-                    ],
-                  )
-                : errorWidget(),
-          );
-        },
-      );
-
-  // List<SegmentType> _actionType2SegmentType(ActionType actionType) {
-  //   return switch (actionType) {
-  //     ActionType.skip => [
-  //         SegmentType.sponsor,
-  //         SegmentType.selfpromo,
-  //         SegmentType.interaction,
-  //         SegmentType.intro,
-  //         SegmentType.outro,
-  //         SegmentType.preview,
-  //         SegmentType.filler,
-  //       ],
-  //     ActionType.mute => [
-  //         SegmentType.sponsor,
-  //         SegmentType.selfpromo,
-  //         SegmentType.interaction,
-  //         SegmentType.intro,
-  //         SegmentType.outro,
-  //         SegmentType.preview,
-  //         SegmentType.music_offtopic,
-  //         SegmentType.filler,
-  //       ],
-  //     ActionType.full => [
-  //         SegmentType.sponsor,
-  //         SegmentType.selfpromo,
-  //         SegmentType.exclusive_access,
-  //       ],
-  //     ActionType.poi => [
-  //         SegmentType.poi_highlight,
-  //       ],
-  //   };
-  // }
-
-  List<ActionType> _segmentType2ActionType(SegmentType segmentType) {
-    return switch (segmentType) {
-      SegmentType.sponsor => [
-          ActionType.skip,
-          ActionType.mute,
-          ActionType.full
-        ],
-      SegmentType.selfpromo => [
-          ActionType.skip,
-          ActionType.mute,
-          ActionType.full
-        ],
-      SegmentType.interaction => [
-          ActionType.skip,
-          ActionType.mute,
-        ],
-      SegmentType.intro => [
-          ActionType.skip,
-          ActionType.mute,
-        ],
-      SegmentType.outro => [
-          ActionType.skip,
-          ActionType.mute,
-        ],
-      SegmentType.preview => [
-          ActionType.skip,
-          ActionType.mute,
-        ],
-      SegmentType.music_offtopic => [
-          ActionType.skip,
-        ],
-      SegmentType.poi_highlight => [ActionType.poi],
-      SegmentType.filler => [
-          ActionType.skip,
-          ActionType.mute,
-        ],
-      SegmentType.exclusive_access => [ActionType.full],
-    };
   }
 
   late List<Map<String, String>> _vttSubtitles = <Map<String, String>>[];
@@ -2139,7 +1558,7 @@ class VideoDetailController extends GetxController
       positionSubscription?.cancel();
       videoLabel.value = '';
       segmentList.clear();
-      _segmentProgressList = null;
+      segmentProgressList = null;
     }
 
     // interactive video
@@ -2177,11 +1596,14 @@ class VideoDetailController extends GetxController
     }
   }
 
-  void showNoteList() async {
+  void showNoteList(BuildContext context) async {
     if (plPlayerController.isFullScreen.value) {
       Utils.showFSSheet(
-        child: NoteListPage(oid: oid.value),
-        isFullScreen: plPlayerController.isFullScreen.value,
+        child: NoteListPage(
+          oid: oid.value,
+          enableSlide: false,
+        ),
+        isFullScreen: () => plPlayerController.isFullScreen.value,
       );
     } else {
       childKey.currentState?.showBottomSheet(

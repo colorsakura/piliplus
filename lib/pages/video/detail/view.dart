@@ -3,9 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/list_sheet.dart';
-import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
@@ -17,6 +15,7 @@ import 'package:PiliPlus/pages/video/detail/introduction/widgets/page.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/season.dart';
 import 'package:PiliPlus/pages/video/detail/member/horizontal_member_page.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/view.dart';
+import 'package:PiliPlus/pages/video/detail/view_point/view_points_page.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -1105,7 +1104,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             }
                             break;
                           case 'note':
-                            videoDetailController.showNoteList();
+                            videoDetailController.showNoteList(context);
                             break;
                         }
                       },
@@ -1546,7 +1545,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               VideoIntroPanel(
                 heroTag: heroTag,
                 showAiBottomSheet: showAiBottomSheet,
-                showIntroDetail: showIntroDetail,
                 showEpisodes: showEpisodes,
                 onShowMemberPage: onShowMemberPage,
               ),
@@ -1806,15 +1804,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   // ai总结
   showAiBottomSheet() {
     videoDetailController.childKey.currentState?.showBottomSheet(
-      enableDrag: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
       (context) => AiDetail(modelResult: videoIntroController.modelResult),
     );
   }
 
   showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
-      enableDrag: true,
+      shape: const RoundedRectangleBorder(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       (context) => videoDetail is BangumiInfoModel
           ? bangumi.IntroDetail(
@@ -1829,7 +1826,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   }
 
   showEpisodes(index, season, episodes, bvid, aid, cid) {
-    Widget listSheetContent() => ListSheetContent(
+    Widget listSheetContent([bool? enableSlide]) => ListSheetContent(
+          enableSlide: enableSlide,
           index: index,
           season: season,
           bvid: bvid,
@@ -1860,15 +1858,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         );
     if (isFullScreen) {
       Utils.showFSSheet(
-        child: Material(
-          color: Theme.of(context).colorScheme.surface,
-          child: listSheetContent(),
-        ),
-        isFullScreen: isFullScreen,
+        child: listSheetContent(false),
+        isFullScreen: () => isFullScreen,
       );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.transparent,
         (context) => listSheetContent(),
       );
     }
@@ -1945,150 +1940,22 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   }
 
   void showViewPoints() {
-    Widget listSheetContent() {
-      int currentIndex = -1;
-      return StatefulBuilder(
-        builder: (context, setState) => Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            titleSpacing: 16,
-            title: const Text('分段信息'),
-            actions: [
-              Text(
-                '分段进度条',
-                style: TextStyle(fontSize: 16),
-              ),
-              Obx(
-                () => Transform.scale(
-                  alignment: Alignment.centerLeft,
-                  scale: 0.8,
-                  child: Switch(
-                    thumbIcon: WidgetStateProperty.resolveWith<Icon?>((states) {
-                      if (states.isNotEmpty &&
-                          states.first == WidgetState.selected) {
-                        return const Icon(Icons.done);
-                      }
-                      return null;
-                    }),
-                    value:
-                        videoDetailController.plPlayerController.showVP.value,
-                    onChanged: (value) {
-                      videoDetailController.plPlayerController.showVP.value =
-                          value;
-                    },
-                  ),
-                ),
-              ),
-              iconButton(
-                context: context,
-                size: 30,
-                icon: Icons.clear,
-                tooltip: '关闭',
-                onPressed: Get.back,
-              ),
-              const SizedBox(width: 16),
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                ...List.generate(
-                    videoDetailController.viewPointList.length * 2 - 1,
-                    (rawIndex) {
-                  if (rawIndex % 2 == 1) {
-                    return Divider(
-                      height: 1,
-                      color: Theme.of(context).dividerColor.withOpacity(0.1),
-                    );
-                  }
-                  int index = rawIndex ~/ 2;
-                  Segment segment = videoDetailController.viewPointList[index];
-                  if (currentIndex == -1 &&
-                      segment.from != null &&
-                      segment.to != null) {
-                    if (videoDetailController
-                                .plPlayerController.positionSeconds.value >=
-                            segment.from! &&
-                        videoDetailController
-                                .plPlayerController.positionSeconds.value <
-                            segment.to!) {
-                      currentIndex = index;
-                    }
-                  }
-                  return ListTile(
-                    dense: true,
-                    onTap: segment.from != null
-                        ? () {
-                            currentIndex = index;
-                            plPlayerController?.danmakuController?.clear();
-                            plPlayerController?.videoPlayerController
-                                ?.seek(Duration(seconds: segment.from!));
-                            Get.back();
-                          }
-                        : null,
-                    leading: segment.url?.isNotEmpty == true
-                        ? Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            decoration: currentIndex == index
-                                ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                      width: 1.8,
-                                      strokeAlign:
-                                          BorderSide.strokeAlignOutside,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  )
-                                : null,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) =>
-                                  NetworkImgLayer(
-                                radius: 6,
-                                src: segment.url,
-                                width: constraints.maxHeight *
-                                    StyleString.aspectRatio,
-                                height: constraints.maxHeight,
-                              ),
-                            ),
-                          )
-                        : null,
-                    title: Text(
-                      segment.title ?? '',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight:
-                            currentIndex == index ? FontWeight.bold : null,
-                        color: currentIndex == index
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
-                      ),
-                    ),
-                    subtitle: Text(
-                      '${segment.from != null ? Utils.timeFormat(segment.from) : ''} - ${segment.to != null ? Utils.timeFormat(segment.to) : ''}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: currentIndex == index
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                  );
-                }),
-                SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     if (isFullScreen) {
-      Utils.showFSSheet(child: listSheetContent(), isFullScreen: isFullScreen);
+      Utils.showFSSheet(
+        child: ViewPointsPage(
+          enableSlide: false,
+          videoDetailController: videoDetailController,
+          plPlayerController: plPlayerController,
+        ),
+        isFullScreen: () => isFullScreen,
+      );
     } else {
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
-        (context) => listSheetContent(),
+        (context) => ViewPointsPage(
+          videoDetailController: videoDetailController,
+          plPlayerController: plPlayerController,
+        ),
       );
     }
   }
@@ -2109,6 +1976,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   void onShowMemberPage(mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
+      shape: const RoundedRectangleBorder(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       (context) {
         return HorizontalMemberPage(
@@ -2117,7 +1985,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           videoIntroController: videoIntroController,
         );
       },
-      enableDrag: true,
     );
   }
 }

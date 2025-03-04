@@ -35,13 +35,11 @@ class VideoIntroPanel extends StatefulWidget {
     super.key,
     required this.heroTag,
     required this.showAiBottomSheet,
-    required this.showIntroDetail,
     required this.showEpisodes,
     required this.onShowMemberPage,
   });
   final String heroTag;
   final Function showAiBottomSheet;
-  final Function showIntroDetail;
   final Function showEpisodes;
   final ValueChanged onShowMemberPage;
 
@@ -75,10 +73,6 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
               showAiBottomSheet: widget.showAiBottomSheet,
-              showIntroDetail: () => widget.showIntroDetail(
-                videoIntroController.videoDetail.value,
-                videoIntroController.videoTags,
-              ),
               showEpisodes: widget.showEpisodes,
               onShowMemberPage: widget.onShowMemberPage,
             )
@@ -88,10 +82,6 @@ class _VideoIntroPanelState extends State<VideoIntroPanel>
               videoIntroController: videoIntroController,
               heroTag: widget.heroTag,
               showAiBottomSheet: widget.showAiBottomSheet,
-              showIntroDetail: () => widget.showIntroDetail(
-                videoIntroController.videoDetail.value,
-                videoIntroController.videoTags,
-              ),
               showEpisodes: widget.showEpisodes,
               onShowMemberPage: widget.onShowMemberPage,
             ),
@@ -103,7 +93,6 @@ class VideoInfo extends StatefulWidget {
   final bool loadingStatus;
   final String heroTag;
   final Function showAiBottomSheet;
-  final Function showIntroDetail;
   final Function showEpisodes;
   final ValueChanged onShowMemberPage;
   final VideoIntroController videoIntroController;
@@ -113,7 +102,6 @@ class VideoInfo extends StatefulWidget {
     this.loadingStatus = false,
     required this.heroTag,
     required this.showAiBottomSheet,
-    required this.showIntroDetail,
     required this.showEpisodes,
     required this.onShowMemberPage,
     required this.videoIntroController,

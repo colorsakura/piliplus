@@ -3,12 +3,12 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/reply/item.dart';
+import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +19,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'controller.dart';
 
-class VideoReplyReplyPanel extends StatefulWidget {
+class VideoReplyReplyPanel extends CommonSlidePage {
   const VideoReplyReplyPanel({
     super.key,
     this.id,
@@ -52,7 +52,8 @@ class VideoReplyReplyPanel extends StatefulWidget {
   State<VideoReplyReplyPanel> createState() => _VideoReplyReplyPanelState();
 }
 
-class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
+class _VideoReplyReplyPanelState
+    extends CommonSlidePageState<VideoReplyReplyPanel>
     with TickerProviderStateMixin {
   late VideoReplyReplyController _videoReplyReplyController;
   late final _savedReplies = {};
@@ -116,21 +117,8 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
           },
         );
 
-  Offset? _downPos;
-  bool? _isSliding;
-  late final Rx<double> padding = 0.0.obs;
-
   @override
-  Widget build(BuildContext context) {
-    return GStorage.slideDismissReplyPage
-        ? Padding(
-            padding: EdgeInsets.only(top: padding.value),
-            child: _buildPage,
-          )
-        : _buildPage;
-  }
-
-  Widget get _buildPage => Scaffold(
+  Widget get buildPage => Scaffold(
         key: _key,
         resizeToAvoidBottomInset: false,
         body: Column(
@@ -165,73 +153,14 @@ class _VideoReplyReplyPanelState extends State<VideoReplyReplyPanel>
                     color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
             Expanded(
-              child: GStorage.slideDismissReplyPage
-                  ? GestureDetector(
-                      onPanDown: (event) {
-                        if (event.localPosition.dx > 30) {
-                          _isSliding = false;
-                        } else {
-                          _downPos = event.localPosition;
-                        }
-                      },
-                      onPanUpdate: (event) {
-                        if (_isSliding == false) {
-                          return;
-                        } else if (_isSliding == null) {
-                          if (_downPos != null) {
-                            Offset cumulativeDelta =
-                                event.localPosition - _downPos!;
-                            if (cumulativeDelta.dx.abs() >=
-                                cumulativeDelta.dy.abs()) {
-                              _isSliding = true;
-                              setState(() {
-                                padding.value = event.localPosition.dx;
-                              });
-                            } else {
-                              _isSliding = false;
-                            }
-                          }
-                        } else if (_isSliding == true) {
-                          setState(() {
-                            padding.value = event.localPosition.dx;
-                          });
-                        }
-                      },
-                      onPanCancel: () {
-                        if (_isSliding == true) {
-                          if (padding.value >= 100) {
-                            Get.back();
-                          } else {
-                            setState(() {
-                              padding.value = 0;
-                            });
-                          }
-                        }
-                        _downPos = null;
-                        _isSliding = null;
-                      },
-                      onPanEnd: (event) {
-                        if (_isSliding == true) {
-                          if (padding.value >= 100) {
-                            Get.back();
-                          } else {
-                            setState(() {
-                              padding.value = 0;
-                            });
-                          }
-                        }
-                        _downPos = null;
-                        _isSliding = null;
-                      },
-                      child: _buildList,
-                    )
-                  : _buildList,
+              child: enableSlide ? slideList() : buildList,
             ),
           ],
         ),
       );
 
-  Widget get _buildList => ClipRect(
+  @override
+  Widget get buildList => ClipRect(
         child: refreshIndicator(
           onRefresh: () async {
             await _videoReplyReplyController.onRefresh();

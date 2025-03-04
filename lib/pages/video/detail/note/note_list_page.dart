@@ -4,14 +4,20 @@ import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/note/note_list_page_ctr.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NoteListPage extends StatefulWidget {
-  const NoteListPage({super.key, this.oid, this.upperMid});
+class NoteListPage extends CommonSlidePage {
+  const NoteListPage({
+    super.key,
+    super.enableSlide,
+    this.oid,
+    this.upperMid,
+  });
 
   final dynamic oid;
   final dynamic upperMid;
@@ -20,7 +26,7 @@ class NoteListPage extends StatefulWidget {
   State<NoteListPage> createState() => _NoteListPageState();
 }
 
-class _NoteListPageState extends State<NoteListPage> {
+class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   late final _controller = Get.put(
     NoteListPageCtr(oid: widget.oid, upperMid: widget.upperMid),
   );
@@ -32,37 +38,37 @@ class _NoteListPageState extends State<NoteListPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 16,
-        toolbarHeight: 45,
-        title: Obx(
-          () => Text(
-              '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(
-            height: 1,
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+  Widget get buildPage => Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          titleSpacing: 16,
+          toolbarHeight: 45,
+          title: Obx(
+            () => Text(
+                '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
           ),
-        ),
-        actions: [
-          iconButton(
-            context: context,
-            tooltip: '关闭',
-            icon: Icons.clear,
-            onPressed: Get.back,
-            size: 32,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(1),
+            child: Divider(
+              height: 1,
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+            ),
           ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: Obx(() => _buildBody(_controller.loadingState.value)),
-    );
-  }
+          actions: [
+            iconButton(
+              context: context,
+              tooltip: '关闭',
+              icon: Icons.clear,
+              onPressed: Get.back,
+              size: 32,
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: enableSlide
+            ? slideList(Obx(() => _buildBody(_controller.loadingState.value)))
+            : Obx(() => _buildBody(_controller.loadingState.value)),
+      );
 
   Widget _buildBody(LoadingState loadingState) {
     return switch (loadingState) {
