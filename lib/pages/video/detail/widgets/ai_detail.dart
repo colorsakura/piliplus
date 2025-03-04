@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/controller.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -21,6 +22,38 @@ class AiDetail extends CommonSlidePage {
 }
 
 class _AiDetailState extends CommonSlidePageState<AiDetail> {
+  late bool _isInit = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (enableSlide && GStorage.collapsibleVideoPage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _isInit = false;
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (enableSlide && GStorage.collapsibleVideoPage && _isInit) {
+      return CustomScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+      );
+    }
+
+    return enableSlide
+        ? Padding(
+            padding: EdgeInsets.only(top: padding),
+            child: buildPage,
+          )
+        : buildPage;
+  }
+
   InlineSpan buildContent(BuildContext context, content) {
     List descV2 = content.descV2;
     // type
@@ -89,12 +122,11 @@ class _AiDetailState extends CommonSlidePageState<AiDetail> {
   }
 
   @override
-  Widget get buildPage => Container(
+  Widget get buildPage => Material(
         color: Theme.of(context).colorScheme.surface,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
         child: Column(
           children: [
-            InkWell(
+            GestureDetector(
               onTap: Get.back,
               child: Container(
                 height: 35,
@@ -119,34 +151,46 @@ class _AiDetailState extends CommonSlidePageState<AiDetail> {
       );
 
   @override
-  Widget get buildList => SingleChildScrollView(
+  Widget get buildList => CustomScrollView(
         controller: ScrollController(),
         physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            if (widget.modelResult.summary?.isNotEmpty == true) ...[
-              SelectableText(
-                '总结: ${widget.modelResult.summary}',
-                style: const TextStyle(
-                  fontSize: 15,
-                  height: 1.5,
+        slivers: [
+          if (widget.modelResult.summary?.isNotEmpty == true) ...[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: SelectableText(
+                  '总结: ${widget.modelResult.summary}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    height: 1.5,
+                  ),
                 ),
               ),
-              if (widget.modelResult.outline?.isNotEmpty == true)
-                Divider(
+            ),
+            if (widget.modelResult.outline?.isNotEmpty == true)
+              SliverToBoxAdapter(
+                child: Divider(
                   height: 20,
                   color: Theme.of(context).dividerColor.withOpacity(0.1),
                   thickness: 6,
-                )
-            ],
-            if (widget.modelResult.outline?.isNotEmpty == true)
-              ListView.builder(
-                shrinkWrap: true,
+                ),
+              ),
+          ],
+          if (widget.modelResult.outline?.isNotEmpty == true)
+            SliverPadding(
+              padding: EdgeInsets.only(
+                left: 14,
+                right: 14,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
+              ),
+              sliver: SliverList.builder(
                 itemCount: widget.modelResult.outline!.length,
-                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (index != 0) const SizedBox(height: 10),
                       SelectableText(
                         widget.modelResult.outline![index].title!,
                         style: const TextStyle(
@@ -159,86 +203,59 @@ class _AiDetailState extends CommonSlidePageState<AiDetail> {
                       if (widget.modelResult.outline![index].partOutline
                               ?.isNotEmpty ==
                           true)
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: widget
-                              .modelResult.outline![index].partOutline!.length,
-                          itemBuilder: (context, i) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Wrap(
+                        ...widget.modelResult.outline![index].partOutline!.map(
+                          (item) => Wrap(
+                            children: [
+                              SelectableText.rich(
+                                TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    height: 1.5,
+                                  ),
                                   children: [
-                                    SelectableText.rich(
-                                      TextSpan(
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                          height: 1.5,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: Utils.tampToSeektime(widget
-                                                .modelResult
-                                                .outline![index]
-                                                .partOutline![i]
-                                                .timestamp!),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            ),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                // 跳转到指定位置
-                                                try {
-                                                  Get.find<VideoDetailController>(
-                                                          tag: Get.arguments[
-                                                              'heroTag'])
-                                                      .plPlayerController
-                                                      .seekTo(
-                                                        Duration(
-                                                          seconds:
-                                                              Utils.duration(
-                                                            Utils.tampToSeektime(widget
-                                                                    .modelResult
-                                                                    .outline![
-                                                                        index]
-                                                                    .partOutline![
-                                                                        i]
-                                                                    .timestamp!)
-                                                                .toString(),
-                                                          ),
-                                                        ),
-                                                      );
-                                                } catch (_) {}
-                                              },
-                                          ),
-                                          const TextSpan(text: ' '),
-                                          TextSpan(
-                                              text: widget
-                                                  .modelResult
-                                                  .outline![index]
-                                                  .partOutline![i]
-                                                  .content!),
-                                        ],
+                                    TextSpan(
+                                      text:
+                                          Utils.tampToSeektime(item.timestamp!),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // 跳转到指定位置
+                                          try {
+                                            Get.find<VideoDetailController>(
+                                                    tag: Get
+                                                        .arguments['heroTag'])
+                                                .plPlayerController
+                                                .seekTo(
+                                                  Duration(
+                                                    seconds: Utils.duration(
+                                                      Utils.tampToSeektime(
+                                                              item.timestamp!)
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                );
+                                          } catch (_) {}
+                                        },
                                     ),
+                                    const TextSpan(text: ' '),
+                                    TextSpan(text: item.content!),
                                   ],
                                 ),
-                              ],
-                            );
-                          },
+                              ),
+                            ],
+                          ),
                         ),
-                      const SizedBox(height: 20),
                     ],
                   );
                 },
-              )
-          ],
-        ),
+              ),
+            ),
+        ],
       );
 }

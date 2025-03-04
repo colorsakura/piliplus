@@ -2130,8 +2130,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
-      shape: const RoundedRectangleBorder(),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
       (context) => videoDetail is BangumiInfoModel
           ? bangumi.IntroDetail(
               bangumiDetail: videoDetail,

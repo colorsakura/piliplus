@@ -395,8 +395,7 @@ class VideoDetailController extends GetxController
   showMediaListPanel(context) {
     if (mediaList.isNotEmpty) {
       childKey.currentState?.showBottomSheet(
-        shape: const RoundedRectangleBorder(),
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.transparent,
         (context) => MediaListPanel(
           mediaList: mediaList,
           changeMediaList: (bvid, cid, aid, cover) {

@@ -19,8 +19,10 @@ class IntroDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(left: 14, right: 14),
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         child: Column(
           children: [
             InkWell(
@@ -133,7 +135,9 @@ class IntroDetail extends StatelessWidget {
               ),
             )
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   InlineSpan buildContent(BuildContext context, content) {

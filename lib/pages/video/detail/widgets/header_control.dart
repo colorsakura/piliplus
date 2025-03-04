@@ -101,24 +101,23 @@ class _HeaderControlState extends State<HeaderControl> {
   void showSettingSheet() {
     Utils.showFSSheet(
       isFullScreen: () => isFullScreen,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        margin: EdgeInsets.only(
-          left: 12,
-          top: 12,
-          right: 12,
-          bottom: 12 + MediaQuery.paddingOf(context).bottom,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: MediaQuery.removePadding(
-            context: context,
-            removeBottom: true,
+      child: Builder(
+        builder: (context) => Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
+          child: Material(
+            color: Colors.transparent,
             child: ListView(
+              padding: EdgeInsets.only(bottom: 0),
               children: [
                 const SizedBox(height: 14),
                 // ListTile(
@@ -586,166 +585,155 @@ class _HeaderControlState extends State<HeaderControl> {
               bottom: 12 + MediaQuery.paddingOf(context).bottom,
             ),
             padding: const EdgeInsets.only(left: 14, right: 14),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    const Center(child: Text('定时关闭', style: titleStyle)),
-                    const SizedBox(height: 10),
-                    ...[
-                      ...[
-                        ...scheduleTimeChoices,
-                        if (scheduleTimeChoices
-                            .contains(
-                                shutdownTimerService.scheduledExitInMinutes)
-                            .not)
-                          shutdownTimerService.scheduledExitInMinutes,
-                      ]..sort(),
-                      -1,
-                    ].map(
-                      (choice) => ListTile(
-                        dense: true,
-                        onTap: () {
-                          if (choice == -1) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                String duration = '';
-                                return AlertDialog(
-                                  title: const Text('自定义时长'),
-                                  content: TextField(
-                                    autofocus: true,
-                                    onChanged: (value) => duration = value,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'\d+')),
-                                    ],
-                                    decoration: const InputDecoration(
-                                        suffixText: 'min'),
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              children: [
+                const SizedBox(height: 10),
+                const Center(child: Text('定时关闭', style: titleStyle)),
+                const SizedBox(height: 10),
+                ...[
+                  ...[
+                    ...scheduleTimeChoices,
+                    if (scheduleTimeChoices
+                        .contains(shutdownTimerService.scheduledExitInMinutes)
+                        .not)
+                      shutdownTimerService.scheduledExitInMinutes,
+                  ]..sort(),
+                  -1,
+                ].map(
+                  (choice) => ListTile(
+                    dense: true,
+                    onTap: () {
+                      if (choice == -1) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            String duration = '';
+                            return AlertDialog(
+                              title: const Text('自定义时长'),
+                              content: TextField(
+                                autofocus: true,
+                                onChanged: (value) => duration = value,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'\d+')),
+                                ],
+                                decoration:
+                                    const InputDecoration(suffixText: 'min'),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: Get.back,
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline),
                                   ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: Get.back,
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        int choice =
-                                            int.tryParse(duration) ?? 0;
-                                        shutdownTimerService
-                                            .scheduledExitInMinutes = choice;
-                                        shutdownTimerService
-                                            .startShutdownTimer();
-                                        setState(() {});
-                                      },
-                                      child: Text('确定'),
-                                    ),
-                                  ],
-                                );
-                              },
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    int choice = int.tryParse(duration) ?? 0;
+                                    shutdownTimerService
+                                        .scheduledExitInMinutes = choice;
+                                    shutdownTimerService.startShutdownTimer();
+                                    setState(() {});
+                                  },
+                                  child: Text('确定'),
+                                ),
+                              ],
                             );
-                          } else {
-                            Get.back();
-                            shutdownTimerService.scheduledExitInMinutes =
-                                choice;
-                            shutdownTimerService.startShutdownTimer();
-                          }
-                        },
-                        contentPadding: const EdgeInsets.only(),
-                        title: Text(choice == -1
-                            ? '自定义'
-                            : choice == 0
-                                ? "禁用"
-                                : "$choice分钟后"),
-                        trailing: shutdownTimerService.scheduledExitInMinutes ==
-                                choice
+                          },
+                        );
+                      } else {
+                        Get.back();
+                        shutdownTimerService.scheduledExitInMinutes = choice;
+                        shutdownTimerService.startShutdownTimer();
+                      }
+                    },
+                    contentPadding: const EdgeInsets.only(),
+                    title: Text(choice == -1
+                        ? '自定义'
+                        : choice == 0
+                            ? "禁用"
+                            : "$choice分钟后"),
+                    trailing:
+                        shutdownTimerService.scheduledExitInMinutes == choice
                             ? Icon(
                                 Icons.done,
                                 color: Theme.of(context).colorScheme.primary,
                               )
                             : null,
-                      ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Center(
+                  child: SizedBox(
+                    width: 125,
+                    child: Divider(height: 1),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ListTile(
+                  dense: true,
+                  onTap: () {
+                    shutdownTimerService.waitForPlayingCompleted =
+                        !shutdownTimerService.waitForPlayingCompleted;
+                    setState(() {});
+                  },
+                  contentPadding: const EdgeInsets.only(),
+                  title: const Text("额外等待视频播放完毕", style: titleStyle),
+                  trailing: Transform.scale(
+                    alignment:
+                        Alignment.centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
+                    scale: 0.8,
+                    child: Switch(
+                      thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                          (Set<WidgetState> states) {
+                        if (states.isNotEmpty &&
+                            states.first == WidgetState.selected) {
+                          return const Icon(Icons.done);
+                        }
+                        return null;
+                      }),
+                      value: shutdownTimerService.waitForPlayingCompleted,
+                      onChanged: (value) => setState(() =>
+                          shutdownTimerService.waitForPlayingCompleted = value),
                     ),
-                    const SizedBox(height: 6),
-                    const Center(
-                      child: SizedBox(
-                        width: 125,
-                        child: Divider(height: 1),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListTile(
-                      dense: true,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Text('倒计时结束:', style: titleStyle),
+                    const Spacer(),
+                    ActionRowLineItem(
                       onTap: () {
-                        shutdownTimerService.waitForPlayingCompleted =
-                            !shutdownTimerService.waitForPlayingCompleted;
+                        shutdownTimerService.exitApp = false;
                         setState(() {});
+                        // Get.back();
                       },
-                      contentPadding: const EdgeInsets.only(),
-                      title: const Text("额外等待视频播放完毕", style: titleStyle),
-                      trailing: Transform.scale(
-                        alignment: Alignment
-                            .centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
-                        scale: 0.8,
-                        child: Switch(
-                          thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                              (Set<WidgetState> states) {
-                            if (states.isNotEmpty &&
-                                states.first == WidgetState.selected) {
-                              return const Icon(Icons.done);
-                            }
-                            return null;
-                          }),
-                          value: shutdownTimerService.waitForPlayingCompleted,
-                          onChanged: (value) => setState(() =>
-                              shutdownTimerService.waitForPlayingCompleted =
-                                  value),
-                        ),
-                      ),
+                      text: " 暂停视频 ",
+                      selectStatus: !shutdownTimerService.exitApp,
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Text('倒计时结束:', style: titleStyle),
-                        const Spacer(),
-                        ActionRowLineItem(
-                          onTap: () {
-                            shutdownTimerService.exitApp = false;
-                            setState(() {});
-                            // Get.back();
-                          },
-                          text: " 暂停视频 ",
-                          selectStatus: !shutdownTimerService.exitApp,
-                        ),
-                        const Spacer(),
-                        // const SizedBox(width: 10),
-                        ActionRowLineItem(
-                          onTap: () {
-                            shutdownTimerService.exitApp = true;
-                            setState(() {});
-                            // Get.back();
-                          },
-                          text: " 退出APP ",
-                          selectStatus: shutdownTimerService.exitApp,
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10),
+                    const Spacer(),
+                    // const SizedBox(width: 10),
+                    ActionRowLineItem(
+                      onTap: () {
+                        shutdownTimerService.exitApp = true;
+                        setState(() {});
+                        // Get.back();
+                      },
+                      text: " 退出APP ",
+                      selectStatus: shutdownTimerService.exitApp,
+                    )
                   ],
                 ),
-              ),
+                const SizedBox(height: 10),
+              ],
             ),
           );
         },
@@ -779,49 +767,48 @@ class _HeaderControlState extends State<HeaderControl> {
 
     Utils.showFSSheet(
       isFullScreen: () => isFullScreen,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        margin: EdgeInsets.only(
-          left: 12,
-          top: 12,
-          right: 12,
-          bottom: 12 + MediaQuery.paddingOf(context).bottom,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 45,
-              child: GestureDetector(
-                onTap: () {
-                  SmartDialog.showToast(
-                      '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳');
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('选择画质', style: titleStyle),
-                    SizedBox(width: buttonSpace),
-                    Icon(
-                      Icons.info_outline,
-                      size: 16,
-                      color: Theme.of(context).colorScheme.outline,
-                    )
-                  ],
+      child: Builder(
+        builder: (context) => Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 45,
+                child: GestureDetector(
+                  onTap: () {
+                    SmartDialog.showToast(
+                        '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳');
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('选择画质', style: titleStyle),
+                      SizedBox(width: buttonSpace),
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.outline,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: Scrollbar(
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeBottom: true,
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Scrollbar(
                     child: ListView(
+                      padding: EdgeInsets.only(bottom: 0),
                       children: [
                         for (int i = 0; i < totalQaSam; i++) ...[
                           ListTile(
@@ -870,8 +857,8 @@ class _HeaderControlState extends State<HeaderControl> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -883,30 +870,29 @@ class _HeaderControlState extends State<HeaderControl> {
     final List<AudioItem> audio = videoInfo.dash!.audio!;
     Utils.showFSSheet(
       isFullScreen: () => isFullScreen,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        margin: EdgeInsets.only(
-          left: 12,
-          top: 12,
-          right: 12,
-          bottom: 12 + MediaQuery.paddingOf(context).bottom,
-        ),
-        child: Column(
-          children: [
-            const SizedBox(
-                height: 45,
-                child: Center(child: Text('选择音质', style: titleStyle))),
-            Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeBottom: true,
+      child: Builder(
+        builder: (context) => Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 45,
+                  child: Center(child: Text('选择音质', style: titleStyle))),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
                   child: ListView(
+                    padding: EdgeInsets.only(bottom: 0),
                     children: [
                       for (final AudioItem i in audio) ...[
                         ListTile(
@@ -949,8 +935,8 @@ class _HeaderControlState extends State<HeaderControl> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -974,30 +960,29 @@ class _HeaderControlState extends State<HeaderControl> {
 
     Utils.showFSSheet(
       isFullScreen: () => isFullScreen,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        margin: EdgeInsets.only(
-          left: 12,
-          top: 12,
-          right: 12,
-          bottom: 12 + MediaQuery.paddingOf(context).bottom,
-        ),
-        child: Column(
-          children: [
-            const SizedBox(
-                height: 45,
-                child: Center(child: Text('选择解码格式', style: titleStyle))),
-            Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeBottom: true,
+      child: Builder(
+        builder: (context) => Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 45,
+                  child: Center(child: Text('选择解码格式', style: titleStyle))),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
                   child: ListView(
+                    padding: EdgeInsets.only(bottom: 0),
                     children: [
                       for (var i in list) ...[
                         ListTile(
@@ -1031,8 +1016,8 @@ class _HeaderControlState extends State<HeaderControl> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1099,600 +1084,596 @@ class _HeaderControlState extends State<HeaderControl> {
             bottom: MediaQuery.paddingOf(context).bottom + 12,
           ),
           padding: const EdgeInsets.only(left: 14, right: 14),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 45,
-                  child: Center(child: Text('弹幕/字幕设置', style: titleStyle)),
+          child: ListView(
+            padding: EdgeInsets.only(bottom: 0),
+            children: [
+              const SizedBox(
+                height: 45,
+                child: Center(child: Text('弹幕/字幕设置', style: titleStyle)),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Text('智能云屏蔽 $danmakuWeight 级'),
+                  const Spacer(),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () => {
+                            Get.back(),
+                            Get.toNamed('/danmakuBlock',
+                                arguments: widget.controller)
+                          },
+                      child: Text("屏蔽管理(${widget.controller.filterCount})")),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
                 ),
-                const SizedBox(height: 10),
-                Row(
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: 10,
+                    value: danmakuWeight.toDouble(),
+                    divisions: 10,
+                    label: '$danmakuWeight',
+                    onChanged: (double val) {
+                      danmakuWeight = val.toInt();
+                      widget.controller
+                        ..danmakuWeight = danmakuWeight
+                        ..putDanmakuSettings();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              const Text('按类型屏蔽'),
+              Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 18),
+                child: Row(
                   children: [
-                    Text('智能云屏蔽 $danmakuWeight 级'),
-                    const Spacer(),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () => {
-                              Get.back(),
-                              Get.toNamed('/danmakuBlock',
-                                  arguments: widget.controller)
-                            },
-                        child: Text("屏蔽管理(${widget.controller.filterCount})")),
+                    for (final Map<String, dynamic> i in blockTypesList) ...[
+                      ActionRowLineItem(
+                        onTap: () async {
+                          final bool isChoose = blockTypes.contains(i['value']);
+                          if (isChoose) {
+                            blockTypes.remove(i['value']);
+                          } else {
+                            blockTypes.add(i['value']);
+                          }
+                          widget.controller
+                            ..blockTypes = blockTypes
+                            ..putDanmakuSettings();
+                          setState(() {});
+                          try {
+                            danmakuController?.updateOption(
+                              danmakuController.option.copyWith(
+                                hideTop: blockTypes.contains(5),
+                                hideBottom: blockTypes.contains(4),
+                                hideScroll: blockTypes.contains(2),
+                                // 添加或修改其他需要修改的选项属性
+                              ),
+                            );
+                          } catch (_) {}
+                        },
+                        text: i['label'],
+                        selectStatus: blockTypes.contains(i['value']),
+                      ),
+                      const SizedBox(width: 10),
+                    ]
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 10,
-                      value: danmakuWeight.toDouble(),
-                      divisions: 10,
-                      label: '$danmakuWeight',
-                      onChanged: (double val) {
-                        danmakuWeight = val.toInt();
-                        widget.controller
-                          ..danmakuWeight = danmakuWeight
-                          ..putDanmakuSettings();
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                ),
-                const Text('按类型屏蔽'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12, bottom: 18),
-                  child: Row(
-                    children: [
-                      for (final Map<String, dynamic> i in blockTypesList) ...[
-                        ActionRowLineItem(
-                          onTap: () async {
-                            final bool isChoose =
-                                blockTypes.contains(i['value']);
-                            if (isChoose) {
-                              blockTypes.remove(i['value']);
-                            } else {
-                              blockTypes.add(i['value']);
-                            }
-                            widget.controller
-                              ..blockTypes = blockTypes
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option.copyWith(
-                                  hideTop: blockTypes.contains(5),
-                                  hideBottom: blockTypes.contains(4),
-                                  hideScroll: blockTypes.contains(2),
-                                  // 添加或修改其他需要修改的选项属性
-                                ),
-                              );
-                            } catch (_) {}
-                          },
-                          text: i['label'],
-                          selectStatus: blockTypes.contains(i['value']),
-                        ),
-                        const SizedBox(width: 10),
-                      ]
-                    ],
-                  ),
-                ),
-                const Text('显示区域'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Row(
-                    children: [
-                      for (final Map<String, dynamic> i in showAreas) ...[
-                        ActionRowLineItem(
-                          onTap: () {
-                            showArea = i['value'];
-                            widget.controller
-                              ..showArea = showArea
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option
-                                    .copyWith(area: i['value']),
-                              );
-                            } catch (_) {}
-                          },
-                          text: i['label'],
-                          selectStatus: showArea == i['value'],
-                        ),
-                        const SizedBox(width: 10),
-                      ]
-                    ],
-                  ),
-                ),
-                SetSwitchItem(
-                  title: '海量弹幕',
-                  contentPadding: EdgeInsets.all(0),
-                  titleStyle: TextStyle(fontSize: 14),
-                  defaultVal: massiveMode,
-                  setKey: SettingBoxKey.danmakuMassiveMode,
-                  onChanged: (value) {
-                    massiveMode = value;
-                    widget.controller.massiveMode = value;
-                    setState(() {});
-                    try {
-                      danmakuController?.updateOption(
-                        danmakuController.option.copyWith(massiveMode: value),
-                      );
-                    } catch (_) {}
-                  },
-                ),
-                Text('不透明度 ${opacityVal * 100}%'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 1,
-                      value: opacityVal,
-                      divisions: 10,
-                      label: '${opacityVal * 100}%',
-                      onChanged: (double val) {
-                        opacityVal = val;
-                        widget.controller
-                          ..opacityVal = opacityVal
-                          ..putDanmakuSettings();
-                        setState(() {});
-                        try {
-                          danmakuController?.updateOption(
-                            danmakuController.option.copyWith(opacity: val),
-                          );
-                        } catch (_) {}
-                      },
-                    ),
-                  ),
-                ),
-                Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 8,
-                      value: fontWeight.toDouble(),
-                      divisions: 8,
-                      label: '${fontWeight + 1}',
-                      onChanged: (double val) {
-                        fontWeight = val.toInt();
-                        widget.controller
-                          ..fontWeight = fontWeight
-                          ..putDanmakuSettings();
-                        setState(() {});
-                        try {
-                          danmakuController?.updateOption(
-                            danmakuController.option
-                                .copyWith(fontWeight: fontWeight),
-                          );
-                        } catch (_) {}
-                      },
-                    ),
-                  ),
-                ),
-                Text('描边粗细 $strokeWidth'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 3,
-                      value: strokeWidth,
-                      divisions: 6,
-                      label: '$strokeWidth',
-                      onChanged: (double val) {
-                        strokeWidth = val;
-                        widget.controller
-                          ..strokeWidth = val
-                          ..putDanmakuSettings();
-                        setState(() {});
-                        try {
-                          danmakuController?.updateOption(
-                            danmakuController.option.copyWith(strokeWidth: val),
-                          );
-                        } catch (_) {}
-                      },
-                    ),
-                  ),
-                ),
-                Text('字体大小 ${(fontSizeVal * 100).toStringAsFixed(1)}%'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0.5,
-                      max: 2.5,
-                      value: fontSizeVal,
-                      divisions: 20,
-                      label: '${(fontSizeVal * 100).toStringAsFixed(1)}%',
-                      onChanged: (double val) {
-                        fontSizeVal = val;
-                        widget.controller
-                          ..fontSizeVal = fontSizeVal
-                          ..putDanmakuSettings();
-                        setState(() {});
-                        if (widget.controller.isFullScreen.value == false) {
+              ),
+              const Text('显示区域'),
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Row(
+                  children: [
+                    for (final Map<String, dynamic> i in showAreas) ...[
+                      ActionRowLineItem(
+                        onTap: () {
+                          showArea = i['value'];
+                          widget.controller
+                            ..showArea = showArea
+                            ..putDanmakuSettings();
+                          setState(() {});
                           try {
                             danmakuController?.updateOption(
-                              danmakuController.option.copyWith(
-                                fontSize: (15 * fontSizeVal).toDouble(),
-                              ),
+                              danmakuController.option
+                                  .copyWith(area: i['value']),
                             );
                           } catch (_) {}
-                        }
-                      },
-                    ),
+                        },
+                        text: i['label'],
+                        selectStatus: showArea == i['value'],
+                      ),
+                      const SizedBox(width: 10),
+                    ]
+                  ],
+                ),
+              ),
+              SetSwitchItem(
+                title: '海量弹幕',
+                contentPadding: EdgeInsets.all(0),
+                titleStyle: TextStyle(fontSize: 14),
+                defaultVal: massiveMode,
+                setKey: SettingBoxKey.danmakuMassiveMode,
+                onChanged: (value) {
+                  massiveMode = value;
+                  widget.controller.massiveMode = value;
+                  setState(() {});
+                  try {
+                    danmakuController?.updateOption(
+                      danmakuController.option.copyWith(massiveMode: value),
+                    );
+                  } catch (_) {}
+                },
+              ),
+              Text('不透明度 ${opacityVal * 100}%'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: 1,
+                    value: opacityVal,
+                    divisions: 10,
+                    label: '${opacityVal * 100}%',
+                    onChanged: (double val) {
+                      opacityVal = val;
+                      widget.controller
+                        ..opacityVal = opacityVal
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      try {
+                        danmakuController?.updateOption(
+                          danmakuController.option.copyWith(opacity: val),
+                        );
+                      } catch (_) {}
+                    },
                   ),
                 ),
-                Text('全屏字体大小 ${(fontSizeFSVal * 100).toStringAsFixed(1)}%'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0.5,
-                      max: 2.5,
-                      value: fontSizeFSVal,
-                      divisions: 20,
-                      label: '${(fontSizeFSVal * 100).toStringAsFixed(1)}%',
-                      onChanged: (double val) {
-                        fontSizeFSVal = val;
-                        widget.controller
-                          ..fontSizeFSVal = fontSizeFSVal
-                          ..putDanmakuSettings();
-                        setState(() {});
-                        if (widget.controller.isFullScreen.value == true) {
-                          try {
-                            danmakuController?.updateOption(
-                              danmakuController.option.copyWith(
-                                fontSize: (15 * fontSizeFSVal).toDouble(),
-                              ),
-                            );
-                          } catch (_) {}
-                        }
-                      },
-                    ),
+                  child: Slider(
+                    min: 0,
+                    max: 8,
+                    value: fontWeight.toDouble(),
+                    divisions: 8,
+                    label: '${fontWeight + 1}',
+                    onChanged: (double val) {
+                      fontWeight = val.toInt();
+                      widget.controller
+                        ..fontWeight = fontWeight
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      try {
+                        danmakuController?.updateOption(
+                          danmakuController.option
+                              .copyWith(fontWeight: fontWeight),
+                        );
+                      } catch (_) {}
+                    },
                   ),
                 ),
-                Text('弹幕时长 $danmakuDurationVal 秒'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text('描边粗细 $strokeWidth'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 1,
-                      max: 4,
-                      value: pow(danmakuDurationVal, 1 / 4) as double,
-                      divisions: 60,
-                      label: danmakuDurationVal.toString(),
-                      onChanged: (double val) {
-                        danmakuDurationVal =
-                            (pow(val, 4) as double).toPrecision(2);
-                        widget.controller
-                          ..danmakuDurationVal = danmakuDurationVal
-                          ..putDanmakuSettings();
-                        setState(() {});
+                  child: Slider(
+                    min: 0,
+                    max: 3,
+                    value: strokeWidth,
+                    divisions: 6,
+                    label: '$strokeWidth',
+                    onChanged: (double val) {
+                      strokeWidth = val;
+                      widget.controller
+                        ..strokeWidth = val
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      try {
+                        danmakuController?.updateOption(
+                          danmakuController.option.copyWith(strokeWidth: val),
+                        );
+                      } catch (_) {}
+                    },
+                  ),
+                ),
+              ),
+              Text('字体大小 ${(fontSizeVal * 100).toStringAsFixed(1)}%'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  ),
+                  child: Slider(
+                    min: 0.5,
+                    max: 2.5,
+                    value: fontSizeVal,
+                    divisions: 20,
+                    label: '${(fontSizeVal * 100).toStringAsFixed(1)}%',
+                    onChanged: (double val) {
+                      fontSizeVal = val;
+                      widget.controller
+                        ..fontSizeVal = fontSizeVal
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      if (widget.controller.isFullScreen.value == false) {
                         try {
                           danmakuController?.updateOption(
                             danmakuController.option.copyWith(
-                                duration: danmakuDurationVal ~/
-                                    widget.controller.playbackSpeed),
-                          );
-                        } catch (_) {}
-                      },
-                    ),
-                  ),
-                ),
-                Text('弹幕行高 $danmakuLineHeight'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 1.0,
-                      max: 3.0,
-                      value: danmakuLineHeight,
-                      // label: '$danmakuLineHeight',
-                      onChanged: (double val) {
-                        danmakuLineHeight = val.toPrecision(1);
-                        widget.controller
-                          ..danmakuLineHeight = danmakuLineHeight
-                          ..putDanmakuSettings();
-                        setState(() {});
-                        try {
-                          danmakuController?.updateOption(
-                            danmakuController.option.copyWith(
-                              lineHeight: danmakuLineHeight,
+                              fontSize: (15 * fontSizeVal).toDouble(),
                             ),
                           );
                         } catch (_) {}
-                      },
-                    ),
+                      }
+                    },
                   ),
                 ),
-                Text('字幕字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text('全屏字体大小 ${(fontSizeFSVal * 100).toStringAsFixed(1)}%'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0.5,
-                      max: 2.5,
-                      value: subtitleFontScale,
-                      divisions: 20,
-                      label: '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
-                      onChanged: (double val) {
-                        subtitleFontScale = val;
-                        widget.controller
-                          ..subtitleFontScale = subtitleFontScale
-                          ..updateSubtitleStyle()
-                          ..putDanmakuSettings();
-                        setState(() {});
-                      },
-                    ),
+                  child: Slider(
+                    min: 0.5,
+                    max: 2.5,
+                    value: fontSizeFSVal,
+                    divisions: 20,
+                    label: '${(fontSizeFSVal * 100).toStringAsFixed(1)}%',
+                    onChanged: (double val) {
+                      fontSizeFSVal = val;
+                      widget.controller
+                        ..fontSizeFSVal = fontSizeFSVal
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      if (widget.controller.isFullScreen.value == true) {
+                        try {
+                          danmakuController?.updateOption(
+                            danmakuController.option.copyWith(
+                              fontSize: (15 * fontSizeFSVal).toDouble(),
+                            ),
+                          );
+                        } catch (_) {}
+                      }
+                    },
                   ),
                 ),
-                Text(
-                    '全屏字幕字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text('弹幕时长 $danmakuDurationVal 秒'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0.5,
-                      max: 2.5,
-                      value: subtitleFontScaleFS,
-                      divisions: 20,
-                      label:
-                          '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
-                      onChanged: (double val) {
-                        subtitleFontScaleFS = val;
-                        widget.controller
-                          ..subtitleFontScaleFS = subtitleFontScaleFS
-                          ..updateSubtitleStyle()
-                          ..putDanmakuSettings();
-                        setState(() {});
-                      },
-                    ),
+                  child: Slider(
+                    min: 1,
+                    max: 4,
+                    value: pow(danmakuDurationVal, 1 / 4) as double,
+                    divisions: 60,
+                    label: danmakuDurationVal.toString(),
+                    onChanged: (double val) {
+                      danmakuDurationVal =
+                          (pow(val, 4) as double).toPrecision(2);
+                      widget.controller
+                        ..danmakuDurationVal = danmakuDurationVal
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      try {
+                        danmakuController?.updateOption(
+                          danmakuController.option.copyWith(
+                              duration: danmakuDurationVal ~/
+                                  widget.controller.playbackSpeed),
+                        );
+                      } catch (_) {}
+                    },
                   ),
                 ),
-                Text('字幕左右边距 $subtitlePaddingH'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text('弹幕行高 $danmakuLineHeight'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 100,
-                      value: subtitlePaddingH.toDouble(),
-                      divisions: 100,
-                      label: '$subtitlePaddingH',
-                      onChanged: (double val) {
-                        subtitlePaddingH = val.round();
-                        widget.controller
-                          ..subtitlePaddingH = subtitlePaddingH
-                          ..updateSubtitleStyle()
-                          ..putDanmakuSettings();
-                        setState(() {});
-                      },
-                    ),
+                  child: Slider(
+                    min: 1.0,
+                    max: 3.0,
+                    value: danmakuLineHeight,
+                    // label: '$danmakuLineHeight',
+                    onChanged: (double val) {
+                      danmakuLineHeight = val.toPrecision(1);
+                      widget.controller
+                        ..danmakuLineHeight = danmakuLineHeight
+                        ..putDanmakuSettings();
+                      setState(() {});
+                      try {
+                        danmakuController?.updateOption(
+                          danmakuController.option.copyWith(
+                            lineHeight: danmakuLineHeight,
+                          ),
+                        );
+                      } catch (_) {}
+                    },
                   ),
                 ),
-                Text('字幕底部边距 $subtitlePaddingB'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text('字幕字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 100,
-                      value: subtitlePaddingB.toDouble(),
-                      divisions: 100,
-                      label: '$subtitlePaddingB',
-                      onChanged: (double val) {
-                        subtitlePaddingB = val.round();
-                        widget.controller
-                          ..subtitlePaddingB = subtitlePaddingB
-                          ..updateSubtitleStyle()
-                          ..putDanmakuSettings();
-                        setState(() {});
-                      },
-                    ),
+                  child: Slider(
+                    min: 0.5,
+                    max: 2.5,
+                    value: subtitleFontScale,
+                    divisions: 20,
+                    label: '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
+                    onChanged: (double val) {
+                      subtitleFontScale = val;
+                      widget.controller
+                        ..subtitleFontScale = subtitleFontScale
+                        ..updateSubtitleStyle()
+                        ..putDanmakuSettings();
+                      setState(() {});
+                    },
                   ),
                 ),
-                Text('字幕背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 6,
-                    left: 10,
-                    right: 10,
+              ),
+              Text(
+                  '全屏字幕字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   ),
-                  child: SliderTheme(
-                    data: SliderThemeData(
-                      trackShape: MSliderTrackShape(),
-                      thumbColor: Theme.of(context).colorScheme.primary,
-                      activeTrackColor: Theme.of(context).colorScheme.primary,
-                      trackHeight: 10,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: 1,
-                      value: subtitleBgOpaticy,
-                      // label: '${(subtitleBgOpaticy * 100).toInt()}%',
-                      onChanged: (double val) {
-                        subtitleBgOpaticy = val.toPrecision(2);
-                        widget.controller
-                          ..subtitleBgOpaticy = subtitleBgOpaticy
-                          ..updateSubtitleStyle()
-                          ..putDanmakuSettings();
-                        setState(() {});
-                      },
-                    ),
+                  child: Slider(
+                    min: 0.5,
+                    max: 2.5,
+                    value: subtitleFontScaleFS,
+                    divisions: 20,
+                    label: '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
+                    onChanged: (double val) {
+                      subtitleFontScaleFS = val;
+                      widget.controller
+                        ..subtitleFontScaleFS = subtitleFontScaleFS
+                        ..updateSubtitleStyle()
+                        ..putDanmakuSettings();
+                      setState(() {});
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+              Text('字幕左右边距 $subtitlePaddingH'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: 100,
+                    value: subtitlePaddingH.toDouble(),
+                    divisions: 100,
+                    label: '$subtitlePaddingH',
+                    onChanged: (double val) {
+                      subtitlePaddingH = val.round();
+                      widget.controller
+                        ..subtitlePaddingH = subtitlePaddingH
+                        ..updateSubtitleStyle()
+                        ..putDanmakuSettings();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              Text('字幕底部边距 $subtitlePaddingB'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: 100,
+                    value: subtitlePaddingB.toDouble(),
+                    divisions: 100,
+                    label: '$subtitlePaddingB',
+                    onChanged: (double val) {
+                      subtitlePaddingB = val.round();
+                      widget.controller
+                        ..subtitlePaddingB = subtitlePaddingB
+                        ..updateSubtitleStyle()
+                        ..putDanmakuSettings();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              Text('字幕背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 6,
+                  left: 10,
+                  right: 10,
+                ),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackShape: MSliderTrackShape(),
+                    thumbColor: Theme.of(context).colorScheme.primary,
+                    activeTrackColor: Theme.of(context).colorScheme.primary,
+                    trackHeight: 10,
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: 1,
+                    value: subtitleBgOpaticy,
+                    // label: '${(subtitleBgOpaticy * 100).toInt()}%',
+                    onChanged: (double val) {
+                      subtitleBgOpaticy = val.toPrecision(2);
+                      widget.controller
+                        ..subtitleBgOpaticy = subtitleBgOpaticy
+                        ..updateSubtitleStyle()
+                        ..putDanmakuSettings();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }),
@@ -1703,30 +1684,29 @@ class _HeaderControlState extends State<HeaderControl> {
   void showSetRepeat() async {
     Utils.showFSSheet(
       isFullScreen: () => isFullScreen,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        margin: EdgeInsets.only(
-          left: 12,
-          top: 12,
-          right: 12,
-          bottom: 12 + MediaQuery.paddingOf(context).bottom,
-        ),
-        child: Column(
-          children: [
-            const SizedBox(
-                height: 45,
-                child: Center(child: Text('选择播放顺序', style: titleStyle))),
-            Expanded(
-              child: Material(
-                color: Colors.transparent,
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeBottom: true,
+      child: Builder(
+        builder: (context) => Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: EdgeInsets.only(
+            left: 12,
+            top: 12,
+            right: 12,
+            bottom: 12 + MediaQuery.paddingOf(context).bottom,
+          ),
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 45,
+                  child: Center(child: Text('选择播放顺序', style: titleStyle))),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
                   child: ListView(
+                    padding: EdgeInsets.only(bottom: 0),
                     children: [
                       for (final PlayRepeat i in PlayRepeat.values) ...[
                         ListTile(
@@ -1750,8 +1730,8 @@ class _HeaderControlState extends State<HeaderControl> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

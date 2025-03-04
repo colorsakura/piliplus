@@ -109,13 +109,15 @@ class _ViewPointsPageState extends CommonSlidePageState<ViewPointsPage> {
       );
 
   @override
-  Widget get buildList => SingleChildScrollView(
+  Widget get buildList => ListView(
         controller: ScrollController(),
         physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            ...List.generate(videoDetailController.viewPointList.length * 2 - 1,
-                (rawIndex) {
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 80),
+        children: [
+          ...List.generate(
+            videoDetailController.viewPointList.length * 2 - 1,
+            (rawIndex) {
               if (rawIndex % 2 == 1) {
                 return Divider(
                   height: 1,
@@ -191,9 +193,8 @@ class _ViewPointsPageState extends CommonSlidePageState<ViewPointsPage> {
                   ),
                 ),
               );
-            }),
-            SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
-          ],
-        ),
+            },
+          ),
+        ],
       );
 }

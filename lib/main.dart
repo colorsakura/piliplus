@@ -292,7 +292,7 @@ class MyApp extends StatelessWidget {
 }
 
 class _CustomHttpOverrides extends HttpOverrides {
-  static final badCertificateCallback =
+  final badCertificateCallback =
       BuildConfig.isDebug || GStorage.badCertificateCallback;
 
   @override
