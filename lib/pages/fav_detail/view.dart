@@ -26,8 +26,8 @@ class FavDetailPage extends StatefulWidget {
 }
 
 class _FavDetailPageState extends State<FavDetailPage> {
-  final FavDetailController _favDetailController =
-      Get.put(FavDetailController());
+  late final FavDetailController _favDetailController =
+      Get.put(FavDetailController(), tag: Utils.makeHeroTag(mediaId));
   late String mediaId;
 
   @override
