@@ -1812,8 +1812,7 @@ class _HeaderControlState extends State<HeaderControl> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                        ConstrainedBox(
                           constraints: BoxConstraints(maxHeight: 25),
                           child: Obx(
                             () => Marquee(
