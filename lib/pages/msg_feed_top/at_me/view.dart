@@ -54,11 +54,17 @@ class _AtMePageState extends State<AtMePage> {
                       PiliScheme.routePushFromUrl(nativeUri);
                     }
                   },
-                  leading: NetworkImgLayer(
-                    width: 45,
-                    height: 45,
-                    type: 'avatar',
-                    src: loadingState.response[index].user?.avatar,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                          '/member?mid=${loadingState.response[index].user?.mid}');
+                    },
+                    child: NetworkImgLayer(
+                      width: 45,
+                      height: 45,
+                      type: 'avatar',
+                      src: loadingState.response[index].user?.avatar,
+                    ),
                   ),
                   title: Text(
                     "${loadingState.response[index].user?.nickname}  "
