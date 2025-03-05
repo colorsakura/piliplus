@@ -1069,7 +1069,7 @@ class ReplyItemGrpc extends StatelessWidget {
 
   Widget morePanel({
     required BuildContext context,
-    required dynamic item,
+    required ReplyInfo item,
     required onDelete,
   }) {
     Future<dynamic> menuActionHandler(String type) async {
@@ -1077,25 +1077,33 @@ class ReplyItemGrpc extends StatelessWidget {
       switch (type) {
         case 'report':
           Get.back();
-          autoWrapReportDialog(context, ReportOptions.commentReport,
-              (reasonType, reasonDesc, banUid) async {
-            final res = await Request().post('/x/v2/reply/report',
+          autoWrapReportDialog(
+            context,
+            ReportOptions.commentReport,
+            (reasonType, reasonDesc, banUid) async {
+              final res = await Request().post(
+                '/x/v2/reply/report',
                 data: {
-                  'add_blacklist': banUid.toString(),
+                  'add_blacklist': banUid,
                   'csrf': await Request.getCsrf(),
                   'gaia_source': 'main_h5',
-                  'oid': item.oid.toString(),
+                  'oid': item.oid,
                   'platform': 'android',
-                  'reason': reasonType.toString(),
-                  'rpid': item.id.toString(),
+                  'reason': reasonType,
+                  'rpid': item.id,
                   'scene': 'main',
-                  'type': '1',
+                  'type': 1,
                   if (reasonType == 0) 'content': reasonDesc!
                 },
                 options:
-                    Options(contentType: Headers.formUrlEncodedContentType));
-            return res.data as Map;
-          });
+                    Options(contentType: Headers.formUrlEncodedContentType),
+              );
+              if (res.data['code'] == 0) {
+                onDelete?.call(item.id.toInt());
+              }
+              return res.data as Map;
+            },
+          );
           break;
         case 'copyAll':
           Get.back();

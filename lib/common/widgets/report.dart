@@ -47,7 +47,9 @@ void autoWrapReportDialog(
                               padding: const EdgeInsets.only(left: 22),
                               child: Text(
                                 title.key,
-                                style: Theme.of(context).textTheme.labelSmall,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
                               ),
                             ),
                           Padding(
@@ -59,6 +61,7 @@ void autoWrapReportDialog(
                                     value: opt.key,
                                     groupValue: reasonType,
                                     title: opt.value,
+                                    padding: const EdgeInsets.only(right: 10),
                                     onChanged: (value) {
                                       reasonType = value;
                                       if (context.mounted) {
@@ -105,21 +108,36 @@ void autoWrapReportDialog(
                           ),
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12, top: 12),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: banUid,
-                            onChanged: (v) {
-                              banUid = v ?? false;
-                              (context as Element?)?.markNeedsBuild();
-                            },
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          const Text('拉黑该用户'),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        banUid = !banUid;
+                        (context as Element?)?.markNeedsBuild();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 18, top: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              size: 22,
+                              banUid
+                                  ? Icons.check_box_outlined
+                                  : Icons.check_box_outline_blank,
+                              color: banUid
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                            ),
+                            Text(
+                              ' 拉黑该用户',
+                              style: TextStyle(
+                                color: banUid
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -145,6 +163,7 @@ void autoWrapReportDialog(
               SmartDialog.showLoading();
               try {
                 final data = await onSuccess(reasonType!, reasonDesc, banUid);
+                SmartDialog.dismiss();
                 if (data['code'] == 0) {
                   Get.back();
                   SmartDialog.showToast('举报成功');
@@ -152,9 +171,8 @@ void autoWrapReportDialog(
                   SmartDialog.showToast(data['message']);
                 }
               } catch (e) {
-                SmartDialog.showToast('提交失败：$e');
-              } finally {
                 SmartDialog.dismiss();
+                SmartDialog.showToast('提交失败：$e');
               }
             },
             child: const Text('确定'),
@@ -167,34 +185,34 @@ void autoWrapReportDialog(
 
 class ReportOptions {
   // from https://s1.hdslb.com/bfs/seed/jinkela/comment-h5/static/js/605.chunks.js
-  static const Map<String, Map<int, String>> commentReport = {
-    '违反法律法规': {9: '违法违规', 2: '色情', 10: '低俗', 12: '赌博诈骗', 23: '违法信息外链'},
-    '谣言类不实信息': {19: '涉政谣言', 22: '虚假不实信息', 20: '涉社会事件谣言'},
-    '侵犯个人权益': {7: '人身攻击', 15: '侵犯隐私'},
-    '有害社区环境': {
-      1: '垃圾广告',
-      4: '引战',
-      5: '剧透',
-      3: '刷屏',
-      8: '视频不相关',
-      18: '违规抽奖',
-      17: '青少年不良信息',
-    },
-    '其他': {0: '其他'},
-  };
+  static Map<String, Map<int, String>> get commentReport => {
+        '违反法律法规': {9: '违法违规', 2: '色情', 10: '低俗', 12: '赌博诈骗', 23: '违法信息外链'},
+        '谣言类不实信息': {19: '涉政谣言', 22: '虚假不实信息', 20: '涉社会事件谣言'},
+        '侵犯个人权益': {7: '人身攻击', 15: '侵犯隐私'},
+        '有害社区环境': {
+          1: '垃圾广告',
+          4: '引战',
+          5: '剧透',
+          3: '刷屏',
+          8: '视频不相关',
+          18: '违规抽奖',
+          17: '青少年不良信息',
+        },
+        '其他': {0: '其他'},
+      };
 
-  static const Map<String, Map<int, String>> dynamicReport = {
-    '': {
-      4: '垃圾广告',
-      8: '引战',
-      1: '色情',
-      5: '人身攻击',
-      3: '违法信息',
-      9: '涉政谣言',
-      10: '涉社会事件谣言',
-      12: '虚假不实信息',
-      13: '违法信息外链',
-      0: '其他',
-    },
-  };
+  static Map<String, Map<int, String>> get dynamicReport => {
+        '': {
+          4: '垃圾广告',
+          8: '引战',
+          1: '色情',
+          5: '人身攻击',
+          3: '违法信息',
+          9: '涉政谣言',
+          10: '涉社会事件谣言',
+          12: '虚假不实信息',
+          13: '违法信息外链',
+          0: '其他',
+        },
+      };
 }

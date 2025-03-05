@@ -5,21 +5,26 @@ Widget radioWidget<T>({
   T? groupValue,
   required ValueChanged onChanged,
   required String title,
-  double? paddingStart,
+  EdgeInsetsGeometry? padding,
 }) {
+  Widget child() => Row(
+        children: [
+          Radio(
+            value: value,
+            groupValue: groupValue,
+            onChanged: onChanged,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          Text(title),
+        ],
+      );
   return InkWell(
     onTap: () => onChanged(value),
-    child: Row(
-      children: [
-        if (paddingStart != null) SizedBox(width: paddingStart),
-        Radio(
-          value: value,
-          groupValue: groupValue,
-          onChanged: onChanged,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-        Text(title),
-      ],
-    ),
+    child: padding != null
+        ? Padding(
+            padding: padding,
+            child: child(),
+          )
+        : child(),
   );
 }

@@ -1037,24 +1037,32 @@ class MorePanel extends StatelessWidget {
     switch (type) {
       case 'report':
         Get.back();
-        autoWrapReportDialog(Get.context!, ReportOptions.commentReport,
-            (reasonType, reasonDesc, banUid) async {
-          final res = await Request().post('/x/v2/reply/report',
+        autoWrapReportDialog(
+          Get.context!,
+          ReportOptions.commentReport,
+          (reasonType, reasonDesc, banUid) async {
+            final res = await Request().post(
+              '/x/v2/reply/report',
               data: {
-                'add_blacklist': banUid.toString(),
+                'add_blacklist': banUid,
                 'csrf': await Request.getCsrf(),
                 'gaia_source': 'main_h5',
-                'oid': item.oid.toString(),
+                'oid': item.oid,
                 'platform': 'android',
-                'reason': reasonType.toString(),
-                'rpid': item.rpid.toString(),
+                'reason': reasonType,
+                'rpid': item.rpid,
                 'scene': 'main',
-                'type': '1',
+                'type': 1,
                 if (reasonType == 0) 'content': reasonDesc!
               },
-              options: Options(contentType: Headers.formUrlEncodedContentType));
-          return res.data as Map;
-        });
+              options: Options(contentType: Headers.formUrlEncodedContentType),
+            );
+            if (res.data['code'] == 0) {
+              onDelete?.call(item.rpid);
+            }
+            return res.data as Map;
+          },
+        );
         break;
       case 'copyAll':
         Get.back();

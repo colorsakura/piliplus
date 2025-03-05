@@ -327,32 +327,35 @@ class AuthorPanel extends StatelessWidget {
               ),
               onTap: () {
                 Get.back();
-                autoWrapReportDialog(context, ReportOptions.dynamicReport,
-                    (reasonType, reasonDesc, banUid) async {
-                  if (banUid) {
-                    VideoHttp.relationMod(
-                      mid: item.modules.moduleAuthor.mid,
-                      act: 5,
-                      reSrc: 11,
+                autoWrapReportDialog(
+                  context,
+                  ReportOptions.dynamicReport,
+                  (reasonType, reasonDesc, banUid) async {
+                    if (banUid) {
+                      VideoHttp.relationMod(
+                        mid: item.modules.moduleAuthor.mid,
+                        act: 5,
+                        reSrc: 11,
+                      );
+                    }
+                    final res = await Request().post(
+                      '/x/dynamic/feed/dynamic_report/add',
+                      queryParameters: {
+                        'csrf': await Request.getCsrf(),
+                      },
+                      data: {
+                        "accused_uid": item.modules.moduleAuthor.mid,
+                        "dynamic_id": item.idStr,
+                        "reason_type": reasonType,
+                        "reason_desc": reasonType == 0 ? reasonDesc : null,
+                      },
+                      options: Options(
+                        contentType: Headers.formUrlEncodedContentType,
+                      ),
                     );
-                  }
-                  final res = await Request().post(
-                    '/x/dynamic/feed/dynamic_report/add',
-                    queryParameters: {
-                      'csrf': await Request.getCsrf(),
-                    },
-                    data: {
-                      "accused_uid": item.modules.moduleAuthor.mid,
-                      "dynamic_id": item.idStr,
-                      "reason_type": reasonType,
-                      "reason_desc": reasonType == 0 ? reasonDesc : null,
-                    },
-                    options: Options(
-                      contentType: Headers.formUrlEncodedContentType,
-                    ),
-                  );
-                  return res.data as Map;
-                });
+                    return res.data as Map;
+                  },
+                );
               },
               minLeadingWidth: 0,
             ),
