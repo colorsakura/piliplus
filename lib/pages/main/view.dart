@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/tabs.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -186,9 +187,7 @@ class _MainAppState extends State<MainApp>
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarIconBrightness:
-              Theme.of(context).brightness == Brightness.light
-                  ? Brightness.dark
-                  : Brightness.light, // 设置虚拟按键图标颜色
+              Theme.of(context).brightness.reverse, // 设置虚拟按键图标颜色
         ),
         child: Scaffold(
           resizeToAvoidBottomInset: false,

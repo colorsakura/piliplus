@@ -28,6 +28,7 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -636,25 +637,42 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               : PreferredSize(
                   preferredSize: Size.fromHeight(0),
                   child: Obx(
-                    () => Stack(
-                      children: [
-                        AppBar(
-                          backgroundColor: Colors.black,
-                          toolbarHeight: 0,
-                        ),
-                        if (videoDetailController.scrollRatio.value != 0 &&
-                            videoDetailController.scrollCtr.offset != 0 &&
-                            context.orientation == Orientation.portrait)
+                    () {
+                      bool shouldShow =
+                          videoDetailController.scrollRatio.value != 0 &&
+                              videoDetailController.scrollCtr.offset != 0 &&
+                              context.orientation == Orientation.portrait;
+                      return Stack(
+                        children: [
                           AppBar(
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withOpacity(
-                                    videoDetailController.scrollRatio.value),
+                            backgroundColor: Colors.black,
                             toolbarHeight: 0,
+                            systemOverlayStyle: shouldShow
+                                ? null
+                                : SystemUiOverlayStyle(
+                                    statusBarIconBrightness: Brightness.light,
+                                    systemNavigationBarIconBrightness:
+                                        Theme.of(context).brightness.reverse,
+                                  ),
                           ),
-                      ],
-                    ),
+                          if (shouldShow)
+                            AppBar(
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .surface
+                                  .withOpacity(
+                                      videoDetailController.scrollRatio.value),
+                              toolbarHeight: 0,
+                              systemOverlayStyle: SystemUiOverlayStyle(
+                                statusBarIconBrightness:
+                                    Theme.of(context).brightness.reverse,
+                                systemNavigationBarIconBrightness:
+                                    Theme.of(context).brightness.reverse,
+                              ),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ),
           body: ExtendedNestedScrollView(

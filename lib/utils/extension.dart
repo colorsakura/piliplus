@@ -115,3 +115,8 @@ extension ColorExtension on Color {
     return Color.fromARGB(blendedAlpha, blendedRed, blendedGreen, blendedBlue);
   }
 }
+
+extension BrightnessExt on Brightness {
+  Brightness get reverse =>
+      this == Brightness.light ? Brightness.dark : Brightness.light;
+}
