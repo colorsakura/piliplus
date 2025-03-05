@@ -119,7 +119,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodySmall!
+                              .bodyMedium!
                               .copyWith(
                                 color: Theme.of(context).colorScheme.outline,
                               ),

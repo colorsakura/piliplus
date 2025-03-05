@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,7 +87,15 @@ class _AtMePageState extends State<AtMePage> {
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  color: Theme.of(context).colorScheme.outline))
+                                  color:
+                                      Theme.of(context).colorScheme.outline)),
+                      const SizedBox(height: 4),
+                      Text(
+                        Utils.dateFormat(loadingState.response[index].atTime),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                      ),
                     ],
                   ),
                   trailing: loadingState.response[index].item?.image != null &&

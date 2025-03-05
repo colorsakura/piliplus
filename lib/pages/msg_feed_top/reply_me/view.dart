@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -74,52 +75,56 @@ class _ReplyMePageState extends State<ReplyMePage> {
                         .copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                   subtitle: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                          loadingState.response[index].item?.sourceContent ??
+                              "",
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      const SizedBox(height: 4),
+                      if (loadingState
+                                  .response[index].item?.targetReplyContent !=
+                              null &&
+                          loadingState
+                                  .response[index].item?.targetReplyContent !=
+                              "")
                         Text(
-                            loadingState.response[index].item?.sourceContent ??
-                                "",
-                            style: Theme.of(context).textTheme.bodyMedium),
-                        const SizedBox(height: 4),
-                        if (loadingState
-                                    .response[index].item?.targetReplyContent !=
-                                null &&
-                            loadingState
-                                    .response[index].item?.targetReplyContent !=
-                                "")
-                          Text(
-                              "| ${loadingState.response[index].item?.targetReplyContent}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      height: 1.5)),
-                        if (loadingState
-                                    .response[index].item?.rootReplyContent !=
-                                null &&
-                            loadingState
-                                    .response[index].item?.rootReplyContent !=
-                                "")
-                          Text(
-                              " | ${loadingState.response[index].item?.rootReplyContent}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          height: 1.5)),
-                      ]),
+                            "| ${loadingState.response[index].item?.targetReplyContent}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    height: 1.5)),
+                      if (loadingState.response[index].item?.rootReplyContent !=
+                              null &&
+                          loadingState.response[index].item?.rootReplyContent !=
+                              "")
+                        Text(
+                            " | ${loadingState.response[index].item?.rootReplyContent}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    height: 1.5)),
+                      Text(
+                        Utils.dateFormat(
+                            loadingState.response[index].replyTime),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                      ),
+                    ],
+                  ),
                 );
               },
               separatorBuilder: (BuildContext context, int index) {

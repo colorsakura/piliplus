@@ -1207,7 +1207,7 @@ class Utils {
 
   // 时间显示，刚刚，x分钟前
   static String dateFormat(timeStamp, {formatType = 'list'}) {
-    if (timeStamp == 0 || timeStamp == null || timeStamp == '') {
+    if (timeStamp == null || timeStamp == 0 || timeStamp == '') {
       return '';
     }
     // 当前时间
