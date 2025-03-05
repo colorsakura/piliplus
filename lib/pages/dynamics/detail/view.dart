@@ -49,6 +49,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   // 回复类型
   late int replyType;
   bool _isFabVisible = true;
+  bool? _imageStatus;
   int oid = 0;
   int? opusId;
   bool isOpusId = false;
@@ -63,9 +64,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
-          bool needReverse = _isFabVisible;
-          if (needReverse) {
-            _fabAnimationCtr?.reverse();
+          _imageStatus = true;
+          bool isFabVisible = _isFabVisible;
+          if (isFabVisible) {
+            _hideFab();
           }
           final ctr = AnimationController(
             vsync: this,
@@ -81,9 +83,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             imgList,
             index,
             (value) async {
-              if (needReverse) {
-                needReverse = false;
-                _fabAnimationCtr?.forward();
+              _imageStatus = null;
+              if (isFabVisible) {
+                isFabVisible = false;
+                _showFab();
               }
               if (value == false) {
                 await ctr.reverse();
@@ -194,9 +197,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
-          bool needReverse = _isFabVisible;
-          if (needReverse) {
-            _fabAnimationCtr?.reverse();
+          bool isFabVisible = _isFabVisible;
+          if (isFabVisible) {
+            _hideFab();
           }
           scaffoldState.showBottomSheet(
             backgroundColor: Colors.transparent,
@@ -206,8 +209,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               child: replyReplyPage(
                 false,
                 () {
-                  if (needReverse) {
-                    _fabAnimationCtr?.forward();
+                  if (isFabVisible && _imageStatus != true) {
+                    _showFab();
                   }
                 },
               ),

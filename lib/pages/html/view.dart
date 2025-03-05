@@ -44,6 +44,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   late String dynamicType;
   late int type;
   bool _isFabVisible = true;
+  bool? _imageStatus;
   late AnimationController fabAnimationCtr;
 
   late final List<double> _ratio = GStorage.dynamicDetailRatio;
@@ -56,9 +57,10 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
-          bool needReverse = _isFabVisible;
-          if (needReverse) {
-            fabAnimationCtr.reverse();
+          _imageStatus = true;
+          bool isFabVisible = _isFabVisible;
+          if (isFabVisible) {
+            _hideFab();
           }
           final ctr = AnimationController(
             vsync: this,
@@ -74,9 +76,10 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             imgList,
             index,
             (value) async {
-              if (needReverse) {
-                needReverse = false;
-                fabAnimationCtr.forward();
+              _imageStatus = null;
+              if (isFabVisible) {
+                isFabVisible = false;
+                _showFab();
               }
               if (value == false) {
                 await ctr.reverse();
@@ -187,9 +190,9 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
-          bool needReverse = _isFabVisible;
-          if (needReverse) {
-            fabAnimationCtr.reverse();
+          bool isFabVisible = _isFabVisible;
+          if (isFabVisible) {
+            _hideFab();
           }
           scaffoldState.showBottomSheet(
             backgroundColor: Colors.transparent,
@@ -199,8 +202,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               child: replyReplyPage(
                 false,
                 () {
-                  if (needReverse) {
-                    fabAnimationCtr.forward();
+                  if (isFabVisible && _imageStatus != true) {
+                    _showFab();
                   }
                 },
               ),
