@@ -141,8 +141,6 @@ class VideoDetailController extends GetxController
       max(max(Get.height, Get.width) * 0.65, min(Get.height, Get.width));
   late double videoHeight = minVideoHeight;
 
-  bool? backToHome;
-
   void setVideoHeight() {
     String direction = firstVideo.width != null && firstVideo.height != null
         ? firstVideo.width! > firstVideo.height!

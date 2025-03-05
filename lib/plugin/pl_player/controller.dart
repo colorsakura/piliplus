@@ -354,6 +354,8 @@ class PlPlayerController {
     _playCallBack = playCallBack;
   }
 
+  bool? backToHome;
+
   static Function? _playCallBack;
 
   static Future<void> playIfExists(

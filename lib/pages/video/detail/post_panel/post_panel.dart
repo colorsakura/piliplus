@@ -9,7 +9,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/sponsor_block/action_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
-import 'package:PiliPlus/pages/common/common_slide_page.dart';
+import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/index.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class PostPanel extends CommonSlidePage {
+class PostPanel extends CommonCollapseSlidePage {
   const PostPanel({
     super.key,
     super.enableSlide,
@@ -36,42 +36,11 @@ class PostPanel extends CommonSlidePage {
   State<PostPanel> createState() => _PostPanelState();
 }
 
-class _PostPanelState extends CommonSlidePageState<PostPanel> {
-  late bool _isInit = true;
+class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   VideoDetailController get videoDetailController =>
       widget.videoDetailController;
   PlPlayerController get plPlayerController => widget.plPlayerController;
   List<PostSegmentModel>? get list => videoDetailController.list;
-
-  @override
-  void initState() {
-    super.initState();
-    if (enableSlide && GStorage.collapsibleVideoPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (enableSlide && GStorage.collapsibleVideoPage && _isInit) {
-      return CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-      );
-    }
-
-    return enableSlide
-        ? Padding(
-            padding: EdgeInsets.only(top: padding),
-            child: buildPage,
-          )
-        : buildPage;
-  }
 
   @override
   Widget get buildPage => Scaffold(

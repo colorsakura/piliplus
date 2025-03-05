@@ -2,15 +2,14 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
-import 'package:PiliPlus/pages/common/common_slide_page.dart';
+import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/index.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ViewPointsPage extends CommonSlidePage {
+class ViewPointsPage extends CommonCollapseSlidePage {
   const ViewPointsPage({
     super.key,
     super.enableSlide,
@@ -25,43 +24,13 @@ class ViewPointsPage extends CommonSlidePage {
   State<ViewPointsPage> createState() => _ViewPointsPageState();
 }
 
-class _ViewPointsPageState extends CommonSlidePageState<ViewPointsPage> {
-  late bool _isInit = true;
+class _ViewPointsPageState
+    extends CommonCollapseSlidePageState<ViewPointsPage> {
   VideoDetailController get videoDetailController =>
       widget.videoDetailController;
   PlPlayerController? get plPlayerController => widget.plPlayerController;
 
-  @override
-  void initState() {
-    super.initState();
-    if (enableSlide && GStorage.collapsibleVideoPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-        }
-      });
-    }
-  }
-
   int currentIndex = -1;
-
-  @override
-  Widget build(BuildContext context) {
-    if (enableSlide && GStorage.collapsibleVideoPage && _isInit) {
-      return CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-      );
-    }
-
-    return enableSlide
-        ? Padding(
-            padding: EdgeInsets.only(top: padding),
-            child: buildPage,
-          )
-        : buildPage;
-  }
 
   @override
   Widget get buildPage => Scaffold(

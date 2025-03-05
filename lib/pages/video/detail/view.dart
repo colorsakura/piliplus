@@ -368,7 +368,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
     shutdownTimerService.handleWaitingFinished();
     // _bufferedListener?.cancel();
-    if (videoDetailController.backToHome != true) {
+    if (videoDetailController.plPlayerController.backToHome != true) {
       videoPlayerServiceHandler.onVideoDetailDispose(heroTag);
     }
     if (plPlayerController != null) {
@@ -1067,7 +1067,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                             ],
                           ),
                           onPressed: () {
-                            videoDetailController.backToHome = true;
+                            videoDetailController
+                                .plPlayerController.backToHome = true;
                             Get.until((route) => route.isFirst);
                           },
                         ),

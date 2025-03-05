@@ -1,6 +1,5 @@
-import 'package:PiliPlus/pages/common/common_slide_page.dart';
+import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/widgets/stat/danmu.dart';
 import 'package:PiliPlus/common/widgets/stat/view.dart';
@@ -8,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../../utils/utils.dart';
 
-class IntroDetail extends CommonSlidePage {
+class IntroDetail extends CommonCollapseSlidePage {
   final dynamic bangumiDetail;
   final dynamic videoTags;
 
@@ -22,42 +21,11 @@ class IntroDetail extends CommonSlidePage {
   State<IntroDetail> createState() => _IntroDetailState();
 }
 
-class _IntroDetailState extends CommonSlidePageState<IntroDetail> {
-  late bool _isInit = true;
+class _IntroDetailState extends CommonCollapseSlidePageState<IntroDetail> {
   late final TextStyle smallTitle = TextStyle(
     fontSize: 12,
     color: Theme.of(context).colorScheme.onSurface,
   );
-
-  @override
-  void initState() {
-    super.initState();
-    if (enableSlide && GStorage.collapsibleVideoPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (enableSlide && GStorage.collapsibleVideoPage && _isInit) {
-      return CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-      );
-    }
-
-    return enableSlide
-        ? Padding(
-            padding: EdgeInsets.only(top: padding),
-            child: buildPage,
-          )
-        : buildPage;
-  }
 
   @override
   Widget get buildPage {

@@ -1,7 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/pages/common/common_slide_page.dart';
+import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/controller.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -9,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/models/video/ai.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
-class AiDetail extends CommonSlidePage {
+class AiDetail extends CommonCollapseSlidePage {
   final ModelResult modelResult;
 
   const AiDetail({
@@ -21,39 +20,7 @@ class AiDetail extends CommonSlidePage {
   State<AiDetail> createState() => _AiDetailState();
 }
 
-class _AiDetailState extends CommonSlidePageState<AiDetail> {
-  late bool _isInit = true;
-
-  @override
-  void initState() {
-    super.initState();
-    if (enableSlide && GStorage.collapsibleVideoPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (enableSlide && GStorage.collapsibleVideoPage && _isInit) {
-      return CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-      );
-    }
-
-    return enableSlide
-        ? Padding(
-            padding: EdgeInsets.only(top: padding),
-            child: buildPage,
-          )
-        : buildPage;
-  }
-
+class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
   InlineSpan buildContent(BuildContext context, content) {
     List descV2 = content.descV2;
     // type

@@ -406,7 +406,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     }
     shutdownTimerService.handleWaitingFinished();
     // _bufferedListener?.cancel();
-    if (videoDetailController.backToHome != true) {
+    if (videoDetailController.plPlayerController.backToHome != true) {
       videoPlayerServiceHandler.onVideoDetailDispose(heroTag);
     }
     if (plPlayerController != null) {
@@ -814,6 +814,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                   ),
                                                   onPressed: () {
                                                     videoDetailController
+                                                        .plPlayerController
                                                         .backToHome = true;
                                                     Get.until((route) =>
                                                         route.isFirst);
@@ -844,6 +845,69 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                             ],
                                           ),
                                         ),
+                                        if (videoDetailController.playedTime ==
+                                            null)
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: PopupMenuButton<String>(
+                                              icon: Icon(
+                                                Icons.more_vert,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                              onSelected: (String type) async {
+                                                switch (type) {
+                                                  case 'later':
+                                                    var res = await UserHttp
+                                                        .toViewLater(
+                                                            bvid:
+                                                                videoDetailController
+                                                                    .bvid);
+                                                    SmartDialog.showToast(
+                                                        res['msg']);
+                                                    break;
+                                                  case 'report':
+                                                    if (videoDetailController
+                                                            .userInfo ==
+                                                        null) {
+                                                      SmartDialog.showToast(
+                                                          '账号未登录');
+                                                    } else {
+                                                      Get.toNamed('/webview',
+                                                          parameters: {
+                                                            'url':
+                                                                'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
+                                                          });
+                                                    }
+                                                    break;
+                                                  case 'note':
+                                                    videoDetailController
+                                                        .showNoteList(context);
+                                                    break;
+                                                }
+                                              },
+                                              itemBuilder:
+                                                  (BuildContext context) =>
+                                                      <PopupMenuEntry<String>>[
+                                                const PopupMenuItem<String>(
+                                                  value: 'later',
+                                                  child: Text('稍后再看'),
+                                                ),
+                                                if (videoDetailController
+                                                        .epId ==
+                                                    null)
+                                                  const PopupMenuItem<String>(
+                                                    value: 'note',
+                                                    child: Text('查看笔记'),
+                                                  ),
+                                                const PopupMenuItem<String>(
+                                                  value: 'report',
+                                                  child: Text('举报'),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                       ],
                                     ),
                                   ),
@@ -1359,7 +1423,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             ],
                           ),
                           onPressed: () {
-                            videoDetailController.backToHome = true;
+                            videoDetailController
+                                .plPlayerController.backToHome = true;
                             Get.until((route) => route.isFirst);
                           },
                         ),

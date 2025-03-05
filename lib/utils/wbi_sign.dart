@@ -82,14 +82,18 @@ class WbiSign {
       return mixinKey;
     }
     final resp = await Request().get(Api.userInfo);
-    final wbiUrls = resp.data['data']['wbi_img'];
 
-    mixinKey = getMixinKey(
-        getFileName(wbiUrls['img_url']) + getFileName(wbiUrls['sub_url']));
+    if (resp.data['code'] == 0) {
+      final wbiUrls = resp.data['data']['wbi_img'];
 
-    localCache.put(LocalCacheKey.mixinKey, mixinKey);
-    localCache.put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
-    return mixinKey;
+      mixinKey = getMixinKey(
+          getFileName(wbiUrls['img_url']) + getFileName(wbiUrls['sub_url']));
+
+      localCache.put(LocalCacheKey.mixinKey, mixinKey);
+      localCache.put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
+    }
+
+    return mixinKey ?? '';
   }
 
   static Future<Map<String, dynamic>> makSign(
