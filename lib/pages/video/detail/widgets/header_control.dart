@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
+import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
+import 'package:PiliPlus/pages/bangumi/introduction/controller.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -54,13 +56,14 @@ class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HeaderControlState extends State<HeaderControl> {
-  PlayUrlModel get videoInfo => widget.videoDetailCtr.data;
+  PlayUrlModel get videoInfo => videoDetailCtr.data;
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
   static const TextStyle titleStyle = TextStyle(fontSize: 14);
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
   double buttonSpace = 8;
   String get heroTag => widget.heroTag;
   late VideoIntroController videoIntroController;
+  late BangumiIntroController bangumiIntroController;
   late bool horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
@@ -70,10 +73,16 @@ class _HeaderControlState extends State<HeaderControl> {
   late final _coinKey = GlobalKey<ActionItemState>();
   late final _favKey = GlobalKey<ActionItemState>();
 
+  PlPlayerController get plPlayerController => widget.controller;
+  VideoDetailController get videoDetailCtr => widget.videoDetailCtr;
+
   @override
   void initState() {
     super.initState();
-    videoIntroController = Get.put(VideoIntroController(), tag: heroTag);
+    videoIntroController = Get.find<VideoIntroController>(tag: heroTag);
+    if (videoDetailCtr.videoType != SearchType.video) {
+      bangumiIntroController = Get.find<BangumiIntroController>(tag: heroTag);
+    }
     horizontalScreen =
         setting.get(SettingBoxKey.horizontalScreen, defaultValue: false);
     defaultCDNService = setting.get(SettingBoxKey.CDNService,
@@ -145,24 +154,24 @@ class _HeaderControlState extends State<HeaderControl> {
                 //     ),
                 //   ),
                 // ),
-                // if (widget.videoDetailCtr.userInfo != null)
+                // if (videoDetailCtr.userInfo != null)
                 ListTile(
                   dense: true,
                   onTap: () async {
                     Get.back();
-                    final res = await UserHttp.toViewLater(
-                        bvid: widget.videoDetailCtr.bvid);
+                    final res =
+                        await UserHttp.toViewLater(bvid: videoDetailCtr.bvid);
                     SmartDialog.showToast(res['msg']);
                   },
                   leading: const Icon(Icons.watch_later_outlined, size: 20),
                   title: const Text('添加至「稍后再看」', style: titleStyle),
                 ),
-                if (widget.videoDetailCtr.epId == null)
+                if (videoDetailCtr.epId == null)
                   ListTile(
                     dense: true,
                     onTap: () {
                       Get.back();
-                      widget.videoDetailCtr.showNoteList(context);
+                      videoDetailCtr.showNoteList(context);
                     },
                     leading: const Icon(Icons.note_alt_outlined, size: 20),
                     title: const Text('查看笔记', style: titleStyle),
@@ -177,8 +186,8 @@ class _HeaderControlState extends State<HeaderControl> {
                   dense: true,
                   onTap: () => {
                     Get.back(),
-                    widget.videoDetailCtr.queryVideoUrl(
-                      widget.videoDetailCtr.playedTime,
+                    videoDetailCtr.queryVideoUrl(
+                      videoDetailCtr.playedTime,
                     )
                   },
                   leading: const Icon(Icons.refresh_outlined, size: 20),
@@ -275,8 +284,8 @@ class _HeaderControlState extends State<HeaderControl> {
                       SmartDialog.showToast(
                           '已设置为 ${CDNServiceCode.fromCode(result)!.description}，正在重载视频');
                       setState(() {});
-                      widget.videoDetailCtr.queryVideoUrl(
-                        widget.videoDetailCtr.playedTime,
+                      videoDetailCtr.queryVideoUrl(
+                        videoDetailCtr.playedTime,
                       );
                     }
                   },
@@ -349,17 +358,17 @@ class _HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.play_circle_outline, size: 20),
                   title: const Text('选择画质', style: titleStyle),
                   subtitle: Text(
-                      '当前画质 ${widget.videoDetailCtr.currentVideoQa.description}',
+                      '当前画质 ${videoDetailCtr.currentVideoQa.description}',
                       style: subTitleStyle),
                 ),
-                if (widget.videoDetailCtr.currentAudioQa != null)
+                if (videoDetailCtr.currentAudioQa != null)
                   ListTile(
                     dense: true,
                     onTap: () => {Get.back(), showSetAudioQa()},
                     leading: const Icon(Icons.album_outlined, size: 20),
                     title: const Text('选择音质', style: titleStyle),
                     subtitle: Text(
-                        '当前音质 ${widget.videoDetailCtr.currentAudioQa!.description}',
+                        '当前音质 ${videoDetailCtr.currentAudioQa!.description}',
                         style: subTitleStyle),
                   ),
                 ListTile(
@@ -368,7 +377,7 @@ class _HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.av_timer_outlined, size: 20),
                   title: const Text('解码格式', style: titleStyle),
                   subtitle: Text(
-                      '当前解码格式 ${widget.videoDetailCtr.currentDecodeFormats.description}',
+                      '当前解码格式 ${videoDetailCtr.currentDecodeFormats.description}',
                       style: subTitleStyle),
                 ),
                 ListTile(
@@ -544,14 +553,14 @@ class _HeaderControlState extends State<HeaderControl> {
                 ListTile(
                   dense: true,
                   onTap: () {
-                    if (widget.videoDetailCtr.userInfo == null) {
+                    if (videoDetailCtr.userInfo == null) {
                       SmartDialog.showToast('账号未登录');
                       return;
                     }
                     Get.back();
                     Get.toNamed('/webview', parameters: {
                       'url':
-                          'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(widget.videoDetailCtr.bvid)}&bvid=${widget.videoDetailCtr.bvid}'
+                          'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailCtr.bvid)}&bvid=${videoDetailCtr.bvid}'
                     });
                   },
                   leading: const Icon(Icons.error_outline, size: 20),
@@ -749,7 +758,7 @@ class _HeaderControlState extends State<HeaderControl> {
       return;
     }
     final List<FormatItem> videoFormat = videoInfo.supportFormats!;
-    final VideoQuality currentVideoQa = widget.videoDetailCtr.currentVideoQa;
+    final VideoQuality currentVideoQa = videoDetailCtr.currentVideoQa;
 
     /// 总质量分类
     final int totalQaSam = videoFormat.length;
@@ -821,9 +830,9 @@ class _HeaderControlState extends State<HeaderControl> {
                               }
                               Get.back();
                               final int quality = videoFormat[i].quality!;
-                              widget.videoDetailCtr.currentVideoQa =
+                              videoDetailCtr.currentVideoQa =
                                   VideoQualityCode.fromCode(quality)!;
-                              widget.videoDetailCtr.updatePlayer();
+                              videoDetailCtr.updatePlayer();
                               // String oldQualityDesc =
                               //     VideoQualityCode.fromCode(setting.get(
                               //             SettingBoxKey.defaultVideoQa,
@@ -867,7 +876,7 @@ class _HeaderControlState extends State<HeaderControl> {
 
   /// 选择音质
   void showSetAudioQa() {
-    final AudioQuality currentAudioQa = widget.videoDetailCtr.currentAudioQa!;
+    final AudioQuality currentAudioQa = videoDetailCtr.currentAudioQa!;
     final List<AudioItem> audio = videoInfo.dash!.audio!;
     Utils.showFSSheet(
       isFullScreen: () => isFullScreen,
@@ -904,9 +913,9 @@ class _HeaderControlState extends State<HeaderControl> {
                             }
                             Get.back();
                             final int quality = i.id!;
-                            widget.videoDetailCtr.currentAudioQa =
+                            videoDetailCtr.currentAudioQa =
                                 AudioQualityCode.fromCode(quality)!;
-                            widget.videoDetailCtr.updatePlayer();
+                            videoDetailCtr.updatePlayer();
                             // String oldQualityDesc = AudioQualityCode.fromCode(
                             //         setting.get(SettingBoxKey.defaultAudioQa,
                             //             defaultValue:
@@ -947,8 +956,8 @@ class _HeaderControlState extends State<HeaderControl> {
   void showSetDecodeFormats() {
     // 当前选中的解码格式
     final VideoDecodeFormats currentDecodeFormats =
-        widget.videoDetailCtr.currentDecodeFormats;
-    final VideoItem firstVideo = widget.videoDetailCtr.firstVideo;
+        videoDetailCtr.currentDecodeFormats;
+    final VideoItem firstVideo = videoDetailCtr.firstVideo;
     // 当前视频可用的解码格式
     final List<FormatItem> videoFormat = videoInfo.supportFormats!;
     final List? list = videoFormat
@@ -992,9 +1001,9 @@ class _HeaderControlState extends State<HeaderControl> {
                             if (i.startsWith(currentDecodeFormats.code)) {
                               return;
                             }
-                            widget.videoDetailCtr.currentDecodeFormats =
+                            videoDetailCtr.currentDecodeFormats =
                                 VideoDecodeFormatsCode.fromString(i)!;
-                            widget.videoDetailCtr.updatePlayer();
+                            videoDetailCtr.updatePlayer();
                             Get.back();
                           },
                           contentPadding:
@@ -1795,8 +1804,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        widget.videoDetailCtr.plPlayerController.backToHome =
-                            true;
+                        videoDetailCtr.plPlayerController.backToHome = true;
                         Get.until((route) => route.isFirst);
                       },
                     ),
@@ -1879,7 +1887,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 //   ),
                 //   fuc: () => _.screenshot(),
                 // ),
-                if (widget.videoDetailCtr.enableSponsorBlock == true)
+                if (videoDetailCtr.enableSponsorBlock == true)
                   SizedBox(
                     width: 42,
                     height: 34,
@@ -1888,7 +1896,7 @@ class _HeaderControlState extends State<HeaderControl> {
                       style: ButtonStyle(
                         padding: WidgetStateProperty.all(EdgeInsets.zero),
                       ),
-                      onPressed: () => widget.videoDetailCtr.onBlock(context),
+                      onPressed: () => videoDetailCtr.onBlock(context),
                       icon: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -1907,7 +1915,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     ),
                   ),
                 Obx(
-                  () => widget.videoDetailCtr.segmentList.isNotEmpty == true
+                  () => videoDetailCtr.segmentList.isNotEmpty == true
                       ? SizedBox(
                           width: 42,
                           height: 34,
@@ -1917,7 +1925,7 @@ class _HeaderControlState extends State<HeaderControl> {
                               padding: WidgetStateProperty.all(EdgeInsets.zero),
                             ),
                             onPressed: () =>
-                                widget.videoDetailCtr.showSBDetail(context),
+                                videoDetailCtr.showSBDetail(context),
                             icon: Icon(
                               MdiIcons.advertisements,
                               size: 19,
@@ -1935,7 +1943,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     style: ButtonStyle(
                       padding: WidgetStateProperty.all(EdgeInsets.zero),
                     ),
-                    onPressed: widget.videoDetailCtr.showShootDanmakuSheet,
+                    onPressed: videoDetailCtr.showShootDanmakuSheet,
                     icon: const Icon(
                       Icons.comment_outlined,
                       size: 19,
@@ -1989,7 +1997,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           bool enableBackgroundPlay = setting.get(
                               SettingBoxKey.enableBackgroundPlay,
                               defaultValue: true);
-                          if (!enableBackgroundPlay && context.mounted) {
+                          if (!enableBackgroundPlay && mounted) {
                             // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
                             // await Future.delayed(const Duration(seconds: 2), () {
                             // });
@@ -2098,122 +2106,240 @@ class _HeaderControlState extends State<HeaderControl> {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 42,
-                          height: 34,
-                          child: Obx(
-                            () => ActionItem(
+                        if (videoDetailCtr.videoType == SearchType.video) ...[
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                expand: false,
+                                icon: const Icon(
+                                  FontAwesomeIcons.thumbsUp,
+                                  color: Colors.white,
+                                ),
+                                selectIcon:
+                                    const Icon(FontAwesomeIcons.solidThumbsUp),
+                                onTap: videoIntroController.actionLikeVideo,
+                                onLongPress: () {
+                                  videoIntroController.actionOneThree();
+                                  plPlayerController.isSliderMoving.value =
+                                      false;
+                                  plPlayerController.hideTaskControls();
+                                },
+                                selectStatus:
+                                    videoIntroController.hasLike.value,
+                                semanticsLabel: '点赞',
+                                needAnim: true,
+                                hasOneThree:
+                                    videoIntroController.hasLike.value &&
+                                        videoIntroController.hasCoin.value &&
+                                        videoIntroController.hasFav.value,
+                                callBack: (start) {
+                                  if (start) {
+                                    HapticFeedback.lightImpact();
+                                    plPlayerController.isSliderMoving.value =
+                                        true;
+                                    _coinKey.currentState?.controller
+                                        ?.forward();
+                                    _favKey.currentState?.controller?.forward();
+                                  } else {
+                                    _coinKey.currentState?.controller
+                                        ?.reverse();
+                                    _favKey.currentState?.controller?.reverse();
+                                    plPlayerController.isSliderMoving.value =
+                                        false;
+                                    plPlayerController.hideTaskControls();
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                expand: false,
+                                icon: const Icon(
+                                  FontAwesomeIcons.thumbsDown,
+                                  color: Colors.white,
+                                ),
+                                selectIcon: const Icon(
+                                    FontAwesomeIcons.solidThumbsDown),
+                                onTap: videoIntroController.actionDislikeVideo,
+                                selectStatus:
+                                    videoIntroController.hasDislike.value,
+                                semanticsLabel: '点踩',
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                key: _coinKey,
+                                expand: false,
+                                icon: const Icon(
+                                  FontAwesomeIcons.b,
+                                  color: Colors.white,
+                                ),
+                                selectIcon: const Icon(FontAwesomeIcons.b),
+                                onTap: videoIntroController.actionCoinVideo,
+                                selectStatus:
+                                    videoIntroController.hasCoin.value,
+                                semanticsLabel: '投币',
+                                needAnim: true,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                key: _favKey,
+                                expand: false,
+                                icon: const Icon(
+                                  FontAwesomeIcons.star,
+                                  color: Colors.white,
+                                ),
+                                selectIcon:
+                                    const Icon(FontAwesomeIcons.solidStar),
+                                onTap: () => videoIntroController
+                                    .showFavBottomSheet(context),
+                                onLongPress: () => videoIntroController
+                                    .showFavBottomSheet(context,
+                                        type: 'longPress'),
+                                selectStatus: videoIntroController.hasFav.value,
+                                semanticsLabel: '收藏',
+                                needAnim: true,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: ActionItem(
                               expand: false,
                               icon: const Icon(
-                                FontAwesomeIcons.thumbsUp,
+                                FontAwesomeIcons.shareFromSquare,
                                 color: Colors.white,
                               ),
-                              selectIcon:
-                                  const Icon(FontAwesomeIcons.solidThumbsUp),
-                              onTap: videoIntroController.actionLikeVideo,
-                              onLongPress: videoIntroController.actionOneThree,
-                              selectStatus: videoIntroController.hasLike.value,
-                              semanticsLabel: '点赞',
-                              needAnim: true,
-                              hasOneThree: videoIntroController.hasLike.value &&
-                                  videoIntroController.hasCoin.value &&
-                                  videoIntroController.hasFav.value,
-                              callBack: (start) {
-                                if (start) {
-                                  _coinKey.currentState?.controller?.forward();
-                                  _favKey.currentState?.controller?.forward();
-                                } else {
-                                  _coinKey.currentState?.controller?.reverse();
-                                  _favKey.currentState?.controller?.reverse();
-                                }
-                              },
+                              onTap: videoIntroController.actionShareVideo,
+                              semanticsLabel: '分享',
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 42,
-                          height: 34,
-                          child: Obx(
-                            () => ActionItem(
+                        ] else ...[
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                expand: false,
+                                icon: const Icon(
+                                  FontAwesomeIcons.thumbsUp,
+                                  color: Colors.white,
+                                ),
+                                selectIcon:
+                                    const Icon(FontAwesomeIcons.solidThumbsUp),
+                                onTap: bangumiIntroController.actionLikeVideo,
+                                onLongPress: () {
+                                  bangumiIntroController.actionOneThree();
+                                  plPlayerController.isSliderMoving.value =
+                                      false;
+                                  plPlayerController.hideTaskControls();
+                                },
+                                selectStatus:
+                                    bangumiIntroController.hasLike.value,
+                                semanticsLabel: '点赞',
+                                needAnim: true,
+                                hasOneThree:
+                                    bangumiIntroController.hasLike.value &&
+                                        bangumiIntroController.hasCoin.value &&
+                                        bangumiIntroController.hasFav.value,
+                                callBack: (start) {
+                                  if (start) {
+                                    HapticFeedback.lightImpact();
+                                    plPlayerController.isSliderMoving.value =
+                                        true;
+                                    _coinKey.currentState?.controller
+                                        ?.forward();
+                                    _favKey.currentState?.controller?.forward();
+                                  } else {
+                                    _coinKey.currentState?.controller
+                                        ?.reverse();
+                                    _favKey.currentState?.controller?.reverse();
+                                    plPlayerController.isSliderMoving.value =
+                                        false;
+                                    plPlayerController.hideTaskControls();
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                expand: false,
+                                key: _coinKey,
+                                icon: const Icon(
+                                  FontAwesomeIcons.b,
+                                  color: Colors.white,
+                                ),
+                                selectIcon: const Icon(FontAwesomeIcons.b),
+                                onTap: bangumiIntroController.actionCoinVideo,
+                                selectStatus:
+                                    bangumiIntroController.hasCoin.value,
+                                semanticsLabel: '投币',
+                                needAnim: true,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: Obx(
+                              () => ActionItem(
+                                key: _favKey,
+                                expand: false,
+                                icon: const Icon(FontAwesomeIcons.star),
+                                selectIcon:
+                                    const Icon(FontAwesomeIcons.solidStar),
+                                onTap: () => bangumiIntroController
+                                    .showFavBottomSheet(context),
+                                onLongPress: () => bangumiIntroController
+                                    .showFavBottomSheet(context,
+                                        type: 'longPress'),
+                                selectStatus:
+                                    bangumiIntroController.hasFav.value,
+                                semanticsLabel: '收藏',
+                                needAnim: true,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 42,
+                            height: 34,
+                            child: ActionItem(
                               expand: false,
                               icon: const Icon(
-                                FontAwesomeIcons.thumbsDown,
+                                FontAwesomeIcons.shareFromSquare,
                                 color: Colors.white,
                               ),
-                              selectIcon:
-                                  const Icon(FontAwesomeIcons.solidThumbsDown),
-                              onTap: videoIntroController.actionDislikeVideo,
-                              selectStatus:
-                                  videoIntroController.hasDislike.value,
-                              semanticsLabel: '点踩',
+                              onTap: bangumiIntroController.actionShareVideo,
+                              semanticsLabel: '转发',
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 42,
-                          height: 34,
-                          child: Obx(
-                            () => ActionItem(
-                              key: _coinKey,
-                              expand: false,
-                              icon: const Icon(
-                                FontAwesomeIcons.b,
-                                color: Colors.white,
-                              ),
-                              selectIcon: const Icon(FontAwesomeIcons.b),
-                              onTap: videoIntroController.actionCoinVideo,
-                              selectStatus: videoIntroController.hasCoin.value,
-                              semanticsLabel: '投币',
-                              needAnim: true,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 42,
-                          height: 34,
-                          child: Obx(
-                            () => ActionItem(
-                              key: _favKey,
-                              expand: false,
-                              icon: const Icon(
-                                FontAwesomeIcons.star,
-                                color: Colors.white,
-                              ),
-                              selectIcon:
-                                  const Icon(FontAwesomeIcons.solidStar),
-                              onTap: () => videoIntroController
-                                  .showFavBottomSheet(context),
-                              onLongPress: () => videoIntroController
-                                  .showFavBottomSheet(context,
-                                      type: 'longPress'),
-                              selectStatus: videoIntroController.hasFav.value,
-                              semanticsLabel: '收藏',
-                              needAnim: true,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 42,
-                          height: 34,
-                          child: ActionItem(
-                            expand: false,
-                            icon: const Icon(
-                              FontAwesomeIcons.shareFromSquare,
-                              color: Colors.white,
-                            ),
-                            onTap: videoIntroController.actionShareVideo,
-                            selectStatus: false,
-                            semanticsLabel: '分享',
-                          ),
-                        ),
+                        ],
                       ],
                     )
                   : const SizedBox.shrink(),
           ],
         ),
       );
-
-  PlPlayerController get plPlayerController => widget.controller;
 
   @override
   Widget build(BuildContext context) {

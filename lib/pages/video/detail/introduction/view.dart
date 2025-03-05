@@ -8,6 +8,7 @@ import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -866,6 +867,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     videoIntroController.hasFav.value,
                 callBack: (start) {
                   if (start) {
+                    HapticFeedback.lightImpact();
                     _coinKey.currentState?.controller?.forward();
                     _favKey.currentState?.controller?.forward();
                   } else {

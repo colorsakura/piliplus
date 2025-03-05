@@ -1132,7 +1132,7 @@ class PlPlayerController {
   }
 
   /// 隐藏控制条
-  void _hideTaskControls() {
+  void hideTaskControls() {
     if (_timer != null) {
       _timer!.cancel();
     }
@@ -1171,7 +1171,7 @@ class PlPlayerController {
     cancelSeek = null;
     hasToast = null;
     _isSliderMoving.value = false;
-    _hideTaskControls();
+    hideTaskControls();
   }
 
   /// 音量
@@ -1336,7 +1336,7 @@ class PlPlayerController {
     _showControls.value = visible;
     _timer?.cancel();
     if (visible) {
-      _hideTaskControls();
+      hideTaskControls();
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactivevie
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -171,26 +171,6 @@ class _BangumiInfoState extends State<BangumiInfo>
   void dispose() {
     _listener?.cancel();
     super.dispose();
-  }
-
-  // 收藏
-  showFavBottomSheet({type = 'tap'}) {
-    if (bangumiIntroController.userInfo == null) {
-      SmartDialog.showToast('账号未登录');
-      return;
-    }
-    // 快速收藏 &
-    // 点按 收藏至默认文件夹
-    // 长按选择文件夹
-    if (bangumiIntroController.enableQuickFav) {
-      if (type == 'tap') {
-        bangumiIntroController.actionFavVideo(type: 'default');
-      } else {
-        Utils.showFavBottomSheet(context: context, ctr: bangumiIntroController);
-      }
-    } else if (type != 'longPress') {
-      Utils.showFavBottomSheet(context: context, ctr: bangumiIntroController);
-    }
   }
 
   // 视频介绍
@@ -446,7 +426,8 @@ class _BangumiInfoState extends State<BangumiInfo>
     );
   }
 
-  Widget actionGrid(BuildContext context, bangumiIntroController) {
+  Widget actionGrid(
+      BuildContext context, BangumiIntroController bangumiIntroController) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Material(
@@ -479,6 +460,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                         bangumiIntroController.hasFav.value,
                     callBack: (start) {
                       if (start) {
+                        HapticFeedback.lightImpact();
                         _coinKey.currentState?.controller?.forward();
                         _favKey.currentState?.controller?.forward();
                       } else {
@@ -511,8 +493,10 @@ class _BangumiInfoState extends State<BangumiInfo>
                     key: _favKey,
                     icon: const Icon(FontAwesomeIcons.star),
                     selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                    onTap: () => showFavBottomSheet(),
-                    onLongPress: () => showFavBottomSheet(type: 'longPress'),
+                    onTap: () =>
+                        bangumiIntroController.showFavBottomSheet(context),
+                    onLongPress: () => bangumiIntroController
+                        .showFavBottomSheet(context, type: 'longPress'),
                     selectStatus: bangumiIntroController.hasFav.value,
                     loadingStatus: false,
                     semanticsLabel: '收藏',
@@ -553,13 +537,17 @@ class _BangumiInfoState extends State<BangumiInfo>
     });
   }
 
-  Widget actionRow(BuildContext context, videoIntroController, videoDetailCtr) {
+  Widget actionRow(
+    BuildContext context,
+    BangumiIntroController bangumiIntroController,
+    VideoDetailController videoDetailCtr,
+  ) {
     return Row(children: [
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.thumbsUp),
-          onTap: () => handleState(videoIntroController.actionLikeVideo),
-          selectStatus: videoIntroController.hasLike.value,
+          onTap: () => handleState(bangumiIntroController.actionLikeVideo),
+          selectStatus: bangumiIntroController.hasLike.value,
           loadingStatus: widget.isLoading,
           text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['likes']!.toString()
@@ -570,8 +558,8 @@ class _BangumiInfoState extends State<BangumiInfo>
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.b),
-          onTap: () => handleState(videoIntroController.actionCoinVideo),
-          selectStatus: videoIntroController.hasCoin.value,
+          onTap: () => handleState(bangumiIntroController.actionCoinVideo),
+          selectStatus: bangumiIntroController.hasCoin.value,
           loadingStatus: widget.isLoading,
           text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['coins']!.toString()
@@ -582,9 +570,10 @@ class _BangumiInfoState extends State<BangumiInfo>
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.heart),
-          onTap: () => showFavBottomSheet(),
-          onLongPress: () => showFavBottomSheet(type: 'longPress'),
-          selectStatus: videoIntroController.hasFav.value,
+          onTap: () => bangumiIntroController.showFavBottomSheet(context),
+          onLongPress: () => bangumiIntroController.showFavBottomSheet(context,
+              type: 'longPress'),
+          selectStatus: bangumiIntroController.hasFav.value,
           loadingStatus: widget.isLoading,
           text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['favorite']!.toString()
@@ -606,7 +595,7 @@ class _BangumiInfoState extends State<BangumiInfo>
       const SizedBox(width: 8),
       ActionRowItem(
           icon: const Icon(FontAwesomeIcons.share),
-          onTap: () => videoIntroController.actionShareVideo(),
+          onTap: () => bangumiIntroController.actionShareVideo(),
           selectStatus: false,
           loadingStatus: widget.isLoading,
           text: '转发'),
