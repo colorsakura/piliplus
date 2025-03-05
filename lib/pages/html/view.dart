@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/article_content.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
@@ -404,24 +405,29 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                       child: Scaffold(
                         key: _key,
                         backgroundColor: Colors.transparent,
-                        body: CustomScrollView(
-                          controller: _htmlRenderCtr.scrollController,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: [
-                            SliverPadding(
-                              padding: EdgeInsets.only(right: padding / 4),
-                              sliver: SliverToBoxAdapter(
-                                child: replyHeader(),
+                        body: refreshIndicator(
+                          onRefresh: () async {
+                            await _htmlRenderCtr.onRefresh();
+                          },
+                          child: CustomScrollView(
+                            controller: _htmlRenderCtr.scrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            slivers: [
+                              SliverPadding(
+                                padding: EdgeInsets.only(right: padding / 4),
+                                sliver: SliverToBoxAdapter(
+                                  child: replyHeader(),
+                                ),
                               ),
-                            ),
-                            SliverPadding(
-                              padding: EdgeInsets.only(right: padding / 4),
-                              sliver: Obx(
-                                () => replyList(
-                                    _htmlRenderCtr.loadingState.value),
+                              SliverPadding(
+                                padding: EdgeInsets.only(right: padding / 4),
+                                sliver: Obx(
+                                  () => replyList(
+                                      _htmlRenderCtr.loadingState.value),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

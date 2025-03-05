@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:PiliPlus/models/dynamics/article_content_model.dart';
+import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
@@ -48,10 +49,11 @@ class HtmlHttp {
       String opusContent =
           opusDetail.querySelector('.opus-module-content')!.innerHtml;
       String? test;
-      test = opusDetail
-              .querySelector('.horizontal-scroll-album__pic__img')
-              ?.innerHtml ??
-          '';
+      try {
+        test = opusDetail
+            .querySelector('.horizontal-scroll-album__pic__img')!
+            .innerHtml;
+      } catch (_) {}
 
       String commentId = opusDetail
           .querySelector('.bili-comment-container')!
@@ -64,7 +66,7 @@ class HtmlHttp {
         'avatar': avatar,
         'uname': uname,
         'updateTime': updateTime,
-        'content': test + opusContent,
+        'content': (test ?? '') + opusContent,
         'commentId': int.parse(commentId)
       };
     } catch (err) {
@@ -74,6 +76,12 @@ class HtmlHttp {
 
   // read
   static Future reqReadHtml(id, dynamicType) async {
+    String? redirectUrl = await UrlUtils.parseRedirectUrl(
+        'https://www.bilibili.com/$dynamicType/$id/');
+    if (redirectUrl != null) {
+      return await reqHtml(redirectUrl.split('/').last, dynamicType);
+    }
+
     var response = await Request().get(
       "https://www.bilibili.com/$dynamicType/$id/",
       extra: {'ua': 'pc'},
