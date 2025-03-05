@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -59,7 +60,10 @@ class _BlackListPageState extends State<BlackListPage> {
                   _blackListController.onLoadMore();
                 }
                 return ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(
+                        '/member?mid=${loadingState.response[index].mid}');
+                  },
                   leading: NetworkImgLayer(
                     width: 45,
                     height: 45,
@@ -81,8 +85,11 @@ class _BlackListPageState extends State<BlackListPage> {
                   ),
                   dense: true,
                   trailing: TextButton(
-                    onPressed: () => _blackListController
-                        .removeBlack(loadingState.response[index].mid),
+                    onPressed: () => _blackListController.removeBlack(
+                      context,
+                      loadingState.response[index].uname,
+                      loadingState.response[index].mid,
+                    ),
                     child: const Text('移除'),
                   ),
                 );
@@ -130,16 +137,23 @@ class BlackListController extends CommonController {
     return true;
   }
 
-  Future removeBlack(mid) async {
-    var result = await BlackHttp.removeBlack(fid: mid);
-    if (result['status']) {
-      List list = (loadingState.value as Success).response;
-      list.removeWhere((e) => e.mid == mid);
-      total.value = total.value - 1;
-      loadingState.value =
-          LoadingState.success(list.isNotEmpty ? list : <BlackListItem>[]);
-      SmartDialog.showToast(result['msg']);
-    }
+  Future removeBlack(context, name, mid) async {
+    showConfirmDialog(
+      context: context,
+      title: '确定将 $name 移出黑名单？',
+      onConfirm: () async {
+        Get.back();
+        var result = await BlackHttp.removeBlack(fid: mid);
+        if (result['status']) {
+          List list = (loadingState.value as Success).response;
+          list.removeWhere((e) => e.mid == mid);
+          total.value = total.value - 1;
+          loadingState.value =
+              LoadingState.success(list.isNotEmpty ? list : <BlackListItem>[]);
+          SmartDialog.showToast(result['msg']);
+        }
+      },
+    );
   }
 
   @override
