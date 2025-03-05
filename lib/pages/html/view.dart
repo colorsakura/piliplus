@@ -56,8 +56,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
-          bool needReverse =
-              fabAnimationCtr.status.isForwardOrCompleted == true;
+          bool needReverse = _isFabVisible;
           if (needReverse) {
             fabAnimationCtr.reverse();
           }
@@ -131,11 +130,15 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     // }
 
     // fab按钮
-    final ScrollDirection direction =
-        _htmlRenderCtr.scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
+    final ScrollDirection direction1 =
+        _htmlRenderCtr.scrollController.positions.first.userScrollDirection;
+    late final ScrollDirection direction2 =
+        _htmlRenderCtr.scrollController.positions.last.userScrollDirection;
+    if (direction1 == ScrollDirection.forward ||
+        direction2 == ScrollDirection.forward) {
       _showFab();
-    } else if (direction == ScrollDirection.reverse) {
+    } else if (direction1 == ScrollDirection.reverse ||
+        direction2 == ScrollDirection.reverse) {
       _hideFab();
     }
   }
@@ -184,8 +187,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
-          bool needReverse =
-              fabAnimationCtr.status.isForwardOrCompleted == true;
+          bool needReverse = _isFabVisible;
           if (needReverse) {
             fabAnimationCtr.reverse();
           }
@@ -337,9 +339,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   Expanded(
                     flex: _ratio[0].toInt(),
                     child: CustomScrollView(
-                      controller: orientation == Orientation.portrait
-                          ? _htmlRenderCtr.scrollController
-                          : null,
+                      controller: _htmlRenderCtr.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
                       slivers: [
                         SliverPadding(
                           padding: orientation == Orientation.portrait
@@ -402,6 +403,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                         backgroundColor: Colors.transparent,
                         body: CustomScrollView(
                           controller: _htmlRenderCtr.scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
                             SliverPadding(
                               padding: EdgeInsets.only(right: padding / 4),

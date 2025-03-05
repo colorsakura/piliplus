@@ -63,8 +63,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   get _getImageCallback => _horizontalPreview
       ? (imgList, index) {
-          bool needReverse =
-              _fabAnimationCtr?.status.isForwardOrCompleted == true;
+          bool needReverse = _isFabVisible;
           if (needReverse) {
             _fabAnimationCtr?.reverse();
           }
@@ -195,8 +194,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
-          bool needReverse =
-              _fabAnimationCtr?.status.isForwardOrCompleted == true;
+          bool needReverse = _isFabVisible;
           if (needReverse) {
             _fabAnimationCtr?.reverse();
           }
@@ -229,22 +227,28 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   void listener() {
     // 标题
-    if (_dynamicDetailController.scrollController.offset > 55 &&
-        !_visibleTitle) {
-      _visibleTitle = true;
-      _titleStreamC.add(true);
-    } else if (_dynamicDetailController.scrollController.offset <= 55 &&
-        _visibleTitle) {
-      _visibleTitle = false;
-      _titleStreamC.add(false);
+    if (_dynamicDetailController.scrollController.positions.length == 1) {
+      if (_dynamicDetailController.scrollController.offset > 55 &&
+          !_visibleTitle) {
+        _visibleTitle = true;
+        _titleStreamC.add(true);
+      } else if (_dynamicDetailController.scrollController.offset <= 55 &&
+          _visibleTitle) {
+        _visibleTitle = false;
+        _titleStreamC.add(false);
+      }
     }
 
     // fab按钮
-    final ScrollDirection direction =
-        _dynamicDetailController.scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
+    final ScrollDirection direction1 = _dynamicDetailController
+        .scrollController.positions.first.userScrollDirection;
+    late final ScrollDirection direction2 = _dynamicDetailController
+        .scrollController.positions.last.userScrollDirection;
+    if (direction1 == ScrollDirection.forward ||
+        direction2 == ScrollDirection.forward) {
       _showFab();
-    } else if (direction == ScrollDirection.reverse) {
+    } else if (direction1 == ScrollDirection.reverse ||
+        direction2 == ScrollDirection.reverse) {
       _hideFab();
     }
   }
@@ -384,6 +388,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     Expanded(
                       flex: _ratio[0].toInt(),
                       child: CustomScrollView(
+                        controller: _dynamicDetailController.scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
                           SliverPadding(
