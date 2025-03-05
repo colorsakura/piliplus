@@ -28,7 +28,7 @@ class AppBarAni extends StatelessWidget implements PreferredSizeWidget {
         parent: controller,
         curve: Curves.linear,
       )),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: position! == 'top'
               ? const LinearGradient(

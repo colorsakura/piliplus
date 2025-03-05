@@ -232,26 +232,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     }
   }
 
-  // 收藏
-  showFavBottomSheet({type = 'tap'}) {
-    if (videoIntroController.userInfo == null) {
-      SmartDialog.showToast('账号未登录');
-      return;
-    }
-    // 快速收藏 &
-    // 点按 收藏至默认文件夹
-    // 长按选择文件夹
-    if (videoIntroController.enableQuickFav) {
-      if (type == 'tap') {
-        videoIntroController.actionFavVideo(type: 'default');
-      } else {
-        Utils.showFavBottomSheet(context: context, ctr: videoIntroController);
-      }
-    } else if (type != 'longPress') {
-      Utils.showFavBottomSheet(context: context, ctr: videoIntroController);
-    }
-  }
-
   // 视频介绍
   showIntroDetail() {
     if (widget.loadingStatus) {
@@ -857,7 +837,8 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
     );
   }
 
-  Widget actionGrid(BuildContext context, videoIntroController) {
+  Widget actionGrid(
+      BuildContext context, VideoIntroController videoIntroController) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
@@ -896,14 +877,15 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
             ),
             Obx(
               () => ActionItem(
-                  icon: const Icon(FontAwesomeIcons.thumbsDown),
-                  selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
-                  onTap: () =>
-                      handleState(videoIntroController.actionDislikeVideo),
-                  selectStatus: videoIntroController.hasDislike.value,
-                  loadingStatus: widget.loadingStatus,
-                  semanticsLabel: '点踩',
-                  text: "点踩"),
+                icon: const Icon(FontAwesomeIcons.thumbsDown),
+                selectIcon: const Icon(FontAwesomeIcons.solidThumbsDown),
+                onTap: () =>
+                    handleState(videoIntroController.actionDislikeVideo),
+                selectStatus: videoIntroController.hasDislike.value,
+                loadingStatus: widget.loadingStatus,
+                semanticsLabel: '点踩',
+                text: "点踩",
+              ),
             ),
             // ActionItem(
             //     icon: const Icon(FontAwesomeIcons.clock),
@@ -931,8 +913,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                 key: _favKey,
                 icon: const Icon(FontAwesomeIcons.star),
                 selectIcon: const Icon(FontAwesomeIcons.solidStar),
-                onTap: () => showFavBottomSheet(),
-                onLongPress: () => showFavBottomSheet(type: 'longPress'),
+                onTap: () => videoIntroController.showFavBottomSheet(context),
+                onLongPress: () => videoIntroController
+                    .showFavBottomSheet(context, type: 'longPress'),
                 selectStatus: videoIntroController.hasFav.value,
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '收藏',
@@ -943,31 +926,37 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
               ),
             ),
             ActionItem(
-                icon: const Icon(FontAwesomeIcons.comment),
-                onTap: () => videoDetailCtr.tabCtr
-                    .animateTo(videoDetailCtr.tabCtr.index == 1 ? 0 : 1),
-                selectStatus: false,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '评论',
-                text: !widget.loadingStatus
-                    ? Utils.numFormat(videoDetail.stat!.reply!)
-                    : '评论'),
+              icon: const Icon(FontAwesomeIcons.comment),
+              onTap: () => videoDetailCtr.tabCtr
+                  .animateTo(videoDetailCtr.tabCtr.index == 1 ? 0 : 1),
+              selectStatus: false,
+              loadingStatus: widget.loadingStatus,
+              semanticsLabel: '评论',
+              text: !widget.loadingStatus
+                  ? Utils.numFormat(videoDetail.stat!.reply!)
+                  : '评论',
+            ),
             ActionItem(
-                icon: const Icon(FontAwesomeIcons.shareFromSquare),
-                onTap: () => videoIntroController.actionShareVideo(),
-                selectStatus: false,
-                loadingStatus: widget.loadingStatus,
-                semanticsLabel: '分享',
-                text: !widget.loadingStatus
-                    ? Utils.numFormat(videoDetail.stat!.share!)
-                    : '分享'),
+              icon: const Icon(FontAwesomeIcons.shareFromSquare),
+              onTap: () => videoIntroController.actionShareVideo(),
+              selectStatus: false,
+              loadingStatus: widget.loadingStatus,
+              semanticsLabel: '分享',
+              text: !widget.loadingStatus
+                  ? Utils.numFormat(videoDetail.stat!.share!)
+                  : '分享',
+            ),
           ],
         ),
       );
     });
   }
 
-  Widget actionRow(BuildContext context, videoIntroController, videoDetailCtr) {
+  Widget actionRow(
+    BuildContext context,
+    VideoIntroController videoIntroController,
+    VideoDetailController videoDetailCtr,
+  ) {
     return Row(children: <Widget>[
       Obx(
         () => ActionRowItem(
@@ -994,8 +983,9 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       Obx(
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.heart),
-          onTap: () => showFavBottomSheet(),
-          onLongPress: () => showFavBottomSheet(type: 'longPress'),
+          onTap: () => videoIntroController.showFavBottomSheet(context),
+          onLongPress: () => videoIntroController.showFavBottomSheet(context,
+              type: 'longPress'),
           selectStatus: videoIntroController.hasFav.value,
           loadingStatus: widget.loadingStatus,
           text: !widget.loadingStatus

@@ -861,4 +861,24 @@ class VideoIntroController extends GetxController
     }
     return res;
   }
+
+  // 收藏
+  showFavBottomSheet(BuildContext context, {type = 'tap'}) {
+    if (userInfo == null) {
+      SmartDialog.showToast('账号未登录');
+      return;
+    }
+    // 快速收藏 &
+    // 点按 收藏至默认文件夹
+    // 长按选择文件夹
+    if (enableQuickFav) {
+      if (type == 'tap') {
+        actionFavVideo(type: 'default');
+      } else {
+        Utils.showFavBottomSheet(context: context, ctr: this);
+      }
+    } else if (type != 'longPress') {
+      Utils.showFavBottomSheet(context: context, ctr: this);
+    }
+  }
 }

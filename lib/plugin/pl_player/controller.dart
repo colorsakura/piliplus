@@ -254,6 +254,8 @@ class PlPlayerController {
   /// 弹幕开关
   Rx<bool> isOpenDanmu = false.obs;
 
+  late final showFSActionItem = GStorage.showFSActionItem;
+
   /// 弹幕权重
   int danmakuWeight = 0;
   int filterCount = 0;

@@ -394,6 +394,9 @@ class GStorage {
   static bool slideDismissReplyPage = GStorage.setting
       .get(SettingBoxKey.slideDismissReplyPage, defaultValue: Platform.isIOS);
 
+  static bool get showFSActionItem =>
+      GStorage.setting.get(SettingBoxKey.showFSActionItem, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -649,6 +652,7 @@ class SettingBoxKey {
       collapsibleVideoPage = 'collapsibleVideoPage',
       enableHttp2 = 'enableHttp2',
       slideDismissReplyPage = 'slideDismissReplyPage',
+      showFSActionItem = 'showFSActionItem',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

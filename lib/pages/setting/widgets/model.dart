@@ -2128,6 +2128,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '全屏展示点赞/投币/收藏等操作按钮',
+        leading: Icon(MdiIcons.dotsHorizontalCircleOutline),
+        setKey: SettingBoxKey.showFSActionItem,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

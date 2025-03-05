@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 
 class ActionItem extends StatefulWidget {
-  final Icon? icon;
+  final Icon icon;
   final Icon? selectIcon;
   final Function? onTap;
   final Function? onLongPress;
@@ -16,10 +16,11 @@ class ActionItem extends StatefulWidget {
   final bool needAnim;
   final bool hasOneThree;
   final Function? callBack;
+  final bool? expand;
 
   const ActionItem({
     super.key,
-    this.icon,
+    required this.icon,
     this.selectIcon,
     this.onTap,
     this.onLongPress,
@@ -30,6 +31,7 @@ class ActionItem extends StatefulWidget {
     this.hasOneThree = false,
     this.callBack,
     required this.semanticsLabel,
+    this.expand,
   });
 
   @override
@@ -113,8 +115,10 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Semantics(
+    return widget.expand == false ? _buildItem : Expanded(child: _buildItem);
+  }
+
+  Widget get _buildItem => Semantics(
         label: (widget.text ?? "") +
             (widget.selectStatus ? "已" : "") +
             widget.semanticsLabel,
@@ -155,42 +159,42 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
                   Icon(
                     widget.selectStatus
                         ? widget.selectIcon!.icon!
-                        : widget.icon!.icon!,
+                        : widget.icon.icon,
                     size: 18,
                     color: widget.selectStatus
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outline,
+                        : widget.icon.color ??
+                            Theme.of(context).colorScheme.outline,
                   ),
                 ],
               ),
-              AnimatedOpacity(
-                opacity: widget.loadingStatus! ? 0 : 1,
-                duration: const Duration(milliseconds: 200),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                    return ScaleTransition(scale: animation, child: child);
-                  },
-                  child: Text(
-                    widget.text ?? '',
-                    key: ValueKey<String>(widget.text ?? ''),
-                    style: TextStyle(
-                        color: widget.selectStatus
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline,
-                        fontSize:
-                            Theme.of(context).textTheme.labelSmall!.fontSize),
-                    semanticsLabel: "",
+              if (widget.text != null)
+                AnimatedOpacity(
+                  opacity: widget.loadingStatus! ? 0 : 1,
+                  duration: const Duration(milliseconds: 200),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: Text(
+                      widget.text!,
+                      key: ValueKey<String>(widget.text ?? ''),
+                      style: TextStyle(
+                          color: widget.selectStatus
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.outline,
+                          fontSize:
+                              Theme.of(context).textTheme.labelSmall!.fontSize),
+                      semanticsLabel: "",
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _ArcPainter extends CustomPainter {

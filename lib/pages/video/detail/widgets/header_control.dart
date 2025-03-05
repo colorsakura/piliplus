@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
+import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_item.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -28,7 +29,6 @@ import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import '../../../../models/video/play/CDN.dart';
-import '../../../../models/video_detail_res.dart';
 import '../../../setting/widgets/select_dialog.dart';
 import '../introduction/index.dart';
 import 'package:marquee/marquee.dart';
@@ -61,13 +61,14 @@ class _HeaderControlState extends State<HeaderControl> {
   double buttonSpace = 8;
   String get heroTag => widget.heroTag;
   late VideoIntroController videoIntroController;
-  late VideoDetailData videoDetail;
   late bool horizontalScreen;
   RxString now = ''.obs;
   Timer? clock;
   late String defaultCDNService;
   bool get isFullScreen => widget.controller.isFullScreen.value;
   Box get setting => GStorage.setting;
+  late final _coinKey = GlobalKey<ActionItemState>();
+  late final _favKey = GlobalKey<ActionItemState>();
 
   @override
   void initState() {
@@ -1746,346 +1747,483 @@ class _HeaderControlState extends State<HeaderControl> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final plPlayerController = widget.controller;
-    // final bool isLandscape =
-    //     MediaQuery.of(context).orientation == Orientation.landscape;
-
-    bool equivalentFullScreen = !isFullScreen &&
-        !horizontalScreen &&
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    return LayoutBuilder(builder: (context, boxConstraints) {
-      return AppBar(
+  Widget _buildHeader(bool showFSActionItem) => AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         primary: false,
         automaticallyImplyLeading: false,
-        title: Row(
+        toolbarHeight: showFSActionItem && isFullScreen ? 112 : null,
+        flexibleSpace: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: '返回',
-                icon: const Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 15,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (isFullScreen) {
-                    widget.controller.triggerFullScreen(status: false);
-                  } else if (MediaQuery.of(context).orientation ==
-                          Orientation.landscape &&
-                      !horizontalScreen) {
-                    verticalScreenForTwoSeconds();
-                  } else {
-                    Get.back();
-                  }
-                },
-              ),
-            ),
-            if (!isFullScreen ||
-                MediaQuery.of(context).orientation != Orientation.portrait)
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: IconButton(
-                  tooltip: '返回主页',
-                  icon: const Icon(
-                    FontAwesomeIcons.house,
-                    size: 15,
-                    color: Colors.white,
+            const SizedBox(height: 11),
+            Row(
+              children: [
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '返回',
+                    icon: const Icon(
+                      FontAwesomeIcons.arrowLeft,
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      if (isFullScreen) {
+                        widget.controller.triggerFullScreen(status: false);
+                      } else if (MediaQuery.of(context).orientation ==
+                              Orientation.landscape &&
+                          !horizontalScreen) {
+                        verticalScreenForTwoSeconds();
+                      } else {
+                        Get.back();
+                      }
+                    },
                   ),
-                  onPressed: () {
-                    widget.videoDetailCtr.plPlayerController.backToHome = true;
-                    Get.until((route) => route.isFirst);
-                  },
                 ),
-              ),
-            if ((videoIntroController.videoDetail.value.title != null) &&
-                (isFullScreen || equivalentFullScreen))
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxWidth: boxConstraints.maxWidth / 2 - 60,
-                        maxHeight: 25),
-                    child: Obx(
-                      () => Marquee(
-                        text: videoIntroController.videoDetail.value.title!,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                if (!isFullScreen ||
+                    MediaQuery.of(context).orientation != Orientation.portrait)
+                  SizedBox(
+                    width: 42,
+                    height: 34,
+                    child: IconButton(
+                      tooltip: '返回主页',
+                      icon: const Icon(
+                        FontAwesomeIcons.house,
+                        size: 15,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        widget.videoDetailCtr.plPlayerController.backToHome =
+                            true;
+                        Get.until((route) => route.isFirst);
+                      },
+                    ),
+                  ),
+                if ((videoIntroController.videoDetail.value.title != null) &&
+                    (isFullScreen ||
+                        (!isFullScreen &&
+                            !horizontalScreen &&
+                            MediaQuery.of(context).orientation ==
+                                Orientation.landscape)))
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          constraints: BoxConstraints(maxHeight: 25),
+                          child: Obx(
+                            () => Marquee(
+                              text:
+                                  videoIntroController.videoDetail.value.title!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                              scrollAxis: Axis.horizontal,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              blankSpace: 200,
+                              velocity: 40,
+                              startAfter: const Duration(seconds: 1),
+                              showFadingOnlyWhenScrolling: true,
+                              fadingEdgeStartFraction: 0,
+                              fadingEdgeEndFraction: 0.1,
+                              numberOfRounds: 1,
+                              startPadding: 0,
+                              accelerationDuration: const Duration(seconds: 1),
+                              accelerationCurve: Curves.linear,
+                              decelerationDuration:
+                                  const Duration(milliseconds: 500),
+                              decelerationCurve: Curves.easeOut,
+                            ),
+                          ),
                         ),
-                        scrollAxis: Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        blankSpace: 200,
-                        velocity: 40,
-                        startAfter: const Duration(seconds: 1),
-                        showFadingOnlyWhenScrolling: true,
-                        fadingEdgeStartFraction: 0,
-                        fadingEdgeEndFraction: 0.1,
-                        numberOfRounds: 1,
-                        startPadding: 0,
-                        accelerationDuration: const Duration(seconds: 1),
-                        accelerationCurve: Curves.linear,
-                        decelerationDuration: const Duration(milliseconds: 500),
-                        decelerationCurve: Curves.easeOut,
+                        if (videoIntroController.isShowOnlineTotal)
+                          Obx(
+                            () => Text(
+                              '${videoIntroController.total.value}人正在看',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  )
+                else
+                  const Spacer(),
+                if (MediaQuery.of(context).orientation ==
+                        Orientation.landscape &&
+                    (isFullScreen || !horizontalScreen)) ...[
+                  // const Spacer(),
+                  // show current datetime
+                  Obx(
+                    () => Text(
+                      now.value,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
                       ),
                     ),
                   ),
-                  if (videoIntroController.isShowOnlineTotal)
-                    Obx(
-                      () => Text(
-                        '${videoIntroController.total.value}人正在看',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
+                  const SizedBox(width: 15),
                 ],
-              ),
-            const Spacer(),
-            if (MediaQuery.of(context).orientation == Orientation.landscape &&
-                (isFullScreen || !horizontalScreen)) ...[
-              // const Spacer(),
-              // show current datetime
-              Obx(
-                () => Text(
-                  now.value,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
+                // ComBtn(
+                //   icon: const Icon(
+                //     FontAwesomeIcons.cropSimple,
+                //     size: 15,
+                //     color: Colors.white,
+                //   ),
+                //   fuc: () => _.screenshot(),
+                // ),
+                if (widget.videoDetailCtr.enableSponsorBlock == true)
+                  SizedBox(
+                    width: 42,
+                    height: 34,
+                    child: IconButton(
+                      tooltip: '提交片段',
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                      ),
+                      onPressed: () => widget.videoDetailCtr.onBlock(context),
+                      icon: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(
+                            Icons.shield_outlined,
+                            size: 19,
+                            color: Colors.white,
+                          ),
+                          Icon(
+                            Icons.play_arrow_rounded,
+                            size: 13,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                Obx(
+                  () => widget.videoDetailCtr.segmentList.isNotEmpty == true
+                      ? SizedBox(
+                          width: 42,
+                          height: 34,
+                          child: IconButton(
+                            tooltip: '片段信息',
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(EdgeInsets.zero),
+                            ),
+                            onPressed: () =>
+                                widget.videoDetailCtr.showSBDetail(context),
+                            icon: Icon(
+                              MdiIcons.advertisements,
+                              size: 19,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: '发弹幕',
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    ),
+                    onPressed: widget.videoDetailCtr.showShootDanmakuSheet,
+                    icon: const Icon(
+                      Icons.comment_outlined,
+                      size: 19,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 15),
-            ],
-            // ComBtn(
-            //   icon: const Icon(
-            //     FontAwesomeIcons.cropSimple,
-            //     size: 15,
-            //     color: Colors.white,
-            //   ),
-            //   fuc: () => _.screenshot(),
-            // ),
-            if (widget.videoDetailCtr.enableSponsorBlock == true)
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: IconButton(
-                  tooltip: '提交片段',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () => widget.videoDetailCtr.onBlock(context),
-                  icon: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Icon(
-                        Icons.shield_outlined,
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: Obx(
+                    () => IconButton(
+                      tooltip:
+                          "${plPlayerController.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                      ),
+                      onPressed: () {
+                        plPlayerController.isOpenDanmu.value =
+                            !plPlayerController.isOpenDanmu.value;
+                        setting.put(SettingBoxKey.enableShowDanmaku,
+                            plPlayerController.isOpenDanmu.value);
+                        // SmartDialog.showToast(
+                        //     "已${plPlayerController.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
+                        //     displayTime: const Duration(seconds: 1));
+                      },
+                      icon: Icon(
+                        plPlayerController.isOpenDanmu.value
+                            ? Icons.subtitles_outlined
+                            : Icons.subtitles_off_outlined,
                         size: 19,
                         color: Colors.white,
                       ),
-                      Icon(
-                        Icons.play_arrow_rounded,
-                        size: 13,
-                        color: Colors.white,
+                    ),
+                  ),
+                ),
+                if (Platform.isAndroid)
+                  SizedBox(
+                    width: 42,
+                    height: 34,
+                    child: IconButton(
+                      tooltip: '画中画',
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            Obx(
-              () => widget.videoDetailCtr.segmentList.isNotEmpty == true
-                  ? SizedBox(
-                      width: 42,
-                      height: 34,
-                      child: IconButton(
-                        tooltip: '片段信息',
-                        style: ButtonStyle(
-                          padding: WidgetStateProperty.all(EdgeInsets.zero),
-                        ),
-                        onPressed: () =>
-                            widget.videoDetailCtr.showSBDetail(context),
-                        icon: Icon(
-                          MdiIcons.advertisements,
-                          size: 19,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: '发弹幕',
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: widget.videoDetailCtr.showShootDanmakuSheet,
-                icon: const Icon(
-                  Icons.comment_outlined,
-                  size: 19,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: Obx(
-                () => IconButton(
-                  tooltip:
-                      "${plPlayerController.isOpenDanmu.value ? '关闭' : '开启'}弹幕",
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () {
-                    plPlayerController.isOpenDanmu.value =
-                        !plPlayerController.isOpenDanmu.value;
-                    setting.put(SettingBoxKey.enableShowDanmaku,
-                        plPlayerController.isOpenDanmu.value);
-                    // SmartDialog.showToast(
-                    //     "已${plPlayerController.isOpenDanmu.value ? '开启' : '关闭'}弹幕",
-                    //     displayTime: const Duration(seconds: 1));
-                  },
-                  icon: Icon(
-                    plPlayerController.isOpenDanmu.value
-                        ? Icons.subtitles_outlined
-                        : Icons.subtitles_off_outlined,
-                    size: 19,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            if (Platform.isAndroid)
-              SizedBox(
-                width: 42,
-                height: 34,
-                child: IconButton(
-                  tooltip: '画中画',
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () async {
-                    bool canUsePiP = widget.floating != null &&
-                        await widget.floating!.isPipAvailable;
-                    widget.controller.hiddenControls(false);
-                    if (canUsePiP) {
-                      bool enableBackgroundPlay = setting.get(
-                          SettingBoxKey.enableBackgroundPlay,
-                          defaultValue: true);
-                      if (!enableBackgroundPlay && context.mounted) {
-                        // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
-                        // await Future.delayed(const Duration(seconds: 2), () {
-                        // });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Column(
-                              children: [
-                                const Row(
+                      onPressed: () async {
+                        bool canUsePiP = widget.floating != null &&
+                            await widget.floating!.isPipAvailable;
+                        widget.controller.hiddenControls(false);
+                        if (canUsePiP) {
+                          bool enableBackgroundPlay = setting.get(
+                              SettingBoxKey.enableBackgroundPlay,
+                              defaultValue: true);
+                          if (!enableBackgroundPlay && context.mounted) {
+                            // SmartDialog.showToast('建议开启【后台播放】功能\n避免画中画没有暂停按钮');
+                            // await Future.delayed(const Duration(seconds: 2), () {
+                            // });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Column(
                                   children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
+                                    const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.check,
+                                          color: Colors.green,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text('画中画',
+                                            style: TextStyle(
+                                                fontSize: 15, height: 1.5))
+                                      ],
                                     ),
-                                    SizedBox(width: 10),
-                                    Text('画中画',
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                        '建议开启【后台音频服务】\n'
+                                        '避免画中画没有暂停按钮',
                                         style: TextStyle(
-                                            fontSize: 15, height: 1.5))
+                                            fontSize: 12.5, height: 1.5)),
+                                    Row(children: [
+                                      TextButton(
+                                          style: ButtonStyle(
+                                            foregroundColor:
+                                                WidgetStateProperty.resolveWith(
+                                                    (states) {
+                                              return Theme.of(context)
+                                                  .snackBarTheme
+                                                  .actionTextColor;
+                                            }),
+                                          ),
+                                          onPressed: () async {
+                                            plPlayerController
+                                                .setBackgroundPlay(true);
+                                            SmartDialog.showToast("请重新载入本页面刷新");
+                                            // Get.back();
+                                          },
+                                          child: const Text('启用后台音频服务')),
+                                      const SizedBox(width: 10),
+                                      TextButton(
+                                          style: ButtonStyle(
+                                            foregroundColor:
+                                                WidgetStateProperty.resolveWith(
+                                                    (states) {
+                                              return Theme.of(context)
+                                                  .snackBarTheme
+                                                  .actionTextColor;
+                                            }),
+                                          ),
+                                          onPressed: () {},
+                                          child: const Text('不启用'))
+                                    ])
                                   ],
                                 ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                    '建议开启【后台音频服务】\n'
-                                    '避免画中画没有暂停按钮',
-                                    style:
-                                        TextStyle(fontSize: 12.5, height: 1.5)),
-                                Row(children: [
-                                  TextButton(
-                                      style: ButtonStyle(
-                                        foregroundColor:
-                                            WidgetStateProperty.resolveWith(
-                                                (states) {
-                                          return Theme.of(context)
-                                              .snackBarTheme
-                                              .actionTextColor;
-                                        }),
-                                      ),
-                                      onPressed: () async {
-                                        plPlayerController
-                                            .setBackgroundPlay(true);
-                                        SmartDialog.showToast("请重新载入本页面刷新");
-                                        // Get.back();
-                                      },
-                                      child: const Text('启用后台音频服务')),
-                                  const SizedBox(width: 10),
-                                  TextButton(
-                                      style: ButtonStyle(
-                                        foregroundColor:
-                                            WidgetStateProperty.resolveWith(
-                                                (states) {
-                                          return Theme.of(context)
-                                              .snackBarTheme
-                                              .actionTextColor;
-                                        }),
-                                      ),
-                                      onPressed: () {},
-                                      child: const Text('不启用'))
-                                ])
-                              ],
-                            ),
-                            duration: const Duration(seconds: 2),
-                            showCloseIcon: true,
-                          ),
-                        );
-                        await Future.delayed(const Duration(seconds: 3), () {});
-                      }
-                      final Rational aspectRatio = Rational(
-                        widget.videoDetailCtr.data.dash!.video!.first.width!,
-                        widget.videoDetailCtr.data.dash!.video!.first.height!,
-                      );
-                      if (!context.mounted) return;
-                      await widget.floating!.enable(EnableManual(
-                        aspectRatio: aspectRatio,
-                      ));
-                    } else {}
-                  },
-                  icon: const Icon(
-                    Icons.picture_in_picture_outlined,
-                    size: 19,
-                    color: Colors.white,
+                                duration: const Duration(seconds: 2),
+                                showCloseIcon: true,
+                              ),
+                            );
+                            await Future.delayed(
+                                const Duration(seconds: 3), () {});
+                          }
+                          final Rational aspectRatio = Rational(
+                            widget
+                                .videoDetailCtr.data.dash!.video!.first.width!,
+                            widget
+                                .videoDetailCtr.data.dash!.video!.first.height!,
+                          );
+                          if (!context.mounted) return;
+                          await widget.floating!.enable(EnableManual(
+                            aspectRatio: aspectRatio,
+                          ));
+                        } else {}
+                      },
+                      icon: const Icon(
+                        Icons.picture_in_picture_outlined,
+                        size: 19,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                SizedBox(
+                  width: 42,
+                  height: 34,
+                  child: IconButton(
+                    tooltip: "更多设置",
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    ),
+                    onPressed: showSettingSheet,
+                    icon: const Icon(
+                      Icons.more_vert_outlined,
+                      size: 19,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            SizedBox(
-              width: 42,
-              height: 34,
-              child: IconButton(
-                tooltip: "更多设置",
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: showSettingSheet,
-                icon: const Icon(
-                  Icons.more_vert_outlined,
-                  size: 19,
-                  color: Colors.white,
-                ),
-              ),
+              ],
             ),
+            if (showFSActionItem)
+              isFullScreen
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 42,
+                          height: 34,
+                          child: Obx(
+                            () => ActionItem(
+                              expand: false,
+                              icon: const Icon(
+                                FontAwesomeIcons.thumbsUp,
+                                color: Colors.white,
+                              ),
+                              selectIcon:
+                                  const Icon(FontAwesomeIcons.solidThumbsUp),
+                              onTap: videoIntroController.actionLikeVideo,
+                              onLongPress: videoIntroController.actionOneThree,
+                              selectStatus: videoIntroController.hasLike.value,
+                              semanticsLabel: '点赞',
+                              needAnim: true,
+                              hasOneThree: videoIntroController.hasLike.value &&
+                                  videoIntroController.hasCoin.value &&
+                                  videoIntroController.hasFav.value,
+                              callBack: (start) {
+                                if (start) {
+                                  _coinKey.currentState?.controller?.forward();
+                                  _favKey.currentState?.controller?.forward();
+                                } else {
+                                  _coinKey.currentState?.controller?.reverse();
+                                  _favKey.currentState?.controller?.reverse();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 42,
+                          height: 34,
+                          child: Obx(
+                            () => ActionItem(
+                              expand: false,
+                              icon: const Icon(
+                                FontAwesomeIcons.thumbsDown,
+                                color: Colors.white,
+                              ),
+                              selectIcon:
+                                  const Icon(FontAwesomeIcons.solidThumbsDown),
+                              onTap: videoIntroController.actionDislikeVideo,
+                              selectStatus:
+                                  videoIntroController.hasDislike.value,
+                              semanticsLabel: '点踩',
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 42,
+                          height: 34,
+                          child: Obx(
+                            () => ActionItem(
+                              key: _coinKey,
+                              expand: false,
+                              icon: const Icon(
+                                FontAwesomeIcons.b,
+                                color: Colors.white,
+                              ),
+                              selectIcon: const Icon(FontAwesomeIcons.b),
+                              onTap: videoIntroController.actionCoinVideo,
+                              selectStatus: videoIntroController.hasCoin.value,
+                              semanticsLabel: '投币',
+                              needAnim: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 42,
+                          height: 34,
+                          child: Obx(
+                            () => ActionItem(
+                              key: _favKey,
+                              expand: false,
+                              icon: const Icon(
+                                FontAwesomeIcons.star,
+                                color: Colors.white,
+                              ),
+                              selectIcon:
+                                  const Icon(FontAwesomeIcons.solidStar),
+                              onTap: () => videoIntroController
+                                  .showFavBottomSheet(context),
+                              onLongPress: () => videoIntroController
+                                  .showFavBottomSheet(context,
+                                      type: 'longPress'),
+                              selectStatus: videoIntroController.hasFav.value,
+                              semanticsLabel: '收藏',
+                              needAnim: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 42,
+                          height: 34,
+                          child: ActionItem(
+                            expand: false,
+                            icon: const Icon(
+                              FontAwesomeIcons.shareFromSquare,
+                              color: Colors.white,
+                            ),
+                            onTap: videoIntroController.actionShareVideo,
+                            selectStatus: false,
+                            semanticsLabel: '分享',
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
           ],
         ),
       );
-    });
+
+  PlPlayerController get plPlayerController => widget.controller;
+
+  @override
+  Widget build(BuildContext context) {
+    // final bool isLandscape =
+    //     MediaQuery.of(context).orientation == Orientation.landscape;
+
+    return plPlayerController.showFSActionItem
+        ? Obx(() => _buildHeader(true))
+        : _buildHeader(false);
   }
 }
 
