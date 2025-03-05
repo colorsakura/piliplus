@@ -70,25 +70,28 @@ class _AtMePageState extends State<AtMePage> {
                   title: Text(
                     "${loadingState.response[index].user?.nickname}  "
                     "在${loadingState.response[index].item?.business}中@了我",
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 4),
-                      Text(
-                          loadingState.response[index].item?.sourceContent ??
-                              "",
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.outline)),
+                      if ((loadingState.response[index].item?.sourceContent
+                                  as String?)
+                              ?.isNotEmpty ==
+                          true) ...[
+                        const SizedBox(height: 4),
+                        Text(loadingState.response[index].item?.sourceContent,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.outline)),
+                      ],
                       const SizedBox(height: 4),
                       Text(
                         Utils.dateFormat(loadingState.response[index].atTime),
