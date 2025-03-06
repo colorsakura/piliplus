@@ -1887,9 +1887,9 @@ class _HeaderControlState extends State<HeaderControl> {
                 // show current datetime
                 Obx(
                   () {
-                    if (MediaQuery.of(context).orientation ==
-                            Orientation.landscape &&
-                        (isFullScreen || !horizontalScreen)) {
+                    if ((isFullScreen || !horizontalScreen) &&
+                        MediaQuery.of(context).orientation ==
+                            Orientation.landscape) {
                       startClock();
                       return Text(
                         now.value,
