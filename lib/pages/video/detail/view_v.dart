@@ -647,13 +647,18 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           AppBar(
                             backgroundColor: Colors.black,
                             toolbarHeight: 0,
-                            systemOverlayStyle: shouldShow
-                                ? null
-                                : SystemUiOverlayStyle(
-                                    statusBarIconBrightness: Brightness.light,
-                                    systemNavigationBarIconBrightness:
-                                        Theme.of(context).brightness.reverse,
-                                  ),
+                            systemOverlayStyle: Platform.isAndroid
+                                ? shouldShow
+                                    ? null
+                                    : SystemUiOverlayStyle(
+                                        statusBarIconBrightness:
+                                            Brightness.light,
+                                        systemNavigationBarIconBrightness:
+                                            Theme.of(context)
+                                                .brightness
+                                                .reverse,
+                                      )
+                                : null,
                           ),
                           if (shouldShow)
                             AppBar(
@@ -663,12 +668,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                   .withOpacity(
                                       videoDetailController.scrollRatio.value),
                               toolbarHeight: 0,
-                              systemOverlayStyle: SystemUiOverlayStyle(
-                                statusBarIconBrightness:
-                                    Theme.of(context).brightness.reverse,
-                                systemNavigationBarIconBrightness:
-                                    Theme.of(context).brightness.reverse,
-                              ),
+                              systemOverlayStyle: Platform.isAndroid
+                                  ? SystemUiOverlayStyle(
+                                      statusBarIconBrightness:
+                                          Theme.of(context).brightness.reverse,
+                                      systemNavigationBarIconBrightness:
+                                          Theme.of(context).brightness.reverse,
+                                    )
+                                  : null,
                             ),
                         ],
                       );
