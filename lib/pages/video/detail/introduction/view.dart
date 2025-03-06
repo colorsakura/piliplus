@@ -862,7 +862,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                     ? Utils.numFormat(videoDetail.stat!.like!)
                     : '-',
                 needAnim: true,
-                hasOneThree: videoIntroController.hasLike.value &&
+                hasTriple: videoIntroController.hasLike.value &&
                     videoIntroController.hasCoin.value &&
                     videoIntroController.hasFav.value,
                 callBack: (start) {

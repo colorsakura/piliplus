@@ -455,7 +455,7 @@ class _BangumiInfoState extends State<BangumiInfo>
                             bangumiItem!.stat!['likes']!,
                           ),
                     needAnim: true,
-                    hasOneThree: bangumiIntroController.hasLike.value &&
+                    hasTriple: bangumiIntroController.hasLike.value &&
                         bangumiIntroController.hasCoin.value &&
                         bangumiIntroController.hasFav.value,
                     callBack: (start) {

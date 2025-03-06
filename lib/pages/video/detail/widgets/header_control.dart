@@ -2129,10 +2129,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                     videoIntroController.hasLike.value,
                                 semanticsLabel: '点赞',
                                 needAnim: true,
-                                hasOneThree:
-                                    videoIntroController.hasLike.value &&
-                                        videoIntroController.hasCoin.value &&
-                                        videoIntroController.hasFav.value,
+                                hasTriple: videoIntroController.hasLike.value &&
+                                    videoIntroController.hasCoin.value &&
+                                    videoIntroController.hasFav.value,
                                 callBack: (start) {
                                   if (start) {
                                     HapticFeedback.lightImpact();
@@ -2250,7 +2249,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                     bangumiIntroController.hasLike.value,
                                 semanticsLabel: '点赞',
                                 needAnim: true,
-                                hasOneThree:
+                                hasTriple:
                                     bangumiIntroController.hasLike.value &&
                                         bangumiIntroController.hasCoin.value &&
                                         bangumiIntroController.hasFav.value,
