@@ -576,38 +576,42 @@ class BangumiIntroController extends CommonController {
 
   /// 列表循环或者顺序播放时，自动播放下一个；自动连播时，播放相关视频
   bool nextPlay() {
-    late List episodes;
-    VideoDetailController videoDetailCtr =
-        Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
-    PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
+    try {
+      late List episodes;
+      VideoDetailController videoDetailCtr =
+          Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
+      PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
-    if ((loadingState.value as Success).response.episodes != null) {
-      episodes = (loadingState.value as Success).response.episodes!;
-    } else {
-      if (playRepeat == PlayRepeat.autoPlayRelated) {
-        return playRelated();
-      }
-    }
-    int currentIndex =
-        episodes.indexWhere((e) => e.cid == videoDetailCtr.cid.value);
-    int nextIndex = currentIndex + 1;
-    // 列表循环
-    if (nextIndex >= episodes.length) {
-      if (playRepeat == PlayRepeat.listCycle) {
-        nextIndex = 0;
-      } else if (playRepeat == PlayRepeat.autoPlayRelated) {
-        return playRelated();
+      if ((loadingState.value as Success).response.episodes != null) {
+        episodes = (loadingState.value as Success).response.episodes!;
       } else {
-        return false;
+        if (playRepeat == PlayRepeat.autoPlayRelated) {
+          return playRelated();
+        }
       }
+      int currentIndex =
+          episodes.indexWhere((e) => e.cid == videoDetailCtr.cid.value);
+      int nextIndex = currentIndex + 1;
+      // 列表循环
+      if (nextIndex >= episodes.length) {
+        if (playRepeat == PlayRepeat.listCycle) {
+          nextIndex = 0;
+        } else if (playRepeat == PlayRepeat.autoPlayRelated) {
+          return playRelated();
+        } else {
+          return false;
+        }
+      }
+      int epid = episodes[nextIndex].epId;
+      int cid = episodes[nextIndex].cid;
+      String bvid = episodes[nextIndex].bvid;
+      int aid = episodes[nextIndex].aid;
+      dynamic cover = episodes[nextIndex].cover;
+      changeSeasonOrbangu(epid, bvid, cid, aid, cover);
+      return true;
+    } catch (_) {
+      return false;
     }
-    int epid = episodes[nextIndex].epId;
-    int cid = episodes[nextIndex].cid;
-    String bvid = episodes[nextIndex].bvid;
-    int aid = episodes[nextIndex].aid;
-    dynamic cover = episodes[nextIndex].cover;
-    changeSeasonOrbangu(epid, bvid, cid, aid, cover);
-    return true;
   }
 
   bool playRelated() {
