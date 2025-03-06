@@ -95,18 +95,6 @@ class _HeaderControlState extends State<HeaderControl> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (MediaQuery.of(context).orientation == Orientation.landscape &&
-        (isFullScreen || !horizontalScreen)) {
-      startClock();
-    } else {
-      clock?.cancel();
-      clock = null;
-    }
-  }
-
   /// 设置面板
   void showSettingSheet() {
     Utils.showFSSheet(
@@ -1820,33 +1808,66 @@ class _HeaderControlState extends State<HeaderControl> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 25),
-                          child: Obx(
-                            () => Marquee(
-                              text:
-                                  videoIntroController.videoDetail.value.title!,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                              scrollAxis: Axis.horizontal,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              blankSpace: 200,
-                              velocity: 40,
-                              startAfter: const Duration(seconds: 1),
-                              showFadingOnlyWhenScrolling: true,
-                              fadingEdgeStartFraction: 0,
-                              fadingEdgeEndFraction: 0.1,
-                              numberOfRounds: 1,
-                              startPadding: 0,
-                              accelerationDuration: const Duration(seconds: 1),
-                              accelerationCurve: Curves.linear,
-                              decelerationDuration:
-                                  const Duration(milliseconds: 500),
-                              decelerationCurve: Curves.easeOut,
-                            ),
-                          ),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return Obx(
+                              () {
+                                final textPainter = TextPainter(
+                                  text: TextSpan(
+                                    text: videoIntroController
+                                        .videoDetail.value.title!,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1,
+                                )..layout(maxWidth: constraints.maxWidth);
+                                if (textPainter.didExceedMaxLines) {
+                                  return ConstrainedBox(
+                                    constraints: BoxConstraints(maxHeight: 25),
+                                    child: Marquee(
+                                      text: videoIntroController
+                                          .videoDetail.value.title!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                      scrollAxis: Axis.horizontal,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      blankSpace: 200,
+                                      velocity: 40,
+                                      startAfter: const Duration(seconds: 1),
+                                      showFadingOnlyWhenScrolling: true,
+                                      fadingEdgeStartFraction: 0,
+                                      fadingEdgeEndFraction: 0.1,
+                                      numberOfRounds: 1,
+                                      startPadding: 0,
+                                      accelerationDuration:
+                                          const Duration(seconds: 1),
+                                      accelerationCurve: Curves.linear,
+                                      decelerationDuration:
+                                          const Duration(milliseconds: 500),
+                                      decelerationCurve: Curves.easeOut,
+                                    ),
+                                  );
+                                } else {
+                                  return Text(
+                                    videoIntroController
+                                        .videoDetail.value.title!,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                    maxLines: 1,
+                                    textDirection: TextDirection.ltr,
+                                  );
+                                }
+                              },
+                            );
+                          },
                         ),
                         if (videoIntroController.isShowOnlineTotal)
                           Obx(
@@ -1863,22 +1884,26 @@ class _HeaderControlState extends State<HeaderControl> {
                   )
                 else
                   const Spacer(),
-                if (MediaQuery.of(context).orientation ==
-                        Orientation.landscape &&
-                    (isFullScreen || !horizontalScreen)) ...[
-                  // const Spacer(),
-                  // show current datetime
-                  Obx(
-                    () => Text(
-                      now.value,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                ],
+                // show current datetime
+                Obx(
+                  () {
+                    if (MediaQuery.of(context).orientation ==
+                            Orientation.landscape &&
+                        (isFullScreen || !horizontalScreen)) {
+                      startClock();
+                      return Text(
+                        now.value,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
+                      );
+                    }
+                    clock?.cancel();
+                    clock = null;
+                    return SizedBox.shrink();
+                  },
+                ),
                 // ComBtn(
                 //   icon: const Icon(
                 //     FontAwesomeIcons.cropSimple,
