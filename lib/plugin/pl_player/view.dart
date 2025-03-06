@@ -701,6 +701,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             scaleEnabled: !plPlayerController.controlsLock.value, // 启用缩放
             minScale: 0.75,
             maxScale: 2.0,
+            boundaryMargin: const EdgeInsets.all(double.infinity),
             panAxis: PanAxis.aligned,
             onInteractionStart: (ScaleStartDetails details) {
               if (plPlayerController.controlsLock.value) return;

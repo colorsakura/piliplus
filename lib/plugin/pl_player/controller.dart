@@ -1131,6 +1131,8 @@ class PlPlayerController {
     }
   }
 
+  bool? isTriple;
+
   /// 隐藏控制条
   void hideTaskControls() {
     if (_timer != null) {
@@ -1138,7 +1140,7 @@ class PlPlayerController {
     }
     Duration waitingTime = Duration(seconds: enableLongShowControl ? 30 : 3);
     _timer = Timer(waitingTime, () {
-      if (!isSliderMoving.value) {
+      if (!isSliderMoving.value && isTriple != true) {
         controls = false;
       }
       _timer = null;

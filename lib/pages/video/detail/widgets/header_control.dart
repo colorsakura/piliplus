@@ -2122,8 +2122,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 onTap: videoIntroController.actionLikeVideo,
                                 onLongPress: () {
                                   videoIntroController.actionOneThree();
-                                  plPlayerController.isSliderMoving.value =
-                                      false;
+                                  plPlayerController.isTriple = null;
                                   plPlayerController.hideTaskControls();
                                 },
                                 selectStatus:
@@ -2137,8 +2136,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 callBack: (start) {
                                   if (start) {
                                     HapticFeedback.lightImpact();
-                                    plPlayerController.isSliderMoving.value =
-                                        true;
+                                    plPlayerController.isTriple = true;
                                     _coinKey.currentState?.controller
                                         ?.forward();
                                     _favKey.currentState?.controller?.forward();
@@ -2146,8 +2144,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                     _coinKey.currentState?.controller
                                         ?.reverse();
                                     _favKey.currentState?.controller?.reverse();
-                                    plPlayerController.isSliderMoving.value =
-                                        false;
+                                    plPlayerController.isTriple = null;
                                     plPlayerController.hideTaskControls();
                                   }
                                 },
@@ -2246,8 +2243,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 onTap: bangumiIntroController.actionLikeVideo,
                                 onLongPress: () {
                                   bangumiIntroController.actionOneThree();
-                                  plPlayerController.isSliderMoving.value =
-                                      false;
+                                  plPlayerController.isTriple = null;
                                   plPlayerController.hideTaskControls();
                                 },
                                 selectStatus:
@@ -2261,8 +2257,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                 callBack: (start) {
                                   if (start) {
                                     HapticFeedback.lightImpact();
-                                    plPlayerController.isSliderMoving.value =
-                                        true;
+                                    plPlayerController.isTriple = true;
                                     _coinKey.currentState?.controller
                                         ?.forward();
                                     _favKey.currentState?.controller?.forward();
@@ -2270,8 +2265,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                     _coinKey.currentState?.controller
                                         ?.reverse();
                                     _favKey.currentState?.controller?.reverse();
-                                    plPlayerController.isSliderMoving.value =
-                                        false;
+                                    plPlayerController.isTriple = null;
                                     plPlayerController.hideTaskControls();
                                   }
                                 },
@@ -2305,7 +2299,10 @@ class _HeaderControlState extends State<HeaderControl> {
                               () => ActionItem(
                                 key: _favKey,
                                 expand: false,
-                                icon: const Icon(FontAwesomeIcons.star),
+                                icon: const Icon(
+                                  FontAwesomeIcons.star,
+                                  color: Colors.white,
+                                ),
                                 selectIcon:
                                     const Icon(FontAwesomeIcons.solidStar),
                                 onTap: () => bangumiIntroController
