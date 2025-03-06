@@ -9,12 +9,23 @@ class DanmakuHttp {
     required int cid,
     required int segmentIndex,
     required bool mergeDanmaku,
+    int queryCount = 1,
   }) async {
     // 构建参数对象
     final response =
         await GrpcRepo.dmSegMobile(cid: cid, segmentIndex: segmentIndex);
     if (!response['status']) {
-      return DmSegMobileReply();
+      if (queryCount >= 3) {
+        return DmSegMobileReply();
+      } else {
+        await Future.delayed(const Duration(seconds: 1));
+        return await queryDanmaku(
+          cid: cid,
+          segmentIndex: segmentIndex,
+          mergeDanmaku: mergeDanmaku,
+          queryCount: ++queryCount,
+        );
+      }
     }
     DmSegMobileReply data = response['data'];
     if (mergeDanmaku && data.elems.isNotEmpty) {
