@@ -16,8 +16,10 @@ class SysMsgController extends CommonController {
 
   @override
   List? handleListResponse(List currentList, List dataList) {
+    if (cursor == -1) {
+      msgSysUpdateCursor(dataList.first.cursor!);
+    }
     cursor = dataList.last.cursor ?? -1;
-    msgSysUpdateCursor(dataList.first.cursor!);
     if (isEnd.not && dataList.length + 1 < pageSize) {
       isEnd = true;
     }
@@ -25,14 +27,7 @@ class SysMsgController extends CommonController {
   }
 
   Future msgSysUpdateCursor(int cursor) async {
-    var res = await MsgHttp.msgSysUpdateCursor(cursor);
-    if (res['status']) {
-      SmartDialog.showToast('已读成功');
-      return true;
-    } else {
-      SmartDialog.showToast(res['msg']);
-      return false;
-    }
+    MsgHttp.msgSysUpdateCursor(cursor);
   }
 
   @override
