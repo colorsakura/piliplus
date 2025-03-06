@@ -52,7 +52,7 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
 
   void _startLongPress() {
     _lastTime = DateTime.now().millisecondsSinceEpoch;
-    _timer ??= Timer(const Duration(milliseconds: 100), () {
+    _timer ??= Timer(const Duration(milliseconds: 200), () {
       if (widget.hasTriple) {
         HapticFeedback.lightImpact();
         SmartDialog.showToast('已经完成三连');
@@ -66,12 +66,12 @@ class ActionItemState extends State<ActionItem> with TickerProviderStateMixin {
 
   void _cancelLongPress([bool isCancel = false]) {
     int duration = DateTime.now().millisecondsSinceEpoch - _lastTime;
-    if (duration >= 100 && duration < 1500) {
+    if (duration >= 200 && duration < 1500) {
       if (widget.hasTriple.not) {
         controller?.reverse();
         widget.callBack?.call(false);
       }
-    } else if (duration < 100) {
+    } else if (duration < 200) {
       cancelTimer();
       if (!isCancel) {
         feedBack();
