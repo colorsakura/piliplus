@@ -1060,12 +1060,12 @@ class Utils {
     }
 
     String format(first, second) {
-      double result = number / first;
-      String format = result.toStringAsFixed(1);
-      if (format.endsWith('.0')) {
-        return '${result.toInt()}$second';
+      double result = ((number / first) as double).toPrecision(1);
+      int intRes = result.toInt();
+      if (result == intRes) {
+        return '$intRes$second';
       } else {
-        return '$format$second';
+        return '$result$second';
       }
     }
 
