@@ -631,7 +631,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           key: videoDetailController.scaffoldKey,
-          // backgroundColor: Colors.black,
           appBar: removeSafeArea
               ? null
               : PreferredSize(
@@ -754,9 +753,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                               showStatusBar();
                             }
                           }
-                          return Container(
-                            color: Colors.black,
-                            // showStatusBarBackgroundColor ? null : Colors.black,
+                          return SizedBox(
                             height: MediaQuery.of(context).orientation ==
                                         Orientation.landscape ||
                                     isFullScreen
@@ -1302,21 +1299,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           Scaffold(
             resizeToAvoidBottomInset: false,
             key: videoDetailController.scaffoldKey,
-            // backgroundColor: Colors.black,
             appBar: removeSafeArea
                 ? null
                 : AppBar(
                     backgroundColor: Colors.black,
-                    // showStatusBarBackgroundColor ? null : Colors.black,
                     toolbarHeight: 0,
-                    // systemOverlayStyle: SystemUiOverlayStyle(
-                    //   statusBarIconBrightness:
-                    //       Theme.of(context).brightness == Brightness.dark ||
-                    //               !showStatusBarBackgroundColor
-                    //           ? Brightness.light
-                    //           : Brightness.dark,
-                    //   systemNavigationBarColor: Colors.transparent,
-                    // ),
                   ),
             body: Container(
               color: Theme.of(context).colorScheme.surface,
@@ -1335,21 +1322,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         Scaffold(
             resizeToAvoidBottomInset: false,
             key: videoDetailController.scaffoldKey,
-            // backgroundColor: Colors.black,
             appBar: removeSafeArea
                 ? null
                 : AppBar(
                     backgroundColor: Colors.black,
-                    // showStatusBarBackgroundColor ? null : Colors.black,
                     toolbarHeight: 0,
-                    // systemOverlayStyle: SystemUiOverlayStyle(
-                    //   statusBarIconBrightness:
-                    //       Theme.of(context).brightness == Brightness.dark ||
-                    //               !showStatusBarBackgroundColor
-                    //           ? Brightness.light
-                    //           : Brightness.dark,
-                    //   systemNavigationBarColor: Colors.transparent,
-                    // ),
                   ),
             body: Container(
                 color: Theme.of(context).colorScheme.surface,
@@ -1781,6 +1758,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   Widget videoPlayer(double videoWidth, double videoHeight) {
     return Stack(
       children: [
+        Positioned.fill(child: ColoredBox(color: Colors.black)),
+
         if (isShowing) plPlayer,
 
         if (!videoDetailController.autoPlay.value) ...[

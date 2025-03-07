@@ -543,21 +543,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
             Scaffold(
               resizeToAvoidBottomInset: false,
               key: videoDetailController.scaffoldKey,
-              // backgroundColor: Colors.black,
               appBar: removeSafeArea
                   ? null
                   : AppBar(
                       backgroundColor: Colors.black,
-                      // showStatusBarBackgroundColor ? null : Colors.black,
                       toolbarHeight: 0,
-                      // systemOverlayStyle: SystemUiOverlayStyle(
-                      //   statusBarIconBrightness:
-                      //       Theme.of(context).brightness == Brightness.dark ||
-                      //               !showStatusBarBackgroundColor
-                      //           ? Brightness.light
-                      //           : Brightness.dark,
-                      //   systemNavigationBarColor: Colors.transparent,
-                      // ),
                     ),
               body: Column(
                 children: [
@@ -588,9 +578,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           showStatusBar();
                         }
                       }
-                      return Container(
-                        color: Colors.black,
-                        // showStatusBarBackgroundColor ? null : Colors.black,
+                      return SizedBox(
                         height: MediaQuery.of(context).orientation ==
                                     Orientation.landscape ||
                                 isFullScreen
@@ -921,21 +909,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           Scaffold(
             resizeToAvoidBottomInset: false,
             key: videoDetailController.scaffoldKey,
-            // backgroundColor: Colors.black,
             appBar: removeSafeArea
                 ? null
                 : AppBar(
                     backgroundColor: Colors.black,
-                    // showStatusBarBackgroundColor ? null : Colors.black,
                     toolbarHeight: 0,
-                    // systemOverlayStyle: SystemUiOverlayStyle(
-                    //   statusBarIconBrightness:
-                    //       Theme.of(context).brightness == Brightness.dark ||
-                    //               !showStatusBarBackgroundColor
-                    //           ? Brightness.light
-                    //           : Brightness.dark,
-                    //   systemNavigationBarColor: Colors.transparent,
-                    // ),
                   ),
             body: Container(
               color: Theme.of(context).colorScheme.surface,
@@ -954,21 +932,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         Scaffold(
             resizeToAvoidBottomInset: false,
             key: videoDetailController.scaffoldKey,
-            // backgroundColor: Colors.black,
             appBar: removeSafeArea
                 ? null
                 : AppBar(
                     backgroundColor: Colors.black,
-                    // showStatusBarBackgroundColor ? null : Colors.black,
                     toolbarHeight: 0,
-                    // systemOverlayStyle: SystemUiOverlayStyle(
-                    //   statusBarIconBrightness:
-                    //       Theme.of(context).brightness == Brightness.dark ||
-                    //               !showStatusBarBackgroundColor
-                    //           ? Brightness.light
-                    //           : Brightness.dark,
-                    //   systemNavigationBarColor: Colors.transparent,
-                    // ),
                   ),
             body: Container(
                 color: Theme.of(context).colorScheme.surface,
@@ -1394,6 +1362,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   Widget videoPlayer(double videoWidth, double videoHeight) => Stack(
         children: [
+          Positioned.fill(child: ColoredBox(color: Colors.black)),
+
           if (isShowing) plPlayer,
 
           /// 关闭自动播放时 手动播放
