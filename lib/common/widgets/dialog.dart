@@ -22,7 +22,10 @@ void showConfirmDialog({
             ),
           ),
           TextButton(
-            onPressed: onConfirm,
+            onPressed: () {
+              Get.back();
+              onConfirm();
+            },
             child: Text('确认'),
           ),
         ],

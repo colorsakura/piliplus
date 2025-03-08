@@ -143,7 +143,6 @@ class BlackListController extends CommonController {
       context: context,
       title: '确定将 $name 移出黑名单？',
       onConfirm: () async {
-        Get.back();
         var result = await VideoHttp.relationMod(mid: mid, act: 6, reSrc: 11);
         if (result['status']) {
           List list = (loadingState.value as Success).response;

@@ -245,7 +245,6 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               context: context,
                                               title: '确定删除该收藏夹?',
                                               onConfirm: () {
-                                                Get.back();
                                                 UserHttp.deleteFolder(
                                                         mediaIds: [mediaId])
                                                     .then((data) {

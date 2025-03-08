@@ -92,7 +92,6 @@ class LaterController extends MultiSelectController {
         if (res['status']) {
           loadingState.value = LoadingState.success([]);
         }
-        Get.back();
         SmartDialog.showToast(res['msg']);
       },
     );
