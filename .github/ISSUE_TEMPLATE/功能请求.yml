@@ -1,0 +1,41 @@
+name: 功能请求
+description: 对于功能的一些建议
+labels: [ "enhancement" ]
+title: "[FR] "
+body:
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 检查清单
+      options:
+        - label: 之前没有人提交过类似或相同的功能请求。
+          required: true
+
+  - type: textarea
+    id: desc
+    attributes:
+      label: 功能描述
+      description: 请提供对所请求功能的清晰描述。
+    validations:
+      required: true
+
+  - type: textarea
+    id: propose
+    attributes:
+      label: 目标
+      description: 请描述你希望通过这个功能实现的目标。
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 解决方案
+      description: 如果你有任何关于如何实现这个功能的想法或建议，请在这里提供。
+
+  - type: textarea
+    id: addition
+    attributes:
+      label: 其他
+      description: 请提供已实现该功能或类似功能的应用
