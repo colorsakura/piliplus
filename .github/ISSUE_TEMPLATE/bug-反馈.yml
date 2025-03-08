@@ -1,0 +1,51 @@
+name: Bug 反馈
+description: 描述你所遇到的bug
+labels: [ "bug" ]
+title: "[Bug] "
+body:
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 检查清单
+      options:
+        - label: 之前没有人提交过类似或相同的 bug report。
+          required: true
+        - label: 正在使用最新版本。
+          required: true
+
+  - type: textarea
+    id: bug
+    attributes:
+      label: 问题描述
+      description: 请提供一个清晰而简明的问题描述。
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请提供复现该问题所需的具体步骤。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+      description: 请描述你期望的正确行为或结果。
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: 错误日志
+      description: 请提供设置->关于->错误日志中的内容，粘贴在下方代码框中。如果没有，请提供您的app版本号、系统版本、设备型号等相关信息。
+
+  - type: textarea
+    id: info
+    attributes:
+      label: 相关信息
+      description: 请补充截图、录屏、BV号等其他有助于解决问题的信息。
