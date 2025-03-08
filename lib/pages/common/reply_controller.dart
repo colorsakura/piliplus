@@ -313,6 +313,49 @@ abstract class ReplyController extends CommonController {
     }
   }
 
+  void onCheckReply(context, item) {
+    try {
+      if (item is ReplyInfo) {
+        checkReply(
+          context: context,
+          oid: item.oid.toInt(),
+          rpid: item.hasRoot() ? item.root.toInt() : null,
+          replyType: item.type.toInt(),
+          replyId: item.id.toInt(),
+          message: item.content.message,
+          //
+          root: item.root.toInt(),
+          parent: item.parent.toInt(),
+          ctime: item.ctime.toInt(),
+          pictures:
+              item.content.pictures.map((item) => item.toProto3Json()).toList(),
+          mid: item.mid.toInt(),
+          //
+          isManual: true,
+        );
+      } else if (item is ReplyItemModel) {
+        checkReply(
+          context: context,
+          oid: item.oid,
+          rpid: item.root == 0 ? null : item.root,
+          replyType: item.type!,
+          replyId: item.rpid!,
+          message: item.content!.message!,
+          //
+          root: item.root,
+          parent: item.parent,
+          ctime: item.ctime,
+          pictures: item.content?.pictures,
+          mid: item.mid,
+          //
+          isManual: true,
+        );
+      }
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
+    }
+  }
+
   // ref https://github.com/freedom-introvert/biliSendCommAntifraud
   void checkReply({
     required BuildContext context,
@@ -324,8 +367,9 @@ abstract class ReplyController extends CommonController {
     dynamic root,
     dynamic parent,
     dynamic ctime,
-    dynamic pictures,
+    List? pictures,
     dynamic mid,
+    bool isManual = false,
   }) async {
     // biliSendCommAntifraud
     if (Platform.isAndroid && _biliSendCommAntifraud) {
@@ -346,7 +390,7 @@ abstract class ReplyController extends CommonController {
             'parent': parent,
             'ctime': ctime,
             'comment_text': message,
-            if (pictures.isNotEmpty == true) 'pictures': jsonEncode(pictures),
+            if (pictures?.isNotEmpty == true) 'pictures': jsonEncode(pictures),
             'source_id': '$sourceId',
             'uid': mid,
             'cookies': [cookieString],
@@ -359,7 +403,9 @@ abstract class ReplyController extends CommonController {
     }
 
     // CommAntifraud
-    await Future.delayed(const Duration(seconds: 5));
+    if (isManual.not) {
+      await Future.delayed(const Duration(seconds: 5));
+    }
     void showReplyCheckResult(String message) {
       showDialog(
         context: context,
@@ -447,7 +493,9 @@ abstract class ReplyController extends CommonController {
             } else if (res2 is Success) {
               // found
               if (context.mounted) {
-                showReplyCheckResult('''
+                showReplyCheckResult(isManual
+                    ? '无账号状态下找到了你的评论，评论正常！\n\n你的评论：$message'
+                    : '''
 你评论状态有点可疑，虽然无账号翻找评论区获取不到你的评论，但是无账号可通过
 https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? replyId}&type=$replyType
 获取你的评论，疑似评论区被戒严或者这是你的视频。

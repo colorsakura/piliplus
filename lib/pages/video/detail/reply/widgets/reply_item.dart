@@ -41,6 +41,7 @@ class ReplyItem extends StatelessWidget {
     this.onDismissed,
     this.getTag,
     this.callback,
+    required this.onCheckReply,
   });
   final ReplyItemModel replyItem;
   final String? replyLevel;
@@ -54,6 +55,7 @@ class ReplyItem extends StatelessWidget {
   final ValueChanged<int>? onDismissed;
   final Function? getTag;
   final Function(List<String>, int)? callback;
+  final ValueChanged<ReplyItemModel> onCheckReply;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,8 @@ class ReplyItem extends StatelessWidget {
             useRootNavigator: true,
             isScrollControlled: true,
             builder: (context) {
-              return MorePanel(
+              return morePanel(
+                context: context,
                 item: replyItem,
                 onDelete: (rpid) {
                   onDelete?.call(rpid, null);
@@ -496,7 +499,8 @@ class ReplyItem extends StatelessWidget {
                       useRootNavigator: true,
                       isScrollControlled: true,
                       builder: (context) {
-                        return MorePanel(
+                        return morePanel(
+                          context: context,
                           item: replies[i],
                           onDelete: onDelete,
                         );
@@ -1024,119 +1028,115 @@ class ReplyItem extends StatelessWidget {
     // spanChildren.add(TextSpan(text: matchMember));
     return TextSpan(children: spanChildren);
   }
-}
 
-class MorePanel extends StatelessWidget {
-  final ReplyItemModel item;
-  final Function(dynamic rpid)? onDelete;
-
-  const MorePanel({super.key, required this.item, this.onDelete});
-
-  Future<dynamic> menuActionHandler(String type) async {
-    String message = item.content?.message ?? '';
-    switch (type) {
-      case 'report':
-        Get.back();
-        autoWrapReportDialog(
-          Get.context!,
-          ReportOptions.commentReport,
-          (reasonType, reasonDesc, banUid) async {
-            final res = await Request().post(
-              '/x/v2/reply/report',
-              data: {
-                'add_blacklist': banUid,
-                'csrf': await Request.getCsrf(),
-                'gaia_source': 'main_h5',
-                'oid': item.oid,
-                'platform': 'android',
-                'reason': reasonType,
-                'rpid': item.rpid,
-                'scene': 'main',
-                'type': 1,
-                if (reasonType == 0) 'content': reasonDesc!
-              },
-              options: Options(contentType: Headers.formUrlEncodedContentType),
-            );
-            if (res.data['code'] == 0) {
-              onDelete?.call(item.rpid);
-            }
-            return res.data as Map;
-          },
-        );
-        break;
-      case 'copyAll':
-        Get.back();
-        Utils.copyText(message);
-        break;
-      case 'copyFreedom':
-        Get.back();
-        showDialog(
-          context: Get.context!,
-          builder: (context) {
-            return Dialog(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: SelectableText(message),
-              ),
-            );
-          },
-        );
-        break;
-      // case 'block':
-      //   SmartDialog.showToast('加入黑名单');
-      //   break;
-      // case 'report':
-      //   SmartDialog.showToast('举报');
-      //   break;
-      case 'delete':
-        //弹出确认提示：
-        Get.back();
-        bool? isDelete = await showDialog<bool>(
-          context: Get.context!,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('删除评论（测试）'),
-              content:
-                  Text('确定尝试删除这条评论吗？\n\n$message\n\n注：只能删除自己的评论，或自己管理的评论区下的评论'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Get.back(result: false);
-                  },
-                  child: const Text('取消'),
+  Widget morePanel({
+    required BuildContext context,
+    required ReplyItemModel item,
+    required onDelete,
+  }) {
+    Future<dynamic> menuActionHandler(String type) async {
+      late String message = item.content?.message ?? '';
+      switch (type) {
+        case 'report':
+          Get.back();
+          autoWrapReportDialog(
+            context,
+            ReportOptions.commentReport,
+            (reasonType, reasonDesc, banUid) async {
+              final res = await Request().post(
+                '/x/v2/reply/report',
+                data: {
+                  'add_blacklist': banUid,
+                  'csrf': await Request.getCsrf(),
+                  'gaia_source': 'main_h5',
+                  'oid': item.oid,
+                  'platform': 'android',
+                  'reason': reasonType,
+                  'rpid': item.rpid,
+                  'scene': 'main',
+                  'type': 1,
+                  if (reasonType == 0) 'content': reasonDesc!
+                },
+                options:
+                    Options(contentType: Headers.formUrlEncodedContentType),
+              );
+              if (res.data['code'] == 0) {
+                onDelete?.call(item.rpid);
+              }
+              return res.data as Map;
+            },
+          );
+          break;
+        case 'copyAll':
+          Get.back();
+          Utils.copyText(message);
+          break;
+        case 'copyFreedom':
+          Get.back();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: SelectableText(message),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Get.back(result: true);
-                  },
-                  child: const Text('确定'),
-                ),
-              ],
-            );
-          },
-        );
-        if (isDelete == null || !isDelete) {
-          return;
-        }
-        SmartDialog.showLoading(msg: '删除中...');
-        var result = await VideoHttp.replyDel(
-            type: item.type!, oid: item.oid!, rpid: item.rpid!);
-        SmartDialog.dismiss();
-        if (result['status']) {
-          SmartDialog.showToast('删除成功');
-          onDelete?.call(item.rpid!);
-        } else {
-          SmartDialog.showToast('删除失败, ${result["msg"]}');
-        }
-        break;
-      default:
+              );
+            },
+          );
+          break;
+        case 'delete':
+          Get.back();
+          bool? isDelete = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('删除评论（测试）'),
+                content: Text(
+                    '确定尝试删除这条评论吗？\n\n$message\n\n注：只能删除自己的评论，或自己管理的评论区下的评论'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Get.back(result: false);
+                    },
+                    child: const Text('取消'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.back(result: true);
+                    },
+                    child: const Text('确定'),
+                  ),
+                ],
+              );
+            },
+          );
+          if (isDelete == null || !isDelete) {
+            return;
+          }
+          SmartDialog.showLoading(msg: '删除中...');
+          var result = await VideoHttp.replyDel(
+              type: item.type!, oid: item.oid!, rpid: item.rpid!);
+          SmartDialog.dismiss();
+          if (result['status']) {
+            SmartDialog.showToast('删除成功');
+            onDelete?.call(item.rpid!);
+          } else {
+            SmartDialog.showToast('删除失败, ${result["msg"]}');
+          }
+          break;
+        case 'checkReply':
+          Get.back();
+          onCheckReply(item);
+          break;
+        default:
+      }
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
+    dynamic ownerMid = GStorage.ownerMid;
     Color errorColor = Theme.of(context).colorScheme.error;
+
     return Padding(
       padding: EdgeInsets.only(
           bottom: MediaQueryData.fromView(
@@ -1148,7 +1148,7 @@ class MorePanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           InkWell(
-            onTap: () => Get.back(),
+            onTap: Get.back,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(28),
               topRight: Radius.circular(28),
@@ -1167,10 +1167,9 @@ class MorePanel extends StatelessWidget {
               ),
             ),
           ),
-          // 已登录用户才显示删除
-          if (GStorage.userInfo.get('userInfoCache') != null) ...[
+          if (ownerMid != null) ...[
             ListTile(
-              onTap: () async => await menuActionHandler('delete'),
+              onTap: () => menuActionHandler('delete'),
               minLeadingWidth: 0,
               leading: Icon(Icons.delete_outlined, color: errorColor, size: 19),
               title: Text('删除',
@@ -1180,7 +1179,7 @@ class MorePanel extends StatelessWidget {
                       .copyWith(color: errorColor)),
             ),
             ListTile(
-              onTap: () async => await menuActionHandler('report'),
+              onTap: () => menuActionHandler('report'),
               minLeadingWidth: 0,
               leading: Icon(Icons.error_outline, color: errorColor, size: 19),
               title: Text('举报',
@@ -1191,30 +1190,31 @@ class MorePanel extends StatelessWidget {
             ),
           ],
           ListTile(
-            onTap: () async => await menuActionHandler('copyAll'),
+            onTap: () => menuActionHandler('copyAll'),
             minLeadingWidth: 0,
             leading: const Icon(Icons.copy_all_outlined, size: 19),
             title: Text('复制全部', style: Theme.of(context).textTheme.titleSmall),
           ),
           ListTile(
-            onTap: () async => await menuActionHandler('copyFreedom'),
+            onTap: () => menuActionHandler('copyFreedom'),
             minLeadingWidth: 0,
             leading: const Icon(Icons.copy_outlined, size: 19),
             title: Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
           ),
-
-          // ListTile(
-          //   onTap: () async => await menuActionHandler('block'),
-          //   minLeadingWidth: 0,
-          //   leading: Icon(Icons.block_outlined, color: errorColor),
-          //   title: Text('加入黑名单', style: TextStyle(color: errorColor)),
-          // ),
-          // ListTile(
-          //   onTap: () async => await menuActionHandler('report'),
-          //   minLeadingWidth: 0,
-          //   leading: Icon(Icons.report_outlined, color: errorColor),
-          //   title: Text('举报', style: TextStyle(color: errorColor)),
-          // ),
+          if (item.mid == ownerMid)
+            ListTile(
+              onTap: () => menuActionHandler('checkReply'),
+              minLeadingWidth: 0,
+              leading: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.shield_outlined, size: 19),
+                  const Icon(Icons.reply, size: 12),
+                ],
+              ),
+              title:
+                  Text('检查评论', style: Theme.of(context).textTheme.titleSmall),
+            ),
         ],
       ),
     );

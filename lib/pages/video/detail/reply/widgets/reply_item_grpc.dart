@@ -44,6 +44,7 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onViewImage,
     this.onDismissed,
     this.callback,
+    required this.onCheckReply,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -60,6 +61,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
+  final ValueChanged<ReplyInfo> onCheckReply;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class ReplyItemGrpc extends StatelessWidget {
         onLongPress: () {
           feedBack();
           // showDialog(
-          //   context: Get.context!,
+          //   context: context,
           //   builder: (context) => AlertDialog(
           //     content: SelectableText(jsonEncode(replyItem.toProto3Json())),
           //   ),
@@ -1073,7 +1075,7 @@ class ReplyItemGrpc extends StatelessWidget {
     required onDelete,
   }) {
     Future<dynamic> menuActionHandler(String type) async {
-      String message = item.content.message;
+      late String message = item.content.message;
       switch (type) {
         case 'report':
           Get.back();
@@ -1112,7 +1114,7 @@ class ReplyItemGrpc extends StatelessWidget {
         case 'copyFreedom':
           Get.back();
           showDialog(
-            context: Get.context!,
+            context: context,
             builder: (context) {
               return Dialog(
                 child: Padding(
@@ -1124,17 +1126,10 @@ class ReplyItemGrpc extends StatelessWidget {
             },
           );
           break;
-        // case 'block':
-        //   SmartDialog.showToast('加入黑名单');
-        //   break;
-        // case 'report':
-        //   SmartDialog.showToast('举报');
-        //   break;
         case 'delete':
-          //弹出确认提示：
           Get.back();
           bool? isDelete = await showDialog<bool>(
-            context: Get.context!,
+            context: context,
             builder: (context) {
               return AlertDialog(
                 title: const Text('删除评论（测试）'),
@@ -1174,11 +1169,17 @@ class ReplyItemGrpc extends StatelessWidget {
             SmartDialog.showToast('删除失败, ${result["msg"]}');
           }
           break;
+        case 'checkReply':
+          Get.back();
+          onCheckReply(item);
+          break;
         default:
       }
     }
 
+    dynamic ownerMid = GStorage.ownerMid;
     Color errorColor = Theme.of(context).colorScheme.error;
+
     return Padding(
       padding: EdgeInsets.only(
           bottom: MediaQueryData.fromView(
@@ -1190,7 +1191,7 @@ class ReplyItemGrpc extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           InkWell(
-            onTap: () => Get.back(),
+            onTap: Get.back,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(28),
               topRight: Radius.circular(28),
@@ -1209,10 +1210,9 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
             ),
           ),
-          // 已登录用户才显示删除
-          if (GStorage.userInfo.get('userInfoCache') != null) ...[
+          if (ownerMid != null) ...[
             ListTile(
-              onTap: () async => await menuActionHandler('delete'),
+              onTap: () => menuActionHandler('delete'),
               minLeadingWidth: 0,
               leading: Icon(Icons.delete_outlined, color: errorColor, size: 19),
               title: Text('删除',
@@ -1222,7 +1222,7 @@ class ReplyItemGrpc extends StatelessWidget {
                       .copyWith(color: errorColor)),
             ),
             ListTile(
-              onTap: () async => await menuActionHandler('report'),
+              onTap: () => menuActionHandler('report'),
               minLeadingWidth: 0,
               leading: Icon(Icons.error_outline, color: errorColor, size: 19),
               title: Text('举报',
@@ -1233,30 +1233,31 @@ class ReplyItemGrpc extends StatelessWidget {
             ),
           ],
           ListTile(
-            onTap: () async => await menuActionHandler('copyAll'),
+            onTap: () => menuActionHandler('copyAll'),
             minLeadingWidth: 0,
             leading: const Icon(Icons.copy_all_outlined, size: 19),
             title: Text('复制全部', style: Theme.of(context).textTheme.titleSmall),
           ),
           ListTile(
-            onTap: () async => await menuActionHandler('copyFreedom'),
+            onTap: () => menuActionHandler('copyFreedom'),
             minLeadingWidth: 0,
             leading: const Icon(Icons.copy_outlined, size: 19),
             title: Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
           ),
-
-          // ListTile(
-          //   onTap: () async => await menuActionHandler('block'),
-          //   minLeadingWidth: 0,
-          //   leading: Icon(Icons.block_outlined, color: errorColor),
-          //   title: Text('加入黑名单', style: TextStyle(color: errorColor)),
-          // ),
-          // ListTile(
-          //   onTap: () async => await menuActionHandler('report'),
-          //   minLeadingWidth: 0,
-          //   leading: Icon(Icons.report_outlined, color: errorColor),
-          //   title: Text('举报', style: TextStyle(color: errorColor)),
-          // ),
+          if (item.mid.toInt() == ownerMid)
+            ListTile(
+              onTap: () => menuActionHandler('checkReply'),
+              minLeadingWidth: 0,
+              leading: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.shield_outlined, size: 19),
+                  const Icon(Icons.reply, size: 12),
+                ],
+              ),
+              title:
+                  Text('检查评论', style: Theme.of(context).textTheme.titleSmall),
+            ),
         ],
       ),
     );

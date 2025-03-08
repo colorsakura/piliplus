@@ -755,6 +755,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           isTop: _htmlRenderCtr.hasUpTop && index == 0,
                           upMid: loadingState.response.subjectControl.upMid,
                           callback: _getImageCallback,
+                          onCheckReply: (item) =>
+                              _htmlRenderCtr.onCheckReply(context, item),
                         )
                       : ReplyItem(
                           replyItem: loadingState.response.replies[index],
@@ -772,6 +774,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                           },
                           onDelete: _htmlRenderCtr.onMDelete,
                           callback: _getImageCallback,
+                          onCheckReply: (item) =>
+                              _htmlRenderCtr.onCheckReply(context, item),
                         );
                 }
               },

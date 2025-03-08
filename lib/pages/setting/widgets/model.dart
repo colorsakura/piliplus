@@ -2037,10 +2037,7 @@ List<SettingsModel> get extraSettings => [
           alignment: Alignment.center,
           children: [
             const Icon(Icons.shield_outlined),
-            Icon(
-              Icons.reply,
-              size: 14,
-            ),
+            const Icon(Icons.reply, size: 14),
           ],
         ),
         setKey: SettingBoxKey.enableCommAntifraud,

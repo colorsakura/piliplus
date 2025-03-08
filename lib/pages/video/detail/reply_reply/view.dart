@@ -197,6 +197,9 @@ class _VideoReplyReplyPanelState
                                 onViewImage: widget.onViewImage,
                                 onDismissed: widget.onDismissed,
                                 callback: _getImageCallback,
+                                onCheckReply: (item) =>
+                                    _videoReplyReplyController.onCheckReply(
+                                        context, item),
                               )
                             : ReplyItem(
                                 replyItem: firstFloor,
@@ -210,6 +213,9 @@ class _VideoReplyReplyPanelState
                                 onViewImage: widget.onViewImage,
                                 onDismissed: widget.onDismissed,
                                 callback: _getImageCallback,
+                                onCheckReply: (item) =>
+                                    _videoReplyReplyController.onCheckReply(
+                                        context, item),
                               );
                       } else if (index == 1) {
                         return Divider(
@@ -523,6 +529,8 @@ class _VideoReplyReplyPanelState
             onViewImage: widget.onViewImage,
             onDismissed: widget.onDismissed,
             callback: _getImageCallback,
+            onCheckReply: (item) =>
+                _videoReplyReplyController.onCheckReply(context, item),
           )
         : ReplyItem(
             replyItem: replyItem,
@@ -544,6 +552,8 @@ class _VideoReplyReplyPanelState
             onViewImage: widget.onViewImage,
             onDismissed: widget.onDismissed,
             callback: _getImageCallback,
+            onCheckReply: (item) =>
+                _videoReplyReplyController.onCheckReply(context, item),
           );
   }
 

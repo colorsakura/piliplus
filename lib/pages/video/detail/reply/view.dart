@@ -261,6 +261,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             onViewImage: widget.onViewImage,
                             onDismissed: widget.onDismissed,
                             callback: widget.callback,
+                            onCheckReply: (item) => _videoReplyController
+                                .onCheckReply(context, item),
                           )
                         : ReplyItem(
                             replyItem: loadingState.response.replies[index],
@@ -280,6 +282,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                             onDismissed: widget.onDismissed,
                             getTag: () => heroTag,
                             callback: widget.callback,
+                            onCheckReply: (item) => _videoReplyController
+                                .onCheckReply(context, item),
                           );
                   }
                 },

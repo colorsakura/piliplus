@@ -772,6 +772,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                 _dynamicDetailController.hasUpTop && index == 0,
                             upMid: loadingState.response.subjectControl.upMid,
                             callback: _getImageCallback,
+                            onCheckReply: (item) => _dynamicDetailController
+                                .onCheckReply(context, item),
                           )
                         : ReplyItem(
                             replyItem: loadingState.response.replies[index],
@@ -789,6 +791,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                             },
                             onDelete: _dynamicDetailController.onMDelete,
                             callback: _getImageCallback,
+                            onCheckReply: (item) => _dynamicDetailController
+                                .onCheckReply(context, item),
                           );
                   }
                 },
