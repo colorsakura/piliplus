@@ -699,9 +699,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             transformationController: transformationController,
             panEnabled: false, // 启用平移 //单指平移会与横竖手势冲突
             scaleEnabled: !plPlayerController.controlsLock.value, // 启用缩放
-            minScale: 0.75,
+            minScale: plPlayerController.enableShrinkVideoSize ? 0.75 : 1,
             maxScale: 2.0,
-            boundaryMargin: const EdgeInsets.all(double.infinity),
+            boundaryMargin: plPlayerController.enableShrinkVideoSize
+                ? const EdgeInsets.all(double.infinity)
+                : EdgeInsets.zero,
             panAxis: PanAxis.aligned,
             onInteractionStart: (ScaleStartDetails details) {
               if (plPlayerController.controlsLock.value) return;

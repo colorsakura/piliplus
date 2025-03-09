@@ -397,6 +397,9 @@ class GStorage {
   static bool get showFSActionItem =>
       GStorage.setting.get(SettingBoxKey.showFSActionItem, defaultValue: true);
 
+  static bool get enableShrinkVideoSize => GStorage.setting
+      .get(SettingBoxKey.enableShrinkVideoSize, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -653,6 +656,7 @@ class SettingBoxKey {
       enableHttp2 = 'enableHttp2',
       slideDismissReplyPage = 'slideDismissReplyPage',
       showFSActionItem = 'showFSActionItem',
+      enableShrinkVideoSize = 'enableShrinkVideoSize',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

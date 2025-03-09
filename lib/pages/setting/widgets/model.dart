@@ -2132,6 +2132,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '启用双指缩小视频',
+        leading: const Icon(Icons.pinch),
+        setKey: SettingBoxKey.enableShrinkVideoSize,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {

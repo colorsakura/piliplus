@@ -255,6 +255,7 @@ class PlPlayerController {
   Rx<bool> isOpenDanmu = false.obs;
 
   late final showFSActionItem = GStorage.showFSActionItem;
+  late final enableShrinkVideoSize = GStorage.enableShrinkVideoSize;
 
   /// 弹幕权重
   int danmakuWeight = 0;
