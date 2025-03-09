@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/pages/search_result/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
@@ -32,6 +33,8 @@ class SearchPanelController extends CommonController {
     super.onInit();
     if (searchType == SearchType.video) {
       jump2Video();
+    } else if (searchType == SearchType.article) {
+      jump2Article();
     }
     queryData();
   }
@@ -76,6 +79,25 @@ class SearchPanelController extends CommonController {
         .hasMatch(keyword)) {
       hasJump2Video = true;
       PiliScheme.videoPush(null, keyword, showDialog: false);
+    }
+  }
+
+  void jump2Article() {
+    String? cvid = RegExp(r'^cv(id)?(\d+)$', caseSensitive: false)
+        .firstMatch(keyword)
+        ?.group(2);
+    if (cvid != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.toNamed(
+          '/htmlRender',
+          parameters: {
+            'url': 'https://www.bilibili.com/read/cv$cvid',
+            'title': '',
+            'id': 'cv$cvid',
+            'dynamicType': 'read'
+          },
+        );
+      });
     }
   }
 
