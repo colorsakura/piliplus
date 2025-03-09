@@ -39,6 +39,7 @@ class _ViewPointsPageState
           automaticallyImplyLeading: false,
           titleSpacing: 16,
           title: const Text('分段信息'),
+          toolbarHeight: 45,
           actions: [
             Text(
               '分段进度条',
@@ -73,97 +74,95 @@ class _ViewPointsPageState
             ),
             const SizedBox(width: 16),
           ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(1),
+            child: Divider(
+              height: 1,
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+            ),
+          ),
         ),
         body: enableSlide ? slideList() : buildList,
       );
 
   @override
-  Widget get buildList => ListView(
+  Widget get buildList => ListView.separated(
         controller: ScrollController(),
         physics: const AlwaysScrollableScrollPhysics(),
         padding:
             EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 80),
-        children: [
-          ...List.generate(
-            videoDetailController.viewPointList.length * 2 - 1,
-            (rawIndex) {
-              if (rawIndex % 2 == 1) {
-                return Divider(
-                  height: 1,
-                  color: Theme.of(context).dividerColor.withOpacity(0.1),
-                );
-              }
-              int index = rawIndex ~/ 2;
-              Segment segment = videoDetailController.viewPointList[index];
-              if (currentIndex == -1 &&
-                  segment.from != null &&
-                  segment.to != null) {
-                if (videoDetailController
-                            .plPlayerController.positionSeconds.value >=
-                        segment.from! &&
-                    videoDetailController
-                            .plPlayerController.positionSeconds.value <
-                        segment.to!) {
-                  currentIndex = index;
-                }
-              }
-              return ListTile(
-                dense: true,
-                onTap: segment.from != null
-                    ? () {
-                        currentIndex = index;
-                        plPlayerController?.danmakuController?.clear();
-                        plPlayerController?.videoPlayerController
-                            ?.seek(Duration(seconds: segment.from!));
-                        Get.back();
-                      }
-                    : null,
-                leading: segment.url?.isNotEmpty == true
-                    ? Container(
-                        margin: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: currentIndex == index
-                            ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  width: 1.8,
-                                  strokeAlign: BorderSide.strokeAlignOutside,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              )
-                            : null,
-                        child: LayoutBuilder(
-                          builder: (context, constraints) => NetworkImgLayer(
-                            radius: 6,
-                            src: segment.url,
-                            width:
-                                constraints.maxHeight * StyleString.aspectRatio,
-                            height: constraints.maxHeight,
-                          ),
-                        ),
-                      )
-                    : null,
-                title: Text(
-                  segment.title ?? '',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: currentIndex == index ? FontWeight.bold : null,
-                    color: currentIndex == index
-                        ? Theme.of(context).colorScheme.primary
+        itemCount: videoDetailController.viewPointList.length,
+        itemBuilder: (context, index) {
+          Segment segment = videoDetailController.viewPointList[index];
+          if (currentIndex == -1 &&
+              segment.from != null &&
+              segment.to != null) {
+            if (videoDetailController
+                        .plPlayerController.positionSeconds.value >=
+                    segment.from! &&
+                videoDetailController.plPlayerController.positionSeconds.value <
+                    segment.to!) {
+              currentIndex = index;
+            }
+          }
+          return ListTile(
+            dense: true,
+            onTap: segment.from != null
+                ? () {
+                    currentIndex = index;
+                    plPlayerController?.danmakuController?.clear();
+                    plPlayerController?.videoPlayerController
+                        ?.seek(Duration(seconds: segment.from!));
+                    Get.back();
+                  }
+                : null,
+            leading: segment.url?.isNotEmpty == true
+                ? Container(
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    decoration: currentIndex == index
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              width: 1.8,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
                         : null,
-                  ),
-                ),
-                subtitle: Text(
-                  '${segment.from != null ? Utils.timeFormat(segment.from) : ''} - ${segment.to != null ? Utils.timeFormat(segment.to) : ''}',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: currentIndex == index
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+                    child: LayoutBuilder(
+                      builder: (context, constraints) => NetworkImgLayer(
+                        radius: 6,
+                        src: segment.url,
+                        width: constraints.maxHeight * StyleString.aspectRatio,
+                        height: constraints.maxHeight,
+                      ),
+                    ),
+                  )
+                : null,
+            title: Text(
+              segment.title ?? '',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: currentIndex == index ? FontWeight.bold : null,
+                color: currentIndex == index
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+              ),
+            ),
+            subtitle: Text(
+              '${segment.from != null ? Utils.timeFormat(segment.from) : ''} - ${segment.to != null ? Utils.timeFormat(segment.to) : ''}',
+              style: TextStyle(
+                fontSize: 13,
+                color: currentIndex == index
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.outline,
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => Divider(
+          height: 1,
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+        ),
       );
 }

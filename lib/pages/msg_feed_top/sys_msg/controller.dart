@@ -17,17 +17,19 @@ class SysMsgController extends CommonController {
   @override
   List? handleListResponse(List currentList, List dataList) {
     if (cursor == -1) {
-      msgSysUpdateCursor(dataList.first.cursor!);
+      msgSysUpdateCursor(dataList.firstOrNull?.cursor);
     }
-    cursor = dataList.last.cursor ?? -1;
+    cursor = dataList.lastOrNull?.cursor ?? -1;
     if (isEnd.not && dataList.length + 1 < pageSize) {
       isEnd = true;
     }
     return null;
   }
 
-  Future msgSysUpdateCursor(int cursor) async {
-    MsgHttp.msgSysUpdateCursor(cursor);
+  Future msgSysUpdateCursor(int? cursor) async {
+    if (cursor != null) {
+      MsgHttp.msgSysUpdateCursor(cursor);
+    }
   }
 
   @override

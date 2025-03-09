@@ -23,12 +23,10 @@ class ReplyMeController extends CommonController {
     cursor = data.cursor?.id ?? -1;
     cursorTime = data.cursor?.time ?? -1;
     if (currentPage != 1 && loadingState.value is Success) {
-      loadingState.value = LoadingState.success(
-          (loadingState.value as Success).response as List
-            ..addAll(data.items ?? <ReplyMeItems>[]));
-    } else {
-      loadingState.value = LoadingState.success(data.items);
+      data.items ??= <ReplyMeItems>[];
+      data.items!.insertAll(0, (loadingState.value as Success).response);
     }
+    loadingState.value = LoadingState.success(data.items);
     return true;
   }
 

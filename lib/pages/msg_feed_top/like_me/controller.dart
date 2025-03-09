@@ -27,14 +27,13 @@ class LikeMeController extends CommonController {
     List<LikeMeItems> latest = data.latest?.items ?? [];
     List<LikeMeItems> total = data.total?.items ?? [];
     if (currentPage != 1 && loadingState.value is Success) {
-      loadingState.value = LoadingState.success((loadingState.value as Success)
-          .response as Pair<List<LikeMeItems>, List<LikeMeItems>>
-        ..first.addAll(latest)
-        ..second.addAll(total));
-    } else {
-      loadingState.value =
-          LoadingState.success(Pair(first: latest, second: total));
+      Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
+          (loadingState.value as Success).response;
+      latest.insertAll(0, pair.first);
+      total.insertAll(0, pair.second);
     }
+    loadingState.value =
+        LoadingState.success(Pair(first: latest, second: total));
     return true;
   }
 
