@@ -177,6 +177,20 @@ class SearchHttp {
     }
   }
 
+  static Future<LoadingState> episodeInfo({int? epId}) async {
+    final dynamic res = await Request().get(
+      Api.episodeInfo,
+      queryParameters: {
+        if (epId != null) 'ep_id': epId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
   static Future<Map<String, dynamic>> bangumiInfo({
     dynamic seasonId,
     dynamic epId,

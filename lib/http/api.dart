@@ -265,6 +265,9 @@ class Api {
   // 番剧/剧集明细
   static const String bangumiInfo = '/pgc/view/web/season';
 
+  // https://api.bilibili.com/pgc/season/episode/web/info?ep_id=12345678
+  static const String episodeInfo = '/pgc/season/episode/web/info';
+
   // 全部关注的up
   // vmid 用户id pn 页码 ps 每页个数，最大50 order: desc
   // order_type 排序规则 最近访问传空，最常访问传 attention
