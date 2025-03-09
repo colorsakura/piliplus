@@ -19,6 +19,7 @@ class DynamicDetailController extends ReplyController {
   int? floor;
 
   late final horizontalPreview = GStorage.horizontalPreview;
+  late final showDynActionBar = GStorage.showDynActionBar;
 
   @override
   dynamic get sourceId =>

@@ -400,6 +400,9 @@ class GStorage {
   static bool get enableShrinkVideoSize => GStorage.setting
       .get(SettingBoxKey.enableShrinkVideoSize, defaultValue: true);
 
+  static bool get showDynActionBar =>
+      GStorage.setting.get(SettingBoxKey.showDynActionBar, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -657,6 +660,7 @@ class SettingBoxKey {
       slideDismissReplyPage = 'slideDismissReplyPage',
       showFSActionItem = 'showFSActionItem',
       enableShrinkVideoSize = 'enableShrinkVideoSize',
+      showDynActionBar = 'showDynActionBar',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

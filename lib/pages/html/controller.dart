@@ -25,6 +25,7 @@ class HtmlRenderController extends ReplyController {
   RxBool loaded = false.obs;
 
   late final horizontalPreview = GStorage.horizontalPreview;
+  late final showDynActionBar = GStorage.showDynActionBar;
 
   @override
   dynamic get sourceId => id;
@@ -35,16 +36,20 @@ class HtmlRenderController extends ReplyController {
     id = Get.parameters['id']!;
     dynamicType = Get.parameters['dynamicType']!;
     type = dynamicType == 'picture' ? 11 : 12;
-    if (RegExp(r'^cv', caseSensitive: false).hasMatch(id)) {
-      UrlUtils.parseRedirectUrl('https://www.bilibili.com/read/$id/')
-          .then((url) {
-        if (url != null) {
-          _queryDyn(url.split('/').last);
-        }
-      });
-    } else {
-      _queryDyn(id);
+
+    if (showDynActionBar) {
+      if (RegExp(r'^cv', caseSensitive: false).hasMatch(id)) {
+        UrlUtils.parseRedirectUrl('https://www.bilibili.com/read/$id/')
+            .then((url) {
+          if (url != null) {
+            _queryDyn(url.split('/').last);
+          }
+        });
+      } else {
+        _queryDyn(id);
+      }
     }
+
     reqHtml();
   }
 

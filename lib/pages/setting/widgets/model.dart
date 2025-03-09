@@ -2139,6 +2139,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '动态/专栏详情页展示底部操作栏',
+        leading: const Icon(Icons.more_horiz),
+        setKey: SettingBoxKey.showDynActionBar,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {
