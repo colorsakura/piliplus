@@ -398,7 +398,10 @@ class ChatItem extends StatelessWidget {
         : isRevoke
             ? const SizedBox()
             : GestureDetector(
-                onLongPress: onLongPress,
+                onLongPress: () {
+                  Feedback.forLongPress(context);
+                  onLongPress?.call();
+                },
                 child: Row(
                   children: [
                     if (!isOwner) const SizedBox(width: 12),

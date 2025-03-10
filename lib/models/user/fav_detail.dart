@@ -56,6 +56,8 @@ class FavDetailItemData {
   int? page;
   int? duration;
   Owner? owner;
+  // https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/fav/list.md
+  // | attr     | num  | 失效  | 0: 正常；9: up自己删除；1: 其他原因删除                                                         |
   int? attr;
   Map? cntInfo;
   String? link;

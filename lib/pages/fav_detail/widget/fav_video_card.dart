@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,10 @@ class FavVideoCardH extends StatelessWidget {
           }
         }
 
+        if (videoItem is FavDetailItemData && videoItem.attr != 0) {
+          Get.toNamed('/member?mid=${videoItem.owner?.mid}');
+          return;
+        }
         Utils.toViewPage(
           'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
           arguments: {
