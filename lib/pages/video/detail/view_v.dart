@@ -1207,7 +1207,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             );
           }
           double videoWidth =
-              max(context.height / context.width * 1.04, 1 / 2) * context.width;
+              clampDouble(context.height / context.width * 1.04, 0.5, 0.7) *
+                  context.width;
           if (context.width >= 560) {
             videoWidth = min(videoWidth, context.width - 280);
           }
