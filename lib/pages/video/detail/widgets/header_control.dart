@@ -1745,6 +1745,8 @@ class _HeaderControlState extends State<HeaderControl> {
   }
 
   Widget _buildHeader(bool showFSActionItem) => AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         primary: false,

@@ -914,38 +914,34 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                     backgroundColor: Colors.black,
                     toolbarHeight: 0,
                   ),
-            body: Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: SafeArea(
-                  left: !removeSafeArea && !isFullScreen,
-                  right: !removeSafeArea && !isFullScreen,
-                  top: !removeSafeArea,
-                  bottom: false, //!removeSafeArea,
-                  child: childWhenDisabledLandscapeInner),
+            body: SafeArea(
+              left: !removeSafeArea && !isFullScreen,
+              right: !removeSafeArea && !isFullScreen,
+              top: !removeSafeArea,
+              bottom: false, //!removeSafeArea,
+              child: childWhenDisabledLandscapeInner,
             ),
           ),
         ],
       );
 
-  Widget get childWhenDisabledAlmostSquare => Stack(children: [
-        Scaffold(
-            resizeToAvoidBottomInset: false,
-            key: videoDetailController.scaffoldKey,
-            appBar: removeSafeArea
-                ? null
-                : AppBar(
-                    backgroundColor: Colors.black,
-                    toolbarHeight: 0,
-                  ),
-            body: Container(
-                color: Theme.of(context).colorScheme.surface,
-                child: SafeArea(
-                    left: !removeSafeArea && !isFullScreen,
-                    right: !removeSafeArea && !isFullScreen,
-                    top: !removeSafeArea,
-                    bottom: false, //!removeSafeArea,
-                    child: childWhenDisabledAlmostSquareInner)))
-      ]);
+  Widget get childWhenDisabledAlmostSquare => Scaffold(
+        resizeToAvoidBottomInset: false,
+        key: videoDetailController.scaffoldKey,
+        appBar: removeSafeArea
+            ? null
+            : AppBar(
+                backgroundColor: Colors.black,
+                toolbarHeight: 0,
+              ),
+        body: SafeArea(
+          left: !removeSafeArea && !isFullScreen,
+          right: !removeSafeArea && !isFullScreen,
+          top: !removeSafeArea,
+          bottom: false, //!removeSafeArea,
+          child: childWhenDisabledAlmostSquareInner,
+        ),
+      );
 
   Widget get childWhenEnabled => Obx(
         () => !videoDetailController.autoPlay.value
@@ -992,6 +988,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 left: 0,
                 right: 0,
                 child: AppBar(
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
                   primary: false,
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.transparent,

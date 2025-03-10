@@ -719,6 +719,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverAppBar(
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
                   primary: false,
                   automaticallyImplyLeading: false,
                   pinned: true,
@@ -1300,38 +1302,34 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     backgroundColor: Colors.black,
                     toolbarHeight: 0,
                   ),
-            body: Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: SafeArea(
-                  left: !removeSafeArea && !isFullScreen,
-                  right: !removeSafeArea && !isFullScreen,
-                  top: !removeSafeArea,
-                  bottom: false, //!removeSafeArea,
-                  child: childWhenDisabledLandscapeInner),
+            body: SafeArea(
+              left: !removeSafeArea && !isFullScreen,
+              right: !removeSafeArea && !isFullScreen,
+              top: !removeSafeArea,
+              bottom: false, //!removeSafeArea,
+              child: childWhenDisabledLandscapeInner,
             ),
           ),
         ],
       );
 
-  Widget get childWhenDisabledAlmostSquare => Stack(children: [
-        Scaffold(
-            resizeToAvoidBottomInset: false,
-            key: videoDetailController.scaffoldKey,
-            appBar: removeSafeArea
-                ? null
-                : AppBar(
-                    backgroundColor: Colors.black,
-                    toolbarHeight: 0,
-                  ),
-            body: Container(
-                color: Theme.of(context).colorScheme.surface,
-                child: SafeArea(
-                    left: !removeSafeArea && !isFullScreen,
-                    right: !removeSafeArea && !isFullScreen,
-                    top: !removeSafeArea,
-                    bottom: false, //!removeSafeArea,
-                    child: childWhenDisabledAlmostSquareInner)))
-      ]);
+  Widget get childWhenDisabledAlmostSquare => Scaffold(
+        resizeToAvoidBottomInset: false,
+        key: videoDetailController.scaffoldKey,
+        appBar: removeSafeArea
+            ? null
+            : AppBar(
+                backgroundColor: Colors.black,
+                toolbarHeight: 0,
+              ),
+        body: SafeArea(
+          left: !removeSafeArea && !isFullScreen,
+          right: !removeSafeArea && !isFullScreen,
+          top: !removeSafeArea,
+          bottom: false, //!removeSafeArea,
+          child: childWhenDisabledAlmostSquareInner,
+        ),
+      );
 
   Widget get childWhenEnabled => Obx(
         () => !videoDetailController.autoPlay.value
@@ -1379,6 +1377,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 right: 0,
                 child: AppBar(
                   primary: false,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.transparent,
                   automaticallyImplyLeading: false,
