@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/http/danmaku.dart';
+import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -16,6 +17,7 @@ class SendDanmakuPanel extends CommonPublishPage {
   final dynamic bvid;
   final dynamic progress;
   final ValueChanged<DanmakuContentItem> callback;
+  final bool darkVideoPage;
 
   const SendDanmakuPanel({
     super.key,
@@ -25,6 +27,7 @@ class SendDanmakuPanel extends CommonPublishPage {
     required this.bvid,
     required this.progress,
     required this.callback,
+    required this.darkVideoPage,
   });
 
   @override
@@ -81,8 +84,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          color: themeData.colorScheme.secondaryContainer,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         alignment: Alignment.center,
@@ -90,9 +92,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                         child: Icon(
                           size: 22,
                           Icons.edit,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
+                          color: themeData.colorScheme.onSecondaryContainer,
                         ),
                       ),
                     );
@@ -107,38 +107,44 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         ),
       );
 
-  @override
-  Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      removeTop: true,
-      context: context,
-      child: GestureDetector(
-        onTap: Get.back,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            bool isH = constraints.maxWidth > constraints.maxHeight;
-            late double padding = constraints.maxWidth * 0.12;
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.transparent,
-                body: GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _buildInputView(),
-                      buildPanelContainer(),
-                    ],
+  Widget get child => MediaQuery.removePadding(
+        removeTop: true,
+        context: context,
+        child: GestureDetector(
+          onTap: Get.back,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              bool isH = constraints.maxWidth > constraints.maxHeight;
+              late double padding = constraints.maxWidth * 0.12;
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
+                child: Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  backgroundColor: Colors.transparent,
+                  body: GestureDetector(
+                    onTap: () {},
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _buildInputView(),
+                        buildPanelContainer(themeData.colorScheme.surface),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+
+  late final ThemeData themeData = widget.darkVideoPage
+      ? MyApp.darkThemeData ?? Theme.of(context)
+      : Theme.of(context);
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.darkVideoPage ? Theme(data: themeData, child: child) : child;
   }
 
   @override
@@ -148,7 +154,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+              color: themeData.colorScheme.outline.withOpacity(0.1),
             ),
           ),
         ),
@@ -209,7 +215,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               ? null
               : Border.all(
                   width: 2,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: themeData.colorScheme.primary,
                 ),
         ),
         child: Container(
@@ -236,8 +242,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: _mode.value == mode
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context).colorScheme.onInverseSurface,
+                  ? themeData.colorScheme.secondaryContainer
+                  : themeData.colorScheme.onInverseSurface,
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -245,8 +251,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               title,
               style: TextStyle(
                 color: _mode.value == mode
-                    ? Theme.of(context).colorScheme.onSecondaryContainer
-                    : Theme.of(context).colorScheme.outline,
+                    ? themeData.colorScheme.onSecondaryContainer
+                    : themeData.colorScheme.outline,
               ),
             ),
           ),
@@ -268,8 +274,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: _fontsize.value == fontsize
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context).colorScheme.onInverseSurface,
+                  ? themeData.colorScheme.secondaryContainer
+                  : themeData.colorScheme.onInverseSurface,
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -277,8 +283,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               title,
               style: TextStyle(
                 color: _fontsize.value == fontsize
-                    ? Theme.of(context).colorScheme.onSecondaryContainer
-                    : Theme.of(context).colorScheme.outline,
+                    ? themeData.colorScheme.onSecondaryContainer
+                    : themeData.colorScheme.outline,
               ),
             ),
           ),
@@ -297,7 +303,7 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        color: Theme.of(context).colorScheme.surface,
+        color: themeData.colorScheme.surface,
       ),
       child: Row(
         children: [
@@ -318,8 +324,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               iconSize: 24,
               icon: Icons.text_format,
               iconColor: selectKeyboard.value.not
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                  ? themeData.colorScheme.primary
+                  : themeData.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(width: 12),
@@ -362,10 +368,10 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 15,
-                        color: Theme.of(context).colorScheme.outline,
+                        color: themeData.colorScheme.outline,
                       ),
                     ),
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: themeData.textTheme.bodyLarge,
                   ),
                 ),
               ),
@@ -379,8 +385,8 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               bgColor: Colors.transparent,
               iconSize: 22,
               iconColor: enablePublish.value
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.outline,
+                  ? themeData.colorScheme.primary
+                  : themeData.colorScheme.outline,
               onPressed: enablePublish.value ? onPublish : null,
               icon: Icons.send,
             ),

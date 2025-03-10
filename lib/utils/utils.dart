@@ -14,6 +14,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
@@ -33,6 +34,7 @@ import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -49,6 +51,74 @@ class Utils {
   static final Random random = Random();
 
   static const channel = MethodChannel("PiliPlus");
+
+  static ThemeData getThemeData({
+    required ColorScheme colorScheme,
+    required bool isDynamic,
+    bool isDark = false,
+    required FlexSchemeVariant variant,
+  }) {
+    ThemeData themeData = ThemeData(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        titleSpacing: 0,
+        centerTitle: false,
+        scrolledUnderElevation: 0,
+        backgroundColor: isDynamic ? null : colorScheme.surface,
+        titleTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        actionTextColor: colorScheme.primary,
+        backgroundColor: colorScheme.secondaryContainer,
+        closeIconColor: colorScheme.secondary,
+        contentTextStyle: TextStyle(color: colorScheme.secondary),
+        elevation: 20,
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: ZoomPageTransitionsBuilder(
+            allowEnterRouteSnapshotting: false,
+          ),
+        },
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
+      ),
+      cardTheme: CardTheme(
+        elevation: 1,
+        surfaceTintColor: isDynamic
+            ? colorScheme.onSurfaceVariant
+            : isDark
+                ? colorScheme.onSurfaceVariant
+                : null,
+        shadowColor: Colors.transparent,
+      ),
+      // dialogTheme: DialogTheme(
+      //   surfaceTintColor: isDark ? colorScheme.onSurfaceVariant : null,
+      // ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        refreshBackgroundColor: colorScheme.onSecondary,
+      ),
+      dialogTheme: DialogTheme(
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          color: colorScheme.onSurface,
+        ),
+      ),
+    );
+    if (isDark && GStorage.isPureBlackTheme) {
+      themeData = Utils.darkenTheme(themeData);
+    }
+    if (isDark && GStorage.darkVideoPage) {
+      MyApp.darkThemeData = themeData;
+    }
+    return themeData;
+  }
 
   static final regExp =
       RegExp(r'(@(\d+[a-z]_?)*)(\..*)?$', caseSensitive: false);

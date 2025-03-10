@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/toolbar_icon_button.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -36,39 +38,47 @@ class ReplyPage extends CommonPublishPage {
 class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
   final RxBool _syncToDynamic = false.obs;
 
-  @override
-  Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      removeTop: true,
-      context: context,
-      child: GestureDetector(
-        onTap: Get.back,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            bool isH = constraints.maxWidth > constraints.maxHeight;
-            late double padding = constraints.maxWidth * 0.12;
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.transparent,
-                body: GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      buildInputView(),
-                      buildImagePreview(),
-                      buildPanelContainer(),
-                    ],
+  Widget get child => MediaQuery.removePadding(
+        removeTop: true,
+        context: context,
+        child: GestureDetector(
+          onTap: Get.back,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              bool isH = constraints.maxWidth > constraints.maxHeight;
+              late double padding = constraints.maxWidth * 0.12;
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: isH ? padding : 0),
+                child: Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  backgroundColor: Colors.transparent,
+                  body: GestureDetector(
+                    onTap: () {},
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        buildInputView(),
+                        buildImagePreview(),
+                        buildPanelContainer(themeData.colorScheme.surface),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+
+  late final darkVideoPage =
+      Get.currentRoute.startsWith('/video') && GStorage.darkVideoPage;
+  late final ThemeData themeData = darkVideoPage
+      ? MyApp.darkThemeData ?? Theme.of(context)
+      : Theme.of(context);
+
+  @override
+  Widget build(BuildContext context) {
+    return darkVideoPage ? Theme(data: themeData, child: child) : child;
   }
 
   @override
@@ -83,7 +93,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
         if (pathList.isNotEmpty) {
           return Container(
             height: 85,
-            color: Theme.of(context).colorScheme.surface,
+            color: themeData.colorScheme.surface,
             padding: const EdgeInsets.only(bottom: 10),
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
@@ -112,7 +122,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        color: Theme.of(context).colorScheme.surface,
+        color: themeData.colorScheme.surface,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -150,7 +160,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                         hintText: "输入回复内容",
                         border: InputBorder.none,
                         hintStyle: TextStyle(fontSize: 14)),
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: themeData.textTheme.bodyLarge,
                   ),
                 ),
               ),
@@ -158,7 +168,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
           ),
           Divider(
             height: 1,
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: themeData.dividerColor.withOpacity(0.1),
           ),
           Container(
             height: 52,
@@ -213,8 +223,8 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                         vertical: -2,
                       ),
                       foregroundColor: _syncToDynamic.value
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.outline,
+                          ? themeData.colorScheme.secondary
+                          : themeData.colorScheme.outline,
                     ),
                     onPressed: () {
                       _syncToDynamic.value = !_syncToDynamic.value;

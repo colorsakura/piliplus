@@ -944,6 +944,7 @@ class VideoDetailController extends GetxController
               savedDanmaku = null;
               plPlayerController.danmakuController?.addDanmaku(danmakuModel);
             },
+            darkVideoPage: plPlayerController.darkVideoPage,
           );
         },
         transitionDuration: const Duration(milliseconds: 500),

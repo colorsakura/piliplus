@@ -60,6 +60,7 @@ class ReplyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: InkWell(
         // 点击整个评论区 评论详情/回复
         onTap: () {

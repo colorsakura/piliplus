@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/list_sheet.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/bangumi/introduction/widgets/intro_detail.dart'
@@ -797,7 +798,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                 //             child: Divider(
                 //               indent: 12,
                 //               endIndent: 12,
-                //               color: Theme.of(context).dividerColor.withOpacity(0.06),
+                //               color: themeData.dividerColor.withOpacity(0.06),
                 //             ),
                 //           ),
                 //           const RelatedVideoPanel(),
@@ -1153,8 +1154,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     return childWhenDisabled;
   }
 
-  @override
-  Widget build(BuildContext context) {
+  late final ThemeData themeData =
+      videoDetailController.plPlayerController.darkVideoPage
+          ? MyApp.darkThemeData ?? Theme.of(context)
+          : Theme.of(context);
+
+  Widget get child {
     if (!horizontalScreen) {
       return autoChoose(childWhenDisabled);
     }
@@ -1162,7 +1167,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // if (!isShowing) {
-        //   return ColoredBox(color: Theme.of(context).colorScheme.surface);
+        //   return ColoredBox(color: themeData.colorScheme.surface);
         // }
         if (constraints.maxWidth > constraints.maxHeight * 1.25) {
 //             hideStatusBar();
@@ -1212,6 +1217,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return videoDetailController.plPlayerController.darkVideoPage
+        ? Theme(data: themeData, child: child)
+        : child;
+  }
+
   Widget buildTabbar({
     bool needIndicator = true,
     String introText = '简介',
@@ -1234,7 +1246,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
     Widget tabbar() => TabBar(
           labelColor: needIndicator.not || tabs.length == 1
-              ? Theme.of(context).colorScheme.onSurface
+              ? themeData.colorScheme.onSurface
               : null,
           indicator: needIndicator.not || tabs.length == 1
               ? const BoxDecoration()
@@ -1281,7 +1293,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         border: Border(
           bottom: BorderSide(
             width: 1,
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: themeData.dividerColor.withOpacity(0.1),
           ),
         ),
       ),
@@ -1311,7 +1323,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         '发弹幕',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: themeData.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -1339,8 +1351,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                           // ignore: deprecated_member_use
                           color: videoDetailController
                                   .plPlayerController.isOpenDanmu.value
-                              ? Theme.of(context).colorScheme.secondary
-                              : Theme.of(context).colorScheme.outline,
+                              ? themeData.colorScheme.secondary
+                              : themeData.colorScheme.outline,
                         ),
                       ),
                     ),
@@ -1463,9 +1475,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer
+                              backgroundColor: themeData
+                                  .colorScheme.secondaryContainer
                                   .withOpacity(0.8),
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 15,
@@ -1524,10 +1535,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       height: 1,
                       indent: 12,
                       endIndent: 12,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withOpacity(0.08),
+                      color: themeData.colorScheme.outline.withOpacity(0.08),
                     ),
                   ),
                 ),
@@ -1578,9 +1586,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                   height: 54,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .secondaryContainer
+                    color: themeData.colorScheme.secondaryContainer
                         .withOpacity(0.95),
                     borderRadius: const BorderRadius.all(Radius.circular(14)),
                   ),
@@ -1591,9 +1597,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       Text(
                         videoDetailController.watchLaterTitle,
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
+                          color: themeData.colorScheme.onSecondaryContainer,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.2,
                         ),
@@ -1660,7 +1664,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               const SizedBox(height: 8),
               Divider(
                 height: 1,
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                color: themeData.colorScheme.outline.withOpacity(0.1),
               ),
             ],
             Padding(
@@ -1780,7 +1784,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       shape: const RoundedRectangleBorder(),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: themeData.colorScheme.surface,
       (context) => videoDetail is BangumiInfoModel
           ? bangumi.IntroDetail(
               bangumiDetail: videoDetail,
@@ -1945,7 +1949,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void onShowMemberPage(mid) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       shape: const RoundedRectangleBorder(),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: themeData.colorScheme.surface,
       (context) {
         return HorizontalMemberPage(
           mid: mid,

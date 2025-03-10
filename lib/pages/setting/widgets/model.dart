@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart'
 import 'package:PiliPlus/http/interceptor.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/http/video.dart';
+import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/audio_normalization.dart';
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/models/common/dynamics_type.dart';
@@ -205,6 +206,18 @@ List<SettingsModel> get styleSettings => [
         title: '中卡列表宽度（dp）限制',
         getSubtitle: () =>
             '当前:${GStorage.mediumCardWidth.toInt()}dp，屏幕宽度:${MediaQuery.of(Get.context!).size.width.toPrecision(2)}dp。宽度越小列数越多。',
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '视频播放页使用深色主题',
+        leading: Icon(Icons.dark_mode_outlined),
+        setKey: SettingBoxKey.darkVideoPage,
+        defaultVal: false,
+        onChanged: (value) {
+          if (value && MyApp.darkThemeData == null) {
+            Get.forceAppUpdate();
+          }
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
@@ -496,7 +509,8 @@ List<SettingsModel> get styleSettings => [
         setKey: SettingBoxKey.isPureBlackTheme,
         defaultVal: false,
         onChanged: (value) {
-          if (Theme.of(Get.context!).brightness == Brightness.dark) {
+          if (Theme.of(Get.context!).brightness == Brightness.dark ||
+              GStorage.darkVideoPage) {
             Get.forceAppUpdate();
           }
         },

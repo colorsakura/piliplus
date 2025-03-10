@@ -118,6 +118,8 @@ class MyApp extends StatelessWidget {
 
   Box get setting => GStorage.setting;
 
+  static ThemeData? darkThemeData;
+
   @override
   Widget build(BuildContext context) {
     // 主题色
@@ -183,12 +185,12 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           // showSemanticsDebugger: true,
           title: 'PiliPlus',
-          theme: _getThemeData(
+          theme: Utils.getThemeData(
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,
             variant: variant,
           ),
-          darkTheme: _getThemeData(
+          darkTheme: Utils.getThemeData(
             colorScheme: darkColorScheme,
             isDynamic: darkDynamic != null && isDynamicColor,
             isDark: true,
@@ -223,71 +225,6 @@ class MyApp extends StatelessWidget {
         );
       }),
     );
-  }
-
-  ThemeData _getThemeData({
-    required ColorScheme colorScheme,
-    required bool isDynamic,
-    bool isDark = false,
-    required FlexSchemeVariant variant,
-  }) {
-    ThemeData themeData = ThemeData(
-      colorScheme: colorScheme,
-      useMaterial3: true,
-      appBarTheme: AppBarTheme(
-        elevation: 0,
-        titleSpacing: 0,
-        centerTitle: false,
-        scrolledUnderElevation: 0,
-        backgroundColor: isDynamic ? null : colorScheme.surface,
-        titleTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
-      ),
-      navigationBarTheme: NavigationBarThemeData(
-        surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
-      ),
-      snackBarTheme: SnackBarThemeData(
-        actionTextColor: colorScheme.primary,
-        backgroundColor: colorScheme.secondaryContainer,
-        closeIconColor: colorScheme.secondary,
-        contentTextStyle: TextStyle(color: colorScheme.secondary),
-        elevation: 20,
-      ),
-      pageTransitionsTheme: const PageTransitionsTheme(
-        builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: ZoomPageTransitionsBuilder(
-            allowEnterRouteSnapshotting: false,
-          ),
-        },
-      ),
-      popupMenuTheme: PopupMenuThemeData(
-        surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
-      ),
-      cardTheme: CardTheme(
-        elevation: 1,
-        surfaceTintColor: isDynamic
-            ? colorScheme.onSurfaceVariant
-            : isDark
-                ? colorScheme.onSurfaceVariant
-                : null,
-        shadowColor: Colors.transparent,
-      ),
-      // dialogTheme: DialogTheme(
-      //   surfaceTintColor: isDark ? colorScheme.onSurfaceVariant : null,
-      // ),
-      progressIndicatorTheme: ProgressIndicatorThemeData(
-        refreshBackgroundColor: colorScheme.onSecondary,
-      ),
-      dialogTheme: DialogTheme(
-        titleTextStyle: TextStyle(
-          fontSize: 18,
-          color: colorScheme.onSurface,
-        ),
-      ),
-    );
-    if (isDark && GStorage.isPureBlackTheme) {
-      themeData = Utils.darkenTheme(themeData);
-    }
-    return themeData;
   }
 }
 

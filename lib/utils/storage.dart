@@ -403,6 +403,9 @@ class GStorage {
   static bool get showDynActionBar =>
       GStorage.setting.get(SettingBoxKey.showDynActionBar, defaultValue: true);
 
+  static bool get darkVideoPage =>
+      GStorage.setting.get(SettingBoxKey.darkVideoPage, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -661,6 +664,7 @@ class SettingBoxKey {
       showFSActionItem = 'showFSActionItem',
       enableShrinkVideoSize = 'enableShrinkVideoSize',
       showDynActionBar = 'showDynActionBar',
+      darkVideoPage = 'darkVideoPage',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
