@@ -8,6 +8,7 @@ import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contr
 import 'package:PiliPlus/pages/member/new/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:get/get.dart';
+import 'package:PiliPlus/models/space/data.dart' as space;
 
 class MemberBangumiCtr extends CommonController {
   MemberBangumiCtr({
@@ -17,17 +18,22 @@ class MemberBangumiCtr extends CommonController {
 
   final int mid;
   final String? heroTag;
-  late final int count;
+  int? count;
   late final _ctr = Get.find<MemberControllerNew>(tag: heroTag);
 
   @override
   void onInit() {
     super.onInit();
-    currentPage = 2;
-    dynamic res = (_ctr.loadingState.value as Success).response.season;
-    loadingState.value = LoadingState.success(res.item);
-    count = res.count;
-    isEnd = res.item!.length >= count;
+    dynamic response = (_ctr.loadingState.value as Success).response;
+    if (response is space.Data) {
+      currentPage = 2;
+      dynamic res = response.season;
+      loadingState.value = LoadingState.success(res.item);
+      count = res.count;
+      isEnd = res.item!.length >= count;
+    } else {
+      queryData();
+    }
   }
 
   @override
@@ -40,7 +46,7 @@ class MemberBangumiCtr extends CommonController {
       data.item ??= <Item>[];
       data.item!.insertAll(0, (loadingState.value as Success).response);
     }
-    if (data.item!.length >= count) {
+    if (isEnd.not && count != null && data.item!.length >= count!) {
       isEnd = true;
     }
     loadingState.value = LoadingState.success(data.item);

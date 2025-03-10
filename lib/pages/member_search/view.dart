@@ -83,7 +83,10 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
                 heightFactor: 0.5,
                 widthFactor: 1.0,
                 child: Center(
-                  child: Text('搜索「${_memberSearchCtr.uname.value}」的动态、视频'),
+                  child: Text(
+                    '搜索「${_memberSearchCtr.uname.value}」的动态、视频',
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
       ),

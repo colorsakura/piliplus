@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/dynamic_sliver_appbar.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/bangumi/member_bangumi.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/favorite/member_favorite.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart';
@@ -197,13 +198,15 @@ class _MemberPageNewState extends State<MemberPageNew>
             padding: EdgeInsets.only(top: _userController.top ?? 0),
             child: const BackButton(),
           ),
-          title: Obx(() => _userController.scrollRatio.value == 1 &&
-                  _userController.username != null
-              ? Padding(
-                  padding: EdgeInsets.only(top: _userController.top ?? 0),
-                  child: Text(_userController.username!),
-                )
-              : const SizedBox.shrink()),
+          title: IgnorePointer(
+            child: Obx(() => _userController.scrollRatio.value == 1 &&
+                    _userController.username != null
+                ? Padding(
+                    padding: EdgeInsets.only(top: _userController.top ?? 0),
+                    child: Text(_userController.username!),
+                  )
+                : const SizedBox.shrink()),
+          ),
           pinned: true,
           flexibleSpace:
               _buildUserInfo(_userController.loadingState.value, isV),
@@ -312,24 +315,30 @@ class _MemberPageNewState extends State<MemberPageNew>
   Widget _buildUserInfo(LoadingState userState, [bool isV = true]) {
     return switch (userState) {
       Loading() => const CircularProgressIndicator(),
-      Success() => Obx(
-          () => Padding(
-            padding: EdgeInsets.only(
-                bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
-            child: UserInfoCard(
-              isV: isV,
-              isOwner: _userController.mid == _userController.ownerMid,
-              relation: _userController.relation.value,
-              isFollow: _userController.isFollow.value,
-              card: userState.response.card,
-              images: userState.response.images,
-              onFollow: () => _userController.onFollow(context),
-              live: _userController.live,
-              silence: _userController.silence,
-              endTime: _userController.endTime,
+      Success() => userState.response is Data
+          ? Obx(
+              () => Padding(
+                padding: EdgeInsets.only(
+                    bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
+                child: UserInfoCard(
+                  isV: isV,
+                  isOwner: _userController.mid == _userController.ownerMid,
+                  relation: _userController.relation.value,
+                  isFollow: _userController.isFollow.value,
+                  card: userState.response.card,
+                  images: userState.response.images,
+                  onFollow: () => _userController.onFollow(context),
+                  live: _userController.live,
+                  silence: _userController.silence,
+                  endTime: _userController.endTime,
+                ),
+              ),
+            )
+          : GestureDetector(
+              onTap: _userController.onReload,
+              behavior: HitTestBehavior.opaque,
+              child: SizedBox(height: 56, width: double.infinity),
             ),
-          ),
-        ),
       Error() => _errorWidget(userState.errMsg),
       LoadingState() => throw UnimplementedError(),
     };

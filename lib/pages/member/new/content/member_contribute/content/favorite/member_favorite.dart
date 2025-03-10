@@ -55,20 +55,12 @@ class _MemberFavoriteState extends State<MemberFavorite>
                 slivers: [
                   SliverToBoxAdapter(
                     child: Obx(
-                      () => _controller.first.value.mediaListResponse?.list
-                                  ?.isNotEmpty ==
-                              true
-                          ? _buildItem(_controller.first.value, true)
-                          : const SizedBox.shrink(),
+                      () => _buildItem(_controller.first.value, true),
                     ),
                   ),
                   SliverToBoxAdapter(
                     child: Obx(
-                      () => _controller.second.value.mediaListResponse?.list
-                                  ?.isNotEmpty ==
-                              true
-                          ? _buildItem(_controller.second.value, false)
-                          : const SizedBox.shrink(),
+                      () => _buildItem(_controller.second.value, false),
                     ),
                   ),
                   SliverToBoxAdapter(

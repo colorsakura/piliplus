@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/space/data.dart';
+import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -29,7 +30,7 @@ class MemberControllerNew extends CommonController
   RxBool isFollow = false.obs;
   RxInt relation = 1.obs;
   TabController? tabController;
-  late final List<Tab> tabs;
+  late List<Tab> tabs;
   List<Tab2>? tab2;
   RxInt contributeInitialIndex = 0.obs;
   double? top;
@@ -109,6 +110,29 @@ class MemberControllerNew extends CommonController
       }
     }
     loadingState.value = response;
+    return true;
+  }
+
+  @override
+  bool handleError(String? errMsg) {
+    tab2 = [
+      Tab2(title: '动态', param: 'dynamic'),
+      Tab2(
+        title: '投稿',
+        param: 'contribute',
+        items: [Item(title: '视频', param: 'video')],
+      ),
+      Tab2(title: '收藏', param: 'favorite'),
+      Tab2(title: '追番', param: 'bangumi'),
+    ];
+    tabs = tab2!.map((item) => Tab(text: item.title)).toList();
+    tabController = TabController(
+      vsync: this,
+      length: tabs.length,
+    );
+    scrollRatio.value = 1;
+    username = errMsg;
+    loadingState.value = LoadingState.success(null);
     return true;
   }
 

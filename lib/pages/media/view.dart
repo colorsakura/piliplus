@@ -254,7 +254,12 @@ class _MediaPageState extends State<MediaPage>
     if (loadingState is Error) {
       return SizedBox(
         height: 160,
-        child: Center(child: Text(loadingState.errMsg)),
+        child: Center(
+          child: Text(
+            loadingState.errMsg,
+            textAlign: TextAlign.center,
+          ),
+        ),
       );
     }
     return const SizedBox();

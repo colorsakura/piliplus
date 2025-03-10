@@ -21,6 +21,10 @@ abstract class CommonController extends GetxController {
     return false;
   }
 
+  bool handleError(String? errMsg) {
+    return false;
+  }
+
   // void handleSuccess(List currentList, List dataList) {}
 
   Future queryData([bool isRefresh = true]) async {
@@ -45,7 +49,8 @@ abstract class CommonController extends GetxController {
       }
       currentPage++;
     } else {
-      if (isRefresh) {
+      if (isRefresh &&
+          handleError(response is Error ? response.errMsg : null).not) {
         loadingState.value = response;
       }
     }
