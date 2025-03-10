@@ -15,7 +15,7 @@ void imageSaveDialog({
   final double imgWidth = min(Get.width, Get.height) - 8 * 2;
   SmartDialog.show(
     animationType: SmartAnimationType.centerScale_otherSlide,
-    builder: (context) => Container(
+    builder: (_) => Container(
       width: imgWidth,
       margin: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
       decoration: BoxDecoration(

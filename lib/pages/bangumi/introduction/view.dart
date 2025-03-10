@@ -522,7 +522,8 @@ class _BangumiInfoState extends State<BangumiInfo>
                 ),
                 ActionItem(
                     icon: const Icon(FontAwesomeIcons.shareFromSquare),
-                    onTap: () => bangumiIntroController.actionShareVideo(),
+                    onTap: () =>
+                        bangumiIntroController.actionShareVideo(context),
                     selectStatus: false,
                     loadingStatus: false,
                     semanticsLabel: '转发',
@@ -595,7 +596,7 @@ class _BangumiInfoState extends State<BangumiInfo>
       const SizedBox(width: 8),
       ActionRowItem(
           icon: const Icon(FontAwesomeIcons.share),
-          onTap: () => bangumiIntroController.actionShareVideo(),
+          onTap: () => bangumiIntroController.actionShareVideo(context),
           selectStatus: false,
           loadingStatus: widget.isLoading,
           text: '转发'),

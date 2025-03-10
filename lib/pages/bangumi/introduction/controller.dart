@@ -357,9 +357,9 @@ class BangumiIntroController extends CommonController {
   }
 
   // 分享视频
-  Future actionShareVideo() async {
+  Future actionShareVideo(context) async {
     showDialog(
-        context: Get.context!,
+        context: context,
         builder: (context) {
           String videoUrl = '${HttpString.baseUrl}/video/$bvid';
           return AlertDialog(

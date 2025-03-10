@@ -934,7 +934,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
             ),
             ActionItem(
               icon: const Icon(FontAwesomeIcons.shareFromSquare),
-              onTap: () => videoIntroController.actionShareVideo(),
+              onTap: () => videoIntroController.actionShareVideo(context),
               selectStatus: false,
               loadingStatus: widget.loadingStatus,
               semanticsLabel: '分享',
@@ -1002,7 +1002,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
       const SizedBox(width: 8),
       ActionRowItem(
           icon: const Icon(FontAwesomeIcons.share),
-          onTap: () => videoIntroController.actionShareVideo(),
+          onTap: () => videoIntroController.actionShareVideo(context),
           selectStatus: false,
           loadingStatus: widget.loadingStatus,
           // text: !loadingStatus
