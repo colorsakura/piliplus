@@ -31,7 +31,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/bangumi/introduction/index.dart';
 import 'package:PiliPlus/pages/danmaku/view.dart';
