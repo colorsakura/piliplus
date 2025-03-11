@@ -635,7 +635,7 @@ class VideoIntroController extends GetxController
     }
 
     // 重新请求相关视频
-    if (videoDetailCtr.showRelatedVideo) {
+    if (videoDetailCtr.showRelatedVideo && isStein != true) {
       try {
         Get.find<RelatedController>(tag: heroTag)
           ..bvid = bvid
@@ -644,7 +644,7 @@ class VideoIntroController extends GetxController
     }
 
     // 重新请求评论
-    if (videoDetailCtr.showReply) {
+    if (videoDetailCtr.showReply && isStein != true) {
       try {
         Get.find<VideoReplyController>(tag: heroTag)
           ..aid = aid
