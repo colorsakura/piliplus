@@ -191,11 +191,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       color: Colors.black,
       child: Stack(
         children: [
-          Positioned(
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
+          Positioned.fill(
             child: Opacity(
               opacity: 0.6,
               child: Image.asset(
@@ -205,30 +201,22 @@ class _LiveRoomPageState extends State<LiveRoomPage>
             ),
           ),
           Obx(
-            () => Positioned(
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0,
-              child: _liveRoomController
-                              .roomInfoH5.value.roomInfo?.appBackground !=
-                          '' &&
-                      _liveRoomController
-                              .roomInfoH5.value.roomInfo?.appBackground !=
-                          null
-                  ? Opacity(
+            () => _liveRoomController
+                        .roomInfoH5.value.roomInfo?.appBackground?.isNotEmpty ==
+                    true
+                ? Positioned.fill(
+                    child: Opacity(
                       opacity: 0.6,
                       child: NetworkImgLayer(
                         width: Get.width,
                         height: Get.height,
                         type: 'bg',
                         src: _liveRoomController
-                                .roomInfoH5.value.roomInfo?.appBackground ??
-                            '',
+                            .roomInfoH5.value.roomInfo!.appBackground,
                       ),
-                    )
-                  : const SizedBox(),
-            ),
+                    ),
+                  )
+                : const SizedBox(),
           ),
           isPortrait
               ? Scaffold(
@@ -382,7 +370,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 onPointerDown: (_) {
                   _node.unfocus();
                 },
-                child: SizedBox(
+                child: Container(
+                  color: plPlayerController.isFullScreen.value
+                      ? Colors.black
+                      : null,
                   width: plPlayerController.isFullScreen.value
                       ? Get.size.width
                       : videoWidth,
@@ -429,7 +420,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               onPointerDown: (_) {
                 _node.unfocus();
               },
-              child: SizedBox(
+              child: Container(
+                color: Colors.black,
                 width: Get.size.width,
                 height: plPlayerController.isFullScreen.value
                     ? Get.size.height
