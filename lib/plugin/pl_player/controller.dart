@@ -1356,12 +1356,19 @@ class PlPlayerController {
     if (controlsLock.value) {
       return;
     }
-    _doubleSpeedStatus.value = val;
+    if (_doubleSpeedStatus.value == val) {
+      return;
+    }
     if (val) {
-      await setPlaybackSpeed(
-          enableAutoLongPressSpeed ? playbackSpeed * 2 : longPressSpeed);
+      if (playerStatus.status.value == PlayerStatus.playing) {
+        _doubleSpeedStatus.value = val;
+        HapticFeedback.lightImpact();
+        await setPlaybackSpeed(
+            enableAutoLongPressSpeed ? playbackSpeed * 2 : longPressSpeed);
+      }
     } else {
-      debugPrint('$playbackSpeed');
+      // debugPrint('$playbackSpeed');
+      _doubleSpeedStatus.value = val;
       await setPlaybackSpeed(playbackSpeed);
     }
   }
