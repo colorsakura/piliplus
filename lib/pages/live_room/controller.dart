@@ -57,15 +57,16 @@ class LiveRoomController extends GetxController {
       // 硬解
       enableHA: true,
       autoplay: true,
+      direction: isPortrait.value ? 'vertical' : 'horizontal',
     );
   }
 
-  bool? isPortrait;
+  final RxBool isPortrait = false.obs;
 
   Future queryLiveInfo() async {
     var res = await LiveHttp.liveRoomInfo(roomId: roomId, qn: currentQn);
     if (res['status']) {
-      isPortrait = res['data'].isPortrait;
+      isPortrait.value = res['data'].isPortrait ?? false;
       List<CodecItem> codec =
           res['data'].playurlInfo.playurl.stream.first.format.first.codec;
       CodecItem item = codec.first;
