@@ -270,41 +270,52 @@ class Utils {
     }
   }
 
-  static void showFSSheet({
+  static void showFSSheet(
+    BuildContext context, {
     required Widget child,
     required Function isFullScreen,
     double? padding,
   }) {
-    Navigator.of(Get.context!).push(
+    Navigator.of(context).push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
           return MediaQuery.orientationOf(Get.context!) == Orientation.portrait
-              ? Column(
-                  children: [
-                    const Spacer(flex: 3),
-                    Expanded(
-                      flex: 7,
-                      child: MediaQuery.removePadding(
-                        context: Get.context!,
-                        removeTop: true,
-                        child: child,
+              ? SafeArea(
+                  child: Column(
+                    children: [
+                      const Spacer(flex: 3),
+                      Expanded(
+                        flex: 7,
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          removeBottom: true,
+                          removeLeft: true,
+                          removeRight: true,
+                          child: child,
+                        ),
                       ),
-                    ),
-                    if (isFullScreen() && padding != null)
-                      SizedBox(height: padding),
-                  ],
+                      if (isFullScreen() && padding != null)
+                        SizedBox(height: padding),
+                    ],
+                  ),
                 )
-              : Row(
-                  children: [
-                    const Spacer(),
-                    Expanded(
-                      child: MediaQuery.removePadding(
-                        context: Get.context!,
-                        removeLeft: true,
-                        child: child,
+              : SafeArea(
+                  child: Row(
+                    children: [
+                      const Spacer(),
+                      Expanded(
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          removeBottom: true,
+                          removeLeft: true,
+                          removeRight: true,
+                          child: child,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
         },
         transitionDuration: const Duration(milliseconds: 350),

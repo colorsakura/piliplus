@@ -1813,7 +1813,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         );
     if (isFullScreen) {
       Utils.showFSSheet(
-        child: listSheetContent(false),
+        context,
+        child: Theme(
+          data: themeData,
+          child: listSheetContent(false),
+        ),
         isFullScreen: () => isFullScreen,
       );
     } else {
@@ -1897,10 +1901,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void showViewPoints() {
     if (isFullScreen) {
       Utils.showFSSheet(
-        child: ViewPointsPage(
-          enableSlide: false,
-          videoDetailController: videoDetailController,
-          plPlayerController: plPlayerController,
+        context,
+        child: Theme(
+          data: themeData,
+          child: ViewPointsPage(
+            enableSlide: false,
+            videoDetailController: videoDetailController,
+            plPlayerController: plPlayerController,
+          ),
         ),
         isFullScreen: () => isFullScreen,
       );

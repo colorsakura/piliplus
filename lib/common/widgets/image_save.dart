@@ -84,7 +84,11 @@ void imageSaveDialog({
                       SmartDialog.dismiss();
                     }
                   },
-                  icon: const Icon(Icons.download, size: 20),
+                  icon: Icon(
+                    Icons.download,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 )
               ],
             ),
