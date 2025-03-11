@@ -132,7 +132,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   final GlobalKey playerKey = GlobalKey();
   double? padding;
 
-  Widget videoPlayerPanel([Color? fill]) {
+  Widget videoPlayerPanel({Color? fill, Alignment? alignment}) {
     return PopScope(
       canPop: !isFullScreen,
       onPopInvokedWithResult: (bool didPop, Object? result) {
@@ -152,6 +152,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               return PLVideoPlayer(
                 key: playerKey,
                 fill: fill,
+                alignment: alignment,
                 plPlayerController: plPlayerController,
                 bottomControl: BottomControl(
                   plPlayerController: plPlayerController,
@@ -273,7 +274,9 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                                 ? 0
                                 : MediaQuery.paddingOf(context).top)
                         : Get.height - 56 - 85 - padding!,
-                    child: videoPlayerPanel(),
+                    child: videoPlayerPanel(
+                      alignment: isFullScreen ? null : Alignment.topCenter,
+                    ),
                   ),
                 ),
               ],
@@ -433,7 +436,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
               child: MediaQuery.removePadding(
                 removeRight: true,
                 context: context,
-                child: videoPlayerPanel(Colors.transparent),
+                child: videoPlayerPanel(fill: Colors.transparent),
               ),
             ),
           ),

@@ -53,6 +53,7 @@ class PLVideoPlayer extends StatefulWidget {
     this.showEpisodes,
     this.showViewPoints,
     this.fill,
+    this.alignment,
     super.key,
   });
 
@@ -69,6 +70,7 @@ class PLVideoPlayer extends StatefulWidget {
   final Function? showEpisodes;
   final VoidCallback? showViewPoints;
   final Color? fill;
+  final Alignment? alignment;
 
   @override
   State<PLVideoPlayer> createState() => _PLVideoPlayerState();
@@ -898,6 +900,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               child: Video(
                 fill: widget.fill ?? Colors.black,
                 key: key,
+                alignment: widget.alignment ?? Alignment.center,
                 controller: videoController,
                 controls: NoVideoControls,
                 pauseUponEnteringBackgroundMode:
