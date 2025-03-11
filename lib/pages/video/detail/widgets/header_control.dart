@@ -2278,7 +2278,8 @@ class _HeaderControlState extends State<HeaderControl> {
                                 FontAwesomeIcons.shareFromSquare,
                                 color: Colors.white,
                               ),
-                              onTap: videoIntroController.actionShareVideo,
+                              onTap: () => videoIntroController
+                                  .actionShareVideo(context),
                               semanticsLabel: '分享',
                             ),
                           ),
@@ -2381,7 +2382,8 @@ class _HeaderControlState extends State<HeaderControl> {
                                 FontAwesomeIcons.shareFromSquare,
                                 color: Colors.white,
                               ),
-                              onTap: bangumiIntroController.actionShareVideo,
+                              onTap: () => bangumiIntroController
+                                  .actionShareVideo(context),
                               semanticsLabel: '转发',
                             ),
                           ),
