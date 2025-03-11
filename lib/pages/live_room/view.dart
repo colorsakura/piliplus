@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
+import 'dart:ui';
 
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
@@ -239,7 +239,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 )
               : Column(
                   children: [
-                    _buildAppBar,
+                    Obx(() => _buildAppBar),
                     _buildBodyH,
                   ],
                 ),
@@ -420,13 +420,14 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   Widget get _buildBodyH {
     double videoWidth =
-        max(context.height / context.width * 1.04, 0.58) * context.width;
+        clampDouble(context.height / context.width * 1.04, 0.58, 0.75) *
+            context.width;
     return Expanded(
       child: Row(
         children: [
           Obx(
             () => Container(
-              color: Colors.black,
+              color: isFullScreen ? Colors.black : null,
               width: isFullScreen ? Get.size.width : videoWidth,
               height: isFullScreen ? Get.size.height : Get.size.width * 9 / 16,
               child: MediaQuery.removePadding(
