@@ -80,6 +80,7 @@ class _VideoReplyReplyPanelState
         dialog: widget.dialog,
         replyType: widget.replyType,
         isDialogue: widget.isDialogue,
+        getThemeData: () => Theme.of(context),
       ),
       tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
     );
@@ -473,9 +474,9 @@ class _VideoReplyReplyPanelState
                     animation: _videoReplyReplyController.colorAnimation!,
                     builder: (context, child) {
                       return ColoredBox(
-                        color: _videoReplyReplyController
-                                .colorAnimation?.value ??
-                            Theme.of(Get.context!).colorScheme.onInverseSurface,
+                        color:
+                            _videoReplyReplyController.colorAnimation?.value ??
+                                Theme.of(context).colorScheme.onInverseSurface,
                         child: _replyItem(loadingState.response[index], index),
                       );
                     },

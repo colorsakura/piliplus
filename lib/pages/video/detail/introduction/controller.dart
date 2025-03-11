@@ -652,6 +652,7 @@ class VideoIntroController extends GetxController
       } catch (_) {}
     }
 
+    hasLater.value = false;
     this.bvid = bvid;
     lastPlayCid.value = cid;
     queryVideoIntro();

@@ -21,7 +21,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/video/play/quality.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/pages/video/detail/index.dart';
@@ -147,9 +146,7 @@ class _HeaderControlState extends State<HeaderControl> {
                   dense: true,
                   onTap: () async {
                     Get.back();
-                    final res =
-                        await UserHttp.toViewLater(bvid: videoDetailCtr.bvid);
-                    SmartDialog.showToast(res['msg']);
+                    videoIntroController.viewLater();
                   },
                   leading: const Icon(Icons.watch_later_outlined, size: 20),
                   title: const Text('添加至「稍后再看」', style: titleStyle),

@@ -21,6 +21,7 @@ class VideoReplyReplyController extends ReplyController
     required this.dialog,
     required this.replyType,
     required this.isDialogue,
+    required this.getThemeData,
   });
   final int? dialog;
   final bool isDialogue;
@@ -60,6 +61,8 @@ class VideoReplyReplyController extends ReplyController
     return super.onRefresh();
   }
 
+  final ThemeData Function() getThemeData;
+
   @override
   bool customHandleResponse(Success response) {
     if (GlobalData().grpcReply) {
@@ -81,8 +84,8 @@ class VideoReplyReplyController extends ReplyController
               vsync: this,
             );
             colorAnimation = ColorTween(
-              begin: Theme.of(Get.context!).colorScheme.onInverseSurface,
-              end: Theme.of(Get.context!).colorScheme.surface,
+              begin: getThemeData().colorScheme.onInverseSurface,
+              end: getThemeData().colorScheme.surface,
             ).animate(controller!);
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               if (index != null) {
