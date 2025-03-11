@@ -258,16 +258,21 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       );
 
   Widget get _buildPP => Scaffold(
-        appBar: _buildAppBar,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
+            _buildAppBar,
             Column(
               children: [
                 Obx(
                   () => Container(
                     color: Colors.black,
                     width: Get.width,
+                    margin: isFullScreen
+                        ? null
+                        : EdgeInsets.only(
+                            top: 56 + MediaQuery.paddingOf(context).top,
+                          ),
                     height: isFullScreen
                         ? Get.height -
                             (context.orientation == Orientation.landscape
