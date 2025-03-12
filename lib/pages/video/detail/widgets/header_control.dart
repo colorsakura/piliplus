@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
@@ -141,7 +142,7 @@ class _HeaderControlState extends State<HeaderControl> {
                 // if (videoDetailCtr.userInfo != null)
                 ListTile(
                   dense: true,
-                  onTap: () async {
+                  onTap: () {
                     Get.back();
                     videoIntroController.viewLater();
                   },
@@ -373,8 +374,17 @@ class _HeaderControlState extends State<HeaderControl> {
                 ListTile(
                   dense: true,
                   onTap: () => {Get.back(), showSetDanmaku()},
+                  leading: Transform.rotate(
+                    angle: pi,
+                    child: const Icon(Icons.subtitles_outlined, size: 20),
+                  ),
+                  title: const Text('弹幕设置', style: titleStyle),
+                ),
+                ListTile(
+                  dense: true,
+                  onTap: () => {Get.back(), showSetSubtitle()},
                   leading: const Icon(Icons.subtitles_outlined, size: 20),
-                  title: const Text('弹幕/字幕设置', style: titleStyle),
+                  title: const Text('字幕设置', style: titleStyle),
                 ),
                 ListTile(
                   dense: true,
@@ -558,7 +568,7 @@ class _HeaderControlState extends State<HeaderControl> {
   }
 
   /// 定时关闭
-  void scheduleExit() async {
+  void scheduleExit() {
     const List<int> scheduleTimeChoices = [0, 15, 30, 45, 60];
     Utils.showFSSheet(
       context,
@@ -1025,55 +1035,73 @@ class _HeaderControlState extends State<HeaderControl> {
     );
   }
 
-  /// 弹幕功能
-  void showSetDanmaku() async {
-    // 屏蔽类型
-    final List<Map<String, dynamic>> blockTypesList = [
-      {'value': 5, 'label': '顶部'},
-      {'value': 2, 'label': '滚动'},
-      {'value': 4, 'label': '底部'},
-      {'value': 6, 'label': '彩色'},
-    ];
-    final List blockTypes = widget.controller.blockTypes;
-    // 显示区域
-    final List<Map<String, dynamic>> showAreas = [
-      {'value': 0.25, 'label': '1/4屏'},
-      {'value': 0.5, 'label': '半屏'},
-      {'value': 0.75, 'label': '3/4屏'},
-      {'value': 1.0, 'label': '满屏'},
-    ];
-    // 智能云屏蔽
-    int danmakuWeight = widget.controller.danmakuWeight;
-    // 显示区域
-    double showArea = widget.controller.showArea;
-    // 不透明度
-    double opacityVal = widget.controller.opacityVal;
-    // 字体大小
-    double fontSizeVal = widget.controller.fontSizeVal;
-    // 全屏字体大小
-    double fontSizeFSVal = widget.controller.fontSizeFSVal;
+  /// 字幕设置
+  void showSetSubtitle() {
     double subtitleFontScale = widget.controller.subtitleFontScale;
     double subtitleFontScaleFS = widget.controller.subtitleFontScaleFS;
-    double danmakuLineHeight = widget.controller.danmakuLineHeight;
-    // 弹幕速度
-    double danmakuDurationVal = widget.controller.danmakuDurationVal;
-    // 弹幕描边
-    double strokeWidth = widget.controller.strokeWidth;
-    // 字体粗细
-    int fontWeight = widget.controller.fontWeight;
-    bool massiveMode = widget.controller.massiveMode;
     int subtitlePaddingH = widget.controller.subtitlePaddingH;
     int subtitlePaddingB = widget.controller.subtitlePaddingB;
     double subtitleBgOpaticy = widget.controller.subtitleBgOpaticy;
 
-    final DanmakuController? danmakuController =
-        widget.controller.danmakuController;
+    final sliderTheme = SliderThemeData(
+      trackShape: MSliderTrackShape(),
+      thumbColor: Theme.of(context).colorScheme.primary,
+      activeTrackColor: Theme.of(context).colorScheme.primary,
+      trackHeight: 10,
+      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+    );
+
     Utils.showFSSheet(
       context,
       isFullScreen: () => isFullScreen,
       padding: isFullScreen ? 70 : null,
       child: StatefulBuilder(
         builder: (_, setState) {
+          void updateOpacity(double val) {
+            subtitleBgOpaticy = val;
+            widget.controller
+              ..subtitleBgOpaticy = subtitleBgOpaticy
+              ..updateSubtitleStyle()
+              ..putDanmakuSettings();
+            setState(() {});
+          }
+
+          void updateBottomPadding(int val) {
+            subtitlePaddingB = val;
+            widget.controller
+              ..subtitlePaddingB = subtitlePaddingB
+              ..updateSubtitleStyle()
+              ..putDanmakuSettings();
+            setState(() {});
+          }
+
+          void updateHorizontalPadding(int val) {
+            subtitlePaddingH = val;
+            widget.controller
+              ..subtitlePaddingH = subtitlePaddingH
+              ..updateSubtitleStyle()
+              ..putDanmakuSettings();
+            setState(() {});
+          }
+
+          void updateFontScaleFS(double val) {
+            subtitleFontScaleFS = val;
+            widget.controller
+              ..subtitleFontScaleFS = subtitleFontScaleFS
+              ..updateSubtitleStyle()
+              ..putDanmakuSettings();
+            setState(() {});
+          }
+
+          void updateFontScale(double val) {
+            subtitleFontScale = val;
+            widget.controller
+              ..subtitleFontScale = subtitleFontScale
+              ..updateSubtitleStyle()
+              ..putDanmakuSettings();
+            setState(() {});
+          }
+
           return Theme(
             data: Theme.of(context),
             child: Material(
@@ -1091,7 +1119,357 @@ class _HeaderControlState extends State<HeaderControl> {
                   children: [
                     SizedBox(
                       height: 45,
-                      child: Center(child: Text('弹幕/字幕设置', style: titleStyle)),
+                      child: Center(child: Text('字幕设置', style: titleStyle)),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            '字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
+                        resetBtn('100.0%', () => updateFontScale(1.0)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0.5,
+                          max: 2.5,
+                          value: subtitleFontScale,
+                          divisions: 20,
+                          label:
+                              '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
+                          onChanged: updateFontScale,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            '全屏字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
+                        resetBtn('150.0%', () => updateFontScaleFS(1.5)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0.5,
+                          max: 2.5,
+                          value: subtitleFontScaleFS,
+                          divisions: 20,
+                          label:
+                              '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
+                          onChanged: updateFontScaleFS,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('左右边距 $subtitlePaddingH'),
+                        resetBtn(24, () => updateHorizontalPadding(24)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0,
+                          max: 100,
+                          value: subtitlePaddingH.toDouble(),
+                          divisions: 100,
+                          label: '$subtitlePaddingH',
+                          onChanged: (double val) {
+                            updateHorizontalPadding(val.round());
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('底部边距 $subtitlePaddingB'),
+                        resetBtn(24, () => updateBottomPadding(24)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0,
+                          max: 100,
+                          value: subtitlePaddingB.toDouble(),
+                          divisions: 100,
+                          label: '$subtitlePaddingB',
+                          onChanged: (double val) {
+                            updateBottomPadding(val.round());
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
+                        resetBtn('67%', () => updateOpacity(0.67)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0,
+                          max: 1,
+                          value: subtitleBgOpaticy,
+                          // label: '${(subtitleBgOpaticy * 100).toInt()}%',
+                          onChanged: (double val) {
+                            updateOpacity(val.toPrecision(2));
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget resetBtn(def, VoidCallback onPressed) {
+    return iconButton(
+      context: context,
+      tooltip: '默认值: $def',
+      icon: Icons.refresh,
+      onPressed: onPressed,
+      bgColor: Colors.transparent,
+      iconColor: Theme.of(context).colorScheme.outline,
+      size: 24,
+      iconSize: 24,
+    );
+  }
+
+  /// 弹幕功能
+  void showSetDanmaku() {
+    // 屏蔽类型
+    final List<Map<String, dynamic>> blockTypesList = [
+      {'value': 5, 'label': '顶部'},
+      {'value': 2, 'label': '滚动'},
+      {'value': 4, 'label': '底部'},
+      {'value': 6, 'label': '彩色'},
+    ];
+    final List blockTypes = widget.controller.blockTypes;
+    // 显示区域
+    // final List<Map<String, dynamic>> showAreas = [
+    //   {'value': 0.25, 'label': '1/4屏'},
+    //   {'value': 0.5, 'label': '半屏'},
+    //   {'value': 0.75, 'label': '3/4屏'},
+    //   {'value': 1.0, 'label': '满屏'},
+    // ];
+    // 智能云屏蔽
+    int danmakuWeight = widget.controller.danmakuWeight;
+    // 显示区域
+    double showArea = widget.controller.showArea;
+    // 不透明度
+    double opacityVal = widget.controller.opacityVal;
+    // 字体大小
+    double fontSizeVal = widget.controller.fontSizeVal;
+    // 全屏字体大小
+    double fontSizeFSVal = widget.controller.fontSizeFSVal;
+    double danmakuLineHeight = widget.controller.danmakuLineHeight;
+    // 弹幕速度
+    double danmakuDurationVal = widget.controller.danmakuDurationVal;
+    // 弹幕描边
+    double strokeWidth = widget.controller.strokeWidth;
+    // 字体粗细
+    int fontWeight = widget.controller.fontWeight;
+    bool massiveMode = widget.controller.massiveMode;
+
+    final sliderTheme = SliderThemeData(
+      trackShape: MSliderTrackShape(),
+      thumbColor: Theme.of(context).colorScheme.primary,
+      activeTrackColor: Theme.of(context).colorScheme.primary,
+      trackHeight: 10,
+      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+    );
+
+    final DanmakuController? danmakuController =
+        widget.controller.danmakuController;
+
+    Utils.showFSSheet(
+      context,
+      isFullScreen: () => isFullScreen,
+      child: StatefulBuilder(
+        builder: (_, setState) {
+          void updateLineHeight(double val) {
+            danmakuLineHeight = val;
+            widget.controller
+              ..danmakuLineHeight = danmakuLineHeight
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(
+                  lineHeight: danmakuLineHeight,
+                ),
+              );
+            } catch (_) {}
+          }
+
+          void updateDuration(double val) {
+            danmakuDurationVal = val;
+            widget.controller
+              ..danmakuDurationVal = danmakuDurationVal
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(
+                    duration:
+                        danmakuDurationVal ~/ widget.controller.playbackSpeed),
+              );
+            } catch (_) {}
+          }
+
+          void updateFontSizeFS(double val) {
+            fontSizeFSVal = val;
+            widget.controller
+              ..fontSizeFSVal = fontSizeFSVal
+              ..putDanmakuSettings();
+            setState(() {});
+            if (widget.controller.isFullScreen.value == true) {
+              try {
+                danmakuController?.updateOption(
+                  danmakuController.option.copyWith(
+                    fontSize: (15 * fontSizeFSVal).toDouble(),
+                  ),
+                );
+              } catch (_) {}
+            }
+          }
+
+          void updateFontSize(double val) {
+            fontSizeVal = val;
+            widget.controller
+              ..fontSizeVal = fontSizeVal
+              ..putDanmakuSettings();
+            setState(() {});
+            if (widget.controller.isFullScreen.value == false) {
+              try {
+                danmakuController?.updateOption(
+                  danmakuController.option.copyWith(
+                    fontSize: (15 * fontSizeVal).toDouble(),
+                  ),
+                );
+              } catch (_) {}
+            }
+          }
+
+          void updateStrokeWidth(double val) {
+            strokeWidth = val;
+            widget.controller
+              ..strokeWidth = val
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(strokeWidth: val),
+              );
+            } catch (_) {}
+          }
+
+          void updateFontWeight(int val) {
+            fontWeight = val;
+            widget.controller
+              ..fontWeight = fontWeight
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(fontWeight: fontWeight),
+              );
+            } catch (_) {}
+          }
+
+          void updateOpacity(double val) {
+            opacityVal = val;
+            widget.controller
+              ..opacityVal = opacityVal
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(opacity: val),
+              );
+            } catch (_) {}
+          }
+
+          void updateShowArea(double val) {
+            showArea = val;
+            widget.controller
+              ..showArea = showArea
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(area: showArea),
+              );
+            } catch (_) {}
+          }
+
+          return Theme(
+            data: Theme.of(context),
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                margin: const EdgeInsets.all(12),
+                padding: const EdgeInsets.only(left: 14, right: 14),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    SizedBox(
+                      height: 45,
+                      child: Center(child: Text('弹幕设置', style: titleStyle)),
                     ),
                     const SizedBox(height: 10),
                     Row(
@@ -1121,15 +1499,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 0,
                           max: 10,
@@ -1148,13 +1518,13 @@ class _HeaderControlState extends State<HeaderControl> {
                     ),
                     const Text('按类型屏蔽'),
                     Padding(
-                      padding: const EdgeInsets.only(top: 12, bottom: 18),
+                      padding: const EdgeInsets.only(top: 12),
                       child: Row(
                         children: [
                           for (final Map<String, dynamic> i
                               in blockTypesList) ...[
                             ActionRowLineItem(
-                              onTap: () async {
+                              onTap: () {
                                 final bool isChoose =
                                     blockTypes.contains(i['value']);
                                 if (isChoose) {
@@ -1185,34 +1555,6 @@ class _HeaderControlState extends State<HeaderControl> {
                         ],
                       ),
                     ),
-                    const Text('显示区域'),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Row(
-                        children: [
-                          for (final Map<String, dynamic> i in showAreas) ...[
-                            ActionRowLineItem(
-                              onTap: () {
-                                showArea = i['value'];
-                                widget.controller
-                                  ..showArea = showArea
-                                  ..putDanmakuSettings();
-                                setState(() {});
-                                try {
-                                  danmakuController?.updateOption(
-                                    danmakuController.option
-                                        .copyWith(area: i['value']),
-                                  );
-                                } catch (_) {}
-                              },
-                              text: i['label'],
-                              selectStatus: showArea == i['value'],
-                            ),
-                            const SizedBox(width: 10),
-                          ]
-                        ],
-                      ),
-                    ),
                     SetSwitchItem(
                       title: '海量弹幕',
                       contentPadding: EdgeInsets.all(0),
@@ -1231,7 +1573,13 @@ class _HeaderControlState extends State<HeaderControl> {
                         } catch (_) {}
                       },
                     ),
-                    Text('不透明度 ${opacityVal * 100}%'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('显示区域 ${showArea * 100}%'),
+                        resetBtn('50.0%', () => updateShowArea(0.5)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1240,37 +1588,52 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0.1,
+                          max: 1,
+                          value: showArea,
+                          divisions: 9,
+                          label: '${showArea * 100}%',
+                          onChanged: (val) => updateShowArea(
+                            val.toPrecision(1),
+                          ),
                         ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('不透明度 ${opacityVal * 100}%'),
+                        resetBtn('100.0%', () => updateOpacity(1.0)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
                         child: Slider(
                           min: 0,
                           max: 1,
                           value: opacityVal,
                           divisions: 10,
                           label: '${opacityVal * 100}%',
-                          onChanged: (double val) {
-                            opacityVal = val;
-                            widget.controller
-                              ..opacityVal = opacityVal
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option.copyWith(opacity: val),
-                              );
-                            } catch (_) {}
-                          },
+                          onChanged: updateOpacity,
                         ),
                       ),
                     ),
-                    Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
+                        resetBtn(6, () => updateFontWeight(5)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1279,15 +1642,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 0,
                           max: 8,
@@ -1295,22 +1650,18 @@ class _HeaderControlState extends State<HeaderControl> {
                           divisions: 8,
                           label: '${fontWeight + 1}',
                           onChanged: (double val) {
-                            fontWeight = val.toInt();
-                            widget.controller
-                              ..fontWeight = fontWeight
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option
-                                    .copyWith(fontWeight: fontWeight),
-                              );
-                            } catch (_) {}
+                            updateFontWeight(val.toInt());
                           },
                         ),
                       ),
                     ),
-                    Text('描边粗细 $strokeWidth'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('描边粗细 $strokeWidth'),
+                        resetBtn(1.5, () => updateStrokeWidth(1.5)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1319,38 +1670,24 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 0,
                           max: 3,
                           value: strokeWidth,
                           divisions: 6,
                           label: '$strokeWidth',
-                          onChanged: (double val) {
-                            strokeWidth = val;
-                            widget.controller
-                              ..strokeWidth = val
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option
-                                    .copyWith(strokeWidth: val),
-                              );
-                            } catch (_) {}
-                          },
+                          onChanged: updateStrokeWidth,
                         ),
                       ),
                     ),
-                    Text('字体大小 ${(fontSizeVal * 100).toStringAsFixed(1)}%'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('字体大小 ${(fontSizeVal * 100).toStringAsFixed(1)}%'),
+                        resetBtn('100.0%', () => updateFontSize(1.0)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1359,41 +1696,25 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 0.5,
                           max: 2.5,
                           value: fontSizeVal,
                           divisions: 20,
                           label: '${(fontSizeVal * 100).toStringAsFixed(1)}%',
-                          onChanged: (double val) {
-                            fontSizeVal = val;
-                            widget.controller
-                              ..fontSizeVal = fontSizeVal
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            if (widget.controller.isFullScreen.value == false) {
-                              try {
-                                danmakuController?.updateOption(
-                                  danmakuController.option.copyWith(
-                                    fontSize: (15 * fontSizeVal).toDouble(),
-                                  ),
-                                );
-                              } catch (_) {}
-                            }
-                          },
+                          onChanged: updateFontSize,
                         ),
                       ),
                     ),
-                    Text('全屏字体大小 ${(fontSizeFSVal * 100).toStringAsFixed(1)}%'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            '全屏字体大小 ${(fontSizeFSVal * 100).toStringAsFixed(1)}%'),
+                        resetBtn('120.0%', () => updateFontSizeFS(1.2)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1402,41 +1723,24 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 0.5,
                           max: 2.5,
                           value: fontSizeFSVal,
                           divisions: 20,
                           label: '${(fontSizeFSVal * 100).toStringAsFixed(1)}%',
-                          onChanged: (double val) {
-                            fontSizeFSVal = val;
-                            widget.controller
-                              ..fontSizeFSVal = fontSizeFSVal
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            if (widget.controller.isFullScreen.value == true) {
-                              try {
-                                danmakuController?.updateOption(
-                                  danmakuController.option.copyWith(
-                                    fontSize: (15 * fontSizeFSVal).toDouble(),
-                                  ),
-                                );
-                              } catch (_) {}
-                            }
-                          },
+                          onChanged: updateFontSizeFS,
                         ),
                       ),
                     ),
-                    Text('弹幕时长 $danmakuDurationVal 秒'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('弹幕时长 $danmakuDurationVal 秒'),
+                        resetBtn(7.0, () => updateDuration(7.0)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1445,40 +1749,26 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 1,
-                          max: 4,
-                          value: pow(danmakuDurationVal, 1 / 4) as double,
-                          divisions: 60,
+                          max: 50,
+                          value: danmakuDurationVal,
+                          divisions: 49,
                           label: danmakuDurationVal.toString(),
                           onChanged: (double val) {
-                            danmakuDurationVal =
-                                (pow(val, 4) as double).toPrecision(2);
-                            widget.controller
-                              ..danmakuDurationVal = danmakuDurationVal
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option.copyWith(
-                                    duration: danmakuDurationVal ~/
-                                        widget.controller.playbackSpeed),
-                              );
-                            } catch (_) {}
+                            updateDuration(val.toPrecision(1));
                           },
                         ),
                       ),
                     ),
-                    Text('弹幕行高 $danmakuLineHeight'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('弹幕行高 $danmakuLineHeight'),
+                        resetBtn(1.6, () => updateLineHeight(1.6)),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 0,
@@ -1487,211 +1777,14 @@ class _HeaderControlState extends State<HeaderControl> {
                         right: 10,
                       ),
                       child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
+                        data: sliderTheme,
                         child: Slider(
                           min: 1.0,
                           max: 3.0,
                           value: danmakuLineHeight,
                           // label: '$danmakuLineHeight',
                           onChanged: (double val) {
-                            danmakuLineHeight = val.toPrecision(1);
-                            widget.controller
-                              ..danmakuLineHeight = danmakuLineHeight
-                              ..putDanmakuSettings();
-                            setState(() {});
-                            try {
-                              danmakuController?.updateOption(
-                                danmakuController.option.copyWith(
-                                  lineHeight: danmakuLineHeight,
-                                ),
-                              );
-                            } catch (_) {}
-                          },
-                        ),
-                      ),
-                    ),
-                    Text(
-                        '字幕字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
-                        child: Slider(
-                          min: 0.5,
-                          max: 2.5,
-                          value: subtitleFontScale,
-                          divisions: 20,
-                          label:
-                              '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
-                          onChanged: (double val) {
-                            subtitleFontScale = val;
-                            widget.controller
-                              ..subtitleFontScale = subtitleFontScale
-                              ..updateSubtitleStyle()
-                              ..putDanmakuSettings();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ),
-                    Text(
-                        '全屏字幕字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
-                        child: Slider(
-                          min: 0.5,
-                          max: 2.5,
-                          value: subtitleFontScaleFS,
-                          divisions: 20,
-                          label:
-                              '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
-                          onChanged: (double val) {
-                            subtitleFontScaleFS = val;
-                            widget.controller
-                              ..subtitleFontScaleFS = subtitleFontScaleFS
-                              ..updateSubtitleStyle()
-                              ..putDanmakuSettings();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ),
-                    Text('字幕左右边距 $subtitlePaddingH'),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
-                        child: Slider(
-                          min: 0,
-                          max: 100,
-                          value: subtitlePaddingH.toDouble(),
-                          divisions: 100,
-                          label: '$subtitlePaddingH',
-                          onChanged: (double val) {
-                            subtitlePaddingH = val.round();
-                            widget.controller
-                              ..subtitlePaddingH = subtitlePaddingH
-                              ..updateSubtitleStyle()
-                              ..putDanmakuSettings();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ),
-                    Text('字幕底部边距 $subtitlePaddingB'),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
-                        child: Slider(
-                          min: 0,
-                          max: 100,
-                          value: subtitlePaddingB.toDouble(),
-                          divisions: 100,
-                          label: '$subtitlePaddingB',
-                          onChanged: (double val) {
-                            subtitlePaddingB = val.round();
-                            widget.controller
-                              ..subtitlePaddingB = subtitlePaddingB
-                              ..updateSubtitleStyle()
-                              ..putDanmakuSettings();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ),
-                    Text('字幕背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                          trackShape: MSliderTrackShape(),
-                          thumbColor: Theme.of(context).colorScheme.primary,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.primary,
-                          trackHeight: 10,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0),
-                        ),
-                        child: Slider(
-                          min: 0,
-                          max: 1,
-                          value: subtitleBgOpaticy,
-                          // label: '${(subtitleBgOpaticy * 100).toInt()}%',
-                          onChanged: (double val) {
-                            subtitleBgOpaticy = val.toPrecision(2);
-                            widget.controller
-                              ..subtitleBgOpaticy = subtitleBgOpaticy
-                              ..updateSubtitleStyle()
-                              ..putDanmakuSettings();
-                            setState(() {});
+                            updateLineHeight(val.toPrecision(1));
                           },
                         ),
                       ),
@@ -1707,7 +1800,7 @@ class _HeaderControlState extends State<HeaderControl> {
   }
 
   /// 播放顺序
-  void showSetRepeat() async {
+  void showSetRepeat() {
     Utils.showFSSheet(
       context,
       isFullScreen: () => isFullScreen,
@@ -2090,7 +2183,7 @@ class _HeaderControlState extends State<HeaderControl> {
                                                   .actionTextColor;
                                             }),
                                           ),
-                                          onPressed: () async {
+                                          onPressed: () {
                                             plPlayerController
                                                 .setBackgroundPlay(true);
                                             SmartDialog.showToast("请重新载入本页面刷新");

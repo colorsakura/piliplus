@@ -431,7 +431,7 @@ class PlPlayerController {
     massiveMode = GStorage.danmakuMassiveMode;
     // 弹幕时间
     danmakuDurationVal =
-        setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.29);
+        setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.0);
     // 描边粗细
     strokeWidth = setting.get(SettingBoxKey.strokeWidth, defaultValue: 1.5);
     // 弹幕字体粗细
