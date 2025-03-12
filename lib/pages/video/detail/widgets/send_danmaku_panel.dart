@@ -377,6 +377,21 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
               ),
             ),
           ),
+          Obx(
+            () => enablePublish.value
+                ? iconButton(
+                    context: context,
+                    bgColor: Colors.transparent,
+                    iconSize: 22,
+                    iconColor: themeData.colorScheme.onSurfaceVariant,
+                    onPressed: () {
+                      editController.clear();
+                      enablePublish.value = false;
+                    },
+                    icon: Icons.clear,
+                  )
+                : const SizedBox.shrink(),
+          ),
           const SizedBox(width: 12),
           Obx(
             () => iconButton(

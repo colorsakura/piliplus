@@ -99,7 +99,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   @override
   void dispose() {
-    tabController.animation?.removeListener(() {});
     tabController.dispose();
     super.dispose();
   }

@@ -299,6 +299,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                           child: videoItem['staff'] == null
                               ? GestureDetector(
                                   onTap: onPushMember,
+                                  behavior: HitTestBehavior.opaque,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
