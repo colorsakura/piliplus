@@ -38,7 +38,10 @@ class HtmlRenderPage extends StatefulWidget {
 
 class _HtmlRenderPageState extends State<HtmlRenderPage>
     with TickerProviderStateMixin {
-  final HtmlRenderController _htmlRenderCtr = Get.put(HtmlRenderController());
+  late final HtmlRenderController _htmlRenderCtr = Get.put(
+    HtmlRenderController(),
+    tag: Utils.makeHeroTag(id),
+  );
   late String title;
   late String id;
   late String url;

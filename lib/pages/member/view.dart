@@ -17,6 +17,7 @@ import 'widgets/conis.dart';
 import 'widgets/profile.dart';
 import 'widgets/seasons.dart';
 
+@Deprecated('Use MemberPageNew instead')
 class MemberPage extends StatefulWidget {
   const MemberPage({super.key});
 

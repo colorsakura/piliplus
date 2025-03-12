@@ -6,6 +6,7 @@ import 'package:PiliPlus/pages/member/new/content/member_dynamic/member_dynamic_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+@Deprecated('Use MemberDynamicsPage instead')
 class MemberDynamic extends StatefulWidget {
   const MemberDynamic({
     super.key,

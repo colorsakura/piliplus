@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
@@ -20,7 +21,10 @@ class FavSearchPage extends StatefulWidget {
 }
 
 class _FavSearchPageState extends State<FavSearchPage> {
-  final FavSearchController _favSearchCtr = Get.put(FavSearchController());
+  final FavSearchController _favSearchCtr = Get.put(
+    FavSearchController(),
+    tag: Utils.generateRandomString(8),
+  );
 
   @override
   Widget build(BuildContext context) {

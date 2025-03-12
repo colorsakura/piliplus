@@ -15,10 +15,12 @@ class NoteListPage extends CommonSlidePage {
   const NoteListPage({
     super.key,
     super.enableSlide,
+    required this.heroTag,
     this.oid,
     this.upperMid,
   });
 
+  final dynamic heroTag;
   final dynamic oid;
   final dynamic upperMid;
 
@@ -29,11 +31,12 @@ class NoteListPage extends CommonSlidePage {
 class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
   late final _controller = Get.put(
     NoteListPageCtr(oid: widget.oid, upperMid: widget.upperMid),
+    tag: widget.heroTag,
   );
 
   @override
   void dispose() {
-    Get.delete<NoteListPageCtr>();
+    Get.delete<NoteListPageCtr>(tag: widget.heroTag);
     super.dispose();
   }
 

@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/stat/danmu.dart';
 import 'package:PiliPlus/common/widgets/stat/view.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
+@Deprecated('deprecated')
 class IntroDetail extends StatelessWidget {
   const IntroDetail({
     super.key,

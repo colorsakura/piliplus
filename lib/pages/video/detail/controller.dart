@@ -1615,18 +1615,20 @@ class VideoDetailController extends GetxController
                 child: NoteListPage(
                   oid: oid.value,
                   enableSlide: false,
+                  heroTag: heroTag,
                 ),
               )
             : NoteListPage(
                 oid: oid.value,
                 enableSlide: false,
+                heroTag: heroTag,
               ),
         isFullScreen: () => plPlayerController.isFullScreen.value,
       );
     } else {
       childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
-        (context) => NoteListPage(oid: oid.value),
+        (context) => NoteListPage(oid: oid.value, heroTag: heroTag),
       );
     }
   }

@@ -23,9 +23,9 @@ class SubDetailPage extends StatefulWidget {
 
 class _SubDetailPageState extends State<SubDetailPage> {
   late final ScrollController _controller = ScrollController();
-  final SubDetailController _subDetailController =
-      Get.put(SubDetailController());
-  late StreamController<bool> titleStreamC; // a
+  late final SubDetailController _subDetailController =
+      Get.put(SubDetailController(), tag: Utils.makeHeroTag(id));
+  late StreamController<bool> titleStreamC;
   late Future _futureBuilderFuture;
   late String id;
 

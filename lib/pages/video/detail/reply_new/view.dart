@@ -12,6 +12,7 @@ import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 import 'toolbar_icon_button.dart';
 
+@Deprecated('Use ReplyPage instead')
 class VideoReplyNewDialog extends StatefulWidget {
   final int? oid;
   final int? root;

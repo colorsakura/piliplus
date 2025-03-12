@@ -6,6 +6,7 @@ import 'package:PiliPlus/models/msg/session.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,10 @@ class WhisperDetailPage extends CommonPublishPage {
 
 class _WhisperDetailPageState
     extends CommonPublishPageState<WhisperDetailPage> {
-  final _whisperDetailController = Get.put(WhisperDetailController());
+  final _whisperDetailController = Get.put(
+    WhisperDetailController(),
+    tag: Utils.makeHeroTag(Get.parameters['talkerId']),
+  );
 
   @override
   Widget build(BuildContext context) {
