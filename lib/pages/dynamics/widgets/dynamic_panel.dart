@@ -3,6 +3,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'action_panel.dart';
 import 'author_panel.dart';
 import 'content_panel.dart';
@@ -28,14 +29,17 @@ class DynamicPanel extends StatelessWidget {
       padding: source == 'detail'
           ? const EdgeInsets.only(bottom: 12)
           : EdgeInsets.zero,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 8,
-            color: Theme.of(context).dividerColor.withOpacity(0.05),
-          ),
-        ),
-      ),
+      decoration: source == 'detail' &&
+              Get.context!.orientation == Orientation.landscape
+          ? null
+          : BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: 8,
+                  color: Theme.of(context).dividerColor.withOpacity(0.05),
+                ),
+              ),
+            ),
       child: Material(
         elevation: 0,
         // clipBehavior: Clip.hardEdge,
