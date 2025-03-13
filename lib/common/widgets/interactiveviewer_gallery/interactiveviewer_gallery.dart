@@ -262,7 +262,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
 
   String _getActualUrl(int index) {
     return _quality != 100
-        ? Utils.thumbnailImgUrl(widget.sources[index].url)
+        ? Utils.thumbnailImgUrl(widget.sources[index].url, _quality)
         : widget.sources[index].url.http2https;
   }
 
