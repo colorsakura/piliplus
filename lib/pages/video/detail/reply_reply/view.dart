@@ -434,19 +434,21 @@ class _VideoReplyReplyPanelState
 
   Widget _buildBody(LoadingState loadingState, int index) {
     return switch (loadingState) {
-      Loading() => CustomScrollView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          slivers: [
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return const VideoReplySkeleton();
-                },
-                childCount: 8,
-              ),
-            )
-          ],
+      Loading() => IgnorePointer(
+          child: CustomScrollView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            slivers: [
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return const VideoReplySkeleton();
+                  },
+                  childCount: 8,
+                ),
+              )
+            ],
+          ),
         ),
       Success() => () {
           if (index == loadingState.response.length) {
