@@ -24,25 +24,25 @@ class DynamicPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: source == 'detail'
           ? const EdgeInsets.only(bottom: 12)
           : EdgeInsets.zero,
-      // decoration: BoxDecoration(
-      //   border: Border(
-      //     bottom: BorderSide(
-      //       width: 8,
-      //       color: Theme.of(context).dividerColor.withOpacity(0.05),
-      //     ),
-      //   ),
-      // ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 8,
+            color: Theme.of(context).dividerColor.withOpacity(0.05),
+          ),
+        ),
+      ),
       child: Material(
         elevation: 0,
-        clipBehavior: Clip.hardEdge,
+        // clipBehavior: Clip.hardEdge,
         color: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(5),
+        // ),
         child: InkWell(
           onTap: source == 'detail' &&
                   [

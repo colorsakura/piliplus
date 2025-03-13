@@ -157,7 +157,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                   maxCrossAxisExtent: Grid.smallCardWidth * 2,
                   //cacheExtent: 0.0,
                   crossAxisSpacing: StyleString.cardSpace / 2,
-                  mainAxisSpacing: StyleString.cardSpace / 2,
+                  // mainAxisSpacing: StyleString.cardSpace / 2,
 
                   lastChildLayoutTypeBuilder: (index) {
                     if (index == loadingState.response.length - 1) {
