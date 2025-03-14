@@ -743,6 +743,13 @@ List<SettingsModel> get playSettings => [
         defaultVal: true,
       ),
       SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '左右侧滑动调节亮度/音量',
+        leading: Icon(MdiIcons.tuneVerticalVariant),
+        setKey: SettingBoxKey.enableSlideVolumeBrightness,
+        defaultVal: true,
+      ),
+      SettingsModel(
         settingsType: SettingsType.normal,
         title: '自动启用字幕',
         leading: const Icon(Icons.closed_caption_outlined),

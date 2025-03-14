@@ -257,6 +257,7 @@ class PlPlayerController {
   late final showFSActionItem = GStorage.showFSActionItem;
   late final enableShrinkVideoSize = GStorage.enableShrinkVideoSize;
   late final darkVideoPage = GStorage.darkVideoPage;
+  late final enableSlideVolumeBrightness = GStorage.enableSlideVolumeBrightness;
 
   /// 弹幕权重
   int danmakuWeight = 0;

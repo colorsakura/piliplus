@@ -747,12 +747,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   final double tapPosition = details.localFocalPoint.dx;
                   final double sectionWidth = totalWidth / 3;
                   if (tapPosition < sectionWidth) {
+                    if (plPlayerController.enableSlideVolumeBrightness.not) {
+                      return;
+                    }
                     // 左边区域
                     _gestureType = 'left';
                   } else if (tapPosition < sectionWidth * 2) {
                     // 全屏
                     _gestureType = 'center';
                   } else {
+                    if (plPlayerController.enableSlideVolumeBrightness.not) {
+                      return;
+                    }
                     // 右边区域
                     _gestureType = 'right';
                   }
@@ -1142,12 +1148,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 final double sectionWidth = totalWidth / 3;
                 late String gestureType;
                 if (tapPosition < sectionWidth) {
+                  if (plPlayerController.enableSlideVolumeBrightness.not) {
+                    return;
+                  }
                   // 左边区域
                   gestureType = 'left';
                 } else if (tapPosition < sectionWidth * 2) {
                   // 全屏
                   gestureType = 'center';
                 } else {
+                  if (plPlayerController.enableSlideVolumeBrightness.not) {
+                    return;
+                  }
                   // 右边区域
                   gestureType = 'right';
                 }
