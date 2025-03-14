@@ -39,6 +39,9 @@ class SSearchController extends GetxController {
       if (Get.parameters['hintText'] != null) {
         hintText = Get.parameters['hintText']!;
       }
+      if (Get.parameters['text'] != null) {
+        controller.text = Get.parameters['text']!;
+      }
     }
 
     historyList.value = List.from(GStorage.historyWord.get('cacheList') ?? []);

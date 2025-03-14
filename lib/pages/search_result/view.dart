@@ -63,12 +63,23 @@ class _SearchResultPageState extends State<SearchResultPage>
           ),
         ),
         title: GestureDetector(
-          onTap: Get.back,
+          onTap: () {
+            if (Get.previousRoute.startsWith('/search')) {
+              Get.back();
+            } else {
+              Get.offNamed(
+                '/search',
+                parameters: {'text': _searchResultController.keyword},
+              );
+            }
+          },
+          behavior: HitTestBehavior.opaque,
           child: SizedBox(
             width: double.infinity,
             child: Text(
               _searchResultController.keyword,
               style: Theme.of(context).textTheme.titleMedium,
+              maxLines: 1,
             ),
           ),
         ),
