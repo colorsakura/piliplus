@@ -295,7 +295,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                       bottom: 125 + MediaQuery.paddingOf(context).bottom,
                       child: SizedBox(
                         height: 125,
-                        child: _buildChatWidget,
+                        child: _buildChatWidget(true),
                       ),
                     ),
             ),
@@ -478,11 +478,11 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   final GlobalKey chatKey = GlobalKey();
 
   List<Widget> get _buildBottomWidget => [
-        Expanded(child: _buildChatWidget),
+        Expanded(child: _buildChatWidget()),
         _buildInputWidget,
       ];
 
-  Widget get _buildChatWidget => Listener(
+  Widget _buildChatWidget([bool? isPP]) => Listener(
         onPointerDown: (_) {
           _node.unfocus();
         },
@@ -490,6 +490,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: LiveRoomChat(
             key: chatKey,
+            isPP: isPP,
             roomId: _roomId,
             liveRoomController: _liveRoomController,
           ),

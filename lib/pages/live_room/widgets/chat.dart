@@ -6,21 +6,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LiveRoomChat extends StatefulWidget {
-  final int roomId;
-  final LiveRoomController liveRoomController;
+class LiveRoomChat extends StatelessWidget {
   const LiveRoomChat({
     super.key,
     required this.roomId,
     required this.liveRoomController,
+    this.isPP,
   });
-  @override
-  State<LiveRoomChat> createState() => _LiveRoomChatState();
-}
 
-class _LiveRoomChatState extends State<LiveRoomChat> {
-  bool get disableAutoScroll =>
-      widget.liveRoomController.disableAutoScroll.value;
+  final int roomId;
+  final LiveRoomController liveRoomController;
+  final bool? isPP;
+  bool get disableAutoScroll => liveRoomController.disableAutoScroll.value;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +26,9 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
         Obx(
           () => ListView.separated(
             padding: const EdgeInsets.all(0),
-            controller: widget.liveRoomController.scrollController,
+            controller: liveRoomController.scrollController,
             separatorBuilder: (context, index) => const SizedBox(height: 6),
-            itemCount: widget.liveRoomController.messages.length,
+            itemCount: liveRoomController.messages.length,
             itemBuilder: (context, index) {
               return Container(
                 alignment: Alignment.centerLeft,
@@ -39,25 +36,27 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: const BoxDecoration(
-                    color: Color(0x15FFFFFF),
-                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                  decoration: BoxDecoration(
+                    color: isPP == true
+                        ? Colors.black.withOpacity(0.3)
+                        : Color(0x15FFFFFF),
+                    borderRadius: const BorderRadius.all(Radius.circular(18)),
                   ),
                   child: Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
                           text:
-                              '${widget.liveRoomController.messages[index]['name']}: ',
-                          style: const TextStyle(
-                            color: Color(0xFFAAAAAA),
+                              '${liveRoomController.messages[index]['name']}: ',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.6),
                             fontSize: 14,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               try {
-                                dynamic uid = widget
-                                    .liveRoomController.messages[index]['uid'];
+                                dynamic uid =
+                                    liveRoomController.messages[index]['uid'];
                                 Get.toNamed(
                                   '/member?mid=$uid',
                                   arguments: {
@@ -70,7 +69,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                               }
                             },
                         ),
-                        _buildMsg(widget.liveRoomController.messages[index]),
+                        _buildMsg(liveRoomController.messages[index]),
                       ],
                     ),
                   ),
@@ -80,7 +79,7 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
           ),
         ),
         Obx(
-          () => widget.liveRoomController.disableAutoScroll.value
+          () => liveRoomController.disableAutoScroll.value
               ? Positioned(
                   right: 12,
                   bottom: 0,
@@ -91,8 +90,8 @@ class _LiveRoomChatState extends State<LiveRoomChat> {
                     ),
                     label: const Text('回到底部'),
                     onPressed: () {
-                      widget.liveRoomController.disableAutoScroll.value = false;
-                      widget.liveRoomController.scrollToBottom();
+                      liveRoomController.disableAutoScroll.value = false;
+                      liveRoomController.scrollToBottom();
                     },
                   ),
                 )
