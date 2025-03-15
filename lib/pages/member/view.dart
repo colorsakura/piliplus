@@ -25,8 +25,7 @@ class MemberPage extends StatefulWidget {
   State<MemberPage> createState() => _MemberPageState();
 }
 
-class _MemberPageState extends State<MemberPage>
-    with SingleTickerProviderStateMixin {
+class _MemberPageState extends State<MemberPage> {
   late String heroTag;
   late MemberController _memberController;
   late Future _futureBuilderFuture;

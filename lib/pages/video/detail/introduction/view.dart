@@ -49,7 +49,7 @@ class VideoIntroPanel extends StatefulWidget {
 }
 
 class _VideoIntroPanelState extends State<VideoIntroPanel>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin {
   late VideoIntroController videoIntroController;
 
   // 添加页面缓存

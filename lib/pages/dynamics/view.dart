@@ -33,7 +33,7 @@ class DynamicsPage extends StatefulWidget {
 }
 
 class _DynamicsPageState extends State<DynamicsPage>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin {
   final DynamicsController _dynamicsController = Get.put(DynamicsController());
   late UpPanelPosition upPanelPosition;
 
