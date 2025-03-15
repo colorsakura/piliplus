@@ -290,6 +290,7 @@ class PlPlayerController {
   late int subtitlePaddingB = GStorage.subtitlePaddingB;
   late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
   late bool showVipDanmaku = GStorage.showVipDanmaku;
+  late double subtitleStrokeWidth = GStorage.subtitleStrokeWidth;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -313,7 +314,8 @@ class PlPlayerController {
           right: subtitlePaddingH.toDouble(),
           bottom: subtitlePaddingB.toDouble(),
         ),
-        textScaleFactor: MediaQuery.textScalerOf(Get.context!).scale(1),
+        textScaleFactor: 1,
+        strokeWidth: subtitleBgOpaticy == 0 ? subtitleStrokeWidth : null,
       );
 
   GlobalKey<VideoState> Function()? getPlayerKey;
@@ -1533,6 +1535,7 @@ class PlPlayerController {
     setting.put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH);
     setting.put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB);
     setting.put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy);
+    setting.put(SettingBoxKey.subtitleStrokeWidth, subtitleStrokeWidth);
   }
 
   Future<void> dispose({String type = 'single'}) async {

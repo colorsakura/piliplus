@@ -307,6 +307,9 @@ class GStorage {
   static double get subtitleBgOpaticy =>
       setting.get(SettingBoxKey.subtitleBgOpaticy, defaultValue: 0.67);
 
+  static double get subtitleStrokeWidth =>
+      setting.get(SettingBoxKey.subtitleStrokeWidth, defaultValue: 1.5);
+
   static bool get badCertificateCallback =>
       setting.get(SettingBoxKey.badCertificateCallback, defaultValue: false);
 
@@ -630,6 +633,7 @@ class SettingBoxKey {
       subtitlePaddingH = 'subtitlePaddingH',
       subtitlePaddingB = 'subtitlePaddingB',
       subtitleBgOpaticy = 'subtitleBgOpaticy',
+      subtitleStrokeWidth = 'subtitleStrokeWidth',
       badCertificateCallback = 'badCertificateCallback',
       continuePlayingPart = 'continuePlayingPart',
       cdnSpeedTest = 'cdnSpeedTest',

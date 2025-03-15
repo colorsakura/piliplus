@@ -1042,6 +1042,7 @@ class _HeaderControlState extends State<HeaderControl> {
     int subtitlePaddingH = widget.controller.subtitlePaddingH;
     int subtitlePaddingB = widget.controller.subtitlePaddingB;
     double subtitleBgOpaticy = widget.controller.subtitleBgOpaticy;
+    double subtitleStrokeWidth = widget.controller.subtitleStrokeWidth;
 
     final sliderTheme = SliderThemeData(
       trackShape: MSliderTrackShape(),
@@ -1057,6 +1058,15 @@ class _HeaderControlState extends State<HeaderControl> {
       padding: isFullScreen ? 70 : null,
       child: StatefulBuilder(
         builder: (_, setState) {
+          void updateStrokeWidth(double val) {
+            subtitleStrokeWidth = val;
+            widget.controller
+              ..subtitleStrokeWidth = subtitleStrokeWidth
+              ..updateSubtitleStyle()
+              ..putDanmakuSettings();
+            setState(() {});
+          }
+
           void updateOpacity(double val) {
             subtitleBgOpaticy = val;
             widget.controller
@@ -1175,6 +1185,32 @@ class _HeaderControlState extends State<HeaderControl> {
                           label:
                               '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
                           onChanged: updateFontScaleFS,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('描边粗细 $subtitleStrokeWidth'),
+                        resetBtn(1.5, () => updateStrokeWidth(1.5)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0,
+                          max: 3,
+                          value: subtitleStrokeWidth,
+                          divisions: 6,
+                          label: '$subtitleStrokeWidth',
+                          onChanged: updateStrokeWidth,
                         ),
                       ),
                     ),

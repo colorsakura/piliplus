@@ -1210,10 +1210,11 @@ packages:
   media_kit_video:
     dependency: "direct main"
     description:
-      name: media_kit_video
-      sha256: "2cc3b966679963ba25a4ce5b771e532a521ebde7c6aa20e9802bec95d9916c8f"
-      url: "https://pub.dev"
-    source: hosted
+      path: media_kit_video
+      ref: "version_1.2.5"
+      resolved-ref: cb6fd7e49c30433140001cd19e4e9a8e03c14249
+      url: "https://github.com/bggRGjQaUbCoE/media-kit.git"
+    source: git
     version: "1.2.5"
   meta:
     dependency: transitive
