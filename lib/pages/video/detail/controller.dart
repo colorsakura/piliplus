@@ -1142,7 +1142,7 @@ class VideoDetailController extends GetxController
       bvid: bvid,
       epid: epId,
       seasonId: seasonId,
-      forcePgcApi: Get.arguments['pgcApi'] ?? false,
+      forcePgcApi: Get.arguments?['pgcApi'] ?? false,
     );
     if (result['status']) {
       data = result['data'];
