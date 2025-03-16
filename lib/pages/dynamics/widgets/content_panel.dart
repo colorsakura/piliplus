@@ -32,7 +32,7 @@ Widget content(context, item, source, callback) {
 
   return Container(
     width: double.infinity,
-    padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+    padding: const EdgeInsets.symmetric(horizontal: 12),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +55,6 @@ Widget content(context, item, source, callback) {
               child: Text.rich(
                 /// fix 默认20px高度
                 style: TextStyle(
-                  height: 0,
                   fontSize: source == 'detail' ? 16 : 15,
                 ),
                 richNodes,
