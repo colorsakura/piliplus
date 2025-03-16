@@ -207,17 +207,18 @@ class MyApp extends StatelessWidget {
           fallbackLocale: const Locale("zh", "CN"),
           getPages: Routes.getPages,
           home: const MainApp(),
-          builder: (BuildContext context, Widget? child) {
-            return FlutterSmartDialog(
-              toastBuilder: (String msg) => CustomToast(msg: msg),
-              child: MediaQuery(
+          builder: FlutterSmartDialog.init(
+            toastBuilder: (String msg) => CustomToast(msg: msg),
+            builder: (context, child) {
+              return MediaQuery(
                 data: MediaQuery.of(context)
                     .copyWith(textScaler: TextScaler.linear(textScale)),
                 child: child!,
-              ),
-            );
-          },
+              );
+            },
+          ),
           navigatorObservers: [
+            FlutterSmartDialog.observer,
             VideoDetailPage.routeObserver,
             VideoDetailPageV.routeObserver,
             MainApp.routeObserver,
