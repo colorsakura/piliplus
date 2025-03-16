@@ -274,7 +274,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             size: 22,
             color: Colors.white,
           ),
-          fuc: () {
+          onTap: () {
             bool? res;
             if (videoIntroController != null) {
               res = videoIntroController!.prevPlay();
@@ -306,7 +306,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             size: 22,
             color: Colors.white,
           ),
-          fuc: () {
+          onTap: () {
             bool? res;
             if (videoIntroController != null) {
               res = videoIntroController!.nextPlay();
@@ -385,7 +385,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                           ),
                         ],
                       ),
-                fuc: () {
+                onTap: () {
                   plPlayerController.showDmChart.value =
                       !plPlayerController.showDmChart.value;
                 },
@@ -448,7 +448,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       color: Colors.white,
                     ),
                   ),
-                  fuc: widget.showViewPoints,
+                  onTap: widget.showViewPoints,
+                  onLongPress: () {
+                    plPlayerController.showVP.value =
+                        !plPlayerController.showVP.value;
+                  },
                 ),
               ),
       ),
@@ -465,7 +469,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             size: 22,
             color: Colors.white,
           ),
-          fuc: () {
+          onTap: () {
             int? index;
             int currentCid = plPlayerController.cid;
             String bvid = plPlayerController.bvid;
@@ -629,7 +633,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               size: 24,
               color: Colors.white,
             ),
-            fuc: () => plPlayerController.triggerFullScreen(
+            onTap: () => plPlayerController.triggerFullScreen(
                 status: !isFullScreen, duration: 800),
           ),
         ),
@@ -1516,7 +1520,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                         size: 15,
                         color: Colors.white,
                       ),
-                      fuc: () => plPlayerController.onLockControl(
+                      onTap: () => plPlayerController.onLockControl(
                           !plPlayerController.controlsLock.value),
                     ),
                   ),
@@ -1546,7 +1550,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                       size: 20,
                       color: Colors.white,
                     ),
-                    fuc: () {
+                    onTap: () {
                       SmartDialog.showToast('截图中');
                       plPlayerController.videoPlayerController
                           ?.screenshot(format: 'image/png')

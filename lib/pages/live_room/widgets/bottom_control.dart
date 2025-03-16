@@ -44,7 +44,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               size: 18,
               color: Colors.white,
             ),
-            fuc: onRefresh,
+            onTap: onRefresh,
           ),
           //   // ComBtn(
           //   icon: const Icon(
@@ -192,7 +192,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               size: 20,
               color: Colors.white,
             ),
-            fuc: () => plPlayerController.triggerFullScreen(
+            onTap: () => plPlayerController.triggerFullScreen(
                 status: !plPlayerController.isFullScreen.value),
           ),
         ],

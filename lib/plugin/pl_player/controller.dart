@@ -303,7 +303,9 @@ class PlPlayerController {
         wordSpacing: 0.1,
         color: Colors.white,
         fontWeight: FontWeight.normal,
-        backgroundColor: Colors.black.withOpacity(subtitleBgOpaticy),
+        backgroundColor: subtitleBgOpaticy == 0
+            ? null
+            : Colors.black.withOpacity(subtitleBgOpaticy),
       );
 
   SubtitleViewConfiguration get subtitleViewConfiguration =>

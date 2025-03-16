@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ComBtn extends StatelessWidget {
-  final Widget? icon;
-  final GestureTapCallback? fuc;
+  final Widget icon;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   const ComBtn({
-    this.icon,
-    this.fuc,
+    required this.icon,
+    this.onTap,
+    this.onLongPress,
     super.key,
   });
 
@@ -16,8 +18,9 @@ class ComBtn extends StatelessWidget {
       width: 34,
       height: 34,
       child: GestureDetector(
-        onTap: fuc,
-        child: icon!,
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: icon,
       ),
     );
   }
