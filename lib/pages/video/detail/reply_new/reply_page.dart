@@ -70,11 +70,17 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
         ),
       );
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    themeData = darkVideoPage
+        ? MyApp.darkThemeData ?? Theme.of(context)
+        : Theme.of(context);
+  }
+
   late final darkVideoPage =
       Get.currentRoute.startsWith('/video') && GStorage.darkVideoPage;
-  late final ThemeData themeData = darkVideoPage
-      ? MyApp.darkThemeData ?? Theme.of(context)
-      : Theme.of(context);
+  late ThemeData themeData;
 
   @override
   Widget build(BuildContext context) {

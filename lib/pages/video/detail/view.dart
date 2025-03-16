@@ -503,6 +503,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     super.didChangeDependencies();
     VideoDetailPage.routeObserver
         .subscribe(this, ModalRoute.of(context)! as PageRoute);
+    themeData = videoDetailController.plPlayerController.darkVideoPage
+        ? MyApp.darkThemeData ?? Theme.of(context)
+        : Theme.of(context);
   }
 
   // void _handleTransition(String name) {
@@ -1131,10 +1134,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     return childWhenDisabled;
   }
 
-  late final ThemeData themeData =
-      videoDetailController.plPlayerController.darkVideoPage
-          ? MyApp.darkThemeData ?? Theme.of(context)
-          : Theme.of(context);
+  late ThemeData themeData;
 
   Widget get child {
     if (!horizontalScreen) {
@@ -1345,7 +1345,9 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   }
 
   Widget videoPlayer(double videoWidth, double videoHeight) => PopScope(
-        canPop: !isFullScreen,
+        canPop: !isFullScreen &&
+            (horizontalScreen ||
+                MediaQuery.of(context).orientation == Orientation.portrait),
         onPopInvokedWithResult: _onPopInvokedWithResult,
         child: Stack(
           children: [

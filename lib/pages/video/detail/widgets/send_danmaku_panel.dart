@@ -138,9 +138,15 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
         ),
       );
 
-  late final ThemeData themeData = widget.darkVideoPage
-      ? MyApp.darkThemeData ?? Theme.of(context)
-      : Theme.of(context);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    themeData = widget.darkVideoPage
+        ? MyApp.darkThemeData ?? Theme.of(context)
+        : Theme.of(context);
+  }
+
+  late ThemeData themeData;
 
   @override
   Widget build(BuildContext context) {
