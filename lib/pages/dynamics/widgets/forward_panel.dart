@@ -1,7 +1,9 @@
 // 转发
+import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/imageview.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -37,7 +39,7 @@ InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
   );
 }
 
-Widget forWard(item, context, source, callback, {floor = 1}) {
+Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
   switch (item.type) {
     // 图文
     case 'DYNAMIC_TYPE_DRAW':
@@ -448,6 +450,112 @@ Widget forWard(item, context, source, callback, {floor = 1}) {
           ),
         ),
       );
+    case 'DYNAMIC_TYPE_MEDIALIST':
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (floor == 2) ...[
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(
+                  '/member?mid=${item.modules.moduleAuthor.mid}',
+                );
+              },
+              child: Row(
+                children: [
+                  NetworkImgLayer(
+                    width: 28,
+                    height: 28,
+                    type: 'avatar',
+                    src: item.modules.moduleAuthor.face,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    item.modules.moduleAuthor.name,
+                    style: TextStyle(
+                      color: item.modules.moduleAuthor!.vip != null &&
+                              item.modules.moduleAuthor!.vip['status'] > 0 &&
+                              item.modules.moduleAuthor!.vip['type'] == 2
+                          ? context.vipColor
+                          : Theme.of(context).colorScheme.onSurface,
+                      fontSize:
+                          Theme.of(context).textTheme.titleMedium!.fontSize,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (floor == 1) const SizedBox(width: 12),
+              Stack(
+                children: [
+                  Hero(
+                    tag: item.modules.moduleDynamic.major.medialist['cover'],
+                    child: NetworkImgLayer(
+                      width: 180,
+                      height: 110,
+                      src: item.modules.moduleDynamic.major.medialist['cover'],
+                    ),
+                  ),
+                  if (item.modules.moduleDynamic.major.medialist['badge']
+                          ?['text'] !=
+                      null)
+                    PBadge(
+                      right: 6,
+                      top: 6,
+                      text: item.modules.moduleDynamic.major.medialist['badge']
+                          ['text'],
+                    )
+                ],
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: SizedBox(
+                  height: 110,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                        item.modules.moduleDynamic.major.medialist['title'],
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .fontSize,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      if (item.modules.moduleDynamic.major
+                              .medialist['sub_title'] !=
+                          null) ...[
+                        const Spacer(),
+                        Text(
+                          item.modules.moduleDynamic.major
+                              .medialist['sub_title'],
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge!
+                                  .fontSize,
+                              color: Theme.of(context).colorScheme.outline),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+              if (floor == 1) const SizedBox(width: 12),
+            ],
+          ),
+        ],
+      );
+
     default:
       return const SizedBox(
         width: double.infinity,

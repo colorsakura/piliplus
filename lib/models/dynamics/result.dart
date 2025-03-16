@@ -410,6 +410,7 @@ class DynamicMajorModel {
     this.common,
     this.music,
     this.blocked,
+    this.medialist,
   });
 
   DynamicArchiveModel? archive;
@@ -428,6 +429,7 @@ class DynamicMajorModel {
   Map? common;
   Map? music;
   Map? blocked;
+  Map? medialist;
 
   DynamicMajorModel.fromJson(Map<String, dynamic> json) {
     archive = json['archive'] != null
@@ -454,6 +456,7 @@ class DynamicMajorModel {
     common = json['common'] ?? {};
     music = json['music'] ?? {};
     blocked = json['blocked'];
+    medialist = json['medialist'];
   }
 }
 

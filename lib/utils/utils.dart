@@ -647,6 +647,25 @@ class Utils {
           Utils.viewBangumi(epId: pgc.epid);
         }
         break;
+      case 'DYNAMIC_TYPE_MEDIALIST':
+        if (item.modules?.moduleDynamic?.major?.medialist != null) {
+          final String? url =
+              item.modules.moduleDynamic.major.medialist['jump_url'];
+          if (url?.contains('medialist/detail/ml') == true) {
+            Get.toNamed(
+              '/favDetail',
+              parameters: {
+                'heroTag':
+                    '${item.modules.moduleDynamic.major.medialist['cover']}',
+                'mediaId':
+                    '${item.modules.moduleDynamic.major.medialist['id']}',
+              },
+            );
+          } else if (url != null) {
+            handleWebview(url.http2https);
+          }
+        }
+        break;
 
       // case 'DYNAMIC_TYPE_COMMON_SQUARE':
       // /// 转发的动态

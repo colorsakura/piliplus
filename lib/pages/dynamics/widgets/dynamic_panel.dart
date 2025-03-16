@@ -26,9 +26,9 @@ class DynamicPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: source == 'detail'
-          ? const EdgeInsets.only(bottom: 12)
-          : EdgeInsets.zero,
+      // padding: source == 'detail'
+      //     ? const EdgeInsets.only(bottom: 12)
+      //     : EdgeInsets.zero,
       decoration: source == 'detail' &&
               Get.context!.orientation == Orientation.landscape
           ? null
@@ -56,6 +56,7 @@ class DynamicPanel extends StatelessWidget {
                     'DYNAMIC_TYPE_PGC',
                     'DYNAMIC_TYPE_LIVE',
                     'DYNAMIC_TYPE_LIVE_RCMD',
+                    'DYNAMIC_TYPE_MEDIALIST',
                   ].contains(item.type).not
               ? null
               : () => Utils.pushDynDetail(item, 1),
@@ -137,6 +138,7 @@ class DynamicPanel extends StatelessWidget {
           forWard(item, context, source, callback),
           const SizedBox(height: 2),
           if (source == null) ActionPanel(item: item),
+          if (source == 'detail') const SizedBox(height: 12),
         ],
       );
 }

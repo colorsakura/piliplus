@@ -8,7 +8,6 @@ import 'package:PiliPlus/models/space_fav/datum.dart';
 import 'package:PiliPlus/models/space_fav/list.dart';
 import 'package:PiliPlus/models/user/sub_folder.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/favorite/member_favorite_ctr.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -116,6 +115,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
                   // invalid
                   return;
                 }
+
                 if (item1.type == 0) {
                   dynamic res = await Get.toNamed(
                     '/favDetail',
@@ -133,13 +133,11 @@ class _MemberFavoriteState extends State<MemberFavorite>
                       _controller.onRefresh();
                     });
                   }
-                } else if (item1.type == 21) {
-                  PiliScheme.routePushFromUrl(item1.link ?? '');
-                } else if (item1.type == 11) {
+                } else {
                   Get.toNamed(
                     '/subDetail',
                     arguments: SubFolderItemData(
-                      type: 11,
+                      type: item1.type,
                       title: item1.title,
                       cover: item1.cover,
                       upper: Upper(

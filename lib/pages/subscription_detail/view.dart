@@ -23,16 +23,15 @@ class SubDetailPage extends StatefulWidget {
 
 class _SubDetailPageState extends State<SubDetailPage> {
   late final ScrollController _controller = ScrollController();
-  late final SubDetailController _subDetailController =
-      Get.put(SubDetailController(), tag: Utils.makeHeroTag(id));
+  late final SubDetailController _subDetailController = Get.put(
+      SubDetailController(),
+      tag: Utils.makeHeroTag(Get.parameters['id']));
   late StreamController<bool> titleStreamC;
   late Future _futureBuilderFuture;
-  late String id;
 
   @override
   void initState() {
     super.initState();
-    id = Get.parameters['id']!;
     _futureBuilderFuture = _subDetailController.queryUserSubFolderDetail();
     titleStreamC = StreamController<bool>();
     _controller.addListener(listener);
