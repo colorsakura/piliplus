@@ -20,6 +20,7 @@ class ComBtn extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         onLongPress: onLongPress,
+        behavior: HitTestBehavior.opaque,
         child: icon,
       ),
     );

@@ -23,7 +23,7 @@ import 'package:PiliPlus/pages/video/detail/post_panel/post_panel.dart';
 import 'package:PiliPlus/pages/video/detail/related/controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply/controller.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/send_danmaku_panel.dart';
-import 'package:PiliPlus/pages/video/detail/widgets/watch_later_list.dart';
+import 'package:PiliPlus/pages/video/detail/widgets/media_list_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -415,6 +415,31 @@ class VideoDetailController extends GetxController
           loadPrevious: Get.arguments['isContinuePlaying'] == true
               ? () {
                   getMediaList(isLoadPrevious: true);
+                }
+              : null,
+          onDelete: ['watchLater', 'fav'].contains(sourceType)
+              ? (index) async {
+                  if (sourceType == 'watchLater') {
+                    var res = await UserHttp.toViewDel(
+                      aids: [mediaList[index].aid],
+                    );
+                    if (res['status']) {
+                      mediaList.removeAt(index);
+                    }
+                    SmartDialog.showToast(res['msg']);
+                  } else {
+                    final item = mediaList[index];
+                    var res = await VideoHttp.delFav(
+                      ids: ['${item.aid}:${item.type}'],
+                      delIds: '${Get.arguments?['mediaId']}',
+                    );
+                    if (res['status']) {
+                      mediaList.removeAt(index);
+                      SmartDialog.showToast('取消收藏');
+                    } else {
+                      SmartDialog.showToast(res['msg']);
+                    }
+                  }
                 }
               : null,
         ),
@@ -1502,7 +1527,7 @@ class VideoDetailController extends GetxController
       VideoHttp.medialistHistory(
         desc: _mediaDesc ? 1 : 0,
         oid: aid,
-        upperMid: Get.arguments['mediaId'],
+        upperMid: Get.arguments?['mediaId'],
       );
     }
   }
