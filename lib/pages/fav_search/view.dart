@@ -85,17 +85,34 @@ class _FavSearchPageState extends State<FavSearchPage> {
                             if (index == loadingState.response.length) {
                               _favSearchCtr.onLoadMore();
                             }
+                            final element = loadingState.response[index];
                             return FavVideoCardH(
-                              videoItem: loadingState.response[index],
+                              videoItem: element,
                               searchType: _favSearchCtr.type,
                               callFn: _favSearchCtr.type != 1
                                   ? () {
                                       _favSearchCtr.onCancelFav(
-                                        loadingState.response[index].id!,
-                                        loadingState.response[index].type,
+                                        element.id!,
+                                        element.type,
                                       );
                                     }
                                   : null,
+                              onViewFav: () {
+                                Utils.toViewPage(
+                                  'bvid=${element.bvid}&cid=${element.cid}',
+                                  arguments: {
+                                    'videoItem': element,
+                                    'heroTag': Utils.makeHeroTag(element.bvid),
+                                    'sourceType': 'fav',
+                                    'mediaId': Get.arguments['mediaId'],
+                                    'oid': element.id,
+                                    'favTitle': Get.arguments['title'],
+                                    'count': Get.arguments['count'],
+                                    'desc': true,
+                                    'isContinuePlaying': true,
+                                  },
+                                );
+                              },
                             );
                           },
                           childCount: loadingState.response.length,

@@ -23,6 +23,7 @@ class VideoCardH extends StatelessWidget {
     this.showPubdate = false,
     this.onTap,
     this.onLongPress,
+    this.onViewLater,
   });
   final dynamic videoItem;
   final String source;
@@ -32,6 +33,7 @@ class VideoCardH extends StatelessWidget {
   final bool showPubdate;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final ValueChanged<int>? onViewLater;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,7 @@ class VideoCardH extends StatelessWidget {
               },
               onTap: () async {
                 if (onTap != null) {
-                  onTap?.call();
+                  onTap!();
                   return;
                 }
                 if (type == 'ketang') {
@@ -89,13 +91,17 @@ class VideoCardH extends StatelessWidget {
                 try {
                   final int cid = videoItem.cid ??
                       await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                  Utils.toViewPage(
-                    'bvid=$bvid&cid=$cid',
-                    arguments: {
-                      'videoItem': videoItem,
-                      'heroTag': Utils.makeHeroTag(aid)
-                    },
-                  );
+                  if (source == 'later') {
+                    onViewLater!(cid);
+                  } else {
+                    Utils.toViewPage(
+                      'bvid=$bvid&cid=$cid',
+                      arguments: {
+                        'videoItem': videoItem,
+                        'heroTag': Utils.makeHeroTag(aid)
+                      },
+                    );
+                  }
                 } catch (err) {
                   SmartDialog.showToast(err.toString());
                 }

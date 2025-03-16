@@ -190,6 +190,9 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                 Get.toNamed('/favSearch', arguments: {
                               'type': 0,
                               'mediaId': int.parse(mediaId),
+                              'title': _favDetailController.item.value.title,
+                              'count':
+                                  _favDetailController.item.value.mediaCount,
                               'searchType': SearchType.fav,
                             }),
                             icon: const Icon(Icons.search_outlined),
@@ -426,15 +429,34 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         ),
                       );
                     }
+                    final element = loadingState.response[index];
                     return Stack(
                       children: [
                         Positioned.fill(
                           child: FavVideoCardH(
-                            videoItem: loadingState.response[index],
+                            videoItem: element,
                             callFn: () => _favDetailController.onCancelFav(
-                              loadingState.response[index].id,
-                              loadingState.response[index].type,
+                              element.id,
+                              element.type,
                             ),
+                            onViewFav: () {
+                              Utils.toViewPage(
+                                'bvid=${element.bvid}&cid=${element.cid}',
+                                arguments: {
+                                  'videoItem': element,
+                                  'heroTag': Utils.makeHeroTag(element.bvid),
+                                  'sourceType': 'fav',
+                                  'mediaId': _favDetailController.item.value.id,
+                                  'oid': element.id,
+                                  'favTitle':
+                                      _favDetailController.item.value.title,
+                                  'count': _favDetailController
+                                      .item.value.mediaCount,
+                                  'desc': true,
+                                  'isContinuePlaying': index != 0,
+                                },
+                              );
+                            },
                             onTap: _favDetailController.enableMultiSelect.value
                                 ? () {
                                     _favDetailController.onSelect(index);

@@ -10,7 +10,6 @@ import 'package:PiliPlus/common/widgets/stat/danmu.dart';
 import 'package:PiliPlus/common/widgets/stat/view.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -24,6 +23,7 @@ class FavVideoCardH extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final bool isOwner;
+  final VoidCallback? onViewFav;
 
   const FavVideoCardH({
     super.key,
@@ -33,6 +33,7 @@ class FavVideoCardH extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.isOwner = false,
+    this.onViewFav,
   });
 
   @override
@@ -66,15 +67,16 @@ class FavVideoCardH extends StatelessWidget {
           Get.toNamed('/member?mid=${videoItem.owner?.mid}');
           return;
         }
-        Utils.toViewPage(
-          'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
-          arguments: {
-            'videoItem': videoItem,
-            'heroTag': Utils.makeHeroTag(id),
-            'videoType':
-                epId != null ? SearchType.media_bangumi : SearchType.video,
-          },
-        );
+        onViewFav!();
+        // Utils.toViewPage(
+        //   'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
+        //   arguments: {
+        //     'videoItem': videoItem,
+        //     'heroTag': Utils.makeHeroTag(id),
+        //     'videoType':
+        //         epId != null ? SearchType.media_bangumi : SearchType.video,
+        //   },
+        // );
       },
       onLongPress: () {
         if (onLongPress != null) {

@@ -337,8 +337,7 @@ class VideoDetailController extends GetxController
       oid: isReverse
           ? null
           : mediaList.isEmpty
-              ? _mediaType == 1 &&
-                      Get.arguments['mediaType'] == null // member archive
+              ? Get.arguments['isContinuePlaying'] == true
                   ? Get.arguments['oid']
                   : null
               : isLoadPrevious
@@ -353,11 +352,10 @@ class VideoDetailController extends GetxController
                   : mediaList.last.type,
       desc: _mediaDesc,
       sortField: Get.arguments['sortField'] ?? 1,
-      withCurrent: mediaList.isEmpty &&
-              _mediaType == 1 &&
-              Get.arguments['mediaType'] == null
-          ? true // init && member archive
-          : false,
+      withCurrent:
+          mediaList.isEmpty && Get.arguments['isContinuePlaying'] == true
+              ? true
+              : false,
     );
     if (res['status']) {
       if (res['data'].isNotEmpty) {
@@ -444,6 +442,8 @@ class VideoDetailController extends GetxController
               : null,
         ),
       );
+    } else {
+      getMediaList();
     }
   }
 

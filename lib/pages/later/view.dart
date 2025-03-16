@@ -201,6 +201,22 @@ class _LaterPageState extends State<LaterPage> {
                       VideoCardH(
                         videoItem: videoItem,
                         source: 'later',
+                        onViewLater: (cid) {
+                          Utils.toViewPage(
+                            'bvid=${videoItem.bvid}&cid=$cid',
+                            arguments: {
+                              'videoItem': videoItem,
+                              'oid': videoItem.aid,
+                              'heroTag': Utils.makeHeroTag(videoItem.bvid),
+                              'sourceType': 'watchLater',
+                              'count': loadingState.response.length,
+                              'favTitle': '稍后再看',
+                              'mediaId': _laterController.mid,
+                              'desc': false,
+                              'isContinuePlaying': index != 0,
+                            },
+                          );
+                        },
                         onTap: _laterController.enableMultiSelect.value.not
                             ? null
                             : () {
