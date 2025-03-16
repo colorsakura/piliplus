@@ -23,7 +23,7 @@ class FavVideoCardH extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final bool isOwner;
-  final VoidCallback? onViewFav;
+  final VoidCallback onViewFav;
 
   const FavVideoCardH({
     super.key,
@@ -33,7 +33,7 @@ class FavVideoCardH extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.isOwner = false,
-    this.onViewFav,
+    required this.onViewFav,
   });
 
   @override
@@ -67,7 +67,7 @@ class FavVideoCardH extends StatelessWidget {
           Get.toNamed('/member?mid=${videoItem.owner?.mid}');
           return;
         }
-        onViewFav!();
+        onViewFav();
         // Utils.toViewPage(
         //   'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
         //   arguments: {

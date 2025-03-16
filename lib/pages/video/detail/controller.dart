@@ -415,7 +415,8 @@ class VideoDetailController extends GetxController
                   getMediaList(isLoadPrevious: true);
                 }
               : null,
-          onDelete: ['watchLater', 'fav'].contains(sourceType)
+          onDelete: sourceType == 'watchLater' ||
+                  (sourceType == 'fav' && Get.arguments?['isOwner'] == true)
               ? (index) async {
                   if (sourceType == 'watchLater') {
                     var res = await UserHttp.toViewDel(

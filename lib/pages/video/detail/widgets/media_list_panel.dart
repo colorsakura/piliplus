@@ -121,6 +121,7 @@ class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
               widget.onDelete != null && widget.mediaList.length > 1;
           return ScrollablePositionedList.builder(
             itemScrollController: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             itemCount: widget.mediaList.length,
             padding: EdgeInsets.only(
               bottom: MediaQuery.paddingOf(context).bottom + 80,

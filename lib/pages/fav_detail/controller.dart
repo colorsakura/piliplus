@@ -158,6 +158,7 @@ class FavDetailController extends MultiSelectController {
               'favTitle': item.value.title,
               'count': item.value.mediaCount,
               'desc': true,
+              'isOwner': isOwner.value,
             },
           );
           break;
