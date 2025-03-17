@@ -59,8 +59,6 @@ void main() async {
   Request();
   await Request.setCookie();
   RecommendFilter();
-  SmartDialog.config.loading =
-      SmartConfigLoading(backType: SmartBackType.normal);
   // 异常捕获 logo记录
   final String buildConfig = '''\n
 Build Time: ${BuildConfig.buildTime}
@@ -209,6 +207,7 @@ class MyApp extends StatelessWidget {
           home: const MainApp(),
           builder: FlutterSmartDialog.init(
             toastBuilder: (String msg) => CustomToast(msg: msg),
+            loadingBuilder: (msg) => LoadingWidget(msg: msg),
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context)
