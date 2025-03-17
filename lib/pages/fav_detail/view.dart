@@ -454,6 +454,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                       .item.value.mediaCount,
                                   'desc': true,
                                   'isContinuePlaying': index != 0,
+                                  'isOwner': _favDetailController.isOwner.value,
                                 },
                               );
                             },

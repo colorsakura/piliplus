@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/danmu.dart';
@@ -258,16 +259,26 @@ class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
                       Positioned(
                         right: 12,
                         bottom: 0,
-                        child: iconButton(
-                          tooltip: '移除',
-                          context: context,
-                          onPressed: () {
-                            widget.onDelete!(index);
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          onTap: () {
+                            showConfirmDialog(
+                              context: context,
+                              title: '确定移除该视频？',
+                              onConfirm: () => widget.onDelete!(index),
+                            );
                           },
-                          icon: Icons.clear,
-                          iconColor:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
-                          bgColor: Colors.transparent,
+                          onLongPress: () => widget.onDelete!(index),
+                          child: Padding(
+                            padding: const EdgeInsets.all(9),
+                            child: Icon(
+                              Icons.clear,
+                              size: 18,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                          ),
                         ),
                       ),
                   ],
