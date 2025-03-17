@@ -82,7 +82,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            if (index == loadingState.response.length) {
+                            if (index == loadingState.response.length - 1) {
                               _favSearchCtr.onLoadMore();
                             }
                             final element = loadingState.response[index];
@@ -126,6 +126,9 @@ class _FavSearchPageState extends State<FavSearchPage> {
                       controller: _favSearchCtr.scrollController,
                       itemCount: loadingState.response.length,
                       itemBuilder: ((context, index) {
+                        if (index == loadingState.response.length - 1) {
+                          _favSearchCtr.onLoadMore();
+                        }
                         return FollowItem(
                           item: loadingState.response[index],
                         );
@@ -143,6 +146,9 @@ class _FavSearchPageState extends State<FavSearchPage> {
                           ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
+                              if (index == loadingState.response.length - 1) {
+                                _favSearchCtr.onLoadMore();
+                              }
                               return HistoryItem(
                                 videoItem: loadingState.response[index],
                                 ctr: _favSearchCtr,
