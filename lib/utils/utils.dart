@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:PiliPlus/build_config.dart';
+import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/common/widgets/radio_widget.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
@@ -24,6 +25,7 @@ import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/group_panel.dart';
+import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
@@ -40,7 +42,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
@@ -778,7 +779,7 @@ class Utils {
       dynamic response = await Request().get(
         '${HttpString.spaceBaseUrl}/$mid/dynamic',
         options: Options(
-          extra: {'clearCookie': true},
+          extra: {'account': AnonymousAccount()},
         ),
       );
       dom.Document document = html_parser.parse(response.data);
@@ -1137,16 +1138,16 @@ class Utils {
     }
   }
 
-  static Future<String> getCookiePath() async {
-    final Directory tempDir = await getApplicationSupportDirectory();
-    final String tempPath = "${tempDir.path}/.plpl/";
-    final Directory dir = Directory(tempPath);
-    final bool b = await dir.exists();
-    if (!b) {
-      dir.createSync(recursive: true);
-    }
-    return tempPath;
-  }
+  // static Future<String> getCookiePath() async {
+  //   final Directory tempDir = await getApplicationSupportDirectory();
+  //   final String tempPath = "${tempDir.path}/.plpl/";
+  //   final Directory dir = Directory(tempPath);
+  //   final bool b = await dir.exists();
+  //   if (!b) {
+  //     dir.createSync(recursive: true);
+  //   }
+  //   return tempPath;
+  // }
 
   static String numFormat(dynamic number) {
     if (number == null) {
@@ -1596,18 +1597,17 @@ class Utils {
     return height;
   }
 
-  static String appSign(
-      Map<String, String> params, String appkey, String appsec) {
+  static void appSign(Map<String, dynamic> params,
+      [String appkey = Constants.appKey, String appsec = Constants.appSec]) {
     params['appkey'] = appkey;
-    var searchParams = Uri(queryParameters: params).query;
-    var sortedParams = searchParams.split('&')..sort();
-    var sortedQueryString = sortedParams.join('&');
+    var searchParams = Uri(
+        queryParameters:
+            params.map((key, value) => MapEntry(key, value.toString()))).query;
+    var sortedQueryString = (searchParams.split('&')..sort()).join('&');
 
-    var appsecString = sortedQueryString + appsec;
-    var md5Digest = md5.convert(utf8.encode(appsecString));
-    var md5String = md5Digest.toString(); // 获取MD5哈希值
-
-    return md5String;
+    params['sign'] = md5
+        .convert(utf8.encode(sortedQueryString + appsec))
+        .toString(); // 获取MD5哈希值
   }
 
   static List<int> generateRandomBytes(int minLength, int maxLength) {

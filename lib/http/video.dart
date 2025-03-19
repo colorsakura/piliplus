@@ -18,9 +18,7 @@ import '../models/video_detail_res.dart';
 import '../utils/id_utils.dart';
 import '../utils/recommend_filter.dart';
 import '../utils/storage.dart';
-import '../utils/utils.dart';
 import '../utils/wbi_sign.dart';
-import '../pages/mine/controller.dart';
 import 'api.dart';
 import 'init.dart';
 import 'login.dart';
@@ -71,15 +69,8 @@ class VideoHttp {
   }
 
   // 添加额外的loginState变量模拟未登录状态
-  static Future<LoadingState> rcmdVideoListApp(
-      {bool loginStatus = true, required int freshIdx}) async {
+  static Future<LoadingState> rcmdVideoListApp({required int freshIdx}) async {
     Map<String, String> data = {
-      'access_key': loginStatus
-          ? (GStorage.localCache
-                  .get(LocalCacheKey.accessKey, defaultValue: {})['value'] ??
-              '')
-          : '',
-      'appkey': Constants.appKey,
       'build': '1462100',
       'c_locale': 'zh_CN',
       'channel': 'yingyongbao',
@@ -106,16 +97,8 @@ class VideoHttp {
       's_locale': 'zh_CN',
       'splash_id': '',
       'statistics': Constants.statistics,
-      'ts': (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString(),
       'voice_balance': '0'
     };
-    String sign = Utils.appSign(
-      data,
-      Constants.appKey,
-      Constants.appSec,
-    );
-    data['sign'] = sign;
-
     var res = await Request().get(
       Api.recommendListApp,
       queryParameters: data,
@@ -227,24 +210,22 @@ class VideoHttp {
       'qn': qn ?? 80,
       // 获取所有格式的视频
       'fnval': 4048,
-    };
-
-    // 免登录查看1080p
-    if ((GStorage.userInfo.get('userInfoCache') == null ||
-            MineController.anonymity.value) &&
-        GStorage.setting.get(SettingBoxKey.p1080, defaultValue: true)) {
-      data['try_look'] = 1;
-    }
-
-    Map params = await WbiSign.makSign({
-      ...data,
       'fourk': 1,
       'voice_balance': 1,
       'gaia_source': 'pre-load',
       'web_location': 1550101,
-    });
+    };
 
-    late final usePgcApi = forcePgcApi == true || GStorage.isLogin;
+    // 免登录查看1080p
+    if ((Accounts.get(AccountType.video).isLogin) &&
+        GStorage.setting.get(SettingBoxKey.p1080, defaultValue: true)) {
+      data['try_look'] = 1;
+    }
+
+    Map params = await WbiSign.makSign(data);
+
+    late final usePgcApi =
+        forcePgcApi == true || Accounts.get(AccountType.video).isLogin;
 
     try {
       var res = await Request().get(
@@ -326,7 +307,7 @@ class VideoHttp {
       data: {
         'platform': 'web',
         'season_id': seasonId,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -427,14 +408,12 @@ class VideoHttp {
   }) async {
     var res = await Request().post(
       Api.coinVideo,
-      queryParameters: {
-        'aid': IdUtils.bv2av(bvid),
+      data: {
+        'aid': IdUtils.bv2av(bvid).toString(),
         // 'bvid': bvid,
-        'multiply': multiply,
-        'select_like': selectLike,
-        'access_key': GStorage.localCache
-            .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
-        // 'csrf': await Request.getCsrf(),
+        'multiply': multiply.toString(),
+        'select_like': selectLike.toString(),
+        // 'csrf': Accounts.main.csrf,
       },
     );
     if (res.data['code'] == 0) {
@@ -461,7 +440,7 @@ class VideoHttp {
       Api.triple,
       data: {
         'ep_id': epId,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -489,7 +468,7 @@ class VideoHttp {
         'ramval': 0,
         'source': 'web_normal',
         'ga': 1,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -509,18 +488,19 @@ class VideoHttp {
 
   // （取消）点赞
   static Future likeVideo({required String bvid, required bool type}) async {
-    var res = await Request().post(Api.likeVideo, queryParameters: {
-      'aid': IdUtils.bv2av(bvid),
-      'like': type ? 0 : 1,
-      'access_key': GStorage.localCache
-          .get(LocalCacheKey.accessKey, defaultValue: {})['value'],
-    }
-        // queryParameters: {
-        //   'bvid': bvid,
-        //   'like': type ? 1 : 2,
-        //   'csrf': await Request.getCsrf(),
-        // },
-        );
+    var res = await Request().post(
+      Api.likeVideo,
+      data: {
+        'aid': IdUtils.bv2av(bvid).toString(),
+        'like': type ? '0' : '1',
+      },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+      // queryParameters: {
+      //   'bvid': bvid,
+      //   'like': type ? 1 : 2,
+      //   'csrf': Accounts.main.csrf,
+      // },
+    );
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
@@ -530,17 +510,14 @@ class VideoHttp {
 
   // （取消）点踩
   static Future dislikeVideo({required String bvid, required bool type}) async {
-    String? accessKey = GStorage.localCache
-        .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
-    if (accessKey == null || accessKey == "") {
+    if (Accounts.main.accessKey.isNullOrEmpty) {
       return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     var res = await Request().post(
       Api.dislikeVideo,
-      queryParameters: {
-        'aid': IdUtils.bv2av(bvid),
-        'dislike': type ? 0 : 1,
-        'access_key': accessKey,
+      data: {
+        'aid': IdUtils.bv2av(bvid).toString(),
+        'dislike': type ? '0' : '1',
       },
     );
     if (res.data is! String && res.data['code'] == 0) {
@@ -559,9 +536,7 @@ class VideoHttp {
       required int id,
       int? reasonId,
       int? feedbackId}) async {
-    String? accessKey = GStorage.localCache
-        .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
-    if (accessKey == null || accessKey == "") {
+    if (Accounts.get(AccountType.recommend).accessKey.isNullOrEmpty) {
       return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     assert((reasonId != null) ^ (feedbackId != null));
@@ -571,10 +546,8 @@ class VideoHttp {
       // 'mid': mid,
       if (reasonId != null) 'reason_id': reasonId,
       if (feedbackId != null) 'feedback_id': feedbackId,
-      'build': 1,
+      'build': '1',
       'mobi_app': 'android',
-      'access_key': accessKey,
-      'appkey': Constants.appKey,
     });
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -589,9 +562,7 @@ class VideoHttp {
       required int id,
       int? reasonId,
       int? feedbackId}) async {
-    String? accessKey = GStorage.localCache
-        .get(LocalCacheKey.accessKey, defaultValue: {})['value'];
-    if (accessKey == null || accessKey == "") {
+    if (Accounts.get(AccountType.recommend).accessKey.isNullOrEmpty) {
       return {'status': false, 'msg': "请退出账号后重新登录"};
     }
     // assert ((reasonId != null) ^ (feedbackId != null));
@@ -601,10 +572,8 @@ class VideoHttp {
       // 'mid': mid,
       if (reasonId != null) 'reason_id': reasonId,
       if (feedbackId != null) 'feedback_id': feedbackId,
-      'build': 1,
+      'build': '1',
       'mobi_app': 'android',
-      'access_key': accessKey,
-      'appkey': Constants.appKey,
     });
     if (res.data['code'] == 0) {
       return {'status': true};
@@ -624,7 +593,7 @@ class VideoHttp {
         'resources': ids?.join(','),
         'media_id': delIds,
         'platform': 'web',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
@@ -649,7 +618,7 @@ class VideoHttp {
         'type': type ?? 2,
         'add_media_ids': addIds ?? '',
         'del_media_ids': delIds ?? '',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
@@ -672,7 +641,7 @@ class VideoHttp {
   //       'resources': '$epId:24',
   //       'add_media_ids': addIds ?? '',
   //       'del_media_ids': delIds ?? '',
-  //       'csrf': await Request.getCsrf(),
+  //       'csrf': Accounts.main.csrf,
   //     },
   //     options: Options(
   //       headers: {
@@ -709,7 +678,7 @@ class VideoHttp {
         if (mid != null) 'mid': mid,
         'resources': resources.join(','),
         'platform': 'web',
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
@@ -783,7 +752,7 @@ class VideoHttp {
       'message': message,
       if (pictures != null) 'pictures': jsonEncode(pictures),
       if (syncToDynamic == true) 'sync_to_dynamic': 1,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     };
     var res = await Request().post(
       Api.replyAdd,
@@ -806,7 +775,7 @@ class VideoHttp {
       'type': type, //type.index
       'oid': oid,
       'rpid': rpid,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     });
     log(res.toString());
     if (res.data['code'] == 0) {
@@ -842,7 +811,7 @@ class VideoHttp {
           "entity_id": mid,
           'fp': Request.headerUa(type: 'pc'),
         },
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -878,7 +847,7 @@ class VideoHttp {
       if (epid != null) 'type': 4,
       if (subType != null) 'sub_type': subType,
       'played_time': progress,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     });
   }
 
@@ -891,7 +860,7 @@ class VideoHttp {
       'desc': desc,
       'oid': oid,
       'upper_mid': upperMid,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     });
   }
 
@@ -899,7 +868,7 @@ class VideoHttp {
   static Future bangumiAdd({int? seasonId}) async {
     var res = await Request().post(Api.bangumiAdd, queryParameters: {
       'season_id': seasonId,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     });
     if (res.data['code'] == 0) {
       return {
@@ -920,7 +889,7 @@ class VideoHttp {
   static Future bangumiDel({int? seasonId}) async {
     var res = await Request().post(Api.bangumiDel, queryParameters: {
       'season_id': seasonId,
-      'csrf': await Request.getCsrf(),
+      'csrf': Accounts.main.csrf,
     });
     if (res.data['code'] == 0) {
       return {
@@ -946,7 +915,7 @@ class VideoHttp {
       data: {
         'season_id': seasonId,
         'status': status,
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
       },
       options: Options(
         contentType: Headers.formUrlEncodedContentType,
@@ -1143,7 +1112,7 @@ class VideoHttp {
     var res = await Request().get(
       Api.noteList,
       queryParameters: {
-        'csrf': await Request.getCsrf(),
+        'csrf': Accounts.main.csrf,
         'oid': oid,
         'oid_type': 0,
         'pn': page,
