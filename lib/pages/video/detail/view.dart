@@ -1657,10 +1657,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               child: SeasonPanel(
                 heroTag: heroTag,
                 onTap: false,
-                ugcSeason: videoIntroController.videoDetail.value.ugcSeason!,
                 changeFuc: videoIntroController.changeSeasonOrbangu,
                 showEpisodes: showEpisodes,
-                pages: videoIntroController.videoDetail.value.pages,
                 videoIntroController: videoIntroController,
               ),
             ),
