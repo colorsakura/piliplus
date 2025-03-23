@@ -215,7 +215,7 @@ class VideoHttp {
     };
 
     // 免登录查看1080p
-    if ((Accounts.get(AccountType.video).isLogin) &&
+    if (!Accounts.get(AccountType.video).isLogin &&
         GStorage.setting.get(SettingBoxKey.p1080, defaultValue: true)) {
       data['try_look'] = 1;
     }
