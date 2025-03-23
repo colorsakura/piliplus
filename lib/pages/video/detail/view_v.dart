@@ -1308,6 +1308,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             : PLVideoPlayer(
                 key: Key(heroTag),
                 plPlayerController: plPlayerController!,
+                videoDetailController: videoDetailController,
                 videoIntroController:
                     videoDetailController.videoType == SearchType.video
                         ? videoIntroController
@@ -1479,6 +1480,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 : PLVideoPlayer(
                     key: Key(heroTag),
                     plPlayerController: plPlayerController!,
+                    videoDetailController: videoDetailController,
                     videoIntroController:
                         videoDetailController.videoType == SearchType.video
                             ? videoIntroController

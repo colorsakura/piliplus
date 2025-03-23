@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:PiliPlus/common/widgets/segment_progress_bar.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
+import 'package:PiliPlus/pages/video/detail/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -44,6 +45,7 @@ import 'widgets/play_pause_btn.dart';
 class PLVideoPlayer extends StatefulWidget {
   const PLVideoPlayer({
     required this.plPlayerController,
+    this.videoDetailController,
     this.videoIntroController,
     this.bangumiIntroController,
     this.headerControl,
@@ -59,6 +61,7 @@ class PLVideoPlayer extends StatefulWidget {
   });
 
   final PlPlayerController plPlayerController;
+  final VideoDetailController? videoDetailController;
   final VideoIntroController? videoIntroController;
   final BangumiIntroController? bangumiIntroController;
   final PreferredSizeWidget? headerControl;
@@ -259,7 +262,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     bool isPage = videoIntroController?.videoDetail.value.pages != null &&
         videoIntroController!.videoDetail.value.pages!.length > 1;
     bool isBangumi = bangumiIntroController?.loadingState.value is Success;
-    bool anySeason = isSeason || isPage || isBangumi;
+    bool anySeason = isSeason ||
+        isPage ||
+        isBangumi ||
+        widget.videoDetailController?.isPlayAll == true;
     double widgetWidth =
         isFullScreen && context.orientation == Orientation.landscape ? 42 : 35;
     Map<BottomControlType, Widget> videoProgressWidgets = {
