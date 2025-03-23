@@ -162,7 +162,7 @@ class VideoIntroController extends GetxController
           if (res.data['code'] == 0) {
             staffRelations.value = {
               'status': true,
-              ...res.data['data'],
+              if (res.data['data'] != null) ...res.data['data'],
             };
           }
         });
