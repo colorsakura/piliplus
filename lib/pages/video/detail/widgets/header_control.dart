@@ -1079,7 +1079,9 @@ class _HeaderControlState extends State<HeaderControl> {
                                 fileNameList: [name],
                                 mimeTypeList: ['text/plain'],
                               );
-                              SmartDialog.showToast('已保存');
+                              if (Platform.isAndroid) {
+                                SmartDialog.showToast('已保存');
+                              }
                             } catch (e) {
                               Share.shareXFiles([
                                 XFile.fromData(
@@ -1315,9 +1317,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         data: sliderTheme,
                         child: Slider(
                           min: 0,
-                          max: 3,
+                          max: 5,
                           value: subtitleStrokeWidth,
-                          divisions: 6,
+                          divisions: 10,
                           label: '$subtitleStrokeWidth',
                           onChanged: updateStrokeWidth,
                         ),
