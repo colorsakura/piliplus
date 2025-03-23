@@ -13,6 +13,8 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
+import 'package:dio/dio.dart';
+import 'package:document_file_save_plus/document_file_save_plus_platform_interface.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +32,7 @@ import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/services/shutdown_timer_service.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../../models/video/play/CDN.dart';
 import '../../../setting/widgets/select_dialog.dart';
 import '../introduction/index.dart';
@@ -386,6 +389,14 @@ class _HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.subtitles_outlined, size: 20),
                   title: const Text('字幕设置', style: titleStyle),
                 ),
+                if (videoDetailCtr.subtitles is List &&
+                    videoDetailCtr.subtitles.isNotEmpty)
+                  ListTile(
+                    dense: true,
+                    onTap: () => {Get.back(), onExportSubtitle()},
+                    leading: const Icon(Icons.download_outlined, size: 20),
+                    title: const Text('保存字幕', style: titleStyle),
+                  ),
                 ListTile(
                   dense: true,
                   title: const Text('播放信息', style: titleStyle),
@@ -1032,6 +1043,66 @@ class _HeaderControlState extends State<HeaderControl> {
           ),
         ),
       ),
+    );
+  }
+
+  void onExportSubtitle() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          clipBehavior: Clip.hardEdge,
+          contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+          title: const Text('保存字幕'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: (videoDetailCtr.subtitles as List)
+                  .map(
+                    (item) => ListTile(
+                      dense: true,
+                      onTap: () async {
+                        Get.back();
+                        try {
+                          final res = await Dio().get(
+                            (item['subtitle_url'] as String).http2https,
+                            options: Options(
+                              responseType: ResponseType.bytes,
+                            ),
+                          );
+                          if (res.statusCode == 200) {
+                            final name =
+                                '${videoIntroController.videoDetail.value.title}-${videoDetailCtr.bvid}-${videoDetailCtr.cid.value}-${item['lan_doc']}';
+                            try {
+                              DocumentFileSavePlusPlatform.instance
+                                  .saveMultipleFiles(
+                                dataList: [res.data],
+                                fileNameList: [name],
+                                mimeTypeList: ['text/plain'],
+                              );
+                              SmartDialog.showToast('已保存');
+                            } catch (e) {
+                              Share.shareXFiles([
+                                XFile.fromData(
+                                  res.data,
+                                  name: name,
+                                  mimeType: 'application/json',
+                                )
+                              ]);
+                            }
+                          }
+                        } catch (e) {
+                          SmartDialog.showToast(e.toString());
+                        }
+                      },
+                      title:
+                          Text(item['lan_doc'], style: TextStyle(fontSize: 14)),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -1373,6 +1373,7 @@ class VideoDetailController extends GetxController
     }
   }
 
+  dynamic subtitles;
   late List<Map<String, String>> _vttSubtitles = <Map<String, String>>[];
   int? vttSubtitlesIndex;
   late bool showVP = true;
@@ -1499,6 +1500,7 @@ class VideoDetailController extends GetxController
       }
 
       if (res["data"] is List && res["data"].isNotEmpty) {
+        subtitles = res["data"];
         var result = await VideoHttp.vttSubtitles(res["data"]);
         if (result != null) {
           _vttSubtitles = result;
@@ -1569,6 +1571,7 @@ class VideoDetailController extends GetxController
     savedDanmaku = null;
 
     // subtitle
+    subtitles = null;
     vttSubtitlesIndex = null;
     _vttSubtitles.clear();
 
