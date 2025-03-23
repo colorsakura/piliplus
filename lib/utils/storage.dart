@@ -12,6 +12,7 @@ import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/models/common/theme_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
+import 'package:PiliPlus/models/live/quality.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models/user/danmaku_rule_adapter.dart';
 import 'package:PiliPlus/models/video/play/CDN.dart';
@@ -432,6 +433,13 @@ class GStorage {
   static int get retryDelay =>
       GStorage.setting.get(SettingBoxKey.retryDelay, defaultValue: 500);
 
+  static int get liveQuality => GStorage.setting
+      .get(SettingBoxKey.liveQuality, defaultValue: LiveQuality.origin.code);
+
+  static int get liveQualityCellular =>
+      GStorage.setting.get(SettingBoxKey.liveQualityCellular,
+          defaultValue: LiveQuality.superHD.code);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -710,6 +718,8 @@ class SettingBoxKey {
       enableSlideVolumeBrightness = 'enableSlideVolumeBrightness',
       retryCount = 'retryCount',
       retryDelay = 'retryDelay',
+      liveQuality = 'liveQuality',
+      liveQualityCellular = 'liveQualityCellular',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
