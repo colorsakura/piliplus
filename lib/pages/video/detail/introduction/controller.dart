@@ -639,7 +639,23 @@ class VideoIntroController extends GetxController
   // 修改分P或番剧分集
   Future changeSeasonOrbangu(epid, bvid, cid, aid, cover, [isStein]) async {
     // 重新获取视频资源
-    final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag)
+    final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
+
+    if (videoDetailCtr.isPlayAll) {
+      if (videoDetailCtr.mediaList.indexWhere((item) => item.bvid == bvid) ==
+          -1) {
+        Utils.toViewPage(
+          'bvid=$bvid&cid=$cid',
+          arguments: {
+            if (cover != null) 'pic': cover,
+            'heroTag': Utils.makeHeroTag(bvid),
+          },
+        );
+        return;
+      }
+    }
+
+    videoDetailCtr
       ..plPlayerController.pause()
       ..makeHeartBeat()
       ..updateMediaListHistory(aid)
