@@ -422,6 +422,12 @@ class GStorage {
   static bool get enableSlideVolumeBrightness => GStorage.setting
       .get(SettingBoxKey.enableSlideVolumeBrightness, defaultValue: true);
 
+  static int get retryCount =>
+      GStorage.setting.get(SettingBoxKey.retryCount, defaultValue: 0);
+
+  static int get retryDelay =>
+      GStorage.setting.get(SettingBoxKey.retryDelay, defaultValue: 500);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -691,6 +697,8 @@ class SettingBoxKey {
       showDynActionBar = 'showDynActionBar',
       darkVideoPage = 'darkVideoPage',
       enableSlideVolumeBrightness = 'enableSlideVolumeBrightness',
+      retryCount = 'retryCount',
+      retryDelay = 'retryDelay',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
