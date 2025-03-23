@@ -289,6 +289,7 @@ class PlPlayerController {
   late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
   late bool showVipDanmaku = GStorage.showVipDanmaku;
   late double subtitleStrokeWidth = GStorage.subtitleStrokeWidth;
+  late int subtitleFontWeight = GStorage.subtitleFontWeight;
 
   // 播放顺序相关
   PlayRepeat playRepeat = PlayRepeat.pause;
@@ -300,7 +301,7 @@ class PlPlayerController {
         letterSpacing: 0.1,
         wordSpacing: 0.1,
         color: Colors.white,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.values[subtitleFontWeight],
         backgroundColor: subtitleBgOpaticy == 0
             ? null
             : Colors.black.withOpacity(subtitleBgOpaticy),
@@ -1511,16 +1512,20 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuOpacity, opacityVal);
     setting.put(SettingBoxKey.danmakuFontScale, fontSizeVal);
     setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFSVal);
-    setting.put(SettingBoxKey.subtitleFontScale, subtitleFontScale);
-    setting.put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS);
     setting.put(SettingBoxKey.danmakuDuration, danmakuDurationVal);
     setting.put(SettingBoxKey.strokeWidth, strokeWidth);
     setting.put(SettingBoxKey.fontWeight, fontWeight);
     setting.put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);
+  }
+
+  void putSubtitleSettings() {
+    setting.put(SettingBoxKey.subtitleFontScale, subtitleFontScale);
+    setting.put(SettingBoxKey.subtitleFontScaleFS, subtitleFontScaleFS);
     setting.put(SettingBoxKey.subtitlePaddingH, subtitlePaddingH);
     setting.put(SettingBoxKey.subtitlePaddingB, subtitlePaddingB);
     setting.put(SettingBoxKey.subtitleBgOpaticy, subtitleBgOpaticy);
     setting.put(SettingBoxKey.subtitleStrokeWidth, subtitleStrokeWidth);
+    setting.put(SettingBoxKey.subtitleFontWeight, subtitleFontWeight);
   }
 
   Future<void> dispose({String type = 'single'}) async {

@@ -1043,6 +1043,7 @@ class _HeaderControlState extends State<HeaderControl> {
     int subtitlePaddingB = widget.controller.subtitlePaddingB;
     double subtitleBgOpaticy = widget.controller.subtitleBgOpaticy;
     double subtitleStrokeWidth = widget.controller.subtitleStrokeWidth;
+    int subtitleFontWeight = widget.controller.subtitleFontWeight;
 
     final sliderTheme = SliderThemeData(
       trackShape: MSliderTrackShape(),
@@ -1063,7 +1064,7 @@ class _HeaderControlState extends State<HeaderControl> {
             widget.controller
               ..subtitleStrokeWidth = subtitleStrokeWidth
               ..updateSubtitleStyle()
-              ..putDanmakuSettings();
+              ..putSubtitleSettings();
             setState(() {});
           }
 
@@ -1072,7 +1073,7 @@ class _HeaderControlState extends State<HeaderControl> {
             widget.controller
               ..subtitleBgOpaticy = subtitleBgOpaticy
               ..updateSubtitleStyle()
-              ..putDanmakuSettings();
+              ..putSubtitleSettings();
             setState(() {});
           }
 
@@ -1081,7 +1082,7 @@ class _HeaderControlState extends State<HeaderControl> {
             widget.controller
               ..subtitlePaddingB = subtitlePaddingB
               ..updateSubtitleStyle()
-              ..putDanmakuSettings();
+              ..putSubtitleSettings();
             setState(() {});
           }
 
@@ -1090,7 +1091,7 @@ class _HeaderControlState extends State<HeaderControl> {
             widget.controller
               ..subtitlePaddingH = subtitlePaddingH
               ..updateSubtitleStyle()
-              ..putDanmakuSettings();
+              ..putSubtitleSettings();
             setState(() {});
           }
 
@@ -1099,7 +1100,7 @@ class _HeaderControlState extends State<HeaderControl> {
             widget.controller
               ..subtitleFontScaleFS = subtitleFontScaleFS
               ..updateSubtitleStyle()
-              ..putDanmakuSettings();
+              ..putSubtitleSettings();
             setState(() {});
           }
 
@@ -1108,7 +1109,16 @@ class _HeaderControlState extends State<HeaderControl> {
             widget.controller
               ..subtitleFontScale = subtitleFontScale
               ..updateSubtitleStyle()
-              ..putDanmakuSettings();
+              ..putSubtitleSettings();
+            setState(() {});
+          }
+
+          void updateFontWeight(int val) {
+            subtitleFontWeight = val;
+            widget.controller
+              ..subtitleFontWeight = subtitleFontWeight
+              ..updateSubtitleStyle()
+              ..putSubtitleSettings();
             setState(() {});
           }
 
@@ -1185,6 +1195,34 @@ class _HeaderControlState extends State<HeaderControl> {
                           label:
                               '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
                           onChanged: updateFontScaleFS,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('字体粗细 ${subtitleFontWeight + 1}（可能无法精确调节）'),
+                        resetBtn(6, () => updateFontWeight(5)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 0,
+                          max: 8,
+                          value: subtitleFontWeight.toDouble(),
+                          divisions: 8,
+                          label: '${subtitleFontWeight + 1}',
+                          onChanged: (double val) {
+                            updateFontWeight(val.toInt());
+                          },
                         ),
                       ),
                     ),

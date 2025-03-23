@@ -318,7 +318,10 @@ class GStorage {
       setting.get(SettingBoxKey.subtitleBgOpaticy, defaultValue: 0.67);
 
   static double get subtitleStrokeWidth =>
-      setting.get(SettingBoxKey.subtitleStrokeWidth, defaultValue: 1.5);
+      setting.get(SettingBoxKey.subtitleStrokeWidth, defaultValue: 2.0);
+
+  static int get subtitleFontWeight =>
+      setting.get(SettingBoxKey.subtitleFontWeight, defaultValue: 5);
 
   static bool get badCertificateCallback =>
       setting.get(SettingBoxKey.badCertificateCallback, defaultValue: false);
@@ -658,6 +661,9 @@ class SettingBoxKey {
       subtitlePaddingB = 'subtitlePaddingB',
       subtitleBgOpaticy = 'subtitleBgOpaticy',
       subtitleStrokeWidth = 'subtitleStrokeWidth',
+      subtitleFontScale = 'subtitleFontScale',
+      subtitleFontScaleFS = 'subtitleFontScaleFS',
+      subtitleFontWeight = 'subtitleFontWeight',
       badCertificateCallback = 'badCertificateCallback',
       continuePlayingPart = 'continuePlayingPart',
       cdnSpeedTest = 'cdnSpeedTest',
@@ -723,8 +729,6 @@ class SettingBoxKey {
       strokeWidth = 'strokeWidth',
       fontWeight = 'fontWeight',
       memberTab = 'memberTab',
-      subtitleFontScale = 'subtitleFontScale',
-      subtitleFontScaleFS = 'subtitleFontScaleFS',
       dynamicDetailRatio = 'dynamicDetailRatio',
 
       // 代理host port
