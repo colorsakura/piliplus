@@ -1782,7 +1782,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  showEpisodes(index, season, episodes, bvid, aid, cid) {
+  showEpisodes([index, season, episodes, bvid, aid, cid]) {
+    if (bvid == null) {
+      videoDetailController.showMediaListPanel(context);
+      return;
+    }
     Widget listSheetContent([bool? enableSlide]) => ListSheetContent(
           enableSlide: enableSlide,
           index: index,

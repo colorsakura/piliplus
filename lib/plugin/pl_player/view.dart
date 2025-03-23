@@ -262,10 +262,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     bool isPage = videoIntroController?.videoDetail.value.pages != null &&
         videoIntroController!.videoDetail.value.pages!.length > 1;
     bool isBangumi = bangumiIntroController?.loadingState.value is Success;
-    bool anySeason = isSeason ||
-        isPage ||
-        isBangumi ||
-        widget.videoDetailController?.isPlayAll == true;
+    bool anySeason = isSeason || isPage || isBangumi;
     double widgetWidth =
         isFullScreen && context.orientation == Orientation.landscape ? 42 : 35;
     Map<BottomControlType, Widget> videoProgressWidgets = {
@@ -478,16 +475,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           onTap: () {
+            if (anySeason.not) {
+              widget.showEpisodes?.call();
+              return;
+            }
             int? index;
             int currentCid = plPlayerController.cid;
             String bvid = plPlayerController.bvid;
             List episodes = [];
-            // late Function changeFucCall;
             if (isPage) {
               final List<Part> pages =
                   videoIntroController!.videoDetail.value.pages!;
               episodes = pages;
-              // changeFucCall = videoIntroController!.changeSeasonOrbangu;
             } else if (isSeason) {
               final List<SectionItem> sections =
                   videoIntroController!.videoDetail.value.ugcSeason!.sections!;
@@ -501,12 +500,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   }
                 }
               }
-              // changeFucCall = videoIntroController!.changeSeasonOrbangu;
             } else if (isBangumi) {
               episodes = (bangumiIntroController!.loadingState.value as Success)
                   .response
                   .episodes!;
-              // changeFucCall = bangumiIntroController!.changeSeasonOrbangu;
             }
             widget.showEpisodes?.call(
               index,
@@ -651,15 +648,18 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
     List<BottomControlType> userSpecifyItemLeft = [
       BottomControlType.playOrPause,
       BottomControlType.time,
-      if (anySeason) BottomControlType.pre,
-      if (anySeason) BottomControlType.next,
+      if (anySeason || widget.videoDetailController?.isPlayAll == true) ...[
+        BottomControlType.pre,
+        BottomControlType.next,
+      ],
     ];
 
     List<BottomControlType> userSpecifyItemRight = [
       BottomControlType.dmChart,
       BottomControlType.superResolution,
       BottomControlType.viewPoints,
-      if (anySeason) BottomControlType.episode,
+      if (anySeason || widget.videoDetailController?.isPlayAll == true)
+        BottomControlType.episode,
       if (isFullScreen) BottomControlType.fit,
       BottomControlType.subtitle,
       BottomControlType.speed,
