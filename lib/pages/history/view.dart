@@ -296,6 +296,8 @@ class _HistoryPageState extends State<HistoryPage>
                       videoItem: loadingState.response[index],
                       ctr: _historyController.baseCtr,
                       onChoose: () => _historyController.onSelect(index),
+                      onDelete: (kid, business) =>
+                          _historyController.delHistory(kid, business),
                     );
                   },
                   childCount: loadingState.response.length,
