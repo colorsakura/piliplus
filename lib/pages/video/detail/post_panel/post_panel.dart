@@ -450,7 +450,9 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             updateSegment(
               isFirst: isFirst,
               index: index,
-              value: isFirst ? 0 : plPlayerController.duration.value.inSeconds,
+              value: isFirst
+                  ? 0
+                  : plPlayerController.durationSeconds.value.inSeconds,
             );
           });
         },
