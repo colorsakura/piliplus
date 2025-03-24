@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/fav_search/controller.dart';
+import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,8 @@ class HistoryItem extends StatelessWidget {
     String bvid = videoItem.history.bvid ?? IdUtils.av2bv(aid);
     return InkWell(
       onTap: () async {
-        if (ctr is MultiSelectController && ctr!.enableMultiSelect.value) {
+        if ((ctr is MultiSelectController || ctr is HistoryBaseController) &&
+            ctr!.enableMultiSelect.value) {
           feedBack();
           onChoose?.call();
           return;
