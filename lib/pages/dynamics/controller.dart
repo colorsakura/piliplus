@@ -33,7 +33,6 @@ class DynamicsController extends GetxController
   dynamic face;
   RxBool isLoadingDynamic = false.obs;
   List<UpItem> hasUpdatedUps = <UpItem>[];
-  List<UpItem> allFollowedUps = <UpItem>[];
   int allFollowedUpsPage = 1;
   int allFollowedUpsTotal = 0;
 
@@ -69,8 +68,9 @@ class DynamicsController extends GetxController
   }
 
   Future queryFollowing2() async {
-    if (allFollowedUps.length >= allFollowedUpsTotal) {
-      SmartDialog.showToast('没有更多了');
+    if (upData.value.upList != null &&
+        upData.value.upList!.length >= allFollowedUpsTotal) {
+      // SmartDialog.showToast('没有更多了');
       return;
     }
     var res = await FollowHttp.followings(
@@ -80,16 +80,22 @@ class DynamicsController extends GetxController
       orderType: 'attention',
     );
     if (res['status']) {
-      allFollowedUps.addAll(res['data'].list.map<UpItem>((FollowItemModel e) =>
-          UpItem(
-              face: e.face,
-              mid: e.mid,
-              uname: e.uname,
-              hasUpdate: hasUpdatedUps.any((element) =>
-                  (element.mid == e.mid) && (element.hasUpdate == true)))));
+      upData.value.upList ??= <UpItem>[];
+      upData.value.upList!.addAll(
+        res['data']
+            .list
+            .where((e) => hasUpdatedUps.every((e1) => e.mid != e1.mid))
+            .map<UpItem>(
+              (FollowItemModel e) => UpItem(
+                face: e.face,
+                mid: e.mid,
+                uname: e.uname,
+                hasUpdate: false,
+              ),
+            ),
+      );
       allFollowedUpsPage += 1;
       allFollowedUpsTotal = res['data'].total;
-      upData.value.upList = allFollowedUps;
       upData.refresh();
     } else {
       SmartDialog.showToast(res['msg']);
@@ -129,23 +135,25 @@ class DynamicsController extends GetxController
         upData.refresh();
         hasUpdatedUps = ress[0]['data'].upList!;
       }
+      List<UpItem> allFollowedUps = <UpItem>[];
       if (!ress[1]['status']) {
         SmartDialog.showToast("获取关注列表失败：${ress[1]['msg']}");
       } else {
-        allFollowedUps = ress[1]['data']
-            .list
-            .map<UpItem>((FollowItemModel e) => UpItem(
+        allFollowedUps = (ress[1]['data'].list as List)
+            .where((e) => hasUpdatedUps.every((e1) => e.mid != e1.mid))
+            .map<UpItem>(
+              (e) => UpItem(
                 face: e.face,
                 mid: e.mid,
                 uname: e.uname,
-                hasUpdate: hasUpdatedUps.any((element) =>
-                    (element.mid == e.mid) && (element.hasUpdate == true))))
+                hasUpdate: false,
+              ),
+            )
             .toList();
         allFollowedUpsPage += 1;
         allFollowedUpsTotal = ress[1]['data'].total;
       }
-      upData.value.upList =
-          allFollowedUpsTotal > 0 ? allFollowedUps : hasUpdatedUps;
+      upData.value.upList = hasUpdatedUps + allFollowedUps;
       upData.refresh();
     } else {
       var res = await DynamicsHttp.followUp();

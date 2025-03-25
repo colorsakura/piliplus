@@ -10,8 +10,9 @@ class FollowDataModel {
   FollowDataModel.fromJson(Map<String, dynamic> json) {
     total = json['total'] ?? 0;
     list = (json['list'] as List?)
-        ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
-        .toList();
+            ?.map<FollowItemModel>((e) => FollowItemModel.fromJson(e))
+            .toList() ??
+        [];
   }
 }
 
