@@ -37,6 +37,15 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
   late bool val;
 
   @override
+  void didUpdateWidget(SetSwitchItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.setKey != widget.setKey) {
+      val = GStorage.setting
+          .get(widget.setKey, defaultValue: widget.defaultVal ?? false);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     val = GStorage.setting
