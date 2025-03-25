@@ -139,18 +139,18 @@ class _MainAppState extends State<MainApp>
     } else {
       dynamic currentPage = _mainController.pages[value];
 
-      if (currentPage is HomePage) {
-        _homeController.toTopOrRefresh();
-      } else if (currentPage is DynamicsPage) {
-        _dynamicController.toTopOrRefresh();
-      }
-
       int now = DateTime.now().millisecondsSinceEpoch;
       if (now - _lastSelectTime < 500) {
         if (currentPage is HomePage) {
           _homeController.onRefresh();
         } else if (currentPage is DynamicsPage) {
           _dynamicController.onRefresh();
+        }
+      } else {
+        if (currentPage is HomePage) {
+          _homeController.toTopOrRefresh();
+        } else if (currentPage is DynamicsPage) {
+          _dynamicController.toTopOrRefresh();
         }
       }
       _lastSelectTime = now;
