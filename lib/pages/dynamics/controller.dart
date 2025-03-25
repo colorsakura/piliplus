@@ -96,7 +96,10 @@ class DynamicsController extends GetxController
     }
   }
 
+  late bool isQuerying = false;
   Future queryFollowUp({type = 'init'}) async {
+    if (isQuerying) return;
+    isQuerying = true;
     if (!isLogin.value) {
       upData.value.errMsg = '账号未登录';
       upData.refresh();
@@ -156,6 +159,7 @@ class DynamicsController extends GetxController
         upData.refresh();
       }
     }
+    isQuerying = false;
   }
 
   onSelectUp(mid) async {
