@@ -141,7 +141,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: '改用侧边栏',
         subtitle: '开启后底栏与顶栏被替换，且相关设置失效',
-        leading: Icon(Icons.chrome_reader_mode_outlined),
+        leading: const Icon(Icons.chrome_reader_mode_outlined),
         setKey: SettingBoxKey.useSideBar,
         defaultVal: false,
         needReboot: true,
@@ -150,7 +150,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: 'MD3样式底栏',
         subtitle: 'Material You设计规范底栏，关闭可变窄',
-        leading: Icon(Icons.design_services_outlined),
+        leading: const Icon(Icons.design_services_outlined),
         setKey: SettingBoxKey.enableMYBar,
         defaultVal: true,
         needReboot: true,
@@ -210,7 +210,7 @@ List<SettingsModel> get styleSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '视频播放页使用深色主题',
-        leading: Icon(Icons.dark_mode_outlined),
+        leading: const Icon(Icons.dark_mode_outlined),
         setKey: SettingBoxKey.darkVideoPage,
         defaultVal: false,
         onChanged: (value) {
@@ -223,7 +223,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: '播放页移除安全边距',
         subtitle: '隐藏状态栏、撑满屏幕，但播放控件仍处于安全域内',
-        leading: Icon(Icons.fit_screen_outlined),
+        leading: const Icon(Icons.fit_screen_outlined),
         setKey: SettingBoxKey.videoPlayerRemoveSafeArea,
         defaultVal: false,
       ),
@@ -231,7 +231,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: '动态页启用瀑布流',
         subtitle: '关闭会显示为单列',
-        leading: Icon(Icons.view_array_outlined),
+        leading: const Icon(Icons.view_array_outlined),
         setKey: SettingBoxKey.dynamicsWaterfallFlow,
         defaultVal: true,
         needReboot: true,
@@ -266,14 +266,14 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: '动态页显示所有已关注UP主',
         subtitle: '并以最常访问排序UP',
-        leading: Icon(Icons.people_alt_outlined),
+        leading: const Icon(Icons.people_alt_outlined),
         setKey: SettingBoxKey.dynamicsShowAllFollowedUp,
         defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '动态页展开正在直播UP列表',
-        leading: Icon(Icons.live_tv),
+        leading: const Icon(Icons.live_tv),
         setKey: SettingBoxKey.expandDynLivePanel,
         defaultVal: false,
       ),
@@ -376,7 +376,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: '首页顶栏收起',
         subtitle: '首页列表滑动时，收起顶栏',
-        leading: Icon(Icons.vertical_align_top_outlined),
+        leading: const Icon(Icons.vertical_align_top_outlined),
         setKey: SettingBoxKey.hideSearchBar,
         defaultVal: true,
         needReboot: true,
@@ -385,7 +385,7 @@ List<SettingsModel> get styleSettings => [
         settingsType: SettingsType.sw1tch,
         title: '首页底栏收起',
         subtitle: '首页列表滑动时，收起底栏',
-        leading: Icon(Icons.vertical_align_bottom_outlined),
+        leading: const Icon(Icons.vertical_align_bottom_outlined),
         setKey: SettingBoxKey.hideTabBar,
         defaultVal: true,
         needReboot: true,
@@ -664,48 +664,22 @@ void _showQualityDialog({
   required int initValue,
   required ValueChanged<int> callback,
 }) {
-  showDialog(
+  showDialog<double>(
     context: context,
-    builder: (context) {
-      int picQuality = initValue;
-      return AlertDialog(
-        title: Text(title),
-        contentPadding:
-            const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 8),
-        content: SizedBox(
-          height: 40,
-          child: Builder(
-            builder: (context) => Slider(
-              value: picQuality.toDouble(),
-              min: 10,
-              max: 100,
-              divisions: 9,
-              label: '$picQuality%',
-              onChanged: (double val) {
-                picQuality = val.toInt();
-                (context as Element).markNeedsBuild();
-              },
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-              onPressed: Get.back,
-              child: Text('取消',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.outline))),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              callback(picQuality);
-              SmartDialog.showToast('设置成功');
-            },
-            child: const Text('确定'),
-          )
-        ],
-      );
-    },
-  );
+    builder: (context) => SlideDialog(
+        value: initValue.toDouble(),
+        title: title,
+        min: 10,
+        max: 100,
+        divisions: 9,
+        suffix: '%',
+        precise: 0),
+  ).then((result) {
+    if (result != null) {
+      SmartDialog.showToast('设置成功');
+      callback(result.toInt());
+    }
+  });
 }
 
 List<SettingsModel> get playSettings => [
@@ -713,7 +687,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '弹幕开关',
         subtitle: '是否展示弹幕',
-        leading: Icon(Icons.subtitles_outlined),
+        leading: const Icon(Icons.subtitles_outlined),
         setKey: SettingBoxKey.enableShowDanmaku,
         defaultVal: true,
       ),
@@ -728,7 +702,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '自动播放',
         subtitle: '进入详情页自动播放',
-        leading: Icon(Icons.motion_photos_auto_outlined),
+        leading: const Icon(Icons.motion_photos_auto_outlined),
         setKey: SettingBoxKey.autoPlayEnable,
         defaultVal: false,
       ),
@@ -736,7 +710,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '双击快退/快进',
         subtitle: '左侧双击快退/右侧双击快进，关闭则双击均为暂停/播放',
-        leading: Icon(Icons.touch_app_outlined),
+        leading: const Icon(Icons.touch_app_outlined),
         setKey: SettingBoxKey.enableQuickDouble,
         defaultVal: true,
       ),
@@ -777,7 +751,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '竖屏扩大展示',
         subtitle: '小屏竖屏视频宽高比由16:9扩大至1:1（不支持收起）；横屏适配时，扩大至9:16',
-        leading: Icon(Icons.expand_outlined),
+        leading: const Icon(Icons.expand_outlined),
         setKey: SettingBoxKey.enableVerticalExpand,
         defaultVal: false,
       ),
@@ -785,7 +759,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '自动全屏',
         subtitle: '视频开始播放时进入全屏',
-        leading: Icon(Icons.fullscreen_outlined),
+        leading: const Icon(Icons.fullscreen_outlined),
         setKey: SettingBoxKey.enableAutoEnter,
         defaultVal: false,
       ),
@@ -793,7 +767,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '自动退出全屏',
         subtitle: '视频结束播放时退出全屏',
-        leading: Icon(Icons.fullscreen_exit_outlined),
+        leading: const Icon(Icons.fullscreen_exit_outlined),
         setKey: SettingBoxKey.enableAutoExit,
         defaultVal: true,
       ),
@@ -801,14 +775,14 @@ List<SettingsModel> get playSettings => [
           settingsType: SettingsType.sw1tch,
           title: '延长播放控件显示时间',
           subtitle: '开启后延长至30秒，便于屏幕阅读器滑动切换控件焦点',
-          leading: Icon(Icons.timer_outlined),
+          leading: const Icon(Icons.timer_outlined),
           setKey: SettingBoxKey.enableLongShowControl,
           defaultVal: false),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '全向旋转',
         subtitle: '小屏可受重力转为临时全屏，若系统锁定旋转仍触发请关闭，关闭会影响横屏适配',
-        leading: Icon(Icons.screen_rotation_alt_outlined),
+        leading: const Icon(Icons.screen_rotation_alt_outlined),
         setKey: SettingBoxKey.allowRotateScreen,
         defaultVal: true,
       ),
@@ -816,7 +790,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '后台播放',
         subtitle: '进入后台时继续播放',
-        leading: Icon(Icons.motion_photos_pause_outlined),
+        leading: const Icon(Icons.motion_photos_pause_outlined),
         setKey: SettingBoxKey.continuePlayInBackground,
         defaultVal: false,
       ),
@@ -840,7 +814,7 @@ List<SettingsModel> get playSettings => [
           settingsType: SettingsType.sw1tch,
           title: '画中画不加载弹幕',
           subtitle: '当弹幕开关开启时，小窗屏蔽弹幕以获得较好的体验',
-          leading: Icon(Icons.subtitles_off_outlined),
+          leading: const Icon(Icons.subtitles_off_outlined),
           setKey: SettingBoxKey.pipNoDanmaku,
           defaultVal: false,
         ),
@@ -848,7 +822,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '全屏手势反向',
         subtitle: '默认播放器中部向上滑动进入全屏，向下退出\n开启后向下全屏，向上退出',
-        leading: Icon(Icons.swap_vert_outlined),
+        leading: const Icon(Icons.swap_vert_outlined),
         setKey: SettingBoxKey.fullScreenGestureReverse,
         defaultVal: false,
       ),
@@ -856,7 +830,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '观看人数',
         subtitle: '展示同时在看人数',
-        leading: Icon(Icons.people_outlined),
+        leading: const Icon(Icons.people_outlined),
         setKey: SettingBoxKey.enableOnlineTotal,
         defaultVal: false,
       ),
@@ -913,7 +887,7 @@ List<SettingsModel> get playSettings => [
         settingsType: SettingsType.sw1tch,
         title: '后台音频服务',
         subtitle: '避免画中画没有播放暂停功能',
-        leading: Icon(Icons.volume_up_outlined),
+        leading: const Icon(Icons.volume_up_outlined),
         setKey: SettingBoxKey.enableBackgroundPlay,
         defaultVal: true,
       ),
@@ -924,7 +898,7 @@ List<SettingsModel> get videoSettings => [
         settingsType: SettingsType.sw1tch,
         title: '开启硬解',
         subtitle: '以较低功耗播放视频，若异常卡死请关闭',
-        leading: Icon(Icons.flash_on_outlined),
+        leading: const Icon(Icons.flash_on_outlined),
         setKey: SettingBoxKey.enableHA,
         defaultVal: true,
       ),
@@ -932,7 +906,7 @@ List<SettingsModel> get videoSettings => [
         settingsType: SettingsType.sw1tch,
         title: '免登录1080P',
         subtitle: '免登录查看1080P视频',
-        leading: Icon(Icons.hd_outlined),
+        leading: const Icon(Icons.hd_outlined),
         setKey: SettingBoxKey.p1080,
         defaultVal: true,
       ),
@@ -1202,7 +1176,7 @@ List<SettingsModel> get videoSettings => [
         SettingsModel(
           settingsType: SettingsType.sw1tch,
           title: '优先使用 OpenSL ES 输出音频',
-          leading: Icon(Icons.speaker_outlined),
+          leading: const Icon(Icons.speaker_outlined),
           subtitle:
               '关闭则优先使用AudioTrack输出音频（此项即mpv的--ao），若遇系统音效丢失、无声、音画不同步等问题请尝试关闭。',
           setKey: SettingBoxKey.useOpenSLES,
@@ -1211,7 +1185,7 @@ List<SettingsModel> get videoSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '扩大缓冲区',
-        leading: Icon(Icons.storage_outlined),
+        leading: const Icon(Icons.storage_outlined),
         subtitle: '默认缓冲区为视频4MB/直播16MB，开启后为32MB/64MB，加载时间变长',
         setKey: SettingBoxKey.expandBuffer,
         defaultVal: false,
@@ -1295,7 +1269,7 @@ List<SettingsModel> get recommendSettings => [
         settingsType: SettingsType.sw1tch,
         title: '推荐动态',
         subtitle: '是否在推荐内容中展示动态(仅app端)',
-        leading: Icon(Icons.motion_photos_on_outlined),
+        leading: const Icon(Icons.motion_photos_on_outlined),
         setKey: SettingBoxKey.enableRcmdDynamic,
         defaultVal: true,
       ),
@@ -1303,7 +1277,7 @@ List<SettingsModel> get recommendSettings => [
         settingsType: SettingsType.sw1tch,
         title: '保留首页推荐刷新',
         subtitle: '下拉刷新时保留上次内容',
-        leading: Icon(Icons.refresh),
+        leading: const Icon(Icons.refresh),
         setKey: SettingBoxKey.enableSaveLastData,
         defaultVal: false,
         onChanged: (value) {
@@ -1318,7 +1292,7 @@ List<SettingsModel> get recommendSettings => [
         settingsType: SettingsType.sw1tch,
         title: '显示上次看到位置提示',
         subtitle: '保留上次推荐时，在上次刷新位置显示提示',
-        leading: Icon(Icons.tips_and_updates_outlined),
+        leading: const Icon(Icons.tips_and_updates_outlined),
         setKey: SettingBoxKey.savedRcmdTip,
         defaultVal: true,
         onChanged: (value) {
@@ -1334,122 +1308,41 @@ List<SettingsModel> get recommendSettings => [
         },
       ),
       SettingsModel(settingsType: SettingsType.divider),
-      SettingsModel(
-        settingsType: SettingsType.normal,
-        leading: const Icon(Icons.thumb_up_outlined),
-        title: '点赞率过滤',
-        getSubtitle: () =>
-            '过滤掉点赞数/播放量「小于${GStorage.minLikeRatioForRecommend}%」的推荐视频(仅web端)',
-        onTap: (setState) async {
-          int? result = await showDialog(
-            context: Get.context!,
-            builder: (context) {
-              return SelectDialog<int>(
-                  title: '选择点赞率（0即不过滤）',
-                  value: GStorage.minLikeRatioForRecommend,
-                  values: [0, 1, 2, 3, 4].map(
-                    (e) {
-                      return {'title': '$e %', 'value': e};
-                    },
-                  ).toList());
-            },
-          );
-          if (result != null) {
-            await GStorage.setting
-                .put(SettingBoxKey.minLikeRatioForRecommend, result);
-            RecommendFilter.update();
-            setState();
-          }
-        },
+      _getVideoFilterSelectModel(
+        context: Get.context!,
+        title: '点赞率',
+        suffix: '%',
+        key: SettingBoxKey.minLikeRatioForRecommend,
+        values: [0, 1, 2, 3, 4],
       ),
-      getBanwordModel(
+      _getBanwordModel(
+        context: Get.context!,
         title: '标题关键词过滤',
         key: SettingBoxKey.banWordForRecommend,
-        getBanWord: () => GStorage.banWordForRecommend,
+        callback: (value) {
+          RecommendFilter.rcmdRegExp = value;
+        },
       ),
-      getBanwordModel(
+      _getBanwordModel(
+        context: Get.context!,
         title: '热门/分区: 视频分区关键词过滤',
         key: SettingBoxKey.banWordForZone,
-        getBanWord: () => GStorage.banWordForZone,
-      ),
-      SettingsModel(
-        settingsType: SettingsType.normal,
-        title: '视频时长过滤',
-        leading: const Icon(Icons.timelapse_outlined),
-        getSubtitle: () => '过滤掉时长「小于${GStorage.minDurationForRcmd}秒」的推荐视频',
-        onTap: (setState) async {
-          const List<int> defDurations = [0, 30, 60, 90, 120];
-          int? result = await showDialog(
-            context: Get.context!,
-            builder: (context) {
-              int minDurationForRcmd = GStorage.minDurationForRcmd;
-              return SelectDialog<int>(
-                  title: '选择时长（0即不过滤）',
-                  value: minDurationForRcmd,
-                  values: [
-                    ...[
-                      ...defDurations,
-                      if (defDurations.contains(minDurationForRcmd).not)
-                        minDurationForRcmd,
-                    ]..sort(),
-                    -1,
-                  ].map((e) {
-                    if (e == -1) {
-                      return {'title': '自定义', 'value': e};
-                    }
-                    return {'title': '$e 秒', 'value': e};
-                  }).toList());
-            },
-          );
-          if (result != null) {
-            void updateDuration(int value) async {
-              await GStorage.setting
-                  .put(SettingBoxKey.minDurationForRcmd, value);
-              RecommendFilter.update();
-              setState();
-            }
-
-            if (result == -1) {
-              showDialog(
-                context: Get.context!,
-                builder: (context) {
-                  String duration = '';
-                  return AlertDialog(
-                    title: const Text('自定义时长'),
-                    content: TextField(
-                      autofocus: true,
-                      onChanged: (value) => duration = value,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'\d+')),
-                      ],
-                      decoration: const InputDecoration(suffixText: 's'),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: Get.back,
-                        child: Text(
-                          '取消',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Get.back();
-                          updateDuration(int.tryParse(duration) ?? 0);
-                        },
-                        child: Text('确定'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            } else {
-              updateDuration(result);
-            }
-          }
+        callback: (value) {
+          VideoHttp.zoneRegExp = value;
         },
+      ),
+      _getVideoFilterSelectModel(
+        context: Get.context!,
+        title: '视频时长',
+        suffix: 's',
+        key: SettingBoxKey.minDurationForRcmd,
+        values: [0, 30, 60, 90, 120],
+      ),
+      _getVideoFilterSelectModel(
+        context: Get.context!,
+        title: '播放量',
+        key: SettingBoxKey.minPlayForRcmd,
+        values: [0, 50, 100, 500, 1000],
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
@@ -1533,9 +1426,9 @@ List<SettingsModel> get extraSettings => [
         setKey: SettingBoxKey.enableSponsorBlock,
         defaultVal: false,
         onTap: () => Get.toNamed('/sponsorBlock'),
-        leading: Stack(
+        leading: const Stack(
           alignment: Alignment.center,
-          children: const [
+          children: [
             Icon(Icons.shield_outlined),
             Icon(Icons.play_arrow_rounded, size: 15),
           ],
@@ -1587,7 +1480,7 @@ List<SettingsModel> get extraSettings => [
                           .put(SettingBoxKey.dynamicPeriod, dynamicPeriod);
                       Get.find<MainController>().dynamicPeriod = dynamicPeriod;
                     },
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   )
                 ],
               );
@@ -1719,7 +1612,7 @@ List<SettingsModel> get extraSettings => [
                       );
                       setState();
                     },
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   )
                 ],
               );
@@ -1778,7 +1671,7 @@ List<SettingsModel> get extraSettings => [
                       );
                       setState();
                     },
-                    child: Text('确定'),
+                    child: const Text('确定'),
                   )
                 ],
               );
@@ -1805,40 +1698,43 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '禁用 SSL 证书验证',
         subtitle: '谨慎开启，禁用容易受到中间人攻击',
-        leading: Icon(Icons.security),
+        leading: const Icon(Icons.security),
         needReboot: true,
         setKey: SettingBoxKey.badCertificateCallback,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '显示继续播放分P提示',
-        leading: Icon(Icons.local_parking),
+        leading: const Icon(Icons.local_parking),
         setKey: SettingBoxKey.continuePlayingPart,
         defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '横屏在侧栏打开图片预览',
-        leading: Icon(Icons.photo_outlined),
+        leading: const Icon(Icons.photo_outlined),
         setKey: SettingBoxKey.horizontalPreview,
         defaultVal: false,
       ),
-      getBanwordModel(
+      _getBanwordModel(
+        context: Get.context!,
         title: '评论关键词过滤',
         key: SettingBoxKey.banWordForReply,
-        getBanWord: () => GStorage.banWordForReply,
+        callback: (value) {
+          ReplyHttp.replyRegExp = value;
+        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '使用外部浏览器打开链接',
-        leading: Icon(Icons.open_in_browser),
+        leading: const Icon(Icons.open_in_browser),
         setKey: SettingBoxKey.openInBrowser,
         defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.normal,
         title: '刷新滑动距离',
-        leading: Icon(Icons.refresh),
+        leading: const Icon(Icons.refresh),
         setKey: SettingBoxKey.refreshDragPercentage,
         getSubtitle: () => '当前滑动距离: ${GStorage.refreshDragPercentage}x',
         onTap: (setState) async {
@@ -1868,7 +1764,7 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.normal,
         title: '刷新指示器高度',
-        leading: Icon(Icons.height),
+        leading: const Icon(Icons.height),
         setKey: SettingBoxKey.refreshDisplacement,
         getSubtitle: () => '当前指示器高度: ${GStorage.refreshDisplacement}',
         onTap: (setState) async {
@@ -1904,7 +1800,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '合并弹幕',
         subtitle: '合并一段时间内获取到的相同弹幕',
-        leading: Icon(Icons.merge),
+        leading: const Icon(Icons.merge),
         setKey: SettingBoxKey.mergeDanmaku,
         defaultVal: false,
       ),
@@ -1912,7 +1808,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '显示热门推荐',
         subtitle: '热门页面显示每周必看等推荐内容入口',
-        leading: Icon(Icons.local_fire_department_outlined),
+        leading: const Icon(Icons.local_fire_department_outlined),
         setKey: SettingBoxKey.showHotRcmd,
         defaultVal: false,
         onChanged: (value) {
@@ -1988,7 +1884,7 @@ List<SettingsModel> get extraSettings => [
                                 .put(SettingBoxKey.audioNormalization, param);
                             setState();
                           },
-                          child: Text('确定'),
+                          child: const Text('确定'),
                         ),
                       ],
                     );
@@ -2031,14 +1927,14 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '提前初始化播放器',
         subtitle: '相对减少手动播放加载时间',
-        leading: Icon(Icons.play_circle_outlined),
+        leading: const Icon(Icons.play_circle_outlined),
         setKey: SettingBoxKey.preInitPlayer,
         defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '首页切换页面动画',
-        leading: Icon(Icons.home_outlined),
+        leading: const Icon(Icons.home_outlined),
         setKey: SettingBoxKey.mainTabBarView,
         defaultVal: false,
         needReboot: true,
@@ -2046,7 +1942,7 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '搜索建议',
-        leading: Icon(Icons.search),
+        leading: const Icon(Icons.search),
         setKey: SettingBoxKey.searchSuggestion,
         defaultVal: true,
       ),
@@ -2062,14 +1958,14 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '预览 Live Photo',
         subtitle: '开启则以视频形式预览 Live Photo，否则预览静态图片',
-        leading: Icon(Icons.image_outlined),
+        leading: const Icon(Icons.image_outlined),
         setKey: SettingBoxKey.enableLivePhoto,
         defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '滑动跳转预览视频缩略图',
-        leading: Icon(Icons.preview_outlined),
+        leading: const Icon(Icons.preview_outlined),
         setKey: SettingBoxKey.showSeekPreview,
         defaultVal: true,
       ),
@@ -2077,7 +1973,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '显示高能进度条',
         subtitle: '高能进度条反应了在时域上，单位时间内弹幕发送量的变化趋势',
-        leading: Icon(Icons.show_chart),
+        leading: const Icon(Icons.show_chart),
         setKey: SettingBoxKey.showDmChart,
         defaultVal: false,
       ),
@@ -2085,9 +1981,9 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '发评反诈',
         subtitle: '发送评论后检查评论是否可见',
-        leading: Stack(
+        leading: const Stack(
           alignment: Alignment.center,
-          children: const [
+          children: [
             Icon(Icons.shield_outlined),
             Icon(Icons.reply, size: 14),
           ],
@@ -2110,9 +2006,9 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '发布/转发动态反诈',
         subtitle: '发布/转发动态后检查动态是否可见',
-        leading: Stack(
+        leading: const Stack(
           alignment: Alignment.center,
-          children: const [
+          children: [
             Icon(Icons.shield_outlined),
             Icon(Icons.motion_photos_on, size: 12),
           ],
@@ -2123,9 +2019,9 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '屏蔽带货动态',
-        leading: Stack(
+        leading: const Stack(
           alignment: Alignment.center,
-          children: const [
+          children: [
             Icon(Icons.shopping_bag_outlined, size: 14),
             Icon(Icons.not_interested),
           ],
@@ -2139,9 +2035,9 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '屏蔽带货评论',
-        leading: Stack(
+        leading: const Stack(
           alignment: Alignment.center,
-          children: const [
+          children: [
             Icon(Icons.shopping_bag_outlined, size: 14),
             Icon(Icons.not_interested),
           ],
@@ -2152,7 +2048,7 @@ List<SettingsModel> get extraSettings => [
       SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: '使用可折叠的播放页面',
-        leading: Icon(Icons.video_settings),
+        leading: const Icon(Icons.video_settings),
         setKey: SettingBoxKey.collapsibleVideoPage,
         defaultVal: true,
         onChanged: (value) {
@@ -2164,7 +2060,7 @@ List<SettingsModel> get extraSettings => [
         title: '侧滑关闭二级评论页面',
         leading: Transform.rotate(
           angle: pi * 1.5,
-          child: Icon(Icons.touch_app),
+          child: const Icon(Icons.touch_app),
         ),
         setKey: SettingBoxKey.slideDismissReplyPage,
         defaultVal: Platform.isIOS,
@@ -2208,7 +2104,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '大家都在搜',
         subtitle: '是否展示「大家都在搜」',
-        leading: Icon(Icons.data_thresholding_outlined),
+        leading: const Icon(Icons.data_thresholding_outlined),
         setKey: SettingBoxKey.enableHotKey,
         defaultVal: true,
       ),
@@ -2227,7 +2123,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '快速收藏',
         subtitle: '点按收藏至默认，长按选择文件夹',
-        leading: Icon(Icons.bookmark_add_outlined),
+        leading: const Icon(Icons.bookmark_add_outlined),
         setKey: SettingBoxKey.enableQuickFav,
         defaultVal: false,
       ),
@@ -2235,7 +2131,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '评论区搜索关键词',
         subtitle: '展示评论区搜索关键词',
-        leading: Icon(Icons.search_outlined),
+        leading: const Icon(Icons.search_outlined),
         setKey: SettingBoxKey.enableWordRe,
         defaultVal: false,
       ),
@@ -2243,7 +2139,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '启用AI总结',
         subtitle: '视频详情页开启AI总结',
-        leading: Icon(Icons.engineering_outlined),
+        leading: const Icon(Icons.engineering_outlined),
         setKey: SettingBoxKey.enableAi,
         defaultVal: false,
       ),
@@ -2251,7 +2147,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '消息页禁用"收到的赞"功能',
         subtitle: '禁止打开入口，降低网络社交依赖',
-        leading: Icon(Icons.beach_access_outlined),
+        leading: const Icon(Icons.beach_access_outlined),
         setKey: SettingBoxKey.disableLikeMsg,
         defaultVal: false,
       ),
@@ -2259,19 +2155,18 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '默认展示评论区',
         subtitle: '在视频详情页默认切换至评论区页（仅Tab型布局）',
-        leading: Icon(Icons.mode_comment_outlined),
+        leading: const Icon(Icons.mode_comment_outlined),
         setKey: SettingBoxKey.defaultShowComment,
         defaultVal: false,
       ),
       SettingsModel(
-          settingsType: SettingsType.sw1tch,
-          title: '启用HTTP/2',
-          leading: const Icon(Icons.swap_horizontal_circle_outlined),
-          setKey: SettingBoxKey.enableHttp2,
-          defaultVal: false,
-          onChanged: (_) {
-            SmartDialog.showToast('重启生效');
-          }),
+        settingsType: SettingsType.sw1tch,
+        title: '启用HTTP/2',
+        leading: const Icon(Icons.swap_horizontal_circle_outlined),
+        setKey: SettingBoxKey.enableHttp2,
+        defaultVal: false,
+        needReboot: true,
+      ),
       SettingsModel(
         settingsType: SettingsType.normal,
         title: '连接重试次数',
@@ -2453,9 +2348,7 @@ List<SettingsModel> get extraSettings => [
                 ),
                 actions: [
                   TextButton(
-                    onPressed: () async {
-                      Get.back();
-                    },
+                    onPressed: Get.back,
                     child: Text(
                       '取消',
                       style: TextStyle(
@@ -2463,7 +2356,7 @@ List<SettingsModel> get extraSettings => [
                     ),
                   ),
                   TextButton(
-                    onPressed: () async {
+                    onPressed: () {
                       Get.back();
                       GStorage.setting
                           .put(SettingBoxKey.systemProxyHost, systemProxyHost);
@@ -2486,7 +2379,7 @@ List<SettingsModel> get extraSettings => [
         settingsType: SettingsType.sw1tch,
         title: '自动清除缓存',
         subtitle: '每次启动时清除缓存',
-        leading: Icon(Icons.auto_delete_outlined),
+        leading: const Icon(Icons.auto_delete_outlined),
         setKey: SettingBoxKey.autoClearCache,
         defaultVal: false,
       ),
@@ -2505,23 +2398,20 @@ List<SettingsModel> get extraSettings => [
       ),
     ];
 
-SettingsModel getBanwordModel({
-  required String title,
-  required String key,
-  required Function getBanWord,
-}) {
+SettingsModel _getBanwordModel(
+    {required BuildContext context,
+    required String title,
+    required String key,
+    required ValueChanged<RegExp> callback}) {
+  String banWord = GStorage.setting.get(key, defaultValue: '');
   return SettingsModel(
     settingsType: SettingsType.normal,
     leading: const Icon(Icons.filter_alt_outlined),
     title: title,
-    getSubtitle: () {
-      String banWord = getBanWord();
-      return banWord.isEmpty ? "点击添加" : banWord;
-    },
-    onTap: (setState) async {
-      String banWord = getBanWord();
-      await showDialog(
-        context: Get.context!,
+    getSubtitle: () => banWord.isEmpty ? "点击添加" : banWord,
+    onTap: (setState) {
+      showDialog(
+        context: context,
         builder: (context) {
           return AlertDialog(
             title: Text(title),
@@ -2555,23 +2445,94 @@ SettingsModel getBanwordModel({
                   Get.back();
                   await GStorage.setting.put(key, banWord);
                   setState();
+                  callback(RegExp(banWord, caseSensitive: false));
                   SmartDialog.showToast('已保存');
-                  if (key == SettingBoxKey.banWordForReply) {
-                    ReplyHttp.replyRegExp =
-                        RegExp(banWord, caseSensitive: false);
-                  } else if (key == SettingBoxKey.banWordForRecommend) {
-                    RecommendFilter.rcmdRegExp =
-                        RegExp(banWord, caseSensitive: false);
-                  } else if (key == SettingBoxKey.banWordForZone) {
-                    VideoHttp.zoneRegExp =
-                        RegExp(banWord, caseSensitive: false);
-                  }
                 },
               ),
             ],
           );
         },
       );
+    },
+  );
+}
+
+SettingsModel _getVideoFilterSelectModel({
+  required BuildContext context,
+  required String title,
+  String? suffix,
+  required String key,
+  required List<int> values,
+}) {
+  int value = GStorage.setting.get(key, defaultValue: 0);
+  return SettingsModel(
+    settingsType: SettingsType.normal,
+    title: '$title过滤',
+    leading: const Icon(Icons.timelapse_outlined),
+    getSubtitle: () => '过滤掉$title小于「$value${suffix ?? ""}」的视频',
+    onTap: (setState) async {
+      var result = await showDialog<int>(
+        context: context,
+        builder: (context) {
+          return SelectDialog<int>(
+              title: '选择$title（0即不过滤）',
+              value: value,
+              values: (values
+                    ..addIf(!values.contains(value), value)
+                    ..sort())
+                  .map((e) => {
+                        'title': suffix == null ? e.toString() : '$e $suffix',
+                        'value': e
+                      })
+                  .toList()
+                ..add({'title': '自定义', 'value': -1}));
+        },
+      );
+      if (result != null) {
+        if (result == -1 && context.mounted) {
+          await showDialog(
+            context: context,
+            builder: (context) {
+              String valueStr = '';
+              return AlertDialog(
+                title: Text('自定义$title'),
+                content: TextField(
+                  autofocus: true,
+                  onChanged: (value) => valueStr = value,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                  ],
+                  decoration: InputDecoration(suffixText: suffix),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: Get.back,
+                    child: Text(
+                      '取消',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                      result = int.tryParse(valueStr) ?? 0;
+                    },
+                    child: const Text('确定'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+        if (result != -1) {
+          value = result!;
+          await GStorage.setting.put(key, result);
+          setState();
+          RecommendFilter.update();
+        }
+      }
     },
   );
 }
