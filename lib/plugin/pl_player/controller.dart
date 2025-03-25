@@ -90,8 +90,6 @@ class PlPlayerController {
   /// 后台播放
   late final Rx<bool> _continuePlayInBackground = false.obs;
 
-  late final Rx<bool> _onlyPlayAudio = false.obs;
-
   late final Rx<bool> _flipX = false.obs;
 
   late final Rx<bool> _flipY = false.obs;
@@ -226,7 +224,7 @@ class PlPlayerController {
   Rx<bool> get continuePlayInBackground => _continuePlayInBackground;
 
   /// 听视频
-  Rx<bool> get onlyPlayAudio => _onlyPlayAudio;
+  late final Rx<bool> onlyPlayAudio = false.obs;
 
   /// 镜像
   Rx<bool> get flipX => _flipX;
@@ -713,7 +711,7 @@ class PlPlayerController {
       AudioTrack.auto(),
     );
     // 音轨
-    if (dataSource.audioSource?.isNotEmpty ?? false) {
+    if (dataSource.audioSource?.isNotEmpty == true) {
       await pp.setProperty(
         'audio-files',
         UniversalPlatform.isWindows
@@ -721,10 +719,7 @@ class PlPlayerController {
             : dataSource.audioSource!.replaceAll(':', '\\:'),
       );
     } else {
-      await pp.setProperty(
-        'audio-files',
-        '',
-      );
+      await pp.setProperty('audio-files', '');
     }
 
     // 字幕
@@ -778,11 +773,11 @@ class PlPlayerController {
       SmartDialog.showToast('视频播放器为空，请重新进入本页面');
       return false;
     }
-    if (dataSource.videoSource?.isEmpty ?? true) {
+    if (dataSource.videoSource.isNullOrEmpty) {
       SmartDialog.showToast('视频源为空，请重新进入本页面');
       return false;
     }
-    if (dataSource.audioSource?.isEmpty ?? true) {
+    if (dataSource.audioSource.isNullOrEmpty) {
       SmartDialog.showToast('音频源为空');
     } else {
       await (_videoPlayerController!.platform as NativePlayer).setProperty(
@@ -947,12 +942,16 @@ class PlPlayerController {
         } else if (event.startsWith('Could not open codec')) {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
           return;
-        } else if (event.startsWith("Failed to open .") ||
-            event.startsWith("Cannot open file ''")) {
-          SmartDialog.showToast('视频源为空');
         } else {
-          SmartDialog.showToast('视频加载错误, $event');
-          debugPrint('视频加载错误, $event');
+          if (onlyPlayAudio.value.not) {
+            if (event.startsWith("Failed to open .") ||
+                event.startsWith("Cannot open file ''")) {
+              SmartDialog.showToast('视频源为空');
+            } else {
+              SmartDialog.showToast('视频加载错误, $event');
+              debugPrint('视频加载错误, $event');
+            }
+          }
         }
       }),
       // videoPlayerController!.stream.volume.listen((event) {
@@ -1609,9 +1608,9 @@ class PlPlayerController {
   }
 
   void setOnlyPlayAudio() {
-    _onlyPlayAudio.value = !_onlyPlayAudio.value;
+    onlyPlayAudio.value = !onlyPlayAudio.value;
     videoPlayerController?.setVideoTrack(
-        _onlyPlayAudio.value ? VideoTrack.no() : VideoTrack.auto());
+        onlyPlayAudio.value ? VideoTrack.no() : VideoTrack.auto());
   }
 
   late final showSeekPreview = GStorage.showSeekPreview;

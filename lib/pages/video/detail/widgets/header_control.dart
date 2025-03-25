@@ -318,7 +318,18 @@ class _HeaderControlState extends State<HeaderControl> {
                       2 => Obx(
                           () => ActionRowLineItem(
                             iconData: Icons.headphones,
-                            onTap: widget.controller.setOnlyPlayAudio,
+                            onTap: () {
+                              widget.controller.onlyPlayAudio.value =
+                                  !widget.controller.onlyPlayAudio.value;
+                              if (widget.controller.onlyPlayAudio.value) {
+                                widget.videoDetailCtr.playerInit(
+                                  video: widget.videoDetailCtr.audioUrl ?? '',
+                                  audio: '',
+                                );
+                              } else {
+                                widget.videoDetailCtr.playerInit();
+                              }
+                            },
                             text: " 听视频 ",
                             selectStatus: widget.controller.onlyPlayAudio.value,
                           ),
