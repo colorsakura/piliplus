@@ -282,11 +282,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       bool notExitFlag = false;
 
       /// 顺序播放 列表循环
-      if (videoDetailController.isPlayAll) {
-        notExitFlag = videoIntroController.nextPlay();
-      } else if (plPlayerController!.playRepeat != PlayRepeat.pause &&
+      if (plPlayerController!.playRepeat != PlayRepeat.pause &&
           plPlayerController!.playRepeat != PlayRepeat.singleCycle) {
-        if (videoDetailController.videoType == SearchType.video) {
+        if (videoDetailController.isPlayAll ||
+            videoDetailController.videoType == SearchType.video) {
           notExitFlag = videoIntroController.nextPlay();
         } else if (videoDetailController.videoType ==
             SearchType.media_bangumi) {
