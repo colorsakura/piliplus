@@ -946,7 +946,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               translation: const Offset(0.0, 0.3), // 上下偏移量（负数向上偏移）
               child: AnimatedOpacity(
                 curve: Curves.easeInOut,
-                opacity: plPlayerController.doubleSpeedStatus.value ? 1.0 : 0.0,
+                opacity: plPlayerController.longPressStatus.value ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 150),
                 child: Container(
                   alignment: Alignment.center,
@@ -959,7 +959,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   child: Center(
                     child: Obx(
                       () => Text(
-                        '${plPlayerController.enableAutoLongPressSpeed ? plPlayerController.playbackSpeed * 2 : plPlayerController.longPressSpeed}倍速中',
+                        '${plPlayerController.enableAutoLongPressSpeed ? (plPlayerController.longPressStatus.value ? plPlayerController.lastPlaybackSpeed : plPlayerController.playbackSpeed) * 2 : plPlayerController.longPressSpeed}倍速中',
                         style:
                             const TextStyle(color: Colors.white, fontSize: 13),
                       ),
@@ -1255,10 +1255,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                 doubleTapFuc(type);
               },
               onLongPressStart: (LongPressStartDetails detail) {
-                plPlayerController.setDoubleSpeedStatus(true);
+                plPlayerController.setLongPressStatus(true);
               },
               onLongPressEnd: (LongPressEndDetails details) {
-                plPlayerController.setDoubleSpeedStatus(false);
+                plPlayerController.setLongPressStatus(false);
               },
             ),
           ),

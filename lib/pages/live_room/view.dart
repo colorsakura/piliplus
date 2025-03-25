@@ -180,10 +180,10 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                         hideTop: plPlayerController.blockTypes.contains(5),
                         hideScroll: plPlayerController.blockTypes.contains(2),
                         hideBottom: plPlayerController.blockTypes.contains(4),
-                        duration: plPlayerController.danmakuDuration ~/
+                        duration: plPlayerController.danmakuDuration /
                             plPlayerController.playbackSpeed,
                         staticDuration:
-                            plPlayerController.danmakuStaticDuration ~/
+                            plPlayerController.danmakuStaticDuration /
                                 plPlayerController.playbackSpeed,
                         strokeWidth: plPlayerController.strokeWidth,
                         lineHeight: plPlayerController.danmakuLineHeight,

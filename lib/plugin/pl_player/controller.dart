@@ -65,6 +65,7 @@ class PlPlayerController {
 
   final Rx<int> _playerCount = Rx(0);
 
+  late double lastPlaybackSpeed = 1.0;
   final Rx<double> _playbackSpeed = 1.0.obs;
   final Rx<double> _longPressSpeed = 2.0.obs;
   final Rx<double> _currentVolume = 1.0.obs;
@@ -74,7 +75,7 @@ class PlPlayerController {
   final Rx<bool> _showControls = false.obs;
   final Rx<bool> _showVolumeStatus = false.obs;
   final Rx<bool> _showBrightnessStatus = false.obs;
-  final Rx<bool> _doubleSpeedStatus = false.obs;
+  final Rx<bool> _longPressStatus = false.obs;
   final Rx<bool> _controlsLock = false.obs;
   final Rx<bool> _isFullScreen = false.obs;
   // 默认投稿视频格式
@@ -232,7 +233,7 @@ class PlPlayerController {
   Rx<bool> get flipY => _flipY;
 
   /// 是否长按倍速
-  Rx<bool> get doubleSpeedStatus => _doubleSpeedStatus;
+  Rx<bool> get longPressStatus => _longPressStatus;
 
   Rx<bool> isBuffering = true.obs;
 
@@ -277,7 +278,6 @@ class PlPlayerController {
   late double danmakuDuration;
   late double danmakuStaticDuration;
   late List<double> speedList;
-  double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
   late bool enableLongShowControl;
   double subtitleFontScale = 1.0;
@@ -806,11 +806,7 @@ class PlPlayerController {
     if (videoType.value == 'live') {
       await setPlaybackSpeed(1.0);
     } else {
-      if (_playbackSpeed.value != 1.0) {
-        await setPlaybackSpeed(_playbackSpeed.value);
-      } else {
-        await setPlaybackSpeed(1.0);
-      }
+      await setPlaybackSpeed(_playbackSpeed.value);
     }
     getVideoFit();
     // if (_looping) {
@@ -1036,23 +1032,25 @@ class PlPlayerController {
 
   /// 设置倍速
   Future<void> setPlaybackSpeed(double speed) async {
-    /// TODO  _duration.value丢失
-    await _videoPlayerController?.setRate(speed);
-    try {
-      DanmakuOption currentOption = danmakuController!.option;
-      defaultDuration ??=
-          currentOption.duration.toDouble() * _playbackSpeed.value;
-      DanmakuOption updatedOption =
-          currentOption.copyWith(duration: defaultDuration! ~/ speed);
-      danmakuController!.updateOption(updatedOption);
-      if (speed == 1.0) {
-        defaultDuration = null;
-      }
-    } catch (_) {}
-    // fix 长按倍速后放开不恢复
-    if (!doubleSpeedStatus.value) {
-      _playbackSpeed.value = speed;
+    lastPlaybackSpeed = playbackSpeed;
+
+    if (speed == playbackSpeed) {
+      return;
     }
+
+    await _videoPlayerController?.setRate(speed);
+    if (danmakuController != null) {
+      DanmakuOption currentOption = danmakuController!.option;
+      double defaultDuration = currentOption.duration * lastPlaybackSpeed;
+      double defaultStaticDuration =
+          currentOption.staticDuration * lastPlaybackSpeed;
+      DanmakuOption updatedOption = currentOption.copyWith(
+        duration: defaultDuration / speed,
+        staticDuration: defaultStaticDuration / speed,
+      );
+      danmakuController!.updateOption(updatedOption);
+    }
+    _playbackSpeed.value = speed;
   }
 
   // 还原默认速度
@@ -1339,27 +1337,27 @@ class PlPlayerController {
   }
 
   /// 设置长按倍速状态 live模式下禁用
-  void setDoubleSpeedStatus(bool val) async {
+  void setLongPressStatus(bool val) async {
     if (videoType.value == 'live') {
       return;
     }
     if (controlsLock.value) {
       return;
     }
-    if (_doubleSpeedStatus.value == val) {
+    if (_longPressStatus.value == val) {
       return;
     }
     if (val) {
       if (playerStatus.status.value == PlayerStatus.playing) {
-        _doubleSpeedStatus.value = val;
+        _longPressStatus.value = val;
         HapticFeedback.lightImpact();
         await setPlaybackSpeed(
             enableAutoLongPressSpeed ? playbackSpeed * 2 : longPressSpeed);
       }
     } else {
       // debugPrint('$playbackSpeed');
-      _doubleSpeedStatus.value = val;
-      await setPlaybackSpeed(playbackSpeed);
+      _longPressStatus.value = val;
+      await setPlaybackSpeed(lastPlaybackSpeed);
     }
   }
 

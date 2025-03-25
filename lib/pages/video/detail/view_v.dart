@@ -302,8 +302,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       // 结束播放退出全屏
       if (!notExitFlag && autoExitFullscreen) {
         plPlayerController!.triggerFullScreen(status: false);
-        if (plPlayerController!.doubleSpeedStatus.value) {
-          plPlayerController!.setDoubleSpeedStatus(false);
+        if (plPlayerController!.longPressStatus.value) {
+          plPlayerController!.setLongPressStatus(false);
         }
         if (plPlayerController!.controlsLock.value) {
           plPlayerController!.onLockControl(false);

@@ -1520,7 +1520,7 @@ class _HeaderControlState extends State<HeaderControl> {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
                     duration:
-                        danmakuDuration ~/ widget.controller.playbackSpeed),
+                        danmakuDuration / widget.controller.playbackSpeed),
               );
             } catch (_) {}
           }
@@ -1534,7 +1534,7 @@ class _HeaderControlState extends State<HeaderControl> {
             try {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
-                    staticDuration: danmakuStaticDuration ~/
+                    staticDuration: danmakuStaticDuration /
                         widget.controller.playbackSpeed),
               );
             } catch (_) {}
