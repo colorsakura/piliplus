@@ -270,13 +270,14 @@ class PlPlayerController {
   // 弹幕相关配置
   late List blockTypes;
   late double showArea;
-  late double opacityVal;
-  late double fontSizeVal;
-  late double fontSizeFSVal;
+  late double opacity;
+  late double fontSize;
+  late double fontSizeFS;
   late double strokeWidth;
   late int fontWeight;
   late bool massiveMode;
-  late double danmakuDurationVal;
+  late double danmakuDuration;
+  late double danmakuStaticDuration;
   late List<double> speedList;
   double? defaultDuration;
   late bool enableAutoLongPressSpeed = false;
@@ -409,18 +410,19 @@ class PlPlayerController {
     blockTypes = setting.get(SettingBoxKey.danmakuBlockType, defaultValue: []);
     showArea = setting.get(SettingBoxKey.danmakuShowArea, defaultValue: 0.5);
     // 不透明度
-    opacityVal = setting.get(SettingBoxKey.danmakuOpacity, defaultValue: 1.0);
+    opacity = setting.get(SettingBoxKey.danmakuOpacity, defaultValue: 1.0);
     // 字体大小
-    fontSizeVal =
-        setting.get(SettingBoxKey.danmakuFontScale, defaultValue: 1.0);
+    fontSize = setting.get(SettingBoxKey.danmakuFontScale, defaultValue: 1.0);
     // 全屏字体大小
-    fontSizeFSVal = GStorage.danmakuFontScaleFS;
+    fontSizeFS = GStorage.danmakuFontScaleFS;
     subtitleFontScale = GStorage.subtitleFontScale;
     subtitleFontScaleFS = GStorage.subtitleFontScaleFS;
     massiveMode = GStorage.danmakuMassiveMode;
     // 弹幕时间
-    danmakuDurationVal =
+    danmakuDuration =
         setting.get(SettingBoxKey.danmakuDuration, defaultValue: 7.0);
+    danmakuStaticDuration =
+        setting.get(SettingBoxKey.danmakuStaticDuration, defaultValue: 4.0);
     // 描边粗细
     strokeWidth = setting.get(SettingBoxKey.strokeWidth, defaultValue: 1.5);
     // 弹幕字体粗细
@@ -1509,10 +1511,11 @@ class PlPlayerController {
     setting.put(SettingBoxKey.danmakuWeight, danmakuWeight);
     setting.put(SettingBoxKey.danmakuBlockType, blockTypes);
     setting.put(SettingBoxKey.danmakuShowArea, showArea);
-    setting.put(SettingBoxKey.danmakuOpacity, opacityVal);
-    setting.put(SettingBoxKey.danmakuFontScale, fontSizeVal);
-    setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFSVal);
-    setting.put(SettingBoxKey.danmakuDuration, danmakuDurationVal);
+    setting.put(SettingBoxKey.danmakuOpacity, opacity);
+    setting.put(SettingBoxKey.danmakuFontScale, fontSize);
+    setting.put(SettingBoxKey.danmakuFontScaleFS, fontSizeFS);
+    setting.put(SettingBoxKey.danmakuDuration, danmakuDuration);
+    setting.put(SettingBoxKey.danmakuStaticDuration, danmakuStaticDuration);
     setting.put(SettingBoxKey.strokeWidth, strokeWidth);
     setting.put(SettingBoxKey.fontWeight, fontWeight);
     setting.put(SettingBoxKey.danmakuLineHeight, danmakuLineHeight);

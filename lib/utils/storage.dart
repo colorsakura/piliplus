@@ -741,6 +741,7 @@ class SettingBoxKey {
       danmakuFontScale = 'danmakuFontScale',
       danmakuFontScaleFS = 'danmakuFontScaleFS',
       danmakuDuration = 'danmakuDuration',
+      danmakuStaticDuration = 'danmakuStaticDuration',
       danmakuMassiveMode = 'danmakuMassiveMode',
       danmakuLineHeight = 'danmakuLineHeight',
       strokeWidth = 'strokeWidth',

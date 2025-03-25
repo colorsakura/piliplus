@@ -1453,14 +1453,15 @@ class _HeaderControlState extends State<HeaderControl> {
     // 显示区域
     double showArea = widget.controller.showArea;
     // 不透明度
-    double opacityVal = widget.controller.opacityVal;
+    double opacity = widget.controller.opacity;
     // 字体大小
-    double fontSizeVal = widget.controller.fontSizeVal;
+    double fontSize = widget.controller.fontSize;
     // 全屏字体大小
-    double fontSizeFSVal = widget.controller.fontSizeFSVal;
+    double fontSizeFS = widget.controller.fontSizeFS;
     double danmakuLineHeight = widget.controller.danmakuLineHeight;
     // 弹幕速度
-    double danmakuDurationVal = widget.controller.danmakuDurationVal;
+    double danmakuDuration = widget.controller.danmakuDuration;
+    double danmakuStaticDuration = widget.controller.danmakuStaticDuration;
     // 弹幕描边
     double strokeWidth = widget.controller.strokeWidth;
     // 字体粗细
@@ -1499,31 +1500,46 @@ class _HeaderControlState extends State<HeaderControl> {
           }
 
           void updateDuration(double val) {
-            danmakuDurationVal = val;
+            danmakuDuration = val;
             widget.controller
-              ..danmakuDurationVal = danmakuDurationVal
+              ..danmakuDuration = danmakuDuration
               ..putDanmakuSettings();
             setState(() {});
             try {
               danmakuController?.updateOption(
                 danmakuController.option.copyWith(
                     duration:
-                        danmakuDurationVal ~/ widget.controller.playbackSpeed),
+                        danmakuDuration ~/ widget.controller.playbackSpeed),
+              );
+            } catch (_) {}
+          }
+
+          void updateStaticDuration(double val) {
+            danmakuStaticDuration = val;
+            widget.controller
+              ..danmakuStaticDuration = danmakuStaticDuration
+              ..putDanmakuSettings();
+            setState(() {});
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(
+                    staticDuration: danmakuStaticDuration ~/
+                        widget.controller.playbackSpeed),
               );
             } catch (_) {}
           }
 
           void updateFontSizeFS(double val) {
-            fontSizeFSVal = val;
+            fontSizeFS = val;
             widget.controller
-              ..fontSizeFSVal = fontSizeFSVal
+              ..fontSizeFS = fontSizeFS
               ..putDanmakuSettings();
             setState(() {});
             if (widget.controller.isFullScreen.value == true) {
               try {
                 danmakuController?.updateOption(
                   danmakuController.option.copyWith(
-                    fontSize: (15 * fontSizeFSVal).toDouble(),
+                    fontSize: (15 * fontSizeFS).toDouble(),
                   ),
                 );
               } catch (_) {}
@@ -1531,16 +1547,16 @@ class _HeaderControlState extends State<HeaderControl> {
           }
 
           void updateFontSize(double val) {
-            fontSizeVal = val;
+            fontSize = val;
             widget.controller
-              ..fontSizeVal = fontSizeVal
+              ..fontSize = fontSize
               ..putDanmakuSettings();
             setState(() {});
             if (widget.controller.isFullScreen.value == false) {
               try {
                 danmakuController?.updateOption(
                   danmakuController.option.copyWith(
-                    fontSize: (15 * fontSizeVal).toDouble(),
+                    fontSize: (15 * fontSize).toDouble(),
                   ),
                 );
               } catch (_) {}
@@ -1574,9 +1590,9 @@ class _HeaderControlState extends State<HeaderControl> {
           }
 
           void updateOpacity(double val) {
-            opacityVal = val;
+            opacity = val;
             widget.controller
-              ..opacityVal = opacityVal
+              ..opacity = opacity
               ..putDanmakuSettings();
             setState(() {});
             try {
@@ -1751,7 +1767,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('不透明度 ${opacityVal * 100}%'),
+                        Text('不透明度 ${opacity * 100}%'),
                         resetBtn('100.0%', () => updateOpacity(1.0)),
                       ],
                     ),
@@ -1767,9 +1783,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         child: Slider(
                           min: 0,
                           max: 1,
-                          value: opacityVal,
+                          value: opacity,
                           divisions: 10,
-                          label: '${opacityVal * 100}%',
+                          label: '${opacity * 100}%',
                           onChanged: updateOpacity,
                         ),
                       ),
@@ -1831,7 +1847,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('字体大小 ${(fontSizeVal * 100).toStringAsFixed(1)}%'),
+                        Text('字体大小 ${(fontSize * 100).toStringAsFixed(1)}%'),
                         resetBtn('100.0%', () => updateFontSize(1.0)),
                       ],
                     ),
@@ -1847,9 +1863,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         child: Slider(
                           min: 0.5,
                           max: 2.5,
-                          value: fontSizeVal,
+                          value: fontSize,
                           divisions: 20,
-                          label: '${(fontSizeVal * 100).toStringAsFixed(1)}%',
+                          label: '${(fontSize * 100).toStringAsFixed(1)}%',
                           onChanged: updateFontSize,
                         ),
                       ),
@@ -1858,7 +1874,7 @@ class _HeaderControlState extends State<HeaderControl> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            '全屏字体大小 ${(fontSizeFSVal * 100).toStringAsFixed(1)}%'),
+                            '全屏字体大小 ${(fontSizeFS * 100).toStringAsFixed(1)}%'),
                         resetBtn('120.0%', () => updateFontSizeFS(1.2)),
                       ],
                     ),
@@ -1874,9 +1890,9 @@ class _HeaderControlState extends State<HeaderControl> {
                         child: Slider(
                           min: 0.5,
                           max: 2.5,
-                          value: fontSizeFSVal,
+                          value: fontSizeFS,
                           divisions: 20,
-                          label: '${(fontSizeFSVal * 100).toStringAsFixed(1)}%',
+                          label: '${(fontSizeFS * 100).toStringAsFixed(1)}%',
                           onChanged: updateFontSizeFS,
                         ),
                       ),
@@ -1884,7 +1900,7 @@ class _HeaderControlState extends State<HeaderControl> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('弹幕时长 $danmakuDurationVal 秒'),
+                        Text('滚动弹幕时长 $danmakuDuration 秒'),
                         resetBtn(7.0, () => updateDuration(7.0)),
                       ],
                     ),
@@ -1900,11 +1916,39 @@ class _HeaderControlState extends State<HeaderControl> {
                         child: Slider(
                           min: 1,
                           max: 50,
-                          value: danmakuDurationVal,
+                          value: danmakuDuration,
                           divisions: 49,
-                          label: danmakuDurationVal.toString(),
+                          label: danmakuDuration.toString(),
                           onChanged: (double val) {
                             updateDuration(val.toPrecision(1));
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('静态弹幕时长 $danmakuStaticDuration 秒'),
+                        resetBtn(4.0, () => updateStaticDuration(4.0)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 6,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: SliderTheme(
+                        data: sliderTheme,
+                        child: Slider(
+                          min: 1,
+                          max: 50,
+                          value: danmakuStaticDuration,
+                          divisions: 49,
+                          label: danmakuStaticDuration.toString(),
+                          onChanged: (double val) {
+                            updateStaticDuration(val.toPrecision(1));
                           },
                         ),
                       ),

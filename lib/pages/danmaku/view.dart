@@ -138,8 +138,8 @@ class _PlDanmakuState extends State<PlDanmaku> {
 
   double _getFontSize(isFullScreen) =>
       isFullScreen == false || widget.isPipMode == true
-          ? 15 * playerController.fontSizeVal
-          : 15 * playerController.fontSizeFSVal;
+          ? 15 * playerController.fontSize
+          : 15 * playerController.fontSizeFS;
 
   @override
   Widget build(BuildContext context) {
@@ -157,11 +157,13 @@ class _PlDanmakuState extends State<PlDanmaku> {
               fontSize: _getFontSize(playerController.isFullScreen.value),
               fontWeight: playerController.fontWeight,
               area: playerController.showArea,
-              opacity: playerController.opacityVal,
+              opacity: playerController.opacity,
               hideTop: playerController.blockTypes.contains(5),
               hideScroll: playerController.blockTypes.contains(2),
               hideBottom: playerController.blockTypes.contains(4),
-              duration: playerController.danmakuDurationVal ~/
+              duration: playerController.danmakuDuration ~/
+                  playerController.playbackSpeed,
+              staticDuration: playerController.danmakuStaticDuration ~/
                   playerController.playbackSpeed,
               strokeWidth: playerController.strokeWidth,
               lineHeight: playerController.danmakuLineHeight,
