@@ -8,7 +8,7 @@ class PostSegmentModel {
     required this.category,
     required this.actionType,
   });
-  Pair<int, int> segment;
+  Pair<double, double> segment;
   SegmentType category;
   ActionType actionType;
 }

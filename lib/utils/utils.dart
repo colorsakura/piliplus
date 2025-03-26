@@ -1423,10 +1423,13 @@ class Utils {
     return v.toString() + random.nextInt(9999).toString();
   }
 
-  static String formatDuration(int seconds) {
+  static String formatDuration(num seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
-    int remainingSeconds = seconds % 60;
+    num remainingSeconds = seconds % 60;
+    if (remainingSeconds is double) {
+      remainingSeconds = remainingSeconds.toPrecision(3);
+    }
 
     String minutesStr = minutes.toString().padLeft(2, '0');
     String secondsStr = remainingSeconds.toString().padLeft(2, '0');

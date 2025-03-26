@@ -745,12 +745,20 @@ class VideoDetailController extends GetxController
                 skipType = SkipType.showOnly;
               }
             }
+            int convert(value) {
+              return switch (value) {
+                int() => value,
+                double() => value.round(),
+                _ => -1,
+              };
+            }
+
             return SegmentModel(
               UUID: item['UUID'],
               segmentType: segmentType,
               segment: Pair(
-                first: _convert(item['segment'][0]),
-                second: _convert(item['segment'][1]),
+                first: convert(item['segment'][0]),
+                second: convert(item['segment'][1]),
               ),
               skipType: skipType,
             );
@@ -770,14 +778,6 @@ class VideoDetailController extends GetxController
         debugPrint('failed to parse sponsorblock: $e');
       }
     }
-  }
-
-  int _convert(value) {
-    return value is double
-        ? value.round()
-        : value is int
-            ? value
-            : -1;
   }
 
   void initSkip() {
@@ -1319,7 +1319,7 @@ class VideoDetailController extends GetxController
         PostSegmentModel(
           segment: Pair(
             first: 0,
-            second: plPlayerController.positionSeconds.value,
+            second: plPlayerController.position.value.inMilliseconds / 1000,
           ),
           category: SegmentType.sponsor,
           actionType: ActionType.skip,

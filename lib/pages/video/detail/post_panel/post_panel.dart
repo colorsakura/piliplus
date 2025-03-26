@@ -42,6 +42,12 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   PlPlayerController get plPlayerController => widget.plPlayerController;
   List<PostSegmentModel>? get list => videoDetailController.list;
 
+  late final double videoDuration =
+      plPlayerController.durationSeconds.value.inMilliseconds / 1000;
+
+  double get currentPos =>
+      plPlayerController.position.value.inMilliseconds / 1000;
+
   @override
   Widget get buildPage => Scaffold(
         resizeToAvoidBottomInset: false,
@@ -60,7 +66,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                     PostSegmentModel(
                       segment: Pair(
                         first: 0,
-                        second: plPlayerController.positionSeconds.value,
+                        second: currentPos,
                       ),
                       category: SegmentType.sponsor,
                       actionType: ActionType.skip,
@@ -299,6 +305,50 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                             },
                           ),
                         ),
+                        Positioned(
+                          top: 0,
+                          left: 4,
+                          child: iconButton(
+                            context: context,
+                            size: 26,
+                            tooltip: '预览',
+                            icon: Icons.preview_outlined,
+                            onPressed: () async {
+                              if (widget.plPlayerController
+                                      .videoPlayerController !=
+                                  null) {
+                                int start = max(
+                                  0,
+                                  (list![index].segment.first * 1000).toInt() -
+                                      1,
+                                );
+                                await widget
+                                    .plPlayerController.videoPlayerController!
+                                    .seek(
+                                  Duration(milliseconds: start),
+                                );
+                                if (widget.plPlayerController
+                                    .videoPlayerController!.state.playing.not) {
+                                  await widget
+                                      .plPlayerController.videoPlayerController!
+                                      .play();
+                                }
+                                if (start != 0) {
+                                  await Future.delayed(
+                                      const Duration(seconds: 1));
+                                }
+                                widget.plPlayerController.videoPlayerController!
+                                    .seek(
+                                  Duration(
+                                    milliseconds:
+                                        (list![index].segment.second * 1000)
+                                            .toInt(),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -338,8 +388,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                                 'cid': videoDetailController.cid.value,
                                 'userID': GStorage.blockUserID,
                                 'userAgent': Constants.userAgent,
-                                'videoDuration': plPlayerController
-                                    .durationSeconds.value.inSeconds,
+                                'videoDuration': videoDuration,
                               },
                               data: {
                                 'segments': list!
@@ -400,7 +449,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
   void updateSegment({
     required bool isFirst,
     required int index,
-    required int value,
+    required double value,
   }) {
     if (isFirst) {
       list![index].segment.first = value;
@@ -434,7 +483,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             updateSegment(
               isFirst: isFirst,
               index: index,
-              value: plPlayerController.positionSeconds.value,
+              value: currentPos,
             );
           });
         },
@@ -450,9 +499,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
             updateSegment(
               isFirst: isFirst,
               index: index,
-              value: isFirst
-                  ? 0
-                  : plPlayerController.durationSeconds.value.inSeconds,
+              value: isFirst ? 0 : videoDuration,
             );
           });
         },
@@ -464,7 +511,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
         tooltip: '编辑',
         icon: Icons.edit,
         onPressed: () {
-          showDialog(
+          showDialog<String>(
             context: context,
             builder: (context) {
               String initV = value;
@@ -477,7 +524,7 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                      RegExp(r'[\d:]+'),
+                      RegExp(r'[\d:.]+'),
                     ),
                   ],
                 ),
@@ -500,19 +547,13 @@ class _PostPanelState extends CommonCollapseSlidePageState<PostPanel> {
           ).then((res) {
             if (res != null) {
               try {
-                List<int> split = (res as String)
-                    .split(':')
-                    .toList()
-                    .reversed
-                    .toList()
-                    .map((e) => int.parse(e))
-                    .toList();
-                int duration = 0;
+                List<num> split =
+                    res.split(':').reversed.map((e) => num.parse(e)).toList();
+                double duration = 0;
                 for (int i = 0; i < split.length; i++) {
-                  duration += split[i] * pow(60, i).toInt();
+                  duration += split[i] * pow(60, i);
                 }
-                if (duration <=
-                    plPlayerController.durationSeconds.value.inSeconds) {
+                if (duration <= videoDuration) {
                   setState(() {
                     updateSegment(
                       isFirst: isFirst,
