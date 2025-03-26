@@ -436,6 +436,9 @@ class GStorage {
       GStorage.setting.get(SettingBoxKey.liveQualityCellular,
           defaultValue: LiveQuality.superHD.code);
 
+  static int get appFontWeight =>
+      GStorage.setting.get(SettingBoxKey.appFontWeight, defaultValue: -1);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -717,6 +720,7 @@ class SettingBoxKey {
       retryDelay = 'retryDelay',
       liveQuality = 'liveQuality',
       liveQualityCellular = 'liveQualityCellular',
+      appFontWeight = 'appFontWeight',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

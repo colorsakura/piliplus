@@ -66,7 +66,10 @@ class _MemberContributeState extends State<MemberContribute>
                       borderRadius: BorderRadius.circular(20),
                     ),
                     indicatorSize: TabBarIndicatorSize.tab,
-                    labelStyle: const TextStyle(fontSize: 14),
+                    labelStyle: TabBarTheme.of(context)
+                            .labelStyle
+                            ?.copyWith(fontSize: 14) ??
+                        const TextStyle(fontSize: 14),
                     labelColor:
                         Theme.of(context).colorScheme.onSecondaryContainer,
                     unselectedLabelColor: Theme.of(context).colorScheme.outline,

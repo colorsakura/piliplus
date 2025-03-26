@@ -36,20 +36,27 @@ class SetSwitchItem extends StatefulWidget {
 class _SetSwitchItemState extends State<SetSwitchItem> {
   late bool val;
 
-  @override
-  void didUpdateWidget(SetSwitchItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.setKey != widget.setKey) {
+  void setVal() {
+    if (widget.setKey == SettingBoxKey.appFontWeight) {
+      val = GStorage.appFontWeight != -1;
+    } else {
       val = GStorage.setting
           .get(widget.setKey, defaultValue: widget.defaultVal ?? false);
     }
   }
 
   @override
+  void didUpdateWidget(SetSwitchItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.setKey != widget.setKey) {
+      setVal();
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
-    val = GStorage.setting
-        .get(widget.setKey, defaultValue: widget.defaultVal ?? false);
+    setVal();
   }
 
   void switchChange(value) async {
@@ -89,7 +96,12 @@ class _SetSwitchItemState extends State<SetSwitchItem> {
 
     val = value ?? !val;
 
-    await GStorage.setting.put(widget.setKey, val);
+    if (widget.setKey == SettingBoxKey.appFontWeight) {
+      await GStorage.setting.put(SettingBoxKey.appFontWeight, val ? 4 : -1);
+    } else {
+      await GStorage.setting.put(widget.setKey, val);
+    }
+
     widget.onChanged?.call(val);
     if (widget.needReboot == true) {
       SmartDialog.showToast('重启生效');

@@ -148,6 +148,37 @@ List<SettingsModel> get styleSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: 'App字体字重',
+        subtitle: '点击设置',
+        setKey: SettingBoxKey.appFontWeight,
+        defaultVal: false,
+        onTap: () {
+          showDialog<double>(
+            context: Get.context!,
+            builder: (context) {
+              return SlideDialog(
+                title: 'App字体字重',
+                value: GStorage.appFontWeight.toDouble() + 1,
+                min: 1,
+                max: FontWeight.values.length.toDouble(),
+                divisions: FontWeight.values.length - 1,
+              );
+            },
+          ).then((res) async {
+            if (res != null) {
+              await GStorage.setting
+                  .put(SettingBoxKey.appFontWeight, res.toInt() - 1);
+              Get.forceAppUpdate();
+            }
+          });
+        },
+        leading: const Icon(Icons.text_fields),
+        onChanged: (value) {
+          Get.forceAppUpdate();
+        },
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         title: 'MD3样式底栏',
         subtitle: 'Material You设计规范底栏，关闭可变窄',
         leading: const Icon(Icons.design_services_outlined),

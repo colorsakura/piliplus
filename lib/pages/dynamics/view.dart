@@ -154,9 +154,9 @@ class _DynamicsPageState extends State<DynamicsPage>
               indicatorColor: Theme.of(context).colorScheme.primary,
               labelColor: Theme.of(context).colorScheme.primary,
               unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
-              labelStyle: TextStyle(
-                fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-              ),
+              labelStyle:
+                  TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
+                      const TextStyle(fontSize: 13),
               tabs:
                   DynamicsType.values.map((e) => Tab(text: e.labels)).toList(),
               onTap: (index) {

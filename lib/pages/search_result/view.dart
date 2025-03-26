@@ -120,7 +120,10 @@ class _SearchResultPageState extends State<SearchResultPage>
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                labelStyle: const TextStyle(fontSize: 13),
+                labelStyle: TabBarTheme.of(context)
+                        .labelStyle
+                        ?.copyWith(fontSize: 13) ??
+                    const TextStyle(fontSize: 13),
                 dividerColor: Colors.transparent,
                 dividerHeight: 0,
                 unselectedLabelColor: Theme.of(context).colorScheme.outline,

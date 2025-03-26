@@ -64,16 +64,46 @@ class Utils {
     bool isDark = false,
     required FlexSchemeVariant variant,
   }) {
+    final appFontWeight =
+        GStorage.appFontWeight.clamp(-1, FontWeight.values.length - 1);
+    final fontWeight =
+        appFontWeight == -1 ? null : FontWeight.values[appFontWeight];
+    late final textStyle = TextStyle(fontWeight: fontWeight);
     ThemeData themeData = ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
+      textTheme: fontWeight == null
+          ? null
+          : TextTheme(
+              displayLarge: textStyle,
+              displayMedium: textStyle,
+              displaySmall: textStyle,
+              headlineLarge: textStyle,
+              headlineMedium: textStyle,
+              headlineSmall: textStyle,
+              titleLarge: textStyle,
+              titleMedium: textStyle,
+              titleSmall: textStyle,
+              bodyLarge: textStyle,
+              bodyMedium: textStyle,
+              bodySmall: textStyle,
+              labelLarge: textStyle,
+              labelMedium: textStyle,
+              labelSmall: textStyle,
+            ),
+      tabBarTheme:
+          fontWeight == null ? null : TabBarTheme(labelStyle: textStyle),
       appBarTheme: AppBarTheme(
         elevation: 0,
         titleSpacing: 0,
         centerTitle: false,
         scrolledUnderElevation: 0,
         backgroundColor: isDynamic ? null : colorScheme.surface,
-        titleTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
+        titleTextStyle: TextStyle(
+          fontSize: 16,
+          color: colorScheme.onSurface,
+          fontWeight: fontWeight,
+        ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         surfaceTintColor: isDynamic ? colorScheme.onSurfaceVariant : null,
@@ -114,6 +144,7 @@ class Utils {
         titleTextStyle: TextStyle(
           fontSize: 18,
           color: colorScheme.onSurface,
+          fontWeight: fontWeight,
         ),
       ),
     );

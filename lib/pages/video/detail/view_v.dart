@@ -1610,7 +1610,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               : null,
           padding: EdgeInsets.zero,
           controller: videoDetailController.tabCtr,
-          labelStyle: const TextStyle(fontSize: 13),
+          labelStyle:
+              TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
+                  const TextStyle(fontSize: 13),
           labelPadding:
               const EdgeInsets.symmetric(horizontal: 10.0), // 设置每个标签的宽度
           dividerColor: Colors.transparent,
