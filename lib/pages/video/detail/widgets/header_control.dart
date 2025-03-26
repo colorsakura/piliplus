@@ -13,6 +13,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:document_file_save_plus/document_file_save_plus_platform_interface.dart';
 import 'package:floating/floating.dart';
@@ -844,7 +845,7 @@ class _HeaderControlState extends State<HeaderControl> {
                           for (int i = 0; i < totalQaSam; i++) ...[
                             ListTile(
                               dense: true,
-                              onTap: () {
+                              onTap: () async {
                                 if (currentVideoQa.code ==
                                     videoFormat[i].quality) {
                                   return;
@@ -854,16 +855,33 @@ class _HeaderControlState extends State<HeaderControl> {
                                 videoDetailCtr.currentVideoQa =
                                     VideoQualityCode.fromCode(quality)!;
                                 videoDetailCtr.updatePlayer();
-                                // String oldQualityDesc =
-                                //     VideoQualityCode.fromCode(setting.get(
-                                //             SettingBoxKey.defaultVideoQa,
-                                //             defaultValue:
-                                //                 VideoQuality.values.last.code))!
-                                //         .description;
-                                // setting.put(
-                                //     SettingBoxKey.defaultVideoQa, quality);
-                                // SmartDialog.showToast(
-                                //     "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}");
+
+                                // update
+                                late String oldQualityDesc;
+                                await Connectivity()
+                                    .checkConnectivity()
+                                    .then((res) {
+                                  if (res.contains(ConnectivityResult.wifi)) {
+                                    oldQualityDesc = VideoQualityCode.fromCode(
+                                            GStorage.defaultVideoQa)!
+                                        .description;
+                                    setting.put(
+                                      SettingBoxKey.defaultVideoQa,
+                                      quality,
+                                    );
+                                  } else {
+                                    oldQualityDesc = VideoQualityCode.fromCode(
+                                            GStorage.defaultVideoQaCellular)!
+                                        .description;
+                                    setting.put(
+                                      SettingBoxKey.defaultVideoQaCellular,
+                                      quality,
+                                    );
+                                  }
+                                });
+                                SmartDialog.showToast(
+                                  "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}",
+                                );
                               },
                               // 可能包含会员解锁画质
                               enabled: i >= totalQaSam - userfulQaSam,
@@ -928,7 +946,7 @@ class _HeaderControlState extends State<HeaderControl> {
                         for (final AudioItem i in audio) ...[
                           ListTile(
                             dense: true,
-                            onTap: () {
+                            onTap: () async {
                               if (currentAudioQa.code == i.id) {
                                 return;
                               }
@@ -937,15 +955,33 @@ class _HeaderControlState extends State<HeaderControl> {
                               videoDetailCtr.currentAudioQa =
                                   AudioQualityCode.fromCode(quality)!;
                               videoDetailCtr.updatePlayer();
-                              // String oldQualityDesc = AudioQualityCode.fromCode(
-                              //         setting.get(SettingBoxKey.defaultAudioQa,
-                              //             defaultValue:
-                              //                 AudioQuality.values.last.code))!
-                              //     .description;
-                              // setting.put(
-                              //     SettingBoxKey.defaultAudioQa, quality);
-                              // SmartDialog.showToast(
-                              //     "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}");
+
+                              // update
+                              late String oldQualityDesc;
+                              await Connectivity()
+                                  .checkConnectivity()
+                                  .then((res) {
+                                if (res.contains(ConnectivityResult.wifi)) {
+                                  oldQualityDesc = AudioQualityCode.fromCode(
+                                          GStorage.defaultAudioQa)!
+                                      .description;
+                                  setting.put(
+                                    SettingBoxKey.defaultAudioQa,
+                                    quality,
+                                  );
+                                } else {
+                                  oldQualityDesc = AudioQualityCode.fromCode(
+                                          GStorage.defaultAudioQaCellular)!
+                                      .description;
+                                  setting.put(
+                                    SettingBoxKey.defaultAudioQaCellular,
+                                    quality,
+                                  );
+                                }
+                              });
+                              SmartDialog.showToast(
+                                "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}",
+                              );
                             },
                             contentPadding:
                                 const EdgeInsets.only(left: 20, right: 20),
