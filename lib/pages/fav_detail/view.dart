@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/pages/fav_detail/fav_sort_page.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -239,6 +240,33 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                           });
                                         },
                                         child: Text('清除失效内容'),
+                                      ),
+                                      PopupMenuItem(
+                                        onTap: () {
+                                          if (_favDetailController.loadingState
+                                                  .value is Success &&
+                                              ((_favDetailController
+                                                              .loadingState
+                                                              .value as Success)
+                                                          .response as List?)
+                                                      ?.isNotEmpty ==
+                                                  true) {
+                                            if ((_favDetailController.item.value
+                                                        .mediaCount ??
+                                                    0) >
+                                                1000) {
+                                              SmartDialog.showToast(
+                                                  '内容太多啦！超过1000不支持排序');
+                                              return;
+                                            }
+                                            Get.to(
+                                              FavSortPage(
+                                                  favDetailController:
+                                                      _favDetailController),
+                                            );
+                                          }
+                                        },
+                                        child: Text('排序'),
                                       ),
                                       if (!Utils.isDefault(_favDetailController
                                               .item.value.attr ??

@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/later.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../common/constants.dart';
@@ -59,6 +60,30 @@ class UserHttp {
       return LoadingState.success(FavFolderData.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message'] ?? '账号未登录');
+    }
+  }
+
+  static Future sortFav({
+    required dynamic mediaId,
+    required List<String> sort,
+  }) async {
+    Map<String, dynamic> data = {
+      'media_id': mediaId,
+      'sort': sort.join(','),
+      'csrf': await Request.getCsrf(),
+    };
+    Utils.appSign(data);
+    var res = await Request().post(
+      Api.sortFav,
+      data: data,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -152,7 +177,7 @@ class UserHttp {
       String keyword = '',
       String order = 'mtime',
       int type = 0}) async {
-    var res = await Request().get(Api.userFavFolderDetail, queryParameters: {
+    var res = await Request().get(Api.favResourceList, queryParameters: {
       'media_id': mediaId,
       'pn': pn,
       'ps': ps,

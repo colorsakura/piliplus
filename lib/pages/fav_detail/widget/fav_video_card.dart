@@ -22,7 +22,8 @@ class FavVideoCardH extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final bool isOwner;
-  final VoidCallback onViewFav;
+  final VoidCallback? onViewFav;
+  final bool? isSort;
 
   const FavVideoCardH({
     super.key,
@@ -32,7 +33,8 @@ class FavVideoCardH extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.isOwner = false,
-    required this.onViewFav,
+    this.onViewFav,
+    this.isSort,
   });
 
   @override
@@ -40,53 +42,57 @@ class FavVideoCardH extends StatelessWidget {
     int id = videoItem.id!;
     String bvid = videoItem.bvid ?? IdUtils.av2bv(id);
     return InkWell(
-      onTap: () async {
-        if (onTap != null) {
-          onTap!();
-          return;
-        }
-        String? epId;
-        if (videoItem.type == 24) {
-          videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
-          dynamic seasonId = videoItem.ogv!['season_id'];
-          epId = videoItem.epId;
-          Utils.viewBangumi(seasonId: seasonId, epId: epId);
-          return;
-        } else if (videoItem.page == 0 || videoItem.page! > 1) {
-          var result = await VideoHttp.videoIntro(bvid: bvid);
-          if (result['status']) {
-            epId = result['data'].epId;
-          } else {
-            SmartDialog.showToast(result['msg']);
-          }
-        }
+      onTap: isSort == true
+          ? null
+          : () async {
+              if (onTap != null) {
+                onTap!();
+                return;
+              }
+              String? epId;
+              if (videoItem.type == 24) {
+                videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
+                dynamic seasonId = videoItem.ogv!['season_id'];
+                epId = videoItem.epId;
+                Utils.viewBangumi(seasonId: seasonId, epId: epId);
+                return;
+              } else if (videoItem.page == 0 || videoItem.page! > 1) {
+                var result = await VideoHttp.videoIntro(bvid: bvid);
+                if (result['status']) {
+                  epId = result['data'].epId;
+                } else {
+                  SmartDialog.showToast(result['msg']);
+                }
+              }
 
-        if ([0, 16].contains(videoItem.attr).not) {
-          Get.toNamed('/member?mid=${videoItem.owner.mid}');
-          return;
-        }
-        onViewFav();
-        // Utils.toViewPage(
-        //   'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
-        //   arguments: {
-        //     'videoItem': videoItem,
-        //     'heroTag': Utils.makeHeroTag(id),
-        //     'videoType':
-        //         epId != null ? SearchType.media_bangumi : SearchType.video,
-        //   },
-        // );
-      },
-      onLongPress: () {
-        if (onLongPress != null) {
-          onLongPress!();
-        } else {
-          imageSaveDialog(
-            context: context,
-            title: videoItem.title,
-            cover: videoItem.pic,
-          );
-        }
-      },
+              if ([0, 16].contains(videoItem.attr).not) {
+                Get.toNamed('/member?mid=${videoItem.owner.mid}');
+                return;
+              }
+              onViewFav?.call();
+              // Utils.toViewPage(
+              //   'bvid=$bvid&cid=${videoItem.cid}${epId?.isNotEmpty == true ? '&epId=$epId' : ''}',
+              //   arguments: {
+              //     'videoItem': videoItem,
+              //     'heroTag': Utils.makeHeroTag(id),
+              //     'videoType':
+              //         epId != null ? SearchType.media_bangumi : SearchType.video,
+              //   },
+              // );
+            },
+      onLongPress: isSort == true
+          ? null
+          : () {
+              if (onLongPress != null) {
+                onLongPress!();
+              } else {
+                imageSaveDialog(
+                  context: context,
+                  title: videoItem.title,
+                  cover: videoItem.pic,
+                );
+              }
+            },
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: StyleString.safeSpace,

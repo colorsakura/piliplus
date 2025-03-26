@@ -81,6 +81,18 @@ class Api {
   /// https://api.bilibili.com/x/web-interface/archive/coins
   static const String hasCoinVideo = '/x/web-interface/archive/coins';
 
+  /// 收藏夹 详情
+  /// media_id  当前收藏夹id 搜索全部时为默认收藏夹id
+  /// pn int 当前页
+  /// ps int pageSize
+  /// keyword String 搜索词
+  /// order String 排序方式 view 最多播放 mtime 最近收藏 pubtime 最近投稿
+  /// tid int 分区id
+  /// platform web
+  /// type 0 当前收藏夹 1 全部收藏夹
+  // https://api.bilibili.com/x/v3/fav/resource/list?media_id=76614671&pn=1&ps=20&keyword=&order=mtime&type=0&tid=0
+  static const String favResourceList = '/x/v3/fav/resource/list';
+
   // 收藏视频（双端）POST
   // access_key	str	APP登录Token	APP方式必要
   /// rid	num	稿件avid	必要
@@ -95,6 +107,14 @@ class Api {
   // static const String favBangumi = '/x/v3/fav/resource/batch-deal';
 
   static const String delFav = '/x/v3/fav/resource/batch-del';
+
+  static const String copyFav = '/x/v3/fav/resource/copy';
+
+  static const String moveFav = '/x/v3/fav/resource/move';
+
+  static const String cleanFav = '/x/v3/fav/resource/clean';
+
+  static const String sortFav = '/x/v3/fav/resource/sort';
 
   // 判断视频是否被收藏（双端）GET
   /// aid
@@ -122,10 +142,6 @@ class Api {
   // type	num	目标内容属性	非必要	默认为全部 0：全部 2：视频稿件
   // rid	num	目标 视频稿件avid
   static const String favFolder = '/x/v3/fav/folder/created/list-all';
-
-  static const String copyFav = '/x/v3/fav/resource/copy';
-
-  static const String moveFav = '/x/v3/fav/resource/move';
 
   static const String copyToview = '/x/v2/history/toview/copy';
 
@@ -191,20 +207,6 @@ class Api {
   static const String editFolder = '/x/v3/fav/folder/edit';
 
   static const String deleteFolder = '/x/v3/fav/folder/del';
-
-  static const String cleanFav = '/x/v3/fav/resource/clean';
-
-  /// 收藏夹 详情
-  /// media_id  当前收藏夹id 搜索全部时为默认收藏夹id
-  /// pn int 当前页
-  /// ps int pageSize
-  /// keyword String 搜索词
-  /// order String 排序方式 view 最多播放 mtime 最近收藏 pubtime 最近投稿
-  /// tid int 分区id
-  /// platform web
-  /// type 0 当前收藏夹 1 全部收藏夹
-  // https://api.bilibili.com/x/v3/fav/resource/list?media_id=76614671&pn=1&ps=20&keyword=&order=mtime&type=0&tid=0
-  static const String userFavFolderDetail = '/x/v3/fav/resource/list';
 
   // 正在直播的up & 关注的up
   // https://api.bilibili.com/x/polymer/web-dynamic/v1/portal
@@ -673,9 +675,6 @@ class Api {
 
   /// 我的订阅-合集详情
   static const favSeasonList = '/x/space/fav/season/list';
-
-  /// 我的订阅-播单详情
-  static const favResourceList = '/x/v3/fav/resource/list';
 
   /// 发送私信
   static const String sendMsg = '${HttpString.tUrl}/web_im/v1/web_im/send_msg';
