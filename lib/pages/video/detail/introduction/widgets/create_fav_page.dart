@@ -284,6 +284,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
                 ),
               ),
               title: TextField(
+                autofocus: true,
                 readOnly: _attr != null && Utils.isDefault(_attr!),
                 controller: _titleController,
                 style: TextStyle(

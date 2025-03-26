@@ -7,6 +7,7 @@ import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -141,11 +142,14 @@ class _MainAppState extends State<MainApp>
 
       int now = DateTime.now().millisecondsSinceEpoch;
       if (now - _lastSelectTime < 500) {
-        if (currentPage is HomePage) {
-          _homeController.onRefresh();
-        } else if (currentPage is DynamicsPage) {
-          _dynamicController.onRefresh();
-        }
+        EasyThrottle.throttle('topOrRefresh', const Duration(milliseconds: 500),
+            () {
+          if (currentPage is HomePage) {
+            _homeController.onRefresh();
+          } else if (currentPage is DynamicsPage) {
+            _dynamicController.onRefresh();
+          }
+        });
       } else {
         if (currentPage is HomePage) {
           _homeController.toTopOrRefresh();
