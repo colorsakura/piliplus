@@ -596,33 +596,35 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       ),
 
       /// 播放速度
-      BottomControlType.speed: Container(
-        height: 30,
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
-        child: PopupMenuButton<double>(
-          initialValue: plPlayerController.playbackSpeed,
-          color: Colors.black.withOpacity(0.8),
-          itemBuilder: (BuildContext context) {
-            return plPlayerController.speedList.map((double speed) {
-              return PopupMenuItem<double>(
-                height: 35,
-                padding: const EdgeInsets.only(left: 30),
-                value: speed,
-                onTap: () {
-                  plPlayerController.setPlaybackSpeed(speed);
-                },
-                child: Text(
-                  "${speed}X",
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                  semanticsLabel: "$speed倍速",
-                ),
-              );
-            }).toList();
-          },
-          child: Text("${plPlayerController.playbackSpeed}X",
-              style: const TextStyle(color: Colors.white, fontSize: 13),
-              semanticsLabel: "${plPlayerController.playbackSpeed}倍速"),
+      BottomControlType.speed: Obx(
+        () => Container(
+          height: 30,
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          alignment: Alignment.center,
+          child: PopupMenuButton<double>(
+            initialValue: plPlayerController.playbackSpeed,
+            color: Colors.black.withOpacity(0.8),
+            itemBuilder: (BuildContext context) {
+              return plPlayerController.speedList.map((double speed) {
+                return PopupMenuItem<double>(
+                  height: 35,
+                  padding: const EdgeInsets.only(left: 30),
+                  value: speed,
+                  onTap: () {
+                    plPlayerController.setPlaybackSpeed(speed);
+                  },
+                  child: Text(
+                    "${speed}X",
+                    style: const TextStyle(color: Colors.white, fontSize: 13),
+                    semanticsLabel: "$speed倍速",
+                  ),
+                );
+              }).toList();
+            },
+            child: Text("${plPlayerController.playbackSpeed}X",
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+                semanticsLabel: "${plPlayerController.playbackSpeed}倍速"),
+          ),
         ),
       ),
 

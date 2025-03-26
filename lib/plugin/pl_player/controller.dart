@@ -1034,7 +1034,7 @@ class PlPlayerController {
   Future<void> setPlaybackSpeed(double speed) async {
     lastPlaybackSpeed = playbackSpeed;
 
-    if (speed == playbackSpeed) {
+    if (speed == _videoPlayerController?.state.rate) {
       return;
     }
 
