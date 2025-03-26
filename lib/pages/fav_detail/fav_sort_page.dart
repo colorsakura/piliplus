@@ -1,6 +1,7 @@
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
+import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/pages/fav_detail/controller.dart';
 import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -21,8 +22,8 @@ class _FavSortPageState extends State<FavSortPage> {
   FavDetailController get _favDetailController => widget.favDetailController;
 
   final GlobalKey _key = GlobalKey();
-  late List list =
-      List.from((_favDetailController.loadingState.value as Success).response);
+  late List<FavDetailItemData> list = List<FavDetailItemData>.from(
+      (_favDetailController.loadingState.value as Success).response);
   List<String> sort = <String>[];
 
   final ScrollController _scrollController = ScrollController();
@@ -33,7 +34,7 @@ class _FavSortPageState extends State<FavSortPage> {
       _favDetailController.onLoadMore().then((_) {
         try {
           if (_favDetailController.loadingState.value is Success) {
-            List list =
+            List<FavDetailItemData> list =
                 (_favDetailController.loadingState.value as Success).response;
             this.list.addAll(list.sublist(this.list.length));
             if (mounted) {
