@@ -135,7 +135,9 @@ class Api {
   static const String relatedList = '/x/web-interface/archive/related';
 
   // 查询用户与自己关系_仅查关注
-  static const String hasFollow = '/x/relation';
+  static const String relation = '/x/relation';
+
+  static const String relations = '/x/relation/relations';
 
   // 操作用户关系
   static const String relationMod = '/x/relation/modify';

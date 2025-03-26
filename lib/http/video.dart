@@ -784,7 +784,7 @@ class VideoHttp {
 
   // 查询是否关注up
   static Future hasFollow({required int mid}) async {
-    var res = await Request().get(Api.hasFollow, queryParameters: {'fid': mid});
+    var res = await Request().get(Api.relation, queryParameters: {'fid': mid});
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {

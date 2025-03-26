@@ -346,7 +346,7 @@ class UserHttp {
 
   static Future hasFollow(int mid) async {
     var res = await Request().get(
-      Api.hasFollow,
+      Api.relation,
       queryParameters: {
         'fid': mid,
       },

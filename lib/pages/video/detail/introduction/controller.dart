@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPlus/http/api.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
@@ -150,23 +151,6 @@ class VideoIntroController extends GetxController
       }
       videoDetail.value = result['data'];
       videoItem['staff'] = result['data'].staff;
-      if (result['data'].staff?.isNotEmpty == true) {
-        Request().get(
-          '/x/relation/relations',
-          queryParameters: {
-            'fids': (result['data'].staff as List<Staff>)
-                .map((item) => item.mid)
-                .join(',')
-          },
-        ).then((res) {
-          if (res.data['code'] == 0) {
-            staffRelations.value = {
-              'status': true,
-              if (res.data['data'] != null) ...res.data['data'],
-            };
-          }
-        });
-      }
       try {
         final videoDetailController =
             Get.find<VideoDetailController>(tag: heroTag);
@@ -187,7 +171,7 @@ class VideoIntroController extends GetxController
       //   '评论 ${result['data']!.stat!.reply}'
       // ];
       // 获取到粉丝数再返回
-      await queryUserStat();
+      queryUserStat();
     } else {
       SmartDialog.showToast(
           "${result['code']} ${result['msg']} ${result['data']}");
@@ -215,14 +199,32 @@ class VideoIntroController extends GetxController
 
   // 获取up主粉丝数
   Future queryUserStat() async {
-    if (videoDetail.value.owner == null) {
-      return;
-    }
-    var result =
-        await MemberHttp.memberCardInfo(mid: videoDetail.value.owner!.mid!);
-    if (result['status']) {
-      userStat.value = result['data'];
-      userStat.refresh();
+    if (videoItem['staff']?.isNotEmpty == true) {
+      Request().get(
+        Api.relations,
+        queryParameters: {
+          'fids': (videoItem['staff'] as List<Staff>)
+              .map((item) => item.mid)
+              .join(',')
+        },
+      ).then((res) {
+        if (res.data['code'] == 0) {
+          staffRelations.value = {
+            'status': true,
+            if (res.data['data'] != null) ...res.data['data'],
+          };
+        }
+      });
+    } else {
+      if (videoDetail.value.owner == null) {
+        return;
+      }
+      var result =
+          await MemberHttp.memberCardInfo(mid: videoDetail.value.owner!.mid!);
+      if (result['status']) {
+        userStat.value = result['data'];
+        userStat.refresh();
+      }
     }
   }
 
