@@ -29,6 +29,9 @@ class _FavSortPageState extends State<FavSortPage> {
   final ScrollController _scrollController = ScrollController();
 
   void listener() {
+    if (_favDetailController.isEnd) {
+      return;
+    }
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       _favDetailController.onLoadMore().then((_) {
