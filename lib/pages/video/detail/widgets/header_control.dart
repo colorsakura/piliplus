@@ -2451,17 +2451,15 @@ class HeaderControlState extends State<HeaderControl> {
                             await Future.delayed(
                                 const Duration(seconds: 3), () {});
                           }
-                          final Rational aspectRatio = Rational(
+                          if (!context.mounted) return;
+                          Utils.enterPip(
+                            widget.floating!,
                             widget
                                 .videoDetailCtr.data.dash!.video!.first.width!,
                             widget
                                 .videoDetailCtr.data.dash!.video!.first.height!,
                           );
-                          if (!context.mounted) return;
-                          await widget.floating!.enable(EnableManual(
-                            aspectRatio: aspectRatio,
-                          ));
-                        } else {}
+                        }
                       },
                       icon: const Icon(
                         Icons.picture_in_picture_outlined,

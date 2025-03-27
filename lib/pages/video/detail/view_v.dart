@@ -558,14 +558,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   // }
 
   void enterPip() {
-    if (Get.currentRoute.startsWith('/video')) {
-      videoDetailController.floating?.enable(
-        EnableManual(
-          aspectRatio: Rational(
-            videoDetailController.data.dash!.video!.first.width!,
-            videoDetailController.data.dash!.video!.first.height!,
-          ),
-        ),
+    if (Get.currentRoute.startsWith('/video') &&
+        videoDetailController.floating != null) {
+      Utils.enterPip(
+        videoDetailController.floating!,
+        videoDetailController.data.dash!.video!.first.width!,
+        videoDetailController.data.dash!.video!.first.height!,
       );
     }
   }

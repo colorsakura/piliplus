@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/hero_dialog_route.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
+import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -121,4 +122,17 @@ extension ColorExtension on Color {
 extension BrightnessExt on Brightness {
   Brightness get reverse =>
       this == Brightness.light ? Brightness.dark : Brightness.light;
+}
+
+extension RationalExt on Rational {
+  /// Checks whether given [Rational] instance fits into Android requirements
+  /// or not.
+  ///
+  /// Android docs specified boundaries as inclusive.
+  bool get fitsInAndroidRequirements {
+    final aspectRatio = numerator / denominator;
+    final min = 1 / 2.39;
+    final max = 2.39;
+    return (min <= aspectRatio) && (aspectRatio <= max);
+  }
 }

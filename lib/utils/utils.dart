@@ -37,6 +37,7 @@ import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
+import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -57,6 +58,19 @@ class Utils {
   static const channel = MethodChannel("PiliPlus");
 
   static final _numRegExp = RegExp(r'([\d\.]+)([千万亿])?');
+
+  static void enterPip(Floating floating, int width, int height) {
+    Rational aspectRatio = Rational(width, height);
+    floating.enable(
+      EnableManual(
+        aspectRatio: aspectRatio.fitsInAndroidRequirements
+            ? aspectRatio
+            : height > width
+                ? const Rational.vertical()
+                : const Rational.landscape(),
+      ),
+    );
+  }
 
   static ThemeData getThemeData({
     required ColorScheme colorScheme,
