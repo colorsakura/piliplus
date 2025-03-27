@@ -94,7 +94,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
     List<DanmakuElem>? currentDanmakuList =
         _plDanmakuController.getCurrentDanmaku(currentPosition);
 
-    if (playerController.showDanmaku &&
+    if ((widget.isPipMode == true || playerController.showDanmaku) &&
         _controller != null &&
         playerController.playerStatus.status.value == PlayerStatus.playing &&
         playerController.isBuffering.value.not &&
