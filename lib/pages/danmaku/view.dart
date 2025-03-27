@@ -35,7 +35,6 @@ class _PlDanmakuState extends State<PlDanmaku> {
   late bool enableShowDanmaku;
   int latestAddedPosition = -1;
   bool? _isFullScreen;
-  StreamSubscription? _listenerDanmaku;
   StreamSubscription? _listenerFS;
 
   @override
@@ -48,20 +47,15 @@ class _PlDanmakuState extends State<PlDanmaku> {
       playerController,
     );
     if (enableShowDanmaku || playerController.isOpenDanmu.value) {
-      _plDanmakuController.initiate(
-          playerController.duration.value.inMilliseconds,
-          playerController.position.value.inMilliseconds);
+      _plDanmakuController.queryDanmaku(
+        _plDanmakuController.calcSegment(
+          playerController.position.value.inMilliseconds,
+        ),
+      );
     }
     playerController
       ..addStatusLister(playerListener)
       ..addPositionListener(videoPositionListen);
-    _listenerDanmaku = playerController.isOpenDanmu.listen((p0) {
-      if (p0 && !_plDanmakuController.initiated) {
-        _plDanmakuController.initiate(
-            playerController.duration.value.inMilliseconds,
-            playerController.position.value.inMilliseconds);
-      }
-    });
     _listenerFS = playerController.isFullScreen.listen((isFullScreen) {
       if (isFullScreen != _isFullScreen) {
         _isFullScreen = isFullScreen;
@@ -128,7 +122,6 @@ class _PlDanmakuState extends State<PlDanmaku> {
 
   @override
   void dispose() {
-    _listenerDanmaku?.cancel();
     _listenerFS?.cancel();
     playerController.removePositionListener(videoPositionListen);
     playerController.removeStatusLister(playerListener);

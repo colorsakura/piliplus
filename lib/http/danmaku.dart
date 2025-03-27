@@ -16,7 +16,7 @@ class DanmakuHttp {
         await GrpcRepo.dmSegMobile(cid: cid, segmentIndex: segmentIndex);
     if (!response['status']) {
       if (queryCount >= 3) {
-        return DmSegMobileReply();
+        return {'status': false};
       } else {
         await Future.delayed(const Duration(seconds: 1));
         return await queryDanmaku(
@@ -43,7 +43,7 @@ class DanmakuHttp {
         }
       }
     }
-    return data;
+    return {'status': true, 'data': data};
   }
 
   static Future shootDanmaku({
