@@ -710,16 +710,23 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       key: _playerKey,
       children: <Widget>[
         Obx(
-          () => InteractiveViewer(
+          () => Video(
+            fill: widget.fill ?? Colors.black,
+            key: key,
+            alignment: widget.alignment ?? Alignment.center,
+            controller: videoController,
+            controls: NoVideoControls,
+            pauseUponEnteringBackgroundMode:
+                !plPlayerController.continuePlayInBackground.value,
+            resumeUponEnteringForegroundMode: true,
+            // 字幕尺寸调节
+            subtitleViewConfiguration:
+                plPlayerController.subtitleViewConfiguration,
+            fit: plPlayerController.videoFit.value,
+            dmWidget: widget.danmuWidget,
             transformationController: transformationController,
-            panEnabled: false, // 启用平移 //单指平移会与横竖手势冲突
-            scaleEnabled: !plPlayerController.controlsLock.value, // 启用缩放
-            minScale: plPlayerController.enableShrinkVideoSize ? 0.75 : 1,
-            maxScale: 2.0,
-            boundaryMargin: plPlayerController.enableShrinkVideoSize
-                ? const EdgeInsets.all(double.infinity)
-                : EdgeInsets.zero,
-            panAxis: PanAxis.aligned,
+            scaleEnabled: !plPlayerController.controlsLock.value,
+            enableShrinkVideoSize: plPlayerController.enableShrinkVideoSize,
             onInteractionStart: (ScaleStartDetails details) {
               if (plPlayerController.controlsLock.value) return;
               // 如果起点太靠上则屏蔽
@@ -731,7 +738,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               // debugPrint("_initialFocalPoint$_initialFocalPoint");
               _gestureType = null;
             },
-
             onInteractionUpdate: (ScaleUpdateDetails details) {
               showRestoreScaleBtn.value =
                   transformationController.value.row0.x != 1.0;
@@ -914,25 +920,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               _initialFocalPoint = Offset.zero;
               _gestureType = null;
             },
-            child: Transform.flip(
-              flipX: plPlayerController.flipX.value,
-              flipY: plPlayerController.flipY.value,
-              child: Video(
-                fill: widget.fill ?? Colors.black,
-                key: key,
-                alignment: widget.alignment ?? Alignment.center,
-                controller: videoController,
-                controls: NoVideoControls,
-                pauseUponEnteringBackgroundMode:
-                    !plPlayerController.continuePlayInBackground.value,
-                resumeUponEnteringForegroundMode: true,
-                // 字幕尺寸调节
-                subtitleViewConfiguration:
-                    plPlayerController.subtitleViewConfiguration,
-                fit: plPlayerController.videoFit.value,
-                dmWidget: widget.danmuWidget,
-              ),
-            ),
+            flipX: plPlayerController.flipX.value,
+            flipY: plPlayerController.flipY.value,
           ),
         ),
 
@@ -1302,18 +1291,21 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
         ),
 
         // if (BuildConfig.isDebug)
-        //   FilledButton.tonal(
+        // Positioned(
+        //   right: 25,
+        //   top: 125,
+        //   child: FilledButton.tonal(
         //     onPressed: () {
         //       transformationController.value = Matrix4.identity()
         //         ..translate(0.5, 0.5)
         //         ..scale(1.2)
         //         ..translate(-0.5, -0.5);
 
-        //       plPlayerController.videoScale.value =
-        //           transformationController.value.row0.x;
+        //       showRestoreScaleBtn.value = true;
         //     },
         //     child: const Text('scale'),
         //   ),
+        // ),
 
         Obx(
           () =>

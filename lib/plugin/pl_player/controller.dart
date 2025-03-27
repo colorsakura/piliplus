@@ -754,7 +754,7 @@ class PlPlayerController {
         play: false,
       );
     } else {
-      await player.open(
+      player.open(
         Media(dataSource.videoSource!,
             httpHeaders: dataSource.httpHeaders, start: seekTo),
         play: false,
@@ -1564,8 +1564,7 @@ class PlPlayerController {
         var pp = _videoPlayerController!.platform as NativePlayer;
         await pp.setProperty('audio-files', '');
         removeListeners();
-        await _videoPlayerController?.stop();
-        await _videoPlayerController?.dispose();
+        await _videoPlayerController!.dispose();
         _videoPlayerController = null;
       }
       _instance = null;
