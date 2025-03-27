@@ -856,62 +856,93 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                             ],
                                           ),
                                         ),
-                                        if (videoDetailController.playedTime ==
-                                            null)
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: PopupMenuButton<String>(
-                                              icon: Icon(
-                                                Icons.more_vert,
-                                                color: themeData
-                                                    .colorScheme.onSurface,
-                                              ),
-                                              onSelected: (String type) async {
-                                                switch (type) {
-                                                  case 'later':
-                                                    await videoIntroController
-                                                        .viewLater();
-                                                    break;
-                                                  case 'report':
-                                                    if (!Accounts
-                                                        .main.isLogin) {
-                                                      SmartDialog.showToast(
-                                                          '账号未登录');
-                                                    } else {
-                                                      Get.toNamed('/webview',
-                                                          parameters: {
-                                                            'url':
-                                                                'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
-                                                          });
-                                                    }
-                                                    break;
-                                                  case 'note':
-                                                    videoDetailController
-                                                        .showNoteList(context);
-                                                    break;
-                                                }
-                                              },
-                                              itemBuilder:
-                                                  (BuildContext context) =>
-                                                      <PopupMenuEntry<String>>[
-                                                const PopupMenuItem<String>(
-                                                  value: 'later',
-                                                  child: Text('稍后再看'),
-                                                ),
-                                                if (videoDetailController
-                                                        .epId ==
-                                                    null)
-                                                  const PopupMenuItem<String>(
-                                                    value: 'note',
-                                                    child: Text('查看笔记'),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: videoDetailController
+                                                      .playedTime ==
+                                                  null
+                                              ? PopupMenuButton<String>(
+                                                  icon: Icon(
+                                                    Icons.more_vert,
+                                                    color: themeData
+                                                        .colorScheme.onSurface,
                                                   ),
-                                                const PopupMenuItem<String>(
-                                                  value: 'report',
-                                                  child: Text('举报'),
+                                                  onSelected:
+                                                      (String type) async {
+                                                    switch (type) {
+                                                      case 'later':
+                                                        await videoIntroController
+                                                            .viewLater();
+                                                        break;
+                                                      case 'report':
+                                                        if (!Accounts
+                                                            .main.isLogin) {
+                                                          SmartDialog.showToast(
+                                                              '账号未登录');
+                                                        } else {
+                                                          Get.toNamed(
+                                                              '/webview',
+                                                              parameters: {
+                                                                'url':
+                                                                    'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
+                                                              });
+                                                        }
+                                                        break;
+                                                      case 'note':
+                                                        videoDetailController
+                                                            .showNoteList(
+                                                                context);
+                                                        break;
+                                                    }
+                                                  },
+                                                  itemBuilder: (BuildContext
+                                                          context) =>
+                                                      <PopupMenuEntry<String>>[
+                                                    const PopupMenuItem<String>(
+                                                      value: 'later',
+                                                      child: Text('稍后再看'),
+                                                    ),
+                                                    if (videoDetailController
+                                                            .epId ==
+                                                        null)
+                                                      const PopupMenuItem<
+                                                          String>(
+                                                        value: 'note',
+                                                        child: Text('查看笔记'),
+                                                      ),
+                                                    const PopupMenuItem<String>(
+                                                      value: 'report',
+                                                      child: Text('举报'),
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(
+                                                  width: 42,
+                                                  height: 34,
+                                                  child: IconButton(
+                                                    tooltip: "更多设置",
+                                                    style: ButtonStyle(
+                                                      padding:
+                                                          WidgetStateProperty
+                                                              .all(EdgeInsets
+                                                                  .zero),
+                                                    ),
+                                                    onPressed: () {
+                                                      videoDetailController
+                                                          .headerCtrKey
+                                                          .currentState
+                                                          ?.showSettingSheet();
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.more_vert_outlined,
+                                                      size: 19,
+                                                      color: themeData
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

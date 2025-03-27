@@ -95,6 +95,7 @@ class VideoDetailController extends GetxController
   // 默认记录历史记录
   bool enableHeart = true;
   Floating? floating;
+  late final headerCtrKey = GlobalKey<HeaderControlState>();
   late PreferredSizeWidget headerControl;
 
   Box get setting => GStorage.setting;
@@ -291,6 +292,7 @@ class VideoDetailController extends GetxController
       floating = Floating();
     }
     headerControl = HeaderControl(
+      key: headerCtrKey,
       controller: plPlayerController,
       videoDetailCtr: this,
       floating: floating,

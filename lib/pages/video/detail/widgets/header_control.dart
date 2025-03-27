@@ -53,13 +53,13 @@ class HeaderControl extends StatefulWidget implements PreferredSizeWidget {
   final String heroTag;
 
   @override
-  State<HeaderControl> createState() => _HeaderControlState();
+  State<HeaderControl> createState() => HeaderControlState();
 
   @override
   Size get preferredSize => throw UnimplementedError();
 }
 
-class _HeaderControlState extends State<HeaderControl> {
+class HeaderControlState extends State<HeaderControl> {
   PlayUrlModel get videoInfo => videoDetailCtr.data;
   static const TextStyle subTitleStyle = TextStyle(fontSize: 12);
   static const TextStyle titleStyle = TextStyle(fontSize: 14);
