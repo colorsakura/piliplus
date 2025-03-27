@@ -543,11 +543,8 @@ class PlPlayerController {
       callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
-      _position.value =
-          _sliderPosition.value = _buffered.value = seekTo ?? Duration.zero;
+      _sliderPosition.value = seekTo ?? Duration.zero;
       updateDurationSecond();
-      updatePositionSecond();
-      updateBufferedSecond();
       updateSliderPositionSecond();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
@@ -754,7 +751,7 @@ class PlPlayerController {
         play: false,
       );
     } else {
-      player.open(
+      await player.open(
         Media(dataSource.videoSource!,
             httpHeaders: dataSource.httpHeaders, start: seekTo),
         play: false,
