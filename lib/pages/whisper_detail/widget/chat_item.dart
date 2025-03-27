@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:get/get.dart';
 
 import '../../../http/search.dart';
 
@@ -378,6 +379,55 @@ class ChatItem extends StatelessWidget {
                   ],
                 ],
               ));
+        case MsgType.article_card:
+          return GestureDetector(
+            onTap: () async {
+              Get.toNamed('/htmlRender', parameters: {
+                'url': "https://www.bilibili.com/read/cv${content['rid']}/",
+                // 'url': url.startsWith('//') ? url.split('//').last : url,
+                'title': content['title'] ?? "",
+                'id': "cv${content['rid']}",
+                'dynamicType': "read" //content['template_id'] ?? "",
+              });
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    for (var i in content['image_urls'])
+                      NetworkImgLayer(
+                        width: 130,
+                        height: 130 * 9 / 16,
+                        src: i,
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                SelectableText(
+                  content['title'] ?? "",
+                  style: TextStyle(
+                    letterSpacing: 0.6,
+                    height: 1.5,
+                    color: textColor(),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 1),
+                SelectableText(
+                  content['summary'] ?? "",
+                  style: TextStyle(
+                    letterSpacing: 0.6,
+                    height: 1.5,
+                    color: textColor().withOpacity(0.6),
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 2,
+                ),
+              ],
+            ),
+          );
         default:
           return Text(
             content != null && content != ''
