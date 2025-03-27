@@ -83,9 +83,17 @@ class _PlDanmakuState extends State<PlDanmaku> {
     if (!playerController.isOpenDanmu.value) {
       return;
     }
+
+    if (_controller == null) {
+      return;
+    }
+
+    if (playerController.showDanmaku.not && widget.isPipMode != true) {
+      return;
+    }
+
     int currentPosition = position.inMilliseconds;
     currentPosition -= currentPosition % 100; //取整百的毫秒数
-
     if (currentPosition == latestAddedPosition) {
       return;
     }
@@ -93,12 +101,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
 
     List<DanmakuElem>? currentDanmakuList =
         _plDanmakuController.getCurrentDanmaku(currentPosition);
-
-    if ((widget.isPipMode == true || playerController.showDanmaku) &&
-        _controller != null &&
-        playerController.playerStatus.status.value == PlayerStatus.playing &&
-        playerController.isBuffering.value.not &&
-        currentDanmakuList != null) {
+    if (currentDanmakuList != null) {
       for (DanmakuElem e in currentDanmakuList) {
         _controller!.addDanmaku(
           DanmakuContentItem(
