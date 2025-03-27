@@ -21,7 +21,6 @@ class VideoReplyReplyController extends ReplyController
     required this.dialog,
     required this.replyType,
     required this.isDialogue,
-    required this.getThemeData,
   });
   final int? dialog;
   final bool isDialogue;
@@ -40,7 +39,6 @@ class VideoReplyReplyController extends ReplyController
 
   int? index;
   AnimationController? controller;
-  Animation<Color?>? colorAnimation;
 
   late final horizontalPreview = GStorage.horizontalPreview;
 
@@ -61,8 +59,6 @@ class VideoReplyReplyController extends ReplyController
     return super.onRefresh();
   }
 
-  final ThemeData Function() getThemeData;
-
   @override
   bool customHandleResponse(Success response) {
     if (GlobalData().grpcReply) {
@@ -78,15 +74,13 @@ class VideoReplyReplyController extends ReplyController
               .map((item) => item.id.toInt())
               .toList()
               .indexOf(id!);
-          if (index != null && index != -1) {
+          if (index == -1) {
+            index = null;
+          } else {
             controller = AnimationController(
               duration: const Duration(milliseconds: 300),
               vsync: this,
             );
-            colorAnimation = ColorTween(
-              begin: getThemeData().colorScheme.onInverseSurface,
-              end: getThemeData().colorScheme.surface,
-            ).animate(controller!);
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               if (index != null) {
                 try {
@@ -201,5 +195,11 @@ class VideoReplyReplyController extends ReplyController
         ? Mode.MAIN_LIST_TIME
         : Mode.MAIN_LIST_HOT;
     onReload();
+  }
+
+  @override
+  void onClose() {
+    controller?.dispose();
+    super.dispose();
   }
 }

@@ -68,6 +68,8 @@ class _VideoReplyReplyPanelState
       context.orientation == Orientation.landscape &&
       _videoReplyReplyController.horizontalPreview;
 
+  Animation<Color?>? colorAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -80,7 +82,6 @@ class _VideoReplyReplyPanelState
         dialog: widget.dialog,
         replyType: widget.replyType,
         isDialogue: widget.isDialogue,
-        getThemeData: () => Theme.of(context),
       ),
       tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
     );
@@ -89,9 +90,6 @@ class _VideoReplyReplyPanelState
   @override
   void dispose() {
     widget.onDispose?.call();
-    _videoReplyReplyController.controller?.stop();
-    _videoReplyReplyController.controller?.dispose();
-    _videoReplyReplyController.controller = null;
     Get.delete<VideoReplyReplyController>(
       tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
     );
@@ -471,19 +469,24 @@ class _VideoReplyReplyPanelState
               ),
             );
           } else {
-            return _videoReplyReplyController.index == index
-                ? AnimatedBuilder(
-                    animation: _videoReplyReplyController.colorAnimation!,
-                    builder: (context, child) {
-                      return ColoredBox(
-                        color:
-                            _videoReplyReplyController.colorAnimation?.value ??
-                                Theme.of(context).colorScheme.onInverseSurface,
-                        child: _replyItem(loadingState.response[index], index),
-                      );
-                    },
-                  )
-                : _replyItem(loadingState.response[index], index);
+            if (_videoReplyReplyController.index != null &&
+                _videoReplyReplyController.index == index) {
+              colorAnimation ??= ColorTween(
+                begin: Theme.of(context).colorScheme.onInverseSurface,
+                end: Theme.of(context).colorScheme.surface,
+              ).animate(_videoReplyReplyController.controller!);
+              return AnimatedBuilder(
+                animation: colorAnimation!,
+                builder: (context, child) {
+                  return ColoredBox(
+                    color: colorAnimation!.value ??
+                        Theme.of(context).colorScheme.onInverseSurface,
+                    child: _replyItem(loadingState.response[index], index),
+                  );
+                },
+              );
+            }
+            return _replyItem(loadingState.response[index], index);
           }
         }(),
       Error() => replyErrorWidget(
