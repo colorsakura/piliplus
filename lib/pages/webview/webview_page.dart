@@ -33,14 +33,16 @@ extension _WebviewMenuItemExt on _WebviewMenuItem {
 }
 
 class WebviewPageNew extends StatefulWidget {
-  const WebviewPageNew({super.key});
+  const WebviewPageNew({super.key, this.url});
+
+  final String? url;
 
   @override
   State<WebviewPageNew> createState() => _WebviewPageNewState();
 }
 
 class _WebviewPageNewState extends State<WebviewPageNew> {
-  final String _url = Get.parameters['url'] ?? '';
+  late final String _url = widget.url ?? Get.parameters['url'] ?? '';
   final uaType = Get.parameters['uaType'] ?? 'mob';
   final _titleStream = StreamController<String?>();
   final _progressStream = StreamController<double>();
@@ -69,97 +71,99 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: StreamBuilder(
-          initialData: null,
-          stream: _titleStream.stream,
-          builder: (context, snapshot) => Text(
-            maxLines: 1,
-            snapshot.hasData ? snapshot.data! : _url,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.zero,
-          child: StreamBuilder(
-            initialData: 0.0,
-            stream: _progressStream.stream,
-            builder: (context, snapshot) => snapshot.data as double < 1
-                ? LinearProgressIndicator(
-                    value: snapshot.data as double,
-                  )
-                : const SizedBox.shrink(),
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            onSelected: (item) async {
-              switch (item) {
-                case _WebviewMenuItem.refresh:
-                  _webViewController?.reload();
-                  break;
-                case _WebviewMenuItem.copy:
-                  WebUri? uri = await _webViewController?.getUrl();
-                  if (uri != null) {
-                    Utils.copyText(uri.toString());
-                  }
-                  break;
-                case _WebviewMenuItem.openInBrowser:
-                  WebUri? uri = await _webViewController?.getUrl();
-                  if (uri != null) {
-                    Utils.launchURL(uri.toString());
-                  }
-                  break;
-                case _WebviewMenuItem.clearCache:
-                  try {
-                    await InAppWebViewController.clearAllCache();
-                    await _webViewController?.clearHistory();
-                    SmartDialog.showToast('已清理');
-                  } catch (e) {
-                    SmartDialog.showToast(e.toString());
-                  }
-                  break;
-                case _WebviewMenuItem.goBack:
-                  if (await _webViewController?.canGoBack() == true) {
-                    _webViewController?.goBack();
-                  } else {
-                    Get.back();
-                  }
-                  break;
-                case _WebviewMenuItem.resetCookie:
-                  final cookies = Accounts.main.cookieJar.toList();
-                  for (var item in cookies) {
-                    await CookieManager().setCookie(
-                      url: WebUri(item.domain ?? ''),
-                      name: item.name,
-                      value: item.value,
-                      path: item.path ?? '',
-                      domain: item.domain,
-                      isSecure: item.secure,
-                      isHttpOnly: item.httpOnly,
-                    );
-                  }
-                  SmartDialog.showToast('设置成功，刷新或重新打开网页');
-                  break;
-              }
-            },
-            itemBuilder: (context) => <PopupMenuEntry<_WebviewMenuItem>>[
-              ..._WebviewMenuItem.values
-                  .sublist(0, _WebviewMenuItem.values.length - 1)
-                  .map((item) =>
-                      PopupMenuItem(value: item, child: Text(item.title))),
-              const PopupMenuDivider(),
-              PopupMenuItem(
-                  value: _WebviewMenuItem.goBack,
-                  child: Text(
-                    _WebviewMenuItem.goBack.title,
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.error),
-                  )),
-            ],
-          )
-        ],
-      ),
+      appBar: widget.url != null
+          ? null
+          : AppBar(
+              title: StreamBuilder(
+                initialData: null,
+                stream: _titleStream.stream,
+                builder: (context, snapshot) => Text(
+                  maxLines: 1,
+                  snapshot.hasData ? snapshot.data! : _url,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              bottom: PreferredSize(
+                preferredSize: Size.zero,
+                child: StreamBuilder(
+                  initialData: 0.0,
+                  stream: _progressStream.stream,
+                  builder: (context, snapshot) => snapshot.data as double < 1
+                      ? LinearProgressIndicator(
+                          value: snapshot.data as double,
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ),
+              actions: [
+                PopupMenuButton(
+                  onSelected: (item) async {
+                    switch (item) {
+                      case _WebviewMenuItem.refresh:
+                        _webViewController?.reload();
+                        break;
+                      case _WebviewMenuItem.copy:
+                        WebUri? uri = await _webViewController?.getUrl();
+                        if (uri != null) {
+                          Utils.copyText(uri.toString());
+                        }
+                        break;
+                      case _WebviewMenuItem.openInBrowser:
+                        WebUri? uri = await _webViewController?.getUrl();
+                        if (uri != null) {
+                          Utils.launchURL(uri.toString());
+                        }
+                        break;
+                      case _WebviewMenuItem.clearCache:
+                        try {
+                          await InAppWebViewController.clearAllCache();
+                          await _webViewController?.clearHistory();
+                          SmartDialog.showToast('已清理');
+                        } catch (e) {
+                          SmartDialog.showToast(e.toString());
+                        }
+                        break;
+                      case _WebviewMenuItem.goBack:
+                        if (await _webViewController?.canGoBack() == true) {
+                          _webViewController?.goBack();
+                        } else {
+                          Get.back();
+                        }
+                        break;
+                      case _WebviewMenuItem.resetCookie:
+                        final cookies = Accounts.main.cookieJar.toList();
+                        for (var item in cookies) {
+                          await CookieManager().setCookie(
+                            url: WebUri(item.domain ?? ''),
+                            name: item.name,
+                            value: item.value,
+                            path: item.path ?? '',
+                            domain: item.domain,
+                            isSecure: item.secure,
+                            isHttpOnly: item.httpOnly,
+                          );
+                        }
+                        SmartDialog.showToast('设置成功，刷新或重新打开网页');
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => <PopupMenuEntry<_WebviewMenuItem>>[
+                    ..._WebviewMenuItem.values
+                        .sublist(0, _WebviewMenuItem.values.length - 1)
+                        .map((item) => PopupMenuItem(
+                            value: item, child: Text(item.title))),
+                    const PopupMenuDivider(),
+                    PopupMenuItem(
+                        value: _WebviewMenuItem.goBack,
+                        child: Text(
+                          _WebviewMenuItem.goBack.title,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
+                        )),
+                  ],
+                )
+              ],
+            ),
       body: SafeArea(
         child: InAppWebView(
           initialSettings: InAppWebViewSettings(
@@ -176,6 +180,12 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
               URLRequest(url: WebUri.uri(Uri.tryParse(_url) ?? Uri())),
           onWebViewCreated: (InAppWebViewController controller) {
             _webViewController = controller;
+            _webViewController?.addJavaScriptHandler(
+              handlerName: 'finishButtonClicked',
+              callback: (args) {
+                Get.back();
+              },
+            );
           },
           onProgressChanged: (controller, progress) {
             _progressStream.add(progress / 100);
@@ -185,6 +195,15 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
           },
           onCloseWindow: (controller) => Get.back(),
           onLoadStop: (controller, url) {
+            if (url
+                .toString()
+                .startsWith('https://www.bilibili.com/h5/note-app')) {
+              _webViewController?.evaluateJavascript(source: """
+  document.querySelector('.finish-btn').addEventListener('click', function() {
+      window.flutter_inappwebview.callHandler('finishButtonClicked');
+  });
+""");
+            }
             if (url.toString().startsWith('https://live.bilibili.com')) {
               _webViewController?.evaluateJavascript(
                 source: '''

@@ -6,6 +6,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/note/note_list_page_ctr.dart';
+import 'package:PiliPlus/pages/webview/webview_page.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +19,13 @@ class NoteListPage extends CommonSlidePage {
     required this.heroTag,
     this.oid,
     this.upperMid,
+    required this.isStein,
   });
 
   final dynamic heroTag;
   final dynamic oid;
   final dynamic upperMid;
+  final bool isStein;
 
   @override
   State<NoteListPage> createState() => _NoteListPageState();
@@ -34,6 +37,8 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
     tag: widget.heroTag,
   );
 
+  final _key = GlobalKey<ScaffoldState>();
+
   @override
   void dispose() {
     Get.delete<NoteListPageCtr>(tag: widget.heroTag);
@@ -42,35 +47,77 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
 
   @override
   Widget get buildPage => Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          titleSpacing: 16,
-          toolbarHeight: 45,
-          title: Obx(
-            () => Text(
-                '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
+        key: _key,
+        resizeToAvoidBottomInset: false,
+        body: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            titleSpacing: 16,
+            toolbarHeight: 45,
+            title: Obx(
+              () => Text(
+                  '笔记${_controller.count.value == -1 ? '' : '(${_controller.count.value})'}'),
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(1),
+              child: Divider(
+                height: 1,
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+              ),
+            ),
+            actions: [
+              iconButton(
+                context: context,
+                tooltip: '关闭',
+                icon: Icons.clear,
+                onPressed: Get.back,
+                size: 32,
+              ),
+              const SizedBox(width: 16),
+            ],
           ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(1),
-            child: Divider(
-              height: 1,
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          body: enableSlide
+              ? slideList(Obx(() => _buildBody(_controller.loadingState.value)))
+              : Obx(() => _buildBody(_controller.loadingState.value)),
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.only(
+              left: 12,
+              right: 12,
+              top: 6,
+              bottom: MediaQuery.paddingOf(context).bottom + 6,
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onInverseSurface,
+              border: Border(
+                top: BorderSide(
+                  width: 0.5,
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                ),
+              ),
+            ),
+            child: FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+              onPressed: () {
+                _key.currentState?.showBottomSheet(
+                  (context) => WebviewPageNew(
+                    url:
+                        'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
+                  ),
+                );
+              },
+              child: const Text('开始记笔记'),
             ),
           ),
-          actions: [
-            iconButton(
-              context: context,
-              tooltip: '关闭',
-              icon: Icons.clear,
-              onPressed: Get.back,
-              size: 32,
-            ),
-            const SizedBox(width: 16),
-          ],
         ),
-        body: enableSlide
-            ? slideList(Obx(() => _buildBody(_controller.loadingState.value)))
-            : Obx(() => _buildBody(_controller.loadingState.value)),
       );
 
   Widget _buildBody(LoadingState loadingState) {

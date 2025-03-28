@@ -1632,19 +1632,25 @@ class VideoDetailController extends GetxController
                   oid: oid.value,
                   enableSlide: false,
                   heroTag: heroTag,
+                  isStein: graphVersion != null,
                 ),
               )
             : NoteListPage(
                 oid: oid.value,
                 enableSlide: false,
                 heroTag: heroTag,
+                isStein: graphVersion != null,
               ),
         isFullScreen: () => plPlayerController.isFullScreen.value,
       );
     } else {
       childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
-        (context) => NoteListPage(oid: oid.value, heroTag: heroTag),
+        (context) => NoteListPage(
+          oid: oid.value,
+          heroTag: heroTag,
+          isStein: graphVersion != null,
+        ),
       );
     }
   }
