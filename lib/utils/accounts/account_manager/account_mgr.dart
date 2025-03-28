@@ -170,6 +170,8 @@ class AccountManager extends Interceptor {
     String url = err.requestOptions.uri.toString();
     debugPrint('🌹🌹ApiInterceptor: $url');
     if (url.contains('heartbeat') ||
+        url.contains('history/report') ||
+        url.contains('roomEntryAction') ||
         url.contains('seg.so') ||
         url.contains('online/total') ||
         url.contains('github') ||

@@ -816,6 +816,32 @@ class VideoHttp {
     }
   }
 
+  static Future roomEntryAction({
+    roomId,
+  }) async {
+    await Request().post(
+      Api.roomEntryAction,
+      queryParameters: {
+        'csrf': await Request.getCsrf(),
+      },
+      data: {
+        'room_id': roomId,
+        'platform': 'pc',
+      },
+    );
+  }
+
+  static Future historyReport({
+    aid,
+    type,
+  }) async {
+    await Request().post(Api.historyReport, queryParameters: {
+      if (aid != null) 'aid': aid,
+      if (type != null) 'type': type,
+      'csrf': Accounts.main.csrf,
+    });
+  }
+
   // 视频播放进度
   static Future heartBeat({
     bvid,

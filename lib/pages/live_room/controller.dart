@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/live/danmu_info.dart';
 import 'package:PiliPlus/models/live/quality.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/danmaku.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -41,6 +43,9 @@ class LiveRoomController extends GetxController {
   void onInit() {
     super.onInit();
     roomId = int.parse(Get.parameters['roomid']!);
+    if (Accounts.main.isLogin && !MineController.anonymity.value) {
+      VideoHttp.roomEntryAction(roomId: roomId);
+    }
   }
 
   playerInit(source) async {

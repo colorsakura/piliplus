@@ -1,8 +1,10 @@
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
+import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
@@ -82,23 +84,28 @@ class HtmlRenderController extends ReplyController {
   }
 
   @override
-  Future<LoadingState> customGetData() => GlobalData().grpcReply
-      ? ReplyHttp.replyListGrpc(
-          type: type,
-          oid: oid.value,
-          cursor: CursorReq(
-            next: cursor?.next ?? $fixnum.Int64(0),
-            mode: mode.value,
-          ),
-          antiGoodsReply: antiGoodsReply,
-        )
-      : ReplyHttp.replyList(
-          isLogin: isLogin,
-          oid: oid.value,
-          nextOffset: nextOffset,
-          type: type,
-          sort: sortType.value.index,
-          page: currentPage,
-          antiGoodsReply: antiGoodsReply,
-        );
+  Future<LoadingState> customGetData() {
+    if (Accounts.main.isLogin && !MineController.anonymity.value) {
+      VideoHttp.historyReport(aid: oid.value, type: 5);
+    }
+    return GlobalData().grpcReply
+        ? ReplyHttp.replyListGrpc(
+            type: type,
+            oid: oid.value,
+            cursor: CursorReq(
+              next: cursor?.next ?? $fixnum.Int64(0),
+              mode: mode.value,
+            ),
+            antiGoodsReply: antiGoodsReply,
+          )
+        : ReplyHttp.replyList(
+            isLogin: isLogin,
+            oid: oid.value,
+            nextOffset: nextOffset,
+            type: type,
+            sort: sortType.value.index,
+            page: currentPage,
+            antiGoodsReply: antiGoodsReply,
+          );
+  }
 }

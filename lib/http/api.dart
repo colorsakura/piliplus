@@ -261,6 +261,11 @@ class Api {
   // https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/video/report.md
   static const String heartBeat = '/x/click-interface/web/heartbeat';
 
+  static const String historyReport = '/x/v2/history/report';
+
+  static const String roomEntryAction =
+      '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/roomEntryAction';
+
   static const String mediaListHistory = '/x/v1/medialist/history';
 
   // 查询视频分P列表 (avid/bvid转cid)
