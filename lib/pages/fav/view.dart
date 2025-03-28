@@ -1,16 +1,14 @@
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
-import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/pages/fav/video/index.dart';
+import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/pages/fav/index.dart';
-import 'package:PiliPlus/pages/fav/widgets/item.dart';
 
-import '../../common/constants.dart';
-import '../../utils/grid.dart';
+enum _FavType { video, bangumi, cinema, article, note }
+
+extension _FavTypeExt on _FavType {
+  String get title => ['视频', '追番', '追剧', '专栏', '笔记'][index];
+}
 
 class FavPage extends StatefulWidget {
   const FavPage({super.key});
@@ -19,8 +17,18 @@ class FavPage extends StatefulWidget {
   State<FavPage> createState() => _FavPageState();
 }
 
-class _FavPageState extends State<FavPage> {
+class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
+  late final TabController _tabController = TabController(
+    length: _FavType.values.length,
+    vsync: this,
+  );
   final FavController _favController = Get.put(FavController());
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +38,19 @@ class _FavPageState extends State<FavPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.toNamed('/createFav')?.then((data) {
-                if (data != null) {
-                  List list = _favController.loadingState.value is Success
-                      ? (_favController.loadingState.value as Success).response
-                      : [];
-                  list.insert(list.isNotEmpty ? 1 : 0, data);
-                  _favController.loadingState.value =
-                      LoadingState.success(list);
-                }
-              });
+              Get.toNamed('/createFav')?.then(
+                (data) {
+                  if (data != null) {
+                    List list = _favController.loadingState.value is Success
+                        ? (_favController.loadingState.value as Success)
+                            .response
+                        : [];
+                    list.insert(list.isNotEmpty ? 1 : 0, data);
+                    _favController.loadingState.value =
+                        LoadingState.success(list);
+                  }
+                },
+              );
             },
             icon: const Icon(Icons.add),
             tooltip: '新建收藏夹',
@@ -66,96 +77,29 @@ class _FavPageState extends State<FavPage> {
           ),
           const SizedBox(width: 6),
         ],
-      ),
-      body: refreshIndicator(
-        onRefresh: () async {
-          await _favController.onRefresh();
-        },
-        child: CustomScrollView(
-          controller: _favController.scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            Obx(
-              () => _buildBody(_favController.loadingState.value),
-            ),
-          ],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: _FavType.values
+              .map(
+                (item) => Tab(text: item.title),
+              )
+              .toList(),
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: _FavType.values
+            .map(
+              (item) => switch (item) {
+                _FavType.video => const FavVideoPage(),
+                _FavType.bangumi => Center(child: Text(item.title)),
+                _FavType.cinema => Center(child: Text(item.title)),
+                _FavType.article => Center(child: Text(item.title)),
+                _FavType.note => Center(child: Text(item.title)),
+              },
+            )
+            .toList(),
       ),
     );
-  }
-
-  Widget _buildBody(LoadingState loadingState) {
-    return switch (loadingState) {
-      Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return const VideoCardHSkeleton();
-            },
-            childCount: 10,
-          ),
-        ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                  bottom: 80 + MediaQuery.paddingOf(context).bottom),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                  mainAxisSpacing: 2,
-                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                  childAspectRatio: StyleString.aspectRatio * 2.2,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  childCount: loadingState.response.length,
-                  (BuildContext context, int index) {
-                    if (index == loadingState.response.length - 1) {
-                      _favController.onLoadMore();
-                    }
-                    String heroTag =
-                        Utils.makeHeroTag(loadingState.response[index].fid);
-                    return FavItem(
-                      heroTag: heroTag,
-                      favFolderItem: loadingState.response[index],
-                      onTap: () async {
-                        dynamic res = await Get.toNamed(
-                          '/favDetail',
-                          arguments: loadingState.response[index],
-                          parameters: {
-                            'heroTag': heroTag,
-                            'mediaId':
-                                loadingState.response[index].id.toString(),
-                          },
-                        );
-                        if (res == true) {
-                          List list =
-                              (_favController.loadingState.value as Success)
-                                  .response;
-                          list.removeAt(index);
-                          _favController.loadingState.value =
-                              LoadingState.success(list);
-                        } else {
-                          Future.delayed(const Duration(milliseconds: 255), () {
-                            _favController.onRefresh();
-                          });
-                        }
-                      },
-                    );
-                  },
-                ),
-              ),
-            )
-          : HttpError(
-              callback: _favController.onReload,
-            ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
-          callback: _favController.onReload,
-        ),
-      LoadingState() => throw UnimplementedError(),
-    };
   }
 }

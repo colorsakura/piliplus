@@ -1,3 +1,4 @@
+import 'package:PiliPlus/pages/fav/view.dart';
 import 'package:PiliPlus/pages/member/new/member_page.dart';
 import 'package:PiliPlus/pages/member/new/widget/edit_profile_page.dart';
 import 'package:PiliPlus/pages/setting/navigation_bar_set.dart';
@@ -20,7 +21,6 @@ import '../pages/danmaku_block/index.dart';
 import '../pages/dynamics/detail/index.dart';
 import '../pages/dynamics/index.dart';
 import '../pages/fan/index.dart';
-import '../pages/fav/index.dart';
 import '../pages/fav_detail/index.dart';
 import '../pages/fav_search/index.dart';
 import '../pages/follow/index.dart';
