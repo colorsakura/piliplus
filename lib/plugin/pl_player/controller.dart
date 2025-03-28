@@ -543,8 +543,9 @@ class PlPlayerController {
       callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
-      _sliderPosition.value = seekTo ?? Duration.zero;
+      _position.value = _sliderPosition.value = seekTo ?? Duration.zero;
       updateDurationSecond();
+      updatePositionSecond();
       updateSliderPositionSecond();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
@@ -803,7 +804,9 @@ class PlPlayerController {
     if (videoType.value == 'live') {
       await setPlaybackSpeed(1.0);
     } else {
-      await setPlaybackSpeed(_playbackSpeed.value);
+      if (_videoPlayerController?.state.rate != _playbackSpeed.value) {
+        await setPlaybackSpeed(_playbackSpeed.value);
+      }
     }
     getVideoFit();
     // if (_looping) {
