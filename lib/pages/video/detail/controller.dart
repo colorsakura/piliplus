@@ -41,6 +41,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:hive/hive.dart';
+import 'package:media_kit/media_kit.dart';
 
 import '../../../utils/id_utils.dart';
 import 'widgets/header_control.dart';
@@ -1068,8 +1069,6 @@ class VideoDetailController extends GetxController
       ),
       segmentList: segmentProgressList,
       viewPointList: viewPointList,
-      vttSubtitles: _vttSubtitles,
-      vttSubtitlesIndex: vttSubtitlesIndex,
       showVP: showVP,
       dmTrend: dmTrend,
       // 硬解
@@ -1092,12 +1091,13 @@ class VideoDetailController extends GetxController
         if (videoState.value is! Success) {
           videoState.value = LoadingState.success(null);
         }
+        setSubtitle(vttSubtitlesIndex.value);
       },
     );
 
     initSkip();
 
-    if (vttSubtitlesIndex == null) {
+    if (vttSubtitlesIndex.value == -1) {
       _getSubtitle();
     }
 
@@ -1358,43 +1358,47 @@ class VideoDetailController extends GetxController
     }
   }
 
-  dynamic subtitles;
-  late List<Map<String, String>> _vttSubtitles = <Map<String, String>>[];
-  int? vttSubtitlesIndex;
+  RxList subtitles = [].obs;
+  late final Map<int, String> _vttSubtitles = {};
+  late final RxInt vttSubtitlesIndex = (-1).obs;
   late bool showVP = true;
 
   void _getSubtitle() {
     _vttSubtitles.clear();
     viewPointList.clear();
-    _querySubtitles().then((value) {
-      if (_vttSubtitles.isNotEmpty) {
-        String preference = setting.get(
-          SettingBoxKey.subtitlePreference,
-          defaultValue: SubtitlePreference.values.first.code,
-        );
-        vttSubtitlesIndex = 0;
-        if (preference == 'on') {
-          vttSubtitlesIndex = 1;
-        } else if (preference == 'withoutAi') {
-          for (int i = 1; i < _vttSubtitles.length; i++) {
-            if (_vttSubtitles[i]['language']!.startsWith('ai')) {
-              continue;
-            }
-            vttSubtitlesIndex = i;
-            break;
-          }
-        }
-        if (plPlayerController.vttSubtitles.isEmpty) {
-          plPlayerController.vttSubtitles.value = _vttSubtitles;
-          if (vttSubtitlesIndex != null) {
-            plPlayerController.vttSubtitlesIndex.value = vttSubtitlesIndex!;
-            if (vttSubtitlesIndex != 0) {
-              plPlayerController.setSubtitle(vttSubtitlesIndex!);
-            }
-          }
-        }
+    _querySubtitles();
+  }
+
+  // 设定字幕轨道
+  setSubtitle(int index) async {
+    if (index <= 0) {
+      plPlayerController.videoPlayerController
+          ?.setSubtitleTrack(SubtitleTrack.no());
+      vttSubtitlesIndex.value = index;
+      return;
+    }
+
+    void setSub(subtitle) {
+      plPlayerController.videoPlayerController?.setSubtitleTrack(
+        SubtitleTrack.data(
+          subtitle,
+          title: subtitles[index - 1]['lan_doc'],
+          language: subtitles[index - 1]['lan'],
+        ),
+      );
+      vttSubtitlesIndex.value = index;
+    }
+
+    String? subtitle = _vttSubtitles[index - 1];
+    if (subtitle != null) {
+      setSub(subtitle);
+    } else {
+      var result = await VideoHttp.vttSubtitles(subtitles[index - 1]);
+      if (result != null) {
+        _vttSubtitles[index - 1] = result;
+        setSub(result);
       }
-    });
+    }
   }
 
   // interactive video
@@ -1484,15 +1488,26 @@ class VideoDetailController extends GetxController
         }
       }
 
-      if (res["data"] is List && res["data"].isNotEmpty) {
-        subtitles = res["data"];
-        var result = await VideoHttp.vttSubtitles(res["data"]);
-        if (result != null) {
-          _vttSubtitles = result;
+      if (res["subtitles"] is List && res["subtitles"].isNotEmpty) {
+        vttSubtitlesIndex.value = 0;
+        subtitles.value = res["subtitles"];
+
+        String preference = setting.get(
+          SettingBoxKey.subtitlePreference,
+          defaultValue: SubtitlePreference.values.first.code,
+        );
+        if (preference == 'on') {
+          vttSubtitlesIndex.value = 1;
+        } else if (preference == 'withoutAi') {
+          for (int i = 0; i < subtitles.length; i++) {
+            if (subtitles[i]['lan']!.startsWith('ai')) {
+              continue;
+            }
+            vttSubtitlesIndex.value = i + 1;
+            break;
+          }
         }
-        // if (_vttSubtitles.isEmpty) {
-        //   SmartDialog.showToast('字幕均加载失败');
-        // }
+        setSubtitle(vttSubtitlesIndex.value);
       }
     }
   }
@@ -1556,8 +1571,8 @@ class VideoDetailController extends GetxController
     savedDanmaku = null;
 
     // subtitle
-    subtitles = null;
-    vttSubtitlesIndex = null;
+    subtitles.clear();
+    vttSubtitlesIndex.value = -1;
     _vttSubtitles.clear();
 
     // view point

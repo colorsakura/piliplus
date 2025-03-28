@@ -111,9 +111,6 @@ class PlPlayerController {
   bool _enableHeart = true;
 
   late DataSource dataSource;
-  // 视频字幕
-  final RxList<Map<String, String>> vttSubtitles = <Map<String, String>>[].obs;
-  final RxInt vttSubtitlesIndex = 0.obs;
 
   Timer? _timer;
   Timer? _timerForSeek;
@@ -471,8 +468,6 @@ class PlPlayerController {
     DataSource dataSource, {
     List<Segment>? segmentList,
     List<Segment>? viewPointList,
-    List<Map<String, String>>? vttSubtitles,
-    int? vttSubtitlesIndex,
     bool? showVP,
     List? dmTrend,
     bool autoplay = true,
@@ -504,8 +499,6 @@ class PlPlayerController {
       this.dataSource = dataSource;
       this.segmentList.value = segmentList ?? <Segment>[];
       this.viewPointList.value = viewPointList ?? <Segment>[];
-      this.vttSubtitles.value = vttSubtitles ?? <Map<String, String>>[];
-      this.vttSubtitlesIndex.value = vttSubtitlesIndex ?? 0;
       this.showVP.value = showVP ?? true;
       this.dmTrend.value = dmTrend ?? [];
       _autoPlay = autoplay;
@@ -555,7 +548,6 @@ class PlPlayerController {
         startListeners();
       }
       await _initializePlayer();
-      setSubtitle(this.vttSubtitlesIndex.value);
     } catch (err, stackTrace) {
       dataStatus.status.value = DataStatus.error;
       debugPrint(stackTrace.toString());
@@ -1572,22 +1564,6 @@ class PlPlayerController {
     } catch (err) {
       debugPrint(err.toString());
     }
-  }
-
-  // 设定字幕轨道
-  setSubtitle(int index) {
-    if (index == 0) {
-      _videoPlayerController?.setSubtitleTrack(SubtitleTrack.no());
-      vttSubtitlesIndex.value = 0;
-      return;
-    }
-    Map<String, String> s = vttSubtitles[index];
-    _videoPlayerController?.setSubtitleTrack(SubtitleTrack.data(
-      s['text']!,
-      title: s['title']!,
-      language: s['language']!,
-    ));
-    vttSubtitlesIndex.value = index;
   }
 
   static void updatePlayCount() {

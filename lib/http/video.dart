@@ -1005,23 +1005,18 @@ class VideoHttp {
        */
       return {
         'status': true,
-        'data': data['subtitle']['subtitles'],
+        'subtitles': data['subtitle']['subtitles'],
         'view_points': data['view_points'],
         // 'last_play_time': data['last_play_time'],
         'last_play_cid': data['last_play_cid'],
         'interaction': data['interaction'],
       };
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
-  static Future vttSubtitles(List subtitlesJson) async {
-    if (subtitlesJson.isEmpty) {
-      return [];
-    }
-    List<Map<String, String>> subtitlesVtt = [];
-
+  static Future vttSubtitles(subtile) async {
     String subtitleTimecode(num seconds) {
       int h = (seconds / 3600).floor();
       int m = ((seconds % 3600) / 60).floor();
@@ -1039,56 +1034,12 @@ class VideoHttp {
       });
     }
 
-    for (var i in subtitlesJson) {
-      var res =
-          await Request().get("https://${i['subtitle_url'].split('//')[1]}");
-      /*
-          {
-            "font_size": 0.4,
-            "font_color": "#FFFFFF",
-            "background_alpha": 0.5,
-            "background_color": "#9C27B0",
-            "Stroke": "none",
-            "type": "AIsubtitle",
-            "lang": "zh",
-            "version": "v1.6.0.4",
-            "body": [
-              {
-                "from": 0.5,
-                "to": 1.58,
-                "sid": 1,
-                "location": 2,
-                "content": "很多人可能不知道",
-                "music": 0.0
-              },
-              ……,
-              {
-                "from": 558.629,
-                "to": 560.22,
-                "sid": 280,
-                "location": 2,
-                "content": "我们下期再见",
-                "music": 0.0
-              }
-            ]
-          }
-         */
-      if (res.data != null && res.data?['body'] is List) {
-        String vttData = await compute(processList, res.data['body'] as List);
-        subtitlesVtt.add({
-          'language': i['lan'],
-          'title': i['lan_doc'],
-          'text': vttData,
-        });
-      } else {
-        // SmartDialog.showToast("字幕${i['lan_doc']}加载失败, ${res.data['message']}");
-        debugPrint('字幕${i['lan_doc']}加载失败, ${res.data['message']}');
-      }
+    var res = await Request().get("https:${subtile['subtitle_url']}");
+
+    if (res.data?['body'] is List) {
+      return await compute(processList, res.data['body'] as List);
     }
-    if (subtitlesVtt.isNotEmpty) {
-      subtitlesVtt.insert(0, {'language': '', 'title': '关闭字幕', 'text': ""});
-    }
-    return subtitlesVtt;
+    return null;
   }
 
   // 视频排行

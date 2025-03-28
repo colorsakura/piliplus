@@ -11,7 +11,7 @@ extension SubtitlePreferenceDesc on SubtitlePreference {
 
 extension SubtitlePreferenceCode on SubtitlePreference {
   static final List<String> _codeList = ['off', 'on', 'withoutAi'];
-  get code => _codeList[index];
+  String get code => _codeList[index];
 
   static SubtitlePreference? fromCode(String code) {
     final index = _codeList.indexOf(code);

@@ -449,8 +449,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     // }
     if (plPlayerController != null) {
       videoDetailController.makeHeartBeat();
-      videoDetailController.vttSubtitlesIndex =
-          plPlayerController!.vttSubtitlesIndex.value;
       videoDetailController.showVP = plPlayerController!.showVP.value;
       plPlayerController!.removeStatusLister(playerListener);
       plPlayerController!.removePositionListener(positionListener);

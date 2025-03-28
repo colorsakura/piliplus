@@ -550,40 +550,52 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
       /// 字幕
       BottomControlType.subtitle: Obx(
-        () => plPlayerController.vttSubtitles.isEmpty
+        () => widget.videoDetailController?.subtitles.isEmpty == true
             ? const SizedBox.shrink()
             : SizedBox(
                 width: widgetWidth,
                 height: 30,
                 child: PopupMenuButton<int>(
-                  initialValue: plPlayerController.vttSubtitles.length <
-                          plPlayerController.vttSubtitlesIndex.value
-                      ? 0
-                      : plPlayerController.vttSubtitlesIndex.value,
+                  initialValue: widget
+                      .videoDetailController!.vttSubtitlesIndex.value
+                      .clamp(0, widget.videoDetailController!.subtitles.length),
                   color: Colors.black.withOpacity(0.8),
                   itemBuilder: (BuildContext context) {
-                    return plPlayerController.vttSubtitles
-                        .asMap()
-                        .entries
-                        .map((entry) {
-                      return PopupMenuItem<int>(
-                        value: entry.key,
+                    return [
+                      PopupMenuItem<int>(
+                        value: 0,
                         onTap: () {
-                          plPlayerController.setSubtitle(entry.key);
+                          widget.videoDetailController!.setSubtitle(0);
                         },
                         child: Text(
-                          "${entry.value['title']}",
+                          "关闭字幕",
                           style: const TextStyle(color: Colors.white),
                         ),
-                      );
-                    }).toList();
+                      ),
+                      ...widget.videoDetailController!.subtitles
+                          .asMap()
+                          .entries
+                          .map((entry) {
+                        return PopupMenuItem<int>(
+                          value: entry.key + 1,
+                          onTap: () {
+                            widget.videoDetailController!
+                                .setSubtitle(entry.key + 1);
+                          },
+                          child: Text(
+                            "${entry.value['lan_doc']}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      })
+                    ];
                   },
                   child: Container(
                     width: 35,
                     height: 30,
                     alignment: Alignment.center,
                     child: Icon(
-                      plPlayerController.vttSubtitlesIndex.value == 0
+                      widget.videoDetailController!.vttSubtitlesIndex.value == 0
                           ? Icons.closed_caption_off_outlined
                           : Icons.closed_caption_off_rounded,
                       size: 22,

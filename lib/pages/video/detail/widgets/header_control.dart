@@ -401,8 +401,7 @@ class HeaderControlState extends State<HeaderControl> {
                   leading: const Icon(Icons.subtitles_outlined, size: 20),
                   title: const Text('字幕设置', style: titleStyle),
                 ),
-                if (videoDetailCtr.subtitles is List &&
-                    videoDetailCtr.subtitles.isNotEmpty)
+                if (videoDetailCtr.subtitles.isNotEmpty)
                   ListTile(
                     dense: true,
                     onTap: () => {Get.back(), onExportSubtitle()},
@@ -1103,7 +1102,7 @@ class HeaderControlState extends State<HeaderControl> {
           title: const Text('保存字幕'),
           content: SingleChildScrollView(
             child: Column(
-              children: (videoDetailCtr.subtitles as List)
+              children: videoDetailCtr.subtitles
                   .map(
                     (item) => ListTile(
                       dense: true,
