@@ -22,6 +22,7 @@ class NetworkImgLayer extends StatelessWidget {
     this.isLongPic,
     this.callback,
     this.getPlaceHolder,
+    this.boxFit,
   });
 
   final String? src;
@@ -38,6 +39,7 @@ class NetworkImgLayer extends StatelessWidget {
   final Function? isLongPic;
   final Function? callback;
   final Function? getPlaceHolder;
+  final BoxFit? boxFit;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class NetworkImgLayer extends StatelessWidget {
       height: ignoreHeight == null || ignoreHeight == false ? height : null,
       memCacheWidth: memCacheWidth,
       memCacheHeight: memCacheHeight,
-      fit: BoxFit.cover,
+      fit: boxFit ?? BoxFit.cover,
       alignment:
           isLongPic?.call() == true ? Alignment.topCenter : Alignment.center,
       fadeOutDuration: fadeOutDuration ?? const Duration(milliseconds: 120),

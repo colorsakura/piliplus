@@ -32,7 +32,7 @@ Widget htmlRender({
             final bool isEmote = imgUrl.contains('/emote/');
             final bool isMall = imgUrl.contains('/mall/');
             if (isMall) {
-              return const SizedBox();
+              return const SizedBox.shrink();
             }
             // bool inTable =
             //     extensionContext.element!.previousElementSibling == null ||
@@ -43,6 +43,18 @@ Widget htmlRender({
             //   width: isEmote ? 22 : null,
             //   height: isEmote ? 22 : null,
             // );
+            String? height = RegExp(r'max-height:(\d+)px')
+                .firstMatch('${attributes['style']}')
+                ?.group(1);
+            if (height != null) {
+              return NetworkImgLayer(
+                width: constrainedWidth,
+                height: double.parse(height),
+                src: imgUrl,
+                type: 'emote',
+                boxFit: BoxFit.contain,
+              );
+            }
             return Hero(
               tag: imgUrl,
               child: GestureDetector(

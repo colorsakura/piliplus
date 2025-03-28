@@ -203,8 +203,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
       window.flutter_inappwebview.callHandler('finishButtonClicked');
   });
 """);
-            }
-            if (url.toString().startsWith('https://live.bilibili.com')) {
+            } else if (url.toString().startsWith('https://live.bilibili.com')) {
               _webViewController?.evaluateJavascript(
                 source: '''
                   document.styleSheets[0].insertRule('div.open-app-btn.bili-btn-warp {display:none;}', 0);
