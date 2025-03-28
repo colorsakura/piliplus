@@ -76,6 +76,9 @@ class HtmlRenderController extends ReplyController {
     if (res != null) {
       response = res;
       oid.value = res['commentId'];
+      if (Accounts.main.isLogin && !MineController.anonymity.value) {
+        VideoHttp.historyReport(aid: oid.value, type: 5);
+      }
       queryData();
       if (res['status'] == true) {
         loaded.value = true;
@@ -85,9 +88,6 @@ class HtmlRenderController extends ReplyController {
 
   @override
   Future<LoadingState> customGetData() {
-    if (Accounts.main.isLogin && !MineController.anonymity.value) {
-      VideoHttp.historyReport(aid: oid.value, type: 5);
-    }
     return GlobalData().grpcReply
         ? ReplyHttp.replyListGrpc(
             type: type,
