@@ -18,11 +18,16 @@ class FavVideoPage extends StatefulWidget {
   State<FavVideoPage> createState() => _FavVideoPageState();
 }
 
-class _FavVideoPageState extends State<FavVideoPage> {
+class _FavVideoPageState extends State<FavVideoPage>
+    with AutomaticKeepAliveClientMixin {
   final FavController _favController = Get.find<FavController>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return refreshIndicator(
       onRefresh: () async {
         await _favController.onRefresh();

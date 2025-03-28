@@ -20,12 +20,14 @@ class NoteListPage extends CommonSlidePage {
     this.oid,
     this.upperMid,
     required this.isStein,
+    required this.title,
   });
 
   final dynamic heroTag;
   final dynamic oid;
   final dynamic upperMid;
   final bool isStein;
+  final dynamic title;
 
   @override
   State<NoteListPage> createState() => _NoteListPageState();
@@ -109,6 +111,8 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               onPressed: () {
                 _key.currentState?.showBottomSheet(
                   (context) => WebviewPageNew(
+                    oid: widget.oid,
+                    title: widget.title,
                     url:
                         'https://www.bilibili.com/h5/note-app?oid=${widget.oid}&pagefrom=ugcvideo&is_stein_gate=${widget.isStein ? 1 : 0}',
                   ),

@@ -1074,7 +1074,7 @@ class VideoHttp {
     required int page,
   }) async {
     var res = await Request().get(
-      Api.noteList,
+      Api.archiveNoteList,
       queryParameters: {
         'csrf': Accounts.main.csrf,
         'oid': oid,
@@ -1086,6 +1086,90 @@ class VideoHttp {
     );
     if (res.data['code'] == 0) {
       return LoadingState.success(res.data['data']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState> noteList({
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.noteList,
+      queryParameters: {
+        'pn': page,
+        'ps': 10,
+        'csrf': Accounts.main.csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']?['list']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState> userNoteList({
+    required int page,
+  }) async {
+    var res = await Request().get(
+      Api.userNoteList,
+      queryParameters: {
+        'pn': page,
+        'ps': 10,
+        'csrf': Accounts.main.csrf,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']?['list']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future<LoadingState> addNote({
+    required oid,
+    required String title,
+    required String summary,
+  }) async {
+    String noteId = '';
+    try {
+      final res = await Request().get(Api.archiveNote, queryParameters: {
+        'oid': oid,
+        'oid_type': 0,
+        'csrf': Accounts.main.csrf,
+      });
+      if (res.data['code'] == 0) {
+        if (res.data['data']['noteIds'] != null) {
+          noteId = res.data['data']['noteIds'].first;
+        }
+      }
+    } catch (_) {}
+
+    var res = await Request().post(
+      Api.addNote,
+      data: {
+        'cont_len': summary.length,
+        'note_id': noteId,
+        'oid': oid,
+        'oid_type': 0,
+        'platform': 'web',
+        'title': title,
+        'summary': summary,
+        'content': jsonEncode([
+          {"insert": summary},
+        ]),
+        'from': 'close',
+        'hash': DateTime.now().millisecondsSinceEpoch,
+        'tags': '',
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']?['list']);
     } else {
       return LoadingState.error(res.data['message']);
     }

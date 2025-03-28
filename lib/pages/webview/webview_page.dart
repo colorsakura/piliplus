@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/http/init.dart';
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
@@ -33,9 +34,15 @@ extension _WebviewMenuItemExt on _WebviewMenuItem {
 }
 
 class WebviewPageNew extends StatefulWidget {
-  const WebviewPageNew({super.key, this.url});
+  const WebviewPageNew(
+      {super.key, this.url, this.oid, this.title, this.uaType});
 
   final String? url;
+
+  // note
+  final int? oid;
+  final String? title;
+  final String? uaType;
 
   @override
   State<WebviewPageNew> createState() => _WebviewPageNewState();
@@ -43,7 +50,7 @@ class WebviewPageNew extends StatefulWidget {
 
 class _WebviewPageNewState extends State<WebviewPageNew> {
   late final String _url = widget.url ?? Get.parameters['url'] ?? '';
-  final uaType = Get.parameters['uaType'] ?? 'mob';
+  late final uaType = widget.uaType ?? Get.parameters['uaType'] ?? 'mob';
   final _titleStream = StreamController<String?>();
   final _progressStream = StreamController<double>();
   bool? _inApp;
@@ -183,7 +190,21 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             _webViewController?.addJavaScriptHandler(
               handlerName: 'finishButtonClicked',
               callback: (args) {
-                Get.back();
+                _webViewController?.evaluateJavascript(source: """
+  Array.from(document.querySelectorAll('.ql-editor > p')).map(p => p.textContent).join('\\n');
+""").then((value) {
+                  try {
+                    String? summary = (value as String?);
+                    if (summary?.isNotEmpty == true) {
+                      VideoHttp.addNote(
+                        oid: widget.oid!,
+                        title: widget.title!,
+                        summary: summary!,
+                      );
+                    }
+                  } catch (_) {}
+                  Get.back();
+                });
               },
             );
           },

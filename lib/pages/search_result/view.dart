@@ -86,56 +86,49 @@ class _SearchResultPageState extends State<SearchResultPage>
       ),
       body: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 4),
-            color: Theme.of(context).colorScheme.surface,
-            child: Theme(
-              data: ThemeData(
-                splashColor: Colors.transparent, // 点击时的水波纹颜色设置为透明
-                highlightColor: Colors.transparent, // 点击时的背景高亮颜色设置为透明
+            child: TabBar(
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
+              splashFactory: NoSplash.splashFactory,
+              padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
+              controller: _tabController,
+              tabs: SearchType.values
+                  .map(
+                    (item) => Obx(
+                      () {
+                        int count = _searchResultController.count[item.index];
+                        return Tab(
+                            text:
+                                '${item.label}${count != -1 ? ' ${count > 99 ? '99+' : count}' : ''}');
+                      },
+                    ),
+                  )
+                  .toList(),
+              isScrollable: true,
+              indicatorWeight: 0,
+              indicatorPadding:
+                  const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
+              indicator: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
-              child: TabBar(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                controller: _tabController,
-                tabs: SearchType.values
-                    .map(
-                      (item) => Obx(
-                        () {
-                          int count = _searchResultController.count[item.index];
-                          return Tab(
-                              text:
-                                  '${item.label}${count != -1 ? ' ${count > 99 ? '99+' : count}' : ''}');
-                        },
-                      ),
-                    )
-                    .toList(),
-                isScrollable: true,
-                indicatorWeight: 0,
-                indicatorPadding:
-                    const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
-                indicator: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                ),
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                labelStyle: TabBarTheme.of(context)
-                        .labelStyle
-                        ?.copyWith(fontSize: 13) ??
-                    const TextStyle(fontSize: 13),
-                dividerColor: Colors.transparent,
-                dividerHeight: 0,
-                unselectedLabelColor: Theme.of(context).colorScheme.outline,
-                tabAlignment: TabAlignment.start,
-                onTap: (index) {
-                  if (_tabController.indexIsChanging.not) {
-                    Get.find<SearchPanelController>(
-                            tag: SearchType.values[index].name + _tag)
-                        .animateToTop();
-                  }
-                },
-              ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
+              labelStyle:
+                  TabBarTheme.of(context).labelStyle?.copyWith(fontSize: 13) ??
+                      const TextStyle(fontSize: 13),
+              dividerColor: Colors.transparent,
+              dividerHeight: 0,
+              unselectedLabelColor: Theme.of(context).colorScheme.outline,
+              tabAlignment: TabAlignment.start,
+              onTap: (index) {
+                if (_tabController.indexIsChanging.not) {
+                  Get.find<SearchPanelController>(
+                          tag: SearchType.values[index].name + _tag)
+                      .animateToTop();
+                }
+              },
             ),
           ),
           Expanded(

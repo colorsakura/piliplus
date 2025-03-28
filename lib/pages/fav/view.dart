@@ -1,4 +1,5 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/fav/note/view.dart';
 import 'package:PiliPlus/pages/fav/video/index.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                 _FavType.bangumi => Center(child: Text(item.title)),
                 _FavType.cinema => Center(child: Text(item.title)),
                 _FavType.article => Center(child: Text(item.title)),
-                _FavType.note => Center(child: Text(item.title)),
+                _FavType.note => const FavNotePage(),
               },
             )
             .toList(),

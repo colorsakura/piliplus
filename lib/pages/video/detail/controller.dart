@@ -1622,6 +1622,11 @@ class VideoDetailController extends GetxController
   }
 
   void showNoteList(BuildContext context) async {
+    String? title;
+    try {
+      title =
+          Get.find<VideoIntroController>(tag: heroTag).videoDetail.value.title;
+    } catch (_) {}
     if (plPlayerController.isFullScreen.value) {
       Utils.showFSSheet(
         context,
@@ -1633,6 +1638,7 @@ class VideoDetailController extends GetxController
                   enableSlide: false,
                   heroTag: heroTag,
                   isStein: graphVersion != null,
+                  title: title,
                 ),
               )
             : NoteListPage(
@@ -1640,6 +1646,7 @@ class VideoDetailController extends GetxController
                 enableSlide: false,
                 heroTag: heroTag,
                 isStein: graphVersion != null,
+                title: title,
               ),
         isFullScreen: () => plPlayerController.isFullScreen.value,
       );
@@ -1650,6 +1657,7 @@ class VideoDetailController extends GetxController
           oid: oid.value,
           heroTag: heroTag,
           isStein: graphVersion != null,
+          title: title,
         ),
       );
     }
