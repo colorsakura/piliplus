@@ -1870,14 +1870,14 @@ List<SettingsModel> get extraSettings => [
                   value: audioNormalization,
                   values: values
                       .map((e) => (
+                            e,
                             switch (e) {
                               '0' => AudioNormalization.disable.title,
                               '1' => AudioNormalization.dynaudnorm.title,
                               '2' => AudioNormalization.loudnorm.title,
                               '3' => AudioNormalization.custom.title,
                               _ => e,
-                            },
-                            e
+                            }
                           ))
                       .toList());
             },
