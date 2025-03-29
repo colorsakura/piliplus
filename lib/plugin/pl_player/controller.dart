@@ -311,7 +311,7 @@ class PlPlayerController {
           right: subtitlePaddingH.toDouble(),
           bottom: subtitlePaddingB.toDouble(),
         ),
-        textScaler: TextScaler.linear(1),
+        textScaleFactor: 1,
         strokeWidth: subtitleBgOpaticy == 0 ? subtitleStrokeWidth : null,
       );
 
