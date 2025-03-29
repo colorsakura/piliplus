@@ -424,7 +424,7 @@ class GStorage {
       .get(SettingBoxKey.enableSlideVolumeBrightness, defaultValue: true);
 
   static int get retryCount =>
-      GStorage.setting.get(SettingBoxKey.retryCount, defaultValue: 0);
+      GStorage.setting.get(SettingBoxKey.retryCount, defaultValue: 2);
 
   static int get retryDelay =>
       GStorage.setting.get(SettingBoxKey.retryDelay, defaultValue: 500);
