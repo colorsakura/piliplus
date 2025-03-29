@@ -134,7 +134,6 @@ class HistoryItem extends StatelessWidget {
           return;
         }
         if (!ctr!.enableMultiSelect.value) {
-          feedBack();
           ctr!.enableMultiSelect.value = true;
           onChoose?.call();
         }

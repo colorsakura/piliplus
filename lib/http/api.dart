@@ -733,5 +733,7 @@ class Api {
 
   static const String addNote = '/x/note/add';
 
+  static const String delNote = '/x/note/del';
+
   static const String archiveNote = '/x/note/list/archive';
 }

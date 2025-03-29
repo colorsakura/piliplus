@@ -1146,7 +1146,7 @@ class VideoHttp {
       }
     } catch (_) {}
 
-    var res = await Request().post(
+    final res = await Request().post(
       Api.addNote,
       data: {
         'cont_len': summary.length,
@@ -1172,6 +1172,26 @@ class VideoHttp {
       return LoadingState.success(res.data['data']?['list']);
     } else {
       return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future delNote({
+    required List noteIds,
+  }) async {
+    final res = await Request().post(
+      Api.delNote,
+      data: {
+        'note_ids': noteIds.join(','),
+        'csrf': Accounts.main.csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 }
