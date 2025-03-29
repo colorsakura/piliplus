@@ -26,7 +26,11 @@ class FavNoteItem extends StatelessWidget {
             onSelect();
             return;
           }
-          Utils.handleWebview(item['web_url'], inApp: true);
+          Utils.handleWebview(
+            item['web_url'],
+            inApp: true,
+            parameters: {'uaType': 'android'},
+          );
         },
         onLongPress: () {
           if (!ctr.enableMultiSelect.value) {

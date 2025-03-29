@@ -787,6 +787,7 @@ class Utils {
     String url, {
     bool off = false,
     bool inApp = false,
+    Map? parameters,
   }) async {
     if (inApp.not && GStorage.openInBrowser) {
       if ((await PiliScheme.routePushFromUrl(url, selfHandle: true)).not) {
@@ -796,7 +797,10 @@ class Utils {
       if (off) {
         Get.offNamed(
           '/webview',
-          parameters: {'url': url},
+          parameters: {
+            'url': url,
+            if (parameters != null) ...parameters,
+          },
         );
       } else {
         PiliScheme.routePushFromUrl(url);
