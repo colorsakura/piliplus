@@ -7,13 +7,44 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import 'package:live_photo_maker/live_photo_maker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'dart:io';
 
+import 'package:share_plus/share_plus.dart';
+
 class DownloadUtils {
+  // 图片分享
+  static void onShareImg(String imgUrl) async {
+    try {
+      SmartDialog.showLoading();
+      var response = await Request()
+          .get(imgUrl, options: Options(responseType: ResponseType.bytes));
+      final temp = await getTemporaryDirectory();
+      SmartDialog.dismiss();
+      String imgName =
+          "plpl_pic_${DateTime.now().toString().split('-').join()}.jpg";
+      var path = '${temp.path}/$imgName';
+      File(path).writeAsBytesSync(response.data);
+
+      Rect? sharePositionOrigin;
+      if (Platform.isIOS && (await Utils.isIpad())) {
+        sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
+      }
+
+      Share.shareXFiles(
+        [XFile(path)],
+        subject: imgUrl,
+        sharePositionOrigin: sharePositionOrigin,
+      );
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
+    }
+  }
+
   // 获取存储权限
   static Future<bool> requestStoragePer(BuildContext context) async {
     await Permission.storage.request();

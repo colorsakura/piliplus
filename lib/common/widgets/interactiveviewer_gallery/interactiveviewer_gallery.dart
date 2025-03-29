@@ -1,21 +1,16 @@
 import 'dart:io';
 
-import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'interactive_viewer_boundary.dart';
 import 'interactive_viewer.dart' as custom;
 
@@ -380,7 +375,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                       itemBuilder: (context) {
                         return [
                           PopupMenuItem(
-                            onTap: () => onShareImg(
+                            onTap: () => DownloadUtils.onShareImg(
                                 widget.sources[currentIndex.value].url),
                             child: const Text("分享图片"),
                           ),
@@ -440,34 +435,6 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
         ),
       ],
     );
-  }
-
-  // 图片分享
-  void onShareImg(String imgUrl) async {
-    try {
-      SmartDialog.showLoading();
-      var response = await Request()
-          .get(imgUrl, options: Options(responseType: ResponseType.bytes));
-      final temp = await getTemporaryDirectory();
-      SmartDialog.dismiss();
-      String imgName =
-          "plpl_pic_${DateTime.now().toString().split('-').join()}.jpg";
-      var path = '${temp.path}/$imgName';
-      File(path).writeAsBytesSync(response.data);
-
-      Rect? sharePositionOrigin;
-      if (Platform.isIOS && (await Utils.isIpad())) {
-        sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
-      }
-
-      Share.shareXFiles(
-        [XFile(path)],
-        subject: imgUrl,
-        sharePositionOrigin: sharePositionOrigin,
-      );
-    } catch (e) {
-      SmartDialog.showToast(e.toString());
-    }
   }
 
   Widget _itemBuilder(index) {
@@ -573,7 +540,8 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
             children: [
               ListTile(
                 onTap: () {
-                  onShareImg(widget.sources[currentIndex.value].url);
+                  DownloadUtils.onShareImg(
+                      widget.sources[currentIndex.value].url);
                   Get.back();
                 },
                 dense: true,

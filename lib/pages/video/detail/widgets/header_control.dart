@@ -9,6 +9,7 @@ import 'package:PiliPlus/models/common/super_resolution_type.dart';
 import 'package:PiliPlus/pages/bangumi/introduction/controller.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_item.dart';
+import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -162,6 +163,19 @@ class HeaderControlState extends State<HeaderControl> {
                     },
                     leading: const Icon(Icons.note_alt_outlined, size: 20),
                     title: const Text('查看笔记', style: titleStyle),
+                  ),
+                if (widget.videoDetailCtr.videoItem['pic'] != null)
+                  ListTile(
+                    dense: true,
+                    onTap: () {
+                      Get.back();
+                      DownloadUtils.downloadImg(
+                        context,
+                        [widget.videoDetailCtr.videoItem['pic']],
+                      );
+                    },
+                    leading: const Icon(Icons.image_outlined, size: 20),
+                    title: const Text('保存封面', style: titleStyle),
                   ),
                 ListTile(
                   dense: true,
@@ -1118,13 +1132,19 @@ class HeaderControlState extends State<HeaderControl> {
                                 SmartDialog.showToast('已保存');
                               }
                             } catch (e) {
-                              Share.shareXFiles([
-                                XFile.fromData(
-                                  res.data,
-                                  name: name,
-                                  mimeType: 'application/json',
-                                )
-                              ]);
+                              Share.shareXFiles(
+                                [
+                                  XFile.fromData(
+                                    res.data,
+                                    name: name,
+                                    mimeType: 'application/json',
+                                  ),
+                                ],
+                                sharePositionOrigin: await Utils.isIpad()
+                                    ? Rect.fromLTWH(
+                                        0, 0, Get.width, Get.height / 2)
+                                    : null,
+                              );
                             }
                           }
                         } catch (e) {

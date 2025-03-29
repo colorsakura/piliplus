@@ -73,6 +73,17 @@ void imageSaveDialog({
                 ),
                 const SizedBox(width: 4),
                 IconButton(
+                  tooltip: '分享',
+                  onPressed: () {
+                    DownloadUtils.onShareImg(cover ?? '');
+                  },
+                  icon: Icon(
+                    Icons.share,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                IconButton(
                   tooltip: '保存封面图',
                   onPressed: () async {
                     bool saveStatus = await DownloadUtils.downloadImg(
@@ -89,7 +100,7 @@ void imageSaveDialog({
                     size: 20,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                )
+                ),
               ],
             ),
           ),

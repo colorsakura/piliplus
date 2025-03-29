@@ -19,6 +19,7 @@ import 'package:PiliPlus/pages/video/detail/member/horizontal_member_page.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPlus/pages/video/detail/view_point/view_points_page.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/ai_detail.dart';
+import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -889,6 +890,17 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                             .showNoteList(
                                                                 context);
                                                         break;
+                                                      case 'savePic':
+                                                        DownloadUtils
+                                                            .downloadImg(
+                                                          context,
+                                                          [
+                                                            videoDetailController
+                                                                    .videoItem[
+                                                                'pic']
+                                                          ],
+                                                        );
+                                                        break;
                                                     }
                                                   },
                                                   itemBuilder: (BuildContext
@@ -905,6 +917,14 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                           String>(
                                                         value: 'note',
                                                         child: Text('查看笔记'),
+                                                      ),
+                                                    if (videoDetailController
+                                                            .videoItem['pic'] !=
+                                                        null)
+                                                      const PopupMenuItem<
+                                                          String>(
+                                                        value: 'savePic',
+                                                        child: Text('保存封面'),
                                                       ),
                                                     const PopupMenuItem<String>(
                                                       value: 'report',
@@ -1456,6 +1476,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           case 'note':
                             videoDetailController.showNoteList(context);
                             break;
+                          case 'savePic':
+                            DownloadUtils.downloadImg(
+                              context,
+                              [videoDetailController.videoItem['pic']],
+                            );
+                            break;
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -1468,6 +1494,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                           const PopupMenuItem<String>(
                             value: 'note',
                             child: Text('查看笔记'),
+                          ),
+                        if (videoDetailController.videoItem['pic'] != null)
+                          const PopupMenuItem<String>(
+                            value: 'savePic',
+                            child: Text('保存封面'),
                           ),
                         const PopupMenuItem<String>(
                           value: 'report',
