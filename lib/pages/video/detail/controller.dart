@@ -1058,8 +1058,11 @@ class VideoDetailController extends GetxController
   }) async {
     await plPlayerController.setDataSource(
       DataSource(
-        videoSource: video ?? videoUrl,
-        audioSource: audio ?? audioUrl,
+        videoSource: plPlayerController.onlyPlayAudio.value
+            ? audio ?? audioUrl
+            : video ?? videoUrl,
+        audioSource:
+            plPlayerController.onlyPlayAudio.value ? '' : audio ?? audioUrl,
         type: DataSourceType.network,
         httpHeaders: {
           'user-agent':

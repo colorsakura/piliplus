@@ -322,14 +322,7 @@ class HeaderControlState extends State<HeaderControl> {
                             onTap: () {
                               widget.controller.onlyPlayAudio.value =
                                   !widget.controller.onlyPlayAudio.value;
-                              if (widget.controller.onlyPlayAudio.value) {
-                                widget.videoDetailCtr.playerInit(
-                                  video: widget.videoDetailCtr.audioUrl ?? '',
-                                  audio: '',
-                                );
-                              } else {
-                                widget.videoDetailCtr.playerInit();
-                              }
+                              widget.videoDetailCtr.playerInit();
                             },
                             text: " 听视频 ",
                             selectStatus: widget.controller.onlyPlayAudio.value,
