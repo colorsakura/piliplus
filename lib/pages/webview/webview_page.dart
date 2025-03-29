@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
@@ -193,18 +192,31 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 _webViewController?.evaluateJavascript(source: """
   Array.from(document.querySelectorAll('.ql-editor > p')).map(p => p.textContent).join('\\n');
 """).then((value) {
-                  try {
-                    String? summary = (value as String?);
-                    if (summary?.isNotEmpty == true) {
-                      VideoHttp.addNote(
-                        oid: widget.oid!,
-                        title: widget.title!,
-                        summary: summary!,
-                      );
-                    }
-                  } catch (_) {}
+                  // try {
+                  //   String? summary = (value as String?);
+                  //   if (summary?.isNotEmpty == true) {
+                  //     VideoHttp.addNote(
+                  //       oid: widget.oid!,
+                  //       title: widget.title!,
+                  //       summary: summary!,
+                  //     );
+                  //   }
+                  // } catch (_) {}
                   Get.back();
                 });
+              },
+            );
+            _webViewController?.addJavaScriptHandler(
+              handlerName: 'infoBarClicked',
+              callback: (args) async {
+                WebUri? uri = await _webViewController?.getUrl();
+                if (uri != null) {
+                  String? oid =
+                      RegExp(r'oid=(\d+)').firstMatch(uri.toString())?.group(1);
+                  if (oid != null) {
+                    PiliScheme.videoPush(int.parse(oid), null);
+                  }
+                }
               },
             );
           },
@@ -222,6 +234,11 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
               _webViewController?.evaluateJavascript(source: """
   document.querySelector('.finish-btn').addEventListener('click', function() {
       window.flutter_inappwebview.callHandler('finishButtonClicked');
+  });
+""");
+              _webViewController?.evaluateJavascript(source: """
+  document.querySelector('.info-bar').addEventListener('click', function() {
+      window.flutter_inappwebview.callHandler('infoBarClicked');
   });
 """);
             } else if (url.toString().startsWith('https://live.bilibili.com')) {

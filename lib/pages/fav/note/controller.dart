@@ -53,7 +53,11 @@ class FavNoteController extends MultiSelectController {
     List dataList = (loadingState.value as Success).response as List;
     Set removeList = dataList.where((item) => item['checked'] == true).toSet();
     final res = await VideoHttp.delNote(
-        noteIds: removeList.map((item) => item['note_id']).toList());
+      isPublish: isPublish,
+      noteIds: removeList
+          .map((item) => isPublish ? item['cvid'] : item['note_id'])
+          .toList(),
+    );
     if (res['status']) {
       List remainList = dataList.toSet().difference(removeList).toList();
       loadingState.value = LoadingState.success(remainList);

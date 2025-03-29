@@ -1176,12 +1176,13 @@ class VideoHttp {
   }
 
   static Future delNote({
+    required bool isPublish,
     required List noteIds,
   }) async {
     final res = await Request().post(
-      Api.delNote,
+      isPublish ? Api.delPublishNote : Api.delNote,
       data: {
-        'note_ids': noteIds.join(','),
+        isPublish ? 'cvids' : 'note_ids': noteIds.join(','),
         'csrf': Accounts.main.csrf,
       },
       options: Options(

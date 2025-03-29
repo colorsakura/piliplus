@@ -735,5 +735,7 @@ class Api {
 
   static const String delNote = '/x/note/del';
 
+  static const String delPublishNote = '/x/note/publish/del';
+
   static const String archiveNote = '/x/note/list/archive';
 }
