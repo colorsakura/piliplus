@@ -803,7 +803,7 @@ class Utils {
           },
         );
       } else {
-        PiliScheme.routePushFromUrl(url);
+        PiliScheme.routePushFromUrl(url, parameters: parameters);
       }
     }
   }

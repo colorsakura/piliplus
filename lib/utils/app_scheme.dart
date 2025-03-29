@@ -34,6 +34,7 @@ class PiliScheme {
     String url, {
     bool selfHandle = false,
     bool off = false,
+    Map? parameters,
   }) async {
     try {
       if (url.startsWith('//')) {
@@ -41,7 +42,12 @@ class PiliScheme {
       } else if (RegExp(r'^\S+://').hasMatch(url).not) {
         url = 'https://$url';
       }
-      return await routePush(Uri.parse(url), selfHandle: selfHandle, off: off);
+      return await routePush(
+        Uri.parse(url),
+        selfHandle: selfHandle,
+        off: off,
+        parameters: parameters,
+      );
     } catch (_) {
       return false;
     }
@@ -52,6 +58,7 @@ class PiliScheme {
     Uri uri, {
     bool selfHandle = false,
     bool off = false,
+    Map? parameters,
   }) async {
     final String scheme = uri.scheme;
     final String host = uri.host.toLowerCase();
@@ -342,7 +349,12 @@ class PiliScheme {
             return false;
         }
       case 'http' || 'https':
-        return await _fullPathPush(uri, selfHandle: selfHandle, off: off);
+        return await _fullPathPush(
+          uri,
+          selfHandle: selfHandle,
+          off: off,
+          parameters: parameters,
+        );
       default:
         String? aid = RegExp(r'^av(\d+)', caseSensitive: false)
             .firstMatch(path)
@@ -370,6 +382,7 @@ class PiliScheme {
     Uri uri, {
     bool selfHandle = false,
     bool off = false,
+    Map? parameters,
   }) async {
     // https://m.bilibili.com/bangumi/play/ss39708
     // https | m.bilibili.com | /bangumi/play/ss39708
@@ -384,7 +397,7 @@ class PiliScheme {
 
     void launchURL() {
       if (selfHandle.not) {
-        _toWebview(uri.toString(), off);
+        _toWebview(uri.toString(), off, parameters);
       }
     }
 
@@ -604,10 +617,17 @@ class PiliScheme {
     return false;
   }
 
-  static void _toWebview(String url, bool off) {
+  static void _toWebview(
+    String url,
+    bool off,
+    Map? parameters,
+  ) {
     Utils.toDupNamed(
       '/webview',
-      parameters: {'url': url},
+      parameters: {
+        'url': url,
+        if (parameters != null) ...parameters,
+      },
       off: off,
     );
   }
