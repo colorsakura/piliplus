@@ -14,7 +14,6 @@ import 'package:PiliPlus/models/common/sponsor_block/segment_model.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/video/later.dart';
-import 'package:PiliPlus/models/video/play/subtitle.dart';
 import 'package:PiliPlus/models/video_detail_res.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
@@ -29,6 +28,7 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -1361,7 +1361,7 @@ class VideoDetailController extends GetxController
     }
   }
 
-  RxList subtitles = [].obs;
+  RxList subtitles = RxList();
   late final Map<int, String> _vttSubtitles = {};
   late final RxInt vttSubtitlesIndex = (-1).obs;
   late bool showVP = true;
@@ -1412,7 +1412,7 @@ class VideoDetailController extends GetxController
     steinEdgeInfo = null;
     try {
       dynamic res = await Request().get(
-        'https://api.bilibili.com/x/stein/edgeinfo_v2',
+        '/x/stein/edgeinfo_v2',
         queryParameters: {
           'bvid': bvid,
           'graph_version': graphVersion,
@@ -1432,7 +1432,7 @@ class VideoDetailController extends GetxController
   late bool continuePlayingPart = GStorage.continuePlayingPart;
 
   Future _querySubtitles() async {
-    Map res = await VideoHttp.subtitlesJson(bvid: bvid, cid: cid.value);
+    var res = await VideoHttp.subtitlesJson(bvid: bvid, cid: cid.value);
     // if (!res["status"]) {
     //   SmartDialog.showToast('查询字幕错误，${res["msg"]}');
     // }
@@ -1492,25 +1492,21 @@ class VideoDetailController extends GetxController
       }
 
       if (res["subtitles"] is List && res["subtitles"].isNotEmpty) {
-        vttSubtitlesIndex.value = 0;
+        int idx = 0;
         subtitles.value = res["subtitles"];
 
-        String preference = setting.get(
-          SettingBoxKey.subtitlePreference,
-          defaultValue: SubtitlePreference.values.first.code,
-        );
-        if (preference == 'on') {
-          vttSubtitlesIndex.value = 1;
-        } else if (preference == 'withoutAi') {
-          for (int i = 0; i < subtitles.length; i++) {
-            if (subtitles[i]['lan']!.startsWith('ai')) {
-              continue;
+        String preference = GStorage.defaultSubtitlePreference;
+        if (preference != 'off') {
+          idx = subtitles.indexWhere((i) => !i['lan']!.startsWith('ai')) + 1;
+          if (idx == 0) {
+            if (preference == 'on' ||
+                (preference == 'auto' &&
+                    (await FlutterVolumeController.getVolume() ?? 0) <= 0)) {
+              idx = 1;
             }
-            vttSubtitlesIndex.value = i + 1;
-            break;
           }
         }
-        setSubtitle(vttSubtitlesIndex.value);
+        setSubtitle(idx);
       }
     }
   }
