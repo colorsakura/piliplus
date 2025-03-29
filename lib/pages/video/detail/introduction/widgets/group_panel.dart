@@ -64,7 +64,7 @@ class _GroupPanelState extends State<GroupPanel> {
     final res = await MemberHttp.addUsers(widget.mid, tagids);
     SmartDialog.showToast(res['msg']);
     if (res['status']) {
-      Get.back(result: tagidList?.contains(-10) == true);
+      Get.back(result: tagidList);
     }
   }
 

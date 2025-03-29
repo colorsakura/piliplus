@@ -954,7 +954,7 @@ class Utils {
                     dense: true,
                     onTap: () async {
                       Get.back();
-                      var result = await showModalBottomSheet<bool>(
+                      var result = await showModalBottomSheet<List?>(
                         context: context,
                         useSafeArea: true,
                         isScrollControlled: true,
@@ -979,6 +979,7 @@ class Utils {
                           );
                         },
                       );
+                      followStatus!['tag'] = result;
                       if (result != null) {
                         callback?.call(2);
                       }

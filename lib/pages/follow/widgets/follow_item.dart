@@ -82,7 +82,7 @@ class FollowItem extends StatelessWidget {
                     mid: item.mid,
                     isFollow: item.attribute != -1,
                     callback: callback,
-                    followStatus: {'special': item.special, 'tag': item.tag},
+                    // followStatus: {'special': item.special, 'tag': item.tag},
                   );
                 },
                 style: FilledButton.styleFrom(
