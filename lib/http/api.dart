@@ -735,4 +735,13 @@ class Api {
   static const String delPublishNote = '/x/note/publish/del';
 
   static const String archiveNote = '/x/note/list/archive';
+
+  static const String favArticle = '/x/polymer/web-dynamic/v1/opus/feed/fav';
+
+  static const String communityAction =
+      '/x/community/cosmo/interface/simple_action';
+
+  static const String delFavArticle = '/x/article/favorites/del';
+
+  static const String addFavArticle = '/x/article/favorites/add';
 }

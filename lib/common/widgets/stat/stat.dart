@@ -64,9 +64,11 @@ class StatView extends _StatItemBase {
   }) : super(iconSize: 13);
 
   @override
-  IconData get iconData => goto == 'picture'
-      ? Icons.remove_red_eye_outlined
-      : Icons.play_circle_outlined;
+  IconData get iconData => switch (goto) {
+        'picture' => Icons.remove_red_eye_outlined,
+        'like' => Icons.thumb_up_outlined,
+        _ => Icons.play_circle_outlined,
+      };
 
   @override
   String get semanticsLabel =>

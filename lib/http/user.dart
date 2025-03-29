@@ -468,6 +468,84 @@ class UserHttp {
     }
   }
 
+  static Future<LoadingState> favArticle({
+    required int page,
+  }) async {
+    var res = await Request().get(Api.favArticle, queryParameters: {
+      'page_size': 20,
+      'page': page,
+    });
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']?['items']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
+  static Future addFavArticle({
+    required int id,
+  }) async {
+    var res = await Request().post(
+      Api.addFavArticle,
+      data: {
+        'id': id,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future delFavArticle({
+    required int id,
+  }) async {
+    var res = await Request().post(
+      Api.delFavArticle,
+      data: {
+        'id': id,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
+  static Future communityAction({
+    required dynamic opusId,
+    required dynamic action,
+  }) async {
+    var res = await Request().post(
+      Api.communityAction,
+      queryParameters: {
+        'csrf': await Request.getCsrf(),
+      },
+      data: {
+        "entity": {
+          "object_id_str": opusId,
+          "type": {"biz": 2}
+        },
+        "action": action, // 3 fav, 4 unfav
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   static Future favResourceList({
     required int id,
     required int pn,

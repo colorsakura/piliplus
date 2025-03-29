@@ -171,7 +171,7 @@ class FavPgcItem extends StatelessWidget {
             right: 12,
             bottom: 0,
             child: iconButton(
-              iconSize: 22,
+              iconSize: 20,
               context: context,
               onPressed: onUpdateStatus,
               icon: Icons.more_vert,

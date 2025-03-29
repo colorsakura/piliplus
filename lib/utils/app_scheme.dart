@@ -182,9 +182,19 @@ class PiliScheme {
             return false;
           case 'opus':
             // bilibili://opus/detail/12345678?h5awaken=random
-            if (path.startsWith('/detail')) {
-              bool hasMatch = await _onPushDynDetail(path, off);
-              return hasMatch;
+            String? id = uriDigitRegExp.firstMatch(path)?.group(1);
+            if (id != null) {
+              Utils.toDupNamed(
+                '/htmlRender',
+                parameters: {
+                  'url': 'https://www.bilibili.com/opus/$id',
+                  'title': '',
+                  'id': id,
+                  'dynamicType': 'opus'
+                },
+                off: off,
+              );
+              return true;
             }
             return false;
           case 'search':
@@ -459,7 +469,24 @@ class PiliScheme {
         }
         launchURL();
         return false;
-      case 'opus' || 'dynamic':
+      case 'opus':
+        String? id = uriDigitRegExp.firstMatch(path)?.group(1);
+        if (id != null) {
+          Utils.toDupNamed(
+            '/htmlRender',
+            parameters: {
+              'url': 'https://www.bilibili.com/opus/$id',
+              'title': '',
+              'id': id,
+              'dynamicType': 'opus'
+            },
+            off: off,
+          );
+          return true;
+        }
+        launchURL();
+        return false;
+      case 'dynamic':
         bool hasMatch = await _onPushDynDetail(path, off);
         if (hasMatch.not) {
           launchURL();
