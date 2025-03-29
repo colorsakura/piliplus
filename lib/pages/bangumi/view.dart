@@ -90,7 +90,6 @@ class _BangumiPageState extends State<BangumiPage>
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Obx(
                                 () => Text(
@@ -99,6 +98,7 @@ class _BangumiPageState extends State<BangumiPage>
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
+                              const Spacer(),
                               IconButton(
                                 tooltip: '刷新',
                                 onPressed: () {
@@ -112,6 +112,45 @@ class _BangumiPageState extends State<BangumiPage>
                                   size: 20,
                                 ),
                               ),
+                              Obx(() => _bangumiController.isLogin.value
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(
+                                            '/fav',
+                                            arguments: widget.tabType ==
+                                                    TabType.bangumi
+                                                ? 1
+                                                : 2,
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              '查看全部',
+                                              strutStyle: StrutStyle(
+                                                  leading: 0, height: 1),
+                                              style: TextStyle(
+                                                height: 1,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.chevron_right,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox.shrink()),
                             ],
                           ),
                         ),

@@ -114,8 +114,11 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                               padding: const EdgeInsets.only(left: 25),
                               child: GestureDetector(
                                 onTap: () {
-                                  _favPgcController
-                                      .onUpdate(item['followStatus']);
+                                  if (_favPgcController.checkedCount.value !=
+                                      0) {
+                                    _favPgcController
+                                        .onUpdate(item['followStatus']);
+                                  }
                                 },
                                 child: Text(
                                   '标记为${item['title']}',

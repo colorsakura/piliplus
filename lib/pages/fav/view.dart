@@ -24,6 +24,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
   late final TabController _tabController = TabController(
     length: _FavType.values.length,
     vsync: this,
+    initialIndex: Get.arguments is int ? Get.arguments : 0,
   );
   final FavController _favController = Get.put(FavController());
 
