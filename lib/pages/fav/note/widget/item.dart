@@ -18,123 +18,126 @@ class FavNoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (ctr.enableMultiSelect.value) {
-          onSelect();
-          return;
-        }
-        Utils.handleWebview(item['web_url'], inApp: true);
-      },
-      onLongPress: () {
-        if (!ctr.enableMultiSelect.value) {
-          ctr.enableMultiSelect.value = true;
-          onSelect();
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: StyleString.safeSpace,
-          vertical: 5,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      item['title'],
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        height: 1.4,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          if (ctr.enableMultiSelect.value) {
+            onSelect();
+            return;
+          }
+          Utils.handleWebview(item['web_url'], inApp: true);
+        },
+        onLongPress: () {
+          if (!ctr.enableMultiSelect.value) {
+            ctr.enableMultiSelect.value = true;
+            onSelect();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: StyleString.safeSpace,
+            vertical: 5,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        item['title'],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          height: 1.4,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    item['summary'],
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
+                    Text(
+                      item['summary'],
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
-                  ),
-                  Text(
-                    item['message'],
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
+                    Text(
+                      item['message'],
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            if (item['arc']?['pic'] != null) ...[
-              const SizedBox(width: 10),
-              AspectRatio(
-                aspectRatio: StyleString.aspectRatio,
-                child: LayoutBuilder(
-                  builder:
-                      (BuildContext context, BoxConstraints boxConstraints) {
-                    return Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        NetworkImgLayer(
-                          src: item['arc']?['pic'],
-                          width: boxConstraints.maxWidth,
-                          height: boxConstraints.maxHeight,
-                        ),
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            child: LayoutBuilder(
-                              builder: (context, constraints) =>
-                                  AnimatedOpacity(
-                                opacity: item['checked'] == true ? 1 : 0,
-                                duration: const Duration(milliseconds: 200),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: constraints.maxHeight,
-                                  width: constraints.maxHeight *
-                                      StyleString.aspectRatio,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black.withOpacity(0.6),
-                                  ),
-                                  child: SizedBox(
-                                    width: 34,
-                                    height: 34,
-                                    child: AnimatedScale(
-                                      scale: item['checked'] == true ? 1 : 0,
-                                      duration:
-                                          const Duration(milliseconds: 250),
-                                      curve: Curves.easeInOut,
-                                      child: IconButton(
-                                        tooltip: '取消选择',
-                                        style: ButtonStyle(
-                                          padding: WidgetStateProperty.all(
-                                              EdgeInsets.zero),
-                                          backgroundColor:
-                                              WidgetStateProperty.resolveWith(
-                                            (states) {
-                                              return Theme.of(context)
-                                                  .colorScheme
-                                                  .surface
-                                                  .withOpacity(0.8);
-                                            },
+              if (item['arc']?['pic'] != null) ...[
+                const SizedBox(width: 10),
+                AspectRatio(
+                  aspectRatio: StyleString.aspectRatio,
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints boxConstraints) {
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          NetworkImgLayer(
+                            src: item['arc']?['pic'],
+                            width: boxConstraints.maxWidth,
+                            height: boxConstraints.maxHeight,
+                          ),
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              child: LayoutBuilder(
+                                builder: (context, constraints) =>
+                                    AnimatedOpacity(
+                                  opacity: item['checked'] == true ? 1 : 0,
+                                  duration: const Duration(milliseconds: 200),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: constraints.maxHeight,
+                                    width: constraints.maxHeight *
+                                        StyleString.aspectRatio,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.black.withOpacity(0.6),
+                                    ),
+                                    child: SizedBox(
+                                      width: 34,
+                                      height: 34,
+                                      child: AnimatedScale(
+                                        scale: item['checked'] == true ? 1 : 0,
+                                        duration:
+                                            const Duration(milliseconds: 250),
+                                        curve: Curves.easeInOut,
+                                        child: IconButton(
+                                          tooltip: '取消选择',
+                                          style: ButtonStyle(
+                                            padding: WidgetStateProperty.all(
+                                                EdgeInsets.zero),
+                                            backgroundColor:
+                                                WidgetStateProperty.resolveWith(
+                                              (states) {
+                                                return Theme.of(context)
+                                                    .colorScheme
+                                                    .surface
+                                                    .withOpacity(0.8);
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                        onPressed: null,
-                                        icon: Icon(
-                                          Icons.done_all_outlined,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                          onPressed: null,
+                                          icon: Icon(
+                                            Icons.done_all_outlined,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -143,14 +146,14 @@ class FavNoteItem extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

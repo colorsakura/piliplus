@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
@@ -299,10 +300,24 @@ class _BangumiInfoState extends State<BangumiInfo>
                                             : () {
                                                 if (bangumiIntroController
                                                     .isFollowed.value) {
-                                                  showDialog(
+                                                  showPgcFollowDialog(
                                                     context: context,
-                                                    builder: (context) =>
-                                                        _followDialog(),
+                                                    type: bangumiIntroController
+                                                        .type,
+                                                    followStatus:
+                                                        bangumiIntroController
+                                                            .followStatus.value,
+                                                    onUpdateStatus:
+                                                        (followStatus) {
+                                                      if (followStatus == -1) {
+                                                        bangumiIntroController
+                                                            .bangumiDel();
+                                                      } else {
+                                                        bangumiIntroController
+                                                            .bangumiUpdate(
+                                                                followStatus);
+                                                      }
+                                                    },
                                                   );
                                                 } else {
                                                   bangumiIntroController
@@ -600,59 +615,6 @@ class _BangumiInfoState extends State<BangumiInfo>
           loadingStatus: widget.isLoading,
           text: '转发'),
     ]);
-  }
-
-  Widget _followDialog() {
-    return AlertDialog(
-      clipBehavior: Clip.hardEdge,
-      contentPadding: const EdgeInsets.symmetric(vertical: 12),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _followDialogItem(3, '看过'),
-          _followDialogItem(2, '在看'),
-          _followDialogItem(1, '想看'),
-          ListTile(
-            dense: true,
-            title: Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                '取消${bangumiIntroController.type}',
-                style: TextStyle(fontSize: 14),
-              ),
-            ),
-            onTap: () {
-              Get.back();
-              bangumiIntroController.bangumiDel();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _followDialogItem(
-    int followStatus,
-    String text,
-  ) {
-    return ListTile(
-      dense: true,
-      enabled: bangumiIntroController.followStatus.value != followStatus,
-      title: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Text(
-          '标记为 $text',
-          style: const TextStyle(fontSize: 14),
-        ),
-      ),
-      trailing: bangumiIntroController.followStatus.value == followStatus
-          ? const Icon(size: 22, Icons.check)
-          : null,
-      onTap: () {
-        Get.back();
-        bangumiIntroController.bangumiUpdate(followStatus);
-      },
-    );
   }
 }
 

@@ -521,7 +521,7 @@ class BangumiIntroController extends CommonController {
 
   Future bangumiUpdate(status) async {
     var result = await VideoHttp.bangumiUpdate(
-      seasonId: (loadingState.value as Success).response.seasonId,
+      seasonId: [(loadingState.value as Success).response.seasonId],
       status: status,
     );
     if (result['status']) {

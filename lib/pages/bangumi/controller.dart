@@ -51,7 +51,7 @@ class BangumiController extends CommonController {
       return;
     }
     followLoading = true;
-    dynamic res = await BangumiHttp.bangumiFollow(
+    dynamic res = await BangumiHttp.bangumiFollowList(
       mid: mid,
       type: tabType == TabType.bangumi ? 1 : 2,
       pn: followPage,

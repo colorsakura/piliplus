@@ -920,13 +920,13 @@ class VideoHttp {
   }
 
   static Future bangumiUpdate({
-    dynamic seasonId,
-    dynamic status,
+    required List seasonId,
+    required dynamic status,
   }) async {
     var res = await Request().post(
       Api.bangumiUpdate,
       data: {
-        'season_id': seasonId,
+        'season_id': seasonId.join(','),
         'status': status,
         'csrf': Accounts.main.csrf,
       },

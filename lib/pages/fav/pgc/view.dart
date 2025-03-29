@@ -1,17 +1,19 @@
-import 'package:PiliPlus/pages/fav/note/child_view.dart';
+import 'package:PiliPlus/pages/fav/pgc/child_view.dart';
 import 'package:flutter/material.dart';
 
-class FavNotePage extends StatefulWidget {
-  const FavNotePage({super.key});
+class FavPgcPage extends StatefulWidget {
+  const FavPgcPage({super.key, required this.type});
+
+  final int type;
 
   @override
-  State<FavNotePage> createState() => _FavNotePageState();
+  State<FavPgcPage> createState() => _FavPgcPageState();
 }
 
-class _FavNotePageState extends State<FavNotePage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class _FavPgcPageState extends State<FavPgcPage>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   late final TabController _tabController =
-      TabController(length: 2, vsync: this);
+      TabController(length: 3, vsync: this, initialIndex: 1);
 
   @override
   bool get wantKeepAlive => true;
@@ -53,9 +55,10 @@ class _FavNotePageState extends State<FavNotePage>
                     const TextStyle(fontSize: 14),
                 labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 unselectedLabelColor: Theme.of(context).colorScheme.outline,
-                tabs: [
-                  Tab(text: '未发布笔记'),
-                  Tab(text: '公开笔记'),
+                tabs: const [
+                  Tab(text: '想看'),
+                  Tab(text: '在看'),
+                  Tab(text: '看过'),
                 ],
               ),
             ),
@@ -65,21 +68,7 @@ class _FavNotePageState extends State<FavNotePage>
             //     visualDensity: VisualDensity(horizontal: -2, vertical: -2),
             //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //   ),
-            //   onPressed: () async {
-            //     final favNoteController = Get.find<FavNoteController>(
-            //         tag: _tabController.index == 0 ? 'false' : 'true');
-            //     if (favNoteController.enableMultiSelect.value) {
-            //       favNoteController.onDisable();
-            //     } else {
-            //       if (favNoteController.loadingState.value is Success &&
-            //           ((favNoteController.loadingState.value as Success)
-            //                       .response as List?)
-            //                   ?.isNotEmpty ==
-            //               true) {
-            //         favNoteController.enableMultiSelect.value = true;
-            //       }
-            //     }
-            //   },
+            //   onPressed: () {},
             //   child: const Text('管理'),
             // ),
             // const SizedBox(width: 12),
@@ -89,10 +78,13 @@ class _FavNotePageState extends State<FavNotePage>
           child: TabBarView(
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
-            children: [
-              FavNoteChildPage(isPublish: false),
-              FavNoteChildPage(isPublish: true),
-            ],
+            children: List.generate(
+              3,
+              (index) => FavPgcChildPage(
+                type: widget.type,
+                followStatus: index + 1,
+              ),
+            ),
           ),
         ),
       ],

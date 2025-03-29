@@ -67,19 +67,24 @@ class BangumiHttp {
     }
   }
 
-  static Future<LoadingState> bangumiFollow({
-    dynamic mid,
+  static Future<LoadingState> bangumiFollowList({
+    required dynamic mid,
     required int type,
     required int pn,
+    int? followStatus,
   }) async {
-    var res = await Request().get(Api.bangumiFollow, queryParameters: {
+    var res = await Request().get(Api.bangumiFollowList, queryParameters: {
       'vmid': mid,
       'type': type,
+      if (followStatus != null) 'follow_status': followStatus,
       'pn': pn,
     });
     if (res.data['code'] == 0) {
       BangumiListDataModel data =
           BangumiListDataModel.fromJson(res.data['data']);
+      if (followStatus != null) {
+        return LoadingState.success(data.list);
+      }
       return LoadingState.success(data);
     } else {
       return LoadingState.error(res.data['message']);

@@ -5,25 +5,32 @@ import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/fav/note/controller.dart';
-import 'package:PiliPlus/pages/fav/note/widget/item.dart';
+import 'package:PiliPlus/pages/fav/pgc/controller.dart';
+import 'package:PiliPlus/pages/fav/pgc/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FavNoteChildPage extends StatefulWidget {
-  const FavNoteChildPage({super.key, required this.isPublish});
+class FavPgcChildPage extends StatefulWidget {
+  const FavPgcChildPage({
+    super.key,
+    required this.type,
+    required this.followStatus,
+  });
 
-  final bool isPublish;
+  final int type;
+  final int followStatus;
 
   @override
-  State<FavNoteChildPage> createState() => _FavNoteChildPageState();
+  State<FavPgcChildPage> createState() => _FavPgcChildPageState();
 }
 
-class _FavNoteChildPageState extends State<FavNoteChildPage>
+class _FavPgcChildPageState extends State<FavPgcChildPage>
     with AutomaticKeepAliveClientMixin {
-  late final FavNoteController _favNoteController =
-      Get.put(FavNoteController(widget.isPublish), tag: '${widget.isPublish}');
+  late final FavPgcController _favPgcController = Get.put(
+    FavPgcController(widget.type, widget.followStatus),
+    tag: '${widget.type}${widget.followStatus}',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +41,11 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
         children: [
           refreshIndicator(
             onRefresh: () async {
-              await _favNoteController.onRefresh();
+              await _favPgcController.onRefresh();
             },
             child: CustomScrollView(
               slivers: [
-                Obx(() => _buildBody(_favNoteController.loadingState.value)),
+                Obx(() => _buildBody(_favPgcController.loadingState.value)),
               ],
             ),
           ),
@@ -48,7 +55,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
             right: 0,
             child: Obx(
               () => AnimatedSlide(
-                offset: _favNoteController.enableMultiSelect.value
+                offset: _favPgcController.enableMultiSelect.value
                     ? Offset(0, -1)
                     : Offset.zero,
                 duration: const Duration(milliseconds: 150),
@@ -75,42 +82,53 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                         tooltip: '取消',
                         context: context,
                         icon: Icons.clear,
-                        onPressed: _favNoteController.onDisable,
+                        onPressed: _favPgcController.onDisable,
                       ),
                       const SizedBox(width: 12),
                       Obx(
                         () => Checkbox(
-                          value: _favNoteController.allSelected.value,
+                          value: _favPgcController.allSelected.value,
                           onChanged: (value) {
-                            _favNoteController.handleSelect(
-                                !_favNoteController.allSelected.value);
+                            _favPgcController.handleSelect(
+                                !_favPgcController.allSelected.value);
                           },
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          _favNoteController.handleSelect(
-                              !_favNoteController.allSelected.value);
+                          _favPgcController.handleSelect(
+                              !_favPgcController.allSelected.value);
                         },
                         child: const Text('全选'),
                       ),
                       const Spacer(),
-                      FilledButton.tonal(
-                        style: TextButton.styleFrom(
-                          visualDensity:
-                              VisualDensity(horizontal: -2, vertical: -2),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          showConfirmDialog(
-                            context: context,
-                            title: '确定删除已选中的笔记吗？',
-                            onConfirm: _favNoteController.onRemove,
-                          );
-                        },
-                        child: const Text('删除'),
-                      ),
-                      const SizedBox(width: 16),
+                      ...[
+                        {'followStatus': 1, 'title': '想看'},
+                        {'followStatus': 2, 'title': '在看'},
+                        {'followStatus': 3, 'title': '看过'},
+                      ]
+                          .where((item) =>
+                              item['followStatus'] != widget.followStatus)
+                          .map(
+                            (Map item) => Padding(
+                              padding: const EdgeInsets.only(left: 25),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _favPgcController
+                                      .onUpdate(item['followStatus']);
+                                },
+                                child: Text(
+                                  '标记为${item['title']}',
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      const SizedBox(width: 20),
                     ],
                   ),
                 ),
@@ -150,13 +168,34 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == loadingState.response.length - 1) {
-                      _favNoteController.onLoadMore();
+                      _favPgcController.onLoadMore();
                     }
-                    return FavNoteItem(
+                    return FavPgcItem(
                       item: loadingState.response[index],
-                      ctr: _favNoteController,
+                      ctr: _favPgcController,
                       onSelect: () {
-                        _favNoteController.onSelect(index);
+                        _favPgcController.onSelect(index);
+                      },
+                      onUpdateStatus: () {
+                        showPgcFollowDialog(
+                          context: context,
+                          type: widget.type == 0 ? '追番' : '追剧',
+                          followStatus: widget.followStatus,
+                          onUpdateStatus: (followStatus) {
+                            if (followStatus == -1) {
+                              _favPgcController.bangumiDel(
+                                index,
+                                loadingState.response[index].seasonId,
+                              );
+                            } else {
+                              _favPgcController.bangumiUpdate(
+                                index,
+                                followStatus,
+                                loadingState.response[index].seasonId,
+                              );
+                            }
+                          },
+                        );
                       },
                     );
                   },
@@ -164,10 +203,10 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                 ),
               ),
             )
-          : HttpError(callback: _favNoteController.onReload),
+          : HttpError(callback: _favPgcController.onReload),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _favNoteController.onReload,
+          callback: _favPgcController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };
