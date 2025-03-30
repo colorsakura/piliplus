@@ -94,7 +94,11 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                     child: Center(
                                       child: const Text(
                                         '上次观看',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          letterSpacing: 1.5,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -107,14 +111,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                   right: 6.0,
                                   top: 6.0,
                                 ),
-                              if (videoItem.duration > 0)
-                                PBadge(
-                                  text: Utils.timeFormat(videoItem.duration),
-                                  right: 6.0,
-                                  bottom: 6.0,
-                                  type: 'gray',
-                                ),
-                              if (videoItem.history != null)
+                              if (videoItem.history != null) ...[
                                 Builder(builder: (context) {
                                   try {
                                     return Positioned(
@@ -130,6 +127,34 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                     return const SizedBox.shrink();
                                   }
                                 }),
+                                Builder(builder: (context) {
+                                  try {
+                                    return PBadge(
+                                      text: videoItem.history!['progress'] ==
+                                              videoItem.history!['duration']
+                                          ? '已看完'
+                                          : '${Utils.timeFormat(videoItem.history!['progress'])}/${Utils.timeFormat(videoItem.history!['duration'])}',
+                                      right: 6.0,
+                                      bottom: 6.0,
+                                      type: 'gray',
+                                    );
+                                  } catch (_) {
+                                    return PBadge(
+                                      text:
+                                          Utils.timeFormat(videoItem.duration),
+                                      right: 6.0,
+                                      bottom: 6.0,
+                                      type: 'gray',
+                                    );
+                                  }
+                                }),
+                              ] else if (videoItem.duration > 0)
+                                PBadge(
+                                  text: Utils.timeFormat(videoItem.duration),
+                                  right: 6.0,
+                                  bottom: 6.0,
+                                  type: 'gray',
+                                ),
                             ],
                           );
                         },
