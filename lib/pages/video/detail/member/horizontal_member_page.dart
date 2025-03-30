@@ -1,23 +1,26 @@
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import 'package:PiliPlus/common/widgets/pair.dart';
+import 'package:PiliPlus/common/widgets/video_card_h_member_video.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/pages/video/detail/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/member/controller.dart';
-import 'package:PiliPlus/pages/video/detail/member/widget/video_card_h_member_video.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+
+import '../../../../models/space_archive/item.dart';
 
 class HorizontalMemberPage extends StatefulWidget {
   const HorizontalMemberPage({
@@ -46,11 +49,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     _controller = Get.put(
       HorizontalMemberPageController(
         mid: widget.mid,
-        firstParam: Triple<dynamic, dynamic, dynamic>(
-          first: widget.videoDetailController.oid.value,
-          second: widget.videoDetailController.cid.value,
-          third: 0,
-        ),
+        lastAid: widget.videoDetailController.oid.value.toString(),
       ),
       tag: widget.videoDetailController.heroTag,
     );
@@ -120,6 +119,59 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     };
   }
 
+  Widget get _buildSliverHeader {
+    return SliverPersistentHeader(
+      pinned: false,
+      floating: true,
+      delegate: CustomSliverPersistentHeaderDelegate(
+        extent: 40,
+        bgColor: Theme.of(context).colorScheme.surface,
+        child: Container(
+          height: 40,
+          padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(
+                () => Text(
+                  _controller.count.value != -1
+                      ? '共${_controller.count.value}视频'
+                      : '',
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ),
+              SizedBox(
+                height: 35,
+                child: TextButton.icon(
+                  onPressed: () {
+                    _controller
+                      ..lastAid =
+                          widget.videoDetailController.oid.value.toString()
+                      ..queryBySort();
+                  },
+                  icon: Icon(
+                    Icons.sort,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  label: Obx(
+                    () => Text(
+                      _controller.order.value == 'pubdate' ? '最新发布' : '最多播放',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildVideoList(LoadingState loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
@@ -129,6 +181,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
             controller: _controller.scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
+              _buildSliverHeader,
               SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom + 80,
@@ -149,17 +202,17 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                         videoItem: loadingState.response[index],
                         bvid: _bvid,
                         onTap: () {
-                          final videoItem = loadingState.response[index];
+                          final Item videoItem = loadingState.response[index];
                           final status =
                               widget.videoIntroController.changeSeasonOrbangu(
                             null,
-                            videoItem['bvid'],
-                            videoItem['player_args']?['cid'],
-                            int.parse(videoItem['param']),
-                            videoItem['cover'],
+                            videoItem.bvid,
+                            videoItem.cid,
+                            IdUtils.bv2av(videoItem.bvid!),
+                            videoItem.cover,
                           );
                           if (status) {
-                            _bvid = videoItem['bvid'];
+                            _bvid = videoItem.bvid;
                             setState(() {});
                           }
                         },

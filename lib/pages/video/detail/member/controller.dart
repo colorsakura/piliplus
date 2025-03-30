@@ -1,12 +1,15 @@
-import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/models/space_archive/data.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
+    show ContributeType;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 
 class HorizontalMemberPageController extends CommonController {
-  HorizontalMemberPageController({this.mid, required this.firstParam});
+  HorizontalMemberPageController({this.mid, required this.lastAid});
 
   dynamic mid;
   dynamic wwebid;
@@ -17,6 +20,7 @@ class HorizontalMemberPageController extends CommonController {
   @override
   void onInit() {
     super.onInit();
+    currentPage = 0;
     getUserInfo();
     queryData();
   }
@@ -49,72 +53,61 @@ class HorizontalMemberPageController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    final data = response.response;
-    if (currentPage == 0 || isLoadPrevious == true) {
-      hasPrev = data['page']['has_prev'];
+    Data data = response.response;
+    count.value = data.count ?? -1;
+    if (currentPage == 0 || isLoadPrevious) {
+      hasPrev = data.hasPrev ?? false;
     }
-    if (currentPage == 0 || isLoadPrevious != true) {
-      hasNext = data['page']['has_next'];
+    if (currentPage == 0 || !isLoadPrevious) {
+      hasNext = data.hasNext ?? false;
     }
-
     if (currentPage != 0 && loadingState.value is Success) {
-      data['items'] ??= [];
+      data.item ??= <Item>[];
       if (isLoadPrevious) {
-        data['items'].addAll((loadingState.value as Success).response);
+        data.item!.addAll((loadingState.value as Success).response);
       } else {
-        data['items'].insertAll(0, (loadingState.value as Success).response);
+        data.item!.insertAll(0, (loadingState.value as Success).response);
       }
     }
-
-    if ((data['items'] as List?)?.isNotEmpty == true) {
-      final first = data['items'].first;
-      final last = data['items'].last;
-
-      firstParam = Triple(
-        first: first['param'],
-        second: first['player_args']?['cid'],
-        third: first['index'],
-      );
-      lastParam = Triple(
-        first: last['param'],
-        second: last['player_args']?['cid'],
-        third: last['index'],
-      );
-    }
-
-    loadingState.value = LoadingState.success(data['items']);
+    firstAid = data.item?.firstOrNull?.param;
+    lastAid = data.item?.lastOrNull?.param;
+    loadingState.value = LoadingState.success(data.item);
     isLoadPrevious = false;
     return true;
   }
 
+  String? firstAid;
+  String? lastAid;
+  RxString order = 'pubdate'.obs;
+  RxInt count = (-1).obs;
   bool isLoadPrevious = false;
-  Triple<dynamic, dynamic, dynamic> firstParam;
-  Triple<dynamic, dynamic, dynamic>? lastParam;
   bool hasPrev = true;
   bool hasNext = true;
 
   @override
-  Future<LoadingState> customGetData() => MemberHttp.spaceStory(
+  Future<LoadingState> customGetData() => MemberHttp.spaceArchive(
+        type: ContributeType.video,
         mid: mid,
-        aid: lastParam == null || isLoadPrevious
-            ? firstParam.first
-            : lastParam?.first,
-        cid: lastParam == null || isLoadPrevious
-            ? firstParam.second
-            : lastParam?.second,
-        index: lastParam == null || isLoadPrevious
-            ? firstParam.third
-            : lastParam?.third,
-        beforeSize: lastParam == null
-            ? 0
-            : isLoadPrevious
-                ? 20
-                : 0,
-        afterSize: lastParam == null
-            ? 10
-            : isLoadPrevious
-                ? 0
-                : 20,
-        contain: lastParam == null ? 1 : 0,
+        aid: isLoadPrevious ? firstAid : lastAid,
+        order: order.value,
+        sort: isLoadPrevious ? 'asc' : null,
+        pn: null,
+        next: null,
+        seasonId: null,
+        seriesId: null,
+        includeCursor: currentPage == 0 ? true : null,
       );
+
+  @override
+  Future onRefresh() async {
+    currentPage = 0;
+    hasPrev = true;
+    hasNext = true;
+    await queryData();
+  }
+
+  queryBySort() {
+    order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
+    onReload();
+  }
 }
