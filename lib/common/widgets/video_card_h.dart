@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models/search/result.dart';
@@ -53,6 +54,7 @@ class VideoCardH extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Semantics(
             label: Utils.videoItemSemantics(videoItem),
@@ -125,7 +127,14 @@ class VideoCardH extends StatelessWidget {
                             BoxConstraints boxConstraints) {
                           final double maxWidth = boxConstraints.maxWidth;
                           final double maxHeight = boxConstraints.maxHeight;
+                          num? progress;
+                          if (videoItem is HotVideoItemModel) {
+                            progress =
+                                (videoItem as HotVideoItemModel).progress;
+                          }
+
                           return Stack(
+                            clipBehavior: Clip.none,
                             children: [
                               NetworkImgLayer(
                                 src: videoItem.pic,
@@ -143,7 +152,26 @@ class VideoCardH extends StatelessWidget {
                                   top: 6.0,
                                   right: 6.0,
                                 ),
-                              if (videoItem.duration > 0)
+                              if (progress != null && progress != 0) ...[
+                                PBadge(
+                                  text: progress == -1
+                                      ? '已看完'
+                                      : '${Utils.timeFormat(progress)}/${Utils.timeFormat(videoItem.duration)}',
+                                  right: 6,
+                                  bottom: 8,
+                                  type: 'gray',
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  bottom: 0,
+                                  right: 0,
+                                  child: videoProgressIndicator(
+                                    progress == -1
+                                        ? 1
+                                        : progress / videoItem.duration,
+                                  ),
+                                )
+                              ] else if (videoItem.duration > 0)
                                 PBadge(
                                   text: Utils.timeFormat(videoItem.duration),
                                   right: 6.0,

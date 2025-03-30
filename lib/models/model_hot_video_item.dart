@@ -18,6 +18,8 @@ class HotVideoItemModel extends BaseRecVideoItemModel {
 
   bool? checked; // 手动设置的
 
+  num? progress;
+
   HotVideoItemModel.fromJson(Map<String, dynamic> json) {
     aid = json["aid"];
     cid = json["cid"];
@@ -44,6 +46,7 @@ class HotVideoItemModel extends BaseRecVideoItemModel {
     pgcLabel = json['pgc_label'];
     redirectUrl = json['redirect_url'];
     // uri = json['uri']; // 仅在稍后再看存在
+    progress = json['progress'];
   }
 
   // @override

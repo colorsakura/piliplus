@@ -154,6 +154,7 @@ class HistoryItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       AspectRatio(
                         aspectRatio: StyleString.aspectRatio,
@@ -162,6 +163,7 @@ class HistoryItem extends StatelessWidget {
                             double maxWidth = boxConstraints.maxWidth;
                             double maxHeight = boxConstraints.maxHeight;
                             return Stack(
+                              clipBehavior: Clip.none,
                               children: [
                                 NetworkImgLayer(
                                   src: (videoItem.cover.isNullOrEmpty
@@ -246,6 +248,7 @@ class HistoryItem extends StatelessWidget {
                       ),
                       if (videoItem.duration != null &&
                           videoItem.duration != 0 &&
+                          videoItem.progress != null &&
                           videoItem.progress != 0)
                         Positioned(
                           left: 0,
@@ -254,7 +257,7 @@ class HistoryItem extends StatelessWidget {
                           child: videoProgressIndicator(
                             videoItem.progress == -1
                                 ? 1
-                                : videoItem.progress / videoItem.duration!,
+                                : videoItem.progress! / videoItem.duration!,
                           ),
                         ),
                     ],

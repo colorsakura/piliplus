@@ -72,7 +72,7 @@ class HisListItem {
   String? authorFace;
   int? authorMid;
   int? viewAt;
-  int progress = 0;
+  int? progress;
   String? badge;
   String? showTitle;
   int? duration;
