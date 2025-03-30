@@ -651,7 +651,7 @@ class VideoIntroController extends GetxController
   }
 
   // 修改分P或番剧分集
-  Future changeSeasonOrbangu(epid, bvid, cid, aid, cover, [isStein]) async {
+  bool changeSeasonOrbangu(epid, bvid, cid, aid, cover, [isStein]) {
     // 重新获取视频资源
     final videoDetailCtr = Get.find<VideoDetailController>(tag: heroTag);
 
@@ -665,7 +665,7 @@ class VideoIntroController extends GetxController
             'heroTag': Utils.makeHeroTag(bvid),
           },
         );
-        return;
+        return false;
       }
     }
 
@@ -710,6 +710,7 @@ class VideoIntroController extends GetxController
 
     lastPlayCid.value = cid;
     queryOnlineTotal();
+    return true;
   }
 
   void startTimer() {

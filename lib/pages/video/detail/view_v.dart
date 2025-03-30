@@ -15,6 +15,7 @@ import 'package:PiliPlus/pages/video/detail/introduction/widgets/intro_detail.da
     as video;
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/page.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/season.dart';
+import 'package:PiliPlus/pages/video/detail/member/controller.dart';
 import 'package:PiliPlus/pages/video/detail/member/horizontal_member_page.dart';
 import 'package:PiliPlus/pages/video/detail/reply_reply/view.dart';
 import 'package:PiliPlus/pages/video/detail/view_point/view_points_page.dart';
@@ -383,6 +384,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     videoDetailController.skipTimer = null;
 
     try {
+      Get.delete<HorizontalMemberPageController>(
+          tag: videoDetailController.heroTag);
       videoDetailController.animationController.removeListener(animListener);
       if (videoDetailController.showReply) {
         videoDetailController.scrollKey.currentState?.innerController

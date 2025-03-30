@@ -196,6 +196,48 @@ class MemberHttp {
     }
   }
 
+  static Future<LoadingState> spaceStory({
+    required mid,
+    required aid,
+    required beforeSize,
+    required afterSize,
+    required cid,
+    required contain,
+    required index,
+  }) async {
+    Map<String, String> data = {
+      'aid': aid.toString(),
+      'before_size': beforeSize.toString(),
+      'after_size': afterSize.toString(),
+      'cid': cid.toString(),
+      'contain': contain.toString(),
+      'index': index.toString(),
+      'build': '1462100',
+      'c_locale': 'zh_CN',
+      'channel': 'yingyongbao',
+      'mobi_app': 'android_hd',
+      'platform': 'android',
+      's_locale': 'zh_CN',
+      'statistics': Constants.statistics,
+      'vmid': mid.toString(),
+    };
+    dynamic res = await Request().get(
+      Api.spaceStory,
+      queryParameters: data,
+      options: Options(
+        headers: {
+          'bili-http-engine': 'cronet',
+          'user-agent': Constants.userAgent,
+        },
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return LoadingState.success(res.data['data']);
+    } else {
+      return LoadingState.error(res.data['message']);
+    }
+  }
+
   static Future<LoadingState> space({
     int? mid,
   }) async {

@@ -329,6 +329,9 @@ class Api {
   static const String spaceArchive =
       '${HttpString.appBaseUrl}/x/v2/space/archive/cursor';
 
+  static const String spaceStory =
+      '${HttpString.appBaseUrl}/x/v2/feed/index/space/story/cursor';
+
   static const String spaceChargingArchive =
       '${HttpString.appBaseUrl}/x/v2/space/archive/charging';
 
