@@ -88,11 +88,19 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                         ),
                       ),
                       GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           _favNoteController.handleSelect(
                               !_favNoteController.allSelected.value);
                         },
-                        child: const Text('全选'),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 14,
+                            bottom: 14,
+                            right: 12,
+                          ),
+                          child: const Text('全选'),
+                        ),
                       ),
                       const Spacer(),
                       FilledButton.tonal(

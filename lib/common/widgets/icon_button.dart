@@ -22,7 +22,7 @@ Widget iconButton({
         color: iconColor ?? Theme.of(context).colorScheme.onSecondaryContainer,
       ),
       style: IconButton.styleFrom(
-        padding: EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         backgroundColor:
             bgColor ?? Theme.of(context).colorScheme.secondaryContainer,
       ),

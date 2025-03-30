@@ -95,11 +95,19 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                         ),
                       ),
                       GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           _favPgcController.handleSelect(
                               !_favPgcController.allSelected.value);
                         },
-                        child: const Text('全选'),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 14,
+                            bottom: 14,
+                            right: 12,
+                          ),
+                          child: const Text('全选'),
+                        ),
                       ),
                       const Spacer(),
                       ...[
@@ -113,6 +121,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                             (Map item) => Padding(
                               padding: const EdgeInsets.only(left: 25),
                               child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
                                 onTap: () {
                                   if (_favPgcController.checkedCount.value !=
                                       0) {
@@ -120,12 +129,16 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                                         .onUpdate(item['followStatus']);
                                   }
                                 },
-                                child: Text(
-                                  '标记为${item['title']}',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14, horizontal: 5),
+                                  child: Text(
+                                    '标记为${item['title']}',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                                   ),
                                 ),
                               ),

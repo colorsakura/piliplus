@@ -112,45 +112,52 @@ class _BangumiPageState extends State<BangumiPage>
                                   size: 20,
                                 ),
                               ),
-                              Obx(() => _bangumiController.isLogin.value
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(
-                                            '/fav',
-                                            arguments: widget.tabType ==
-                                                    TabType.bangumi
-                                                ? 1
-                                                : 2,
-                                          );
-                                        },
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              '查看全部',
-                                              strutStyle: StrutStyle(
-                                                  leading: 0, height: 1),
-                                              style: TextStyle(
-                                                height: 1,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                              ),
+                              Obx(
+                                () => _bangumiController.isLogin.value
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () {
+                                            Get.toNamed(
+                                              '/fav',
+                                              arguments: widget.tabType ==
+                                                      TabType.bangumi
+                                                  ? 1
+                                                  : 2,
+                                            );
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '查看全部',
+                                                  strutStyle: StrutStyle(
+                                                      leading: 0, height: 1),
+                                                  style: TextStyle(
+                                                    height: 1,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.chevron_right,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                ),
+                                              ],
                                             ),
-                                            Icon(
-                                              Icons.chevron_right,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink()),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ),
                             ],
                           ),
                         ),
@@ -183,6 +190,7 @@ class _BangumiPageState extends State<BangumiPage>
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       if (widget.tabType == TabType.bangumi) {
                         Get.to(PgcIndexPage());
@@ -214,22 +222,25 @@ class _BangumiPageState extends State<BangumiPage>
                         );
                       }
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '查看更多',
-                          strutStyle: StrutStyle(leading: 0, height: 1),
-                          style: TextStyle(
-                            height: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '查看更多',
+                            strutStyle: StrutStyle(leading: 0, height: 1),
+                            style: TextStyle(
+                              height: 1,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

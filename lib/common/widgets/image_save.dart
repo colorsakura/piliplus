@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:flutter/material.dart';
@@ -72,18 +73,19 @@ void imageSaveDialog({
                   ),
                 ),
                 const SizedBox(width: 4),
-                IconButton(
+                iconButton(
+                  context: context,
                   tooltip: '分享',
                   onPressed: () {
                     DownloadUtils.onShareImg(cover ?? '');
                   },
-                  icon: Icon(
-                    Icons.share,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                  iconSize: 20,
+                  icon: Icons.share,
+                  bgColor: Colors.transparent,
+                  iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                IconButton(
+                iconButton(
+                  context: context,
                   tooltip: '保存封面图',
                   onPressed: () async {
                     bool saveStatus = await DownloadUtils.downloadImg(
@@ -95,11 +97,10 @@ void imageSaveDialog({
                       SmartDialog.dismiss();
                     }
                   },
-                  icon: Icon(
-                    Icons.download,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                  iconSize: 20,
+                  icon: Icons.download,
+                  bgColor: Colors.transparent,
+                  iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ],
             ),
