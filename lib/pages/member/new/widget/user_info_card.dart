@@ -580,7 +580,7 @@ class UserInfoCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           card.prInfo!.content!,
-                          style: TextStyle(fontSize: 15, color: textColor),
+                          style: TextStyle(fontSize: 13, color: textColor),
                         ),
                       ),
                       if (card.prInfo?.url?.isNotEmpty == true) ...[

@@ -62,7 +62,7 @@ class _FavVideoPageState extends State<FavVideoPage>
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
-                top: StyleString.safeSpace - 2,
+                top: StyleString.safeSpace - 5,
                 bottom: 80 + MediaQuery.paddingOf(context).bottom,
               ),
               sliver: SliverGrid(
