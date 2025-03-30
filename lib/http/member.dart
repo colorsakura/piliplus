@@ -153,6 +153,7 @@ class MemberHttp {
     int? next,
     int? seasonId,
     int? seriesId,
+    includeCursor,
   }) async {
     Map<String, String> data = {
       if (aid != null) 'aid': aid.toString(),
@@ -170,6 +171,7 @@ class MemberHttp {
       'qn': type == ContributeType.video ? '80' : '32',
       if (order != null) 'order': order,
       if (sort != null) 'sort': sort,
+      if (includeCursor != null) 'include_cursor': includeCursor.toString(),
       'statistics': Constants.statistics,
       'vmid': mid.toString(),
     };
@@ -240,6 +242,7 @@ class MemberHttp {
 
   static Future<LoadingState> space({
     int? mid,
+    dynamic fromViewAid,
   }) async {
     Map<String, String> data = {
       'build': '1462100',
@@ -248,6 +251,7 @@ class MemberHttp {
       'mobi_app': 'android_hd',
       'platform': 'android',
       's_locale': 'zh_CN',
+      if (fromViewAid != null) 'from_view_aid': fromViewAid,
       'statistics': Constants.statistics,
       'vmid': mid.toString(),
     };

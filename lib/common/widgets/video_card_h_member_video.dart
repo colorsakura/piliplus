@@ -17,10 +17,12 @@ class VideoCardHMemberVideo extends StatelessWidget {
     required this.videoItem,
     this.onTap,
     this.bvid,
+    this.fromViewAid,
   });
   final Item videoItem;
   final VoidCallback? onTap;
   final dynamic bvid;
+  final String? fromViewAid;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +84,21 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                 width: maxWidth,
                                 height: maxHeight,
                               ),
+                              if (fromViewAid == videoItem.param)
+                                Positioned.fill(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.black54,
+                                    ),
+                                    child: Center(
+                                      child: const Text(
+                                        '上次观看',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               if (videoItem.badges?.isNotEmpty == true)
                                 PBadge(
                                   text: videoItem.badges!

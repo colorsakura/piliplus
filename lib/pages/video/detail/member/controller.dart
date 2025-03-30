@@ -50,8 +50,12 @@ class HorizontalMemberPageController extends CommonController {
   @override
   bool customHandleResponse(Success response) {
     final data = response.response;
-    hasPrev = data['page']['has_prev'];
-    hasNext = data['page']['has_next'];
+    if (currentPage == 0 || isLoadPrevious == true) {
+      hasPrev = data['page']['has_prev'];
+    }
+    if (currentPage == 0 || isLoadPrevious != true) {
+      hasNext = data['page']['has_next'];
+    }
 
     if (currentPage != 0 && loadingState.value is Success) {
       data['items'] ??= [];

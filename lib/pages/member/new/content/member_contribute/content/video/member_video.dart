@@ -62,129 +62,162 @@ class _MemberVideoState extends State<MemberVideo>
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? refreshIndicator(
-              onRefresh: () async {
-                await _controller.onRefresh();
-              },
-              child: CustomScrollView(
-                slivers: [
-                  SliverPersistentHeader(
-                    pinned: false,
-                    floating: true,
-                    delegate: CustomSliverPersistentHeaderDelegate(
-                      extent: 40,
-                      bgColor: Theme.of(context).colorScheme.surface,
-                      child: SizedBox(
-                        height: 40,
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 8),
-                            Obx(
-                              () => Padding(
-                                padding: const EdgeInsets.only(left: 6),
-                                child: Text(
-                                  _controller.count.value != -1
-                                      ? '共${_controller.count.value}视频'
-                                      : '',
-                                  style: const TextStyle(fontSize: 13),
+          ? Stack(
+              clipBehavior: Clip.none,
+              children: [
+                refreshIndicator(
+                  onRefresh: () async {
+                    await _controller.onRefresh();
+                  },
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverPersistentHeader(
+                        pinned: false,
+                        floating: true,
+                        delegate: CustomSliverPersistentHeaderDelegate(
+                          extent: 40,
+                          bgColor: Theme.of(context).colorScheme.surface,
+                          child: SizedBox(
+                            height: 40,
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 8),
+                                Obx(
+                                  () => Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: Text(
+                                      _controller.count.value != -1
+                                          ? '共${_controller.count.value}视频'
+                                          : '',
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Obx(
-                              () => _controller.episodicButton.value.uri != null
-                                  ? Container(
-                                      height: 35,
-                                      padding: EdgeInsets.only(
-                                          left: _controller.count.value != -1
-                                              ? 6
-                                              : 0),
-                                      child: TextButton.icon(
-                                        onPressed: _controller.toViewPlayAll,
-                                        icon: Icon(
-                                          Icons.play_circle_outline_rounded,
-                                          size: 16,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
-                                        label: Text(
-                                          _controller
-                                                  .episodicButton.value.text ??
-                                              '播放全部',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
+                                Obx(
+                                  () => _controller.episodicButton.value.uri !=
+                                          null
+                                      ? Container(
+                                          height: 35,
+                                          padding: EdgeInsets.only(
+                                              left:
+                                                  _controller.count.value != -1
+                                                      ? 6
+                                                      : 0),
+                                          child: TextButton.icon(
+                                            onPressed:
+                                                _controller.toViewPlayAll,
+                                            icon: Icon(
+                                              Icons.play_circle_outline_rounded,
+                                              size: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                            label: Text(
+                                              _controller.episodicButton.value
+                                                      .text ??
+                                                  '播放全部',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ),
-                            const Spacer(),
-                            SizedBox(
-                              height: 35,
-                              child: TextButton.icon(
-                                onPressed: _controller.queryBySort,
-                                icon: Icon(
-                                  Icons.sort,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                        )
+                                      : const SizedBox.shrink(),
                                 ),
-                                label: Obx(
-                                  () => Text(
-                                    widget.type == ContributeType.video
-                                        ? _controller.order.value == 'pubdate'
-                                            ? '最新发布'
-                                            : '最多播放'
-                                        : _controller.sort.value == 'desc'
-                                            ? '默认'
-                                            : '倒序',
-                                    style: TextStyle(
-                                      fontSize: 13,
+                                const Spacer(),
+                                SizedBox(
+                                  height: 35,
+                                  child: TextButton.icon(
+                                    onPressed: _controller.queryBySort,
+                                    icon: Icon(
+                                      Icons.sort,
+                                      size: 16,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .secondary,
                                     ),
+                                    label: Obx(
+                                      () => Text(
+                                        widget.type == ContributeType.video
+                                            ? _controller.order.value ==
+                                                    'pubdate'
+                                                ? '最新发布'
+                                                : '最多播放'
+                                            : _controller.sort.value == 'desc'
+                                                ? '默认'
+                                                : '倒序',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(width: 8),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      top: StyleString.safeSpace - 5,
-                      bottom: MediaQuery.of(context).padding.bottom + 80,
-                    ),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                        mainAxisSpacing: 2,
-                        maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                        childAspectRatio: StyleString.aspectRatio * 2.2,
+                      SliverPadding(
+                        padding: EdgeInsets.only(
+                          top: StyleString.safeSpace - 5,
+                          bottom: MediaQuery.of(context).padding.bottom + 80,
+                        ),
+                        sliver: SliverGrid(
+                          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                            mainAxisSpacing: 2,
+                            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                            childAspectRatio: StyleString.aspectRatio * 2.2,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              if (widget.type != ContributeType.season &&
+                                  index == loadingState.response.length - 1) {
+                                _controller.onLoadMore();
+                              }
+                              return VideoCardHMemberVideo(
+                                videoItem: loadingState.response[index],
+                                fromViewAid: _controller.fromViewAid,
+                              );
+                            },
+                            childCount: loadingState.response.length,
+                          ),
+                        ),
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (widget.type != ContributeType.season &&
-                              index == loadingState.response.length - 1) {
-                            _controller.onLoadMore();
-                          }
-                          return VideoCardHMemberVideo(
-                            videoItem: loadingState.response[index],
-                          );
+                    ],
+                  ),
+                ),
+                if (widget.type == ContributeType.video &&
+                    _controller.fromViewAid?.isNotEmpty == true &&
+                    _controller.isLocating != true)
+                  Positioned(
+                    right: 15,
+                    bottom: 15,
+                    child: SafeArea(
+                      top: false,
+                      left: false,
+                      child: FloatingActionButton.extended(
+                        onPressed: () {
+                          _controller
+                            ..isLocating = true
+                            ..lastAid = _controller.fromViewAid
+                            ..currentPage = 0
+                            ..loadingState.value = LoadingState.loading()
+                            ..queryData();
                         },
-                        childCount: loadingState.response.length,
+                        label: const Text('定位至上次观看'),
                       ),
                     ),
                   ),
-                ],
-              ),
+              ],
             )
           : scrollErrorWidget(
               callback: _controller.onReload,

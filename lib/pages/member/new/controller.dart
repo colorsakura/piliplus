@@ -35,6 +35,7 @@ class MemberControllerNew extends CommonController
   RxInt contributeInitialIndex = 0.obs;
   double? top;
   bool? hasSeasonOrSeries;
+  final fromViewAid = Get.parameters['from_view_aid'];
 
   @override
   void onInit() {
@@ -95,7 +96,7 @@ class MemberControllerNew extends CommonController
         }
         if (initialIndex == -1) {
           if (data.defaultTab == 'video') {
-            data.defaultTab = 'dynamic';
+            data.defaultTab = 'contribute';
           }
           initialIndex = tab2!.indexWhere((item) {
             return item.param == data.defaultTab;
@@ -137,7 +138,10 @@ class MemberControllerNew extends CommonController
   }
 
   @override
-  Future<LoadingState> customGetData() => MemberHttp.space(mid: mid);
+  Future<LoadingState> customGetData() => MemberHttp.space(
+        mid: mid,
+        fromViewAid: fromViewAid,
+      );
 
   Future blockUser(BuildContext context) async {
     if (ownerMid == null) {

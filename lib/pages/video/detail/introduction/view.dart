@@ -258,7 +258,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
         //     ? videoDetail.owner!.face
         //     : videoItem['owner'].face;
         Get.toNamed(
-          '/member?mid=$mid',
+          '/member?mid=$mid&from_view_aid=${videoDetailCtr.oid.value}',
           // arguments: {
           //   'face': face,
           //   'heroTag': memberHeroTag,

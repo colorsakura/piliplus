@@ -27,7 +27,6 @@ class MemberVideoCtr extends CommonController {
   int? seasonId;
   int? seriesId;
   final int mid;
-  String? aid;
   late RxString order = 'pubdate'.obs;
   late RxString sort = 'desc'.obs;
   RxInt count = (-1).obs;
@@ -36,18 +35,36 @@ class MemberVideoCtr extends CommonController {
   final String? username;
   final String? title;
 
+  String? firstAid;
+  String? lastAid;
+  String? fromViewAid;
+  bool? isLocating;
+  bool? isLoadPrevious;
+  bool? hasPrev;
+
   @override
   Future onRefresh() async {
-    aid = null;
-    next = null;
-    currentPage = 0;
-    isEnd = false;
-    await queryData();
+    if (isLocating == true) {
+      if (hasPrev == true) {
+        isLoadPrevious = true;
+        await queryData();
+      }
+    } else {
+      firstAid = null;
+      lastAid = null;
+      next = null;
+      isEnd = false;
+      currentPage = 0;
+      await queryData();
+    }
   }
 
   @override
   void onInit() {
     super.onInit();
+    if (type == ContributeType.video) {
+      fromViewAid = Get.parameters['from_view_aid'];
+    }
     currentPage = 0;
     queryData();
   }
@@ -58,20 +75,31 @@ class MemberVideoCtr extends CommonController {
     episodicButton.value = data.episodicButton ?? EpisodicButton();
     episodicButton.refresh();
     next = data.next;
-    aid = data.item?.lastOrNull?.param;
-    if ((type == ContributeType.video
-            ? data.hasNext == false
-            : data.next == 0) ||
-        data.item.isNullOrEmpty) {
-      isEnd = true;
+    if (currentPage == 0 || isLoadPrevious == true) {
+      hasPrev = data.hasPrev;
+    }
+    if (currentPage == 0 || isLoadPrevious != true) {
+      if ((type == ContributeType.video
+              ? data.hasNext == false
+              : data.next == 0) ||
+          data.item.isNullOrEmpty) {
+        isEnd = true;
+      }
     }
     count.value = type == ContributeType.season
         ? (data.item?.length ?? -1)
         : (data.count ?? -1);
     if (currentPage != 0 && loadingState.value is Success) {
       data.item ??= <Item>[];
-      data.item!.insertAll(0, (loadingState.value as Success).response);
+      if (isLoadPrevious == true) {
+        data.item!.addAll((loadingState.value as Success).response);
+      } else {
+        data.item!.insertAll(0, (loadingState.value as Success).response);
+      }
     }
+    firstAid = data.item?.firstOrNull?.param;
+    lastAid = data.item?.lastOrNull?.param;
+    isLoadPrevious = null;
     loadingState.value = LoadingState.success(data.item);
     return true;
   }
@@ -80,17 +108,27 @@ class MemberVideoCtr extends CommonController {
   Future<LoadingState> customGetData() => MemberHttp.spaceArchive(
         type: type,
         mid: mid,
-        aid: type == ContributeType.video ? aid : null,
+        aid: type == ContributeType.video
+            ? isLoadPrevious == true
+                ? firstAid
+                : lastAid
+            : null,
         order: type == ContributeType.video ? order.value : null,
-        sort: type == ContributeType.video ? null : sort.value,
+        sort: type == ContributeType.video
+            ? isLoadPrevious == true
+                ? 'asc'
+                : null
+            : sort.value,
         pn: type == ContributeType.charging ? currentPage : null,
         next: next,
         seasonId: seasonId,
         seriesId: seriesId,
+        includeCursor: isLocating == true && currentPage == 0 ? true : null,
       );
 
   queryBySort() {
     if (type == ContributeType.video) {
+      isLocating = null;
       order.value = order.value == 'pubdate' ? 'click' : 'pubdate';
     } else {
       sort.value = sort.value == 'desc' ? 'asc' : 'desc';

@@ -32,9 +32,9 @@ abstract class CommonController extends GetxController
   @override
   final ScrollController scrollController = ScrollController();
 
-  int currentPage = 1;
+  late int currentPage = 1;
   bool isLoading = false;
-  bool isEnd = false;
+  late bool isEnd = false;
   Rx<LoadingState> loadingState = LoadingState.loading().obs;
 
   Future<LoadingState> customGetData();
