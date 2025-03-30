@@ -535,69 +535,66 @@ class UserInfoCard extends StatelessWidget {
             ],
           ),
           ..._buildLeft(context),
-          if (card.prInfo?.content?.isNotEmpty == true)
-            Builder(builder: (context) {
-              final isDark = Theme.of(context).brightness == Brightness.dark;
-              final textColor = isDark
-                  ? Color(int.parse(
-                      'FF${card.prInfo?.textColorNight?.substring(1)}',
-                      radix: 16))
-                  : Color(int.parse('FF${card.prInfo?.textColor?.substring(1)}',
-                      radix: 16));
-              return GestureDetector(
-                onTap: () {
-                  if (card.prInfo?.url?.isNotEmpty == true) {
-                    Utils.handleWebview(card.prInfo!.url!);
-                  }
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  color: isDark
-                      ? Color(int.parse(
-                          'FF${card.prInfo?.bgColorNight?.substring(1)}',
-                          radix: 16))
-                      : Color(int.parse(
-                          'FF${card.prInfo?.bgColor?.substring(1)}',
-                          radix: 16)),
-                  child: Row(
-                    children: [
-                      if (isDark &&
-                          card.prInfo?.iconNight?.isNotEmpty == true) ...[
-                        CachedNetworkImage(
-                          imageUrl: card.prInfo!.iconNight!,
-                          height: 20,
-                        ),
-                        const SizedBox(width: 16),
-                      ] else if (card.prInfo?.icon?.isNotEmpty == true) ...[
-                        CachedNetworkImage(
-                          imageUrl: card.prInfo!.icon!,
-                          height: 20,
-                        ),
-                        const SizedBox(width: 16),
-                      ],
-                      Expanded(
-                        child: Text(
-                          card.prInfo!.content!,
-                          style: TextStyle(fontSize: 13, color: textColor),
-                        ),
-                      ),
-                      if (card.prInfo?.url?.isNotEmpty == true) ...[
-                        const SizedBox(width: 10),
-                        Icon(
-                          Icons.keyboard_arrow_right,
-                          color: textColor,
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              );
-            }),
+          if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo,
           const SizedBox(height: 5),
         ],
       );
+
+  Widget get buildPrInfo => Builder(builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final textColor = isDark
+            ? Color(int.parse('FF${card.prInfo?.textColorNight?.substring(1)}',
+                radix: 16))
+            : Color(int.parse('FF${card.prInfo?.textColor?.substring(1)}',
+                radix: 16));
+        return GestureDetector(
+          onTap: () {
+            if (card.prInfo?.url?.isNotEmpty == true) {
+              Utils.handleWebview(card.prInfo!.url!);
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            color: isDark
+                ? Color(int.parse(
+                    'FF${card.prInfo?.bgColorNight?.substring(1)}',
+                    radix: 16))
+                : Color(int.parse('FF${card.prInfo?.bgColor?.substring(1)}',
+                    radix: 16)),
+            child: Row(
+              children: [
+                if (isDark && card.prInfo?.iconNight?.isNotEmpty == true) ...[
+                  CachedNetworkImage(
+                    imageUrl: card.prInfo!.iconNight!,
+                    height: 20,
+                  ),
+                  const SizedBox(width: 16),
+                ] else if (card.prInfo?.icon?.isNotEmpty == true) ...[
+                  CachedNetworkImage(
+                    imageUrl: card.prInfo!.icon!,
+                    height: 20,
+                  ),
+                  const SizedBox(width: 16),
+                ],
+                Expanded(
+                  child: Text(
+                    card.prInfo!.content!,
+                    style: TextStyle(fontSize: 13, color: textColor),
+                  ),
+                ),
+                if (card.prInfo?.url?.isNotEmpty == true) ...[
+                  const SizedBox(width: 10),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                    color: textColor,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      });
 
   _buildLiveBadge(context) => GestureDetector(
         onTap: () {
@@ -638,61 +635,68 @@ class UserInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
-          Row(
-            children: [
-              SizedBox(width: MediaQuery.paddingOf(context).left),
-              const SizedBox(width: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    _buildAvatar(context),
-                    if (ModuleAuthorModel.showDynDecorate &&
-                        card.pendant?.image?.isNotEmpty == true)
-                      Positioned(
-                        top: -27.5,
-                        left: -27.5,
-                        child: IgnorePointer(
-                          child: CachedNetworkImage(
-                            width: 140,
-                            height: 140,
-                            imageUrl: card.pendant!.image!,
+          SafeArea(
+            top: false,
+            bottom: false,
+            child: Row(
+              children: [
+                const SizedBox(width: 20),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                    bottom: card.prInfo?.content?.isNotEmpty == true ? 0 : 10,
+                  ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      _buildAvatar(context),
+                      if (ModuleAuthorModel.showDynDecorate &&
+                          card.pendant?.image?.isNotEmpty == true)
+                        Positioned(
+                          top: -27.5,
+                          left: -27.5,
+                          child: IgnorePointer(
+                            child: CachedNetworkImage(
+                              width: 140,
+                              height: 140,
+                              imageUrl: card.pendant!.image!,
+                            ),
                           ),
                         ),
-                      ),
-                    if (card.officialVerify?.icon?.isNotEmpty == true ||
-                        (card.vip?.vipStatus ?? -1) > 0)
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: _buildBadge(context),
-                      ),
-                    if (live is Map && ((live['liveStatus'] as int?) ?? 0) == 1)
-                      Positioned(
-                        left: 0,
-                        bottom: -5,
-                        right: 0,
-                        child: _buildLiveBadge(context),
-                      ),
-                  ],
+                      if (card.officialVerify?.icon?.isNotEmpty == true ||
+                          (card.vip?.vipStatus ?? -1) > 0)
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: _buildBadge(context),
+                        ),
+                      if (live is Map &&
+                          ((live['liveStatus'] as int?) ?? 0) == 1)
+                        Positioned(
+                          left: 0,
+                          bottom: -5,
+                          right: 0,
+                          child: _buildLiveBadge(context),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    ..._buildLeft(context),
-                    const SizedBox(height: 5),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      ..._buildLeft(context),
+                      const SizedBox(height: 5),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(child: _buildRight(context)),
-              SizedBox(width: MediaQuery.paddingOf(context).right),
-            ],
+                Expanded(child: _buildRight(context)),
+              ],
+            ),
           ),
+          if (card.prInfo?.content?.isNotEmpty == true) buildPrInfo,
         ],
       );
 }
