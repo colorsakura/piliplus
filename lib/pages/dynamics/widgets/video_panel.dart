@@ -72,6 +72,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
               right: 10.0,
               bottom: null,
               left: null,
+              type: content.badge['text'] == '充电专属' ? 'error' : 'primary',
             ),
           Positioned(
             left: 0,

@@ -43,29 +43,33 @@ class _MemberContributeState extends State<MemberContribute>
     return _controller.tabs != null
         ? Column(
             children: [
-              TabBar(
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
-                splashFactory: NoSplash.splashFactory,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                isScrollable: true,
-                tabs: _controller.tabs!,
-                tabAlignment: TabAlignment.start,
-                controller: _controller.tabController,
-                dividerHeight: 0,
-                indicatorWeight: 0,
-                indicatorPadding:
-                    const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
-                indicator: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(20),
+              SizedBox(
+                width: double.infinity,
+                child: TabBar(
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  splashFactory: NoSplash.splashFactory,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  isScrollable: true,
+                  tabs: _controller.tabs!,
+                  tabAlignment: TabAlignment.start,
+                  controller: _controller.tabController,
+                  dividerHeight: 0,
+                  indicatorWeight: 0,
+                  indicatorPadding:
+                      const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
+                  indicator: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelStyle: TabBarTheme.of(context)
+                          .labelStyle
+                          ?.copyWith(fontSize: 14) ??
+                      const TextStyle(fontSize: 14),
+                  labelColor:
+                      Theme.of(context).colorScheme.onSecondaryContainer,
+                  unselectedLabelColor: Theme.of(context).colorScheme.outline,
                 ),
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelStyle: TabBarTheme.of(context)
-                        .labelStyle
-                        ?.copyWith(fontSize: 14) ??
-                    const TextStyle(fontSize: 14),
-                labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                unselectedLabelColor: Theme.of(context).colorScheme.outline,
               ),
               Expanded(
                 child: TabBarView(

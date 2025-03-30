@@ -42,15 +42,16 @@ class PBadge extends StatelessWidget {
     if (type == 'gray') {
       bgColor = Colors.black54.withOpacity(0.4);
       color = Colors.white;
-    }
-    if (type == 'color') {
+    } else if (type == 'color') {
       bgColor = t.secondaryContainer.withOpacity(0.5);
       color = t.onSecondaryContainer;
-    }
-    if (type == 'line') {
+    } else if (type == 'line') {
       bgColor = Colors.transparent;
       color = t.primary;
       borderColor = t.primary;
+    } else if (type == 'error') {
+      bgColor = t.error;
+      color = t.onError;
     }
 
     EdgeInsets paddingStyle =

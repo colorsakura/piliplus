@@ -110,6 +110,9 @@ class VideoCardHMemberVideo extends StatelessWidget {
                                       .join('|'),
                                   right: 6.0,
                                   top: 6.0,
+                                  type: videoItem.badges!.first.text == '充电专属'
+                                      ? 'error'
+                                      : 'primary',
                                 ),
                               if (videoItem.history != null) ...[
                                 Builder(builder: (context) {
