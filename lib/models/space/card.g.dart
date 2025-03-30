@@ -58,9 +58,9 @@ Card _$CardFromJson(Map<String, dynamic> json) => Card(
           : Achieve.fromJson(json['achieve'] as Map<String, dynamic>),
       pendantUrl: json['pendant_url'] as String?,
       pendantTitle: json['pendant_title'] as String?,
-      // prInfo: json['pr_info'] == null
-      //     ? null
-      //     : PrInfo.fromJson(json['pr_info'] as Map<String, dynamic>),
+      prInfo: json['pr_info'] == null
+          ? null
+          : PrInfo.fromJson(json['pr_info'] as Map<String, dynamic>),
       relation: json['relation'] == null
           ? null
           : Relation.fromJson(json['relation'] as Map<String, dynamic>),
@@ -131,7 +131,7 @@ Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
       'achieve': instance.achieve,
       'pendant_url': instance.pendantUrl,
       'pendant_title': instance.pendantTitle,
-      // 'pr_info': instance.prInfo,
+      'pr_info': instance.prInfo,
       'relation': instance.relation,
       'is_deleted': instance.isDeleted,
       'honours': instance.honours,

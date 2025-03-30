@@ -1,3 +1,4 @@
+import 'package:PiliPlus/models/space/pr_info.dart';
 import 'package:PiliPlus/models/space/space_tag_bottom.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -58,8 +59,8 @@ class Card {
   String? pendantUrl;
   @JsonKey(name: 'pendant_title')
   String? pendantTitle;
-  // @JsonKey(name: 'pr_info')
-  // PrInfo? prInfo;
+  @JsonKey(name: 'pr_info')
+  PrInfo? prInfo;
   Relation? relation;
   @JsonKey(name: 'is_deleted')
   int? isDeleted;
@@ -120,7 +121,7 @@ class Card {
     this.achieve,
     this.pendantUrl,
     this.pendantTitle,
-    // this.prInfo,
+    this.prInfo,
     this.relation,
     this.isDeleted,
     this.honours,

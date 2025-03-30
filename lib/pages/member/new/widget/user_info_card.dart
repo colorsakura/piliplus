@@ -535,6 +535,66 @@ class UserInfoCard extends StatelessWidget {
             ],
           ),
           ..._buildLeft(context),
+          if (card.prInfo?.content?.isNotEmpty == true)
+            Builder(builder: (context) {
+              final isDark = Theme.of(context).brightness == Brightness.dark;
+              final textColor = isDark
+                  ? Color(int.parse(
+                      'FF${card.prInfo?.textColorNight?.substring(1)}',
+                      radix: 16))
+                  : Color(int.parse('FF${card.prInfo?.textColor?.substring(1)}',
+                      radix: 16));
+              return GestureDetector(
+                onTap: () {
+                  if (card.prInfo?.url?.isNotEmpty == true) {
+                    Utils.handleWebview(card.prInfo!.url!);
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  color: isDark
+                      ? Color(int.parse(
+                          'FF${card.prInfo?.bgColorNight?.substring(1)}',
+                          radix: 16))
+                      : Color(int.parse(
+                          'FF${card.prInfo?.bgColor?.substring(1)}',
+                          radix: 16)),
+                  child: Row(
+                    children: [
+                      if (isDark &&
+                          card.prInfo?.iconNight?.isNotEmpty == true) ...[
+                        CachedNetworkImage(
+                          imageUrl: card.prInfo!.iconNight!,
+                          height: 20,
+                        ),
+                        const SizedBox(width: 16),
+                      ] else if (card.prInfo?.icon?.isNotEmpty == true) ...[
+                        CachedNetworkImage(
+                          imageUrl: card.prInfo!.icon!,
+                          height: 20,
+                        ),
+                        const SizedBox(width: 16),
+                      ],
+                      Expanded(
+                        child: Text(
+                          card.prInfo!.content!,
+                          style: TextStyle(fontSize: 15, color: textColor),
+                        ),
+                      ),
+                      if (card.prInfo?.url?.isNotEmpty == true) ...[
+                        const SizedBox(width: 10),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          color: textColor,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              );
+            }),
           const SizedBox(height: 5),
         ],
       );
