@@ -450,16 +450,24 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               fadeInDuration: const Duration(milliseconds: 0),
               fadeOutDuration: const Duration(milliseconds: 0),
               imageUrl: _getActualUrl(index),
-              // fit: BoxFit.contain,
-              progressIndicatorBuilder: (context, url, progress) {
-                return Center(
-                  child: SizedBox(
-                    width: 150.0,
-                    child:
-                        LinearProgressIndicator(value: progress.progress ?? 0),
-                  ),
+              placeholderFadeInDuration: const Duration(milliseconds: 0),
+              placeholder: (context, url) {
+                return CachedNetworkImage(
+                  fadeInDuration: const Duration(milliseconds: 0),
+                  fadeOutDuration: const Duration(milliseconds: 0),
+                  imageUrl: Utils.thumbnailImgUrl(widget.sources[index].url),
                 );
               },
+              // fit: BoxFit.contain,
+              // progressIndicatorBuilder: (context, url, progress) {
+              //   return Center(
+              //     child: SizedBox(
+              //       width: 150.0,
+              //       child:
+              //           LinearProgressIndicator(value: progress.progress ?? 0),
+              //     ),
+              //   );
+              // },
               // errorListener: (value) {
               //   WidgetsBinding.instance.addPostFrameCallback((_) {
               //     setState(() {
