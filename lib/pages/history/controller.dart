@@ -66,7 +66,7 @@ class HistoryController extends MultiSelectController
   @override
   bool customHandleResponse(Success response) {
     HistoryData data = response.response;
-    isEnd = data.list.isNullOrEmpty || data.list!.length < 20;
+    isEnd = data.list.isNullOrEmpty;
     max = data.list?.lastOrNull?.history.oid;
     viewAt = data.list?.lastOrNull?.viewAt;
     if (currentPage == 1) {
