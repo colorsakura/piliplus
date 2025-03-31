@@ -75,21 +75,21 @@ class AuthorPanelGrpc extends StatelessWidget {
                 ),
               ],
             ),
-            DefaultTextStyle.merge(
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.outline,
-                fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
-              ),
-              child: Row(
-                children: [
-                  // Text(item.modules.first.moduleAuthor.pubTime),
-                  // if (item.modules.first.moduleAuthor.pubTime != '' &&
-                  //     item.modules.first.moduleAuthor.pubAction != '')
-                  //   const Text(' '),
-                  // Text(item.modules.first.moduleAuthor.pubAction),
-                ],
-              ),
-            )
+            // DefaultTextStyle.merge(
+            //   style: TextStyle(
+            //     color: Theme.of(context).colorScheme.outline,
+            //     fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+            //   ),
+            //   child: Row(
+            //     children: [
+            // Text(item.modules.first.moduleAuthor.pubTime),
+            // if (item.modules.first.moduleAuthor.pubTime != '' &&
+            //     item.modules.first.moduleAuthor.pubAction != '')
+            //   const Text(' '),
+            // Text(item.modules.first.moduleAuthor.pubAction),
+            // ],
+            // ),
+            // )
           ],
         ),
         const Spacer(),

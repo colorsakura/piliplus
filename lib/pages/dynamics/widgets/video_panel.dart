@@ -152,9 +152,7 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
             ),
             const SizedBox(width: 6),
             Text(
-              item.modules.moduleAuthor.pubTs != null
-                  ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
-                  : item.modules.moduleAuthor.pubTime,
+              Utils.dateFormat(item.modules.moduleAuthor.pubTs),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.outline,
                   fontSize: Theme.of(context).textTheme.labelSmall!.fontSize),

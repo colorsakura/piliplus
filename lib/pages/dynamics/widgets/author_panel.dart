@@ -97,10 +97,8 @@ class AuthorPanel extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Text(item.isForwarded == true
-                            ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
-                            : item.modules.moduleAuthor.pubTime),
-                        if (item.modules.moduleAuthor.pubTime != '' &&
+                        Text(Utils.dateFormat(item.modules.moduleAuthor.pubTs)),
+                        if (item.modules.moduleAuthor.pubTs != '' &&
                             item.modules.moduleAuthor.pubAction != '')
                           const Text(' '),
                         Text(item.modules.moduleAuthor.pubAction),
