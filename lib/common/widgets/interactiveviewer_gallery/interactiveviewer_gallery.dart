@@ -447,14 +447,14 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
               image: FileImage(File(widget.sources[index].url)),
             ),
           SourceType.networkImage => CachedNetworkImage(
-              fadeInDuration: const Duration(milliseconds: 0),
-              fadeOutDuration: const Duration(milliseconds: 0),
+              fadeInDuration: Duration.zero,
+              fadeOutDuration: Duration.zero,
               imageUrl: _getActualUrl(index),
-              placeholderFadeInDuration: const Duration(milliseconds: 0),
+              placeholderFadeInDuration: Duration.zero,
               placeholder: (context, url) {
                 return CachedNetworkImage(
-                  fadeInDuration: const Duration(milliseconds: 0),
-                  fadeOutDuration: const Duration(milliseconds: 0),
+                  fadeInDuration: Duration.zero,
+                  fadeOutDuration: Duration.zero,
                   imageUrl: Utils.thumbnailImgUrl(widget.sources[index].url),
                 );
               },
