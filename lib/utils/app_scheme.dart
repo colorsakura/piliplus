@@ -36,6 +36,7 @@ class PiliScheme {
     bool off = false,
     Map? parameters,
     int? businessId,
+    int? oid,
   }) async {
     try {
       if (url.startsWith('//')) {
@@ -49,6 +50,7 @@ class PiliScheme {
         off: off,
         parameters: parameters,
         businessId: businessId,
+        oid: oid,
       );
     } catch (_) {
       return false;
@@ -62,6 +64,7 @@ class PiliScheme {
     bool off = false,
     Map? parameters,
     int? businessId,
+    int? oid,
   }) async {
     final String scheme = uri.scheme;
     final String host = uri.host.toLowerCase();
@@ -323,13 +326,14 @@ class PiliScheme {
             // businessId == 17 => dynId == oid
             // bilibili://following/detail/832703053858603029 (dynId)
             // bilibili://following/detail/12345678?comment_root_id=654321\u0026comment_on=1
-            if (businessId == 17 && path.startsWith("/detail/")) {
+            if ((oid != null || businessId == 17) &&
+                path.startsWith("/detail/")) {
               final queryParameters = uri.queryParameters;
               final commentRootId = queryParameters['comment_root_id'];
               if (commentRootId != null) {
-                String? oid = uriDigitRegExp.firstMatch(path)?.group(1);
+                String? dynId = uriDigitRegExp.firstMatch(path)?.group(1);
                 int? rpid = int.tryParse(commentRootId);
-                if (oid != null && rpid != null) {
+                if (dynId != null && rpid != null) {
                   Get.to(
                     () => Scaffold(
                       resizeToAvoidBottomInset: false,
@@ -346,7 +350,7 @@ class PiliScheme {
                         ],
                       ),
                       body: VideoReplyReplyPanel(
-                        oid: int.parse(oid),
+                        oid: oid ?? int.parse(dynId),
                         rpid: rpid,
                         source: 'routePush',
                         replyType: businessId != null

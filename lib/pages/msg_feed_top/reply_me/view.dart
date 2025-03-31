@@ -55,6 +55,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       PiliScheme.routePushFromUrl(
                         nativeUri,
                         businessId: item.item?.businessId,
+                        oid: item.item?.subjectId,
                       );
                     }
                   },
