@@ -475,7 +475,7 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
   Future onCustomPublish({required String message, List? pictures}) async {
     SmartDialog.showLoading(msg: '正在发布');
     dynamic result = await MsgHttp.createDynamic(
-      mid: GStorage.userInfo.get('userInfoCache')?.mid,
+      mid: Accounts.main.mid,
       rawText: editController.text,
       pics: pictures,
       publishTime: _publishTime != null

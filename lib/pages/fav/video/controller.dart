@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 class FavController extends CommonController {
-  late final dynamic mid = GStorage.userInfo.get('userInfoCache')?.mid;
+  late final dynamic mid = Accounts.main.mid;
 
   @override
   void onInit() {

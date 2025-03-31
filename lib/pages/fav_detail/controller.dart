@@ -29,7 +29,7 @@ class FavDetailController extends MultiSelectController {
     }
     super.onInit();
 
-    mid = GStorage.userInfo.get('userInfoCache')?.mid;
+    mid = Accounts.main.mid;
 
     queryData();
   }

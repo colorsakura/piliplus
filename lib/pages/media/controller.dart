@@ -45,7 +45,7 @@ class MediaController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    mid = GStorage.userInfo.get('userInfoCache')?.mid;
+    mid = Accounts.main.mid;
     if (mid != null) {
       queryData();
     }
@@ -60,7 +60,7 @@ class MediaController extends CommonController {
 
   @override
   Future<LoadingState> customGetData() {
-    mid ??= GStorage.userInfo.get('userInfoCache')?.mid;
+    mid ??= Accounts.main.mid;
     return UserHttp.userfavFolder(
       pn: 1,
       ps: 5,

@@ -95,12 +95,14 @@ class LoginUtils {
       try {
         Get.find<BangumiController>(tag: TabType.bangumi.name)
           ..isLogin.value = true
+          ..mid = data.mid
           ..queryBangumiFollow();
       } catch (_) {}
 
       try {
         Get.find<BangumiController>(tag: TabType.cinema.name)
           ..isLogin.value = true
+          ..mid = data.mid
           ..queryBangumiFollow();
       } catch (_) {}
     } else {
@@ -138,6 +140,7 @@ class LoginUtils {
 
     try {
       Get.find<DynamicsController>()
+        ..ownerMid = null
         ..isLogin.value = false
         ..onRefresh();
     } catch (_) {}
@@ -162,12 +165,14 @@ class LoginUtils {
 
     try {
       Get.find<BangumiController>(tag: TabType.bangumi.name)
+        ..mid = null
         ..isLogin.value = false
         ..followState.value = LoadingState.loading();
     } catch (_) {}
 
     try {
       Get.find<BangumiController>(tag: TabType.cinema.name)
+        ..mid = null
         ..isLogin.value = false
         ..followState.value = LoadingState.loading();
     } catch (_) {}

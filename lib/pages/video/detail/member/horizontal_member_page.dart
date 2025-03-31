@@ -54,7 +54,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
       tag: widget.videoDetailController.heroTag,
     );
     _bvid = widget.videoDetailController.bvid;
-    _ownerMid = GStorage.userInfo.get('userInfoCache')?.mid;
+    _ownerMid = Accounts.main.mid;
     if (_controller.hasPrev) {
       _controller.scrollController.addListener(listener);
     }

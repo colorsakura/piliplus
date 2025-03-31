@@ -376,7 +376,7 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
   @override
   Future onCustomPublish({required String message, List? pictures}) async {
     dynamic result = await MsgHttp.createDynamic(
-      mid: GStorage.userInfo.get('userInfoCache')?.mid,
+      mid: Accounts.main.mid,
       dynIdStr: widget.item?.idStr,
       rid: widget.rid,
       dynType: widget.dynType,

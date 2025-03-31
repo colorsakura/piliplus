@@ -65,7 +65,7 @@ class WhisperDetailController extends GetxController {
     }
   }
 
-  late final ownerMid = GStorage.userInfo.get('userInfoCache')?.mid;
+  late final ownerMid = Accounts.main.mid;
 
   Future sendMsg({
     required String message,
@@ -75,7 +75,7 @@ class WhisperDetailController extends GetxController {
     int? index,
   }) async {
     feedBack();
-    if (ownerMid == null) {
+    if (ownerMid == 0) {
       SmartDialog.dismiss();
       SmartDialog.showToast('请先登录');
       return;

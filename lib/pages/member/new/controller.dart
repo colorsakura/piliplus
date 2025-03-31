@@ -40,7 +40,7 @@ class MemberControllerNew extends CommonController
   @override
   void onInit() {
     super.onInit();
-    ownerMid = GStorage.userInfo.get('userInfoCache')?.mid;
+    ownerMid = Accounts.main.mid;
     queryData();
   }
 

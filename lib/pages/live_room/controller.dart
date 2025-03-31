@@ -166,7 +166,7 @@ class LiveRoomController extends GetxController {
         msgStream = LiveMessageStream(
           streamToken: info.data.token,
           roomId: roomId,
-          uid: GStorage.userInfo.get('userInfoCache')?.mid ?? 0,
+          uid: Accounts.main.mid,
           servers: servers,
         );
         msgStream?.addEventListener((obj) {
