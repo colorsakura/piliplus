@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,29 +47,31 @@ class _ReplyMePageState extends State<ReplyMePage> {
                   _replyMeController.onLoadMore();
                 }
 
+                ReplyMeItems item = loadingState.response[index];
                 return ListTile(
                   onTap: () {
-                    String? nativeUri =
-                        loadingState.response[index].item?.nativeUri;
+                    String? nativeUri = item.item?.nativeUri;
                     if (nativeUri != null) {
-                      PiliScheme.routePushFromUrl(nativeUri);
+                      PiliScheme.routePushFromUrl(
+                        nativeUri,
+                        businessId: item.item?.businessId,
+                      );
                     }
                   },
                   leading: GestureDetector(
                     onTap: () {
-                      Get.toNamed(
-                          '/member?mid=${loadingState.response[index].user?.mid}');
+                      Get.toNamed('/member?mid=${item.user?.mid}');
                     },
                     child: NetworkImgLayer(
                       width: 45,
                       height: 45,
                       type: 'avatar',
-                      src: loadingState.response[index].user?.avatar,
+                      src: item.user?.avatar,
                     ),
                   ),
                   title: Text(
-                    "${loadingState.response[index].user?.nickname}  "
-                    "回复了我的${loadingState.response[index].item?.business}",
+                    "${item.user?.nickname}${item.isMulti == 1 ? '等人' : ''}  "
+                    "回复了我的${item.item?.business} ${item.isMulti == 1 ? '，共${item.counts}条' : ''}",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
@@ -79,9 +82,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 4),
-                      Text(
-                          loadingState.response[index].item?.sourceContent ??
-                              "",
+                      Text(item.item?.sourceContent ?? "",
                           style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(height: 4),
                       if (loadingState
@@ -90,8 +91,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                           loadingState
                                   .response[index].item?.targetReplyContent !=
                               "")
-                        Text(
-                            "| ${loadingState.response[index].item?.targetReplyContent}",
+                        Text("| ${item.item?.targetReplyContent}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
@@ -101,12 +101,9 @@ class _ReplyMePageState extends State<ReplyMePage> {
                                     color:
                                         Theme.of(context).colorScheme.outline,
                                     height: 1.5)),
-                      if (loadingState.response[index].item?.rootReplyContent !=
-                              null &&
-                          loadingState.response[index].item?.rootReplyContent !=
-                              "")
-                        Text(
-                            " | ${loadingState.response[index].item?.rootReplyContent}",
+                      if (item.item?.rootReplyContent != null &&
+                          item.item?.rootReplyContent != "")
+                        Text(" | ${item.item?.rootReplyContent}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
@@ -117,8 +114,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                                         Theme.of(context).colorScheme.outline,
                                     height: 1.5)),
                       Text(
-                        Utils.dateFormat(
-                            loadingState.response[index].replyTime),
+                        Utils.dateFormat(item.replyTime),
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Theme.of(context).colorScheme.outline,
                             ),

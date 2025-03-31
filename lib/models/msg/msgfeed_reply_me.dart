@@ -6,8 +6,7 @@ class MsgFeedReplyMe {
   MsgFeedReplyMe({this.cursor, this.items, this.lastViewAt});
 
   MsgFeedReplyMe.fromJson(Map<String, dynamic> json) {
-    cursor =
-    json['cursor'] != null ? Cursor.fromJson(json['cursor']) : null;
+    cursor = json['cursor'] != null ? Cursor.fromJson(json['cursor']) : null;
     if (json['items'] != null) {
       items = <ReplyMeItems>[];
       json['items'].forEach((v) {
@@ -56,13 +55,14 @@ class ReplyMeItems {
   int? isMulti;
   int? replyTime;
 
-  ReplyMeItems(
-      {this.id,
-        this.user,
-        this.item,
-        this.counts,
-        this.isMulti,
-        this.replyTime});
+  ReplyMeItems({
+    this.id,
+    this.user,
+    this.item,
+    this.counts,
+    this.isMulti,
+    this.replyTime,
+  });
 
   ReplyMeItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -99,11 +99,11 @@ class User {
 
   User(
       {this.mid,
-        this.fans,
-        this.nickname,
-        this.avatar,
-        this.midLink,
-        this.follow});
+      this.fans,
+      this.nickname,
+      this.avatar,
+      this.midLink,
+      this.follow});
 
   User.fromJson(Map<String, dynamic> json) {
     mid = json['mid'];
@@ -153,28 +153,28 @@ class Item {
 
   Item(
       {this.subjectId,
-        this.rootId,
-        this.sourceId,
-        this.targetId,
-        this.type,
-        this.businessId,
-        this.business,
-        this.title,
-        this.desc,
-        this.image,
-        this.uri,
-        this.nativeUri,
-        this.detailTitle,
-        this.rootReplyContent,
-        this.sourceContent,
-        this.targetReplyContent,
-        this.atDetails,
-        this.topicDetails,
-        this.hideReplyButton,
-        this.hideLikeButton,
-        this.likeState,
-        this.danmu,
-        this.message});
+      this.rootId,
+      this.sourceId,
+      this.targetId,
+      this.type,
+      this.businessId,
+      this.business,
+      this.title,
+      this.desc,
+      this.image,
+      this.uri,
+      this.nativeUri,
+      this.detailTitle,
+      this.rootReplyContent,
+      this.sourceContent,
+      this.targetReplyContent,
+      this.atDetails,
+      this.topicDetails,
+      this.hideReplyButton,
+      this.hideLikeButton,
+      this.likeState,
+      this.danmu,
+      this.message});
 
   Item.fromJson(Map<String, dynamic> json) {
     subjectId = json['subject_id'];
@@ -246,11 +246,11 @@ class AtDetails {
 
   AtDetails(
       {this.mid,
-        this.fans,
-        this.nickname,
-        this.avatar,
-        this.midLink,
-        this.follow});
+      this.fans,
+      this.nickname,
+      this.avatar,
+      this.midLink,
+      this.follow});
 
   AtDetails.fromJson(Map<String, dynamic> json) {
     mid = json['mid'];

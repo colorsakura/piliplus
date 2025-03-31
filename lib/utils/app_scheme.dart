@@ -35,6 +35,7 @@ class PiliScheme {
     bool selfHandle = false,
     bool off = false,
     Map? parameters,
+    int? businessId,
   }) async {
     try {
       if (url.startsWith('//')) {
@@ -47,6 +48,7 @@ class PiliScheme {
         selfHandle: selfHandle,
         off: off,
         parameters: parameters,
+        businessId: businessId,
       );
     } catch (_) {
       return false;
@@ -59,6 +61,7 @@ class PiliScheme {
     bool selfHandle = false,
     bool off = false,
     Map? parameters,
+    int? businessId,
   }) async {
     final String scheme = uri.scheme;
     final String host = uri.host.toLowerCase();
@@ -273,9 +276,14 @@ class PiliScheme {
                 ),
               );
               return true;
+            } else if (path.startsWith("/msg_fold/")) {
+              // bilibili://comment/msg_fold/1/22222/33333/11111/?enterUri=bilibili://video/22222
+              // bilibili://comment/msg_fold/11/22222/33333/11111/?enterUri=bilibili://following/detail/44444
             }
             return false;
           case 'following':
+            // bilibili://following/detail/832703053858603029
+            // bilibili://following/detail/12345678?comment_root_id=654321\u0026comment_on=1
             if (path.startsWith("/detail/")) {
               final queryParameters = uri.queryParameters;
               final commentRootId = queryParameters['comment_root_id'];
@@ -302,7 +310,9 @@ class PiliScheme {
                         oid: int.parse(oid),
                         rpid: rpid,
                         source: 'routePush',
-                        replyType: ReplyType.dynamics,
+                        replyType: businessId != null
+                            ? ReplyType.values[businessId]
+                            : ReplyType.dynamics,
                         firstFloor: null,
                         id: queryParameters['comment_secondary_id'] != null
                             ? int.tryParse(
