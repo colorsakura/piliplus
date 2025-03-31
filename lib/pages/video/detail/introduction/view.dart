@@ -420,7 +420,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                                         widget.onShowMemberPage(ownerMid);
                                       } else {
                                         Get.toNamed(
-                                          '/member?mid=${videoItem['staff'][index].mid}',
+                                          '/member?mid=${videoItem['staff'][index].mid}&from_view_aid=${videoDetailCtr.oid.value}',
                                           // arguments: {
                                           // 'face':
                                           //     videoItem['staff'][index].face,
