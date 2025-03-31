@@ -70,7 +70,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                     ),
                   ),
                   title: Text(
-                    "${item.user?.nickname}${item.isMulti == 1 ? '等人' : ''}  "
+                    "${item.user?.nickname}  ${item.isMulti == 1 ? '等人' : ''}"
                     "回复了我的${item.item?.business} ${item.isMulti == 1 ? '，共${item.counts}条' : ''}",
                     style: Theme.of(context)
                         .textTheme

@@ -278,7 +278,7 @@ class PiliScheme {
               return true;
             } else if (path.startsWith("/msg_fold/")) {
               // bilibili://comment/msg_fold/1/22222/33333/11111/?enterUri=bilibili://video/22222 //(aid)
-              // bilibili://comment/msg_fold/11/22222/33333/11111/?enterUri=bilibili://following/detail/44444 //(oid)
+              // bilibili://comment/msg_fold/11/22222/33333/11111/?enterUri=bilibili://following/detail/44444 (dynId)
               List<String> pathSegments = uri.pathSegments;
               int type = int.parse(pathSegments[1]); // business_id
               int oid = int.parse(pathSegments[2]); // subject_id
@@ -320,9 +320,10 @@ class PiliScheme {
 
             return false;
           case 'following':
-            // bilibili://following/detail/832703053858603029
+            // businessId == 17 => dynId == oid
+            // bilibili://following/detail/832703053858603029 (dynId)
             // bilibili://following/detail/12345678?comment_root_id=654321\u0026comment_on=1
-            if (path.startsWith("/detail/")) {
+            if (businessId == 17 && path.startsWith("/detail/")) {
               final queryParameters = uri.queryParameters;
               final commentRootId = queryParameters['comment_root_id'];
               if (commentRootId != null) {
@@ -365,8 +366,10 @@ class PiliScheme {
                 bool hasMatch = await _onPushDynDetail(path, off);
                 return hasMatch;
               }
+            } else {
+              bool hasMatch = await _onPushDynDetail(path, off);
+              return hasMatch;
             }
-            return false;
           case 'album':
             String? rid = uriDigitRegExp.firstMatch(path)?.group(1);
             if (rid != null) {
