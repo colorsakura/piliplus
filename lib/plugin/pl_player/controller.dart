@@ -536,10 +536,12 @@ class PlPlayerController {
       callback?.call();
       // 获取视频时长 00:00
       _duration.value = duration ?? _videoPlayerController!.state.duration;
-      _position.value = _sliderPosition.value = seekTo ?? Duration.zero;
+      _position.value =
+          _buffered.value = _sliderPosition.value = seekTo ?? Duration.zero;
       updateDurationSecond();
       updatePositionSecond();
       updateSliderPositionSecond();
+      updateBufferedSecond();
       // 数据加载完成
       dataStatus.status.value = DataStatus.loaded;
 
