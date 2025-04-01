@@ -127,7 +127,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: SelectableText(
-                  '总结: ${widget.modelResult.summary}',
+                  widget.modelResult.summary!,
                   style: const TextStyle(
                     fontSize: 15,
                     height: 1.5,

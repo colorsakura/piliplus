@@ -151,8 +151,8 @@ class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
+                        horizontal: 12,
+                        vertical: 5,
                       ),
                       child: LayoutBuilder(
                         builder: (context, boxConstraints) {

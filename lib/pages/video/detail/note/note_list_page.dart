@@ -146,7 +146,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 await _controller.onRefresh();
               },
               child: CustomScrollView(
-                controller: ScrollController(),
+                controller: _controller.scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   SliverList.separated(
