@@ -8,7 +8,9 @@ part of 'coin_archive.dart';
 
 CoinArchive _$CoinArchiveFromJson(Map<String, dynamic> json) => CoinArchive(
       count: (json['count'] as num?)?.toInt(),
-      item: json['item'] as List<dynamic>?,
+      item: (json['item'] as List<dynamic>?)
+          ?.map((json) => Item.fromJson(json))
+          .toList(),
     );
 
 Map<String, dynamic> _$CoinArchiveToJson(CoinArchive instance) =>

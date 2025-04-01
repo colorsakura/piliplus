@@ -1,5 +1,7 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/space/item.dart';
+import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../utils/utils.dart';
@@ -28,9 +30,15 @@ class VideoCardVMemberHome extends StatelessWidget {
             return;
           }
         }
-        String bvid = videoItem.bvid ?? '';
+        String? aid = videoItem.param;
+        String? bvid = videoItem.bvid;
+        if (aid == null && bvid == null) {
+          return;
+        }
+        int? cid = videoItem.firstCid;
+        cid ??= await SearchHttp.ab2c(aid: aid, bvid: bvid);
         Utils.toViewPage(
-          'bvid=$bvid&cid=${videoItem.firstCid}',
+          'bvid=${bvid ?? IdUtils.av2bv(int.parse(aid!))}&cid=$cid',
           arguments: {
             // 'videoItem': videoItem,
             'pic': videoItem.cover,

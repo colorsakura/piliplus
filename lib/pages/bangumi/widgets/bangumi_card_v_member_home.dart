@@ -103,7 +103,7 @@ Widget bangumiContent(Item bangumiItem) {
                 style: const TextStyle(
                   letterSpacing: 0.3,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               )),
             ],

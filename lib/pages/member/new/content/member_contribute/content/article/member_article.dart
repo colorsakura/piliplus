@@ -1,11 +1,10 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/space_article/item.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/article/member_article_ctr.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/pages/member/new/content/member_contribute/content/article/widget/item.dart';
+import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,62 +42,31 @@ class _MemberArticleState extends State<MemberArticle>
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: refreshIndicator(
-                onRefresh: () async {
-                  await _controller.onRefresh();
-                },
-                child: ListView.separated(
-                  itemCount: loadingState.response.length,
-                  itemBuilder: (context, index) {
-                    if (index == loadingState.response.length - 1) {
-                      _controller.onLoadMore();
-                    }
-                    Item item = loadingState.response[index];
-                    return ListTile(
-                      dense: true,
-                      onTap: () {
-                        PiliScheme.routePushFromUrl(item.uri ?? '');
+          ? refreshIndicator(
+              onRefresh: () async {
+                await _controller.onRefresh();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisSpacing: 2,
+                      maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                      childAspectRatio: StyleString.aspectRatio * 2.2,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        if (index == loadingState.response.length - 1) {
+                          _controller.onLoadMore();
+                        }
+                        return MemberArticleItem(
+                          item: loadingState.response[index],
+                        );
                       },
-                      leading: item.originImageUrls?.isNotEmpty == true
-                          ? Container(
-                              margin: const EdgeInsets.symmetric(vertical: 6),
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return NetworkImgLayer(
-                                    radius: 6,
-                                    src: item.originImageUrls!.first,
-                                    width: constraints.maxHeight *
-                                        StyleString.aspectRatio,
-                                    height: constraints.maxHeight,
-                                  );
-                                },
-                              ),
-                            )
-                          : null,
-                      title: Text(
-                        item.title ?? '',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      subtitle: item.summary?.isNotEmpty == true
-                          ? Text(
-                              item.summary!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            )
-                          : null,
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(height: 1),
-                ),
+                      childCount: loadingState.response.length,
+                    ),
+                  ),
+                ],
               ),
             )
           : scrollErrorWidget(

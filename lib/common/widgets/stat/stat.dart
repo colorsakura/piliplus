@@ -67,6 +67,7 @@ class StatView extends _StatItemBase {
   IconData get iconData => switch (goto) {
         'picture' => Icons.remove_red_eye_outlined,
         'like' => Icons.thumb_up_outlined,
+        'reply' => Icons.comment_outlined,
         _ => Icons.play_circle_outlined,
       };
 

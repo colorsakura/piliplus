@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/video_card_v_member_home.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
+import 'package:PiliPlus/pages/member/new/content/member_contribute/content/article/widget/item.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute_ctr.dart';
+import 'package:PiliPlus/pages/member/new/content/member_home/widget/fav_item.dart';
 import 'package:PiliPlus/pages/member/new/controller.dart';
 import 'package:PiliPlus/pages/member_coin/index.dart';
 import 'package:PiliPlus/pages/member_like/index.dart';
@@ -16,8 +17,6 @@ import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-
-import '../../../../../utils/app_scheme.dart';
 
 class MemberHome extends StatefulWidget {
   const MemberHome({super.key, this.heroTag});
@@ -42,6 +41,7 @@ class _MemberHomeState extends State<MemberHome>
   }
 
   Widget _buildBody(LoadingState loadingState) {
+    final isVertical = context.orientation == Orientation.portrait;
     return switch (loadingState) {
       Loading() => loadingWidget,
       Success() => loadingState.response is Data
@@ -75,8 +75,8 @@ class _MemberHomeState extends State<MemberHome>
                                 loadingState.response.archive.item[index],
                           );
                         },
-                        childCount:
-                            min(4, loadingState.response.archive.item.length),
+                        childCount: min(isVertical ? 4 : 8,
+                            loadingState.response.archive.item.length),
                       ),
                     ),
                   ),
@@ -88,7 +88,14 @@ class _MemberHomeState extends State<MemberHome>
                     param: 'favorite',
                     count: loadingState.response.favourite2.count,
                   ),
-                  // TODO
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 120 / StyleString.aspectRatio + 10,
+                      child: MemberFavItem(
+                        item: loadingState.response.favourite2.item.first,
+                      ),
+                    ),
+                  ),
                 ],
                 if (loadingState.response?.coinArchive?.item?.isNotEmpty ==
                     true) ...[
@@ -97,7 +104,31 @@ class _MemberHomeState extends State<MemberHome>
                     param: 'coinArchive',
                     count: loadingState.response.coinArchive.count,
                   ),
-                  // TODO
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: StyleString.safeSpace,
+                    ),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                        mainAxisSpacing: StyleString.cardSpace,
+                        crossAxisSpacing: StyleString.cardSpace,
+                        maxCrossAxisExtent: Grid.smallCardWidth,
+                        childAspectRatio: StyleString.aspectRatio,
+                        mainAxisExtent:
+                            MediaQuery.textScalerOf(context).scale(55),
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return VideoCardVMemberHome(
+                            videoItem:
+                                loadingState.response.coinArchive.item[index],
+                          );
+                        },
+                        childCount: min(isVertical ? 2 : 4,
+                            loadingState.response.coinArchive.item.length),
+                      ),
+                    ),
+                  ),
                 ],
                 if (loadingState.response?.likeArchive?.item?.isNotEmpty ==
                     true) ...[
@@ -106,7 +137,31 @@ class _MemberHomeState extends State<MemberHome>
                     param: 'likeArchive',
                     count: loadingState.response.likeArchive.count,
                   ),
-                  // TODO
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: StyleString.safeSpace,
+                    ),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                        mainAxisSpacing: StyleString.cardSpace,
+                        crossAxisSpacing: StyleString.cardSpace,
+                        maxCrossAxisExtent: Grid.smallCardWidth,
+                        childAspectRatio: StyleString.aspectRatio,
+                        mainAxisExtent:
+                            MediaQuery.textScalerOf(context).scale(55),
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return VideoCardVMemberHome(
+                            videoItem:
+                                loadingState.response.likeArchive.item[index],
+                          );
+                        },
+                        childCount: min(isVertical ? 2 : 4,
+                            loadingState.response.likeArchive.item.length),
+                      ),
+                    ),
+                  ),
                 ],
                 if (loadingState.response?.article?.item?.isNotEmpty ==
                     true) ...[
@@ -116,52 +171,21 @@ class _MemberHomeState extends State<MemberHome>
                     param1: 'article',
                     count: loadingState.response.article.count,
                   ),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      dense: true,
-                      onTap: () {
-                        PiliScheme.routePushFromUrl(
-                          loadingState.response.article.item.first.uri ?? '',
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisSpacing: 2,
+                      maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                      childAspectRatio: StyleString.aspectRatio * 2.2,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return MemberArticleItem(
+                          item: loadingState.response.article.item[index],
                         );
                       },
-                      leading: loadingState.response.article.item.first
-                                  .originImageUrls?.isNotEmpty ==
-                              true
-                          ? Container(
-                              margin: const EdgeInsets.symmetric(vertical: 6),
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return NetworkImgLayer(
-                                    radius: 6,
-                                    src: loadingState.response.article.item
-                                        .first.originImageUrls!.first,
-                                    width: constraints.maxHeight *
-                                        StyleString.aspectRatio,
-                                    height: constraints.maxHeight,
-                                  );
-                                },
-                              ),
-                            )
-                          : null,
-                      title: Text(
-                        loadingState.response.article.item.first.title ?? '',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      subtitle: loadingState.response.article.item.first.summary
-                                  ?.isNotEmpty ==
-                              true
-                          ? Text(
-                              loadingState.response.article.item.first.summary!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            )
-                          : null,
+                      childCount: isVertical
+                          ? 1
+                          : loadingState.response.article.item.length,
                     ),
                   ),
                 ],
@@ -193,7 +217,7 @@ class _MemberHomeState extends State<MemberHome>
                         maxCrossAxisExtent: Grid.smallCardWidth / 3 * 2,
                         childAspectRatio: 0.75,
                         mainAxisExtent:
-                            MediaQuery.textScalerOf(context).scale(30),
+                            MediaQuery.textScalerOf(context).scale(52),
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -202,15 +226,15 @@ class _MemberHomeState extends State<MemberHome>
                                 loadingState.response.season.item[index],
                           );
                         },
-                        childCount:
-                            min(3, loadingState.response.season.item.length),
+                        childCount: min(isVertical ? 3 : 6,
+                            loadingState.response.season.item.length),
                       ),
                     ),
                   ),
                 ],
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: 12 + MediaQuery.of(context).padding.bottom,
+                    height: 80 + MediaQuery.of(context).padding.bottom,
                   ),
                 ),
               ],
@@ -288,7 +312,8 @@ class _MemberHomeState extends State<MemberHome>
                       ));
                       return;
                     }
-                    // TODO
+
+                    // else TODO
                     SmartDialog.showToast('view $param');
                   }
                 },
