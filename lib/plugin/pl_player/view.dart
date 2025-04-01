@@ -13,7 +13,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -483,11 +482,7 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             int currentCid = plPlayerController.cid;
             String bvid = plPlayerController.bvid;
             List episodes = [];
-            if (isPage) {
-              final List<Part> pages =
-                  videoIntroController!.videoDetail.value.pages!;
-              episodes = pages;
-            } else if (isSeason) {
+            if (isSeason) {
               final List<SectionItem> sections =
                   videoIntroController!.videoDetail.value.ugcSeason!.sections!;
               for (int i = 0; i < sections.length; i++) {
@@ -500,6 +495,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   }
                 }
               }
+            } else if (isPage) {
+              final List<Part> pages =
+                  videoIntroController!.videoDetail.value.pages!;
+              episodes = pages;
             } else if (isBangumi) {
               episodes = (bangumiIntroController!.loadingState.value as Success)
                   .response
@@ -507,8 +506,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             }
             widget.showEpisodes?.call(
               index,
-              isPage ? null : videoIntroController?.videoDetail.value.ugcSeason,
-              episodes,
+              isSeason
+                  ? videoIntroController?.videoDetail.value.ugcSeason!
+                  : null,
+              isSeason ? null : episodes,
               bvid,
               IdUtils.bv2av(bvid),
               currentCid,

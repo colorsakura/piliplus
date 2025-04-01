@@ -12,16 +12,20 @@ import '../../../../../utils/id_utils.dart';
 class PagesPanel extends StatefulWidget {
   const PagesPanel({
     super.key,
+    this.list,
+    this.cover,
     required this.bvid,
-    required this.changeFuc,
     required this.heroTag,
-    required this.showEpisodes,
+    this.showEpisodes,
     required this.videoIntroController,
   });
+
+  final List<Part>? list;
+  final String? cover;
+
   final String bvid;
-  final Function changeFuc;
   final String heroTag;
-  final Function showEpisodes;
+  final Function? showEpisodes;
   final VideoIntroController videoIntroController;
 
   @override
@@ -30,36 +34,46 @@ class PagesPanel extends StatefulWidget {
 
 class _PagesPanelState extends State<PagesPanel> {
   late int cid;
-  late int pageIndex;
+  int pageIndex = -1;
   late VideoDetailController _videoDetailController;
   final ScrollController _scrollController = ScrollController();
   StreamSubscription? _listener;
 
-  List<Part> get pages => widget.videoIntroController.videoDetail.value.pages!;
+  List<Part> get pages =>
+      widget.list ?? widget.videoIntroController.videoDetail.value.pages!;
 
   @override
   void initState() {
     super.initState();
-    cid = widget.videoIntroController.lastPlayCid.value;
-    _videoDetailController =
-        Get.find<VideoDetailController>(tag: widget.heroTag);
-    pageIndex = pages.indexWhere((Part e) => e.cid == cid);
-    _listener = _videoDetailController.cid.listen((int cid) {
-      this.cid = cid;
-      pageIndex = max(0, pages.indexWhere((Part e) => e.cid == cid));
-      if (!mounted) return;
-      setState(() {});
-      const double itemWidth = 150; // 每个列表项的宽度
-      final double targetOffset = (pageIndex * itemWidth - itemWidth / 2).clamp(
-          _scrollController.position.minScrollExtent,
-          _scrollController.position.maxScrollExtent);
-      // 滑动至目标位置
-      _scrollController.animateTo(
-        targetOffset,
-        duration: const Duration(milliseconds: 300), // 滑动动画持续时间
-        curve: Curves.easeInOut, // 滑动动画曲线
-      );
-    });
+    if (widget.list == null) {
+      cid = widget.videoIntroController.lastPlayCid.value;
+      _videoDetailController =
+          Get.find<VideoDetailController>(tag: widget.heroTag);
+      pageIndex = pages.indexWhere((Part e) => e.cid == cid);
+      _listener = _videoDetailController.cid.listen((int cid) {
+        this.cid = cid;
+        pageIndex = max(0, pages.indexWhere((Part e) => e.cid == cid));
+        if (!mounted) return;
+        setState(() {});
+        jumpToCurr();
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        jumpToCurr();
+      });
+    }
+  }
+
+  void jumpToCurr() {
+    const double itemWidth = 150; // 每个列表项的宽度
+    final double targetOffset = (pageIndex * itemWidth - itemWidth / 2).clamp(
+        _scrollController.position.minScrollExtent,
+        _scrollController.position.maxScrollExtent);
+    // 滑动至目标位置
+    _scrollController.animateTo(
+      targetOffset,
+      duration: const Duration(milliseconds: 300), // 滑动动画持续时间
+      curve: Curves.easeInOut, // 滑动动画曲线
+    );
   }
 
   @override
@@ -73,46 +87,47 @@ class _PagesPanelState extends State<PagesPanel> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('视频选集 '),
-              Expanded(
-                child: Text(
-                  ' 正在播放：${pages[pageIndex].pagePart}',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              SizedBox(
-                height: 34,
-                child: TextButton(
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () => widget.showEpisodes(
-                    null,
-                    null,
-                    pages,
-                    widget.bvid,
-                    IdUtils.bv2av(widget.bvid),
-                    cid,
-                  ),
+        if (widget.showEpisodes != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('视频选集 '),
+                Expanded(
                   child: Text(
-                    '共${pages.length}集',
-                    style: const TextStyle(fontSize: 13),
+                    ' 正在播放：${pages[pageIndex].pagePart}',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 10),
+                SizedBox(
+                  height: 34,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    ),
+                    onPressed: () => widget.showEpisodes!(
+                      null,
+                      null,
+                      pages,
+                      widget.bvid,
+                      IdUtils.bv2av(widget.bvid),
+                      cid,
+                    ),
+                    child: Text(
+                      '共${pages.length}集',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         SizedBox(
           height: 35,
           child: ListView.builder(
@@ -132,14 +147,17 @@ class _PagesPanelState extends State<PagesPanel> {
                   borderRadius: BorderRadius.circular(6),
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
-                    onTap: () => {
-                      widget.changeFuc(
+                    onTap: () {
+                      if (widget.showEpisodes == null) {
+                        Get.back();
+                      }
+                      widget.videoIntroController.changeSeasonOrbangu(
                         null,
                         widget.bvid,
                         pages[i].cid,
                         IdUtils.bv2av(widget.bvid),
-                        null,
-                      )
+                        widget.cover,
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -160,10 +178,11 @@ class _PagesPanelState extends State<PagesPanel> {
                             pages[i].pagePart!,
                             maxLines: 1,
                             style: TextStyle(
-                                fontSize: 13,
-                                color: isCurrentIndex
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface),
+                              fontSize: 13,
+                              color: isCurrentIndex
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onSurface,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ))
                         ],

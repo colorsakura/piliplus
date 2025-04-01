@@ -427,6 +427,7 @@ class Part {
   Dimension? dimension;
   String? firstFrame;
   String? badge;
+  int? ctime;
 
   Part({
     this.cid,
@@ -439,6 +440,7 @@ class Part {
     this.dimension,
     this.firstFrame,
     this.badge,
+    this.ctime,
   });
 
   fromRawJson(String str) => Part.fromJson(json.decode(str));
@@ -458,6 +460,7 @@ class Part {
         : Dimension.fromJson(json["dimension"]);
     firstFrame = json["first_frame"];
     badge = json["badge"];
+    ctime = json["ctime"];
   }
 
   Map<String, dynamic> toJson() {
@@ -479,7 +482,7 @@ class Part {
 class Stat {
   int? aid;
   int? view;
-  int? danmu;
+  int? danmaku;
   int? reply;
   int? favorite;
   int? coin;
@@ -493,7 +496,7 @@ class Stat {
   Stat({
     this.aid,
     this.view,
-    this.danmu,
+    this.danmaku,
     this.reply,
     this.favorite,
     this.coin,
@@ -512,7 +515,7 @@ class Stat {
   Stat.fromJson(Map<String, dynamic> json) {
     aid = json["aid"];
     view = json["view"];
-    danmu = json["danmaku"];
+    danmaku = json["danmaku"];
     reply = json["reply"];
     favorite = json["favorite"];
     coin = json["coin"];
@@ -529,7 +532,7 @@ class Stat {
 
     data["aid"] = aid;
     data["view"] = view;
-    data["danmaku"] = danmu;
+    data["danmaku"] = danmaku;
     data["reply"] = reply;
     data["favorite"] = favorite;
     data["coin"] = coin;
@@ -640,12 +643,23 @@ class UgcSeason {
 class Arc {
   Arc({
     this.pic,
+    this.duration,
+    this.pubdate,
+    this.stat,
   });
 
   String? pic;
+  num? duration;
+  int? pubdate;
+  Stat? stat;
 
   Arc.fromJson(Map<String, dynamic> json) {
     pic = json['pic'] as String?;
+    duration = json['duration'];
+    pubdate = json['pubdate'];
+    stat = json['stat'] == null
+        ? null
+        : Stat.fromJson(json['stat'] as Map<String, dynamic>);
   }
 }
 
@@ -691,6 +705,7 @@ class EpisodeItem {
     this.bvid,
     this.badge,
     this.arc,
+    this.pages,
   });
   int? seasonId;
   int? sectionId;
@@ -704,6 +719,7 @@ class EpisodeItem {
   String? bvid;
   String? badge;
   Arc? arc;
+  List<Part>? pages;
 
   EpisodeItem.fromJson(Map<String, dynamic> json) {
     seasonId = json['season_id'];
@@ -720,5 +736,7 @@ class EpisodeItem {
     arc = json['arc'] == null
         ? null
         : Arc.fromJson(json['arc'] as Map<String, dynamic>);
+    pages =
+        (json['pages'] as List?)?.map((json) => Part.fromJson(json)).toList();
   }
 }

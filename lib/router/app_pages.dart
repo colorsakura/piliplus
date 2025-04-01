@@ -63,7 +63,6 @@ class Routes {
     // 热门
     CustomGetPage(name: '/hot', page: () => const HotPage()),
     // 视频详情
-    CustomGetPage(name: '/video', page: () => const VideoDetailPage()),
     CustomGetPage(name: '/videoV', page: () => const VideoDetailPageV()),
     //
     CustomGetPage(name: '/webview', page: () => const WebviewPageNew()),

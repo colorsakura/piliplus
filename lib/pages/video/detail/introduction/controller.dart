@@ -778,7 +778,11 @@ class VideoIntroController extends GetxController
 
     final int currentIndex = episodes.indexWhere((e) =>
         e.cid ==
-        (skipPages ? videoDetail.value.pages!.first.cid : lastPlayCid.value));
+        (skipPages
+            ? videoDetail.value.isPageReversed == true
+                ? videoDetail.value.pages!.last.cid
+                : videoDetail.value.pages!.first.cid
+            : lastPlayCid.value));
     int prevIndex = currentIndex - 1;
     final PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
@@ -838,8 +842,11 @@ class VideoIntroController extends GetxController
       final int currentIndex = episodes.indexWhere((e) =>
           e.cid ==
           (skipPages
-              ? videoDetail.value.pages!.first.cid
+              ? videoDetail.value.isPageReversed == true
+                  ? videoDetail.value.pages!.last.cid
+                  : videoDetail.value.pages!.first.cid
               : videoDetailCtr.cid.value));
+
       int nextIndex = currentIndex + 1;
 
       if (isPages.not &&

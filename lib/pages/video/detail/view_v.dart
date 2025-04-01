@@ -4,7 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/list_sheet.dart';
+import 'package:PiliPlus/common/widgets/episode_panel.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
@@ -2075,18 +2075,23 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   heroTag: heroTag,
                   videoIntroController: videoIntroController,
                   bvid: videoIntroController.bvid,
-                  changeFuc: videoIntroController.changeSeasonOrbangu,
                   showEpisodes: showEpisodes,
                 ),
               )
             else
               Expanded(
                 child: Obx(
-                  () => ListSheetContent(
-                    episodes: videoIntroController.videoDetail.value.pages,
+                  () => EpisodePanel(
+                    heroTag: heroTag,
+                    videoIntroController: videoIntroController,
+                    type: EpisodeType.part,
+                    list: [videoIntroController.videoDetail.value.pages!],
+                    cover: videoDetailController.videoItem['pic'],
                     bvid: videoDetailController.bvid,
                     aid: IdUtils.bv2av(videoDetailController.bvid),
-                    currentCid: videoDetailController.cid.value,
+                    cid: videoDetailController.cid.value,
+                    // count: videoIntroController.videoDetail.value.pages!.length,
+                    // name: videoIntroController.videoDetail.value.pages!,
                     isReversed:
                         videoIntroController.videoDetail.value.isPageReversed,
                     changeFucCall: videoDetailController.videoType ==
@@ -2127,12 +2132,23 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             ),
             Expanded(
               child: Obx(
-                () => ListSheetContent(
-                  index: videoDetailController.seasonIndex.value,
-                  season: videoIntroController.videoDetail.value.ugcSeason,
+                () => EpisodePanel(
+                  heroTag: heroTag,
+                  videoIntroController: videoIntroController,
+                  type: EpisodeType.season,
+                  initialTabIndex: videoDetailController.seasonIndex.value,
+                  cover: videoDetailController.videoItem['pic'],
+                  seasonId:
+                      videoIntroController.videoDetail.value.ugcSeason!.id,
+                  list: videoIntroController
+                      .videoDetail.value.ugcSeason!.sections!,
+                  // count: videoIntroController
+                  //     .videoDetail.value.ugcSeason!.epCount!,
+                  // name:
+                  //     videoIntroController.videoDetail.value.ugcSeason!.title!,
                   bvid: videoDetailController.bvid,
                   aid: IdUtils.bv2av(videoDetailController.bvid),
-                  currentCid: videoDetailController.seasonCid ?? 0,
+                  cid: videoDetailController.seasonCid ?? 0,
                   isReversed:
                       videoIntroController.videoDetail.value.isSeasonReversed,
                   changeFucCall: videoDetailController.videoType ==
@@ -2243,14 +2259,22 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       videoDetailController.showMediaListPanel(context);
       return;
     }
-    Widget listSheetContent([bool? enableSlide]) => ListSheetContent(
+    Widget listSheetContent([bool? enableSlide]) => EpisodePanel(
+          heroTag: heroTag,
+          videoIntroController: videoIntroController,
+          type: season != null
+              ? EpisodeType.season
+              : episodes is List<video.Part>
+                  ? EpisodeType.part
+                  : EpisodeType.bangumi,
+          cover: videoDetailController.videoItem['pic'],
           enableSlide: enableSlide,
-          index: index,
-          season: season,
+          initialTabIndex: index ?? 0,
           bvid: bvid,
           aid: aid,
-          currentCid: cid,
-          episodes: episodes,
+          cid: cid,
+          seasonId: season?.id,
+          list: season != null ? season.sections : [episodes],
           isReversed:
               videoDetailController.videoType == SearchType.media_bangumi
                   ? null

@@ -627,7 +627,7 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                             context: context,
                             theme: 'gray',
                             value: Utils.numFormat(!widget.loadingStatus
-                                ? videoDetail.stat?.danmu ?? '-'
+                                ? videoDetail.stat?.danmaku ?? '-'
                                 : videoItem['stat']?.danmu ?? '-'),
                             size: 'medium',
                             textColor: t.colorScheme.outline,
@@ -858,7 +858,6 @@ class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
                         heroTag: widget.heroTag,
                         videoIntroController: videoIntroController,
                         bvid: videoIntroController.bvid,
-                        changeFuc: videoIntroController.changeSeasonOrbangu,
                         showEpisodes: widget.showEpisodes,
                       ),
                     ),
