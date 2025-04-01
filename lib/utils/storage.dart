@@ -264,9 +264,6 @@ class GStorage {
   static double get subtitleFontScaleFS =>
       setting.get(SettingBoxKey.subtitleFontScaleFS, defaultValue: 1.5);
 
-  static bool get grpcReply =>
-      setting.get(SettingBoxKey.grpcReply, defaultValue: true);
-
   static bool get showViewPoints =>
       setting.get(SettingBoxKey.showViewPoints, defaultValue: true);
 
@@ -402,9 +399,6 @@ class GStorage {
   static bool get expandDynLivePanel => GStorage.setting
       .get(SettingBoxKey.expandDynLivePanel, defaultValue: false);
 
-  static bool collapsibleVideoPage = GStorage.setting
-      .get(SettingBoxKey.collapsibleVideoPage, defaultValue: true);
-
   static bool slideDismissReplyPage = GStorage.setting
       .get(SettingBoxKey.slideDismissReplyPage, defaultValue: Platform.isIOS);
 
@@ -529,7 +523,6 @@ class GStorage {
     // 设置全局变量
     GlobalData()
       ..imgQuality = defaultPicQa
-      ..grpcReply = grpcReply
       ..replyLengthLimit = replyLengthLimit;
   }
 
@@ -658,7 +651,6 @@ class SettingBoxKey {
       checkDynamic = 'checkDynamic',
       dynamicPeriod = 'dynamicPeriod',
       schemeVariant = 'schemeVariant',
-      grpcReply = 'grpcReply',
       showViewPoints = 'showViewPoints',
       showRelatedVideo = 'showRelatedVideo',
       showVideoReply = 'showVideoReply',
@@ -708,7 +700,6 @@ class SettingBoxKey {
       antiGoodsReply = 'antiGoodsReply',
       expandDynLivePanel = 'expandDynLivePanel',
       springDescription = 'springDescription',
-      collapsibleVideoPage = 'collapsibleVideoPage',
       enableHttp2 = 'enableHttp2',
       slideDismissReplyPage = 'slideDismissReplyPage',
       showFSActionItem = 'showFSActionItem',

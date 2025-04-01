@@ -13,20 +13,18 @@ abstract class CommonCollapseSlidePageState<T extends CommonCollapseSlidePage>
   @override
   void initState() {
     super.initState();
-    if (GStorage.collapsibleVideoPage) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-        }
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _isInit = false;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (GStorage.collapsibleVideoPage && _isInit) {
+    if (_isInit) {
       return CustomScrollView(
         physics: const NeverScrollableScrollPhysics(),
       );

@@ -233,7 +233,7 @@ class Utils {
   }) {
     if (off) {
       Get.offNamed(
-        '${GStorage.collapsibleVideoPage ? '/videoV' : '/video'}?$page',
+        '/videoV?$page',
         arguments: arguments,
         id: id,
         preventDuplicates: preventDuplicates,
@@ -241,7 +241,7 @@ class Utils {
       );
     } else {
       Get.toNamed(
-        '${GStorage.collapsibleVideoPage ? '/videoV' : '/video'}?$page',
+        '/videoV?$page',
         arguments: arguments,
         id: id,
         preventDuplicates: preventDuplicates,

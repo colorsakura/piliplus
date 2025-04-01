@@ -8,10 +8,8 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
-import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -170,7 +168,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   void replyReply(context, replyItem, id, isTop) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
-      int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
+      int rpid = replyItem.id.toInt();
       Widget replyReplyPage(
               [bool automaticallyImplyLeading = true,
               VoidCallback? onDispose]) =>
@@ -813,48 +811,27 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       ),
                     );
                   } else {
-                    return GlobalData().grpcReply
-                        ? ReplyItemGrpc(
-                            replyItem: loadingState.response.replies[index],
-                            showReplyRow: true,
-                            replyLevel: '1',
-                            replyReply: (replyItem, id, isTop) =>
-                                replyReply(context, replyItem, id, isTop),
-                            replyType: ReplyType.values[replyType],
-                            onReply: () {
-                              _dynamicDetailController.onReply(
-                                context,
-                                replyItem: loadingState.response.replies[index],
-                                index: index,
-                              );
-                            },
-                            onDelete: _dynamicDetailController.onMDelete,
-                            isTop:
-                                _dynamicDetailController.hasUpTop && index == 0,
-                            upMid: loadingState.response.subjectControl.upMid,
-                            callback: _getImageCallback,
-                            onCheckReply: (item) => _dynamicDetailController
-                                .onCheckReply(context, item),
-                          )
-                        : ReplyItem(
-                            replyItem: loadingState.response.replies[index],
-                            showReplyRow: true,
-                            replyLevel: '1',
-                            replyReply: (replyItem, id, isTop) =>
-                                replyReply(context, replyItem, id, isTop),
-                            replyType: ReplyType.values[replyType],
-                            onReply: () {
-                              _dynamicDetailController.onReply(
-                                context,
-                                replyItem: loadingState.response.replies[index],
-                                index: index,
-                              );
-                            },
-                            onDelete: _dynamicDetailController.onMDelete,
-                            callback: _getImageCallback,
-                            onCheckReply: (item) => _dynamicDetailController
-                                .onCheckReply(context, item),
-                          );
+                    return ReplyItemGrpc(
+                      replyItem: loadingState.response.replies[index],
+                      showReplyRow: true,
+                      replyLevel: '1',
+                      replyReply: (replyItem, id, isTop) =>
+                          replyReply(context, replyItem, id, isTop),
+                      replyType: ReplyType.values[replyType],
+                      onReply: () {
+                        _dynamicDetailController.onReply(
+                          context,
+                          replyItem: loadingState.response.replies[index],
+                          index: index,
+                        );
+                      },
+                      onDelete: _dynamicDetailController.onMDelete,
+                      isTop: _dynamicDetailController.hasUpTop && index == 0,
+                      upMid: loadingState.response.subjectControl.upMid,
+                      callback: _getImageCallback,
+                      onCheckReply: (item) =>
+                          _dynamicDetailController.onCheckReply(context, item),
+                    );
                   }
                 },
                 childCount: loadingState.response.replies.length + 1,
@@ -863,11 +840,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           : HttpError(
               callback: _dynamicDetailController.onReload,
             ),
-      Error() => replyErrorWidget(
-          context,
-          true,
-          loadingState.errMsg,
-          _dynamicDetailController.onReload,
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _dynamicDetailController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

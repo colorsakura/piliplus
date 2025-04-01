@@ -16,7 +16,6 @@ import 'package:hive/hive.dart';
 import 'package:PiliPlus/common/widgets/custom_toast.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/models/common/color_type.dart';
-import 'package:PiliPlus/pages/video/detail/index.dart';
 import 'package:PiliPlus/router/app_pages.dart';
 import 'package:PiliPlus/pages/main/view.dart';
 import 'package:PiliPlus/services/service_locator.dart';
@@ -218,7 +217,6 @@ class MyApp extends StatelessWidget {
           ),
           navigatorObservers: [
             FlutterSmartDialog.observer,
-            VideoDetailPage.routeObserver,
             VideoDetailPageV.routeObserver,
             MainApp.routeObserver,
           ],

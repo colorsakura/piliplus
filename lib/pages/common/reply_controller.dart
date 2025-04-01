@@ -69,57 +69,24 @@ abstract class ReplyController extends CommonController {
 
   @override
   bool customHandleResponse(Success response) {
-    if (GlobalData().grpcReply) {
-      MainListReply replies = response.response;
-      if (cursor == null) {
-        count.value = replies.subjectControl.count.toInt();
-        hasUpTop = replies.hasUpTop();
-        if (replies.hasUpTop()) {
-          replies.replies.insert(0, replies.upTop);
-        }
+    MainListReply replies = response.response;
+    if (cursor == null) {
+      count.value = replies.subjectControl.count.toInt();
+      hasUpTop = replies.hasUpTop();
+      if (replies.hasUpTop()) {
+        replies.replies.insert(0, replies.upTop);
       }
-      cursor = replies.cursor;
-      if (currentPage != 1 && loadingState.value is Success) {
-        replies.replies
-            .insertAll(0, (loadingState.value as Success).response.replies);
-      }
-      isEnd = replies.replies.isEmpty ||
-          replies.cursor.isEnd ||
-          replies.replies.length >= count.value;
-      loadingState.value = LoadingState.success(replies);
-    } else {
-      List<ReplyItemModel> replies = response.response.replies;
-      if (isLogin.not) {
-        nextOffset = response.response.cursor.paginationReply.nextOffset ?? '';
-      }
-      count.value = isLogin.not
-          ? response.response.cursor.allCount
-          : response.response.page.count ?? 0;
-      if (replies.isEmpty) {
-        isEnd = true;
-      }
-      if (currentPage == 1) {
-        if (response.response.upper.top != null) {
-          final bool flag = response.response.topReplies.any(
-              (ReplyItemModel reply) =>
-                  reply.rpid != response.response.upper.top.rpid) as bool;
-          if (flag) {
-            replies.insert(0, response.response.upper.top);
-            hasUpTop = true;
-          }
-        }
-        if ((response.response.topReplies as List?)?.isNotEmpty == true) {
-          replies.insertAll(0, response.response.topReplies);
-          hasUpTop = true;
-        }
-      } else if (loadingState.value is Success) {
-        replies.insertAll(0, (loadingState.value as Success).response.replies);
-      }
-      if (isEnd.not && replies.length >= count.value) {
-        isEnd = true;
-      }
-      loadingState.value = LoadingState.success(response.response);
     }
+    cursor = replies.cursor;
+    if (currentPage != 1 && loadingState.value is Success) {
+      replies.replies
+          .insertAll(0, (loadingState.value as Success).response.replies);
+    }
+    isEnd = replies.replies.isEmpty ||
+        replies.cursor.isEnd ||
+        replies.replies.length >= count.value;
+    loadingState.value = LoadingState.success(replies);
+
     return true;
   }
 
@@ -149,40 +116,24 @@ abstract class ReplyController extends CommonController {
     int index = 0,
     ReplyType? replyType,
   }) {
-    dynamic key = oid ??
-        replyItem.oid +
-            (GlobalData().grpcReply ? replyItem.id : replyItem.rpid);
+    dynamic key = oid ?? replyItem.oid + replyItem.id;
     Navigator.of(context)
         .push(
       GetDialogRoute(
         pageBuilder: (buildContext, animation, secondaryAnimation) {
-          return GlobalData().grpcReply
-              ? ReplyPage(
-                  oid: oid ?? replyItem.oid.toInt(),
-                  root: oid != null ? 0 : replyItem.id.toInt(),
-                  parent: oid != null ? 0 : replyItem.id.toInt(),
-                  replyType: replyItem != null
-                      ? ReplyType.values[replyItem.type.toInt()]
-                      : replyType,
-                  replyItem: replyItem,
-                  initialValue: savedReplies[key],
-                  onSave: (reply) {
-                    savedReplies[key] = reply;
-                  },
-                )
-              : ReplyPage(
-                  oid: oid ?? replyItem.oid,
-                  root: oid != null ? 0 : replyItem.rpid,
-                  parent: oid != null ? 0 : replyItem.rpid,
-                  replyType: replyItem != null
-                      ? ReplyType.values[replyItem.type.toInt()]
-                      : replyType,
-                  replyItem: replyItem,
-                  initialValue: savedReplies[key],
-                  onSave: (reply) {
-                    savedReplies[key] = reply;
-                  },
-                );
+          return ReplyPage(
+            oid: oid ?? replyItem.oid.toInt(),
+            root: oid != null ? 0 : replyItem.id.toInt(),
+            parent: oid != null ? 0 : replyItem.id.toInt(),
+            replyType: replyItem != null
+                ? ReplyType.values[replyItem.type.toInt()]
+                : replyType,
+            replyItem: replyItem,
+            initialValue: savedReplies[key],
+            onSave: (reply) {
+              savedReplies[key] = reply;
+            },
+          );
         },
         transitionDuration: const Duration(milliseconds: 500),
         transitionBuilder: (context, animation, secondaryAnimation, child) {
@@ -204,70 +155,36 @@ abstract class ReplyController extends CommonController {
       (res) {
         if (res != null) {
           savedReplies[key] = null;
-          if (GlobalData().grpcReply) {
-            ReplyInfo replyInfo = Utils.replyCast(res);
-            MainListReply response = loadingState.value is Success
-                ? (loadingState.value as Success).response
-                : MainListReply();
-            if (oid != null) {
-              response.replies.insert(hasUpTop ? 1 : 0, replyInfo);
-            } else {
-              response.replies[index].replies.add(replyInfo);
-            }
-            count.value += 1;
-            loadingState.value = LoadingState.success(response);
-            if (enableCommAntifraud && context.mounted) {
-              checkReply(
-                context: context,
-                oid: oid ?? replyItem.oid.toInt(),
-                rpid: replyItem?.id.toInt(),
-                replyType: replyItem?.type.toInt() ??
-                    replyType?.index ??
-                    ReplyType.video.index,
-                replyId: replyInfo.id.toInt(),
-                message: replyInfo.content.message,
-                //
-                root: replyInfo.root.toInt(),
-                parent: replyInfo.parent.toInt(),
-                ctime: replyInfo.ctime.toInt(),
-                pictures: replyInfo.content.pictures
-                    .map((item) => item.toProto3Json())
-                    .toList(),
-                mid: replyInfo.mid.toInt(),
-              );
-            }
+          ReplyInfo replyInfo = Utils.replyCast(res);
+          MainListReply response = loadingState.value is Success
+              ? (loadingState.value as Success).response
+              : MainListReply();
+          if (oid != null) {
+            response.replies.insert(hasUpTop ? 1 : 0, replyInfo);
           } else {
-            ReplyData response = loadingState.value is Success
-                ? (loadingState.value as Success).response
-                : ReplyData();
-            response.replies ??= <ReplyItemModel>[];
-            ReplyItemModel replyInfo = ReplyItemModel.fromJson(res, '');
-            if (oid != null) {
-              response.replies?.insert(hasUpTop ? 1 : 0, replyInfo);
-            } else {
-              response.replies?[index].replies ??= <ReplyItemModel>[];
-              response.replies?[index].replies?.add(replyInfo);
-            }
-            count.value += 1;
-            loadingState.value = LoadingState.success(response);
-            if (enableCommAntifraud && context.mounted) {
-              checkReply(
-                context: context,
-                oid: oid ?? replyItem.oid,
-                rpid: replyItem?.rpid,
-                replyType: replyItem?.type.toInt() ??
-                    replyType?.index ??
-                    ReplyType.video.index,
-                replyId: replyInfo.rpid ?? 0,
-                message: replyInfo.content?.message ?? '',
-                //
-                root: replyInfo.root,
-                parent: replyInfo.parent,
-                ctime: replyInfo.ctime,
-                pictures: replyInfo.content?.pictures,
-                mid: replyInfo.mid,
-              );
-            }
+            response.replies[index].replies.add(replyInfo);
+          }
+          count.value += 1;
+          loadingState.value = LoadingState.success(response);
+          if (enableCommAntifraud && context.mounted) {
+            checkReply(
+              context: context,
+              oid: oid ?? replyItem.oid.toInt(),
+              rpid: replyItem?.id.toInt(),
+              replyType: replyItem?.type.toInt() ??
+                  replyType?.index ??
+                  ReplyType.video.index,
+              replyId: replyInfo.id.toInt(),
+              message: replyInfo.content.message,
+              //
+              root: replyInfo.root.toInt(),
+              parent: replyInfo.parent.toInt(),
+              ctime: replyInfo.ctime.toInt(),
+              pictures: replyInfo.content.pictures
+                  .map((item) => item.toProto3Json())
+                  .toList(),
+              mid: replyInfo.mid.toInt(),
+            );
           }
         }
       },
@@ -275,41 +192,22 @@ abstract class ReplyController extends CommonController {
   }
 
   onMDelete(rpid, frpid) {
-    if (GlobalData().grpcReply) {
-      MainListReply response = (loadingState.value as Success).response;
-      if (frpid == null) {
-        response.replies.removeWhere((item) {
-          return item.id.toInt() == rpid;
-        });
-      } else {
-        response.replies.map((item) {
-          if (item.id == frpid) {
-            return item
-              ..replies.removeWhere((reply) => reply.id.toInt() == rpid);
-          } else {
-            return item;
-          }
-        }).toList();
-      }
-      count.value -= 1;
-      loadingState.value = LoadingState.success(response);
+    MainListReply response = (loadingState.value as Success).response;
+    if (frpid == null) {
+      response.replies.removeWhere((item) {
+        return item.id.toInt() == rpid;
+      });
     } else {
-      ReplyData response = (loadingState.value as Success).response;
-      response.replies = frpid == null
-          ? response.replies?.where((item) => item.rpid != rpid).toList()
-          : response.replies?.map((item) {
-              if (item.rpid == frpid) {
-                return item
-                  ..replies = item.replies
-                      ?.where((reply) => reply.rpid != rpid)
-                      .toList();
-              } else {
-                return item;
-              }
-            }).toList();
-      count.value -= 1;
-      loadingState.value = LoadingState.success(response);
+      response.replies.map((item) {
+        if (item.id == frpid) {
+          return item..replies.removeWhere((reply) => reply.id.toInt() == rpid);
+        } else {
+          return item;
+        }
+      }).toList();
     }
+    count.value -= 1;
+    loadingState.value = LoadingState.success(response);
   }
 
   void onCheckReply(context, item) {

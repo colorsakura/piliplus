@@ -4,11 +4,8 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
-import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
-import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -75,13 +72,11 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   @override
   void didUpdateWidget(VideoReplyPanel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (GStorage.collapsibleVideoPage) {
-      _videoReplyController.showFab();
-      if (widget.needController != false) {
-        _videoReplyController.scrollController.addListener(listener);
-      } else {
-        _videoReplyController.scrollController.removeListener(listener);
-      }
+    _videoReplyController.showFab();
+    if (widget.needController != false) {
+      _videoReplyController.scrollController.addListener(listener);
+    } else {
+      _videoReplyController.scrollController.removeListener(listener);
     }
   }
 
@@ -240,51 +235,29 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       ),
                     );
                   } else {
-                    return GlobalData().grpcReply
-                        ? ReplyItemGrpc(
-                            replyItem: loadingState.response.replies[index],
-                            showReplyRow: true,
-                            replyLevel: replyLevel,
-                            replyReply: widget.replyReply,
-                            replyType: ReplyType.video,
-                            onReply: () {
-                              _videoReplyController.onReply(
-                                context,
-                                replyItem: loadingState.response.replies[index],
-                                index: index,
-                              );
-                            },
-                            onDelete: _videoReplyController.onMDelete,
-                            isTop: _videoReplyController.hasUpTop && index == 0,
-                            upMid: loadingState.response.subjectControl.upMid,
-                            getTag: () => heroTag,
-                            onViewImage: widget.onViewImage,
-                            onDismissed: widget.onDismissed,
-                            callback: widget.callback,
-                            onCheckReply: (item) => _videoReplyController
-                                .onCheckReply(context, item),
-                          )
-                        : ReplyItem(
-                            replyItem: loadingState.response.replies[index],
-                            showReplyRow: true,
-                            replyLevel: replyLevel,
-                            replyReply: widget.replyReply,
-                            replyType: ReplyType.video,
-                            onReply: () {
-                              _videoReplyController.onReply(
-                                context,
-                                replyItem: loadingState.response.replies[index],
-                                index: index,
-                              );
-                            },
-                            onDelete: _videoReplyController.onMDelete,
-                            onViewImage: widget.onViewImage,
-                            onDismissed: widget.onDismissed,
-                            getTag: () => heroTag,
-                            callback: widget.callback,
-                            onCheckReply: (item) => _videoReplyController
-                                .onCheckReply(context, item),
-                          );
+                    return ReplyItemGrpc(
+                      replyItem: loadingState.response.replies[index],
+                      showReplyRow: true,
+                      replyLevel: replyLevel,
+                      replyReply: widget.replyReply,
+                      replyType: ReplyType.video,
+                      onReply: () {
+                        _videoReplyController.onReply(
+                          context,
+                          replyItem: loadingState.response.replies[index],
+                          index: index,
+                        );
+                      },
+                      onDelete: _videoReplyController.onMDelete,
+                      isTop: _videoReplyController.hasUpTop && index == 0,
+                      upMid: loadingState.response.subjectControl.upMid,
+                      getTag: () => heroTag,
+                      onViewImage: widget.onViewImage,
+                      onDismissed: widget.onDismissed,
+                      callback: widget.callback,
+                      onCheckReply: (item) =>
+                          _videoReplyController.onCheckReply(context, item),
+                    );
                   }
                 },
                 childCount: loadingState.response.replies.length + 1,
@@ -294,11 +267,9 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               errMsg: '还没有评论',
               callback: _videoReplyController.onReload,
             ),
-      Error() => replyErrorWidget(
-          context,
-          true,
-          loadingState.errMsg,
-          _videoReplyController.onReload,
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _videoReplyController.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

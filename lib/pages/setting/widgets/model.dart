@@ -1517,21 +1517,6 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
-        title: '使用gRPC加载评论',
-        subtitle: '如无法加载评论，可关闭\n非gRPC楼中楼无法定位评论、按热度/时间排序、查看对话',
-        leading: SizedBox(
-          height: 24,
-          width: 24,
-          child: Icon(MdiIcons.google, size: 20),
-        ),
-        setKey: SettingBoxKey.grpcReply,
-        defaultVal: true,
-        onChanged: (value) {
-          GlobalData().grpcReply = value;
-        },
-      ),
-      SettingsModel(
-        settingsType: SettingsType.sw1tch,
         title: '显示视频分段信息',
         leading: Transform.rotate(
           angle: pi / 2,
@@ -2071,16 +2056,6 @@ List<SettingsModel> get extraSettings => [
         ),
         setKey: SettingBoxKey.antiGoodsReply,
         defaultVal: false,
-      ),
-      SettingsModel(
-        settingsType: SettingsType.sw1tch,
-        title: '使用可折叠的播放页面',
-        leading: const Icon(Icons.video_settings),
-        setKey: SettingBoxKey.collapsibleVideoPage,
-        defaultVal: true,
-        onChanged: (value) {
-          GStorage.collapsibleVideoPage = value;
-        },
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

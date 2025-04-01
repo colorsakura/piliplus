@@ -5,7 +5,6 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/url_utils.dart';
 import 'package:flutter/material.dart';
@@ -88,24 +87,14 @@ class HtmlRenderController extends ReplyController {
 
   @override
   Future<LoadingState> customGetData() {
-    return GlobalData().grpcReply
-        ? ReplyHttp.replyListGrpc(
-            type: type,
-            oid: oid.value,
-            cursor: CursorReq(
-              next: cursor?.next ?? $fixnum.Int64(0),
-              mode: mode.value,
-            ),
-            antiGoodsReply: antiGoodsReply,
-          )
-        : ReplyHttp.replyList(
-            isLogin: isLogin,
-            oid: oid.value,
-            nextOffset: nextOffset,
-            type: type,
-            sort: sortType.value.index,
-            page: currentPage,
-            antiGoodsReply: antiGoodsReply,
-          );
+    return ReplyHttp.replyListGrpc(
+      type: type,
+      oid: oid.value,
+      cursor: CursorReq(
+        next: cursor?.next ?? $fixnum.Int64(0),
+        mode: mode.value,
+      ),
+      antiGoodsReply: antiGoodsReply,
+    );
   }
 }

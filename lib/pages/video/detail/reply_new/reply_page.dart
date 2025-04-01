@@ -5,7 +5,6 @@ import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/toolbar_icon_button.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -275,7 +274,7 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
       root: widget.root!,
       parent: widget.parent!,
       message: widget.replyItem != null && widget.replyItem.root != 0
-          ? ' 回复 @${GlobalData().grpcReply ? widget.replyItem.member.name : widget.replyItem.member.uname} : $message'
+          ? ' 回复 @${widget.replyItem.member.name} : $message'
           : message,
       pictures: pictures,
       syncToDynamic: _syncToDynamic.value,

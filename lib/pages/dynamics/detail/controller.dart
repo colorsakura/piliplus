@@ -3,7 +3,6 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/reply_controller.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get.dart';
@@ -47,23 +46,13 @@ class DynamicDetailController extends ReplyController {
   }
 
   @override
-  Future<LoadingState> customGetData() => GlobalData().grpcReply
-      ? ReplyHttp.replyListGrpc(
-          type: type,
-          oid: oid,
-          cursor: CursorReq(
-            next: cursor?.next ?? $fixnum.Int64(0),
-            mode: mode.value,
-          ),
-          antiGoodsReply: antiGoodsReply,
-        )
-      : ReplyHttp.replyList(
-          isLogin: isLogin,
-          oid: oid,
-          nextOffset: nextOffset,
-          type: type,
-          sort: sortType.value.index,
-          page: currentPage,
-          antiGoodsReply: antiGoodsReply,
-        );
+  Future<LoadingState> customGetData() => ReplyHttp.replyListGrpc(
+        type: type,
+        oid: oid,
+        cursor: CursorReq(
+          next: cursor?.next ?? $fixnum.Int64(0),
+          mode: mode.value,
+        ),
+        antiGoodsReply: antiGoodsReply,
+      );
 }

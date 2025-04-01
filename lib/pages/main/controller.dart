@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/api.dart';
-import 'package:PiliPlus/http/common.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/home/view.dart';
 import 'package:PiliPlus/pages/media/view.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -165,19 +163,11 @@ class MainController extends GetxController {
     if (!isLogin.value || dynIndex == -1) {
       return;
     }
-    if (GlobalData().grpcReply) {
-      await GrpcRepo.dynRed().then((res) {
-        if (res['status']) {
-          setCount(res['data']);
-        }
-      });
-    } else {
-      await CommonHttp.unReadDynamic().then((res) {
-        if (res['status']) {
-          setCount(res['data']);
-        }
-      });
-    }
+    await GrpcRepo.dynRed().then((res) {
+      if (res['status']) {
+        setCount(res['data']);
+      }
+    });
   }
 
   void setCount([int count = 0]) async {

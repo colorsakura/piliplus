@@ -26,6 +26,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'zan.dart';
 import 'package:html/parser.dart' show parse;
 
+@Deprecated('Use ReplyItemGrpc instead')
 class ReplyItem extends StatelessWidget {
   const ReplyItem({
     super.key,

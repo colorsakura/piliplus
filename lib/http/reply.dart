@@ -20,6 +20,7 @@ class ReplyHttp {
   static RegExp replyRegExp =
       RegExp(GStorage.banWordForReply, caseSensitive: false);
 
+  @Deprecated('Use replyListGrpc instead')
   static Future<LoadingState> replyList({
     required bool isLogin,
     required int oid,
@@ -214,6 +215,7 @@ class ReplyHttp {
     return false;
   }
 
+  @Deprecated('Use replyReplyListGrpc instead')
   static Future<LoadingState> replyReplyList({
     required bool isLogin,
     required int oid,

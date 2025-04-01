@@ -8,10 +8,8 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
-import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -167,7 +165,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
   void replyReply(context, replyItem, id, isTop) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
-      int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
+      int rpid = replyItem.id.toInt();
       Widget replyReplyPage(
               [bool automaticallyImplyLeading = true,
               VoidCallback? onDispose]) =>
@@ -786,58 +784,36 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     ),
                   );
                 } else {
-                  return GlobalData().grpcReply
-                      ? ReplyItemGrpc(
-                          replyItem: loadingState.response.replies[index],
-                          showReplyRow: true,
-                          replyLevel: '1',
-                          replyReply: (replyItem, id, isTop) =>
-                              replyReply(context, replyItem, id, isTop),
-                          replyType: ReplyType.values[type],
-                          onReply: () {
-                            _htmlRenderCtr.onReply(
-                              context,
-                              replyItem: loadingState.response.replies[index],
-                              index: index,
-                            );
-                          },
-                          onDelete: _htmlRenderCtr.onMDelete,
-                          isTop: _htmlRenderCtr.hasUpTop && index == 0,
-                          upMid: loadingState.response.subjectControl.upMid,
-                          callback: _getImageCallback,
-                          onCheckReply: (item) =>
-                              _htmlRenderCtr.onCheckReply(context, item),
-                        )
-                      : ReplyItem(
-                          replyItem: loadingState.response.replies[index],
-                          showReplyRow: true,
-                          replyLevel: '1',
-                          replyReply: (replyItem, id, isTop) =>
-                              replyReply(context, replyItem, id, isTop),
-                          replyType: ReplyType.values[type],
-                          onReply: () {
-                            _htmlRenderCtr.onReply(
-                              context,
-                              replyItem: loadingState.response.replies[index],
-                              index: index,
-                            );
-                          },
-                          onDelete: _htmlRenderCtr.onMDelete,
-                          callback: _getImageCallback,
-                          onCheckReply: (item) =>
-                              _htmlRenderCtr.onCheckReply(context, item),
-                        );
+                  return ReplyItemGrpc(
+                    replyItem: loadingState.response.replies[index],
+                    showReplyRow: true,
+                    replyLevel: '1',
+                    replyReply: (replyItem, id, isTop) =>
+                        replyReply(context, replyItem, id, isTop),
+                    replyType: ReplyType.values[type],
+                    onReply: () {
+                      _htmlRenderCtr.onReply(
+                        context,
+                        replyItem: loadingState.response.replies[index],
+                        index: index,
+                      );
+                    },
+                    onDelete: _htmlRenderCtr.onMDelete,
+                    isTop: _htmlRenderCtr.hasUpTop && index == 0,
+                    upMid: loadingState.response.subjectControl.upMid,
+                    callback: _getImageCallback,
+                    onCheckReply: (item) =>
+                        _htmlRenderCtr.onCheckReply(context, item),
+                  );
                 }
               },
             )
           : HttpError(
               callback: _htmlRenderCtr.onReload,
             ),
-      Error() => replyErrorWidget(
-          context,
-          true,
-          loadingState.errMsg,
-          _htmlRenderCtr.onReload,
+      Error() => errorWidget(
+          errMsg: loadingState.errMsg,
+          callback: _htmlRenderCtr.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

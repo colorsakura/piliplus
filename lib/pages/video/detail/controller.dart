@@ -146,10 +146,6 @@ class VideoDetailController extends GetxController
             ? 'horizontal'
             : 'vertical'
         : 'horizontal';
-    if (GStorage.collapsibleVideoPage.not) {
-      this.direction.value = direction;
-      return;
-    }
     if (scrollCtr.hasClients.not) {
       videoHeight = direction == 'vertical' ? maxVideoHeight : minVideoHeight;
       this.direction.value = direction;
@@ -1548,11 +1544,9 @@ class VideoDetailController extends GetxController
   @override
   void onClose() {
     tabCtr.dispose();
-    if (GStorage.collapsibleVideoPage) {
-      scrollCtr.removeListener(scrollListener);
-      scrollCtr.dispose;
-      animationController.dispose();
-    }
+    scrollCtr.removeListener(scrollListener);
+    scrollCtr.dispose;
+    animationController.dispose();
     super.onClose();
   }
 
@@ -1561,7 +1555,7 @@ class VideoDetailController extends GetxController
     videoUrl = null;
     audioUrl = null;
 
-    if (GStorage.collapsibleVideoPage && scrollRatio.value != 0) {
+    if (scrollRatio.value != 0) {
       scrollRatio.refresh();
     }
 

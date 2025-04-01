@@ -7,12 +7,9 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/list_sheet.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
-import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/bangumi/introduction/widgets/intro_detail.dart'
     as bangumi;
-import 'package:PiliPlus/pages/video/detail/introduction/widgets/intro_detail.dart'
-    as video;
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/page.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/season.dart';
 import 'package:PiliPlus/pages/video/detail/member/controller.dart';
@@ -22,7 +19,6 @@ import 'package:PiliPlus/pages/video/detail/view_point/view_points_page.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
@@ -2206,7 +2202,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void replyReply(replyItem, id, isTop) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
-      int rpid = GlobalData().grpcReply ? replyItem.id.toInt() : replyItem.rpid;
+      int rpid = replyItem.id.toInt();
       videoDetailController.childKey.currentState?.showBottomSheet(
         backgroundColor: Colors.transparent,
         (context) => VideoReplyReplyPanel(
@@ -2235,15 +2231,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   showIntroDetail(videoDetail, videoTags) {
     videoDetailController.childKey.currentState?.showBottomSheet(
       backgroundColor: Colors.transparent,
-      (context) => videoDetail is BangumiInfoModel
-          ? bangumi.IntroDetail(
-              bangumiDetail: videoDetail,
-              videoTags: videoTags,
-            )
-          : video.IntroDetail(
-              videoDetail: videoDetail,
-              videoTags: videoTags,
-            ),
+      (context) => bangumi.IntroDetail(
+        bangumiDetail: videoDetail,
+        videoTags: videoTags,
+      ),
     );
   }
 

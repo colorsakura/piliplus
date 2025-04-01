@@ -1,8 +1,6 @@
 class GlobalData {
   int imgQuality = 10;
 
-  bool grpcReply = true;
-
   int replyLengthLimit = 6;
 
   // 私有构造函数

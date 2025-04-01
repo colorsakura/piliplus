@@ -142,21 +142,15 @@ class _ListSheetContentState extends CommonSlidePageState<ListSheetContent>
       }();
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (GStorage.collapsibleVideoPage) {
-        if (mounted) {
-          setState(() {
-            _isInit = false;
-          });
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            try {
-              itemScrollController[_index].jumpTo(index: currentIndex);
-            } catch (_) {}
-          });
-        }
-      } else {
-        try {
-          itemScrollController[_index].jumpTo(index: currentIndex);
-        } catch (_) {}
+      if (mounted) {
+        setState(() {
+          _isInit = false;
+        });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          try {
+            itemScrollController[_index].jumpTo(index: currentIndex);
+          } catch (_) {}
+        });
       }
     });
   }
@@ -295,7 +289,7 @@ class _ListSheetContentState extends CommonSlidePageState<ListSheetContent>
 
   @override
   Widget build(BuildContext context) {
-    if (GStorage.collapsibleVideoPage && _isInit) {
+    if (_isInit) {
       return CustomScrollView(
         physics: const NeverScrollableScrollPhysics(),
       );
