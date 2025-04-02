@@ -512,7 +512,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               isSeason ? null : episodes,
               bvid,
               IdUtils.bv2av(bvid),
-              currentCid,
+              isSeason && isPage
+                  ? widget.videoDetailController?.seasonCid ?? currentCid
+                  : currentCid,
             );
           },
         ),

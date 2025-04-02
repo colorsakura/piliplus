@@ -206,7 +206,8 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
         child: Column(
           children: [
             _buildToolbar,
-            if (widget.type == EpisodeType.season && widget.list.length > 1)
+            if (widget.type == EpisodeType.season &&
+                widget.list.length > 1) ...[
               TabBar(
                 controller: _tabController,
                 padding: const EdgeInsets.only(right: 60),
@@ -215,25 +216,25 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                 dividerHeight: 1,
                 dividerColor: Theme.of(context).dividerColor.withOpacity(0.1),
               ),
-            Expanded(
-              child: widget.type == EpisodeType.season
-                  ? Material(
-                      color: Colors.transparent,
-                      child: tabBarView(
-                        controller: _tabController,
-                        children: List.generate(
-                          widget.list.length,
-                          (index) => _buildBody(
-                            index,
-                            widget.list[index].episodes,
-                          ),
-                        ),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: tabBarView(
+                    controller: _tabController,
+                    children: List.generate(
+                      widget.list.length,
+                      (index) => _buildBody(
+                        index,
+                        widget.list[index].episodes,
                       ),
-                    )
-                  : enableSlide
-                      ? slideList()
-                      : buildList,
-            ),
+                    ),
+                  ),
+                ),
+              ),
+            ] else
+              Expanded(
+                child: enableSlide ? slideList() : buildList,
+              ),
           ],
         ),
       );
@@ -241,7 +242,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
   @override
   Widget get buildList => Material(
         color: Colors.transparent,
-        child: _buildBody(0, widget.list[0]),
+        child: _buildBody(0, _getCurrEpisodes),
       );
 
   Widget _buildBody(int index, episodes) {
