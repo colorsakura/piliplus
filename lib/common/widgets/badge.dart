@@ -13,6 +13,7 @@ class PBadge extends StatelessWidget {
   final String? semanticsLabel;
   final bool bold;
   final double? textScaleFactor;
+  final EdgeInsets? padding;
 
   const PBadge({
     super.key,
@@ -28,6 +29,7 @@ class PBadge extends StatelessWidget {
     this.semanticsLabel,
     this.bold = true,
     this.textScaleFactor,
+    this.padding,
   });
 
   @override
@@ -54,7 +56,7 @@ class PBadge extends StatelessWidget {
       color = t.onError;
     }
 
-    EdgeInsets paddingStyle =
+    late EdgeInsets paddingStyle =
         const EdgeInsets.symmetric(vertical: 2, horizontal: 3);
     double fontSize = 11;
     BorderRadius br = BorderRadius.circular(4);
@@ -66,7 +68,7 @@ class PBadge extends StatelessWidget {
     }
 
     Widget content = Container(
-      padding: paddingStyle,
+      padding: padding ?? paddingStyle,
       decoration: BoxDecoration(
         borderRadius: br,
         color: bgColor,

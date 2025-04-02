@@ -1,9 +1,9 @@
 import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
+import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
-import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -46,7 +46,8 @@ class MediaListPanel extends CommonCollapseSlidePage {
   State<MediaListPanel> createState() => _MediaListPanelState();
 }
 
-class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
+class _MediaListPanelState
+    extends CommonCollapseSlidePageState<MediaListPanel> {
   final _scrollController = ItemScrollController();
   late RxBool desc;
 
@@ -97,6 +98,10 @@ class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
               const SizedBox(width: 14),
             ],
           ),
+          Divider(
+            height: 1,
+            color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          ),
           Expanded(
             child: enableSlide ? slideList() : buildList,
           ),
@@ -119,11 +124,12 @@ class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
         () {
           final showDelBtn =
               widget.onDelete != null && widget.mediaList.length > 1;
-          return ScrollablePositionedList.builder(
+          return ScrollablePositionedList.separated(
             itemScrollController: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: widget.mediaList.length,
             padding: EdgeInsets.only(
+              top: 7,
               bottom: MediaQuery.paddingOf(context).bottom + 80,
             ),
             itemBuilder: ((context, index) {
@@ -133,158 +139,151 @@ class _MediaListPanelState extends CommonSlidePageState<MediaListPanel> {
                       widget.mediaList.length < widget.count!)) {
                 widget.loadMoreMedia();
               }
-              return InkWell(
-                onTap: () async {
-                  if (item.type != 2) {
-                    SmartDialog.showToast('不支持播放该类型视频');
-                    return;
-                  }
-                  Get.back();
-                  String bvid = item.bvid!;
-                  int? aid = item.id;
-                  String cover = item.cover ?? '';
-                  final int cid =
-                      item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
-                  widget.changeMediaList?.call(bvid, cid, aid, cover);
-                },
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 5,
-                      ),
-                      child: LayoutBuilder(
-                        builder: (context, boxConstraints) {
-                          const double width = 120;
-                          return Container(
-                            constraints: const BoxConstraints(minHeight: 88),
-                            height: width / StyleString.aspectRatio,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                AspectRatio(
-                                  aspectRatio: StyleString.aspectRatio,
-                                  child: LayoutBuilder(
-                                    builder: (BuildContext context,
-                                        BoxConstraints boxConstraints) {
-                                      final double maxWidth =
-                                          boxConstraints.maxWidth;
-                                      final double maxHeight =
-                                          boxConstraints.maxHeight;
-                                      return Stack(
-                                        children: [
-                                          NetworkImgLayer(
-                                            src: item.cover ?? '',
-                                            width: maxWidth,
-                                            height: maxHeight,
-                                          ),
-                                          PBadge(
-                                            text: Utils.timeFormat(
-                                                item.duration!),
-                                            right: 6.0,
-                                            bottom: 6.0,
-                                            type: 'gray',
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+              return SizedBox(
+                height: 98,
+                child: InkWell(
+                  onTap: () async {
+                    if (item.type != 2) {
+                      SmartDialog.showToast('不支持播放该类型视频');
+                      return;
+                    }
+                    Get.back();
+                    String bvid = item.bvid!;
+                    int? aid = item.id;
+                    String cover = item.cover ?? '';
+                    final int cid =
+                        item.cid ?? await SearchHttp.ab2c(aid: aid, bvid: bvid);
+                    widget.changeMediaList?.call(bvid, cid, aid, cover);
+                  },
+                  onLongPress: () {
+                    imageSaveDialog(
+                      context: context,
+                      title: item.title,
+                      cover: item.cover,
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 5,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AspectRatio(
+                              aspectRatio: StyleString.aspectRatio,
+                              child: LayoutBuilder(
+                                builder: (context, boxConstraints) {
+                                  return Stack(
                                     children: [
-                                      Text(
-                                        item.title as String,
-                                        textAlign: TextAlign.start,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontWeight:
-                                              item.bvid == widget.getBvId()
-                                                  ? FontWeight.bold
-                                                  : null,
-                                          color: item.bvid == widget.getBvId()
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                              : null,
-                                        ),
+                                      NetworkImgLayer(
+                                        src: item.cover,
+                                        width: boxConstraints.maxWidth,
+                                        height: boxConstraints.maxHeight,
                                       ),
-                                      const Spacer(),
-                                      Text(
-                                        item.upper?.name as String,
-                                        style: TextStyle(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium!
-                                              .fontSize,
-                                          color: Theme.of(context)
+                                      PBadge(
+                                        text: Utils.timeFormat(item.duration!),
+                                        right: 6.0,
+                                        bottom: 6.0,
+                                        type: 'gray',
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.title!,
+                                    textAlign: TextAlign.start,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: item.bvid == widget.getBvId()
+                                          ? FontWeight.bold
+                                          : null,
+                                      color: item.bvid == widget.getBvId()
+                                          ? Theme.of(context)
                                               .colorScheme
-                                              .outline,
-                                        ),
+                                              .primary
+                                          : null,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    item.upper!.name!,
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .fontSize,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Row(
+                                    children: [
+                                      StatView(
+                                        context: context,
+                                        theme: 'gray',
+                                        value: Utils.numFormat(
+                                            item.cntInfo!['play']!),
                                       ),
-                                      const SizedBox(height: 2),
-                                      Row(
-                                        children: [
-                                          StatView(
-                                            context: context,
-                                            theme: 'gray',
-                                            value: Utils.numFormat(
-                                                item.cntInfo!['play']!),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          StatDanMu(
-                                            context: context,
-                                            theme: 'gray',
-                                            value: Utils.numFormat(
-                                                item.cntInfo!['danmaku']!),
-                                          ),
-                                        ],
+                                      const SizedBox(width: 8),
+                                      StatDanMu(
+                                        context: context,
+                                        theme: 'gray',
+                                        value: Utils.numFormat(
+                                            item.cntInfo!['danmaku']!),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          );
-                        },
+                          ],
+                        ),
                       ),
-                    ),
-                    if (showDelBtn && item.bvid != widget.getBvId())
-                      Positioned(
-                        right: 12,
-                        bottom: 0,
-                        child: InkWell(
-                          customBorder: const CircleBorder(),
-                          onTap: () {
-                            showConfirmDialog(
-                              context: context,
-                              title: '确定移除该视频？',
-                              onConfirm: () => widget.onDelete!(index),
-                            );
-                          },
-                          onLongPress: () => widget.onDelete!(index),
-                          child: Padding(
-                            padding: const EdgeInsets.all(9),
-                            child: Icon(
-                              Icons.clear,
-                              size: 18,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                      if (showDelBtn && item.bvid != widget.getBvId())
+                        Positioned(
+                          right: 12,
+                          bottom: 0,
+                          child: InkWell(
+                            customBorder: const CircleBorder(),
+                            onTap: () {
+                              showConfirmDialog(
+                                context: context,
+                                title: '确定移除该视频？',
+                                onConfirm: () => widget.onDelete!(index),
+                              );
+                            },
+                            onLongPress: () => widget.onDelete!(index),
+                            child: Padding(
+                              padding: const EdgeInsets.all(9),
+                              child: Icon(
+                                Icons.clear,
+                                size: 18,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }),
+            separatorBuilder: (context, index) => const SizedBox(height: 2),
           );
         },
       );

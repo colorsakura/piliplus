@@ -90,7 +90,7 @@ class _MemberHomeState extends State<MemberHome>
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 120 / StyleString.aspectRatio + 10,
+                      height: 98,
                       child: MemberFavItem(
                         item: loadingState.response.favourite2.item.first,
                       ),

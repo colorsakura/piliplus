@@ -107,7 +107,6 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
 
   late bool _isInit = true;
   late final Color primary = Theme.of(context).colorScheme.primary;
-  final height = 120 / StyleString.aspectRatio + 10;
 
   void listener() {
     _currentTabIndex.value = _tabController.index;
@@ -248,9 +247,9 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
 
   Widget _buildBody(int index, episodes) {
     return KeepAliveWrapper(
-      builder: (context) => ScrollablePositionedList.builder(
+      builder: (context) => ScrollablePositionedList.separated(
         padding: EdgeInsets.only(
-          top: 5,
+          top: 7,
           bottom: MediaQuery.of(context).padding.bottom + 80,
         ),
         reverse: _isReversed[index],
@@ -306,6 +305,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                 );
         },
         itemScrollController: _itemScrollController[index],
+        separatorBuilder: (context, index) => const SizedBox(height: 2),
       ),
     );
   }
@@ -356,7 +356,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
     return Material(
       color: Colors.transparent,
       child: SizedBox(
-        height: height,
+        height: 98,
         child: InkWell(
           onTap: () {
             if (episode.badge != null && episode.badge == "会员") {

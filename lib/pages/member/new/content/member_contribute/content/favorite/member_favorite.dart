@@ -1,4 +1,3 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -79,7 +78,6 @@ class _MemberFavoriteState extends State<MemberFavorite>
   }
 
   _buildItem(Datum data, bool isFirst) {
-    final height = 120 / StyleString.aspectRatio + 10;
     return Theme(
       data: Theme.of(context).copyWith(
         dividerColor: Colors.transparent,
@@ -108,7 +106,7 @@ class _MemberFavoriteState extends State<MemberFavorite>
         children: [
           ...(data.mediaListResponse?.list as List<FavList>).map(
             (item) => SizedBox(
-              height: height,
+              height: 98,
               child: MemberFavItem(
                 item: item,
                 callback: (res) {
