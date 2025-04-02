@@ -12,7 +12,6 @@ import 'package:brotli/brotli.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
-import 'package:flutter/material.dart';
 import '../utils/storage.dart';
 import 'api.dart';
 import 'constants.dart';
@@ -242,20 +241,28 @@ class Request {
   /*
    * 下载文件
    */
-  downloadFile(urlPath, savePath) async {
-    Response response;
+  Future<Response> downloadFile(urlPath, savePath, {cancelToken}) async {
     try {
-      response = await dio.download(urlPath, savePath,
-          onReceiveProgress: (int count, int total) {
+      Response response = await dio.download(
+        urlPath,
+        savePath,
+        cancelToken: cancelToken,
+        // onReceiveProgress: (int count, int total) {
         //进度
         // debugPrint("$count $total");
-      });
-      debugPrint('downloadFile success: ${response.data}');
-
-      return response.data;
+        // },
+      );
+      // debugPrint('downloadFile success: ${response.data}');
+      return response;
     } on DioException catch (e) {
-      debugPrint('downloadFile error: $e');
-      return Future.error(AccountManager.dioError(e));
+      // debugPrint('downloadFile error: $e');
+      return Response(
+        data: {
+          'message': await AccountManager.dioError(e),
+        },
+        statusCode: -1,
+        requestOptions: RequestOptions(),
+      );
     }
   }
 

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -202,48 +200,64 @@ class DownloadUtils {
         cancelToken.cancel();
       },
     );
-    final picName =
-        "${imgType}_${DateTime.now().toString().substring(0, 19).replaceAll(' ', '_').replaceAll(':', '-')}";
     try {
-      await Future.wait(imgList.map((i) async {
-        var response = await Request().get(
-          i.http2https,
-          options: Options(responseType: ResponseType.bytes),
+      final isAndroid = Platform.isAndroid;
+      final tempPath = (await getTemporaryDirectory()).path;
+      final futures = imgList.map((url) async {
+        var name = Utils.getFileName(url);
+        var filePath = '$tempPath/$name';
+
+        var response = await Request().downloadFile(
+          url.http2https,
+          filePath,
           cancelToken: cancelToken,
         );
 
-        if (response.data is Map) {
-          throw HttpException(response.data['message']);
+        if (isAndroid) {
+          if (response.statusCode == 200) {
+            await SaverGallery.saveFile(
+              filePath: filePath,
+              fileName: name,
+              androidRelativePath: "Pictures/PiliPlus",
+              skipIfExists: false,
+            );
+          }
         }
-
-        var name = '${picName}_${Utils.getFileName(i)}';
-
-        final SaveResult result = await SaverGallery.saveImage(
-          response.data as Uint8List,
-          quality: 100,
-          fileName: name,
-          // 保存到 PiliPlus文件夹
-          androidRelativePath: "Pictures/PiliPlus",
-          skipIfExists: false,
-        );
-
-        // SmartDialog.dismiss();
-        // SmartDialog.showLoading(msg: '正在保存图片至图库');
-
-        if (result.isSuccess) {
-          // SmartDialog.showToast('「$name」已保存');
-        } else {
-          throw Exception('保存失败，${result.errorMessage}');
+        return {
+          'filePath': filePath,
+          'name': name,
+          'statusCode': response.statusCode,
+        };
+      });
+      final result = await Future.wait(futures, eagerError: true);
+      if (!isAndroid) {
+        for (Map res in result) {
+          if (res['statusCode'] == 200) {
+            await SaverGallery.saveFile(
+              filePath: res['filePath'],
+              fileName: res['name'],
+              androidRelativePath: "Pictures/PiliPlus",
+              skipIfExists: false,
+            );
+          }
         }
-      }), eagerError: true);
-      SmartDialog.dismiss();
-      SmartDialog.showToast('图片已保存');
+      }
+      // `SmartDialog.dismiss();` will call `onDismiss();`
+      if (cancelToken.isCancelled) {
+        SmartDialog.dismiss(status: SmartStatus.loading);
+        SmartDialog.showToast('已取消下载');
+        return false;
+      } else {
+        SmartDialog.dismiss(status: SmartStatus.loading);
+        SmartDialog.showToast('图片已保存');
+      }
       return true;
     } catch (e) {
-      SmartDialog.dismiss();
       if (cancelToken.isCancelled) {
+        SmartDialog.dismiss(status: SmartStatus.loading);
         SmartDialog.showToast('已取消下载');
       } else {
+        SmartDialog.dismiss(status: SmartStatus.loading);
         SmartDialog.showToast(e.toString());
       }
       return false;

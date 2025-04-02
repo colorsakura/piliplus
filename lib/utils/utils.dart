@@ -1677,6 +1677,6 @@ class Utils {
   }
 
   static String getFileName(String uri) {
-    return uri.substring(uri.lastIndexOf('/') + 1, uri.lastIndexOf('.'));
+    return uri.substring(uri.lastIndexOf('/') + 1);
   }
 }
