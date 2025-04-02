@@ -144,7 +144,7 @@ class MemberControllerNew extends CommonController
       );
 
   Future blockUser(BuildContext context) async {
-    if (ownerMid == null) {
+    if (ownerMid == 0) {
       SmartDialog.showToast('账号未登录');
       return;
     }

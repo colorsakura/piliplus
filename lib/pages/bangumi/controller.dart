@@ -19,7 +19,7 @@ class BangumiController extends CommonController {
   void onInit() {
     super.onInit();
     mid = Accounts.main.mid;
-    isLogin.value = mid != null;
+    isLogin.value = mid != 0;
 
     queryData();
     queryBangumiFollow();

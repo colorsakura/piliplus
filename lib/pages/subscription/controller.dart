@@ -20,7 +20,7 @@ class SubController extends CommonController {
 
   @override
   Future queryData([bool isRefresh = true]) {
-    if (mid == null) {
+    if (mid == 0) {
       loadingState.value = LoadingState.error('账号未登录');
       return Future.value();
     }

@@ -46,7 +46,7 @@ class MediaController extends CommonController {
   void onInit() {
     super.onInit();
     mid = Accounts.main.mid;
-    if (mid != null) {
+    if (mid != 0) {
       queryData();
     }
   }
