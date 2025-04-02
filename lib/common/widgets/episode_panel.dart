@@ -13,6 +13,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/bangumi/info.dart' as bangumi;
 import 'package:PiliPlus/models/video_detail_res.dart' as video;
 import 'package:PiliPlus/pages/common/common_slide_page.dart';
+import 'package:PiliPlus/pages/video/detail/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/page.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -385,6 +386,13 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                   : widget.aid,
               cover,
             );
+            if (widget.type == EpisodeType.season) {
+              try {
+                Get.find<VideoDetailController>(
+                        tag: widget.videoIntroController.heroTag)
+                    .seasonCid = episode.cid;
+              } catch (_) {}
+            }
           },
           onLongPress: () {
             if (cover?.isNotEmpty == true) {

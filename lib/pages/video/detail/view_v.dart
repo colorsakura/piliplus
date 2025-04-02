@@ -2149,8 +2149,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                   bvid: videoDetailController.bvid,
                   aid: IdUtils.bv2av(videoDetailController.bvid),
                   cid: videoDetailController.seasonCid ?? 0,
-                  isReversed:
-                      videoIntroController.videoDetail.value.isSeasonReversed,
+                  isReversed: videoIntroController
+                      .videoDetail
+                      .value
+                      .ugcSeason!
+                      .sections![videoDetailController.seasonIndex.value]
+                      .isReversed,
                   changeFucCall: videoDetailController.videoType ==
                           SearchType.media_bangumi
                       ? bangumiIntroController.changeSeasonOrbangu
@@ -2279,7 +2283,12 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
               videoDetailController.videoType == SearchType.media_bangumi
                   ? null
                   : season != null
-                      ? videoIntroController.videoDetail.value.isSeasonReversed
+                      ? videoIntroController
+                          .videoDetail
+                          .value
+                          .ugcSeason!
+                          .sections![videoDetailController.seasonIndex.value]
+                          .isReversed
                       : videoIntroController.videoDetail.value.isPageReversed,
           isSupportReverse:
               videoDetailController.videoType != SearchType.media_bangumi,
@@ -2335,8 +2344,10 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
     if (isSeason) {
       // reverse season
-      videoIntroController.videoDetail.value.isSeasonReversed =
-          !videoIntroController.videoDetail.value.isSeasonReversed;
+      videoIntroController.videoDetail.value.ugcSeason!
+              .sections![videoDetailController.seasonIndex.value].isReversed =
+          !videoIntroController.videoDetail.value.ugcSeason!
+              .sections![videoDetailController.seasonIndex.value].isReversed;
       videoIntroController.videoDetail.value.ugcSeason!
               .sections![videoDetailController.seasonIndex.value].episodes =
           videoIntroController
@@ -2358,6 +2369,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
             .sections![videoDetailController.seasonIndex.value].episodes!.first;
         if (episode.cid != videoDetailController.cid.value) {
           changeEpisode(episode);
+          videoDetailController.seasonCid = episode.cid;
         } else {
           videoDetailController.seasonIndex.refresh();
           videoDetailController.cid.refresh();

@@ -45,10 +45,10 @@ class _PagesPanelState extends State<PagesPanel> {
   @override
   void initState() {
     super.initState();
+    _videoDetailController =
+        Get.find<VideoDetailController>(tag: widget.heroTag);
     if (widget.list == null) {
       cid = widget.videoIntroController.lastPlayCid.value;
-      _videoDetailController =
-          Get.find<VideoDetailController>(tag: widget.heroTag);
       pageIndex = pages.indexWhere((Part e) => e.cid == cid);
       _listener = _videoDetailController.cid.listen((int cid) {
         this.cid = cid;
@@ -158,6 +158,12 @@ class _PagesPanelState extends State<PagesPanel> {
                         IdUtils.bv2av(widget.bvid),
                         widget.cover,
                       );
+                      if (widget.list != null &&
+                          widget.videoIntroController.videoDetail.value
+                                  .ugcSeason !=
+                              null) {
+                        _videoDetailController.seasonCid = pages.first.cid;
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

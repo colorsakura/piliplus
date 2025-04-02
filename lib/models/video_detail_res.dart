@@ -70,7 +70,6 @@ class VideoDetailData {
   String? epId;
   List<Staff>? staff;
   late bool isPageReversed;
-  late bool isSeasonReversed;
 
   VideoDetailData({
     this.bvid,
@@ -110,7 +109,6 @@ class VideoDetailData {
     this.epId,
     this.staff,
     this.isPageReversed = false,
-    this.isSeasonReversed = false,
   });
 
   VideoDetailData.fromJson(Map<String, dynamic> json) {
@@ -163,7 +161,6 @@ class VideoDetailData {
       epId = resolveEpId(json['redirect_url']);
     }
     isPageReversed = false;
-    isSeasonReversed = false;
   }
 
   String resolveEpId(url) {
@@ -670,6 +667,7 @@ class SectionItem {
     this.title,
     this.type,
     this.episodes,
+    this.isReversed = false,
   });
 
   int? epCount;
@@ -678,6 +676,7 @@ class SectionItem {
   String? title;
   int? type;
   List<EpisodeItem>? episodes;
+  late bool isReversed;
 
   SectionItem.fromJson(Map<String, dynamic> json) {
     epCount = json['ep_count'];
@@ -688,6 +687,7 @@ class SectionItem {
     episodes = (json['episodes'] as List?)
         ?.map<EpisodeItem>((e) => EpisodeItem.fromJson(e))
         .toList();
+    isReversed = false;
   }
 }
 

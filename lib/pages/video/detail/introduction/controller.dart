@@ -143,7 +143,6 @@ class VideoIntroController extends GetxController
       if (videoDetail.value.ugcSeason?.id == data.ugcSeason?.id) {
         // keep reversed season
         data.ugcSeason = videoDetail.value.ugcSeason;
-        data.isSeasonReversed = videoDetail.value.isSeasonReversed;
       }
       if (videoDetail.value.cid == data.cid) {
         // keep reversed pages
