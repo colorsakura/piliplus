@@ -746,6 +746,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               if (plPlayerController.controlsLock.value) return;
               // 如果起点太靠上则屏蔽
               if (details.localFocalPoint.dy < 40) return;
+              if (details.localFocalPoint.dx < 40) return;
+              if (details.localFocalPoint.dx > context.width - 40) return;
+              if (details.localFocalPoint.dy > context.height - 40) return;
               if (details.pointerCount == 2) {
                 interacting = true;
               }
@@ -1163,6 +1166,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               onVerticalDragStart: (details) {
                 if (plPlayerController.controlsLock.value) return;
                 if (details.localPosition.dy < 40) return;
+                if (details.localPosition.dx < 40) return;
+                if (details.localPosition.dx > context.width - 40) return;
+                if (details.localPosition.dy > context.height - 40) return;
                 _initialFocalPoint = details.localPosition;
                 _gestureType = null;
               },
