@@ -1,3 +1,4 @@
+import 'package:PiliPlus/models/live/room_info_h5.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:PiliPlus/models/bangumi/info.dart';
@@ -66,7 +67,8 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     if (!mediaItem.isClosed) mediaItem.add(newMediaItem);
   }
 
-  Future<void> setPlaybackState(PlayerStatus status, bool isBuffering) async {
+  Future<void> setPlaybackState(
+      PlayerStatus status, bool isBuffering, bool isLive) async {
     if (!enableBackgroundPlay ||
         _item.isEmpty ||
         PlPlayerController.instanceExists().not) {
@@ -87,11 +89,13 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
       processingState:
           isBuffering ? AudioProcessingState.buffering : processingState,
       controls: [
-        MediaControl.rewind
-            .copyWith(androidIcon: 'drawable/ic_baseline_replay_10_24'),
+        if (isLive.not)
+          MediaControl.rewind
+              .copyWith(androidIcon: 'drawable/ic_baseline_replay_10_24'),
         if (playing) MediaControl.pause else MediaControl.play,
-        MediaControl.fastForward
-            .copyWith(androidIcon: 'drawable/ic_baseline_forward_10_24'),
+        if (isLive.not)
+          MediaControl.fastForward
+              .copyWith(androidIcon: 'drawable/ic_baseline_forward_10_24'),
       ],
       playing: playing,
       systemActions: const {
@@ -100,11 +104,11 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
     ));
   }
 
-  onStatusChange(PlayerStatus status, bool isBuffering) {
+  onStatusChange(PlayerStatus status, bool isBuffering, isLive) {
     if (!enableBackgroundPlay) return;
 
     if (_item.isEmpty) return;
-    setPlaybackState(status, isBuffering);
+    setPlaybackState(status, isBuffering, isLive);
   }
 
   onVideoDetailChange(dynamic data, int cid, String herotag) {
@@ -146,6 +150,14 @@ class VideoPlayerServiceHandler extends BaseAudioHandler with SeekHandler {
         artist: data.title ?? "",
         duration: Duration(milliseconds: current?.duration ?? 0),
         artUri: Uri.parse(data.cover ?? ""),
+      );
+    } else if (data is RoomInfoH5Model) {
+      mediaItem = MediaItem(
+        id: id,
+        title: data.roomInfo?.title ?? '',
+        artist: data.anchorInfo?.baseInfo?.uname ?? '',
+        artUri: Uri.parse(data.roomInfo?.cover ?? ''),
+        isLive: true,
       );
     }
     if (mediaItem == null) return;

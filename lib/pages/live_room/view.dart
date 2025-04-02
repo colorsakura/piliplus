@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
+import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -55,14 +56,17 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     plPlayerController.play();
   }
 
+  late final String heroTag;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _roomId = int.parse(Get.parameters['roomid'] ?? '-1');
+    heroTag = Utils.makeHeroTag(_roomId);
     _liveRoomController = Get.put(
-      LiveRoomController(),
-      tag: Utils.makeHeroTag(_roomId),
+      LiveRoomController(heroTag),
+      tag: heroTag,
     );
     PlPlayerController.setPlayCallBack(playCallBack);
     if (Platform.isAndroid) {
@@ -107,6 +111,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   @override
   void dispose() {
+    videoPlayerServiceHandler.onVideoDetailDispose(heroTag);
     _listener?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ScreenBrightness().resetApplicationScreenBrightness();

@@ -853,7 +853,10 @@ class PlPlayerController {
           playerStatus.status.value = PlayerStatus.paused;
         }
         videoPlayerServiceHandler.onStatusChange(
-            playerStatus.status.value, isBuffering.value);
+          playerStatus.status.value,
+          isBuffering.value,
+          videoType.value == 'live',
+        );
 
         /// 触发回调事件
         for (var element in _statusListeners) {
@@ -900,7 +903,10 @@ class PlPlayerController {
       videoPlayerController!.stream.buffering.listen((bool event) {
         isBuffering.value = event;
         videoPlayerServiceHandler.onStatusChange(
-            playerStatus.status.value, event);
+          playerStatus.status.value,
+          event,
+          videoType.value == 'live',
+        );
       }),
       // videoPlayerController!.stream.log.listen((event) {
       //   debugPrint('videoPlayerController!.stream.log.listen');
@@ -952,7 +958,11 @@ class PlPlayerController {
       // }),
       // 媒体通知监听
       onPlayerStatusChanged.listen((PlayerStatus event) {
-        videoPlayerServiceHandler.onStatusChange(event, isBuffering.value);
+        videoPlayerServiceHandler.onStatusChange(
+          event,
+          isBuffering.value,
+          videoType.value == 'live',
+        );
       }),
       onPositionChanged.listen((Duration event) {
         EasyThrottle.throttle(

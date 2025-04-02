@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/live/danmu_info.dart';
 import 'package:PiliPlus/models/live/quality.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
+import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/tcp/live.dart';
 import 'package:PiliPlus/utils/danmaku.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -20,6 +21,8 @@ import '../../models/live/room_info_h5.dart';
 import '../../utils/video_utils.dart';
 
 class LiveRoomController extends GetxController {
+  LiveRoomController(this.heroTag);
+  final String heroTag;
   late int roomId;
   dynamic liveItem;
   double volume = 0.0;
@@ -118,6 +121,11 @@ class LiveRoomController extends GetxController {
     var res = await LiveHttp.liveRoomInfoH5(roomId: roomId);
     if (res['status']) {
       roomInfoH5.value = res['data'];
+      videoPlayerServiceHandler.onVideoDetailChange(
+        roomInfoH5.value,
+        roomId,
+        heroTag,
+      );
     }
     return res;
   }
