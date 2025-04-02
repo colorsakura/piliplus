@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
+import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -75,13 +76,23 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     videoSourceInit();
     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
     plPlayerController.autoEnterFullscreen();
-    _liveRoomController.liveMsg();
+    plPlayerController.addStatusLister(playerListener);
     _listener = plPlayerController.isFullScreen.listen((isFullScreen) {
       if (isFullScreen != _isFullScreen) {
         _isFullScreen = isFullScreen;
         _updateFontSize();
       }
     });
+  }
+
+  void playerListener(PlayerStatus? status) {
+    if (status != PlayerStatus.playing) {
+      plPlayerController.danmakuController?.pause();
+      _liveRoomController.msgStream?.close();
+    } else {
+      plPlayerController.danmakuController?.resume();
+      _liveRoomController.liveMsg();
+    }
   }
 
   void _updateFontSize() async {
@@ -119,6 +130,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     _liveRoomController.msgStream?.close();
     // floating?.dispose();
     _node.dispose();
+    plPlayerController.removeStatusLister(playerListener);
     plPlayerController.dispose();
     _ctr.dispose();
     super.dispose();
@@ -160,10 +172,13 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 fill: fill,
                 alignment: alignment,
                 plPlayerController: plPlayerController,
+                headerControl: LiveHeaderControl(
+                  plPlayerController: plPlayerController,
+                  floating: floating,
+                ),
                 bottomControl: BottomControl(
                   plPlayerController: plPlayerController,
                   liveRoomCtr: _liveRoomController,
-                  floating: floating,
                   onRefresh: () {
                     _futureBuilderFuture = _liveRoomController.queryLiveInfo();
                   },

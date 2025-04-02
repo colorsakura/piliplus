@@ -1,25 +1,20 @@
-import 'dart:io';
-
+import 'package:PiliPlus/plugin/pl_player/widgets/play_pause_btn.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/pages/live_room/index.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:get/get.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   const BottomControl({
     required this.plPlayerController,
     required this.liveRoomCtr,
-    this.floating,
     required this.onRefresh,
     super.key,
   });
 
   final PlPlayerController plPlayerController;
   final LiveRoomController liveRoomCtr;
-  final Floating? floating;
   final VoidCallback onRefresh;
 
   final TextStyle subTitleStyle = const TextStyle(fontSize: 12);
@@ -39,6 +34,10 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: 14,
       title: Row(
         children: [
+          PlayOrPauseButton(
+            plPlayerController: plPlayerController,
+          ),
+          const SizedBox(width: 10),
           ComBtn(
             icon: const Icon(
               Icons.refresh,
@@ -78,18 +77,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
           //   ),
           // ),
           // const SizedBox(width: 4),
-          Obx(
-            () => IconButton(
-              onPressed: plPlayerController.setOnlyPlayAudio,
-              icon: Icon(
-                size: 18,
-                plPlayerController.onlyPlayAudio.value
-                    ? MdiIcons.musicCircle
-                    : MdiIcons.musicCircleOutline,
-                color: Colors.white,
-              ),
-            ),
-          ),
+
           Obx(
             () => IconButton(
               onPressed: () {
@@ -140,32 +128,6 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           const SizedBox(width: 10),
-          if (Platform.isAndroid) ...[
-            SizedBox(
-              width: 34,
-              height: 34,
-              child: IconButton(
-                tooltip: '画中画',
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: () async {
-                  try {
-                    if ((await floating?.isPipAvailable) == true) {
-                      plPlayerController.hiddenControls(false);
-                      floating!.enable(const EnableManual());
-                    }
-                  } catch (_) {}
-                },
-                icon: const Icon(
-                  Icons.picture_in_picture_outlined,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-          ],
           Obx(
             () => SizedBox(
               width: 30,

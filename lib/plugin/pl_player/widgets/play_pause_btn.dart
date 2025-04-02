@@ -68,7 +68,7 @@ class PlayOrPauseButtonState extends State<PlayOrPauseButton>
     return SizedBox(
       width: 42,
       height: 34,
-      child: InkWell(
+      child: GestureDetector(
         onTap: () async {
           if (player.state.completed) {
             await player.seek(Duration.zero);

@@ -33,7 +33,6 @@ import 'package:PiliPlus/pages/video/detail/introduction/widgets/menu_row.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/services/shutdown_timer_service.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../../models/video/play/CDN.dart';
 import '../../../setting/widgets/select_dialog.dart';
@@ -179,7 +178,8 @@ class HeaderControlState extends State<HeaderControl> {
                   ),
                 ListTile(
                   dense: true,
-                  onTap: () => {Get.back(), scheduleExit()},
+                  onTap: () =>
+                      {Get.back(), Utils.scheduleExit(context, isFullScreen)},
                   leading: const Icon(Icons.hourglass_top_outlined, size: 20),
                   title: const Text('定时关闭', style: titleStyle),
                 ),
@@ -588,190 +588,6 @@ class HeaderControlState extends State<HeaderControl> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  /// 定时关闭
-  void scheduleExit() {
-    const List<int> scheduleTimeChoices = [0, 15, 30, 45, 60];
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
-      child: StatefulBuilder(
-        builder: (_, setState) {
-          return Theme(
-            data: Theme.of(context),
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: ListView(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  children: [
-                    const SizedBox(height: 10),
-                    const Center(child: Text('定时关闭', style: titleStyle)),
-                    const SizedBox(height: 10),
-                    ...[
-                      ...[
-                        ...scheduleTimeChoices,
-                        if (scheduleTimeChoices
-                            .contains(
-                                shutdownTimerService.scheduledExitInMinutes)
-                            .not)
-                          shutdownTimerService.scheduledExitInMinutes,
-                      ]..sort(),
-                      -1,
-                    ].map(
-                      (choice) => ListTile(
-                        dense: true,
-                        onTap: () {
-                          if (choice == -1) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                String duration = '';
-                                return AlertDialog(
-                                  title: const Text('自定义时长'),
-                                  content: TextField(
-                                    autofocus: true,
-                                    onChanged: (value) => duration = value,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'\d+')),
-                                    ],
-                                    decoration: const InputDecoration(
-                                        suffixText: 'min'),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: Get.back,
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        int choice =
-                                            int.tryParse(duration) ?? 0;
-                                        shutdownTimerService
-                                            .scheduledExitInMinutes = choice;
-                                        shutdownTimerService
-                                            .startShutdownTimer();
-                                        setState(() {});
-                                      },
-                                      child: Text('确定'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            Get.back();
-                            shutdownTimerService.scheduledExitInMinutes =
-                                choice;
-                            shutdownTimerService.startShutdownTimer();
-                          }
-                        },
-                        contentPadding: const EdgeInsets.only(),
-                        title: Text(choice == -1
-                            ? '自定义'
-                            : choice == 0
-                                ? "禁用"
-                                : "$choice分钟后"),
-                        trailing: shutdownTimerService.scheduledExitInMinutes ==
-                                choice
-                            ? Icon(
-                                Icons.done,
-                                color: Theme.of(context).colorScheme.primary,
-                              )
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    const Center(
-                      child: SizedBox(
-                        width: 125,
-                        child: Divider(height: 1),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListTile(
-                      dense: true,
-                      onTap: () {
-                        shutdownTimerService.waitForPlayingCompleted =
-                            !shutdownTimerService.waitForPlayingCompleted;
-                        setState(() {});
-                      },
-                      contentPadding: const EdgeInsets.only(),
-                      title: const Text("额外等待视频播放完毕", style: titleStyle),
-                      trailing: Transform.scale(
-                        alignment: Alignment
-                            .centerRight, // 缩放Switch的大小后保持右侧对齐, 避免右侧空隙过大
-                        scale: 0.8,
-                        child: Switch(
-                          thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                              (Set<WidgetState> states) {
-                            if (states.isNotEmpty &&
-                                states.first == WidgetState.selected) {
-                              return const Icon(Icons.done);
-                            }
-                            return null;
-                          }),
-                          value: shutdownTimerService.waitForPlayingCompleted,
-                          onChanged: (value) => setState(() =>
-                              shutdownTimerService.waitForPlayingCompleted =
-                                  value),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Text('倒计时结束:', style: titleStyle),
-                        const Spacer(),
-                        ActionRowLineItem(
-                          onTap: () {
-                            shutdownTimerService.exitApp = false;
-                            setState(() {});
-                            // Get.back();
-                          },
-                          text: " 暂停视频 ",
-                          selectStatus: !shutdownTimerService.exitApp,
-                        ),
-                        const Spacer(),
-                        // const SizedBox(width: 10),
-                        ActionRowLineItem(
-                          onTap: () {
-                            shutdownTimerService.exitApp = true;
-                            setState(() {});
-                            // Get.back();
-                          },
-                          text: " 退出APP ",
-                          selectStatus: shutdownTimerService.exitApp,
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }
