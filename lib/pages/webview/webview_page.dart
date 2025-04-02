@@ -282,11 +282,12 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
               : null,
           shouldInterceptAjaxRequest: (controller, ajaxRequest) async {
             String url = ajaxRequest.url.toString();
-            if (url.startsWith('//api.bilibili.com/x/note/add')) {
+            if (url.startsWith('//api.bilibili.com/x/note/add') &&
+                widget.title != null) {
               return ajaxRequest
                 ..data = ajaxRequest.data
                     .toString()
-                    .replaceFirst('title=--', 'title=${widget.title}');
+                    .replaceFirst('&title=--&', '&title=${widget.title}&');
             }
             return null;
           },
