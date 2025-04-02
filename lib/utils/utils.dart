@@ -1676,7 +1676,9 @@ class Utils {
     return base64.encode(randomBytes);
   }
 
-  static String getFileName(String uri) {
-    return uri.substring(uri.lastIndexOf('/') + 1);
+  static String getFileName(String uri, {bool fileExt = true}) {
+    final i0 = uri.lastIndexOf('/') + 1;
+    final i1 = fileExt ? uri.length : uri.lastIndexOf('.');
+    return uri.substring(i0, i1);
   }
 }

@@ -83,8 +83,9 @@ class WbiSign {
     if (resp.data['code'] == 0) {
       final wbiUrls = resp.data['data']['wbi_img'];
 
-      mixinKey = getMixinKey(Utils.getFileName(wbiUrls['img_url']) +
-          Utils.getFileName(wbiUrls['sub_url']));
+      mixinKey = getMixinKey(
+          Utils.getFileName(wbiUrls['img_url'], fileExt: false) +
+              Utils.getFileName(wbiUrls['sub_url'], fileExt: false));
 
       localCache.put(LocalCacheKey.mixinKey, mixinKey);
       localCache.put(LocalCacheKey.timeStamp, nowDate.millisecondsSinceEpoch);
