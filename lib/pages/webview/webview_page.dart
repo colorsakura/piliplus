@@ -190,20 +190,6 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
               handlerName: 'finishButtonClicked',
               callback: (args) {
                 Get.back();
-//                 _webViewController?.evaluateJavascript(source: """
-//   Array.from(document.querySelectorAll('.ql-editor > p')).map(p => p.textContent).join('\\n');
-// """).then((value) {
-                // try {
-                //   String? summary = (value as String?);
-                //   if (summary?.isNotEmpty == true) {
-                //     VideoHttp.addNote(
-                //       oid: widget.oid!,
-                //       title: widget.title!,
-                //       summary: summary!,
-                //     );
-                //   }
-                // } catch (_) {}
-                // });
               },
             );
             _webViewController?.addJavaScriptHandler(
@@ -294,6 +280,16 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                   _progressStream.add(1);
                 }
               : null,
+          shouldInterceptAjaxRequest: (controller, ajaxRequest) async {
+            String url = ajaxRequest.url.toString();
+            if (url.startsWith('//api.bilibili.com/x/note/add')) {
+              return ajaxRequest
+                ..data = ajaxRequest.data
+                    .toString()
+                    .replaceFirst('title=--', 'title=${widget.title}');
+            }
+            return null;
+          },
           shouldInterceptRequest: (controller, request) async {
             String url = request.url.toString();
             if (url.startsWith(
