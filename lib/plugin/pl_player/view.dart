@@ -770,10 +770,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
               /// 锁定时禁用
               if (plPlayerController.controlsLock.value) return;
-              if (plPlayerController.enableSlideVolumeBrightness.not &&
-                  plPlayerController.enableSlideFS.not) {
-                return;
-              }
 
               RenderBox renderBox =
                   _playerKey.currentContext!.findRenderObject() as RenderBox;
@@ -784,6 +780,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   _gestureType = 'horizontal';
                 } else if (cumulativeDelta.dy.abs() >
                     3 * cumulativeDelta.dx.abs()) {
+                  if (plPlayerController.enableSlideVolumeBrightness.not &&
+                      plPlayerController.enableSlideFS.not) {
+                    return;
+                  }
+
                   // _gestureType = 'vertical';
 
                   final double totalWidth = renderBox.size.width;
