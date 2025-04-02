@@ -417,6 +417,9 @@ class GStorage {
   static bool get enableSlideVolumeBrightness => GStorage.setting
       .get(SettingBoxKey.enableSlideVolumeBrightness, defaultValue: true);
 
+  static bool get enableSlideFS =>
+      GStorage.setting.get(SettingBoxKey.enableSlideFS, defaultValue: true);
+
   static int get retryCount =>
       GStorage.setting.get(SettingBoxKey.retryCount, defaultValue: 2);
 
@@ -707,6 +710,7 @@ class SettingBoxKey {
       showDynActionBar = 'showDynActionBar',
       darkVideoPage = 'darkVideoPage',
       enableSlideVolumeBrightness = 'enableSlideVolumeBrightness',
+      enableSlideFS = 'enableSlideFS',
       retryCount = 'retryCount',
       retryDelay = 'retryDelay',
       liveQuality = 'liveQuality',

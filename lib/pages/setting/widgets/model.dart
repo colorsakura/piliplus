@@ -753,6 +753,13 @@ List<SettingsModel> get playSettings => [
         defaultVal: true,
       ),
       SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '中间滑动进入/退出全屏',
+        leading: Icon(MdiIcons.panVertical),
+        setKey: SettingBoxKey.enableSlideFS,
+        defaultVal: true,
+      ),
+      SettingsModel(
         settingsType: SettingsType.normal,
         title: '自动启用字幕',
         leading: const Icon(Icons.closed_caption_outlined),

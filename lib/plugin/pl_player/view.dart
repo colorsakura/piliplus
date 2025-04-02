@@ -767,6 +767,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
 
               /// 锁定时禁用
               if (plPlayerController.controlsLock.value) return;
+              if (plPlayerController.enableSlideVolumeBrightness.not &&
+                  plPlayerController.enableSlideFS.not) {
+                return;
+              }
+
               RenderBox renderBox =
                   _playerKey.currentContext!.findRenderObject() as RenderBox;
 
@@ -788,6 +793,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                     // 左边区域
                     _gestureType = 'left';
                   } else if (tapPosition < sectionWidth * 2) {
+                    if (plPlayerController.enableSlideFS.not) {
+                      return;
+                    }
                     // 全屏
                     _gestureType = 'center';
                   } else {
@@ -1160,6 +1168,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
               },
               onVerticalDragUpdate: (details) {
                 if (plPlayerController.controlsLock.value) return;
+                if (plPlayerController.enableSlideVolumeBrightness.not &&
+                    plPlayerController.enableSlideFS.not) {
+                  return;
+                }
                 RenderBox renderBox =
                     _playerKey.currentContext!.findRenderObject() as RenderBox;
                 final double totalWidth = renderBox.size.width;
@@ -1173,6 +1185,9 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   // 左边区域
                   gestureType = 'left';
                 } else if (tapPosition < sectionWidth * 2) {
+                  if (plPlayerController.enableSlideFS.not) {
+                    return;
+                  }
                   // 全屏
                   gestureType = 'center';
                 } else {
