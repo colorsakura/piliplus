@@ -386,10 +386,11 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
       Get.back();
       SmartDialog.showToast('转发成功');
       widget.callback?.call();
-      Future.wait([
-        Utils.insertCreatedDyn(result),
-        Utils.checkCreatedDyn(result, editController.text)
-      ]);
+      Utils.insertCreatedDyn(result);
+      Utils.checkCreatedDyn(
+        id: result['data']?['dyn_id'],
+        dynText: editController.text,
+      );
     } else {
       SmartDialog.showToast(result['msg']);
     }

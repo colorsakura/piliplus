@@ -488,10 +488,11 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     if (result['status']) {
       Get.back();
       SmartDialog.showToast('发布成功');
-      Future.wait([
-        Utils.insertCreatedDyn(result),
-        Utils.checkCreatedDyn(result, editController.text)
-      ]);
+      Utils.insertCreatedDyn(result);
+      Utils.checkCreatedDyn(
+        id: result['data']?['dyn_id'],
+        dynText: editController.text,
+      );
     } else {
       SmartDialog.showToast(result['msg']);
       debugPrint('failed to publish: ${result['msg']}');

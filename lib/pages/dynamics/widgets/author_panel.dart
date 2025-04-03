@@ -6,7 +6,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -22,6 +21,7 @@ class AuthorPanel extends StatelessWidget {
   final Function? addBannedList;
   final String? source;
   final Function? onRemove;
+
   const AuthorPanel({
     super.key,
     required this.item,
@@ -310,6 +310,62 @@ class AuthorPanel extends StatelessWidget {
             },
             minLeadingWidth: 0,
           ),
+          if (item.modules.moduleAuthor.mid == Accounts.main.mid) ...[
+            ListTile(
+              onTap: () {
+                Get.back();
+                Utils.checkCreatedDyn(id: item.idStr, isManual: true);
+              },
+              minLeadingWidth: 0,
+              leading: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.shield_outlined, size: 19),
+                  const Icon(Icons.published_with_changes_sharp, size: 12),
+                ],
+              ),
+              title:
+                  Text('检查动态', style: Theme.of(context).textTheme.titleSmall!),
+            ),
+            if (onRemove != null)
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('确定删除该动态?'),
+                      actions: [
+                        TextButton(
+                          onPressed: Get.back,
+                          child: Text(
+                            '取消',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                            onRemove?.call(item.idStr);
+                          },
+                          child: const Text('确定'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                minLeadingWidth: 0,
+                leading: Icon(Icons.delete_outline,
+                    color: Theme.of(context).colorScheme.error, size: 19),
+                title: Text('删除',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: Theme.of(context).colorScheme.error)),
+              ),
+          ],
           if (Accounts.main.isLogin)
             ListTile(
               title: Text(
@@ -356,44 +412,6 @@ class AuthorPanel extends StatelessWidget {
                 );
               },
               minLeadingWidth: 0,
-            ),
-          if (item.modules.moduleAuthor.mid == Accounts.main.mid &&
-              onRemove != null)
-            ListTile(
-              onTap: () async {
-                Get.back();
-                showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: const Text('确定删除该动态?'),
-                          actions: [
-                            TextButton(
-                              onPressed: Get.back,
-                              child: Text(
-                                '取消',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                                onRemove?.call(item.idStr);
-                              },
-                              child: const Text('确定'),
-                            ),
-                          ],
-                        ));
-              },
-              minLeadingWidth: 0,
-              leading: Icon(Icons.delete_outline,
-                  color: Theme.of(context).colorScheme.error, size: 19),
-              title: Text('删除',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Theme.of(context).colorScheme.error)),
             ),
           const Divider(thickness: 0.1, height: 1),
           ListTile(

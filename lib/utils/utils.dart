@@ -472,12 +472,13 @@ class Utils {
     }
   }
 
-  static Future checkCreatedDyn(result, dynText) async {
-    if (GStorage.enableCreateDynAntifraud) {
+  static Future checkCreatedDyn({id, dynText, isManual}) async {
+    if (isManual == true || GStorage.enableCreateDynAntifraud) {
       try {
-        dynamic id = result['data']['dyn_id'];
         if (id != null) {
-          await Future.delayed(const Duration(seconds: 5));
+          if (isManual != true) {
+            await Future.delayed(const Duration(seconds: 5));
+          }
           dynamic res =
               await DynamicsHttp.dynamicDetail(id: id, clearCookie: true);
           showDialog(
@@ -485,11 +486,13 @@ class Utils {
             builder: (context) => AlertDialog(
               title: Text('动态检查结果'),
               content: SelectableText(
-                  '${res['status'] ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'} \n\n动态内容: $dynText'),
+                  '${res['status'] ? '无账号状态下找到了你的动态，动态正常！' : '你的动态被shadow ban（仅自己可见）！'}${dynText != null ? ' \n\n动态内容: $dynText' : ''}'),
             ),
           );
         }
-      } catch (_) {}
+      } catch (e) {
+        debugPrint('check dyn error: $e');
+      }
     }
   }
 
