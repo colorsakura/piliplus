@@ -27,7 +27,6 @@ class VideoReplyReplyPanel extends CommonSlidePage {
     this.source,
     required this.replyType,
     this.isDialogue = false,
-    this.isTop = false,
     this.onViewImage,
     this.onDismissed,
     this.onDispose,
@@ -40,7 +39,6 @@ class VideoReplyReplyPanel extends CommonSlidePage {
   final String? source;
   final ReplyType replyType;
   final bool isDialogue;
-  final bool isTop;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final VoidCallback? onDispose;
@@ -188,12 +186,19 @@ class _VideoReplyReplyPanelState
                             _onReply(firstFloor, -1);
                           },
                           upMid: _videoReplyReplyController.upMid,
-                          isTop: widget.isTop,
                           onViewImage: widget.onViewImage,
                           onDismissed: widget.onDismissed,
                           callback: _getImageCallback,
                           onCheckReply: (item) => _videoReplyReplyController
                               .onCheckReply(context, item),
+                          onToggleTop: (isUpTop, rpid) =>
+                              _videoReplyReplyController.onToggleTop(
+                            index,
+                            _videoReplyReplyController.oid,
+                            _videoReplyReplyController.replyType.index,
+                            isUpTop,
+                            rpid,
+                          ),
                         );
                       } else if (index == 1) {
                         return Divider(
@@ -482,6 +487,13 @@ class _VideoReplyReplyPanelState
       callback: _getImageCallback,
       onCheckReply: (item) =>
           _videoReplyReplyController.onCheckReply(context, item),
+      onToggleTop: (isUpTop, rpid) => _videoReplyReplyController.onToggleTop(
+        index,
+        _videoReplyReplyController.oid,
+        _videoReplyReplyController.replyType.index,
+        isUpTop,
+        rpid,
+      ),
     );
   }
 

@@ -249,7 +249,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                         );
                       },
                       onDelete: _videoReplyController.onMDelete,
-                      isTop: _videoReplyController.hasUpTop && index == 0,
                       upMid: loadingState.response.subjectControl.upMid,
                       getTag: () => heroTag,
                       onViewImage: widget.onViewImage,
@@ -257,6 +256,14 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                       callback: widget.callback,
                       onCheckReply: (item) =>
                           _videoReplyController.onCheckReply(context, item),
+                      onToggleTop: (isUpTop, rpid) =>
+                          _videoReplyController.onToggleTop(
+                        index,
+                        _videoReplyController.aid,
+                        ReplyType.video.index,
+                        isUpTop,
+                        rpid,
+                      ),
                     );
                   }
                 },

@@ -183,7 +183,6 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               source: 'dynamic',
               replyType: ReplyType.values[type],
               firstFloor: replyItem,
-              isTop: isTop ?? false,
               onDispose: onDispose,
             ),
           );
@@ -799,11 +798,17 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                       );
                     },
                     onDelete: _htmlRenderCtr.onMDelete,
-                    isTop: _htmlRenderCtr.hasUpTop && index == 0,
                     upMid: loadingState.response.subjectControl.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
                         _htmlRenderCtr.onCheckReply(context, item),
+                    onToggleTop: (isUpTop, rpid) => _htmlRenderCtr.onToggleTop(
+                      index,
+                      _htmlRenderCtr.oid,
+                      _htmlRenderCtr.type,
+                      isUpTop,
+                      rpid,
+                    ),
                   );
                 }
               },

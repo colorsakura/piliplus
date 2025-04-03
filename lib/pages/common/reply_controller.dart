@@ -480,4 +480,28 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
       }
     }
   }
+
+  void onToggleTop(index, oid, int type, bool isUpTop, int rpid) async {
+    final res = await ReplyHttp.replyTop(
+      oid: oid,
+      type: type,
+      rpid: rpid,
+      isUpTop: isUpTop,
+    );
+    if (res['status']) {
+      final data = (loadingState.value as Success).response;
+      if (data is MainListReply) {
+        data.replies[index].replyControl.isUpTop = !isUpTop;
+        if (!isUpTop && index != 0) {
+          data.replies[0].replyControl.isUpTop = false;
+          final item = data.replies.removeAt(index);
+          data.replies.insert(0, item);
+        }
+        loadingState.value = LoadingState.success(data);
+      }
+      SmartDialog.showToast('${isUpTop ? '取消' : ''}置顶成功');
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
 }

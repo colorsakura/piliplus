@@ -399,4 +399,30 @@ class ReplyHttp {
       return LoadingState.error(res.data['message']);
     }
   }
+
+  static Future replyTop({
+    required oid,
+    required type,
+    required rpid,
+    required bool isUpTop,
+  }) async {
+    var res = await Request().post(
+      Api.replyTop,
+      data: {
+        'oid': oid,
+        'type': type,
+        'rpid': rpid,
+        'action': isUpTop ? 0 : 1,
+        'csrf': await Request.getCsrf(),
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

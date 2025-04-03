@@ -2214,7 +2214,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       );
 
   // 展示二级回复
-  void replyReply(replyItem, id, isTop) {
+  void replyReply(replyItem, id) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
@@ -2227,7 +2227,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           firstFloor: replyItem,
           replyType: ReplyType.video,
           source: 'videoDetail',
-          isTop: isTop ?? false,
           onViewImage: videoDetailController.onViewImage,
           onDismissed: videoDetailController.onDismissed,
         ),

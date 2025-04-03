@@ -747,4 +747,6 @@ class Api {
   static const String delFavArticle = '/x/article/favorites/del';
 
   static const String addFavArticle = '/x/article/favorites/add';
+
+  static const String replyTop = '/x/v2/reply/top';
 }

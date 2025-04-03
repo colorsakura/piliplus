@@ -186,7 +186,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
               source: 'dynamic',
               replyType: ReplyType.values[replyType],
               firstFloor: replyItem,
-              isTop: isTop ?? false,
               onDispose: onDispose,
             ),
           );
@@ -826,11 +825,18 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                         );
                       },
                       onDelete: _dynamicDetailController.onMDelete,
-                      isTop: _dynamicDetailController.hasUpTop && index == 0,
                       upMid: loadingState.response.subjectControl.upMid,
                       callback: _getImageCallback,
                       onCheckReply: (item) =>
                           _dynamicDetailController.onCheckReply(context, item),
+                      onToggleTop: (isUpTop, rpid) =>
+                          _dynamicDetailController.onToggleTop(
+                        index,
+                        _dynamicDetailController.oid,
+                        _dynamicDetailController.type,
+                        isUpTop,
+                        rpid,
+                      ),
                     );
                   }
                 },

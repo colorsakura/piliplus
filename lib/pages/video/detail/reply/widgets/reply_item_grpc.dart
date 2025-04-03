@@ -38,13 +38,13 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onReply,
     this.onDelete,
     this.upMid,
-    this.isTop = false,
     this.showDialogue,
     this.getTag,
     this.onViewImage,
     this.onDismissed,
     this.callback,
     required this.onCheckReply,
+    required this.onToggleTop,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -55,13 +55,13 @@ class ReplyItemGrpc extends StatelessWidget {
   final Function()? onReply;
   final Function(dynamic rpid, dynamic frpid)? onDelete;
   final dynamic upMid;
-  final bool isTop;
   final VoidCallback? showDialogue;
   final Function? getTag;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
   final ValueChanged<ReplyInfo> onCheckReply;
+  final Function(bool isUpTop, int rpid) onToggleTop;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class ReplyItemGrpc extends StatelessWidget {
         // 点击整个评论区 评论详情/回复
         onTap: () {
           feedBack();
-          replyReply?.call(replyItem, null, isTop);
+          replyReply?.call(replyItem, null);
         },
         onLongPress: () {
           feedBack();
@@ -92,6 +92,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 onDelete: (rpid) {
                   onDelete?.call(rpid, null);
                 },
+                isSubReply: false,
               );
             },
           );
@@ -368,7 +369,7 @@ class ReplyItemGrpc extends StatelessWidget {
                   style: style,
                   TextSpan(
                     children: [
-                      if (isTop) ...[
+                      if (replyItem.replyControl.isUpTop) ...[
                         const WidgetSpan(
                           alignment: PlaceholderAlignment.top,
                           child: PBadge(
@@ -523,7 +524,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 InkWell(
                   // 一楼点击评论展开评论详情
                   onTap: () => replyReply?.call(
-                      replyItem, replyItem.replies[i].id.toInt(), isTop),
+                      replyItem, replyItem.replies[i].id.toInt()),
                   onLongPress: () {
                     feedBack();
                     showModalBottomSheet(
@@ -537,6 +538,7 @@ class ReplyItemGrpc extends StatelessWidget {
                           onDelete: (rpid) {
                             onDelete?.call(rpid, replyItem.id.toInt());
                           },
+                          isSubReply: true,
                         );
                       },
                     );
@@ -625,7 +627,7 @@ class ReplyItemGrpc extends StatelessWidget {
             if (extraRow)
               InkWell(
                 // 一楼点击【共xx条回复】展开评论详情
-                onTap: () => replyReply?.call(replyItem, null, isTop),
+                onTap: () => replyReply?.call(replyItem, null),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(8, 5, 8, 8),
@@ -1073,7 +1075,9 @@ class ReplyItemGrpc extends StatelessWidget {
     required BuildContext context,
     required ReplyInfo item,
     required onDelete,
+    required bool isSubReply,
   }) {
+    int ownerMid = Accounts.main.mid;
     Future<dynamic> menuActionHandler(String type) async {
       late String message = item.content.message;
       switch (type) {
@@ -1132,15 +1136,35 @@ class ReplyItemGrpc extends StatelessWidget {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text('删除评论（测试）'),
-                content: Text(
-                    '确定尝试删除这条评论吗？\n\n$message\n\n注：只能删除自己的评论，或自己管理的评论区下的评论'),
+                title: const Text('删除评论'),
+                content: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: '确定删除这条评论吗？\n\n'),
+                      if (ownerMid != item.member.mid.toInt()) ...[
+                        TextSpan(
+                          text: '@${item.member.name}',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        TextSpan(text: ':\n'),
+                      ],
+                      TextSpan(text: message),
+                    ],
+                  ),
+                ),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Get.back(result: false);
                     },
-                    child: const Text('取消'),
+                    child: Text(
+                      '取消',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -1173,11 +1197,14 @@ class ReplyItemGrpc extends StatelessWidget {
           Get.back();
           onCheckReply(item);
           break;
+        case 'top':
+          Get.back();
+          onToggleTop(item.replyControl.isUpTop, item.id.toInt());
+          break;
         default:
       }
     }
 
-    int ownerMid = Accounts.main.mid;
     Color errorColor = Theme.of(context).colorScheme.error;
 
     return Padding(
@@ -1210,7 +1237,7 @@ class ReplyItemGrpc extends StatelessWidget {
               ),
             ),
           ),
-          if (ownerMid != 0) ...[
+          if (ownerMid == upMid.toInt() || ownerMid == item.member.mid.toInt())
             ListTile(
               onTap: () => menuActionHandler('delete'),
               minLeadingWidth: 0,
@@ -1221,6 +1248,7 @@ class ReplyItemGrpc extends StatelessWidget {
                       .titleSmall!
                       .copyWith(color: errorColor)),
             ),
+          if (ownerMid != 0)
             ListTile(
               onTap: () => menuActionHandler('report'),
               minLeadingWidth: 0,
@@ -1231,7 +1259,14 @@ class ReplyItemGrpc extends StatelessWidget {
                       .titleSmall!
                       .copyWith(color: errorColor)),
             ),
-          ],
+          if (replyLevel == '1' && isSubReply.not && ownerMid == upMid.toInt())
+            ListTile(
+              onTap: () => menuActionHandler('top'),
+              minLeadingWidth: 0,
+              leading: Icon(Icons.vertical_align_top, size: 19),
+              title: Text('${replyItem.replyControl.isUpTop ? '取消' : ''}置顶',
+                  style: Theme.of(context).textTheme.titleSmall!),
+            ),
           ListTile(
             onTap: () => menuActionHandler('copyAll'),
             minLeadingWidth: 0,
