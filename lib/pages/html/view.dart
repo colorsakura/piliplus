@@ -162,7 +162,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     }
   }
 
-  void replyReply(context, replyItem, id, isTop) {
+  void replyReply(context, replyItem, id) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
@@ -787,8 +787,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     replyItem: loadingState.response.replies[index],
                     showReplyRow: true,
                     replyLevel: '1',
-                    replyReply: (replyItem, id, isTop) =>
-                        replyReply(context, replyItem, id, isTop),
+                    replyReply: (replyItem, id) =>
+                        replyReply(context, replyItem, id),
                     replyType: ReplyType.values[type],
                     onReply: () {
                       _htmlRenderCtr.onReply(
