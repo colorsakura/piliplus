@@ -11,7 +11,6 @@ import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_item.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -575,10 +574,7 @@ class HeaderControlState extends State<HeaderControl> {
                       return;
                     }
                     Get.back();
-                    Get.toNamed('/webview', parameters: {
-                      'url':
-                          'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailCtr.bvid)}&bvid=${videoDetailCtr.bvid}'
-                    });
+                    Utils.reportVideo(videoDetailCtr.oid.value);
                   },
                   leading: const Icon(Icons.error_outline, size: 20),
                   title: const Text('举报', style: titleStyle),

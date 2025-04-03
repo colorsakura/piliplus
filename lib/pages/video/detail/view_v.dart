@@ -876,12 +876,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                           SmartDialog.showToast(
                                                               '账号未登录');
                                                         } else {
-                                                          Get.toNamed(
-                                                              '/webview',
-                                                              parameters: {
-                                                                'url':
-                                                                    'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
-                                                              });
+                                                          Utils.reportVideo(
+                                                              videoDetailController
+                                                                  .oid.value);
                                                         }
                                                         break;
                                                       case 'note':
@@ -1466,10 +1463,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             if (!Accounts.main.isLogin) {
                               SmartDialog.showToast('账号未登录');
                             } else {
-                              Get.toNamed('/webview', parameters: {
-                                'url':
-                                    'https://www.bilibili.com/appeal/?avid=${IdUtils.bv2av(videoDetailController.bvid)}&bvid=${videoDetailController.bvid}'
-                              });
+                              Utils.reportVideo(
+                                  videoDetailController.oid.value);
                             }
                             break;
                           case 'note':

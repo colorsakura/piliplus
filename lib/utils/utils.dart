@@ -62,6 +62,16 @@ class Utils {
 
   static final _numRegExp = RegExp(r'([\d\.]+)([千万亿])?');
 
+  static void reportVideo(int aid) {
+    Get.toNamed(
+      '/webview',
+      parameters: {
+        'uaType': 'android',
+        'url': 'https://www.bilibili.com/appeal/?avid=$aid'
+      },
+    );
+  }
+
   /// 定时关闭
   static void scheduleExit(context, isFullScreen, [bool isLive = false]) {
     const List<int> scheduleTimeChoices = [0, 15, 30, 45, 60];
