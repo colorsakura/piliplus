@@ -1238,9 +1238,9 @@ class HeaderControlState extends State<HeaderControl> {
                         data: sliderTheme,
                         child: Slider(
                           min: 0,
-                          max: 100,
+                          max: 200,
                           value: subtitlePaddingB.toDouble(),
-                          divisions: 100,
+                          divisions: 200,
                           label: '$subtitlePaddingB',
                           onChanged: (double val) {
                             updateBottomPadding(val.round());

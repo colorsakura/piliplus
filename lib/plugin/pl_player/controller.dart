@@ -256,6 +256,7 @@ class PlPlayerController {
   late final darkVideoPage = GStorage.darkVideoPage;
   late final enableSlideVolumeBrightness = GStorage.enableSlideVolumeBrightness;
   late final enableSlideFS = GStorage.enableSlideFS;
+  late final enableDragSubtitle = GStorage.enableDragSubtitle;
 
   /// 弹幕权重
   int danmakuWeight = 0;
@@ -322,6 +323,11 @@ class PlPlayerController {
     getPlayerKey?.call().currentState?.update(
           subtitleViewConfiguration: subtitleViewConfiguration,
         );
+  }
+
+  void onUpdatePadding(EdgeInsets padding) {
+    subtitlePaddingB = padding.bottom.round().clamp(0, 200);
+    putSubtitleSettings();
   }
 
   void updateSliderPositionSecond() {

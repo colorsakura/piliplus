@@ -436,6 +436,9 @@ class GStorage {
   static int get appFontWeight =>
       GStorage.setting.get(SettingBoxKey.appFontWeight, defaultValue: -1);
 
+  static bool get enableDragSubtitle => GStorage.setting
+      .get(SettingBoxKey.enableDragSubtitle, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -716,6 +719,7 @@ class SettingBoxKey {
       liveQuality = 'liveQuality',
       liveQualityCellular = 'liveQualityCellular',
       appFontWeight = 'appFontWeight',
+      enableDragSubtitle = 'enableDragSubtitle',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

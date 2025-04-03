@@ -2100,6 +2100,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '启用拖拽字幕调整底部边距',
+        leading: Icon(MdiIcons.dragVariant),
+        setKey: SettingBoxKey.enableDragSubtitle,
+        defaultVal: false,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         enableFeedback: true,
         setKey: SettingBoxKey.feedBackEnable,
         onChanged: (value) {
