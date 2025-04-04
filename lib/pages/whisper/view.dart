@@ -64,7 +64,7 @@ class _WhisperPageState extends State<WhisperPage> {
                 'url': 'https://message.bilibili.com',
                 'type': 'whisper',
                 'pageTitle': '消息中心',
-                'ua': 'pc',
+                'uaType': 'pc',
               });
             },
           ),
