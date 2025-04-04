@@ -65,10 +65,7 @@ class Utils {
   static void reportVideo(int aid) {
     Get.toNamed(
       '/webview',
-      parameters: {
-        'uaType': 'android',
-        'url': 'https://www.bilibili.com/appeal/?avid=$aid'
-      },
+      parameters: {'url': 'https://www.bilibili.com/appeal/?avid=$aid'},
     );
   }
 

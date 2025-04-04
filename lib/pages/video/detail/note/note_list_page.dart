@@ -111,7 +111,6 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
               onPressed: () {
                 _key.currentState?.showBottomSheet(
                   (context) => WebviewPageNew(
-                    uaType: 'android',
                     oid: widget.oid,
                     title: widget.title,
                     url:
