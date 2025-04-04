@@ -195,21 +195,23 @@ class PiliScheme {
             return false;
           case 'opus':
             // bilibili://opus/detail/12345678?h5awaken=random
-            String? id = uriDigitRegExp.firstMatch(path)?.group(1);
-            if (id != null) {
-              Utils.toDupNamed(
-                '/htmlRender',
-                parameters: {
-                  'url': 'https://www.bilibili.com/opus/$id',
-                  'title': '',
-                  'id': id,
-                  'dynamicType': 'opus'
-                },
-                off: off,
-              );
-              return true;
-            }
-            return false;
+            // String? id = uriDigitRegExp.firstMatch(path)?.group(1);
+            // if (id != null) {
+            //   Utils.toDupNamed(
+            //     '/htmlRender',
+            //     parameters: {
+            //       'url': 'https://www.bilibili.com/opus/$id',
+            //       'title': '',
+            //       'id': id,
+            //       'dynamicType': 'opus'
+            //     },
+            //     off: off,
+            //   );
+            //   return true;
+            // }
+            // return false;
+            bool hasMatch = await _onPushDynDetail(path, off);
+            return hasMatch;
           case 'search':
             Utils.toDupNamed(
               '/searchResult',
