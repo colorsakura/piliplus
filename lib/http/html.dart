@@ -64,11 +64,11 @@ class HtmlHttp {
             .innerHtml;
       } catch (_) {}
 
-      String commentId = opusDetail
+      List comment = opusDetail
           .querySelector('.bili-comment-container')!
           .className
           .split(' ')[1]
-          .split('-')[2];
+          .split('-');
       // List imgList = opusDetail.querySelectorAll('bili-album__preview__picture__img');
       return {
         'status': true,
@@ -76,7 +76,8 @@ class HtmlHttp {
         'uname': uname,
         'updateTime': updateTime,
         'content': (test ?? '') + opusContent,
-        'commentId': int.parse(commentId)
+        'commentType': int.parse(comment[1]),
+        'commentId': int.parse(comment[2]),
       };
     } catch (err) {
       debugPrint('err: $err');

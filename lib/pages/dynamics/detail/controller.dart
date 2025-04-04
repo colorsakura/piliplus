@@ -41,6 +41,7 @@ class DynamicDetailController extends ReplyController {
   // 根据jumpUrl获取动态html
   reqHtmlByOpusId(int id) async {
     var res = await HtmlHttp.reqHtml(id, 'opus');
+    type = res['commentType'];
     oid = res['commentId'];
     queryData();
   }
