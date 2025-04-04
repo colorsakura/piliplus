@@ -54,22 +54,22 @@ class _WhisperPageState extends State<WhisperPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('消息'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.open_in_browser_outlined,
-                color: Theme.of(context).colorScheme.primary),
-            tooltip: '用浏览器打开',
-            onPressed: () {
-              Get.toNamed('/webview', parameters: {
-                'url': 'https://message.bilibili.com',
-                'type': 'whisper',
-                'pageTitle': '消息中心',
-                'uaType': 'pc',
-              });
-            },
-          ),
-          const SizedBox(width: 12)
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.open_in_browser_outlined,
+        //         color: Theme.of(context).colorScheme.primary),
+        //     tooltip: '用浏览器打开',
+        //     onPressed: () {
+        //       Get.toNamed('/webview', parameters: {
+        //         'url': 'https://message.bilibili.com',
+        //         'type': 'whisper',
+        //         'pageTitle': '消息中心',
+        //         'uaType': 'pc',
+        //       });
+        //     },
+        //   ),
+        //   const SizedBox(width: 12)
+        // ],
       ),
       body: refreshIndicator(
         onRefresh: () async {
