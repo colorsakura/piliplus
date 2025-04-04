@@ -83,7 +83,6 @@ class NetworkImgLayer extends StatelessWidget {
   }
 
   Widget placeholder(BuildContext context) {
-    int cacheWidth = width.cacheSize(context);
     return Container(
       width: width,
       height: height,
@@ -106,7 +105,7 @@ class NetworkImgLayer extends StatelessWidget {
                     : 'assets/images/loading.png',
                 width: width,
                 height: height,
-                cacheWidth: cacheWidth == 0 ? null : cacheWidth,
+                cacheWidth: width.cacheSize(context),
                 // cacheHeight: height.cacheSize(context),
               ),
             ),

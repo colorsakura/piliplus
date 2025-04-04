@@ -4,9 +4,12 @@ import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-extension ImageExtension on num {
-  int cacheSize(BuildContext context) {
-    return (this * MediaQuery.of(context).devicePixelRatio).round();
+extension ImageExtension on num? {
+  int? cacheSize(BuildContext context) {
+    if (this == null || this == 0) {
+      return null;
+    }
+    return (this! * MediaQuery.of(context).devicePixelRatio).round();
   }
 }
 
