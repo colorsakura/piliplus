@@ -114,4 +114,10 @@ class HomeController extends GetxController
       ),
     );
   }
+
+  @override
+  void onClose() {
+    searchBarStream.close();
+    super.onClose();
+  }
 }

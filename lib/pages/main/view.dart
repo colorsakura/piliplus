@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -19,6 +18,7 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './controller.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -265,7 +265,8 @@ class _MainAppState extends State<MainApp>
               : StreamBuilder(
                   stream: _mainController.hideTabBar
                       ? _mainController.bottomBarStream.stream
-                      : StreamController<bool>.broadcast().stream,
+                          .throttle(const Duration(milliseconds: 500))
+                      : null,
                   initialData: true,
                   builder: (context, AsyncSnapshot snapshot) {
                     return AnimatedSlide(

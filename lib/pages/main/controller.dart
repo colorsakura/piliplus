@@ -213,4 +213,10 @@ class MainController extends GetxController {
             })
         .toList();
   }
+
+  @override
+  void onClose() {
+    bottomBarStream.close();
+    super.onClose();
+  }
 }

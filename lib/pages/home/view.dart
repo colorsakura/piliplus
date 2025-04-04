@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:PiliPlus/models/common/dynamic_badge_mode.dart';
 import 'package:PiliPlus/pages/main/index.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -11,6 +9,7 @@ import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import './controller.dart';
 import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,17 +21,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   final HomeController _homeController = Get.put(HomeController());
-  late Stream<bool> stream;
   final MainController _mainController = Get.put(MainController());
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    stream = _homeController.searchBarStream.stream;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,8 +154,9 @@ class _HomePageState extends State<HomePage>
   Widget get customAppBar {
     return StreamBuilder(
       stream: _homeController.hideSearchBar
-          ? stream
-          : StreamController<bool>.broadcast().stream,
+          ? _homeController.searchBarStream.stream
+              .throttle(const Duration(milliseconds: 500))
+          : null,
       initialData: true,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AnimatedOpacity(
