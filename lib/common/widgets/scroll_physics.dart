@@ -77,7 +77,7 @@ class PositionRetainedScrollPhysics extends AlwaysScrollableScrollPhysics {
 
     final diff = newPosition.maxScrollExtent - oldPosition.maxScrollExtent;
 
-    if (oldPosition.pixels >= oldPosition.minScrollExtent && diff > 0) {
+    if (oldPosition.pixels == 0 && diff > 0) {
       return position + diff;
     } else {
       return position;
