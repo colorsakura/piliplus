@@ -9,7 +9,9 @@ import 'package:PiliPlus/pages/video/detail/note/note_list_page_ctr.dart';
 import 'package:PiliPlus/pages/webview/webview_page.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class NoteListPage extends CommonSlidePage {
@@ -109,6 +111,10 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 ),
               ),
               onPressed: () {
+                if (!Accounts.main.isLogin) {
+                  SmartDialog.showToast('账号未登录');
+                  return;
+                }
                 _key.currentState?.showBottomSheet(
                   (context) => WebviewPageNew(
                     oid: widget.oid,

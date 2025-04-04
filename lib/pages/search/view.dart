@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> with RouteAware {
-  final SSearchController _searchController = Get.put(SSearchController());
+  final SSearchController _searchController = Get.put(
+    SSearchController(),
+    tag: Utils.generateRandomString(6),
+  );
 
   @override
   Widget build(BuildContext context) {
