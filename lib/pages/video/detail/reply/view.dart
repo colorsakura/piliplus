@@ -1,5 +1,4 @@
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -274,7 +273,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
               errMsg: '还没有评论',
               callback: _videoReplyController.onReload,
             ),
-      Error() => errorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _videoReplyController.onReload,
         ),

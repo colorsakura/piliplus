@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -846,7 +845,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
           : HttpError(
               callback: _dynamicDetailController.onReload,
             ),
-      Error() => errorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _dynamicDetailController.onReload,
         ),

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/article_content.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -816,7 +815,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           : HttpError(
               callback: _htmlRenderCtr.onReload,
             ),
-      Error() => errorWidget(
+      Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _htmlRenderCtr.onReload,
         ),
