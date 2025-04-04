@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../common/widgets/network_img_layer.dart';
 import 'controller.dart';
-import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class EmotePanel extends StatefulWidget {
   final Function onChoose;

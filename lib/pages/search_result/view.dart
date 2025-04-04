@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/pages/search_panel/index.dart';
 import 'controller.dart';
-import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class SearchResultPage extends StatefulWidget {
   const SearchResultPage({super.key});

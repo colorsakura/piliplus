@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactivevie
     show SourceModel;
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/video_card_h_member_video.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/member/info.dart';
@@ -179,7 +180,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
           color: Colors.transparent,
           child: CustomScrollView(
             controller: _controller.scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const PositionRetainedScrollPhysics(),
             slivers: [
               _buildSliverHeader,
               SliverPadding(
@@ -198,11 +199,12 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                           _controller.hasNext) {
                         _controller.onLoadMore();
                       }
+                      final Item videoItem = loadingState.response[index];
                       return VideoCardHMemberVideo(
-                        videoItem: loadingState.response[index],
+                        key: ValueKey('${videoItem.param}'),
+                        videoItem: videoItem,
                         bvid: _bvid,
                         onTap: () {
-                          final Item videoItem = loadingState.response[index];
                           final status =
                               widget.videoIntroController.changeSeasonOrbangu(
                             null,

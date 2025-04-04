@@ -15,7 +15,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class MemberPageNew extends StatefulWidget {
   const MemberPageNew({super.key});

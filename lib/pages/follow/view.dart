@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'controller.dart';
 import 'widgets/follow_list.dart';
 import 'widgets/owner_follow_list.dart';
-import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class FollowPage extends StatefulWidget {
   const FollowPage({super.key});

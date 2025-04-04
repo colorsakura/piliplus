@@ -7,7 +7,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import '../../http/danmaku_block.dart';
 import '../../models/user/danmaku_block.dart';
 import '../../plugin/pl_player/controller.dart';
-import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class DanmakuBlockPage extends StatefulWidget {
   const DanmakuBlockPage({super.key});

@@ -16,7 +16,7 @@ import 'package:PiliPlus/pages/main/index.dart';
 import '../../utils/grid.dart';
 import 'controller.dart';
 import 'widgets/bangumi_card_v.dart';
-import 'package:PiliPlus/common/widgets/spring_physics.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
 class BangumiPage extends StatefulWidget {
   const BangumiPage({

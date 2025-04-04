@@ -2,8 +2,10 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/video_card_h_member_video.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/video/member_video_ctr.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
@@ -70,6 +72,7 @@ class _MemberVideoState extends State<MemberVideo>
                     await _controller.onRefresh();
                   },
                   child: CustomScrollView(
+                    physics: const PositionRetainedScrollPhysics(),
                     slivers: [
                       SliverPersistentHeader(
                         pinned: false,
@@ -183,8 +186,10 @@ class _MemberVideoState extends State<MemberVideo>
                                   index == loadingState.response.length - 1) {
                                 _controller.onLoadMore();
                               }
+                              final Item item = loadingState.response[index];
                               return VideoCardHMemberVideo(
-                                videoItem: loadingState.response[index],
+                                key: ValueKey('${item.param}'),
+                                videoItem: item,
                                 fromViewAid: _controller.fromViewAid,
                               );
                             },
