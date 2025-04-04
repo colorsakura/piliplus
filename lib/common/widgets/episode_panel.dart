@@ -478,6 +478,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                           ),
                         ),
                       if (view != null) ...[
+                        const SizedBox(height: 2),
                         Row(
                           children: [
                             StatView(
@@ -494,7 +495,7 @@ class _EpisodePanelState extends CommonSlidePageState<EpisodePanel>
                               ),
                             ],
                           ],
-                        )
+                        ),
                       ],
                     ],
                   ),
