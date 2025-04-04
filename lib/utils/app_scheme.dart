@@ -537,24 +537,24 @@ class PiliScheme {
         }
         launchURL();
         return false;
-      case 'opus':
-        String? id = uriDigitRegExp.firstMatch(path)?.group(1);
-        if (id != null) {
-          Utils.toDupNamed(
-            '/htmlRender',
-            parameters: {
-              'url': 'https://www.bilibili.com/opus/$id',
-              'title': '',
-              'id': id,
-              'dynamicType': 'opus'
-            },
-            off: off,
-          );
-          return true;
-        }
-        launchURL();
-        return false;
-      case 'dynamic':
+      // case 'opus':
+      //   String? id = uriDigitRegExp.firstMatch(path)?.group(1);
+      //   if (id != null) {
+      //     Utils.toDupNamed(
+      //       '/htmlRender',
+      //       parameters: {
+      //         'url': 'https://www.bilibili.com/opus/$id',
+      //         'title': '',
+      //         'id': id,
+      //         'dynamicType': 'opus'
+      //       },
+      //       off: off,
+      //     );
+      //     return true;
+      //   }
+      //   launchURL();
+      //   return false;
+      case 'dynamic' || 'opus':
         bool hasMatch = await _onPushDynDetail(path, off);
         if (hasMatch.not) {
           launchURL();
