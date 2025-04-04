@@ -72,7 +72,10 @@ class _MemberVideoState extends State<MemberVideo>
                     await _controller.onRefresh();
                   },
                   child: CustomScrollView(
-                    physics: const PositionRetainedScrollPhysics(),
+                    physics: PositionRetainedScrollPhysics(
+                      shouldRetain: _controller.isLocating == true,
+                      parent: ClampingScrollPhysics(),
+                    ),
                     slivers: [
                       SliverPersistentHeader(
                         pinned: false,

@@ -212,4 +212,10 @@ class MemberVideoCtr extends CommonController {
       }
     }
   }
+
+  @override
+  Future onReload() {
+    isLocating = null;
+    return super.onReload();
+  }
 }

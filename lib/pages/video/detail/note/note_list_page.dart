@@ -1,6 +1,6 @@
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
+import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
-import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -173,16 +173,21 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 ],
               ),
             )
-          : scrollErrorWidget(
-              callback: _controller.onReload,
-            ),
-      Error() => scrollErrorWidget(
-          errMsg: loadingState.errMsg,
-          callback: _controller.onReload,
-        ),
+          : errWidget(),
+      Error() => errWidget(loadingState.errMsg),
       LoadingState() => throw UnimplementedError(),
     };
   }
+
+  Widget errWidget([errMsg]) => CustomScrollView(
+        controller: _controller.scrollController,
+        slivers: [
+          HttpError(
+            errMsg: errMsg,
+            callback: _controller.onReload,
+          )
+        ],
+      );
 }
 
 Widget _itemWidget(BuildContext context, dynamic item) {

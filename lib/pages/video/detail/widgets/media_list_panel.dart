@@ -2,7 +2,6 @@ import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +126,9 @@ class _MediaListPanelState
               widget.onDelete != null && widget.mediaList.length > 1;
           return ScrollablePositionedList.separated(
             itemScrollController: _scrollController,
-            physics: const PositionRetainedScrollPhysics(),
+            // physics: const PositionRetainedScrollPhysics(
+            //   parent: ClampingScrollPhysics(),
+            // ),
             itemCount: widget.mediaList.length,
             padding: EdgeInsets.only(
               top: 7,

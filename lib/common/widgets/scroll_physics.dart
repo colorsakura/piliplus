@@ -54,7 +54,9 @@ class CustomTabBarViewClampingScrollPhysics extends ClampingScrollPhysics {
 }
 
 class PositionRetainedScrollPhysics extends AlwaysScrollableScrollPhysics {
-  const PositionRetainedScrollPhysics({super.parent});
+  const PositionRetainedScrollPhysics({super.parent, this.shouldRetain = true});
+
+  final bool shouldRetain;
 
   @override
   PositionRetainedScrollPhysics applyTo(ScrollPhysics? ancestor) {
@@ -75,9 +77,9 @@ class PositionRetainedScrollPhysics extends AlwaysScrollableScrollPhysics {
       velocity: velocity,
     );
 
-    final diff = newPosition.maxScrollExtent - oldPosition.maxScrollExtent;
+    late final diff = newPosition.maxScrollExtent - oldPosition.maxScrollExtent;
 
-    if (oldPosition.pixels == 0 && diff > 0) {
+    if (shouldRetain && oldPosition.pixels == 0 && diff > 0) {
       return position + diff;
     } else {
       return position;

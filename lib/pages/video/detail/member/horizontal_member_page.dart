@@ -180,7 +180,10 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
           color: Colors.transparent,
           child: CustomScrollView(
             controller: _controller.scrollController,
-            physics: const PositionRetainedScrollPhysics(),
+            physics: PositionRetainedScrollPhysics(
+              shouldRetain: _controller.hasPrev,
+              parent: ClampingScrollPhysics(),
+            ),
             slivers: [
               _buildSliverHeader,
               SliverPadding(
