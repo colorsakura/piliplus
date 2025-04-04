@@ -1976,6 +1976,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '记录搜索历史',
+        leading: const Icon(Icons.history),
+        setKey: SettingBoxKey.recordSearchHistory,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         title: '展示头像/评论/动态装饰',
         leading: Icon(MdiIcons.stickerCircleOutline),
         setKey: SettingBoxKey.showDynDecorate,

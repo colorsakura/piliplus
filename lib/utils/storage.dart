@@ -442,6 +442,9 @@ class GStorage {
   static int get fastForBackwardDuration => GStorage.setting
       .get(SettingBoxKey.fastForBackwardDuration, defaultValue: 10);
 
+  static bool get recordSearchHistory => GStorage.setting
+      .get(SettingBoxKey.recordSearchHistory, defaultValue: true);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -724,6 +727,7 @@ class SettingBoxKey {
       appFontWeight = 'appFontWeight',
       enableDragSubtitle = 'enableDragSubtitle',
       fastForBackwardDuration = 'fastForBackwardDuration',
+      recordSearchHistory = 'recordSearchHistory',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

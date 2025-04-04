@@ -1763,11 +1763,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                   .plPlayerController.isOpenDanmu.value
                               ? 'assets/images/video/danmu_open.svg'
                               : 'assets/images/video/danmu_close.svg',
-                          // ignore: deprecated_member_use
-                          color: videoDetailController
-                                  .plPlayerController.isOpenDanmu.value
-                              ? themeData.colorScheme.secondary
-                              : themeData.colorScheme.outline,
+                          colorFilter: ColorFilter.mode(
+                            videoDetailController
+                                    .plPlayerController.isOpenDanmu.value
+                                ? themeData.colorScheme.secondary
+                                : themeData.colorScheme.outline,
+                            BlendMode.srcIn,
+                          ),
                         ),
                       ),
                     ),
