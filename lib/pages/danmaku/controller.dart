@@ -37,7 +37,10 @@ class PlDanmakuController {
     );
     if (result['status']) {
       if (result['data'].elems.isNotEmpty) {
-        for (var element in result['data'].elems) {
+        for (DanmakuElem element in result['data'].elems) {
+          if (element.mode == 7) {
+            continue;
+          }
           int pos = element.progress ~/ 100; //每0.1秒存储一次
           if (dmSegMap[pos] == null) {
             dmSegMap[pos] = [];
