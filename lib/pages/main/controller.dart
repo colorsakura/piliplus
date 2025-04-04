@@ -38,6 +38,7 @@ class MainController extends GetxController {
   late int lastCheckUnreadAt = 0;
 
   late final mainTabBarView = GStorage.mainTabBarView;
+  late bool navSearchStreamDebounce = GStorage.navSearchStreamDebounce;
 
   @override
   void onInit() {

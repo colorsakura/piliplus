@@ -445,6 +445,9 @@ class GStorage {
   static bool get recordSearchHistory => GStorage.setting
       .get(SettingBoxKey.recordSearchHistory, defaultValue: true);
 
+  static bool get navSearchStreamDebounce => GStorage.setting
+      .get(SettingBoxKey.navSearchStreamDebounce, defaultValue: false);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -728,6 +731,7 @@ class SettingBoxKey {
       enableDragSubtitle = 'enableDragSubtitle',
       fastForBackwardDuration = 'fastForBackwardDuration',
       recordSearchHistory = 'recordSearchHistory',
+      navSearchStreamDebounce = 'navSearchStreamDebounce',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

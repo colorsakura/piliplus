@@ -264,8 +264,10 @@ class _MainAppState extends State<MainApp>
               ? null
               : StreamBuilder(
                   stream: _mainController.hideTabBar
-                      ? _mainController.bottomBarStream.stream
-                          .throttle(const Duration(milliseconds: 500))
+                      ? _mainController.navSearchStreamDebounce
+                          ? _mainController.bottomBarStream.stream
+                              .throttle(const Duration(milliseconds: 500))
+                          : _mainController.bottomBarStream.stream
                       : null,
                   initialData: true,
                   builder: (context, AsyncSnapshot snapshot) {

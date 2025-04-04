@@ -422,6 +422,19 @@ List<SettingsModel> get styleSettings => [
         needReboot: true,
       ),
       SettingsModel(
+        settingsType: SettingsType.sw1tch,
+        title: '降低收起/展开顶/底栏频率',
+        leading: const Icon(Icons.vertical_distribute),
+        setKey: SettingBoxKey.navSearchStreamDebounce,
+        defaultVal: false,
+        onChanged: (value) {
+          try {
+            Get.find<MainController>().navSearchStreamDebounce = value;
+            Get.forceAppUpdate();
+          } catch (_) {}
+        },
+      ),
+      SettingsModel(
         settingsType: SettingsType.normal,
         onTap: (setState) {
           _showQualityDialog(

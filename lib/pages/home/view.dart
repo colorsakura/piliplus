@@ -154,8 +154,10 @@ class _HomePageState extends State<HomePage>
   Widget get customAppBar {
     return StreamBuilder(
       stream: _homeController.hideSearchBar
-          ? _homeController.searchBarStream.stream
-              .throttle(const Duration(milliseconds: 500))
+          ? _mainController.navSearchStreamDebounce
+              ? _homeController.searchBarStream.stream
+                  .throttle(const Duration(milliseconds: 500))
+              : _homeController.searchBarStream.stream
           : null,
       initialData: true,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
