@@ -115,6 +115,18 @@ abstract class ReplyController extends CommonController {
     int index = 0,
     ReplyType? replyType,
   }) {
+    String? hint;
+    try {
+      if (loadingState.value is Success) {
+        SubjectControl subjectControl =
+            (loadingState.value as Success).response.subjectControl;
+        if (subjectControl.hasSwitcherType() &&
+            subjectControl.switcherType != 1 &&
+            subjectControl.hasRootText()) {
+          hint = subjectControl.rootText;
+        }
+      }
+    } catch (_) {}
     dynamic key = oid ?? replyItem.oid + replyItem.id;
     Navigator.of(context)
         .push(
@@ -132,6 +144,7 @@ abstract class ReplyController extends CommonController {
             onSave: (reply) {
               savedReplies[key] = reply;
             },
+            hint: hint,
           );
         },
         transitionDuration: const Duration(milliseconds: 500),

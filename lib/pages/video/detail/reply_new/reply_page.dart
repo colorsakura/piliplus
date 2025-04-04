@@ -17,6 +17,7 @@ class ReplyPage extends CommonPublishPage {
   final int? parent;
   final ReplyType? replyType;
   final dynamic replyItem;
+  final String? hint;
 
   const ReplyPage({
     super.key,
@@ -28,6 +29,7 @@ class ReplyPage extends CommonPublishPage {
     this.parent,
     this.replyType,
     this.replyItem,
+    this.hint,
   });
 
   @override
@@ -161,8 +163,8 @@ class _ReplyPageState extends CommonPublishPageState<ReplyPage> {
                       widget.onSave?.call(value);
                     },
                     focusNode: focusNode,
-                    decoration: const InputDecoration(
-                        hintText: "输入回复内容",
+                    decoration: InputDecoration(
+                        hintText: widget.hint ?? "输入回复内容",
                         border: InputBorder.none,
                         hintStyle: TextStyle(fontSize: 14)),
                     style: themeData.textTheme.bodyLarge,
