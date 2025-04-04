@@ -759,6 +759,15 @@ List<SettingsModel> get playSettings => [
         setKey: SettingBoxKey.enableSlideFS,
         defaultVal: true,
       ),
+      _getVideoFilterSelectModel(
+        context: Get.context!,
+        title: '快进/快退时长',
+        suffix: 's',
+        key: SettingBoxKey.fastForBackwardDuration,
+        values: [5, 10, 15],
+        defaultValue: 10,
+        isFilter: false,
+      ),
       SettingsModel(
         settingsType: SettingsType.normal,
         title: '自动启用字幕',
@@ -2479,19 +2488,23 @@ SettingsModel _getVideoFilterSelectModel({
   String? suffix,
   required String key,
   required List<int> values,
+  int defaultValue = 0,
+  bool isFilter = true,
 }) {
-  int value = GStorage.setting.get(key, defaultValue: 0);
+  int value = GStorage.setting.get(key, defaultValue: defaultValue);
   return SettingsModel(
     settingsType: SettingsType.normal,
-    title: '$title过滤',
+    title: '$title${isFilter ? '过滤' : ''}',
     leading: const Icon(Icons.timelapse_outlined),
-    getSubtitle: () => '过滤掉$title小于「$value${suffix ?? ""}」的视频',
+    getSubtitle: () => isFilter
+        ? '过滤掉$title小于「$value${suffix ?? ""}」的视频'
+        : '当前$title:「$value${suffix ?? ""}」',
     onTap: (setState) async {
       var result = await showDialog<int>(
         context: context,
         builder: (context) {
           return SelectDialog<int>(
-              title: '选择$title（0即不过滤）',
+              title: '选择$title${isFilter ? '（0即不过滤）' : ''}',
               value: value,
               values: (values
                     ..addIf(!values.contains(value), value)

@@ -257,6 +257,7 @@ class PlPlayerController {
   late final enableSlideVolumeBrightness = GStorage.enableSlideVolumeBrightness;
   late final enableSlideFS = GStorage.enableSlideFS;
   late final enableDragSubtitle = GStorage.enableDragSubtitle;
+  late final fastForBackwardDuration = GStorage.fastForBackwardDuration;
 
   /// 弹幕权重
   int danmakuWeight = 0;

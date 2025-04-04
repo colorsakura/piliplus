@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 
 class ForwardSeekIndicator extends StatefulWidget {
   // final void Function(Duration) onChanged;
-  final void Function(Duration) onSubmitted;
+  final ValueChanged<Duration> onSubmitted;
+  final int duration;
+
   const ForwardSeekIndicator({
     super.key,
     // required this.onChanged,
     required this.onSubmitted,
+    required this.duration,
   });
 
   @override
@@ -16,15 +19,16 @@ class ForwardSeekIndicator extends StatefulWidget {
 }
 
 class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
-  Duration value = const Duration(seconds: 10);
+  late Duration duration;
 
   Timer? timer;
 
   @override
   void initState() {
     super.initState();
+    duration = Duration(seconds: widget.duration);
     timer = Timer(const Duration(milliseconds: 400), () {
-      widget.onSubmitted.call(value);
+      widget.onSubmitted.call(duration);
     });
   }
 
@@ -37,12 +41,12 @@ class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
   void increment() {
     timer?.cancel();
     timer = Timer(const Duration(milliseconds: 400), () {
-      widget.onSubmitted.call(value);
+      widget.onSubmitted.call(duration);
     });
     // widget.onChanged.call(value);
     // 重复点击 快进秒数累加10
     setState(() {
-      value += const Duration(seconds: 10);
+      duration += Duration(seconds: widget.duration);
     });
   }
 
@@ -74,7 +78,7 @@ class ForwardSeekIndicatorState extends State<ForwardSeekIndicator> {
             ),
             const SizedBox(height: 8.0),
             Text(
-              '快进${value.inSeconds}秒',
+              '快进${duration.inSeconds}秒',
               style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.white,

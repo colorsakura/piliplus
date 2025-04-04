@@ -1704,6 +1704,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               child: child,
                             ),
                             child: BackwardSeekIndicator(
+                              duration:
+                                  plPlayerController.fastForBackwardDuration,
                               onSubmitted: (Duration value) {
                                 _mountSeekBackwardButton.value = false;
                                 final Player player = widget
@@ -1733,6 +1735,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                               child: child,
                             ),
                             child: ForwardSeekIndicator(
+                              duration:
+                                  plPlayerController.fastForBackwardDuration,
                               onSubmitted: (Duration value) {
                                 _mountSeekForwardButton.value = false;
                                 final Player player = widget

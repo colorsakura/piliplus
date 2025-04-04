@@ -439,6 +439,9 @@ class GStorage {
   static bool get enableDragSubtitle => GStorage.setting
       .get(SettingBoxKey.enableDragSubtitle, defaultValue: false);
 
+  static int get fastForBackwardDuration => GStorage.setting
+      .get(SettingBoxKey.fastForBackwardDuration, defaultValue: 10);
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -720,6 +723,7 @@ class SettingBoxKey {
       liveQualityCellular = 'liveQualityCellular',
       appFontWeight = 'appFontWeight',
       enableDragSubtitle = 'enableDragSubtitle',
+      fastForBackwardDuration = 'fastForBackwardDuration',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',

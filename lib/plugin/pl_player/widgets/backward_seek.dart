@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 
 class BackwardSeekIndicator extends StatefulWidget {
   // final void Function(Duration) onChanged;
-  final void Function(Duration) onSubmitted;
+  final ValueChanged<Duration> onSubmitted;
+  final int duration;
+
   const BackwardSeekIndicator({
     super.key,
     // required this.onChanged,
     required this.onSubmitted,
+    required this.duration,
   });
 
   @override
@@ -16,15 +19,16 @@ class BackwardSeekIndicator extends StatefulWidget {
 }
 
 class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
-  Duration value = const Duration(seconds: 10);
+  late Duration duration;
 
   Timer? timer;
 
   @override
   void initState() {
     super.initState();
+    duration = Duration(seconds: widget.duration);
     timer = Timer(const Duration(milliseconds: 400), () {
-      widget.onSubmitted.call(value);
+      widget.onSubmitted.call(duration);
     });
   }
 
@@ -37,12 +41,12 @@ class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
   void increment() {
     timer?.cancel();
     timer = Timer(const Duration(milliseconds: 400), () {
-      widget.onSubmitted.call(value);
+      widget.onSubmitted.call(duration);
     });
     // widget.onChanged.call(value);
     // 重复点击 快退秒数累加10
     setState(() {
-      value += const Duration(seconds: 10);
+      duration += Duration(seconds: widget.duration);
     });
   }
 
@@ -75,7 +79,7 @@ class BackwardSeekIndicatorState extends State<BackwardSeekIndicator> {
             ),
             const SizedBox(height: 8.0),
             Text(
-              '快退${value.inSeconds}秒',
+              '快退${duration.inSeconds}秒',
               style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.white,
