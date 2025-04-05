@@ -85,10 +85,10 @@ class VideoReplyReplyController extends ReplyController
                   index: hasRoot ? index! + 3 : index! + 1,
                   alignment: 0.25,
                 );
+                await Future.delayed(const Duration(milliseconds: 800));
+                await controller?.forward();
+                index = null;
               } catch (_) {}
-              await Future.delayed(const Duration(milliseconds: 800));
-              await controller?.forward();
-              index = null;
             }
           });
         }
