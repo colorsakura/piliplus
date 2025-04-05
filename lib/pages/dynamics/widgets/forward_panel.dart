@@ -39,6 +39,35 @@ InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
   );
 }
 
+Widget _blockedItem(BuildContext context, item, source) {
+  return Container(
+    width: double.infinity,
+    padding: EdgeInsets.only(
+        left: 12, right: 12, bottom: source == 'detail' ? 8 : 0),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (item.modules.moduleDynamic.major.blocked['title'] != null)
+          Text(
+            item.modules.moduleDynamic.major.blocked['title'],
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+        if (item.modules.moduleDynamic.major.blocked['hint_message'] != null)
+          Text(
+            item.modules.moduleDynamic.major.blocked['hint_message'],
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ),
+      ],
+    ),
+  );
+}
+
 Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
   switch (item.type) {
     // 图文
@@ -125,37 +154,8 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
               item.modules.moduleDynamic.additional.type,
               floor: floor,
             ),
-
-          if (item.modules.moduleDynamic.major.blocked != null) ...[
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(
-                  left: 12, right: 12, bottom: source == 'detail' ? 8 : 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (item.modules.moduleDynamic.major.blocked['title'] != null)
-                    Text(
-                      item.modules.moduleDynamic.major.blocked['title'],
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  if (item.modules.moduleDynamic.major
-                          .blocked['hint_message'] !=
-                      null)
-                    Text(
-                      item.modules.moduleDynamic.major.blocked['hint_message'],
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
+          if (item?.modules?.moduleDynamic?.major?.blocked != null)
+            _blockedItem(context, item, source),
         ],
       );
     // 视频
@@ -314,7 +314,9 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
                   item.modules.moduleDynamic.additional.type,
                   floor: floor,
                 )
-              : const SizedBox(height: 0);
+              : item?.modules?.moduleDynamic?.major?.blocked != null
+                  ? _blockedItem(context, item, source)
+                  : const SizedBox(height: 0);
     case 'DYNAMIC_TYPE_PGC':
       return videoSeasonWidget(item, context, 'pgc', floor: floor);
     case 'DYNAMIC_TYPE_PGC_UNION':
