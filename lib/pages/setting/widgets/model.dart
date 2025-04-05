@@ -1842,7 +1842,7 @@ List<SettingsModel> get extraSettings => [
         title: '显示高级弹幕',
         leading: Icon(MdiIcons.paletteAdvanced),
         setKey: SettingBoxKey.showSpecialDanmaku,
-        defaultVal: true,
+        defaultVal: false,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,

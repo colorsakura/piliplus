@@ -343,7 +343,7 @@ class GStorage {
       GStorage.setting.get(SettingBoxKey.showVipDanmaku, defaultValue: true);
 
   static bool get showSpecialDanmaku => GStorage.setting
-      .get(SettingBoxKey.showSpecialDanmaku, defaultValue: true);
+      .get(SettingBoxKey.showSpecialDanmaku, defaultValue: false);
 
   static bool get mergeDanmaku =>
       GStorage.setting.get(SettingBoxKey.mergeDanmaku, defaultValue: false);
