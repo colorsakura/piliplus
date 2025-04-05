@@ -188,7 +188,10 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     try {
-                      PiliScheme.routePushFromUrl(match[3]!);
+                      PiliScheme.videoPush(
+                        isBV ? null : int.parse(match[3]!),
+                        isBV ? match[3]! : null,
+                      );
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
                     }
