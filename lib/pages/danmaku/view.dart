@@ -105,13 +105,15 @@ class _PlDanmakuState extends State<PlDanmaku> {
     if (currentDanmakuList != null) {
       for (DanmakuElem e in currentDanmakuList) {
         if (e.mode == 7) {
-          _controller!.addDanmaku(
-            SpecialDanmakuContentItem.fromList(
-              DmUtils.decimalToColor(e.color),
-              e.fontsize.toDouble(),
-              jsonDecode(e.content),
-            ),
-          );
+          try {
+            _controller!.addDanmaku(
+              SpecialDanmakuContentItem.fromList(
+                DmUtils.decimalToColor(e.color),
+                e.fontsize.toDouble(),
+                jsonDecode(e.content.replaceAll('\n', '\\n')),
+              ),
+            );
+          } catch (_) {}
         } else {
           _controller!.addDanmaku(
             DanmakuContentItem(
