@@ -62,6 +62,39 @@ class Utils {
 
   static final _numRegExp = RegExp(r'([\d\.]+)([千万亿])?');
 
+  static Future pushDynFromId(id, {bool off = false}) async {
+    SmartDialog.showLoading();
+    dynamic res = await DynamicsHttp.dynamicDetail(id: id);
+    SmartDialog.dismiss();
+    if (res['status']) {
+      DynamicItemModel data = res['data'];
+      if (data.basic?['comment_type'] == 12) {
+        Utils.toDupNamed(
+          '/htmlRender',
+          parameters: {
+            'url': 'www.bilibili.com/opus/$id',
+            'title': '',
+            'id': id,
+            'dynamicType': 'opus'
+          },
+          off: off,
+        );
+      } else {
+        Utils.toDupNamed(
+          '/dynamicDetail',
+          arguments: {
+            'item': res['data'],
+            'floor': 1,
+            'action': 'detail',
+          },
+          off: off,
+        );
+      }
+    } else {
+      SmartDialog.showToast(res['msg']);
+    }
+  }
+
   static void reportVideo(int aid) {
     Get.toNamed(
       '/webview',
@@ -783,11 +816,14 @@ class Utils {
 
     /// 点击评论action 直接查看评论
     if (action == 'comment') {
-      Utils.toDupNamed('/dynamicDetail', arguments: {
-        'item': item,
-        'floor': floor,
-        'action': action,
-      });
+      Utils.toDupNamed(
+        '/dynamicDetail',
+        arguments: {
+          'item': item,
+          'floor': floor,
+          'action': action,
+        },
+      );
       return;
     }
 
@@ -858,8 +894,13 @@ class Utils {
       /// 纯文字动态查看
       case 'DYNAMIC_TYPE_WORD':
         debugPrint('纯文本');
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
+        Utils.toDupNamed(
+          '/dynamicDetail',
+          arguments: {
+            'item': item,
+            'floor': floor,
+          },
+        );
         break;
       case 'DYNAMIC_TYPE_LIVE_RCMD':
         DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
@@ -928,8 +969,13 @@ class Utils {
       // /// 图文动态查看
       // case 'DYNAMIC_TYPE_DRAW':
       default:
-        Utils.toDupNamed('/dynamicDetail',
-            arguments: {'item': item, 'floor': floor});
+        Utils.toDupNamed(
+          '/dynamicDetail',
+          arguments: {
+            'item': item,
+            'floor': floor,
+          },
+        );
         break;
     }
   }

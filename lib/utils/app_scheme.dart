@@ -653,22 +653,7 @@ class PiliScheme {
   static Future<bool> _onPushDynDetail(path, off) async {
     String? id = uriDigitRegExp.firstMatch(path)?.group(1);
     if (id != null) {
-      SmartDialog.showLoading();
-      dynamic res = await DynamicsHttp.dynamicDetail(id: id);
-      SmartDialog.dismiss();
-      if (res['status']) {
-        Utils.toDupNamed(
-          '/dynamicDetail',
-          arguments: {
-            'item': res['data'],
-            'floor': 1,
-            'action': 'detail',
-          },
-          off: off,
-        );
-      } else {
-        SmartDialog.showToast(res['msg']);
-      }
+      Utils.pushDynFromId(id, off: off);
       return true;
     }
     return false;

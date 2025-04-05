@@ -216,17 +216,8 @@ class SearchDynamic extends StatelessWidget {
     required String content,
   }) {
     return InkWell(
-      onTap: () async {
-        SmartDialog.showLoading();
-        dynamic res = await DynamicsHttp.dynamicDetail(id: id);
-        if (res['status']) {
-          SmartDialog.dismiss();
-          Get.toNamed('/dynamicDetail',
-              arguments: {'item': res['data'], 'floor': 1, 'action': 'detail'});
-        } else {
-          SmartDialog.dismiss();
-          SmartDialog.showToast(res['msg']);
-        }
+      onTap: () {
+        Utils.pushDynFromId(id);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

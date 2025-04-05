@@ -116,14 +116,12 @@ class DynamicsHttp {
       } catch (err) {
         return {
           'status': false,
-          'data': [],
           'msg': err.toString(),
         };
       }
     } else {
       return {
         'status': false,
-        'data': [],
         'msg': res.data['message'],
       };
     }

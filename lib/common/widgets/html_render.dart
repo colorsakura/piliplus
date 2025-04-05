@@ -1,6 +1,8 @@
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart'
     show SourceModel;
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'network_img_layer.dart';
@@ -43,16 +45,16 @@ Widget htmlRender({
             //   width: isEmote ? 22 : null,
             //   height: isEmote ? 22 : null,
             // );
+            String? clazz = attributes['class'];
             String? height = RegExp(r'max-height:(\d+)px')
                 .firstMatch('${attributes['style']}')
                 ?.group(1);
-            if (height != null) {
-              return NetworkImgLayer(
+            if (clazz?.contains('cut-off') == true || height != null) {
+              return CachedNetworkImage(
                 width: constrainedWidth,
-                height: double.parse(height),
-                src: imgUrl,
-                type: 'emote',
-                boxFit: BoxFit.contain,
+                height: height != null ? double.parse(height) : null,
+                imageUrl: Utils.thumbnailImgUrl(imgUrl),
+                fit: BoxFit.contain,
               );
             }
             return Hero(

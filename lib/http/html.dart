@@ -160,9 +160,7 @@ class HtmlHttp {
         }
       }
 
-      RegExp digitRegExp = RegExp(r'\d+');
-      Iterable<Match> matches = digitRegExp.allMatches(id);
-      String number = matches.first.group(0)!;
+      String number = RegExp(r'\d+').firstMatch(id)!.group(0)!;
       return {
         'status': true,
         'avatar': avatar,

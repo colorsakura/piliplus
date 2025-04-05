@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../../models/home/rcmd/result.dart';
 import '../../models/model_rec_video_item.dart';
 import 'stat/stat.dart';
-import '../../http/dynamics.dart';
 import '../../utils/id_utils.dart';
 import '../../utils/utils.dart';
 import '../constants.dart';
@@ -67,20 +66,9 @@ class VideoCardV extends StatelessWidget {
             id = 'cv${videoItem.param}';
           }
           if (uri.startsWith('http')) {
-            String path = Uri.parse(uri).path;
-            if (isStringNumeric(path.split('/')[1])) {
-              // 请求接口
-              var res =
-                  await DynamicsHttp.dynamicDetail(id: path.split('/')[1]);
-              if (res['status']) {
-                Get.toNamed('/dynamicDetail', arguments: {
-                  'item': res['data'],
-                  'floor': 1,
-                  'action': 'detail'
-                });
-              } else {
-                SmartDialog.showToast(res['msg']);
-              }
+            String id = Uri.parse(uri).path.split('/')[1];
+            if (isStringNumeric(id)) {
+              Utils.pushDynFromId(id);
               return;
             }
           }

@@ -69,6 +69,9 @@ class HtmlRenderController extends ReplyController {
     late dynamic res;
     if (dynamicType == 'opus' || dynamicType == 'picture') {
       res = await HtmlHttp.reqHtml(id, dynamicType);
+      if (res != null) {
+        type = res['commentType'];
+      }
     } else {
       res = await HtmlHttp.reqReadHtml(id, dynamicType);
     }
