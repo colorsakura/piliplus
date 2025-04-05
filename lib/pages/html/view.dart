@@ -851,35 +851,44 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
 
   Widget get _buildHeader => Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-        child: Row(
-          children: [
-            NetworkImgLayer(
-              width: 40,
-              height: 40,
-              type: 'avatar',
-              src: _htmlRenderCtr.response['avatar']!,
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _htmlRenderCtr.response['uname'],
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+        child: GestureDetector(
+          onTap: () {
+            if (_htmlRenderCtr.mid != null) {
+              Get.toNamed('/member?mid=${_htmlRenderCtr.mid}');
+            }
+          },
+          child: Row(
+            children: [
+              NetworkImgLayer(
+                width: 40,
+                height: 40,
+                type: 'avatar',
+                src: _htmlRenderCtr.response['avatar']!,
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _htmlRenderCtr.response['uname'],
+                    style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
+                    ),
                   ),
-                ),
-                Text(
-                  _htmlRenderCtr.response['updateTime'],
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
+                  Text(
+                    _htmlRenderCtr.response['updateTime'],
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontSize:
+                          Theme.of(context).textTheme.labelSmall!.fontSize,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const Spacer(),
-          ],
+                ],
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       );
 

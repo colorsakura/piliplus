@@ -20,6 +20,7 @@ class HtmlRenderController extends ReplyController {
   RxInt oid = (-1).obs;
   late Map response;
   int? floor;
+  dynamic mid;
 
   Rx<DynamicItemModel> item = DynamicItemModel().obs;
 
@@ -77,6 +78,7 @@ class HtmlRenderController extends ReplyController {
     }
     if (res != null) {
       response = res;
+      mid = res['mid'];
       oid.value = res['commentId'];
       if (Accounts.main.isLogin && !MineController.anonymity.value) {
         VideoHttp.historyReport(aid: oid.value, type: 5);

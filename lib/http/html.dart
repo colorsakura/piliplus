@@ -70,8 +70,20 @@ class HtmlHttp {
           .split(' ')[1]
           .split('-');
       // List imgList = opusDetail.querySelectorAll('bili-album__preview__picture__img');
+
+      dynamic mid;
+      try {
+        final regex = RegExp(r'window\.__INITIAL_STATE__\s*=\s*(\{.*?\});');
+        final match = regex.firstMatch(response.data);
+        if (match != null) {
+          final json = jsonDecode(match.group(1)!);
+          mid = json['detail']['basic']['uid'];
+        }
+      } catch (_) {}
+
       return {
         'status': true,
+        'mid': mid,
         'avatar': avatar,
         'uname': uname,
         'updateTime': updateTime,
@@ -115,12 +127,11 @@ class HtmlHttp {
       // String avatar =
       //     authorHeader.querySelector('.bili-avatar-img')!.attributes['data-src']!;
       // 正则寻找形如"author":{"mid":\d+,"name":".*","face":"xxxx"的匹配项
-      String avatar =
-          RegExp(r'"author":\{"mid":\d+?,"name":".+?","face":"(.+?)"')
-              .firstMatch(response.data)!
-              .group(1)!
-              .replaceAll(r'\u002F', '/')
-              .split('@')[0];
+      final match =
+          RegExp(r'"author":\{"mid":(\d+)?,"name":".+?","face":"(.+?)"')
+              .firstMatch(response.data)!;
+      String mid = match.group(1)!;
+      String avatar = match.group(2)!.replaceAll(r'\u002F', '/').split('@')[0];
       // debugPrint(avatar);
       String uname = authorHeader.querySelector('.up-name')!.text.trim();
       // 动态详情
@@ -163,6 +174,7 @@ class HtmlHttp {
       String number = RegExp(r'\d+').firstMatch(id)!.group(0)!;
       return {
         'status': true,
+        'mid': mid,
         'avatar': avatar,
         'uname': uname,
         'updateTime': '',
