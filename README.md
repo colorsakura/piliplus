@@ -47,6 +47,7 @@
 
 ## feat
 
+- [x] 高级弹幕 by @My-Responsitories
 - [x] 取消/置顶评论
 - [x] 记笔记
 - [x] 多账号支持 by @My-Responsitories

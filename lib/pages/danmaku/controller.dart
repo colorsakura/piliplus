@@ -38,7 +38,7 @@ class PlDanmakuController {
     if (result['status']) {
       if (result['data'].elems.isNotEmpty) {
         for (DanmakuElem element in result['data'].elems) {
-          if (element.mode == 7) {
+          if (element.mode == 7 && !plPlayerController.showSpecialDanmaku) {
             continue;
           }
           int pos = element.progress ~/ 100; //每0.1秒存储一次

@@ -12,14 +12,11 @@ class DmUtils {
   }
 
   static DanmakuItemType getPosition(int mode) {
-    DanmakuItemType type = DanmakuItemType.scroll;
-    if (mode >= 1 && mode <= 3) {
-      type = DanmakuItemType.scroll;
-    } else if (mode == 4) {
-      type = DanmakuItemType.bottom;
-    } else if (mode == 5) {
-      type = DanmakuItemType.top;
-    }
-    return type;
+    return switch (mode) {
+      4 => DanmakuItemType.bottom,
+      5 => DanmakuItemType.top,
+      7 => DanmakuItemType.special,
+      _ => DanmakuItemType.scroll,
+    };
   }
 }

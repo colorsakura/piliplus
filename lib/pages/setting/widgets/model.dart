@@ -1839,6 +1839,13 @@ List<SettingsModel> get extraSettings => [
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
+        title: '显示高级弹幕',
+        leading: Icon(MdiIcons.paletteAdvanced),
+        setKey: SettingBoxKey.showSpecialDanmaku,
+        defaultVal: true,
+      ),
+      SettingsModel(
+        settingsType: SettingsType.sw1tch,
         title: '合并弹幕',
         subtitle: '合并一段时间内获取到的相同弹幕',
         leading: const Icon(Icons.merge),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:PiliPlus/grpc/dm/v1/dm.pb.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -103,22 +104,32 @@ class _PlDanmakuState extends State<PlDanmaku> {
         _plDanmakuController.getCurrentDanmaku(currentPosition);
     if (currentDanmakuList != null) {
       for (DanmakuElem e in currentDanmakuList) {
-        _controller!.addDanmaku(
-          DanmakuContentItem(
-            e.content,
-            color: playerController.blockTypes.contains(6)
-                ? Colors.white
-                : DmUtils.decimalToColor(e.color),
-            type: DmUtils.getPosition(e.mode),
-            isColorful: playerController.showVipDanmaku &&
-                    e.colorful == DmColorfulType.VipGradualColor
-                ? true
-                : null,
-            count: widget.playerController.mergeDanmaku && e.hasAttr()
-                ? e.attr
-                : null,
-          ),
-        );
+        if (e.mode == 7) {
+          _controller!.addDanmaku(
+            SpecialDanmakuContentItem.fromList(
+              DmUtils.decimalToColor(e.color),
+              e.fontsize.toDouble(),
+              jsonDecode(e.content),
+            ),
+          );
+        } else {
+          _controller!.addDanmaku(
+            DanmakuContentItem(
+              e.content,
+              color: playerController.blockTypes.contains(6)
+                  ? Colors.white
+                  : DmUtils.decimalToColor(e.color),
+              type: DmUtils.getPosition(e.mode),
+              isColorful: playerController.showVipDanmaku &&
+                      e.colorful == DmColorfulType.VipGradualColor
+                  ? true
+                  : null,
+              count: widget.playerController.mergeDanmaku && e.hasAttr()
+                  ? e.attr
+                  : null,
+            ),
+          );
+        }
       }
     }
   }

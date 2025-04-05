@@ -287,6 +287,7 @@ class PlPlayerController {
   late int subtitlePaddingB = GStorage.subtitlePaddingB;
   late double subtitleBgOpaticy = GStorage.subtitleBgOpaticy;
   late bool showVipDanmaku = GStorage.showVipDanmaku;
+  late bool showSpecialDanmaku = GStorage.showSpecialDanmaku;
   late double subtitleStrokeWidth = GStorage.subtitleStrokeWidth;
   late int subtitleFontWeight = GStorage.subtitleFontWeight;
 

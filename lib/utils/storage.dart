@@ -342,6 +342,9 @@ class GStorage {
   static bool get showVipDanmaku =>
       GStorage.setting.get(SettingBoxKey.showVipDanmaku, defaultValue: true);
 
+  static bool get showSpecialDanmaku => GStorage.setting
+      .get(SettingBoxKey.showSpecialDanmaku, defaultValue: true);
+
   static bool get mergeDanmaku =>
       GStorage.setting.get(SettingBoxKey.mergeDanmaku, defaultValue: false);
 
@@ -695,6 +698,7 @@ class SettingBoxKey {
       refreshDragPercentage = 'refreshDragPercentage',
       refreshDisplacement = 'refreshDisplacement',
       showVipDanmaku = 'showVipDanmaku',
+      showSpecialDanmaku = 'showSpecialDanmaku',
       mergeDanmaku = 'mergeDanmaku',
       showHotRcmd = 'showHotRcmd',
       audioNormalization = 'audioNormalization',
