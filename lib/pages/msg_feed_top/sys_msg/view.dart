@@ -151,7 +151,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
   InlineSpan _buildContent(String content) {
     final List<InlineSpan> spanChildren = <InlineSpan>[];
     RegExp urlRegExp = RegExp(
-        r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*|【(.*?)】');
+        r'#\{([^}]*)\}\{([^}]*)\}|https?:\/\/[^\s/\$.?#].[^\s]*|www\.[^\s/\$.?#].[^\s]*|【(.*?)】|（(\d+)）');
     content.splitMapJoin(
       urlRegExp,
       onMatch: (Match match) {
@@ -200,9 +200,29 @@ class _SysMsgPageState extends State<SysMsgPage> {
             );
             spanChildren.add(TextSpan(text: '】'));
           } catch (e) {
+            spanChildren.add(TextSpan(text: match[0]));
+          }
+        } else if (matchStr.startsWith('（')) {
+          try {
+            match[4]; // dynId
+            spanChildren.add(TextSpan(text: '（'));
             spanChildren.add(
-              TextSpan(text: match[0]),
+              TextSpan(
+                text: '查看动态',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    try {
+                      Utils.pushDynFromId(match[4]);
+                    } catch (err) {
+                      SmartDialog.showToast(err.toString());
+                    }
+                  },
+              ),
             );
+            spanChildren.add(TextSpan(text: '）'));
+          } catch (e) {
+            spanChildren.add(TextSpan(text: match[0]));
           }
         } else {
           spanChildren.add(
