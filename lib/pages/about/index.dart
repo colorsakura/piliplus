@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/services/loggeer.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:PiliPlus/models/github/latest.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -186,6 +188,19 @@ Commit Hash: ${BuildConfig.commitHash}''',
               style: subTitleStyle,
             ),
           ),
+          if (Platform.isAndroid)
+            ListTile(
+              onTap: () {
+                Utils.channel.invokeMethod('linkVerifySettings');
+              },
+              leading: Icon(MdiIcons.linkBoxOutline),
+              title: const Text('打开受支持的链接'),
+              trailing: Icon(
+                Icons.arrow_forward,
+                size: 16,
+                color: outline,
+              ),
+            ),
           ListTile(
             onTap: () {
               showDialog(

@@ -7,8 +7,10 @@ import com.ryanheise.audioservice.AudioServiceActivity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.WindowManager.LayoutParams
 import kotlin.system.exitProcess
 
@@ -55,6 +57,22 @@ class MainActivity : AudioServiceActivity() {
                     }
                     startActivity(intent)
                 } catch (e: Exception) {}
+            } else if (call.method == "linkVerifySettings") {
+                try {
+                    val intent = Intent(android.provider.Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS,
+                        Uri.parse("package:" + context.packageName))
+                    context.startActivity(intent)
+                } catch (t: Throwable) {
+                    try {
+                        val intent = Intent("android.intent.action.MAIN", Uri.parse("package:" + context.packageName))
+                        intent.setClassName("com.android.settings", "com.android.settings.applications.InstalledAppOpenByDefaultActivity")
+                        context.startActivity(intent)
+                    } catch (t2: Throwable) {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("package:" + context.packageName))
+                        context.startActivity(intent)
+                    }
+                }
             } else {
                 result.notImplemented()
             }
