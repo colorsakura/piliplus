@@ -11,11 +11,13 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
   const LiveHeaderControl({
     required this.plPlayerController,
     this.floating,
+    required this.onSendDanmaku,
     super.key,
   });
 
   final Floating? floating;
   final PlPlayerController plPlayerController;
+  final VoidCallback onSendDanmaku;
 
   @override
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
@@ -31,6 +33,22 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          SizedBox(
+            width: 42,
+            height: 34,
+            child: IconButton(
+              tooltip: '发弹幕',
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+              ),
+              onPressed: onSendDanmaku,
+              icon: const Icon(
+                Icons.comment_outlined,
+                size: 19,
+                color: Colors.white,
+              ),
+            ),
+          ),
           Obx(
             () => IconButton(
               onPressed: plPlayerController.setOnlyPlayAudio,

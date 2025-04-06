@@ -1047,7 +1047,6 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
                   !plPlayerController.showControls.value;
             },
             onDoubleTapDown: (TapDownDetails details) {
-              // live模式下禁用 锁定时🔒禁用
               if (plPlayerController.controlsLock.value) {
                 return;
               }

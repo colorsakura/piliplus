@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/http/danmaku.dart';
+import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/pages/common/common_publish_page.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
@@ -13,9 +14,14 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class SendDanmakuPanel extends CommonPublishPage {
+  // video
   final dynamic cid;
   final dynamic bvid;
   final dynamic progress;
+
+  // live
+  final dynamic roomId;
+
   final ValueChanged<DanmakuContentItem> callback;
   final bool darkVideoPage;
 
@@ -23,9 +29,10 @@ class SendDanmakuPanel extends CommonPublishPage {
     super.key,
     super.initialValue,
     super.onSave,
-    required this.cid,
-    required this.bvid,
-    required this.progress,
+    this.cid,
+    this.bvid,
+    this.progress,
+    this.roomId,
     required this.callback,
     required this.darkVideoPage,
   });
@@ -313,27 +320,28 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
       ),
       child: Row(
         children: [
-          Obx(
-            () => iconButton(
-              context: context,
-              tooltip: '弹幕样式',
-              onPressed: () {
-                if (selectKeyboard.value) {
-                  selectKeyboard.value = false;
-                  updatePanelType(PanelType.emoji);
-                } else {
-                  selectKeyboard.value = true;
-                  updatePanelType(PanelType.keyboard);
-                }
-              },
-              bgColor: Colors.transparent,
-              iconSize: 24,
-              icon: Icons.text_format,
-              iconColor: selectKeyboard.value.not
-                  ? themeData.colorScheme.primary
-                  : themeData.colorScheme.onSurfaceVariant,
+          if (widget.roomId == null)
+            Obx(
+              () => iconButton(
+                context: context,
+                tooltip: '弹幕样式',
+                onPressed: () {
+                  if (selectKeyboard.value) {
+                    selectKeyboard.value = false;
+                    updatePanelType(PanelType.emoji);
+                  } else {
+                    selectKeyboard.value = true;
+                    updatePanelType(PanelType.keyboard);
+                  }
+                },
+                bgColor: Colors.transparent,
+                iconSize: 24,
+                icon: Icons.text_format,
+                iconColor: selectKeyboard.value.not
+                    ? themeData.colorScheme.primary
+                    : themeData.colorScheme.onSurfaceVariant,
+              ),
             ),
-          ),
           const SizedBox(width: 12),
           Expanded(
             child: Form(
@@ -441,33 +449,58 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
   @override
   Future onCustomPublish({required String message, List? pictures}) async {
     SmartDialog.showLoading(msg: '发送中...');
-    final dynamic res = await DanmakuHttp.shootDanmaku(
-      oid: widget.cid,
-      bvid: widget.bvid,
-      progress: widget.progress,
-      msg: editController.text,
-      mode: _mode.value,
-      fontsize: _fontsize.value,
-      color: _color.value.value & 0xFFFFFF,
-    );
-    SmartDialog.dismiss();
-    if (res['status']) {
-      Get.back();
-      SmartDialog.showToast('发送成功');
-      widget.callback(
-        DanmakuContentItem(
-          editController.text,
-          color: _color.value,
-          type: switch (_mode.value) {
-            5 => DanmakuItemType.top,
-            4 => DanmakuItemType.bottom,
-            _ => DanmakuItemType.scroll,
-          },
-          selfSend: true,
-        ),
+    if (widget.roomId != null) {
+      final res = await LiveHttp.sendLiveMsg(
+        roomId: widget.roomId,
+        msg: editController.text,
       );
+      if (res['status']) {
+        Get.back();
+        SmartDialog.showToast('发送成功');
+        widget.callback(
+          DanmakuContentItem(
+            editController.text,
+            color: _color.value,
+            type: switch (_mode.value) {
+              5 => DanmakuItemType.top,
+              4 => DanmakuItemType.bottom,
+              _ => DanmakuItemType.scroll,
+            },
+            selfSend: true,
+          ),
+        );
+      } else {
+        SmartDialog.showToast('发送失败: ${res['msg']}');
+      }
     } else {
-      SmartDialog.showToast('发送失败: ${res['msg']}');
+      final dynamic res = await DanmakuHttp.shootDanmaku(
+        oid: widget.cid,
+        bvid: widget.bvid,
+        progress: widget.progress,
+        msg: editController.text,
+        mode: _mode.value,
+        fontsize: _fontsize.value,
+        color: _color.value.value & 0xFFFFFF,
+      );
+      SmartDialog.dismiss();
+      if (res['status']) {
+        Get.back();
+        SmartDialog.showToast('发送成功');
+        widget.callback(
+          DanmakuContentItem(
+            editController.text,
+            color: _color.value,
+            type: switch (_mode.value) {
+              5 => DanmakuItemType.top,
+              4 => DanmakuItemType.bottom,
+              _ => DanmakuItemType.scroll,
+            },
+            selfSend: true,
+          ),
+        );
+      } else {
+        SmartDialog.showToast('发送失败: ${res['msg']}');
+      }
     }
   }
 }

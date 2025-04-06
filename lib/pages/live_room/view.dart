@@ -44,7 +44,6 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   bool isPlay = true;
   Floating? floating;
 
-  late final _isLogin = GStorage.userInfo.get('userInfoCache') != null;
   late final _node = FocusNode();
   late final _ctr = TextEditingController();
   StreamSubscription? _listener;
@@ -175,6 +174,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 headerControl: LiveHeaderControl(
                   plPlayerController: plPlayerController,
                   floating: floating,
+                  onSendDanmaku: _liveRoomController.onSendDanmaku,
                 ),
                 bottomControl: BottomControl(
                   plPlayerController: plPlayerController,
@@ -601,18 +601,25 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       );
 
   void _onSendMsg(msg) async {
-    if (!_isLogin) {
+    if (!_liveRoomController.isLogin) {
       SmartDialog.showToast('未登录');
       return;
     }
     dynamic res = await LiveHttp.sendLiveMsg(
         roomId: _liveRoomController.roomId, msg: msg);
     if (res['status']) {
-      _ctr.clear();
       if (mounted) {
         FocusScope.of(context).unfocus();
       }
       SmartDialog.showToast('发送成功');
+      plPlayerController.danmakuController?.addDanmaku(
+        DanmakuContentItem(
+          _ctr.text,
+          type: DanmakuItemType.scroll,
+          selfSend: true,
+        ),
+      );
+      _ctr.clear();
     } else {
       SmartDialog.showToast(res['msg']);
     }
