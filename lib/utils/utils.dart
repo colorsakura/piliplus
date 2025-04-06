@@ -572,17 +572,7 @@ class Utils {
                 child: Column(
                   children: [
                     const Spacer(flex: 3),
-                    Expanded(
-                      flex: 7,
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        removeBottom: true,
-                        removeLeft: true,
-                        removeRight: true,
-                        child: child,
-                      ),
-                    ),
+                    Expanded(flex: 7, child: child),
                     if (isFullScreen() && padding != null)
                       SizedBox(height: padding),
                   ],
@@ -592,16 +582,7 @@ class Utils {
                 child: Row(
                   children: [
                     const Spacer(),
-                    Expanded(
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        removeBottom: true,
-                        removeLeft: true,
-                        removeRight: true,
-                        child: child,
-                      ),
-                    ),
+                    Expanded(child: child),
                   ],
                 ),
               );

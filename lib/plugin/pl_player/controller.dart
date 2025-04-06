@@ -137,10 +137,6 @@ class PlPlayerController {
     {'attr': BoxFit.scaleDown, 'desc': '限制', 'toast': '仅超出时缩小至播放器尺寸'},
   ];
 
-  PreferredSizeWidget? headerControl;
-  PreferredSizeWidget? bottomControl;
-  Widget? danmuWidget;
-
   String get bvid => _bvid;
   int get cid => _cid;
 

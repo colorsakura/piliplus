@@ -98,13 +98,27 @@ class HeaderControlState extends State<HeaderControl> {
     super.dispose();
   }
 
-  /// 设置面板
-  void showSettingSheet() {
+  void showBottomSheet(StatefulWidgetBuilder builder, {double? padding}) {
     Utils.showFSSheet(
       context,
       isFullScreen: () => isFullScreen,
-      child: Theme(
-        data: Theme.of(context),
+      padding: padding,
+      child: StatefulBuilder(
+        builder: (context, setState) => plPlayerController.darkVideoPage
+            ? Theme(
+                data: Theme.of(this.context),
+                child: builder(this.context, setState),
+              )
+            : builder(context, setState),
+      ),
+    );
+  }
+
+  /// 设置面板
+  void showSettingSheet() {
+    showBottomSheet(
+      (context, setState) => Material(
+        color: Colors.transparent,
         child: Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
@@ -112,476 +126,467 @@ class HeaderControlState extends State<HeaderControl> {
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           margin: const EdgeInsets.all(12),
-          child: Material(
-            color: Colors.transparent,
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                const SizedBox(height: 14),
-                // ListTile(
-                //   onTap: () {},
-                //   dense: true,
-                //   enabled: false,
-                //   leading:
-                //       const Icon(Icons.network_cell_outlined, size: 20),
-                //   title: Text('省流模式', style: titleStyle),
-                //   subtitle: Text('低画质 ｜ 减少视频缓存', style: subTitleStyle),
-                //   trailing: Transform.scale(
-                //     scale: 0.75,
-                //     child: Switch(
-                //       thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                //           (Set<WidgetState> states) {
-                //         if (states.isNotEmpty &&
-                //             states.first == WidgetState.selected) {
-                //           return const Icon(Icons.done);
-                //         }
-                //         return null; // All other states will use the default thumbIcon.
-                //       }),
-                //       value: false,
-                //       onChanged: (value) => {},
-                //     ),
-                //   ),
-                // ),
-                // if (videoDetailCtr.userInfo != null)
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const SizedBox(height: 14),
+              // ListTile(
+              //   onTap: () {},
+              //   dense: true,
+              //   enabled: false,
+              //   leading:
+              //       const Icon(Icons.network_cell_outlined, size: 20),
+              //   title: Text('省流模式', style: titleStyle),
+              //   subtitle: Text('低画质 ｜ 减少视频缓存', style: subTitleStyle),
+              //   trailing: Transform.scale(
+              //     scale: 0.75,
+              //     child: Switch(
+              //       thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+              //           (Set<WidgetState> states) {
+              //         if (states.isNotEmpty &&
+              //             states.first == WidgetState.selected) {
+              //           return const Icon(Icons.done);
+              //         }
+              //         return null; // All other states will use the default thumbIcon.
+              //       }),
+              //       value: false,
+              //       onChanged: (value) => {},
+              //     ),
+              //   ),
+              // ),
+              // if (videoDetailCtr.userInfo != null)
+              ListTile(
+                dense: true,
+                onTap: () {
+                  Get.back();
+                  videoIntroController.viewLater();
+                },
+                leading: const Icon(Icons.watch_later_outlined, size: 20),
+                title: const Text('添加至「稍后再看」', style: titleStyle),
+              ),
+              if (videoDetailCtr.epId == null)
                 ListTile(
                   dense: true,
                   onTap: () {
                     Get.back();
-                    videoIntroController.viewLater();
+                    videoDetailCtr.showNoteList(context);
                   },
-                  leading: const Icon(Icons.watch_later_outlined, size: 20),
-                  title: const Text('添加至「稍后再看」', style: titleStyle),
+                  leading: const Icon(Icons.note_alt_outlined, size: 20),
+                  title: const Text('查看笔记', style: titleStyle),
                 ),
-                if (videoDetailCtr.epId == null)
-                  ListTile(
-                    dense: true,
-                    onTap: () {
-                      Get.back();
-                      videoDetailCtr.showNoteList(context);
-                    },
-                    leading: const Icon(Icons.note_alt_outlined, size: 20),
-                    title: const Text('查看笔记', style: titleStyle),
-                  ),
-                if (widget.videoDetailCtr.videoItem['pic'] != null)
-                  ListTile(
-                    dense: true,
-                    onTap: () {
-                      Get.back();
-                      DownloadUtils.downloadImg(
-                        context,
-                        [widget.videoDetailCtr.videoItem['pic']],
-                      );
-                    },
-                    leading: const Icon(Icons.image_outlined, size: 20),
-                    title: const Text('保存封面', style: titleStyle),
-                  ),
+              if (widget.videoDetailCtr.videoItem['pic'] != null)
                 ListTile(
                   dense: true,
-                  onTap: () =>
-                      {Get.back(), Utils.scheduleExit(context, isFullScreen)},
-                  leading: const Icon(Icons.hourglass_top_outlined, size: 20),
-                  title: const Text('定时关闭', style: titleStyle),
-                ),
-                ListTile(
-                  dense: true,
-                  onTap: () => {
-                    Get.back(),
-                    videoDetailCtr.queryVideoUrl(
-                      videoDetailCtr.playedTime,
-                    )
+                  onTap: () {
+                    Get.back();
+                    DownloadUtils.downloadImg(
+                      context,
+                      [widget.videoDetailCtr.videoItem['pic']],
+                    );
                   },
-                  leading: const Icon(Icons.refresh_outlined, size: 20),
-                  title: const Text('重载视频', style: titleStyle),
+                  leading: const Icon(Icons.image_outlined, size: 20),
+                  title: const Text('保存封面', style: titleStyle),
                 ),
-                ListTile(
-                  dense: true,
-                  leading: const Icon(Icons.stay_current_landscape_outlined,
-                      size: 20),
-                  title: Row(
-                    children: [
-                      const Text(
-                        '超分辨率',
-                        strutStyle: StrutStyle(leading: 0, height: 1),
-                        style: TextStyle(
-                          height: 1,
-                          fontSize: 14,
-                        ),
+              ListTile(
+                dense: true,
+                onTap: () =>
+                    {Get.back(), Utils.scheduleExit(context, isFullScreen)},
+                leading: const Icon(Icons.hourglass_top_outlined, size: 20),
+                title: const Text('定时关闭', style: titleStyle),
+              ),
+              ListTile(
+                dense: true,
+                onTap: () => {
+                  Get.back(),
+                  videoDetailCtr.queryVideoUrl(
+                    videoDetailCtr.playedTime,
+                  )
+                },
+                leading: const Icon(Icons.refresh_outlined, size: 20),
+                title: const Text('重载视频', style: titleStyle),
+              ),
+              ListTile(
+                dense: true,
+                leading:
+                    const Icon(Icons.stay_current_landscape_outlined, size: 20),
+                title: Row(
+                  children: [
+                    const Text(
+                      '超分辨率',
+                      strutStyle: StrutStyle(leading: 0, height: 1),
+                      style: TextStyle(
+                        height: 1,
+                        fontSize: 14,
                       ),
-                      const SizedBox(width: 10),
-                      Builder(
-                        builder: (context) => PopupMenuButton(
-                          initialValue: SuperResolutionType
-                              .values[widget.controller.superResolutionType],
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  SuperResolutionType
-                                      .values[
-                                          widget.controller.superResolutionType]
-                                      .title,
-                                  strutStyle: StrutStyle(leading: 0, height: 1),
-                                  style: TextStyle(
-                                    height: 1,
-                                    fontSize: 14,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
-                                ),
-                                Icon(
-                                  MdiIcons.unfoldMoreHorizontal,
-                                  size: MediaQuery.textScalerOf(context)
-                                      .scale(14),
+                    ),
+                    const SizedBox(width: 10),
+                    Builder(
+                      builder: (context) => PopupMenuButton(
+                        initialValue: SuperResolutionType
+                            .values[widget.controller.superResolutionType],
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                SuperResolutionType
+                                    .values[
+                                        widget.controller.superResolutionType]
+                                    .title,
+                                strutStyle: StrutStyle(leading: 0, height: 1),
+                                style: TextStyle(
+                                  height: 1,
+                                  fontSize: 14,
                                   color:
                                       Theme.of(context).colorScheme.secondary,
-                                )
-                              ],
-                            ),
+                                ),
+                              ),
+                              Icon(
+                                MdiIcons.unfoldMoreHorizontal,
+                                size:
+                                    MediaQuery.textScalerOf(context).scale(14),
+                                color: Theme.of(context).colorScheme.secondary,
+                              )
+                            ],
                           ),
-                          onSelected: (value) {
-                            widget.controller.setShader(value.index);
-                            if (context.mounted) {
-                              (context as Element).markNeedsBuild();
-                            }
+                        ),
+                        onSelected: (value) {
+                          widget.controller.setShader(value.index);
+                          if (context.mounted) {
+                            (context as Element).markNeedsBuild();
+                          }
+                        },
+                        itemBuilder: (context) => SuperResolutionType.values
+                            .map((item) => PopupMenuItem(
+                                  value: item,
+                                  child: Text(item.title),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                dense: true,
+                title: const Text('CDN 设置', style: titleStyle),
+                leading: Icon(MdiIcons.cloudPlusOutline, size: 20),
+                subtitle: Text(
+                  '当前：${CDNServiceCode.fromCode(defaultCDNService)!.description}，无法播放请切换',
+                  style: subTitleStyle,
+                ),
+                onTap: () async {
+                  Get.back();
+                  String? result = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CdnSelectDialog(
+                          sample: videoInfo.dash?.video?.first);
+                    },
+                  );
+                  if (result != null) {
+                    defaultCDNService = result;
+                    setting.put(SettingBoxKey.CDNService, result);
+                    SmartDialog.showToast(
+                        '已设置为 ${CDNServiceCode.fromCode(result)!.description}，正在重载视频');
+                    setState(() {});
+                    videoDetailCtr.queryVideoUrl(
+                      videoDetailCtr.playedTime,
+                    );
+                  }
+                },
+              ),
+              SelfSizedHorizontalList(
+                itemCount: 4,
+                gapSize: 10,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                childBuilder: (index) {
+                  return switch (index) {
+                    0 => Obx(
+                        () => ActionRowLineItem(
+                          iconData: Icons.flip,
+                          onTap: () {
+                            widget.controller.flipX.value =
+                                !widget.controller.flipX.value;
                           },
-                          itemBuilder: (context) => SuperResolutionType.values
-                              .map((item) => PopupMenuItem(
-                                    value: item,
-                                    child: Text(item.title),
-                                  ))
-                              .toList(),
+                          text: " 左右翻转 ",
+                          selectStatus: widget.controller.flipX.value,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  dense: true,
-                  title: const Text('CDN 设置', style: titleStyle),
-                  leading: Icon(MdiIcons.cloudPlusOutline, size: 20),
-                  subtitle: Text(
-                    '当前：${CDNServiceCode.fromCode(defaultCDNService)!.description}，无法播放请切换',
-                    style: subTitleStyle,
-                  ),
-                  onTap: () async {
-                    Get.back();
-                    String? result = await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CdnSelectDialog(
-                            sample: videoInfo.dash?.video?.first);
-                      },
-                    );
-                    if (result != null) {
-                      defaultCDNService = result;
-                      setting.put(SettingBoxKey.CDNService, result);
-                      SmartDialog.showToast(
-                          '已设置为 ${CDNServiceCode.fromCode(result)!.description}，正在重载视频');
-                      setState(() {});
-                      videoDetailCtr.queryVideoUrl(
-                        videoDetailCtr.playedTime,
-                      );
-                    }
-                  },
-                ),
-                SelfSizedHorizontalList(
-                  itemCount: 4,
-                  gapSize: 10,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  childBuilder: (index) {
-                    return switch (index) {
-                      0 => Obx(
-                          () => ActionRowLineItem(
-                            iconData: Icons.flip,
-                            onTap: () {
-                              widget.controller.flipX.value =
-                                  !widget.controller.flipX.value;
-                            },
-                            text: " 左右翻转 ",
-                            selectStatus: widget.controller.flipX.value,
-                          ),
-                        ),
-                      1 => Obx(
-                          () => ActionRowLineItem(
-                            icon: Transform.rotate(
-                              angle: pi / 2,
-                              child: Icon(
-                                Icons.flip,
-                                size: 13,
-                                color: widget.controller.flipY.value
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer
-                                    : Theme.of(context).colorScheme.outline,
-                              ),
+                    1 => Obx(
+                        () => ActionRowLineItem(
+                          icon: Transform.rotate(
+                            angle: pi / 2,
+                            child: Icon(
+                              Icons.flip,
+                              size: 13,
+                              color: widget.controller.flipY.value
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
+                                  : Theme.of(context).colorScheme.outline,
                             ),
-                            onTap: () {
-                              widget.controller.flipY.value =
-                                  !widget.controller.flipY.value;
-                            },
-                            text: " 上下翻转 ",
-                            selectStatus: widget.controller.flipY.value,
                           ),
+                          onTap: () {
+                            widget.controller.flipY.value =
+                                !widget.controller.flipY.value;
+                          },
+                          text: " 上下翻转 ",
+                          selectStatus: widget.controller.flipY.value,
                         ),
-                      2 => Obx(
-                          () => ActionRowLineItem(
-                            iconData: Icons.headphones,
-                            onTap: () {
-                              widget.controller.onlyPlayAudio.value =
-                                  !widget.controller.onlyPlayAudio.value;
-                              widget.videoDetailCtr.playerInit();
-                            },
-                            text: " 听视频 ",
-                            selectStatus: widget.controller.onlyPlayAudio.value,
-                          ),
+                      ),
+                    2 => Obx(
+                        () => ActionRowLineItem(
+                          iconData: Icons.headphones,
+                          onTap: () {
+                            widget.controller.onlyPlayAudio.value =
+                                !widget.controller.onlyPlayAudio.value;
+                            widget.videoDetailCtr.playerInit();
+                          },
+                          text: " 听视频 ",
+                          selectStatus: widget.controller.onlyPlayAudio.value,
                         ),
-                      3 => Obx(
-                          () => ActionRowLineItem(
-                            iconData: Icons.play_circle_outline,
-                            onTap:
-                                widget.controller.setContinuePlayInBackground,
-                            text: " 后台播放 ",
-                            selectStatus: widget
-                                .controller.continuePlayInBackground.value,
-                          ),
+                      ),
+                    3 => Obx(
+                        () => ActionRowLineItem(
+                          iconData: Icons.play_circle_outline,
+                          onTap: widget.controller.setContinuePlayInBackground,
+                          text: " 后台播放 ",
+                          selectStatus:
+                              widget.controller.continuePlayInBackground.value,
                         ),
-                      int() => throw UnimplementedError(),
-                    };
-                  },
-                ),
+                      ),
+                    int() => throw UnimplementedError(),
+                  };
+                },
+              ),
 
+              ListTile(
+                dense: true,
+                onTap: () => {Get.back(), showSetVideoQa()},
+                leading: const Icon(Icons.play_circle_outline, size: 20),
+                title: const Text('选择画质', style: titleStyle),
+                subtitle: Text(
+                    '当前画质 ${videoDetailCtr.currentVideoQa.description}',
+                    style: subTitleStyle),
+              ),
+              if (videoDetailCtr.currentAudioQa != null)
                 ListTile(
                   dense: true,
-                  onTap: () => {Get.back(), showSetVideoQa()},
-                  leading: const Icon(Icons.play_circle_outline, size: 20),
-                  title: const Text('选择画质', style: titleStyle),
+                  onTap: () => {Get.back(), showSetAudioQa()},
+                  leading: const Icon(Icons.album_outlined, size: 20),
+                  title: const Text('选择音质', style: titleStyle),
                   subtitle: Text(
-                      '当前画质 ${videoDetailCtr.currentVideoQa.description}',
+                      '当前音质 ${videoDetailCtr.currentAudioQa!.description}',
                       style: subTitleStyle),
                 ),
-                if (videoDetailCtr.currentAudioQa != null)
-                  ListTile(
-                    dense: true,
-                    onTap: () => {Get.back(), showSetAudioQa()},
-                    leading: const Icon(Icons.album_outlined, size: 20),
-                    title: const Text('选择音质', style: titleStyle),
-                    subtitle: Text(
-                        '当前音质 ${videoDetailCtr.currentAudioQa!.description}',
-                        style: subTitleStyle),
-                  ),
-                ListTile(
-                  dense: true,
-                  onTap: () => {Get.back(), showSetDecodeFormats()},
-                  leading: const Icon(Icons.av_timer_outlined, size: 20),
-                  title: const Text('解码格式', style: titleStyle),
-                  subtitle: Text(
-                      '当前解码格式 ${videoDetailCtr.currentDecodeFormats.description}',
-                      style: subTitleStyle),
+              ListTile(
+                dense: true,
+                onTap: () => {Get.back(), showSetDecodeFormats()},
+                leading: const Icon(Icons.av_timer_outlined, size: 20),
+                title: const Text('解码格式', style: titleStyle),
+                subtitle: Text(
+                    '当前解码格式 ${videoDetailCtr.currentDecodeFormats.description}',
+                    style: subTitleStyle),
+              ),
+              ListTile(
+                dense: true,
+                onTap: () => {Get.back(), showSetRepeat()},
+                leading: const Icon(Icons.repeat, size: 20),
+                title: const Text('播放顺序', style: titleStyle),
+                subtitle: Text(widget.controller.playRepeat.description,
+                    style: subTitleStyle),
+              ),
+              ListTile(
+                dense: true,
+                onTap: () => {Get.back(), showSetDanmaku()},
+                leading: Transform.rotate(
+                  angle: pi,
+                  child: const Icon(Icons.subtitles_outlined, size: 20),
                 ),
+                title: const Text('弹幕设置', style: titleStyle),
+              ),
+              ListTile(
+                dense: true,
+                onTap: () => {Get.back(), showSetSubtitle()},
+                leading: const Icon(Icons.subtitles_outlined, size: 20),
+                title: const Text('字幕设置', style: titleStyle),
+              ),
+              if (videoDetailCtr.subtitles.isNotEmpty)
                 ListTile(
                   dense: true,
-                  onTap: () => {Get.back(), showSetRepeat()},
-                  leading: const Icon(Icons.repeat, size: 20),
-                  title: const Text('播放顺序', style: titleStyle),
-                  subtitle: Text(widget.controller.playRepeat.description,
-                      style: subTitleStyle),
+                  onTap: () => {Get.back(), onExportSubtitle()},
+                  leading: const Icon(Icons.download_outlined, size: 20),
+                  title: const Text('保存字幕', style: titleStyle),
                 ),
-                ListTile(
-                  dense: true,
-                  onTap: () => {Get.back(), showSetDanmaku()},
-                  leading: Transform.rotate(
-                    angle: pi,
-                    child: const Icon(Icons.subtitles_outlined, size: 20),
-                  ),
-                  title: const Text('弹幕设置', style: titleStyle),
-                ),
-                ListTile(
-                  dense: true,
-                  onTap: () => {Get.back(), showSetSubtitle()},
-                  leading: const Icon(Icons.subtitles_outlined, size: 20),
-                  title: const Text('字幕设置', style: titleStyle),
-                ),
-                if (videoDetailCtr.subtitles.isNotEmpty)
-                  ListTile(
-                    dense: true,
-                    onTap: () => {Get.back(), onExportSubtitle()},
-                    leading: const Icon(Icons.download_outlined, size: 20),
-                    title: const Text('保存字幕', style: titleStyle),
-                  ),
-                ListTile(
-                  dense: true,
-                  title: const Text('播放信息', style: titleStyle),
-                  leading: const Icon(Icons.info_outline, size: 20),
-                  onTap: () {
-                    Player? player = widget.controller.videoPlayerController;
-                    if (player == null) {
-                      SmartDialog.showToast('播放器未初始化');
-                      return;
-                    }
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('播放信息'),
-                          content: SizedBox(
-                            width: double.maxFinite,
-                            child: ListView(
-                              children: [
-                                ListTile(
+              ListTile(
+                dense: true,
+                title: const Text('播放信息', style: titleStyle),
+                leading: const Icon(Icons.info_outline, size: 20),
+                onTap: () {
+                  Player? player = widget.controller.videoPlayerController;
+                  if (player == null) {
+                    SmartDialog.showToast('播放器未初始化');
+                    return;
+                  }
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('播放信息'),
+                        content: SizedBox(
+                          width: double.maxFinite,
+                          child: ListView(
+                            children: [
+                              ListTile(
+                                dense: true,
+                                title: const Text("Resolution"),
+                                subtitle: Text(
+                                    '${player.state.width}x${player.state.height}'),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'Resolution\n${player.state.width}x${player.state.height}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
+                                dense: true,
+                                title: const Text("VideoParams"),
+                                subtitle:
+                                    Text(player.state.videoParams.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'VideoParams\n${player.state.videoParams}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
+                                dense: true,
+                                title: const Text("AudioParams"),
+                                subtitle:
+                                    Text(player.state.audioParams.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'AudioParams\n${player.state.audioParams}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
+                                dense: true,
+                                title: const Text("Media"),
+                                subtitle:
+                                    Text(player.state.playlist.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'Media\n${player.state.playlist}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
+                                dense: true,
+                                title: const Text("AudioTrack"),
+                                subtitle:
+                                    Text(player.state.track.audio.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'AudioTrack\n${player.state.track.audio}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
+                                dense: true,
+                                title: const Text("VideoTrack"),
+                                subtitle:
+                                    Text(player.state.track.video.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'VideoTrack\n${player.state.track.audio}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
                                   dense: true,
-                                  title: const Text("Resolution"),
-                                  subtitle: Text(
-                                      '${player.state.width}x${player.state.height}'),
+                                  title: const Text("pitch"),
+                                  subtitle: Text(player.state.pitch.toString()),
                                   onTap: () {
                                     Utils.copyText(
-                                      'Resolution\n${player.state.width}x${player.state.height}',
+                                      'pitch\n${player.state.pitch}',
                                       needToast: false,
                                     );
-                                  },
-                                ),
-                                ListTile(
+                                  }),
+                              ListTile(
                                   dense: true,
-                                  title: const Text("VideoParams"),
-                                  subtitle:
-                                      Text(player.state.videoParams.toString()),
+                                  title: const Text("rate"),
+                                  subtitle: Text(player.state.rate.toString()),
                                   onTap: () {
                                     Utils.copyText(
-                                      'VideoParams\n${player.state.videoParams}',
+                                      'rate\n${player.state.rate}',
                                       needToast: false,
                                     );
-                                  },
-                                ),
-                                ListTile(
-                                  dense: true,
-                                  title: const Text("AudioParams"),
-                                  subtitle:
-                                      Text(player.state.audioParams.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'AudioParams\n${player.state.audioParams}',
-                                      needToast: false,
-                                    );
-                                  },
-                                ),
-                                ListTile(
-                                  dense: true,
-                                  title: const Text("Media"),
-                                  subtitle:
-                                      Text(player.state.playlist.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'Media\n${player.state.playlist}',
-                                      needToast: false,
-                                    );
-                                  },
-                                ),
-                                ListTile(
-                                  dense: true,
-                                  title: const Text("AudioTrack"),
-                                  subtitle:
-                                      Text(player.state.track.audio.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'AudioTrack\n${player.state.track.audio}',
-                                      needToast: false,
-                                    );
-                                  },
-                                ),
-                                ListTile(
-                                  dense: true,
-                                  title: const Text("VideoTrack"),
-                                  subtitle:
-                                      Text(player.state.track.video.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'VideoTrack\n${player.state.track.audio}',
-                                      needToast: false,
-                                    );
-                                  },
-                                ),
-                                ListTile(
-                                    dense: true,
-                                    title: const Text("pitch"),
-                                    subtitle:
-                                        Text(player.state.pitch.toString()),
-                                    onTap: () {
-                                      Utils.copyText(
-                                        'pitch\n${player.state.pitch}',
-                                        needToast: false,
-                                      );
-                                    }),
-                                ListTile(
-                                    dense: true,
-                                    title: const Text("rate"),
-                                    subtitle:
-                                        Text(player.state.rate.toString()),
-                                    onTap: () {
-                                      Utils.copyText(
-                                        'rate\n${player.state.rate}',
-                                        needToast: false,
-                                      );
-                                    }),
-                                ListTile(
-                                  dense: true,
-                                  title: const Text("AudioBitrate"),
-                                  subtitle: Text(
-                                      player.state.audioBitrate.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'AudioBitrate\n${player.state.audioBitrate}',
-                                      needToast: false,
-                                    );
-                                  },
-                                ),
-                                ListTile(
-                                  dense: true,
-                                  title: const Text("Volume"),
-                                  subtitle:
-                                      Text(player.state.volume.toString()),
-                                  onTap: () {
-                                    Utils.copyText(
-                                      'Volume\n${player.state.volume}',
-                                      needToast: false,
-                                    );
-                                  },
-                                ),
-                              ],
+                                  }),
+                              ListTile(
+                                dense: true,
+                                title: const Text("AudioBitrate"),
+                                subtitle:
+                                    Text(player.state.audioBitrate.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'AudioBitrate\n${player.state.audioBitrate}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                              ListTile(
+                                dense: true,
+                                title: const Text("Volume"),
+                                subtitle: Text(player.state.volume.toString()),
+                                onTap: () {
+                                  Utils.copyText(
+                                    'Volume\n${player.state.volume}',
+                                    needToast: false,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Get.back(),
+                            child: Text(
+                              '确定',
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline),
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Get.back(),
-                              child: Text(
-                                '确定',
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                ListTile(
-                  dense: true,
-                  onTap: () {
-                    if (!Accounts.main.isLogin) {
-                      SmartDialog.showToast('账号未登录');
-                      return;
-                    }
-                    Get.back();
-                    Utils.reportVideo(videoDetailCtr.oid.value);
-                  },
-                  leading: const Icon(Icons.error_outline, size: 20),
-                  title: const Text('举报', style: titleStyle),
-                ),
-                const SizedBox(height: 14),
-              ],
-            ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+              ListTile(
+                dense: true,
+                onTap: () {
+                  if (!Accounts.main.isLogin) {
+                    SmartDialog.showToast('账号未登录');
+                    return;
+                  }
+                  Get.back();
+                  Utils.reportVideo(videoDetailCtr.oid.value);
+                },
+                leading: const Icon(Icons.error_outline, size: 20),
+                title: const Text('举报', style: titleStyle),
+              ),
+              const SizedBox(height: 14),
+            ],
           ),
         ),
       ),
@@ -612,116 +617,111 @@ class HeaderControlState extends State<HeaderControl> {
       }
     }
 
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
-      child: Theme(
-        data: Theme.of(context),
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-            ),
-            margin: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 45,
-                  child: GestureDetector(
-                    onTap: () {
-                      SmartDialog.showToast(
-                          '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    showBottomSheet(
+      (context, setState) => Material(
+        color: Colors.transparent,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 45,
+                child: GestureDetector(
+                  onTap: () {
+                    SmartDialog.showToast(
+                        '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳');
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('选择画质', style: titleStyle),
+                      SizedBox(width: buttonSpace),
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.outline,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Scrollbar(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
                       children: [
-                        const Text('选择画质', style: titleStyle),
-                        SizedBox(width: buttonSpace),
-                        Icon(
-                          Icons.info_outline,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.outline,
-                        )
+                        for (int i = 0; i < totalQaSam; i++) ...[
+                          ListTile(
+                            dense: true,
+                            onTap: () async {
+                              if (currentVideoQa.code ==
+                                  videoFormat[i].quality) {
+                                return;
+                              }
+                              Get.back();
+                              final int quality = videoFormat[i].quality!;
+                              videoDetailCtr.currentVideoQa =
+                                  VideoQualityCode.fromCode(quality)!;
+                              videoDetailCtr.updatePlayer();
+
+                              // update
+                              late String oldQualityDesc;
+                              await Connectivity()
+                                  .checkConnectivity()
+                                  .then((res) {
+                                if (res.contains(ConnectivityResult.wifi)) {
+                                  oldQualityDesc = VideoQualityCode.fromCode(
+                                          GStorage.defaultVideoQa)!
+                                      .description;
+                                  setting.put(
+                                    SettingBoxKey.defaultVideoQa,
+                                    quality,
+                                  );
+                                } else {
+                                  oldQualityDesc = VideoQualityCode.fromCode(
+                                          GStorage.defaultVideoQaCellular)!
+                                      .description;
+                                  setting.put(
+                                    SettingBoxKey.defaultVideoQaCellular,
+                                    quality,
+                                  );
+                                }
+                              });
+                              SmartDialog.showToast(
+                                "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}",
+                              );
+                            },
+                            // 可能包含会员解锁画质
+                            enabled: i >= totalQaSam - userfulQaSam,
+                            contentPadding:
+                                const EdgeInsets.only(left: 20, right: 20),
+                            title: Text(videoFormat[i].newDesc!),
+                            trailing: currentVideoQa.code ==
+                                    videoFormat[i].quality
+                                ? Icon(
+                                    Icons.done,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : Text(
+                                    videoFormat[i].format!,
+                                    style: subTitleStyle,
+                                  ),
+                          ),
+                        ]
                       ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Scrollbar(
-                      child: ListView(
-                        padding: EdgeInsets.zero,
-                        children: [
-                          for (int i = 0; i < totalQaSam; i++) ...[
-                            ListTile(
-                              dense: true,
-                              onTap: () async {
-                                if (currentVideoQa.code ==
-                                    videoFormat[i].quality) {
-                                  return;
-                                }
-                                Get.back();
-                                final int quality = videoFormat[i].quality!;
-                                videoDetailCtr.currentVideoQa =
-                                    VideoQualityCode.fromCode(quality)!;
-                                videoDetailCtr.updatePlayer();
-
-                                // update
-                                late String oldQualityDesc;
-                                await Connectivity()
-                                    .checkConnectivity()
-                                    .then((res) {
-                                  if (res.contains(ConnectivityResult.wifi)) {
-                                    oldQualityDesc = VideoQualityCode.fromCode(
-                                            GStorage.defaultVideoQa)!
-                                        .description;
-                                    setting.put(
-                                      SettingBoxKey.defaultVideoQa,
-                                      quality,
-                                    );
-                                  } else {
-                                    oldQualityDesc = VideoQualityCode.fromCode(
-                                            GStorage.defaultVideoQaCellular)!
-                                        .description;
-                                    setting.put(
-                                      SettingBoxKey.defaultVideoQaCellular,
-                                      quality,
-                                    );
-                                  }
-                                });
-                                SmartDialog.showToast(
-                                  "默认画质由：$oldQualityDesc 变为：${VideoQualityCode.fromCode(quality)!.description}",
-                                );
-                              },
-                              // 可能包含会员解锁画质
-                              enabled: i >= totalQaSam - userfulQaSam,
-                              contentPadding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              title: Text(videoFormat[i].newDesc!),
-                              trailing: currentVideoQa.code ==
-                                      videoFormat[i].quality
-                                  ? Icon(
-                                      Icons.done,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )
-                                  : Text(
-                                      videoFormat[i].format!,
-                                      style: subTitleStyle,
-                                    ),
-                            ),
-                          ]
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -732,93 +732,87 @@ class HeaderControlState extends State<HeaderControl> {
   void showSetAudioQa() {
     final AudioQuality currentAudioQa = videoDetailCtr.currentAudioQa!;
     final List<AudioItem> audio = videoInfo.dash!.audio!;
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
-      child: Theme(
-        data: Theme.of(context),
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-            ),
-            margin: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                const SizedBox(
-                    height: 45,
-                    child: Center(child: Text('选择音质', style: titleStyle))),
-                Expanded(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        for (final AudioItem i in audio) ...[
-                          ListTile(
-                            dense: true,
-                            onTap: () async {
-                              if (currentAudioQa.code == i.id) {
-                                return;
-                              }
-                              Get.back();
-                              final int quality = i.id!;
-                              videoDetailCtr.currentAudioQa =
-                                  AudioQualityCode.fromCode(quality)!;
-                              videoDetailCtr.updatePlayer();
+    showBottomSheet(
+      (context, setState) => Material(
+        color: Colors.transparent,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 45,
+                  child: Center(child: Text('选择音质', style: titleStyle))),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      for (final AudioItem i in audio) ...[
+                        ListTile(
+                          dense: true,
+                          onTap: () async {
+                            if (currentAudioQa.code == i.id) {
+                              return;
+                            }
+                            Get.back();
+                            final int quality = i.id!;
+                            videoDetailCtr.currentAudioQa =
+                                AudioQualityCode.fromCode(quality)!;
+                            videoDetailCtr.updatePlayer();
 
-                              // update
-                              late String oldQualityDesc;
-                              await Connectivity()
-                                  .checkConnectivity()
-                                  .then((res) {
-                                if (res.contains(ConnectivityResult.wifi)) {
-                                  oldQualityDesc = AudioQualityCode.fromCode(
-                                          GStorage.defaultAudioQa)!
-                                      .description;
-                                  setting.put(
-                                    SettingBoxKey.defaultAudioQa,
-                                    quality,
-                                  );
-                                } else {
-                                  oldQualityDesc = AudioQualityCode.fromCode(
-                                          GStorage.defaultAudioQaCellular)!
-                                      .description;
-                                  setting.put(
-                                    SettingBoxKey.defaultAudioQaCellular,
-                                    quality,
-                                  );
-                                }
-                              });
-                              SmartDialog.showToast(
-                                "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}",
-                              );
-                            },
-                            contentPadding:
-                                const EdgeInsets.only(left: 20, right: 20),
-                            title: Text(i.quality!),
-                            subtitle: Text(
-                              i.codecs!,
-                              style: subTitleStyle,
-                            ),
-                            trailing: currentAudioQa.code == i.id
-                                ? Icon(
-                                    Icons.done,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )
-                                : const SizedBox(),
+                            // update
+                            late String oldQualityDesc;
+                            await Connectivity()
+                                .checkConnectivity()
+                                .then((res) {
+                              if (res.contains(ConnectivityResult.wifi)) {
+                                oldQualityDesc = AudioQualityCode.fromCode(
+                                        GStorage.defaultAudioQa)!
+                                    .description;
+                                setting.put(
+                                  SettingBoxKey.defaultAudioQa,
+                                  quality,
+                                );
+                              } else {
+                                oldQualityDesc = AudioQualityCode.fromCode(
+                                        GStorage.defaultAudioQaCellular)!
+                                    .description;
+                                setting.put(
+                                  SettingBoxKey.defaultAudioQaCellular,
+                                  quality,
+                                );
+                              }
+                            });
+                            SmartDialog.showToast(
+                              "默认音质由：$oldQualityDesc 变为：${AudioQualityCode.fromCode(quality)!.description}",
+                            );
+                          },
+                          contentPadding:
+                              const EdgeInsets.only(left: 20, right: 20),
+                          title: Text(i.quality!),
+                          subtitle: Text(
+                            i.codecs!,
+                            style: subTitleStyle,
                           ),
-                        ]
-                      ],
-                    ),
+                          trailing: currentAudioQa.code == i.id
+                              ? Icon(
+                                  Icons.done,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : const SizedBox(),
+                        ),
+                      ]
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -841,66 +835,60 @@ class HeaderControlState extends State<HeaderControl> {
       return;
     }
 
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
-      child: Theme(
-        data: Theme.of(context),
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-            ),
-            margin: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                const SizedBox(
-                    height: 45,
-                    child: Center(child: Text('选择解码格式', style: titleStyle))),
-                Expanded(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        for (var i in list) ...[
-                          ListTile(
-                            dense: true,
-                            onTap: () {
-                              if (i.startsWith(currentDecodeFormats.code)) {
-                                return;
-                              }
-                              videoDetailCtr.currentDecodeFormats =
-                                  VideoDecodeFormatsCode.fromString(i)!;
-                              videoDetailCtr.updatePlayer();
-                              Get.back();
-                            },
-                            contentPadding:
-                                const EdgeInsets.only(left: 20, right: 20),
-                            title: Text(VideoDecodeFormatsCode.fromString(i)!
-                                .description),
-                            subtitle: Text(
-                              i!,
-                              style: subTitleStyle,
-                            ),
-                            trailing: i.startsWith(currentDecodeFormats.code)
-                                ? Icon(
-                                    Icons.done,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )
-                                : const SizedBox(),
+    showBottomSheet(
+      (context, setState) => Material(
+        color: Colors.transparent,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 45,
+                  child: Center(child: Text('选择解码格式', style: titleStyle))),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      for (var i in list) ...[
+                        ListTile(
+                          dense: true,
+                          onTap: () {
+                            if (i.startsWith(currentDecodeFormats.code)) {
+                              return;
+                            }
+                            videoDetailCtr.currentDecodeFormats =
+                                VideoDecodeFormatsCode.fromString(i)!;
+                            videoDetailCtr.updatePlayer();
+                            Get.back();
+                          },
+                          contentPadding:
+                              const EdgeInsets.only(left: 20, right: 20),
+                          title: Text(VideoDecodeFormatsCode.fromString(i)!
+                              .description),
+                          subtitle: Text(
+                            i!,
+                            style: subTitleStyle,
                           ),
-                        ]
-                      ],
-                    ),
+                          trailing: i.startsWith(currentDecodeFormats.code)
+                              ? Icon(
+                                  Icons.done,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : const SizedBox(),
+                        ),
+                      ]
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -985,303 +973,295 @@ class HeaderControlState extends State<HeaderControl> {
     double subtitleStrokeWidth = widget.controller.subtitleStrokeWidth;
     int subtitleFontWeight = widget.controller.subtitleFontWeight;
 
-    final sliderTheme = SliderThemeData(
-      trackShape: MSliderTrackShape(),
-      thumbColor: Theme.of(context).colorScheme.primary,
-      activeTrackColor: Theme.of(context).colorScheme.primary,
-      trackHeight: 10,
-      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-    );
-
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
+    showBottomSheet(
       padding: isFullScreen ? 70 : null,
-      child: StatefulBuilder(
-        builder: (_, setState) {
-          void updateStrokeWidth(double val) {
-            subtitleStrokeWidth = val;
-            widget.controller
-              ..subtitleStrokeWidth = subtitleStrokeWidth
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+      (context, setState) {
+        final sliderTheme = SliderThemeData(
+          trackShape: MSliderTrackShape(),
+          thumbColor: Theme.of(context).colorScheme.primary,
+          activeTrackColor: Theme.of(context).colorScheme.primary,
+          trackHeight: 10,
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+        );
 
-          void updateOpacity(double val) {
-            subtitleBgOpaticy = val;
-            widget.controller
-              ..subtitleBgOpaticy = subtitleBgOpaticy
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+        void updateStrokeWidth(double val) {
+          subtitleStrokeWidth = val;
+          widget.controller
+            ..subtitleStrokeWidth = subtitleStrokeWidth
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
 
-          void updateBottomPadding(int val) {
-            subtitlePaddingB = val;
-            widget.controller
-              ..subtitlePaddingB = subtitlePaddingB
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+        void updateOpacity(double val) {
+          subtitleBgOpaticy = val;
+          widget.controller
+            ..subtitleBgOpaticy = subtitleBgOpaticy
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
 
-          void updateHorizontalPadding(int val) {
-            subtitlePaddingH = val;
-            widget.controller
-              ..subtitlePaddingH = subtitlePaddingH
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+        void updateBottomPadding(int val) {
+          subtitlePaddingB = val;
+          widget.controller
+            ..subtitlePaddingB = subtitlePaddingB
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
 
-          void updateFontScaleFS(double val) {
-            subtitleFontScaleFS = val;
-            widget.controller
-              ..subtitleFontScaleFS = subtitleFontScaleFS
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+        void updateHorizontalPadding(int val) {
+          subtitlePaddingH = val;
+          widget.controller
+            ..subtitlePaddingH = subtitlePaddingH
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
 
-          void updateFontScale(double val) {
-            subtitleFontScale = val;
-            widget.controller
-              ..subtitleFontScale = subtitleFontScale
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+        void updateFontScaleFS(double val) {
+          subtitleFontScaleFS = val;
+          widget.controller
+            ..subtitleFontScaleFS = subtitleFontScaleFS
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
 
-          void updateFontWeight(int val) {
-            subtitleFontWeight = val;
-            widget.controller
-              ..subtitleFontWeight = subtitleFontWeight
-              ..updateSubtitleStyle()
-              ..putSubtitleSettings();
-            setState(() {});
-          }
+        void updateFontScale(double val) {
+          subtitleFontScale = val;
+          widget.controller
+            ..subtitleFontScale = subtitleFontScale
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
 
-          return Theme(
-            data: Theme.of(context),
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+        void updateFontWeight(int val) {
+          subtitleFontWeight = val;
+          widget.controller
+            ..subtitleFontWeight = subtitleFontWeight
+            ..updateSubtitleStyle()
+            ..putSubtitleSettings();
+          setState(() {});
+        }
+
+        return Material(
+          color: Colors.transparent,
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            margin: const EdgeInsets.all(12),
+            padding: const EdgeInsets.only(left: 14, right: 14),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                SizedBox(
+                  height: 45,
+                  child: Center(child: Text('字幕设置', style: titleStyle)),
                 ),
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: ListView(
-                  padding: EdgeInsets.zero,
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: 45,
-                      child: Center(child: Text('字幕设置', style: titleStyle)),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            '字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
-                        resetBtn('100.0%', () => updateFontScale(1.0)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0.5,
-                          max: 2.5,
-                          value: subtitleFontScale,
-                          divisions: 20,
-                          label:
-                              '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
-                          onChanged: updateFontScale,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            '全屏字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
-                        resetBtn('150.0%', () => updateFontScaleFS(1.5)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0.5,
-                          max: 2.5,
-                          value: subtitleFontScaleFS,
-                          divisions: 20,
-                          label:
-                              '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
-                          onChanged: updateFontScaleFS,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('字体粗细 ${subtitleFontWeight + 1}（可能无法精确调节）'),
-                        resetBtn(6, () => updateFontWeight(5)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 8,
-                          value: subtitleFontWeight.toDouble(),
-                          divisions: 8,
-                          label: '${subtitleFontWeight + 1}',
-                          onChanged: (double val) {
-                            updateFontWeight(val.toInt());
-                          },
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('描边粗细 $subtitleStrokeWidth'),
-                        resetBtn(2.0, () => updateStrokeWidth(2.0)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 5,
-                          value: subtitleStrokeWidth,
-                          divisions: 10,
-                          label: '$subtitleStrokeWidth',
-                          onChanged: updateStrokeWidth,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('左右边距 $subtitlePaddingH'),
-                        resetBtn(24, () => updateHorizontalPadding(24)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 100,
-                          value: subtitlePaddingH.toDouble(),
-                          divisions: 100,
-                          label: '$subtitlePaddingH',
-                          onChanged: (double val) {
-                            updateHorizontalPadding(val.round());
-                          },
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('底部边距 $subtitlePaddingB'),
-                        resetBtn(24, () => updateBottomPadding(24)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 200,
-                          value: subtitlePaddingB.toDouble(),
-                          divisions: 200,
-                          label: '$subtitlePaddingB',
-                          onChanged: (double val) {
-                            updateBottomPadding(val.round());
-                          },
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
-                        resetBtn('67%', () => updateOpacity(0.67)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 1,
-                          value: subtitleBgOpaticy,
-                          // label: '${(subtitleBgOpaticy * 100).toInt()}%',
-                          onChanged: (double val) {
-                            updateOpacity(val.toPrecision(2));
-                          },
-                        ),
-                      ),
-                    ),
+                    Text(
+                        '字体大小 ${(subtitleFontScale * 100).toStringAsFixed(1)}%'),
+                    resetBtn('100.0%', () => updateFontScale(1.0)),
                   ],
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0.5,
+                      max: 2.5,
+                      value: subtitleFontScale,
+                      divisions: 20,
+                      label: '${(subtitleFontScale * 100).toStringAsFixed(1)}%',
+                      onChanged: updateFontScale,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        '全屏字体大小 ${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%'),
+                    resetBtn('150.0%', () => updateFontScaleFS(1.5)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0.5,
+                      max: 2.5,
+                      value: subtitleFontScaleFS,
+                      divisions: 20,
+                      label:
+                          '${(subtitleFontScaleFS * 100).toStringAsFixed(1)}%',
+                      onChanged: updateFontScaleFS,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('字体粗细 ${subtitleFontWeight + 1}（可能无法精确调节）'),
+                    resetBtn(6, () => updateFontWeight(5)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 8,
+                      value: subtitleFontWeight.toDouble(),
+                      divisions: 8,
+                      label: '${subtitleFontWeight + 1}',
+                      onChanged: (double val) {
+                        updateFontWeight(val.toInt());
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('描边粗细 $subtitleStrokeWidth'),
+                    resetBtn(2.0, () => updateStrokeWidth(2.0)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 5,
+                      value: subtitleStrokeWidth,
+                      divisions: 10,
+                      label: '$subtitleStrokeWidth',
+                      onChanged: updateStrokeWidth,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('左右边距 $subtitlePaddingH'),
+                    resetBtn(24, () => updateHorizontalPadding(24)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 100,
+                      value: subtitlePaddingH.toDouble(),
+                      divisions: 100,
+                      label: '$subtitlePaddingH',
+                      onChanged: (double val) {
+                        updateHorizontalPadding(val.round());
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('底部边距 $subtitlePaddingB'),
+                    resetBtn(24, () => updateBottomPadding(24)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 200,
+                      value: subtitlePaddingB.toDouble(),
+                      divisions: 200,
+                      label: '$subtitlePaddingB',
+                      onChanged: (double val) {
+                        updateBottomPadding(val.round());
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('背景不透明度 ${(subtitleBgOpaticy * 100).toInt()}%'),
+                    resetBtn('67%', () => updateOpacity(0.67)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 1,
+                      value: subtitleBgOpaticy,
+                      // label: '${(subtitleBgOpaticy * 100).toInt()}%',
+                      onChanged: (double val) {
+                        updateOpacity(val.toPrecision(2));
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -1335,536 +1315,150 @@ class HeaderControlState extends State<HeaderControl> {
     int fontWeight = widget.controller.fontWeight;
     bool massiveMode = widget.controller.massiveMode;
 
-    final sliderTheme = SliderThemeData(
-      trackShape: MSliderTrackShape(),
-      thumbColor: Theme.of(context).colorScheme.primary,
-      activeTrackColor: Theme.of(context).colorScheme.primary,
-      trackHeight: 10,
-      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-    );
-
     final DanmakuController? danmakuController =
         widget.controller.danmakuController;
 
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
-      child: StatefulBuilder(
-        builder: (_, setState) {
-          void updateLineHeight(double val) {
-            danmakuLineHeight = val;
-            widget.controller
-              ..danmakuLineHeight = danmakuLineHeight
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(
-                  lineHeight: danmakuLineHeight,
-                ),
-              );
-            } catch (_) {}
-          }
+    showBottomSheet(
+      (cpntext, setState) {
+        final sliderTheme = SliderThemeData(
+          trackShape: MSliderTrackShape(),
+          thumbColor: Theme.of(context).colorScheme.primary,
+          activeTrackColor: Theme.of(context).colorScheme.primary,
+          trackHeight: 10,
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+        );
 
-          void updateDuration(double val) {
-            danmakuDuration = val;
-            widget.controller
-              ..danmakuDuration = danmakuDuration
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(
-                    duration:
-                        danmakuDuration / widget.controller.playbackSpeed),
-              );
-            } catch (_) {}
-          }
-
-          void updateStaticDuration(double val) {
-            danmakuStaticDuration = val;
-            widget.controller
-              ..danmakuStaticDuration = danmakuStaticDuration
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(
-                    staticDuration: danmakuStaticDuration /
-                        widget.controller.playbackSpeed),
-              );
-            } catch (_) {}
-          }
-
-          void updateFontSizeFS(double val) {
-            fontSizeFS = val;
-            widget.controller
-              ..fontSizeFS = fontSizeFS
-              ..putDanmakuSettings();
-            setState(() {});
-            if (widget.controller.isFullScreen.value == true) {
-              try {
-                danmakuController?.updateOption(
-                  danmakuController.option.copyWith(
-                    fontSize: (15 * fontSizeFS).toDouble(),
-                  ),
-                );
-              } catch (_) {}
-            }
-          }
-
-          void updateFontSize(double val) {
-            fontSize = val;
-            widget.controller
-              ..fontSize = fontSize
-              ..putDanmakuSettings();
-            setState(() {});
-            if (widget.controller.isFullScreen.value == false) {
-              try {
-                danmakuController?.updateOption(
-                  danmakuController.option.copyWith(
-                    fontSize: (15 * fontSize).toDouble(),
-                  ),
-                );
-              } catch (_) {}
-            }
-          }
-
-          void updateStrokeWidth(double val) {
-            strokeWidth = val;
-            widget.controller
-              ..strokeWidth = val
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(strokeWidth: val),
-              );
-            } catch (_) {}
-          }
-
-          void updateFontWeight(int val) {
-            fontWeight = val;
-            widget.controller
-              ..fontWeight = fontWeight
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(fontWeight: fontWeight),
-              );
-            } catch (_) {}
-          }
-
-          void updateOpacity(double val) {
-            opacity = val;
-            widget.controller
-              ..opacity = opacity
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(opacity: val),
-              );
-            } catch (_) {}
-          }
-
-          void updateShowArea(double val) {
-            showArea = val;
-            widget.controller
-              ..showArea = showArea
-              ..putDanmakuSettings();
-            setState(() {});
-            try {
-              danmakuController?.updateOption(
-                danmakuController.option.copyWith(area: showArea),
-              );
-            } catch (_) {}
-          }
-
-          return Theme(
-            data: Theme.of(context),
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    SizedBox(
-                      height: 45,
-                      child: Center(child: Text('弹幕设置', style: titleStyle)),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Text('智能云屏蔽 $danmakuWeight 级'),
-                        const Spacer(),
-                        TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () => {
-                                  Get.back(),
-                                  Get.toNamed('/danmakuBlock',
-                                      arguments: widget.controller)
-                                },
-                            child: Text(
-                                "屏蔽管理(${plPlayerController.filters.count})")),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 10,
-                          value: danmakuWeight.toDouble(),
-                          divisions: 10,
-                          label: '$danmakuWeight',
-                          onChanged: (double val) {
-                            danmakuWeight = val.toInt();
-                            widget.controller
-                              ..danmakuWeight = danmakuWeight
-                              ..putDanmakuSettings();
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    ),
-                    const Text('按类型屏蔽'),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Row(
-                        children: [
-                          for (final Map<String, dynamic> i
-                              in blockTypesList) ...[
-                            ActionRowLineItem(
-                              onTap: () {
-                                final bool isChoose =
-                                    blockTypes.contains(i['value']);
-                                if (isChoose) {
-                                  blockTypes.remove(i['value']);
-                                } else {
-                                  blockTypes.add(i['value']);
-                                }
-                                widget.controller
-                                  ..blockTypes = blockTypes
-                                  ..putDanmakuSettings();
-                                setState(() {});
-                                try {
-                                  danmakuController?.updateOption(
-                                    danmakuController.option.copyWith(
-                                      hideTop: blockTypes.contains(5),
-                                      hideBottom: blockTypes.contains(4),
-                                      hideScroll: blockTypes.contains(2),
-                                      // 添加或修改其他需要修改的选项属性
-                                    ),
-                                  );
-                                } catch (_) {}
-                              },
-                              text: i['label'],
-                              selectStatus: blockTypes.contains(i['value']),
-                            ),
-                            const SizedBox(width: 10),
-                          ]
-                        ],
-                      ),
-                    ),
-                    SetSwitchItem(
-                      title: '海量弹幕',
-                      contentPadding: EdgeInsets.all(0),
-                      titleStyle: TextStyle(fontSize: 14),
-                      defaultVal: massiveMode,
-                      setKey: SettingBoxKey.danmakuMassiveMode,
-                      onChanged: (value) {
-                        massiveMode = value;
-                        widget.controller.massiveMode = value;
-                        setState(() {});
-                        try {
-                          danmakuController?.updateOption(
-                            danmakuController.option
-                                .copyWith(massiveMode: value),
-                          );
-                        } catch (_) {}
-                      },
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('显示区域 ${showArea * 100}%'),
-                        resetBtn('50.0%', () => updateShowArea(0.5)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0.1,
-                          max: 1,
-                          value: showArea,
-                          divisions: 9,
-                          label: '${showArea * 100}%',
-                          onChanged: (val) => updateShowArea(
-                            val.toPrecision(1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('不透明度 ${opacity * 100}%'),
-                        resetBtn('100.0%', () => updateOpacity(1.0)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 1,
-                          value: opacity,
-                          divisions: 10,
-                          label: '${opacity * 100}%',
-                          onChanged: updateOpacity,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
-                        resetBtn(6, () => updateFontWeight(5)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 8,
-                          value: fontWeight.toDouble(),
-                          divisions: 8,
-                          label: '${fontWeight + 1}',
-                          onChanged: (double val) {
-                            updateFontWeight(val.toInt());
-                          },
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('描边粗细 $strokeWidth'),
-                        resetBtn(1.5, () => updateStrokeWidth(1.5)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0,
-                          max: 3,
-                          value: strokeWidth,
-                          divisions: 6,
-                          label: '$strokeWidth',
-                          onChanged: updateStrokeWidth,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('字体大小 ${(fontSize * 100).toStringAsFixed(1)}%'),
-                        resetBtn('100.0%', () => updateFontSize(1.0)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0.5,
-                          max: 2.5,
-                          value: fontSize,
-                          divisions: 20,
-                          label: '${(fontSize * 100).toStringAsFixed(1)}%',
-                          onChanged: updateFontSize,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            '全屏字体大小 ${(fontSizeFS * 100).toStringAsFixed(1)}%'),
-                        resetBtn('120.0%', () => updateFontSizeFS(1.2)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 0.5,
-                          max: 2.5,
-                          value: fontSizeFS,
-                          divisions: 20,
-                          label: '${(fontSizeFS * 100).toStringAsFixed(1)}%',
-                          onChanged: updateFontSizeFS,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('滚动弹幕时长 $danmakuDuration 秒'),
-                        resetBtn(7.0, () => updateDuration(7.0)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 1,
-                          max: 50,
-                          value: danmakuDuration,
-                          divisions: 49,
-                          label: danmakuDuration.toString(),
-                          onChanged: (double val) {
-                            updateDuration(val.toPrecision(1));
-                          },
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('静态弹幕时长 $danmakuStaticDuration 秒'),
-                        resetBtn(4.0, () => updateStaticDuration(4.0)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 1,
-                          max: 50,
-                          value: danmakuStaticDuration,
-                          divisions: 49,
-                          label: danmakuStaticDuration.toString(),
-                          onChanged: (double val) {
-                            updateStaticDuration(val.toPrecision(1));
-                          },
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('弹幕行高 $danmakuLineHeight'),
-                        resetBtn(1.6, () => updateLineHeight(1.6)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 6,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: SliderTheme(
-                        data: sliderTheme,
-                        child: Slider(
-                          min: 1.0,
-                          max: 3.0,
-                          value: danmakuLineHeight,
-                          // label: '$danmakuLineHeight',
-                          onChanged: (double val) {
-                            updateLineHeight(val.toPrecision(1));
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+        void updateLineHeight(double val) {
+          danmakuLineHeight = val;
+          widget.controller
+            ..danmakuLineHeight = danmakuLineHeight
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(
+                lineHeight: danmakuLineHeight,
               ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+            );
+          } catch (_) {}
+        }
 
-  /// 播放顺序
-  void showSetRepeat() {
-    Utils.showFSSheet(
-      context,
-      isFullScreen: () => isFullScreen,
-      child: Theme(
-        data: Theme.of(context),
-        child: Material(
+        void updateDuration(double val) {
+          danmakuDuration = val;
+          widget.controller
+            ..danmakuDuration = danmakuDuration
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(
+                  duration: danmakuDuration / widget.controller.playbackSpeed),
+            );
+          } catch (_) {}
+        }
+
+        void updateStaticDuration(double val) {
+          danmakuStaticDuration = val;
+          widget.controller
+            ..danmakuStaticDuration = danmakuStaticDuration
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(
+                  staticDuration:
+                      danmakuStaticDuration / widget.controller.playbackSpeed),
+            );
+          } catch (_) {}
+        }
+
+        void updateFontSizeFS(double val) {
+          fontSizeFS = val;
+          widget.controller
+            ..fontSizeFS = fontSizeFS
+            ..putDanmakuSettings();
+          setState(() {});
+          if (widget.controller.isFullScreen.value == true) {
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(
+                  fontSize: (15 * fontSizeFS).toDouble(),
+                ),
+              );
+            } catch (_) {}
+          }
+        }
+
+        void updateFontSize(double val) {
+          fontSize = val;
+          widget.controller
+            ..fontSize = fontSize
+            ..putDanmakuSettings();
+          setState(() {});
+          if (widget.controller.isFullScreen.value == false) {
+            try {
+              danmakuController?.updateOption(
+                danmakuController.option.copyWith(
+                  fontSize: (15 * fontSize).toDouble(),
+                ),
+              );
+            } catch (_) {}
+          }
+        }
+
+        void updateStrokeWidth(double val) {
+          strokeWidth = val;
+          widget.controller
+            ..strokeWidth = val
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(strokeWidth: val),
+            );
+          } catch (_) {}
+        }
+
+        void updateFontWeight(int val) {
+          fontWeight = val;
+          widget.controller
+            ..fontWeight = fontWeight
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(fontWeight: fontWeight),
+            );
+          } catch (_) {}
+        }
+
+        void updateOpacity(double val) {
+          opacity = val;
+          widget.controller
+            ..opacity = opacity
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(opacity: val),
+            );
+          } catch (_) {}
+        }
+
+        void updateShowArea(double val) {
+          showArea = val;
+          widget.controller
+            ..showArea = showArea
+            ..putDanmakuSettings();
+          setState(() {});
+          try {
+            danmakuController?.updateOption(
+              danmakuController.option.copyWith(area: showArea),
+            );
+          } catch (_) {}
+        }
+
+        return Material(
           color: Colors.transparent,
           child: Container(
             clipBehavior: Clip.hardEdge,
@@ -1873,42 +1467,411 @@ class HeaderControlState extends State<HeaderControl> {
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             margin: const EdgeInsets.all(12),
-            child: Column(
+            padding: const EdgeInsets.only(left: 14, right: 14),
+            child: ListView(
+              padding: EdgeInsets.zero,
               children: [
-                const SizedBox(
-                    height: 45,
-                    child: Center(child: Text('选择播放顺序', style: titleStyle))),
-                Expanded(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        for (final PlayRepeat i in PlayRepeat.values) ...[
-                          ListTile(
-                            dense: true,
-                            onTap: () {
-                              widget.controller.setPlayRepeat(i);
-                              Get.back();
+                SizedBox(
+                  height: 45,
+                  child: Center(child: Text('弹幕设置', style: titleStyle)),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Text('智能云屏蔽 $danmakuWeight 级'),
+                    const Spacer(),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () => {
+                              Get.back(),
+                              Get.toNamed('/danmakuBlock',
+                                  arguments: widget.controller)
                             },
-                            contentPadding:
-                                const EdgeInsets.only(left: 20, right: 20),
-                            title: Text(i.description),
-                            trailing: widget.controller.playRepeat == i
-                                ? Icon(
-                                    Icons.done,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )
-                                : const SizedBox(),
-                          )
-                        ],
-                      ],
+                        child:
+                            Text("屏蔽管理(${plPlayerController.filters.count})")),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 10,
+                      value: danmakuWeight.toDouble(),
+                      divisions: 10,
+                      label: '$danmakuWeight',
+                      onChanged: (double val) {
+                        danmakuWeight = val.toInt();
+                        widget.controller
+                          ..danmakuWeight = danmakuWeight
+                          ..putDanmakuSettings();
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ),
+                const Text('按类型屏蔽'),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Row(
+                    children: [
+                      for (final Map<String, dynamic> i in blockTypesList) ...[
+                        ActionRowLineItem(
+                          onTap: () {
+                            final bool isChoose =
+                                blockTypes.contains(i['value']);
+                            if (isChoose) {
+                              blockTypes.remove(i['value']);
+                            } else {
+                              blockTypes.add(i['value']);
+                            }
+                            widget.controller
+                              ..blockTypes = blockTypes
+                              ..putDanmakuSettings();
+                            setState(() {});
+                            try {
+                              danmakuController?.updateOption(
+                                danmakuController.option.copyWith(
+                                  hideTop: blockTypes.contains(5),
+                                  hideBottom: blockTypes.contains(4),
+                                  hideScroll: blockTypes.contains(2),
+                                  // 添加或修改其他需要修改的选项属性
+                                ),
+                              );
+                            } catch (_) {}
+                          },
+                          text: i['label'],
+                          selectStatus: blockTypes.contains(i['value']),
+                        ),
+                        const SizedBox(width: 10),
+                      ]
+                    ],
+                  ),
+                ),
+                SetSwitchItem(
+                  title: '海量弹幕',
+                  contentPadding: EdgeInsets.all(0),
+                  titleStyle: TextStyle(fontSize: 14),
+                  defaultVal: massiveMode,
+                  setKey: SettingBoxKey.danmakuMassiveMode,
+                  onChanged: (value) {
+                    massiveMode = value;
+                    widget.controller.massiveMode = value;
+                    setState(() {});
+                    try {
+                      danmakuController?.updateOption(
+                        danmakuController.option.copyWith(massiveMode: value),
+                      );
+                    } catch (_) {}
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('显示区域 ${showArea * 100}%'),
+                    resetBtn('50.0%', () => updateShowArea(0.5)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0.1,
+                      max: 1,
+                      value: showArea,
+                      divisions: 9,
+                      label: '${showArea * 100}%',
+                      onChanged: (val) => updateShowArea(
+                        val.toPrecision(1),
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('不透明度 ${opacity * 100}%'),
+                    resetBtn('100.0%', () => updateOpacity(1.0)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 1,
+                      value: opacity,
+                      divisions: 10,
+                      label: '${opacity * 100}%',
+                      onChanged: updateOpacity,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('字体粗细 ${fontWeight + 1}（可能无法精确调节）'),
+                    resetBtn(6, () => updateFontWeight(5)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 8,
+                      value: fontWeight.toDouble(),
+                      divisions: 8,
+                      label: '${fontWeight + 1}',
+                      onChanged: (double val) {
+                        updateFontWeight(val.toInt());
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('描边粗细 $strokeWidth'),
+                    resetBtn(1.5, () => updateStrokeWidth(1.5)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0,
+                      max: 3,
+                      value: strokeWidth,
+                      divisions: 6,
+                      label: '$strokeWidth',
+                      onChanged: updateStrokeWidth,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('字体大小 ${(fontSize * 100).toStringAsFixed(1)}%'),
+                    resetBtn('100.0%', () => updateFontSize(1.0)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0.5,
+                      max: 2.5,
+                      value: fontSize,
+                      divisions: 20,
+                      label: '${(fontSize * 100).toStringAsFixed(1)}%',
+                      onChanged: updateFontSize,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('全屏字体大小 ${(fontSizeFS * 100).toStringAsFixed(1)}%'),
+                    resetBtn('120.0%', () => updateFontSizeFS(1.2)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 0.5,
+                      max: 2.5,
+                      value: fontSizeFS,
+                      divisions: 20,
+                      label: '${(fontSizeFS * 100).toStringAsFixed(1)}%',
+                      onChanged: updateFontSizeFS,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('滚动弹幕时长 $danmakuDuration 秒'),
+                    resetBtn(7.0, () => updateDuration(7.0)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 1,
+                      max: 50,
+                      value: danmakuDuration,
+                      divisions: 49,
+                      label: danmakuDuration.toString(),
+                      onChanged: (double val) {
+                        updateDuration(val.toPrecision(1));
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('静态弹幕时长 $danmakuStaticDuration 秒'),
+                    resetBtn(4.0, () => updateStaticDuration(4.0)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 1,
+                      max: 50,
+                      value: danmakuStaticDuration,
+                      divisions: 49,
+                      label: danmakuStaticDuration.toString(),
+                      onChanged: (double val) {
+                        updateStaticDuration(val.toPrecision(1));
+                      },
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('弹幕行高 $danmakuLineHeight'),
+                    resetBtn(1.6, () => updateLineHeight(1.6)),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 6,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: SliderTheme(
+                    data: sliderTheme,
+                    child: Slider(
+                      min: 1.0,
+                      max: 3.0,
+                      value: danmakuLineHeight,
+                      // label: '$danmakuLineHeight',
+                      onChanged: (double val) {
+                        updateLineHeight(val.toPrecision(1));
+                      },
                     ),
                   ),
                 ),
               ],
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// 播放顺序
+  void showSetRepeat() {
+    showBottomSheet(
+      (context, setState) => Material(
+        color: Colors.transparent,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              const SizedBox(
+                  height: 45,
+                  child: Center(child: Text('选择播放顺序', style: titleStyle))),
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      for (final PlayRepeat i in PlayRepeat.values) ...[
+                        ListTile(
+                          dense: true,
+                          onTap: () {
+                            widget.controller.setPlayRepeat(i);
+                            Get.back();
+                          },
+                          contentPadding:
+                              const EdgeInsets.only(left: 20, right: 20),
+                          title: Text(i.description),
+                          trailing: widget.controller.playRepeat == i
+                              ? Icon(
+                                  Icons.done,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : const SizedBox(),
+                        )
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

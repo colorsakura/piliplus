@@ -97,7 +97,6 @@ class VideoDetailController extends GetxController
   bool enableHeart = true;
   Floating? floating;
   late final headerCtrKey = GlobalKey<HeaderControlState>();
-  late PreferredSizeWidget headerControl;
 
   Box get setting => GStorage.setting;
 
@@ -288,13 +287,6 @@ class VideoDetailController extends GetxController
     if (Platform.isAndroid) {
       floating = Floating();
     }
-    headerControl = HeaderControl(
-      key: headerCtrKey,
-      controller: plPlayerController,
-      videoDetailCtr: this,
-      floating: floating,
-      heroTag: heroTag,
-    );
 
     // CDN优化
     // enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);
@@ -1103,9 +1095,6 @@ class VideoDetailController extends GetxController
     if (showDmChart && dmTrend == null) {
       _getDmTrend();
     }
-
-    /// 开启自动全屏时，在player初始化完成后立即传入headerControl
-    plPlayerController.headerControl = headerControl;
 
     if (defaultST != null) {
       defaultST = null;

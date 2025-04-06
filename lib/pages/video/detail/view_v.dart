@@ -1540,7 +1540,13 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             SearchType.media_bangumi
                         ? bangumiIntroController
                         : null,
-                    headerControl: videoDetailController.headerControl,
+                    headerControl: HeaderControl(
+                      key: videoDetailController.headerCtrKey,
+                      controller: videoDetailController.plPlayerController,
+                      videoDetailCtr: videoDetailController,
+                      floating: videoDetailController.floating,
+                      heroTag: heroTag,
+                    ),
                     danmuWidget: Obx(
                       () => PlDanmaku(
                         key: Key(
