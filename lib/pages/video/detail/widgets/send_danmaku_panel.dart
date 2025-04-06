@@ -449,58 +449,38 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
   @override
   Future onCustomPublish({required String message, List? pictures}) async {
     SmartDialog.showLoading(msg: '发送中...');
-    if (widget.roomId != null) {
-      final res = await LiveHttp.sendLiveMsg(
-        roomId: widget.roomId,
-        msg: editController.text,
+    final res = widget.roomId != null
+        ? await LiveHttp.sendLiveMsg(
+            roomId: widget.roomId,
+            msg: editController.text,
+          )
+        : await DanmakuHttp.shootDanmaku(
+            oid: widget.cid,
+            bvid: widget.bvid,
+            progress: widget.progress,
+            msg: editController.text,
+            mode: _mode.value,
+            fontsize: _fontsize.value,
+            color: _color.value.value & 0xFFFFFF,
+          );
+    SmartDialog.dismiss();
+    if (res['status']) {
+      Get.back();
+      SmartDialog.showToast('发送成功');
+      widget.callback(
+        DanmakuContentItem(
+          editController.text,
+          color: _color.value,
+          type: switch (_mode.value) {
+            5 => DanmakuItemType.top,
+            4 => DanmakuItemType.bottom,
+            _ => DanmakuItemType.scroll,
+          },
+          selfSend: true,
+        ),
       );
-      if (res['status']) {
-        Get.back();
-        SmartDialog.showToast('发送成功');
-        widget.callback(
-          DanmakuContentItem(
-            editController.text,
-            color: _color.value,
-            type: switch (_mode.value) {
-              5 => DanmakuItemType.top,
-              4 => DanmakuItemType.bottom,
-              _ => DanmakuItemType.scroll,
-            },
-            selfSend: true,
-          ),
-        );
-      } else {
-        SmartDialog.showToast('发送失败: ${res['msg']}');
-      }
     } else {
-      final dynamic res = await DanmakuHttp.shootDanmaku(
-        oid: widget.cid,
-        bvid: widget.bvid,
-        progress: widget.progress,
-        msg: editController.text,
-        mode: _mode.value,
-        fontsize: _fontsize.value,
-        color: _color.value.value & 0xFFFFFF,
-      );
-      SmartDialog.dismiss();
-      if (res['status']) {
-        Get.back();
-        SmartDialog.showToast('发送成功');
-        widget.callback(
-          DanmakuContentItem(
-            editController.text,
-            color: _color.value,
-            type: switch (_mode.value) {
-              5 => DanmakuItemType.top,
-              4 => DanmakuItemType.bottom,
-              _ => DanmakuItemType.scroll,
-            },
-            selfSend: true,
-          ),
-        );
-      } else {
-        SmartDialog.showToast('发送失败: ${res['msg']}');
-      }
+      SmartDialog.showToast('发送失败: ${res['msg']}');
     }
   }
 }
