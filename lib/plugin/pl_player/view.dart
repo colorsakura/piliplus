@@ -1048,8 +1048,11 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             },
             onDoubleTapDown: (TapDownDetails details) {
               // live模式下禁用 锁定时🔒禁用
-              if (plPlayerController.videoType.value == 'live' ||
-                  plPlayerController.controlsLock.value) {
+              if (plPlayerController.controlsLock.value) {
+                return;
+              }
+              if (plPlayerController.videoType.value == 'live') {
+                doubleTapFuc('center');
                 return;
               }
               RenderBox renderBox =
