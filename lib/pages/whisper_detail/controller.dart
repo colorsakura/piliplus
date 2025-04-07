@@ -93,11 +93,8 @@ class WhisperDetailController extends GetxController {
     var result = await MsgHttp.sendMsg(
       senderUid: ownerMid,
       receiverId: int.parse(mid!),
-      content: msgType == 5
-          ? message
-          : picMsg != null
-              ? jsonEncode(picMsg)
-              : '{"content":"$message"}',
+      content:
+          msgType == 5 ? message : jsonEncode(picMsg ?? {"content": message}),
       msgType: msgType ?? (picMsg != null ? 2 : 1),
     );
     SmartDialog.dismiss();
