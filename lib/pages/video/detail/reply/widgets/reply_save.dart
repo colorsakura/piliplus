@@ -350,15 +350,15 @@ class _ReplySavePanelState extends State<ReplySavePanel> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black87,
                     Colors.transparent,
+                    Colors.black54,
                   ],
                 ),
               ),
-              padding: const EdgeInsets.only(bottom: 25),
+              padding: const EdgeInsets.only(bottom: 25, top: 10),
               child: SafeArea(
                 top: false,
                 child: Row(
