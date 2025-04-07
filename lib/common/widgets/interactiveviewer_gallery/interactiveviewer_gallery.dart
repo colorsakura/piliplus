@@ -389,7 +389,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                           PopupMenuItem(
                             onTap: () {
                               DownloadUtils.downloadImg(
-                                context,
+                                this.context,
                                 [widget.sources[currentIndex.value].url],
                               );
                             },
@@ -399,7 +399,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                             PopupMenuItem(
                               onTap: () {
                                 DownloadUtils.downloadImg(
-                                  context,
+                                  this.context,
                                   widget.sources
                                       .map((item) => item.url)
                                       .toList(),
@@ -412,7 +412,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                             PopupMenuItem(
                               onTap: () {
                                 DownloadUtils.downloadLivePhoto(
-                                  context: context,
+                                  context: this.context,
                                   url: widget.sources[currentIndex.value].url,
                                   liveUrl: widget
                                       .sources[currentIndex.value].liveUrl!,
@@ -567,7 +567,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                 onTap: () {
                   Get.back();
                   DownloadUtils.downloadImg(
-                    context,
+                    this.context,
                     [widget.sources[currentIndex.value].url],
                   );
                 },
@@ -579,7 +579,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   onTap: () {
                     Get.back();
                     DownloadUtils.downloadImg(
-                      context,
+                      this.context,
                       widget.sources.map((item) => item.url).toList(),
                     );
                   },
@@ -592,7 +592,7 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
                   onTap: () {
                     Get.back();
                     DownloadUtils.downloadLivePhoto(
-                      context: context,
+                      context: this.context,
                       url: widget.sources[currentIndex.value].url,
                       liveUrl: widget.sources[currentIndex.value].liveUrl!,
                       width: widget.sources[currentIndex.value].width!,

@@ -1211,7 +1211,7 @@ class ReplyItemGrpc extends StatelessWidget {
             barrierLabel: '',
             barrierDismissible: true,
             pageBuilder: (context, animation, secondaryAnimation) {
-              return ReplySavePanel(replyItem: item);
+              return ReplySavePanel(upMid: upMid, replyItem: item);
             },
             transitionDuration: const Duration(milliseconds: 255),
             transitionBuilder: (context, animation, secondaryAnimation, child) {

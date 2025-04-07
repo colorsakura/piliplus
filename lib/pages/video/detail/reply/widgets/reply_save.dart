@@ -7,6 +7,7 @@ import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
+import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,8 +18,13 @@ import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ReplySavePanel extends StatefulWidget {
-  const ReplySavePanel({required this.replyItem, super.key});
+  const ReplySavePanel({
+    required this.upMid,
+    required this.replyItem,
+    super.key,
+  });
 
+  final dynamic upMid;
   final ReplyInfo replyItem;
 
   @override
@@ -29,6 +35,12 @@ class _ReplySavePanelState extends State<ReplySavePanel> {
   final boundaryKey = GlobalKey();
 
   void _onSaveOrSharePic([bool isShare = false]) async {
+    if (!isShare) {
+      if (mounted &&
+          !await DownloadUtils.checkPermissionDependOnSdkInt(context)) {
+        return;
+      }
+    }
     SmartDialog.showLoading();
     try {
       RenderRepaintBoundary boundary = boundaryKey.currentContext!
@@ -185,6 +197,7 @@ class _ReplySavePanelState extends State<ReplySavePanel> {
                               showReplyRow: false,
                               replyLevel: '',
                               needDivider: false,
+                              upMid: widget.upMid,
                             ),
                           ),
                           if (cover?.isNotEmpty == true &&
