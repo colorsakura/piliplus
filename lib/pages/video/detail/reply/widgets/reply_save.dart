@@ -34,66 +34,15 @@ class ReplySavePanel extends StatefulWidget {
 class _ReplySavePanelState extends State<ReplySavePanel> {
   final boundaryKey = GlobalKey();
 
-  void _onSaveOrSharePic([bool isShare = false]) async {
-    if (!isShare) {
-      if (mounted &&
-          !await DownloadUtils.checkPermissionDependOnSdkInt(context)) {
-        return;
-      }
-    }
-    SmartDialog.showLoading();
-    try {
-      RenderRepaintBoundary boundary = boundaryKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      var image = await boundary.toImage(pixelRatio: 3);
-      ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-      String picName =
-          "plpl_reply_${DateTime.now().toString().replaceAll(RegExp(r'[- :]'), '').split('.').first}";
-      if (isShare) {
-        Get.back();
-        SmartDialog.dismiss();
-        Share.shareXFiles(
-          [
-            XFile.fromData(
-              pngBytes,
-              name: picName,
-              mimeType: 'image/png',
-            )
-          ],
-          sharePositionOrigin: await Utils.isIpad()
-              ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
-              : null,
-        );
-      } else {
-        final result = await SaverGallery.saveImage(
-          pngBytes,
-          fileName: '$picName.png',
-          androidRelativePath: "Pictures/PiliPlus",
-          skipIfExists: false,
-        );
-        SmartDialog.dismiss();
-        if (result.isSuccess) {
-          Get.back();
-          SmartDialog.showToast('保存成功');
-        } else if (result.errorMessage?.isNotEmpty == true) {
-          SmartDialog.showToast(result.errorMessage!);
-        }
-      }
-    } catch (e) {
-      debugPrint('on save/share reply: $e');
-      SmartDialog.dismiss();
-    }
-  }
+  String? cover;
+  String? title;
+  int? pubdate;
+  String? uname;
+  String uri = '';
 
   @override
-  Widget build(BuildContext context) {
-    String? cover;
-    String? title;
-    int? pubdate;
-    String? uname;
-    String uri = '';
-
+  void initState() {
+    super.initState();
     final currentRoute = Get.currentRoute;
     late final hasRoot = widget.replyItem.hasRoot();
 
@@ -161,7 +110,62 @@ class _ReplySavePanelState extends State<ReplySavePanel> {
     }
 
     debugPrint(uri);
+  }
 
+  void _onSaveOrSharePic([bool isShare = false]) async {
+    if (!isShare) {
+      if (mounted &&
+          !await DownloadUtils.checkPermissionDependOnSdkInt(context)) {
+        return;
+      }
+    }
+    SmartDialog.showLoading();
+    try {
+      RenderRepaintBoundary boundary = boundaryKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      var image = await boundary.toImage(pixelRatio: 3);
+      ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      String picName =
+          "plpl_reply_${DateTime.now().toString().replaceAll(RegExp(r'[- :]'), '').split('.').first}";
+      if (isShare) {
+        Get.back();
+        SmartDialog.dismiss();
+        Share.shareXFiles(
+          [
+            XFile.fromData(
+              pngBytes,
+              name: picName,
+              mimeType: 'image/png',
+            )
+          ],
+          sharePositionOrigin: await Utils.isIpad()
+              ? Rect.fromLTWH(0, 0, Get.width, Get.height / 2)
+              : null,
+        );
+      } else {
+        final result = await SaverGallery.saveImage(
+          pngBytes,
+          fileName: '$picName.png',
+          androidRelativePath: "Pictures/PiliPlus",
+          skipIfExists: false,
+        );
+        SmartDialog.dismiss();
+        if (result.isSuccess) {
+          Get.back();
+          SmartDialog.showToast('保存成功');
+        } else if (result.errorMessage?.isNotEmpty == true) {
+          SmartDialog.showToast(result.errorMessage!);
+        }
+      }
+    } catch (e) {
+      debugPrint('on save/share reply: $e');
+      SmartDialog.dismiss();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -354,7 +358,7 @@ class _ReplySavePanelState extends State<ReplySavePanel> {
                   ],
                 ),
               ),
-              padding: const EdgeInsets.only(bottom: 25, top: 10),
+              padding: const EdgeInsets.only(bottom: 25),
               child: SafeArea(
                 top: false,
                 child: Row(
