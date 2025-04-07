@@ -187,7 +187,13 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             ),
           );
       if (this.context.orientation == Orientation.portrait) {
-        Get.to(replyReplyPage);
+        Get.to(
+          replyReplyPage,
+          routeName: 'htmlRender-Copy',
+          arguments: {
+            'id': _htmlRenderCtr.id,
+          },
+        );
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
@@ -211,7 +217,13 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             ),
           );
         } else {
-          Get.to(replyReplyPage);
+          Get.to(
+            replyReplyPage,
+            routeName: 'htmlRender-Copy',
+            arguments: {
+              'id': _htmlRenderCtr.id,
+            },
+          );
         }
       }
     });

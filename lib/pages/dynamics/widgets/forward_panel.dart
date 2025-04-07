@@ -68,7 +68,8 @@ Widget _blockedItem(BuildContext context, item, source) {
   );
 }
 
-Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
+Widget forWard(isSave, item, BuildContext context, source, callback,
+    {floor = 1}) {
   switch (item.type) {
     // 图文
     case 'DYNAMIC_TYPE_DRAW':
@@ -124,10 +125,16 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
               Text.rich(
                 richNodes,
                 // 被转发状态(floor=2) 隐藏
-                maxLines: source == 'detail' && floor != 2 ? null : 4,
-                overflow: source == 'detail' && floor != 2
+                maxLines: isSave == true
                     ? null
-                    : TextOverflow.ellipsis,
+                    : source == 'detail' && floor != 2
+                        ? null
+                        : 4,
+                overflow: isSave == true
+                    ? null
+                    : source == 'detail' && floor != 2
+                        ? null
+                        : TextOverflow.ellipsis,
               ),
             if (hasPics) ...[
               Text.rich(
@@ -254,8 +261,8 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           color: Theme.of(context).dividerColor.withOpacity(0.08),
-          child:
-              forWard(item.orig, context, source, callback, floor: floor + 1),
+          child: forWard(isSave, item.orig, context, source, callback,
+              floor: floor + 1),
         ),
       );
     // 直播
@@ -300,10 +307,16 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
                   Text.rich(
                     richNodes,
                     // 被转发状态(floor=2) 隐藏
-                    maxLines: source == 'detail' && floor != 2 ? null : 4,
-                    overflow: source == 'detail' && floor != 2
+                    maxLines: isSave == true
                         ? null
-                        : TextOverflow.ellipsis,
+                        : source == 'detail' && floor != 2
+                            ? null
+                            : 4,
+                    overflow: isSave == true
+                        ? null
+                        : source == 'detail' && floor != 2
+                            ? null
+                            : TextOverflow.ellipsis,
                   ),
               ],
             )

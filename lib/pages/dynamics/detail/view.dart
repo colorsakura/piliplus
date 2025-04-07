@@ -190,7 +190,13 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             ),
           );
       if (this.context.orientation == Orientation.portrait) {
-        Get.to(replyReplyPage);
+        Get.to(
+          replyReplyPage,
+          routeName: 'dynamicDetail-Copy',
+          arguments: {
+            'item': _dynamicDetailController.item,
+          },
+        );
       } else {
         ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
         if (scaffoldState != null) {
@@ -214,7 +220,13 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             ),
           );
         } else {
-          Get.to(replyReplyPage);
+          Get.to(
+            replyReplyPage,
+            routeName: 'dynamicDetail-Copy',
+            arguments: {
+              'item': _dynamicDetailController.item,
+            },
+          );
         }
       }
     });

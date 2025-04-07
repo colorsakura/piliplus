@@ -137,8 +137,8 @@ class DynamicPanel extends StatelessWidget {
           ),
           if (item!.modules!.moduleDynamic!.desc != null ||
               item!.modules!.moduleDynamic!.major != null)
-            content(context, item, source, callback),
-          forWard(item, context, source, callback),
+            content(isSave, context, item, source, callback),
+          forWard(isSave, item, context, source, callback),
           const SizedBox(height: 2),
           if (source == null) ActionPanel(item: item),
           if (source == 'detail' && isSave != true) const SizedBox(height: 12),

@@ -131,7 +131,7 @@ class _SavePanelState extends State<SavePanel> {
           late final rootId = hasRoot ? _item.root : _item.id;
           late final anchor = hasRoot ? 'anchor=${_item.id}&' : '';
           late final enterUri =
-              'bilibili://following/detail/${Get.parameters['id']}';
+              'bilibili://following/detail/${Get.parameters['id'] ?? Get.arguments?['id']}';
           uri =
               'bilibili://comment/detail/$type/$oid/$rootId/?${anchor}enterUri=$enterUri';
         } catch (_) {}
@@ -360,78 +360,94 @@ class _SavePanelState extends State<SavePanel> {
                                 ],
                               ),
                             ),
-                          Row(
+                          Stack(
+                            clipBehavior: Clip.none,
                             children: [
-                              Image.asset(
-                                'assets/images/logo/logo_2.png',
-                                width: 100,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
-                              if (uri.isNotEmpty) ...[
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                              if (uri.isNotEmpty)
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
                                     children: [
-                                      if (uname?.isNotEmpty == true) ...[
-                                        Text(
-                                          '@$uname',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                      ],
-                                      Text(
-                                        '识别二维码，$viewType$itemType',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            if (uname?.isNotEmpty == true) ...[
+                                              Text(
+                                                '@$uname',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                            ],
+                                            Text(
+                                              '识别二维码，$viewType$itemType',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              DateTime.now()
+                                                  .toString()
+                                                  .split('.')
+                                                  .first,
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        DateTime.now()
-                                            .toString()
-                                            .split('.')
-                                            .first,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        padding: const EdgeInsets.all(12),
+                                        child: Container(
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                          padding: const EdgeInsets.all(3),
+                                          child: PrettyQrView.data(
+                                            data: uri,
+                                            decoration:
+                                                const PrettyQrDecoration(
+                                              shape: PrettyQrRoundedSymbol(
+                                                borderRadius: BorderRadius.zero,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Container(
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Image.asset(
+                                  'assets/images/logo/logo_2.png',
                                   width: 100,
-                                  height: 100,
-                                  padding: const EdgeInsets.all(12),
-                                  child: Container(
-                                    color: Get.isDarkMode
-                                        ? Colors.white
-                                        : Theme.of(context).colorScheme.surface,
-                                    padding: const EdgeInsets.all(3),
-                                    child: PrettyQrView.data(
-                                      data: uri,
-                                      decoration: const PrettyQrDecoration(
-                                        shape: PrettyQrRoundedSymbol(
-                                          borderRadius: BorderRadius.zero,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                                 ),
-                              ],
+                              ),
                             ],
                           ),
                         ],
