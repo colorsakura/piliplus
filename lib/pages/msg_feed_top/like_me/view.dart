@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -42,165 +43,71 @@ class _LikeMePageState extends State<LikeMePage> {
       Success() => () {
           Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
               loadingState.response;
-
-          int length = pair.first.length + pair.second.length;
-          if (pair.first.isNotEmpty) {
-            length++;
-          }
-          if (pair.second.isNotEmpty) {
-            length++;
-          }
-
-          LikeMeItems getCurrentItem(int index) {
-            if (pair.first.isEmpty) {
-              return pair.second[index - 1];
-            } else {
-              return index <= pair.first.length
-                  ? pair.first[index - 1]
-                  : pair.second[index - pair.first.length - 2];
-            }
-          }
-
-          return length > 0
-              ? ListView.separated(
-                  itemCount: length,
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.paddingOf(context).bottom + 80),
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (context, int index) {
-                    if (index == length - 1) {
-                      _likeMeController.onLoadMore();
-                    }
-
-                    // title
-                    if (index == 0) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Text(
-                          pair.first.isNotEmpty ? '最新' : '累计',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                        ),
+          List<LikeMeItems> latest = pair.first;
+          List<LikeMeItems> total = pair.second;
+          if (latest.isNotEmpty || total.isNotEmpty) {
+            return CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                if (latest.isNotEmpty) ...[
+                  _buildHeader('最新'),
+                  SliverList.separated(
+                    itemBuilder: (context, index) {
+                      if (total.isEmpty && index == latest.length - 1) {
+                        _likeMeController.onLoadMore();
+                      }
+                      return _buildItem(
+                        latest[index],
+                        (id) {
+                          _likeMeController.onRemove(id, index, true);
+                        },
                       );
-                    } else if (pair.first.isNotEmpty &&
-                        index == pair.first.length + 1) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Text(
-                          "累计",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                        ),
+                    },
+                    itemCount: latest.length,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(
+                        indent: 72,
+                        endIndent: 20,
+                        height: 6,
+                        color: Colors.grey.withOpacity(0.1),
                       );
-                    }
-
-                    // item
-                    final item = getCurrentItem(index);
-                    return ListTile(
-                      onTap: () {
-                        String? nativeUri = item.item?.nativeUri;
-                        if (nativeUri != null) {
-                          PiliScheme.routePushFromUrl(nativeUri);
-                        }
-                      },
-                      leading: Column(
-                        children: [
-                          const Spacer(),
-                          SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Stack(
-                                children: [
-                                  for (var j = 0;
-                                      j < item.users!.length && j < 4;
-                                      j++) ...<Widget>[
-                                    Positioned(
-                                        left: 15 * (j % 2).toDouble(),
-                                        top: 15 * (j ~/ 2).toDouble(),
-                                        child: NetworkImgLayer(
-                                          width:
-                                              item.users!.length > 1 ? 30 : 45,
-                                          height:
-                                              item.users!.length > 1 ? 30 : 45,
-                                          type: 'avatar',
-                                          src: item.users![j].avatar,
-                                        )),
-                                  ]
-                                ],
-                              )),
-                          const Spacer(),
-                        ],
-                      ),
-                      title: Text(
-                        // "${msgFeedLikeMeList[i].users!.map((e) => e.nickname).join("/")}"
-                        "${item.users?[0].nickname}"
-                        "${item.users!.length > 1 ? '、${item.users![1].nickname} 等' : ''} "
-                        "${item.counts! > 1 ? '共 ${item.counts} 人' : ''}"
-                        "赞了我的${item.item?.business}",
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            height: 1.5,
-                            color: Theme.of(context).colorScheme.primary),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (item.item?.title?.isNotEmpty == true) ...[
-                            const SizedBox(height: 4),
-                            Text(item.item!.title!,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        height: 1.5)),
-                          ],
-                          const SizedBox(height: 4),
-                          Text(
-                            Utils.dateFormat(item.likeTime),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                          ),
-                        ],
-                      ),
-                      trailing:
-                          item.item?.image != null && item.item?.image != ""
-                              ? NetworkImgLayer(
-                                  width: 45,
-                                  height: 45,
-                                  type: 'cover',
-                                  src: item.item?.image,
-                                )
-                              : null,
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      indent: 72,
-                      endIndent: 20,
-                      height: 6,
-                      color: Colors.grey.withOpacity(0.1),
-                    );
-                  },
-                )
-              : scrollErrorWidget(callback: _likeMeController.onReload);
+                    },
+                  ),
+                ],
+                if (total.isNotEmpty) ...[
+                  _buildHeader('累计'),
+                  SliverList.separated(
+                    itemBuilder: (context, index) {
+                      if (index == total.length - 1) {
+                        _likeMeController.onLoadMore();
+                      }
+                      return _buildItem(
+                        total[index],
+                        (id) {
+                          _likeMeController.onRemove(id, index, false);
+                        },
+                      );
+                    },
+                    itemCount: total.length,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(
+                        indent: 72,
+                        endIndent: 20,
+                        height: 6,
+                        color: Colors.grey.withOpacity(0.1),
+                      );
+                    },
+                  ),
+                ],
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.paddingOf(context).bottom + 80,
+                  ),
+                ),
+              ],
+            );
+          }
+          return scrollErrorWidget(callback: _likeMeController.onReload);
         }(),
       Error() => scrollErrorWidget(
           errMsg: loadingState.errMsg,
@@ -208,5 +115,123 @@ class _LikeMePageState extends State<LikeMePage> {
         ),
       LoadingState() => throw UnimplementedError(),
     };
+  }
+
+  Widget _buildHeader(String title) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItem(LikeMeItems item, ValueChanged onRemove) {
+    return ListTile(
+      onTap: () {
+        String? nativeUri = item.item?.nativeUri;
+        if (nativeUri != null) {
+          PiliScheme.routePushFromUrl(nativeUri);
+        }
+      },
+      onLongPress: () {
+        showConfirmDialog(
+          context: context,
+          title: '确定删除该通知?',
+          onConfirm: () {
+            onRemove(item.id);
+          },
+        );
+      },
+      leading: Column(
+        children: [
+          const Spacer(),
+          SizedBox(
+            width: 50,
+            height: 50,
+            child: Stack(
+              children: [
+                for (var j = 0;
+                    j < item.users!.length && j < 4;
+                    j++) ...<Widget>[
+                  Positioned(
+                      left: 15 * (j % 2).toDouble(),
+                      top: 15 * (j ~/ 2).toDouble(),
+                      child: NetworkImgLayer(
+                        width: item.users!.length > 1 ? 30 : 45,
+                        height: item.users!.length > 1 ? 30 : 45,
+                        type: 'avatar',
+                        src: item.users![j].avatar,
+                      )),
+                ]
+              ],
+            ),
+          ),
+          const Spacer(),
+        ],
+      ),
+      title: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: "${item.users![0].nickname}",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  height: 1.5, color: Theme.of(context).colorScheme.primary),
+            ),
+            if (item.counts! > 1)
+              TextSpan(
+                text: ' 等${item.counts}人',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontSize: 12, height: 1.5),
+              ),
+            TextSpan(
+              text: " 赞了我的${item.item?.business}",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    height: 1.5,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+          ],
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (item.item?.title?.isNotEmpty == true) ...[
+            const SizedBox(height: 4),
+            Text(item.item!.title!,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.outline, height: 1.5)),
+          ],
+          const SizedBox(height: 4),
+          Text(
+            Utils.dateFormat(item.likeTime),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+          ),
+        ],
+      ),
+      trailing: item.item?.image != null && item.item?.image != ""
+          ? NetworkImgLayer(
+              width: 45,
+              height: 45,
+              type: 'cover',
+              src: item.item?.image,
+            )
+          : null,
+    );
   }
 }

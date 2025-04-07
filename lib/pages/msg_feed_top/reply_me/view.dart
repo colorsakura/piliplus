@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
@@ -59,6 +60,15 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       );
                     }
                   },
+                  onLongPress: () {
+                    showConfirmDialog(
+                      context: context,
+                      title: '确定删除该通知?',
+                      onConfirm: () {
+                        _replyMeController.onRemove(item.id, index);
+                      },
+                    );
+                  },
                   leading: GestureDetector(
                     onTap: () {
                       Get.toNamed('/member?mid=${item.user?.mid}');
@@ -70,13 +80,38 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       src: item.user?.avatar,
                     ),
                   ),
-                  title: Text(
-                    "${item.user?.nickname}  ${item.isMulti == 1 ? '等人' : ''}"
-                    "回复了我的${item.item?.business} ${item.isMulti == 1 ? '，共${item.counts}条' : ''}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  title: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "${item.user?.nickname}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
+                        ),
+                        if (item.isMulti == 1)
+                          TextSpan(
+                            text: " 等人",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(fontSize: 12),
+                          ),
+                        TextSpan(
+                          text:
+                              " 对我的${item.item?.business}发布了${item.counts}条评论",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant),
+                        ),
+                      ],
+                    ),
                   ),
                   subtitle: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -117,6 +152,7 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       Text(
                         Utils.dateFormat(item.replyTime),
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 13,
                               color: Theme.of(context).colorScheme.outline,
                             ),
                       ),

@@ -40,7 +40,7 @@ class SysMsgController extends CommonController {
 
   Future onRemove(dynamic id, int index) async {
     try {
-      var res = await MsgHttp.removeSysMsg(id);
+      var res = await MsgHttp.delSysMsg(id);
       if (res['status']) {
         List list = (loadingState.value as Success).response;
         list.removeAt(index);

@@ -331,12 +331,41 @@ class MsgHttp {
     }
   }
 
-  static Future removeSysMsg(
+  static Future delMsgfeed(
+    int tp,
     dynamic id,
   ) async {
     String csrf = await Request.getCsrf();
     var res = await Request().post(
-      HttpString.messageBaseUrl + Api.removeSysMsg,
+      Api.delMsgfeed,
+      data: {
+        'tp': tp,
+        'id': id,
+        'build': 0,
+        'mobi_app': 'web',
+        'csrf_token': csrf,
+        'csrf': csrf,
+      },
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {
+        'status': false,
+        'msg': res.data['message'],
+      };
+    }
+  }
+
+  static Future delSysMsg(
+    dynamic id,
+  ) async {
+    String csrf = await Request.getCsrf();
+    var res = await Request().post(
+      HttpString.messageBaseUrl + Api.delSysMsg,
       queryParameters: {
         'mobi_app': 'android',
         'csrf': csrf,

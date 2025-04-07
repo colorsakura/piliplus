@@ -4,6 +4,7 @@ import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class LikeMeController extends CommonController {
   int cursor = -1;
@@ -47,4 +48,23 @@ class LikeMeController extends CommonController {
   @override
   Future<LoadingState> customGetData() =>
       MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
+
+  Future onRemove(dynamic id, int index, bool isLatest) async {
+    try {
+      var res = await MsgHttp.delMsgfeed(0, id);
+      if (res['status']) {
+        Pair<List<LikeMeItems>, List<LikeMeItems>> pair =
+            (loadingState.value as Success).response;
+        if (isLatest) {
+          pair.first.removeAt(index);
+        } else {
+          pair.second.removeAt(index);
+        }
+        loadingState.value = LoadingState.success(pair);
+        SmartDialog.showToast('删除成功');
+      } else {
+        SmartDialog.showToast(res['msg']);
+      }
+    } catch (_) {}
+  }
 }

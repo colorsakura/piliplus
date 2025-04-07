@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
@@ -47,42 +48,65 @@ class _AtMePageState extends State<AtMePage> {
                 if (index == loadingState.response.length - 1) {
                   _atMeController.onLoadMore();
                 }
+                final item = loadingState.response[index];
                 return ListTile(
                   onTap: () {
-                    String? nativeUri =
-                        loadingState.response[index].item?.nativeUri;
+                    String? nativeUri = item.item?.nativeUri;
                     if (nativeUri != null) {
                       PiliScheme.routePushFromUrl(nativeUri);
                     }
                   },
+                  onLongPress: () {
+                    showConfirmDialog(
+                      context: context,
+                      title: '确定删除该通知?',
+                      onConfirm: () {
+                        _atMeController.onRemove(item.id, index);
+                      },
+                    );
+                  },
                   leading: GestureDetector(
                     onTap: () {
-                      Get.toNamed(
-                          '/member?mid=${loadingState.response[index].user?.mid}');
+                      Get.toNamed('/member?mid=${item.user?.mid}');
                     },
                     child: NetworkImgLayer(
                       width: 45,
                       height: 45,
                       type: 'avatar',
-                      src: loadingState.response[index].user?.avatar,
+                      src: item.user?.avatar,
                     ),
                   ),
-                  title: Text(
-                    "${loadingState.response[index].user?.nickname}  "
-                    "在${loadingState.response[index].item?.business}中@了我",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
+                  title: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "${item.user?.nickname}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
+                        TextSpan(
+                          text: " 在${item.item?.business}中@了我",
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if ((loadingState.response[index].item?.sourceContent
-                                  as String?)
-                              ?.isNotEmpty ==
+                      if ((item.item?.sourceContent as String?)?.isNotEmpty ==
                           true) ...[
                         const SizedBox(height: 4),
-                        Text(loadingState.response[index].item?.sourceContent,
+                        Text(item.item?.sourceContent,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
@@ -94,20 +118,20 @@ class _AtMePageState extends State<AtMePage> {
                       ],
                       const SizedBox(height: 4),
                       Text(
-                        Utils.dateFormat(loadingState.response[index].atTime),
+                        Utils.dateFormat(item.atTime),
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 13,
                               color: Theme.of(context).colorScheme.outline,
                             ),
                       ),
                     ],
                   ),
-                  trailing: loadingState.response[index].item?.image != null &&
-                          loadingState.response[index].item?.image != ""
+                  trailing: item.item?.image != null && item.item?.image != ""
                       ? NetworkImgLayer(
                           width: 45,
                           height: 45,
                           type: 'cover',
-                          src: loadingState.response[index].item?.image,
+                          src: item.item?.image,
                         )
                       : null,
                 );

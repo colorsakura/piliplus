@@ -3,6 +3,7 @@ import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/msg/msgfeed_reply_me.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ReplyMeController extends CommonController {
   int cursor = -1;
@@ -40,4 +41,18 @@ class ReplyMeController extends CommonController {
   @override
   Future<LoadingState> customGetData() =>
       MsgHttp.msgFeedReplyMe(cursor: cursor, cursorTime: cursorTime);
+
+  Future onRemove(dynamic id, int index) async {
+    try {
+      var res = await MsgHttp.delMsgfeed(1, id);
+      if (res['status']) {
+        List list = (loadingState.value as Success).response;
+        list.removeAt(index);
+        loadingState.value = LoadingState.success(list);
+        SmartDialog.showToast('删除成功');
+      } else {
+        SmartDialog.showToast(res['msg']);
+      }
+    } catch (_) {}
+  }
 }
