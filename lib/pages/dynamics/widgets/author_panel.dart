@@ -39,6 +39,9 @@ class AuthorPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? pubTime = item.modules.moduleAuthor.pubTs != null
+        ? Utils.dateFormat(item.modules.moduleAuthor.pubTs)
+        : item.modules.moduleAuthor.pubTime;
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -89,22 +92,15 @@ class AuthorPanel extends StatelessWidget {
                           Theme.of(context).textTheme.titleSmall!.fontSize,
                     ),
                   ),
-                  DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize:
-                          Theme.of(context).textTheme.labelSmall!.fontSize,
+                  if (pubTime != null)
+                    Text(
+                      '$pubTime${item.modules.moduleAuthor.pubAction != null ? ' ${item.modules.moduleAuthor.pubAction}' : ''}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontSize:
+                            Theme.of(context).textTheme.labelSmall!.fontSize,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        Text(Utils.dateFormat(item.modules.moduleAuthor.pubTs)),
-                        if (item.modules.moduleAuthor.pubTs != '' &&
-                            item.modules.moduleAuthor.pubAction != '')
-                          const Text(' '),
-                        Text(item.modules.moduleAuthor.pubAction),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ],
