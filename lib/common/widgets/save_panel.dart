@@ -96,10 +96,9 @@ class _SavePanelState extends State<SavePanel> {
           late final oid = dynItem.idStr;
           late final rootId = hasRoot ? _item.root : _item.id;
           late final anchor = hasRoot ? 'anchor=${_item.id}&' : '';
-          late final enterUri = 'bilibili://following/detail/$oid';
+          late final enterUri = parseDyn(dynItem);
           uri = switch (type) {
-            1 =>
-              'bilibili://video/${dynItem.basic!['rid_str']}?comment_root_id=${hasRoot ? _item.root : _item.id}${hasRoot ? '&comment_secondary_id=${_item.id}' : ''}',
+            1 ||
             11 ||
             12 =>
               'bilibili://comment/detail/$type/${dynItem.basic!['rid_str']}/$rootId/?${anchor}enterUri=$enterUri',
@@ -115,8 +114,7 @@ class _SavePanelState extends State<SavePanel> {
           late final anchor = hasRoot ? 'anchor=${_item.id}&' : '';
           late final enterUri = 'bilibili://following/detail/$oid';
           uri = switch (type) {
-            1 =>
-              'bilibili://video/$oid?comment_root_id=${hasRoot ? _item.root : _item.id}${hasRoot ? '&comment_secondary_id=${_item.id}' : ''}',
+            1 ||
             11 ||
             12 =>
               'bilibili://comment/detail/$type/$oid/$rootId/?${anchor}enterUri=${Get.arguments['enterUri']}',
@@ -139,67 +137,72 @@ class _SavePanelState extends State<SavePanel> {
 
       debugPrint(uri);
     } else if (_item is DynamicItemModel) {
-      try {
-        switch (_item.type) {
-          case 'DYNAMIC_TYPE_AV':
-            viewType = '观看';
-            itemType = '视频';
-            uri = 'bilibili://video/${_item.basic!['comment_id_str']}';
-            break;
+      uri = parseDyn(_item);
 
-          case 'DYNAMIC_TYPE_ARTICLE':
-            itemType = '专栏';
-            uri = 'bilibili://following/detail/${_item.idStr}';
-            break;
-
-          case 'DYNAMIC_TYPE_LIVE_RCMD':
-            viewType = '观看';
-            itemType = '直播';
-            final roomId = _item.modules.moduleDynamic.major.liveRcmd.roomId;
-            uri = 'bilibili://live/$roomId';
-            break;
-
-          case 'DYNAMIC_TYPE_UGC_SEASON':
-            viewType = '观看';
-            itemType = '合集';
-            int aid = _item.modules.moduleDynamic.major.ugcSeason.aid;
-            uri = 'bilibili://video/$aid';
-            break;
-
-          case 'DYNAMIC_TYPE_PGC':
-          case 'DYNAMIC_TYPE_PGC_UNION':
-            viewType = '观看';
-            itemType =
-                _item?.modules?.moduleDynamic?.major?.pgc?.badge?['text'] ??
-                    '番剧';
-            final epid = _item.modules.moduleDynamic.major.pgc.epid;
-            uri = 'bilibili://pgc/season/ep/$epid';
-            break;
-
-          // https://www.bilibili.com/medialist/detail/ml12345678
-          case 'DYNAMIC_TYPE_MEDIALIST':
-            itemType = '收藏夹';
-            final mediaId = _item.modules.moduleDynamic.major.medialist!['id'];
-            uri = 'bilibili://medialist/detail/$mediaId';
-            break;
-
-          // 纯文字动态查看
-          // case 'DYNAMIC_TYPE_WORD':
-          // # 装扮/剧集点评/普通分享
-          // case 'DYNAMIC_TYPE_COMMON_SQUARE':
-          // 转发的动态
-          // case 'DYNAMIC_TYPE_FORWARD':
-          // 图文动态查看
-          // case 'DYNAMIC_TYPE_DRAW':
-          default:
-            itemType = '动态';
-            uri = 'bilibili://following/detail/${_item.idStr}';
-            break;
-        }
-
-        debugPrint(uri);
-      } catch (_) {}
+      debugPrint(uri);
     }
+  }
+
+  String parseDyn(item) {
+    String uri = '';
+    try {
+      switch (item.type) {
+        case 'DYNAMIC_TYPE_AV':
+          viewType = '观看';
+          itemType = '视频';
+          uri = 'bilibili://video/${item.basic!['comment_id_str']}';
+          break;
+
+        case 'DYNAMIC_TYPE_ARTICLE':
+          itemType = '专栏';
+          uri = 'bilibili://following/detail/${item.idStr}';
+          break;
+
+        case 'DYNAMIC_TYPE_LIVE_RCMD':
+          viewType = '观看';
+          itemType = '直播';
+          final roomId = item.modules.moduleDynamic.major.liveRcmd.roomId;
+          uri = 'bilibili://live/$roomId';
+          break;
+
+        case 'DYNAMIC_TYPE_UGC_SEASON':
+          viewType = '观看';
+          itemType = '合集';
+          int aid = item.modules.moduleDynamic.major.ugcSeason.aid;
+          uri = 'bilibili://video/$aid';
+          break;
+
+        case 'DYNAMIC_TYPE_PGC':
+        case 'DYNAMIC_TYPE_PGC_UNION':
+          viewType = '观看';
+          itemType =
+              item?.modules?.moduleDynamic?.major?.pgc?.badge?['text'] ?? '番剧';
+          final epid = item.modules.moduleDynamic.major.pgc.epid;
+          uri = 'bilibili://pgc/season/ep/$epid';
+          break;
+
+        // https://www.bilibili.com/medialist/detail/ml12345678
+        case 'DYNAMIC_TYPE_MEDIALIST':
+          itemType = '收藏夹';
+          final mediaId = item.modules.moduleDynamic.major.medialist!['id'];
+          uri = 'bilibili://medialist/detail/$mediaId';
+          break;
+
+        // 纯文字动态查看
+        // case 'DYNAMIC_TYPE_WORD':
+        // # 装扮/剧集点评/普通分享
+        // case 'DYNAMIC_TYPE_COMMON_SQUARE':
+        // 转发的动态
+        // case 'DYNAMIC_TYPE_FORWARD':
+        // 图文动态查看
+        // case 'DYNAMIC_TYPE_DRAW':
+        default:
+          itemType = '动态';
+          uri = 'bilibili://following/detail/${item.idStr}';
+          break;
+      }
+    } catch (_) {}
+    return uri;
   }
 
   void _onSaveOrSharePic([bool isShare = false]) async {
