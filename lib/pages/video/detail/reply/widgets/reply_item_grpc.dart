@@ -8,6 +8,7 @@ import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_save.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -43,8 +44,8 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onViewImage,
     this.onDismissed,
     this.callback,
-    required this.onCheckReply,
-    required this.onToggleTop,
+    this.onCheckReply,
+    this.onToggleTop,
   });
   final ReplyInfo replyItem;
   final String? replyLevel;
@@ -60,8 +61,8 @@ class ReplyItemGrpc extends StatelessWidget {
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
-  final ValueChanged<ReplyInfo> onCheckReply;
-  final Function(bool isUpTop, int rpid) onToggleTop;
+  final ValueChanged<ReplyInfo>? onCheckReply;
+  final Function(bool isUpTop, int rpid)? onToggleTop;
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +278,6 @@ class ReplyItemGrpc extends StatelessWidget {
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               lfAvtar(context),
               const SizedBox(width: 12),
@@ -344,8 +344,12 @@ class ReplyItemGrpc extends StatelessWidget {
         ),
         // title
         Padding(
-          padding:
-              const EdgeInsets.only(top: 10, left: 45, right: 6, bottom: 4),
+          padding: EdgeInsets.only(
+            top: 10,
+            left: replyLevel == '' ? 6 : 45,
+            right: 6,
+            bottom: 4,
+          ),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               String text = replyItem.content.message;
@@ -400,12 +404,12 @@ class ReplyItemGrpc extends StatelessWidget {
           ),
         ),
         // 操作区域
-        buttonAction(context, replyItem.replyControl),
+        if (replyLevel != '') buttonAction(context, replyItem.replyControl),
         // 一楼的评论
-        if (( //replyItem.replyControl!.isShow! ||
+        if (showReplyRow &&
+            ( //replyItem.replyControl!.isShow! ||
                 replyItem.replies.isNotEmpty ||
-                    replyItem.replyControl.subReplyEntryText.isNotEmpty) &&
-            showReplyRow) ...[
+                    replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 12),
             child: replyItemRow(
@@ -1195,11 +1199,31 @@ class ReplyItemGrpc extends StatelessWidget {
           break;
         case 'checkReply':
           Get.back();
-          onCheckReply(item);
+          onCheckReply?.call(item);
           break;
         case 'top':
           Get.back();
-          onToggleTop(item.replyControl.isUpTop, item.id.toInt());
+          onToggleTop?.call(item.replyControl.isUpTop, item.id.toInt());
+          break;
+        case 'saveReply':
+          Get.back();
+          Get.generalDialog(
+            barrierLabel: '',
+            barrierDismissible: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return ReplySavePanel(replyItem: item);
+            },
+            transitionDuration: const Duration(milliseconds: 255),
+            transitionBuilder: (context, animation, secondaryAnimation, child) {
+              var tween = Tween<double>(begin: 0, end: 1)
+                  .chain(CurveTween(curve: Curves.easeInOut));
+              return FadeTransition(
+                opacity: animation.drive(tween),
+                child: child,
+              );
+            },
+            routeSettings: RouteSettings(arguments: Get.arguments),
+          );
           break;
         default:
       }
@@ -1207,93 +1231,108 @@ class ReplyItemGrpc extends StatelessWidget {
 
     Color errorColor = Theme.of(context).colorScheme.error;
 
-    return Padding(
-      padding: EdgeInsets.only(
-          bottom: MediaQueryData.fromView(
-                      WidgetsBinding.instance.platformDispatcher.views.single)
-                  .padding
-                  .bottom +
-              20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          InkWell(
-            onTap: Get.back,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-            child: Container(
-              height: 35,
-              padding: const EdgeInsets.only(bottom: 2),
-              child: Center(
-                child: Container(
-                  width: 32,
-                  height: 3,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.outline,
-                      borderRadius: const BorderRadius.all(Radius.circular(3))),
+    return MediaQuery.removePadding(
+      context: context,
+      removeLeft: true,
+      removeRight: true,
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: Get.back,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(28),
+                topRight: Radius.circular(28),
+              ),
+              child: Container(
+                height: 35,
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Center(
+                  child: Container(
+                    width: 32,
+                    height: 3,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.outline,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(3))),
+                  ),
                 ),
               ),
             ),
-          ),
-          if (ownerMid == upMid.toInt() || ownerMid == item.member.mid.toInt())
-            ListTile(
-              onTap: () => menuActionHandler('delete'),
-              minLeadingWidth: 0,
-              leading: Icon(Icons.delete_outlined, color: errorColor, size: 19),
-              title: Text('删除',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: errorColor)),
-            ),
-          if (ownerMid != 0)
-            ListTile(
-              onTap: () => menuActionHandler('report'),
-              minLeadingWidth: 0,
-              leading: Icon(Icons.error_outline, color: errorColor, size: 19),
-              title: Text('举报',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: errorColor)),
-            ),
-          if (replyLevel == '1' && isSubReply.not && ownerMid == upMid.toInt())
-            ListTile(
-              onTap: () => menuActionHandler('top'),
-              minLeadingWidth: 0,
-              leading: Icon(Icons.vertical_align_top, size: 19),
-              title: Text('${replyItem.replyControl.isUpTop ? '取消' : ''}置顶',
-                  style: Theme.of(context).textTheme.titleSmall!),
-            ),
-          ListTile(
-            onTap: () => menuActionHandler('copyAll'),
-            minLeadingWidth: 0,
-            leading: const Icon(Icons.copy_all_outlined, size: 19),
-            title: Text('复制全部', style: Theme.of(context).textTheme.titleSmall),
-          ),
-          ListTile(
-            onTap: () => menuActionHandler('copyFreedom'),
-            minLeadingWidth: 0,
-            leading: const Icon(Icons.copy_outlined, size: 19),
-            title: Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
-          ),
-          if (item.mid.toInt() == ownerMid)
-            ListTile(
-              onTap: () => menuActionHandler('checkReply'),
-              minLeadingWidth: 0,
-              leading: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Icon(Icons.shield_outlined, size: 19),
-                  const Icon(Icons.reply, size: 12),
-                ],
+            if (ownerMid == upMid.toInt() ||
+                ownerMid == item.member.mid.toInt())
+              ListTile(
+                onTap: () => menuActionHandler('delete'),
+                minLeadingWidth: 0,
+                leading:
+                    Icon(Icons.delete_outlined, color: errorColor, size: 19),
+                title: Text('删除',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: errorColor)),
               ),
+            if (ownerMid != 0)
+              ListTile(
+                onTap: () => menuActionHandler('report'),
+                minLeadingWidth: 0,
+                leading: Icon(Icons.error_outline, color: errorColor, size: 19),
+                title: Text('举报',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: errorColor)),
+              ),
+            if (replyLevel == '1' &&
+                isSubReply.not &&
+                ownerMid == upMid.toInt())
+              ListTile(
+                onTap: () => menuActionHandler('top'),
+                minLeadingWidth: 0,
+                leading: Icon(Icons.vertical_align_top, size: 19),
+                title: Text('${replyItem.replyControl.isUpTop ? '取消' : ''}置顶',
+                    style: Theme.of(context).textTheme.titleSmall!),
+              ),
+            ListTile(
+              onTap: () => menuActionHandler('copyAll'),
+              minLeadingWidth: 0,
+              leading: const Icon(Icons.copy_all_outlined, size: 19),
               title:
-                  Text('检查评论', style: Theme.of(context).textTheme.titleSmall),
+                  Text('复制全部', style: Theme.of(context).textTheme.titleSmall),
             ),
-        ],
+            ListTile(
+              onTap: () => menuActionHandler('copyFreedom'),
+              minLeadingWidth: 0,
+              leading: const Icon(Icons.copy_outlined, size: 19),
+              title:
+                  Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
+            ),
+            ListTile(
+              onTap: () => menuActionHandler('saveReply'),
+              minLeadingWidth: 0,
+              leading: const Icon(Icons.save_alt, size: 19),
+              title:
+                  Text('保存评论', style: Theme.of(context).textTheme.titleSmall),
+            ),
+            if (item.mid.toInt() == ownerMid)
+              ListTile(
+                onTap: () => menuActionHandler('checkReply'),
+                minLeadingWidth: 0,
+                leading: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(Icons.shield_outlined, size: 19),
+                    const Icon(Icons.reply, size: 12),
+                  ],
+                ),
+                title:
+                    Text('检查评论', style: Theme.of(context).textTheme.titleSmall),
+              ),
+          ],
+        ),
       ),
     );
   }

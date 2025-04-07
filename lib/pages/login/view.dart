@@ -8,7 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 
 import 'controller.dart';
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                 SmartDialog.showLoading(msg: '正在生成截图');
                 RenderRepaintBoundary boundary = globalKey.currentContext!
                     .findRenderObject()! as RenderRepaintBoundary;
-                var image = await boundary.toImage();
+                var image = await boundary.toImage(pixelRatio: 3);
                 ByteData? byteData =
                     await image.toByteData(format: ImageByteFormat.png);
                 Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -93,20 +93,35 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             }
-            return QrImageView(
-              backgroundColor: Colors.white,
-              eyeStyle: QrEyeStyle(
-                eyeShape: QrEyeShape.square,
-                color: Colors.black87,
+            return Container(
+              width: 200,
+              height: 200,
+              color: Colors.white,
+              padding: const EdgeInsets.all(8),
+              child: PrettyQrView.data(
+                data: _loginPageCtr.codeInfo.value['data']!['url']!,
+                decoration: PrettyQrDecoration(
+                  shape: PrettyQrRoundedSymbol(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                ),
               ),
-              dataModuleStyle: QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.square,
-                color: Colors.black87,
-              ),
-              data: _loginPageCtr.codeInfo.value['data']!['url']!,
-              size: 200,
-              semanticsLabel: '二维码',
             );
+            // return QrImageView(
+            //   backgroundColor: Colors.white,
+            //   eyeStyle: QrEyeStyle(
+            //     eyeShape: QrEyeShape.square,
+            //     color: Colors.black87,
+            //   ),
+            //   dataModuleStyle: QrDataModuleStyle(
+            //     dataModuleShape: QrDataModuleShape.square,
+            //     color: Colors.black87,
+            //   ),
+            //   data: _loginPageCtr.codeInfo.value['data']!['url']!,
+            //   size: 200,
+            //   semanticsLabel: '二维码',
+            // );
           }),
         ),
         const SizedBox(height: 10),

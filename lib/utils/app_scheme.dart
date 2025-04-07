@@ -110,6 +110,12 @@ class PiliScheme {
               int? rpid = int.tryParse(queryParameters['comment_root_id']!);
               if (oid != null && rpid != null) {
                 Get.to(
+                  arguments: {
+                    'oid': oid,
+                    'rpid': rpid,
+                    'type': ReplyType.video.index,
+                    'id': queryParameters['comment_secondary_id'],
+                  },
                   () => Scaffold(
                     resizeToAvoidBottomInset: false,
                     appBar: AppBar(
@@ -240,16 +246,24 @@ class PiliScheme {
             if (path.startsWith("/detail/")) {
               // bilibili://comment/detail/17/832703053858603029/238686570016/?subType=0&anchor=238686628816&showEnter=1&extraIntentId=0&scene=1&enterName=%E6%9F%A5%E7%9C%8B%E5%8A%A8%E6%80%81%E8%AF%A6%E6%83%85&enterUri=bilibili://following/detail/832703053858603029
               List<String> pathSegments = uri.pathSegments;
+              Map<String, String> queryParameters = uri.queryParameters;
               int type = int.parse(pathSegments[1]); // business_id
               int oid = int.parse(pathSegments[2]); // subject_id
               int rootId = int.parse(pathSegments[3]); // root_id // target_id
-              int? rpId = uri.queryParameters['anchor'] != null // source_id
-                  ? int.tryParse(uri.queryParameters['anchor']!)
+              int? rpId = queryParameters['anchor'] != null // source_id
+                  ? int.tryParse(queryParameters['anchor']!)
                   : null;
-              // int subType = int.parse(value.queryParameters['subType'] ?? '0');
+              // int subType = int.parse(queryParameters['subType'] ?? '0');
               // int extraIntentId =
-              // int.parse(value.queryParameters['extraIntentId'] ?? '0');
+              // int.parse(queryParameters['extraIntentId'] ?? '0');
               Get.to(
+                arguments: {
+                  'oid': oid,
+                  'rpid': rootId,
+                  'id': rpId,
+                  'type': type,
+                  'enterUri': queryParameters['enterUri'],
+                },
                 () => Scaffold(
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
@@ -258,7 +272,7 @@ class PiliScheme {
                       IconButton(
                         tooltip: '前往',
                         onPressed: () {
-                          String? enterUri = uri.queryParameters['enterUri'];
+                          String? enterUri = queryParameters['enterUri'];
                           if (enterUri != null) {
                             routePush(Uri.parse(enterUri));
                           } else {
@@ -289,6 +303,11 @@ class PiliScheme {
               int oid = int.parse(pathSegments[2]); // subject_id
               int rpId = int.parse(pathSegments[3]); // source_id
               Get.to(
+                arguments: {
+                  'oid': oid,
+                  'rpid': rpId,
+                  'type': type,
+                },
                 () => Scaffold(
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
@@ -328,6 +347,22 @@ class PiliScheme {
             // businessId == 17 => dynId == oid
             // bilibili://following/detail/832703053858603029 (dynId)
             // bilibili://following/detail/12345678?comment_root_id=654321\u0026comment_on=1
+            String? cvid = RegExp(r'^/detail/cv(\d+)', caseSensitive: false)
+                .firstMatch(path)
+                ?.group(1);
+            if (cvid != null) {
+              Utils.toDupNamed(
+                '/htmlRender',
+                parameters: {
+                  'url': 'https://www.bilibili.com/read/cv$cvid',
+                  'title': '',
+                  'id': 'cv$cvid',
+                  'dynamicType': 'read'
+                },
+                off: off,
+              );
+              return true;
+            }
             if ((oid != null || businessId == 17) &&
                 path.startsWith("/detail/")) {
               final queryParameters = uri.queryParameters;
@@ -337,6 +372,12 @@ class PiliScheme {
                 int? rpid = int.tryParse(commentRootId);
                 if (dynId != null && rpid != null) {
                   Get.to(
+                    arguments: {
+                      'oid': oid ?? dynId,
+                      'rpid': rpid,
+                      'type': businessId ?? ReplyType.dynamics.index,
+                      'id': queryParameters['comment_secondary_id'],
+                    },
                     () => Scaffold(
                       resizeToAvoidBottomInset: false,
                       appBar: AppBar(

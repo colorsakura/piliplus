@@ -54,7 +54,8 @@ dependencies:
   saver_gallery: ^4.0.1
 
   # QRCode
-  qr_flutter: ^4.1.0
+  # qr_flutter: ^4.1.0
+  pretty_qr_code: ^3.3.0
 
   # 存储
   path_provider: ^2.1.5

@@ -67,10 +67,8 @@ class VideoReplyReplyController extends ReplyController
         firstFloor = replies.root;
       }
       if (id != null) {
-        index = replies.root.replies
-            .map((item) => item.id.toInt())
-            .toList()
-            .indexOf(id!);
+        index =
+            replies.root.replies.indexWhere((item) => item.id.toInt() == id);
         if (index == -1) {
           index = null;
         } else {

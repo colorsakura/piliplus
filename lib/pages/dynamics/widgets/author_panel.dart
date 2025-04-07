@@ -234,197 +234,200 @@ class AuthorPanel extends StatelessWidget {
       );
 
   Widget morePanel(context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      // clipBehavior: Clip.hardEdge,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          InkWell(
-            onTap: Get.back,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-            child: Container(
-              height: 35,
-              padding: const EdgeInsets.only(bottom: 2),
-              child: Center(
-                child: Container(
-                  width: 32,
-                  height: 3,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.outline,
-                      borderRadius: const BorderRadius.all(Radius.circular(3))),
+    return MediaQuery.removePadding(
+      context: context,
+      removeLeft: true,
+      removeRight: true,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: Get.back,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(28),
+                topRight: Radius.circular(28),
+              ),
+              child: Container(
+                height: 35,
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Center(
+                  child: Container(
+                    width: 32,
+                    height: 3,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.outline,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(3))),
+                  ),
                 ),
               ),
             ),
-          ),
-          if (item.type == 'DYNAMIC_TYPE_AV')
+            if (item.type == 'DYNAMIC_TYPE_AV')
+              ListTile(
+                onTap: () async {
+                  try {
+                    String bvid = item.modules.moduleDynamic.major.archive.bvid;
+                    var res = await UserHttp.toViewLater(bvid: bvid);
+                    SmartDialog.showToast(res['msg']);
+                    Get.back();
+                  } catch (err) {
+                    SmartDialog.showToast('出错了：${err.toString()}');
+                  }
+                },
+                minLeadingWidth: 0,
+                // dense: true,
+                leading: const Icon(Icons.watch_later_outlined, size: 19),
+                title: Text(
+                  '稍后再看',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
             ListTile(
-              onTap: () async {
-                try {
-                  String bvid = item.modules.moduleDynamic.major.archive.bvid;
-                  var res = await UserHttp.toViewLater(bvid: bvid);
-                  SmartDialog.showToast(res['msg']);
-                  Get.back();
-                } catch (err) {
-                  SmartDialog.showToast('出错了：${err.toString()}');
-                }
-              },
-              minLeadingWidth: 0,
-              // dense: true,
-              leading: const Icon(Icons.watch_later_outlined, size: 19),
               title: Text(
-                '稍后再看',
+                '分享动态',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-            ),
-          ListTile(
-            title: Text(
-              '分享动态',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            leading: const Icon(Icons.share_outlined, size: 19),
-            onTap: () {
-              Get.back();
-              Utils.shareText(
-                  '${HttpString.dynamicShareBaseUrl}/${item.idStr}');
-            },
-            minLeadingWidth: 0,
-          ),
-          ListTile(
-            title: Text(
-              '临时屏蔽：${item.modules.moduleAuthor.name}',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            leading: const Icon(Icons.visibility_off_outlined, size: 19),
-            onTap: () {
-              Get.back();
-              DynamicsController dynamicsController =
-                  Get.find<DynamicsController>();
-              dynamicsController.tempBannedList
-                  .add(item.modules.moduleAuthor.mid);
-              SmartDialog.showToast(
-                  '已临时屏蔽${item.modules.moduleAuthor.name}(${item.modules.moduleAuthor.mid})，重启恢复');
-            },
-            minLeadingWidth: 0,
-          ),
-          if (item.modules.moduleAuthor.mid == Accounts.main.mid) ...[
-            ListTile(
+              leading: const Icon(Icons.share_outlined, size: 19),
               onTap: () {
                 Get.back();
-                Utils.checkCreatedDyn(id: item.idStr, isManual: true);
+                Utils.shareText(
+                    '${HttpString.dynamicShareBaseUrl}/${item.idStr}');
               },
               minLeadingWidth: 0,
-              leading: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Icon(Icons.shield_outlined, size: 19),
-                  const Icon(Icons.published_with_changes_sharp, size: 12),
-                ],
-              ),
-              title:
-                  Text('检查动态', style: Theme.of(context).textTheme.titleSmall!),
             ),
-            if (onRemove != null)
+            ListTile(
+              title: Text(
+                '临时屏蔽：${item.modules.moduleAuthor.name}',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              leading: const Icon(Icons.visibility_off_outlined, size: 19),
+              onTap: () {
+                Get.back();
+                DynamicsController dynamicsController =
+                    Get.find<DynamicsController>();
+                dynamicsController.tempBannedList
+                    .add(item.modules.moduleAuthor.mid);
+                SmartDialog.showToast(
+                    '已临时屏蔽${item.modules.moduleAuthor.name}(${item.modules.moduleAuthor.mid})，重启恢复');
+              },
+              minLeadingWidth: 0,
+            ),
+            if (item.modules.moduleAuthor.mid == Accounts.main.mid) ...[
               ListTile(
                 onTap: () {
                   Get.back();
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('确定删除该动态?'),
-                      actions: [
-                        TextButton(
-                          onPressed: Get.back,
-                          child: Text(
-                            '取消',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
+                  Utils.checkCreatedDyn(id: item.idStr, isManual: true);
+                },
+                minLeadingWidth: 0,
+                leading: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(Icons.shield_outlined, size: 19),
+                    const Icon(Icons.published_with_changes_sharp, size: 12),
+                  ],
+                ),
+                title: Text('检查动态',
+                    style: Theme.of(context).textTheme.titleSmall!),
+              ),
+              if (onRemove != null)
+                ListTile(
+                  onTap: () {
+                    Get.back();
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('确定删除该动态?'),
+                        actions: [
+                          TextButton(
+                            onPressed: Get.back,
+                            child: Text(
+                              '取消',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
                             ),
                           ),
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                              onRemove?.call(item.idStr);
+                            },
+                            child: const Text('确定'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  minLeadingWidth: 0,
+                  leading: Icon(Icons.delete_outline,
+                      color: Theme.of(context).colorScheme.error, size: 19),
+                  title: Text('删除',
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: Theme.of(context).colorScheme.error)),
+                ),
+            ],
+            if (Accounts.main.isLogin)
+              ListTile(
+                title: Text(
+                  '举报',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                ),
+                leading: Icon(
+                  Icons.error_outline_outlined,
+                  size: 19,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                onTap: () {
+                  Get.back();
+                  autoWrapReportDialog(
+                    context,
+                    ReportOptions.dynamicReport,
+                    (reasonType, reasonDesc, banUid) async {
+                      if (banUid) {
+                        VideoHttp.relationMod(
+                          mid: item.modules.moduleAuthor.mid,
+                          act: 5,
+                          reSrc: 11,
+                        );
+                      }
+                      final res = await Request().post(
+                        '/x/dynamic/feed/dynamic_report/add',
+                        queryParameters: {
+                          'csrf': await Request.getCsrf(),
+                        },
+                        data: {
+                          "accused_uid": item.modules.moduleAuthor.mid,
+                          "dynamic_id": item.idStr,
+                          "reason_type": reasonType,
+                          "reason_desc": reasonType == 0 ? reasonDesc : null,
+                        },
+                        options: Options(
+                          contentType: Headers.formUrlEncodedContentType,
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Get.back();
-                            onRemove?.call(item.idStr);
-                          },
-                          child: const Text('确定'),
-                        ),
-                      ],
-                    ),
+                      );
+                      return res.data as Map;
+                    },
                   );
                 },
                 minLeadingWidth: 0,
-                leading: Icon(Icons.delete_outline,
-                    color: Theme.of(context).colorScheme.error, size: 19),
-                title: Text('删除',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: Theme.of(context).colorScheme.error)),
               ),
-          ],
-          if (Accounts.main.isLogin)
+            const Divider(thickness: 0.1, height: 1),
             ListTile(
-              title: Text(
-                '举报',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-              ),
-              leading: Icon(
-                Icons.error_outline_outlined,
-                size: 19,
-                color: Theme.of(context).colorScheme.error,
-              ),
-              onTap: () {
-                Get.back();
-                autoWrapReportDialog(
-                  context,
-                  ReportOptions.dynamicReport,
-                  (reasonType, reasonDesc, banUid) async {
-                    if (banUid) {
-                      VideoHttp.relationMod(
-                        mid: item.modules.moduleAuthor.mid,
-                        act: 5,
-                        reSrc: 11,
-                      );
-                    }
-                    final res = await Request().post(
-                      '/x/dynamic/feed/dynamic_report/add',
-                      queryParameters: {
-                        'csrf': await Request.getCsrf(),
-                      },
-                      data: {
-                        "accused_uid": item.modules.moduleAuthor.mid,
-                        "dynamic_id": item.idStr,
-                        "reason_type": reasonType,
-                        "reason_desc": reasonType == 0 ? reasonDesc : null,
-                      },
-                      options: Options(
-                        contentType: Headers.formUrlEncodedContentType,
-                      ),
-                    );
-                    return res.data as Map;
-                  },
-                );
-              },
+              onTap: Get.back,
               minLeadingWidth: 0,
+              dense: true,
+              title: Text(
+                '取消',
+                style: TextStyle(color: Theme.of(context).colorScheme.outline),
+                textAlign: TextAlign.center,
+              ),
             ),
-          const Divider(thickness: 0.1, height: 1),
-          ListTile(
-            onTap: Get.back,
-            minLeadingWidth: 0,
-            dense: true,
-            title: Text(
-              '取消',
-              style: TextStyle(color: Theme.of(context).colorScheme.outline),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

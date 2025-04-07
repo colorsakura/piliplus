@@ -408,7 +408,7 @@ class Utils {
       RegExp(r'(@(\d+[a-z]_?)*)(\..*)?$', caseSensitive: false);
 
   static String thumbnailImgUrl(String? src, [int? quality]) {
-    if (src != null) {
+    if (src != null && quality != 100) {
       bool hasMatch = false;
       src = src.splitMapJoin(
         regExp,
@@ -430,7 +430,10 @@ class Utils {
 
   static bool? _isIpad;
 
-  static Future<bool> isIpad() async {
+  static FutureOr<bool> isIpad() async {
+    if (Platform.isIOS.not) {
+      return false;
+    }
     if (_isIpad != null) {
       return _isIpad!;
     }
@@ -443,7 +446,7 @@ class Utils {
   static void shareText(String text) async {
     try {
       Rect? sharePositionOrigin;
-      if (Platform.isIOS && (await isIpad())) {
+      if (await isIpad()) {
         sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
       }
       Share.share(
@@ -1864,22 +1867,6 @@ class Utils {
     } catch (_) {
       launchURL('https://github.com/bggRGjQaUbCoE/PiliPlus/releases/latest');
     }
-  }
-
-  static double getSheetHeight(BuildContext context) {
-    double height = context.height.abs();
-    double width = context.width.abs();
-    if (height > width) {
-      //return height * 0.7;
-      double paddingTop = MediaQueryData.fromView(
-              WidgetsBinding.instance.platformDispatcher.views.single)
-          .padding
-          .top;
-      paddingTop += width * 9 / 16;
-      return height - paddingTop;
-    }
-    //横屏状态
-    return height;
   }
 
   static void appSign(Map<String, dynamic> params,

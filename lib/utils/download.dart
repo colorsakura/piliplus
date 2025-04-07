@@ -29,7 +29,7 @@ class DownloadUtils {
       File(path).writeAsBytesSync(response.data);
 
       Rect? sharePositionOrigin;
-      if (Platform.isIOS && (await Utils.isIpad())) {
+      if (await Utils.isIpad()) {
         sharePositionOrigin = Rect.fromLTWH(0, 0, Get.width, Get.height / 2);
       }
 

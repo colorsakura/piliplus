@@ -1140,12 +1140,8 @@ class ReplyItem extends StatelessWidget {
     Color errorColor = Theme.of(context).colorScheme.error;
 
     return Padding(
-      padding: EdgeInsets.only(
-          bottom: MediaQueryData.fromView(
-                      WidgetsBinding.instance.platformDispatcher.views.single)
-                  .padding
-                  .bottom +
-              20),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
