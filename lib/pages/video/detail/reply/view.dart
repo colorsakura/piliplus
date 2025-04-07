@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
@@ -17,9 +18,9 @@ class VideoReplyPanel extends StatefulWidget {
   final String? bvid;
   final int oid;
   final int rpid;
-  final String? replyLevel;
+  final String replyLevel;
   final String heroTag;
-  final Function replyReply;
+  final Function(ReplyInfo replyItem, int? rpid) replyReply;
   final VoidCallback? onViewImage;
   final ValueChanged<int>? onDismissed;
   final Function(List<String>, int)? callback;
@@ -30,7 +31,7 @@ class VideoReplyPanel extends StatefulWidget {
     this.bvid,
     required this.oid,
     this.rpid = 0,
-    this.replyLevel,
+    this.replyLevel = '1',
     required this.heroTag,
     required this.replyReply,
     this.onViewImage,
@@ -47,7 +48,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   late VideoReplyController _videoReplyController;
 
-  String replyLevel = '1';
   late String heroTag;
 
   // 添加页面缓存
@@ -60,7 +60,6 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     // int oid = widget.bvid != null ? IdUtils.bv2av(widget.bvid!) : 0;
     // heroTag = Get.arguments['heroTag'];
     heroTag = widget.heroTag;
-    replyLevel = widget.replyLevel ?? '1';
     _videoReplyController = Get.find<VideoReplyController>(tag: heroTag);
 
     if (widget.needController != false) {
@@ -236,10 +235,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                   } else {
                     return ReplyItemGrpc(
                       replyItem: loadingState.response.replies[index],
-                      showReplyRow: true,
-                      replyLevel: replyLevel,
+                      replyLevel: widget.replyLevel,
                       replyReply: widget.replyReply,
-                      replyType: ReplyType.video,
                       onReply: () {
                         _videoReplyController.onReply(
                           context,

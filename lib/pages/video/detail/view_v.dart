@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/episode_panel.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
@@ -2222,7 +2223,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       );
 
   // 展示二级回复
-  void replyReply(replyItem, id) {
+  void replyReply(ReplyInfo replyItem, int? id) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();

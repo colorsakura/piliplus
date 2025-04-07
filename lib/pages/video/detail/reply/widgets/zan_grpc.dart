@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:PiliPlus/http/reply.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
 
@@ -13,11 +12,9 @@ class ZanButtonGrpc extends StatefulWidget {
   const ZanButtonGrpc({
     super.key,
     required this.replyItem,
-    this.replyType,
   });
 
   final ReplyInfo replyItem;
-  final ReplyType? replyType;
 
   @override
   State<ZanButtonGrpc> createState() => _ZanButtonGrpcState();
@@ -33,7 +30,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
     final int action =
         widget.replyItem.replyControl.action.toInt() != 2 ? 2 : 0;
     final res = await ReplyHttp.hateReply(
-      type: widget.replyType!.index,
+      type: widget.replyItem.type.toInt(),
       action: action == 2 ? 1 : 0,
       oid: oid,
       rpid: rpid,
@@ -68,7 +65,7 @@ class _ZanButtonGrpcState extends State<ZanButtonGrpc> {
     final int action =
         widget.replyItem.replyControl.action.toInt() != 1 ? 1 : 0;
     final res = await ReplyHttp.likeReply(
-      type: widget.replyType!.index,
+      type: widget.replyItem.type.toInt(),
       oid: oid,
       rpid: rpid,
       action: action,

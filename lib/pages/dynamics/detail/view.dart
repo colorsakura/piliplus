@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
@@ -164,7 +165,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   }
 
   // 查看二级评论
-  void replyReply(context, replyItem, id) {
+  void replyReply(BuildContext context, ReplyInfo replyItem, int? id) {
     EasyThrottle.throttle('replyReply', const Duration(milliseconds: 500), () {
       int oid = replyItem.oid.toInt();
       int rpid = replyItem.id.toInt();
@@ -811,11 +812,9 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                   } else {
                     return ReplyItemGrpc(
                       replyItem: loadingState.response.replies[index],
-                      showReplyRow: true,
                       replyLevel: '1',
                       replyReply: (replyItem, id) =>
                           replyReply(context, replyItem, id),
-                      replyType: ReplyType.values[replyType],
                       onReply: () {
                         _dynamicDetailController.onReply(
                           context,

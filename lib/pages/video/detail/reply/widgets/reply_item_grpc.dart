@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
-import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/video/detail/index.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -31,10 +30,8 @@ class ReplyItemGrpc extends StatelessWidget {
   const ReplyItemGrpc({
     super.key,
     required this.replyItem,
-    this.replyLevel,
-    this.showReplyRow = true,
+    required this.replyLevel,
     this.replyReply,
-    this.replyType,
     this.needDivider = true,
     this.onReply,
     this.onDelete,
@@ -48,12 +45,10 @@ class ReplyItemGrpc extends StatelessWidget {
     this.onToggleTop,
   });
   final ReplyInfo replyItem;
-  final String? replyLevel;
-  final bool showReplyRow;
-  final Function? replyReply;
-  final ReplyType? replyType;
+  final String replyLevel;
+  final Function(ReplyInfo replyItem, int? rpid)? replyReply;
   final bool needDivider;
-  final Function()? onReply;
+  final VoidCallback? onReply;
   final Function(dynamic rpid, dynamic frpid)? onDelete;
   final dynamic upMid;
   final VoidCallback? showDialogue;
@@ -406,7 +401,7 @@ class ReplyItemGrpc extends StatelessWidget {
         // 操作区域
         if (replyLevel != '') buttonAction(context, replyItem.replyControl),
         // 一楼的评论
-        if (showReplyRow &&
+        if (replyLevel == '1' &&
             ( //replyItem.replyControl!.isShow! ||
                 replyItem.replies.isNotEmpty ||
                     replyItem.replyControl.subReplyEntryText.isNotEmpty)) ...[
@@ -505,7 +500,7 @@ class ReplyItemGrpc extends StatelessWidget {
             ),
           ),
         const Spacer(),
-        ZanButtonGrpc(replyItem: replyItem, replyType: replyType),
+        ZanButtonGrpc(replyItem: replyItem),
         const SizedBox(width: 5)
       ],
     );

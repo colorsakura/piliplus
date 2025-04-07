@@ -194,7 +194,6 @@ class _ReplySavePanelState extends State<ReplySavePanel> {
                           IgnorePointer(
                             child: ReplyItemGrpc(
                               replyItem: widget.replyItem,
-                              showReplyRow: false,
                               replyLevel: '',
                               needDivider: false,
                               upMid: widget.upMid,

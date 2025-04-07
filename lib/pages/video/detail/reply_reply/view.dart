@@ -179,8 +179,6 @@ class _VideoReplyReplyPanelState
                         return ReplyItemGrpc(
                           replyItem: firstFloor,
                           replyLevel: '2',
-                          showReplyRow: false,
-                          replyType: widget.replyType,
                           needDivider: false,
                           onReply: () {
                             _onReply(firstFloor, -1);
@@ -455,8 +453,6 @@ class _VideoReplyReplyPanelState
     return ReplyItemGrpc(
       replyItem: replyItem,
       replyLevel: widget.isDialogue ? '3' : '2',
-      showReplyRow: false,
-      replyType: widget.replyType,
       onReply: () {
         _onReply(replyItem, index);
       },
