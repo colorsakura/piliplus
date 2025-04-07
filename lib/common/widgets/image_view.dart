@@ -31,7 +31,7 @@ class ImageModel {
   bool get isLivePhoto => _isLivePhoto ??= liveUrl?.isNotEmpty == true;
 }
 
-Widget imageview(
+Widget imageView(
   double maxWidth,
   List<ImageModel> picArr, {
   VoidCallback? onViewImage,

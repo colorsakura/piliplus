@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
-import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/common/widgets/report.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/init.dart';
@@ -1033,7 +1033,7 @@ class ReplyItemGrpc extends StatelessWidget {
       spanChildren.add(
         WidgetSpan(
           child: LayoutBuilder(
-            builder: (context, constraints) => imageview(
+            builder: (context, constraints) => imageView(
               constraints.maxWidth,
               content.pictures
                   .map(

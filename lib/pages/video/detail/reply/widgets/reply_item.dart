@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/common/widgets/report.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -993,7 +993,7 @@ class ReplyItem extends StatelessWidget {
       spanChildren.add(
         WidgetSpan(
           child: LayoutBuilder(
-            builder: (context, constraints) => imageview(
+            builder: (context, constraints) => imageView(
               constraints.maxWidth,
               (content.pictures as List)
                   .map(

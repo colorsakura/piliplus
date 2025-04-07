@@ -1,5 +1,5 @@
 // 内容
-import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/grpc/app/dynamic/v2/dynamic.pb.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class ContentGrpc extends StatelessWidget {
   InlineSpan picsNodes() {
     return WidgetSpan(
       child: LayoutBuilder(
-        builder: (context, constraints) => imageview(
+        builder: (context, constraints) => imageView(
           constraints.maxWidth,
           item.modules.first.moduleDynamic.dynDraw.items
               .map(

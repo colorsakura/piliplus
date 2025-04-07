@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:flutter/material.dart';
 
 Widget picWidget(item, context, callback) {
@@ -9,7 +9,7 @@ Widget picWidget(item, context, callback) {
     return const SizedBox();
   }
   return LayoutBuilder(
-    builder: (context, constraints) => imageview(
+    builder: (context, constraints) => imageView(
       constraints.maxWidth,
       (item.modules.moduleDynamic.major.draw.items as List)
           .map(

@@ -1,7 +1,7 @@
 // 转发
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image_save.dart';
-import 'package:PiliPlus/common/widgets/imageview.dart';
+import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ import 'video_panel.dart';
 InlineSpan picsNodes(List<OpusPicsModel> pics, callback) {
   return WidgetSpan(
     child: LayoutBuilder(
-      builder: (context, constraints) => imageview(
+      builder: (context, constraints) => imageView(
         constraints.maxWidth,
         pics
             .map(
