@@ -439,6 +439,20 @@ class PiliScheme {
               return true;
             }
             return false;
+          case 'medialist':
+            String? mediaId = uriDigitRegExp.firstMatch(path)?.group(1);
+            if (mediaId != null) {
+              Utils.toDupNamed(
+                '/favDetail',
+                parameters: {
+                  'mediaId': mediaId,
+                  'heroTag': Utils.makeHeroTag(mediaId),
+                },
+                off: off,
+              );
+              return true;
+            }
+            return false;
           default:
             if (selfHandle.not) {
               debugPrint('$uri');

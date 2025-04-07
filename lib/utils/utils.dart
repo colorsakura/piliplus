@@ -875,17 +875,6 @@ class Utils {
         SmartDialog.showToast('暂未支持的类型，请联系开发者');
         break;
 
-      /// 纯文字动态查看
-      case 'DYNAMIC_TYPE_WORD':
-        debugPrint('纯文本');
-        Utils.toDupNamed(
-          '/dynamicDetail',
-          arguments: {
-            'item': item,
-            'floor': floor,
-          },
-        );
-        break;
       case 'DYNAMIC_TYPE_LIVE_RCMD':
         DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
         ModuleAuthorModel author = item.modules.moduleAuthor;
@@ -947,10 +936,13 @@ class Utils {
         }
         break;
 
+      // 纯文字动态查看
+      // case 'DYNAMIC_TYPE_WORD':
+      // # 装扮/剧集点评/普通分享
       // case 'DYNAMIC_TYPE_COMMON_SQUARE':
-      // /// 转发的动态
+      // 转发的动态
       // case 'DYNAMIC_TYPE_FORWARD':
-      // /// 图文动态查看
+      // 图文动态查看
       // case 'DYNAMIC_TYPE_DRAW':
       default:
         Utils.toDupNamed(

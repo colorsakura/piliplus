@@ -8,7 +8,7 @@ import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_save.dart';
+import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
@@ -1202,23 +1202,7 @@ class ReplyItemGrpc extends StatelessWidget {
           break;
         case 'saveReply':
           Get.back();
-          Get.generalDialog(
-            barrierLabel: '',
-            barrierDismissible: true,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return ReplySavePanel(upMid: upMid, replyItem: item);
-            },
-            transitionDuration: const Duration(milliseconds: 255),
-            transitionBuilder: (context, animation, secondaryAnimation, child) {
-              var tween = Tween<double>(begin: 0, end: 1)
-                  .chain(CurveTween(curve: Curves.easeInOut));
-              return FadeTransition(
-                opacity: animation.drive(tween),
-                child: child,
-              );
-            },
-            routeSettings: RouteSettings(arguments: Get.arguments),
-          );
+          SavePanel.toSavePanel(upMid: upMid, item: item);
           break;
         default:
       }

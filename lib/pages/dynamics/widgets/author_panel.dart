@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/report.dart';
+import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/http/index.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -309,6 +310,16 @@ class AuthorPanel extends StatelessWidget {
                     '已临时屏蔽${item.modules.moduleAuthor.name}(${item.modules.moduleAuthor.mid})，重启恢复');
               },
               minLeadingWidth: 0,
+            ),
+            ListTile(
+              onTap: () {
+                Get.back();
+                SavePanel.toSavePanel(item: item);
+              },
+              minLeadingWidth: 0,
+              leading: const Icon(Icons.save_alt, size: 19),
+              title:
+                  Text('保存动态', style: Theme.of(context).textTheme.titleSmall!),
             ),
             if (item.modules.moduleAuthor.mid == Accounts.main.mid) ...[
               ListTile(

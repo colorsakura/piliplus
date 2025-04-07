@@ -8,7 +8,7 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import 'rich_node_panel.dart';
 
-Widget liveRcmdPanel(item, context, {floor = 1}) {
+Widget liveRcmdPanel(source, item, context, {floor = 1}) {
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
   DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
@@ -144,9 +144,9 @@ Widget liveRcmdPanel(item, context, {floor = 1}) {
         padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         child: Text(
           item.modules.moduleDynamic.major.liveRcmd.title,
-          maxLines: 1,
+          maxLines: source == 'detail' ? null : 1,
           style: const TextStyle(fontWeight: FontWeight.bold),
-          overflow: TextOverflow.ellipsis,
+          overflow: source == 'detail' ? null : TextOverflow.ellipsis,
         ),
       ),
       const SizedBox(height: 2),

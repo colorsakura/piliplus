@@ -160,12 +160,12 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
       );
     // 视频
     case 'DYNAMIC_TYPE_AV':
-      return videoSeasonWidget(item, context, 'archive', floor: floor);
+      return videoSeasonWidget(source, item, context, 'archive', floor: floor);
     // 文章
     case 'DYNAMIC_TYPE_ARTICLE':
       return switch (item) {
         DynamicItemModel() => item.isForwarded == true
-            ? articlePanel(item, context, callback, floor: floor)
+            ? articlePanel(source, item, context, callback, floor: floor)
             : item.modules?.moduleDynamic?.major?.blocked != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -260,13 +260,13 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
       );
     // 直播
     case 'DYNAMIC_TYPE_LIVE_RCMD':
-      return liveRcmdPanel(item, context, floor: floor);
+      return liveRcmdPanel(source, item, context, floor: floor);
     // 直播
     case 'DYNAMIC_TYPE_LIVE':
-      return livePanel(item, context, floor: floor);
+      return livePanel(source, item, context, floor: floor);
     // 合集
     case 'DYNAMIC_TYPE_UGC_SEASON':
-      return videoSeasonWidget(item, context, 'ugcSeason');
+      return videoSeasonWidget(source, item, context, 'ugcSeason');
     case 'DYNAMIC_TYPE_WORD':
       InlineSpan? richNodes = richNode(item, context);
       return floor == 2
@@ -318,9 +318,9 @@ Widget forWard(item, BuildContext context, source, callback, {floor = 1}) {
                   ? _blockedItem(context, item, source)
                   : const SizedBox(height: 0);
     case 'DYNAMIC_TYPE_PGC':
-      return videoSeasonWidget(item, context, 'pgc', floor: floor);
+      return videoSeasonWidget(source, item, context, 'pgc', floor: floor);
     case 'DYNAMIC_TYPE_PGC_UNION':
-      return videoSeasonWidget(item, context, 'pgc', floor: floor);
+      return videoSeasonWidget(source, item, context, 'pgc', floor: floor);
     // 直播结束
     case 'DYNAMIC_TYPE_NONE':
       return Row(

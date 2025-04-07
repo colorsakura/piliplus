@@ -8,7 +8,7 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import 'rich_node_panel.dart';
 
-Widget videoSeasonWidget(item, context, type, {floor = 1}) {
+Widget videoSeasonWidget(source, item, context, type, {floor = 1}) {
   if (item.modules.moduleDynamic.major?.type == 'MAJOR_TYPE_NONE') {
     return item.modules.moduleDynamic.major?.none?.tips != null
         ? Row(
@@ -196,9 +196,9 @@ Widget videoSeasonWidget(item, context, type, {floor = 1}) {
               : EdgeInsets.zero,
           child: Text(
             content.title,
-            maxLines: 1,
+            maxLines: source == 'detail' ? null : 1,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
+            overflow: source == 'detail' ? null : TextOverflow.ellipsis,
           ),
         ),
     ],

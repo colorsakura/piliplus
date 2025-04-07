@@ -6,7 +6,7 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import 'rich_node_panel.dart';
 
-Widget livePanel(item, context, {floor = 1}) {
+Widget livePanel(source, item, context, {floor = 1}) {
   dynamic content = item.modules.moduleDynamic.major;
   late final TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
@@ -85,8 +85,8 @@ Widget livePanel(item, context, {floor = 1}) {
                 children: [
                   Text(
                     content.live.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: source == 'detail' ? null : 2,
+                    overflow: source == 'detail' ? null : TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(

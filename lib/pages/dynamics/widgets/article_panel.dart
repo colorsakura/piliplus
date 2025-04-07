@@ -4,7 +4,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import '../../../common/constants.dart';
 import 'pic_panel.dart';
 
-Widget articlePanel(item, context, callback, {floor = 1}) {
+Widget articlePanel(source, item, context, callback, {floor = 1}) {
   TextStyle authorStyle =
       TextStyle(color: Theme.of(context).colorScheme.primary);
   return Padding(
@@ -46,9 +46,9 @@ Widget articlePanel(item, context, callback, {floor = 1}) {
           Text(
             item.modules.moduleDynamic.major.opus.summary.richTextNodes.first
                 .text,
-            maxLines: 4,
+            maxLines: source == 'detail' ? null : 4,
             style: const TextStyle(height: 1.55),
-            overflow: TextOverflow.ellipsis,
+            overflow: source == 'detail' ? null : TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
         ],
