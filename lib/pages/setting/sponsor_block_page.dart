@@ -67,11 +67,13 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
       '$_blockServer/api/status/uptime',
     )
         .then((res) {
-      setState(() {
-        _serverStatus = res.statusCode == 200 &&
-            res.data is String &&
-            Utils.isStringNumeric(res.data);
-      });
+      if (mounted) {
+        setState(() {
+          _serverStatus = res.statusCode == 200 &&
+              res.data is String &&
+              Utils.isStringNumeric(res.data);
+        });
+      }
     });
   }
 
