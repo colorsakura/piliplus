@@ -380,8 +380,10 @@ class HistoryItem extends StatelessWidget {
                         ),
                       ),
                     PopupMenuItem<String>(
-                      onTap: () => ctr!.delHistory(
-                          videoItem.kid, videoItem.history.business),
+                      onTap: () => onDelete != null
+                          ? onDelete!(videoItem.kid, videoItem.history.business)
+                          : ctr.delHistory(
+                              videoItem.kid, videoItem.history.business),
                       height: 35,
                       child: const Row(
                         children: [
