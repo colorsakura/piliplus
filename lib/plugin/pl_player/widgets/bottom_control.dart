@@ -145,7 +145,8 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                         ),
-                      if (controller.showSeekPreview)
+                      if (controller.showSeekPreview &&
+                          controller.showControls.value)
                         Positioned(
                           left: 0,
                           right: 0,

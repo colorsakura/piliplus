@@ -753,13 +753,12 @@ class VideoDetailController extends GetxController
               skipType: skipType,
             );
 
-            if (item['segment'][0] == 0 &&
-                item['segment'][1] > 0 &&
-                !isShowCover.value) {
-              if (plPlayerController.videoPlayerController != null &&
-                  plPlayerController
-                          .videoPlayerController!.state.position.inSeconds <
-                      item['segment'][1]) {
+            if (positionSubscription == null &&
+                !isShowCover.value &&
+                plPlayerController.videoPlayerController != null) {
+              final currPost = plPlayerController.position.value.inSeconds;
+              if (currPost > segmentModel.segment.first &&
+                  currPost < segmentModel.segment.second) {
                 if (segmentModel.skipType == SkipType.alwaysSkip) {
                   _lastPos = 0;
                   plPlayerController.videoPlayerController!.stream.buffer.first
@@ -793,7 +792,8 @@ class VideoDetailController extends GetxController
           return Segment(start, end, _getColor(item.segmentType));
         }).toList());
 
-        if (positionSubscription == null && autoPlay.value) {
+        if (positionSubscription == null &&
+            (!isShowCover.value || preInitPlayer)) {
           initSkip();
           plPlayerController.segmentList.value = segmentProgressList!;
         }
