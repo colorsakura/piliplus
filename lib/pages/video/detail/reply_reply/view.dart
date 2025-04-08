@@ -55,6 +55,8 @@ class _VideoReplyReplyPanelState
   late final itemPositionsListener = ItemPositionsListener.create();
   late final _key = GlobalKey<ScaffoldState>();
   late final _listKey = GlobalKey();
+  late final _tag =
+      Utils.makeHeroTag('${widget.rpid}${widget.dialog}${widget.isDialogue}');
 
   dynamic get firstFloor =>
       widget.firstFloor ?? _videoReplyReplyController.firstFloor;
@@ -78,16 +80,14 @@ class _VideoReplyReplyPanelState
         replyType: widget.replyType,
         isDialogue: widget.isDialogue,
       ),
-      tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
+      tag: _tag,
     );
   }
 
   @override
   void dispose() {
     widget.onDispose?.call();
-    Get.delete<VideoReplyReplyController>(
-      tag: '${widget.rpid}${widget.dialog}${widget.isDialogue}',
-    );
+    Get.delete<VideoReplyReplyController>(tag: _tag);
     super.dispose();
   }
 
