@@ -102,7 +102,7 @@ class DynamicsHttp {
         if (id != null) 'id': id,
         if (rid != null) 'rid': rid,
         if (type != null) 'type': type,
-        'features': 'itemOpusStyle',
+        'features': 'itemOpusStyle,listOnlyfans',
       },
       options:
           clearCookie ? Options(extra: {'account': AnonymousAccount()}) : null,

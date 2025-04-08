@@ -22,6 +22,7 @@ class MemberSearchController extends GetxController
   bool isEndArchive = false;
   Rx<LoadingState> archiveState = LoadingState.loading().obs;
 
+  String offset = '';
   int dynamicPn = 1;
   RxInt dynamicCount = (-1).obs;
   bool isEndDynamic = false;
@@ -66,6 +67,7 @@ class MemberSearchController extends GetxController
   }
 
   Future refreshDynamic() async {
+    offset = '';
     dynamicPn = 1;
     isEndDynamic = false;
     await searchDynamic();
@@ -82,12 +84,12 @@ class MemberSearchController extends GetxController
     dynamic res = await MemberHttp.memberDynamicSearch(
       mid: mid,
       pn: dynamicPn,
-      ps: 30,
+      offset: offset,
       keyword: textEditingController.text,
     );
     if (res['status']) {
       if (isRefresh) {
-        dynamicCount.value = res['count'];
+        dynamicCount.value = res['count'] ?? -1;
       }
       if (isRefresh.not && dynamicState.value is Success) {
         res['data'].insertAll(0, (dynamicState.value as Success).response);

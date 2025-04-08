@@ -428,23 +428,27 @@ class MemberHttp {
 
   // 搜索用户动态
   static Future memberDynamicSearch({
-    int? pn,
-    int? ps,
-    int? mid,
+    required int pn,
+    required dynamic mid,
+    required dynamic offset,
     required String keyword,
   }) async {
-    var res = await Request().get(Api.memberDynamicSearch, queryParameters: {
-      'keyword': keyword,
-      'mid': mid,
-      'pn': pn,
-      'ps': ps,
-      'platform': 'web'
-    });
+    var res = await Request().get(
+      Api.memberDynamicSearch,
+      queryParameters: {
+        'host_mid': mid,
+        'page': pn,
+        'offset': offset,
+        'keyword': keyword,
+        'features': 'itemOpusStyle,listOnlyfans',
+        'web_location': 333.1387,
+      },
+    );
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': res.data['data']['cards'],
-        'count': res.data['data']['total']
+        'data': DynamicsDataModel.fromJson(res.data['data']).items,
+        'count': res.data['data']?['total'],
       };
     } else {
       return {
