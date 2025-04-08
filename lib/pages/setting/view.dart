@@ -7,12 +7,14 @@ import 'package:PiliPlus/pages/setting/privacy_setting.dart';
 import 'package:PiliPlus/pages/setting/recommend_setting.dart';
 import 'package:PiliPlus/pages/setting/style_setting.dart';
 import 'package:PiliPlus/pages/setting/video_setting.dart';
+import 'package:PiliPlus/pages/webdav/view.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'widgets/multi_select_dialog.dart';
 
@@ -85,6 +87,11 @@ class _SettingPageState extends State<SettingPage> {
       icon: Icons.extension_outlined,
     ),
     _SettingsModel(
+      name: 'webdavSetting',
+      title: 'WebDAV 设置',
+      icon: MdiIcons.databaseCogOutline,
+    ),
+    _SettingsModel(
       name: 'about',
       title: '关于',
       icon: Icons.info_outline,
@@ -104,6 +111,7 @@ class _SettingPageState extends State<SettingPage> {
                 'playSetting' => '播放器设置',
                 'styleSetting' => '外观设置',
                 'extraSetting' => '其它设置',
+                'webdavSetting' => 'WebDAV 设置',
                 'about' => '关于',
                 _ => '设置',
               }),
@@ -127,6 +135,7 @@ class _SettingPageState extends State<SettingPage> {
                     'playSetting' => PlaySetting(showAppBar: false),
                     'styleSetting' => StyleSetting(showAppBar: false),
                     'extraSetting' => ExtraSetting(showAppBar: false),
+                    'webdavSetting' => WebDavSettingPage(showAppBar: false),
                     'about' => AboutPage(showAppBar: false),
                     _ => const SizedBox.shrink(),
                   },

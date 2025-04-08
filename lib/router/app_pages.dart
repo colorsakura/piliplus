@@ -7,6 +7,7 @@ import 'package:PiliPlus/pages/setting/sponsor_block_page.dart';
 import 'package:PiliPlus/pages/setting/view.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/create_fav_page.dart';
 import 'package:PiliPlus/pages/video/detail/view_v.dart';
+import 'package:PiliPlus/pages/webdav/view.dart';
 import 'package:PiliPlus/pages/webview/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -175,6 +176,8 @@ class Routes {
         name: '/navbarSetting', page: () => const NavigationBarSetPage()),
     CustomGetPage(
         name: '/settingsSearch', page: () => const SettingsSearchPage()),
+    CustomGetPage(
+        name: '/webdavSetting', page: () => const WebDavSettingPage()),
   ];
 }
 

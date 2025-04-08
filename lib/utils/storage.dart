@@ -451,6 +451,18 @@ class GStorage {
   static bool get navSearchStreamDebounce => GStorage.setting
       .get(SettingBoxKey.navSearchStreamDebounce, defaultValue: false);
 
+  static String get webdavUri =>
+      GStorage.setting.get(SettingBoxKey.webdavUri, defaultValue: '');
+
+  static String get webdavUsername =>
+      GStorage.setting.get(SettingBoxKey.webdavUsername, defaultValue: '');
+
+  static String get webdavPassword =>
+      GStorage.setting.get(SettingBoxKey.webdavPassword, defaultValue: '');
+
+  static String get webdavDirectory =>
+      GStorage.setting.get(SettingBoxKey.webdavDirectory, defaultValue: '/');
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -736,6 +748,12 @@ class SettingBoxKey {
       fastForBackwardDuration = 'fastForBackwardDuration',
       recordSearchHistory = 'recordSearchHistory',
       navSearchStreamDebounce = 'navSearchStreamDebounce',
+
+      // WebDAV
+      webdavUri = 'webdavUri',
+      webdavUsername = 'webdavUsername',
+      webdavPassword = 'webdavPassword',
+      webdavDirectory = 'webdavDirectory',
 
       // Sponsor Block
       enableSponsorBlock = 'enableSponsorBlock',
