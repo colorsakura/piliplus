@@ -18,8 +18,7 @@ class MainController extends GetxController {
   List<Widget> pages = <Widget>[];
   RxList navigationBars = [].obs;
 
-  final StreamController<bool> bottomBarStream =
-      StreamController<bool>.broadcast();
+  StreamController<bool>? bottomBarStream;
   late bool hideTabBar;
   late dynamic controller;
   RxInt selectedIndex = 0.obs;
@@ -48,6 +47,9 @@ class MainController extends GetxController {
     }
     hideTabBar =
         GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
+    if (hideTabBar) {
+      bottomBarStream = StreamController<bool>.broadcast();
+    }
     isLogin.value = Accounts.main.isLogin;
     dynamicBadgeMode = DynamicBadgeMode.values[GStorage.setting.get(
         SettingBoxKey.dynamicBadgeMode,
@@ -217,7 +219,7 @@ class MainController extends GetxController {
 
   @override
   void onClose() {
-    bottomBarStream.close();
+    bottomBarStream?.close();
     super.onClose();
   }
 }

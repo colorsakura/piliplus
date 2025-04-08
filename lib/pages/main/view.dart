@@ -178,7 +178,8 @@ class _MainAppState extends State<MainApp>
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (_mainController.selectedIndex.value != 0) {
           setIndex(0);
-          _mainController.bottomBarStream.add(true);
+          _mainController.bottomBarStream?.add(true);
+          _homeController.searchBarStream?.add(true);
         } else {
           if (Platform.isAndroid) {
             Utils.channel.invokeMethod('back');
@@ -265,9 +266,9 @@ class _MainAppState extends State<MainApp>
               : StreamBuilder(
                   stream: _mainController.hideTabBar
                       ? _mainController.navSearchStreamDebounce
-                          ? _mainController.bottomBarStream.stream
+                          ? _mainController.bottomBarStream?.stream
                               .throttle(const Duration(milliseconds: 500))
-                          : _mainController.bottomBarStream.stream
+                          : _mainController.bottomBarStream?.stream
                       : null,
                   initialData: true,
                   builder: (context, AsyncSnapshot snapshot) {

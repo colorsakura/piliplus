@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/home/controller.dart';
-import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
@@ -19,7 +17,7 @@ import '../index.dart';
 import '../widgets/dynamic_panel.dart';
 import 'controller.dart';
 
-class DynamicsTabPage extends StatefulWidget {
+class DynamicsTabPage extends CommonPage {
   const DynamicsTabPage({super.key, required this.dynamicsType});
 
   final String dynamicsType;
@@ -28,12 +26,19 @@ class DynamicsTabPage extends StatefulWidget {
   State<DynamicsTabPage> createState() => _DynamicsTabPageState();
 }
 
-class _DynamicsTabPageState extends State<DynamicsTabPage>
+class _DynamicsTabPageState
+    extends CommonPageState<DynamicsTabPage, DynamicsTabController>
     with AutomaticKeepAliveClientMixin {
-  late DynamicsTabController _dynamicsTabController;
   late bool dynamicsWaterfallFlow;
-  late final DynamicsController dynamicsController;
   StreamSubscription? _listener;
+
+  DynamicsController dynamicsController = Get.put(DynamicsController());
+  @override
+  late DynamicsTabController controller = Get.put(
+    DynamicsTabController(dynamicsType: widget.dynamicsType)
+      ..mid = dynamicsController.mid.value,
+    tag: widget.dynamicsType,
+  );
 
   @override
   bool get wantKeepAlive => true;
@@ -41,47 +46,20 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
   @override
   void initState() {
     super.initState();
-    dynamicsController = Get.put(DynamicsController());
-    _dynamicsTabController = Get.put(
-      DynamicsTabController(dynamicsType: widget.dynamicsType)
-        ..mid = dynamicsController.mid.value,
-      tag: widget.dynamicsType,
-    );
-    _dynamicsTabController.scrollController.addListener(listener);
     if (widget.dynamicsType == 'up') {
       _listener = dynamicsController.mid.listen((mid) {
-        // debugPrint('midListen: $mid');
-        _dynamicsTabController.mid = mid;
-        _dynamicsTabController.scrollController.jumpTo(0);
-        _dynamicsTabController.onReload();
+        controller.mid = mid;
+        controller.scrollController.jumpTo(0);
+        controller.onReload();
       });
     }
     dynamicsWaterfallFlow = GStorage.setting
         .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
   }
 
-  void listener() {
-    try {
-      StreamController<bool> mainStream =
-          Get.find<MainController>().bottomBarStream;
-      StreamController<bool> searchBarStream =
-          Get.find<HomeController>().searchBarStream;
-      final ScrollDirection direction =
-          _dynamicsTabController.scrollController.position.userScrollDirection;
-      if (direction == ScrollDirection.forward) {
-        mainStream.add(true);
-        searchBarStream.add(true);
-      } else if (direction == ScrollDirection.reverse) {
-        mainStream.add(false);
-        searchBarStream.add(false);
-      }
-    } catch (_) {}
-  }
-
   @override
   void dispose() {
     _listener?.cancel();
-    _dynamicsTabController.scrollController.removeListener(listener);
     dynamicsController.mid.close();
     super.dispose();
   }
@@ -97,15 +75,15 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
         dynamicsWaterfallFlow = GStorage.setting
             .get(SettingBoxKey.dynamicsWaterfallFlow, defaultValue: true);
         await Future.wait([
-          _dynamicsTabController.onRefresh(),
+          controller.onRefresh(),
           dynamicsController.queryFollowUp(),
         ]);
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        controller: _dynamicsTabController.scrollController,
+        controller: controller.scrollController,
         slivers: [
-          Obx(() => _buildBody(_dynamicsTabController.loadingState.value)),
+          Obx(() => _buildBody(controller.loadingState.value)),
         ],
       ),
     );
@@ -161,7 +139,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
 
                   lastChildLayoutTypeBuilder: (index) {
                     if (index == loadingState.response.length - 1) {
-                      _dynamicsTabController.onLoadMore();
+                      controller.onLoadMore();
                     }
                     return index == loadingState.response.length
                         ? LastChildLayoutType.foot
@@ -173,7 +151,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                       for (var i in loadingState.response)
                         DynamicPanel(
                           item: i,
-                          onRemove: _dynamicsTabController.onRemove,
+                          onRemove: controller.onRemove,
                         ),
                     ] else ...[
                       for (var i in loadingState.response)
@@ -181,7 +159,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                             .contains(i.modules?.moduleAuthor?.mid))
                           DynamicPanel(
                             item: i,
-                            onRemove: _dynamicsTabController.onRemove,
+                            onRemove: controller.onRemove,
                           ),
                     ]
                   ],
@@ -195,7 +173,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             if (index == loadingState.response.length - 1) {
-                              _dynamicsTabController.onLoadMore();
+                              controller.onLoadMore();
                             }
                             if ((dynamicsController.tabController.index == 4 &&
                                     dynamicsController.mid.value != -1) ||
@@ -204,7 +182,7 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                                         ?.moduleAuthor?.mid)) {
                               return DynamicPanel(
                                 item: loadingState.response[index],
-                                onRemove: _dynamicsTabController.onRemove,
+                                onRemove: controller.onRemove,
                               );
                             }
                             return const SizedBox.shrink();
@@ -217,11 +195,11 @@ class _DynamicsTabPageState extends State<DynamicsTabPage>
                   ],
                 )
           : HttpError(
-              callback: _dynamicsTabController.onReload,
+              callback: controller.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _dynamicsTabController.onReload,
+          callback: controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

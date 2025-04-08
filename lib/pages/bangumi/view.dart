@@ -5,20 +5,18 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/pages/bangumi/pgc_index/pgc_index_page.dart';
+import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/pages/home/index.dart';
-import 'package:PiliPlus/pages/main/index.dart';
 
 import '../../utils/grid.dart';
 import 'controller.dart';
 import 'widgets/bangumi_card_v.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 
-class BangumiPage extends StatefulWidget {
+class BangumiPage extends CommonPage {
   const BangumiPage({
     super.key,
     required this.tabType,
@@ -30,9 +28,10 @@ class BangumiPage extends StatefulWidget {
   State<BangumiPage> createState() => _BangumiPageState();
 }
 
-class _BangumiPageState extends State<BangumiPage>
+class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     with AutomaticKeepAliveClientMixin {
-  late final BangumiController _bangumiController = Get.put(
+  @override
+  late BangumiController controller = Get.put(
     BangumiController(tabType: widget.tabType),
     tag: widget.tabType.name,
   );
@@ -41,50 +40,22 @@ class _BangumiPageState extends State<BangumiPage>
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-    _bangumiController.scrollController.addListener(listener);
-  }
-
-  void listener() {
-    StreamController<bool> mainStream =
-        Get.find<MainController>().bottomBarStream;
-    StreamController<bool> searchBarStream =
-        Get.find<HomeController>().searchBarStream;
-    final ScrollDirection direction =
-        _bangumiController.scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      mainStream.add(true);
-      searchBarStream.add(true);
-    } else if (direction == ScrollDirection.reverse) {
-      mainStream.add(false);
-      searchBarStream.add(false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _bangumiController.scrollController.removeListener(listener);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return refreshIndicator(
       onRefresh: () async {
         await Future.wait([
-          _bangumiController.onRefresh(),
-          _bangumiController.queryBangumiFollow(),
+          controller.onRefresh(),
+          controller.queryBangumiFollow(),
         ]);
       },
       child: CustomScrollView(
-        controller: _bangumiController.scrollController,
+        controller: controller.scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Obx(
-              () => _bangumiController.isLogin.value
+              () => controller.isLogin.value
                   ? Column(
                       children: [
                         Padding(
@@ -93,7 +64,7 @@ class _BangumiPageState extends State<BangumiPage>
                             children: [
                               Obx(
                                 () => Text(
-                                  '最近${widget.tabType == TabType.bangumi ? '追番' : '追剧'}${_bangumiController.followCount.value == -1 ? '' : ' ${_bangumiController.followCount.value}'}',
+                                  '最近${widget.tabType == TabType.bangumi ? '追番' : '追剧'}${controller.followCount.value == -1 ? '' : ' ${controller.followCount.value}'}',
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
@@ -102,7 +73,7 @@ class _BangumiPageState extends State<BangumiPage>
                               IconButton(
                                 tooltip: '刷新',
                                 onPressed: () {
-                                  _bangumiController
+                                  controller
                                     ..followPage = 1
                                     ..followEnd = false
                                     ..queryBangumiFollow();
@@ -113,7 +84,7 @@ class _BangumiPageState extends State<BangumiPage>
                                 ),
                               ),
                               Obx(
-                                () => _bangumiController.isLogin.value
+                                () => controller.isLogin.value
                                     ? Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10),
@@ -165,8 +136,8 @@ class _BangumiPageState extends State<BangumiPage>
                           height: Grid.smallCardWidth / 2 / 0.75 +
                               MediaQuery.textScalerOf(context).scale(50),
                           child: Obx(
-                            () => _buildFollowBody(
-                                _bangumiController.followState.value),
+                            () =>
+                                _buildFollowBody(controller.followState.value),
                           ),
                         ),
                       ],
@@ -251,7 +222,7 @@ class _BangumiPageState extends State<BangumiPage>
             padding: const EdgeInsets.fromLTRB(
                 StyleString.safeSpace, 0, StyleString.safeSpace, 0),
             sliver: Obx(
-              () => _buildBody(_bangumiController.loadingState.value),
+              () => _buildBody(controller.loadingState.value),
             ),
           ),
         ],
@@ -277,7 +248,7 @@ class _BangumiPageState extends State<BangumiPage>
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   if (index == loadingState.response.length - 1) {
-                    _bangumiController.onLoadMore();
+                    controller.onLoadMore();
                   }
                   return BangumiCardV(
                       bangumiItem: loadingState.response[index]);
@@ -286,11 +257,11 @@ class _BangumiPageState extends State<BangumiPage>
               ),
             )
           : HttpError(
-              callback: _bangumiController.onReload,
+              callback: controller.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _bangumiController.onReload,
+          callback: controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };
@@ -298,12 +269,12 @@ class _BangumiPageState extends State<BangumiPage>
 
   Widget _buildFollowList(Success loadingState) {
     return ListView.builder(
-      controller: _bangumiController.followController,
+      controller: controller.followController,
       scrollDirection: Axis.horizontal,
       itemCount: loadingState.response.length,
       itemBuilder: (context, index) {
         if (index == loadingState.response.length - 1) {
-          _bangumiController.queryBangumiFollow(false);
+          controller.queryBangumiFollow(false);
         }
         return Container(
           width: Grid.smallCardWidth / 2,

@@ -1,53 +1,28 @@
 import 'dart:async';
 
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
-import 'package:PiliPlus/pages/main/index.dart';
 import 'package:PiliPlus/pages/media/index.dart';
 import 'package:PiliPlus/utils/utils.dart';
 
-class MediaPage extends StatefulWidget {
+class MediaPage extends CommonPage {
   const MediaPage({super.key});
 
   @override
   State<MediaPage> createState() => _MediaPageState();
 }
 
-class _MediaPageState extends State<MediaPage>
+class _MediaPageState extends CommonPageState<MediaPage, MediaController>
     with AutomaticKeepAliveClientMixin {
-  late MediaController mediaController;
+  @override
+  MediaController controller = Get.put(MediaController());
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    mediaController = Get.put(MediaController());
-    mediaController.scrollController.addListener(listener);
-  }
-
-  void listener() {
-    StreamController<bool> mainStream =
-        Get.find<MainController>().bottomBarStream;
-    final ScrollDirection direction =
-        mediaController.scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      mainStream.add(true);
-    } else if (direction == ScrollDirection.reverse) {
-      mainStream.add(false);
-    }
-  }
-
-  @override
-  void dispose() {
-    mediaController.scrollController.removeListener(listener);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +35,7 @@ class _MediaPageState extends State<MediaPage>
       ),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        controller: mediaController.scrollController,
+        controller: controller.scrollController,
         child: Column(
           children: [
             ListTile(
@@ -86,7 +61,7 @@ class _MediaPageState extends State<MediaPage>
                     size: 20,
                   ),
                 )),
-            for (var i in mediaController.list) ...[
+            for (var i in controller.list) ...[
               ListTile(
                 onTap: () => i['onTap'](),
                 dense: true,
@@ -107,7 +82,7 @@ class _MediaPageState extends State<MediaPage>
               ),
             ],
             Obx(
-              () => mediaController.loadingState.value is Loading
+              () => controller.loadingState.value is Loading
                   ? const SizedBox.shrink()
                   : favFolder(),
             )
@@ -128,7 +103,7 @@ class _MediaPageState extends State<MediaPage>
           onTap: () async {
             await Get.toNamed('/fav');
             Future.delayed(const Duration(milliseconds: 150), () {
-              mediaController.onRefresh();
+              controller.onRefresh();
             });
           },
           leading: null,
@@ -146,9 +121,9 @@ class _MediaPageState extends State<MediaPage>
                               Theme.of(context).textTheme.titleMedium!.fontSize,
                           fontWeight: FontWeight.bold),
                     ),
-                    if (mediaController.count.value != -1)
+                    if (controller.count.value != -1)
                       TextSpan(
-                        text: "${mediaController.count.value}  ",
+                        text: "${controller.count.value}  ",
                         style: TextStyle(
                           fontSize:
                               Theme.of(context).textTheme.titleSmall!.fontSize,
@@ -168,7 +143,7 @@ class _MediaPageState extends State<MediaPage>
           ),
           trailing: IconButton(
             tooltip: '刷新',
-            onPressed: mediaController.onRefresh,
+            onPressed: controller.onRefresh,
             icon: const Icon(
               Icons.refresh,
               size: 20,
@@ -179,7 +154,7 @@ class _MediaPageState extends State<MediaPage>
         SizedBox(
           width: double.infinity,
           height: MediaQuery.textScalerOf(context).scale(200),
-          child: Obx(() => _buildBody(mediaController.loadingState.value)),
+          child: Obx(() => _buildBody(controller.loadingState.value)),
         ),
         SizedBox(
           height: MediaQuery.paddingOf(context).bottom + 100,
@@ -214,7 +189,7 @@ class _MediaPageState extends State<MediaPage>
                   onPressed: () async {
                     await Get.toNamed('/fav');
                     Future.delayed(const Duration(milliseconds: 150), () {
-                      mediaController.onRefresh();
+                      controller.onRefresh();
                     });
                   },
                   icon: Icon(
@@ -242,7 +217,7 @@ class _MediaPageState extends State<MediaPage>
                   },
                 );
                 Future.delayed(const Duration(milliseconds: 150), () {
-                  mediaController.onRefresh();
+                  controller.onRefresh();
                 });
               },
             );

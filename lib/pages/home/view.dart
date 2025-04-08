@@ -155,9 +155,9 @@ class _HomePageState extends State<HomePage>
     return StreamBuilder(
       stream: _homeController.hideSearchBar
           ? _mainController.navSearchStreamDebounce
-              ? _homeController.searchBarStream.stream
+              ? _homeController.searchBarStream?.stream
                   .throttle(const Duration(milliseconds: 500))
-              : _homeController.searchBarStream.stream
+              : _homeController.searchBarStream?.stream
           : null,
       initialData: true,
       builder: (BuildContext context, AsyncSnapshot snapshot) {

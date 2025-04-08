@@ -19,8 +19,7 @@ class HomeController extends GetxController
   RxBool isLogin = false.obs;
   RxString userFace = ''.obs;
   dynamic userInfo;
-  late final StreamController<bool> searchBarStream =
-      StreamController<bool>.broadcast();
+  StreamController<bool>? searchBarStream;
   late bool hideSearchBar;
   late List defaultTabs;
   late List<String> tabbarSort;
@@ -51,6 +50,9 @@ class HomeController extends GetxController
     userFace.value = userInfo != null ? userInfo.face : '';
     hideSearchBar =
         GStorage.setting.get(SettingBoxKey.hideSearchBar, defaultValue: true);
+    if (hideSearchBar) {
+      searchBarStream = StreamController<bool>.broadcast();
+    }
     enableSearchWord = GStorage.setting
         .get(SettingBoxKey.enableSearchWord, defaultValue: true);
     if (enableSearchWord) {
@@ -117,7 +119,7 @@ class HomeController extends GetxController
 
   @override
   void onClose() {
-    searchBarStream.close();
+    searchBarStream?.close();
     super.onClose();
   }
 }

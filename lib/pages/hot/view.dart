@@ -1,62 +1,33 @@
-import 'dart:async';
-
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
+import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/rank/view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/pages/home/index.dart';
 import 'package:PiliPlus/pages/hot/controller.dart';
-import 'package:PiliPlus/pages/main/index.dart';
 
 import '../../utils/grid.dart';
 
-class HotPage extends StatefulWidget {
+class HotPage extends CommonPage {
   const HotPage({super.key});
 
   @override
   State<HotPage> createState() => _HotPageState();
 }
 
-class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
-  final HotController _hotController = Get.put(HotController());
+class _HotPageState extends CommonPageState<HotPage, HotController>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  HotController controller = Get.put(HotController());
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _hotController.scrollController.addListener(listener);
-  }
-
-  void listener() {
-    StreamController<bool> mainStream =
-        Get.find<MainController>().bottomBarStream;
-    StreamController<bool> searchBarStream =
-        Get.find<HomeController>().searchBarStream;
-    final ScrollDirection direction =
-        _hotController.scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      mainStream.add(true);
-      searchBarStream.add(true);
-    } else if (direction == ScrollDirection.reverse) {
-      mainStream.add(false);
-      searchBarStream.add(false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _hotController.scrollController.removeListener(listener);
-    super.dispose();
-  }
 
   Widget _buildEntranceItem({
     required String iconUrl,
@@ -84,15 +55,15 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
     super.build(context);
     return refreshIndicator(
       onRefresh: () async {
-        return await _hotController.onRefresh();
+        await controller.onRefresh();
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        controller: _hotController.scrollController,
+        controller: controller.scrollController,
         slivers: [
           SliverToBoxAdapter(
             child: Obx(
-              () => _hotController.showHotRcmd.value
+              () => controller.showHotRcmd.value
                   ? Padding(
                       padding:
                           const EdgeInsets.only(left: 12, top: 12, right: 12),
@@ -165,7 +136,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
               bottom: MediaQuery.of(context).padding.bottom + 80,
             ),
             sliver: Obx(
-              () => _buildBody(_hotController.loadingState.value),
+              () => _buildBody(controller.loadingState.value),
             ),
           ),
         ],
@@ -202,7 +173,7 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == loadingState.response.length - 1) {
-                    _hotController.onLoadMore();
+                    controller.onLoadMore();
                   }
                   return VideoCardH(
                     videoItem: loadingState.response[index],
@@ -213,11 +184,11 @@ class _HotPageState extends State<HotPage> with AutomaticKeepAliveClientMixin {
               ),
             )
           : HttpError(
-              callback: _hotController.onReload,
+              callback: controller.onReload,
             ),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
-          callback: _hotController.onReload,
+          callback: controller.onReload,
         ),
       LoadingState() => throw UnimplementedError(),
     };

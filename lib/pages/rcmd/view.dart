@@ -1,61 +1,30 @@
-import 'dart:async';
-
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_v.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/video_card_v.dart';
-import 'package:PiliPlus/pages/home/index.dart';
-import 'package:PiliPlus/pages/main/index.dart';
 
 import '../../utils/grid.dart';
 import 'controller.dart';
 
-class RcmdPage extends StatefulWidget {
+class RcmdPage extends CommonPage {
   const RcmdPage({super.key});
 
   @override
   State<RcmdPage> createState() => _RcmdPageState();
 }
 
-class _RcmdPageState extends State<RcmdPage>
+class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
     with AutomaticKeepAliveClientMixin {
-  late final _controller = Get.put(RcmdController());
+  @override
+  late RcmdController controller = Get.put(RcmdController());
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.scrollController.addListener(listener);
-  }
-
-  void listener() {
-    StreamController<bool> mainStream =
-        Get.find<MainController>().bottomBarStream;
-    StreamController<bool> searchBarStream =
-        Get.find<HomeController>().searchBarStream;
-    final ScrollDirection direction =
-        _controller.scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      mainStream.add(true);
-      searchBarStream.add(true);
-    } else if (direction == ScrollDirection.reverse) {
-      mainStream.add(false);
-      searchBarStream.add(false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.scrollController.removeListener(listener);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +38,10 @@ class _RcmdPageState extends State<RcmdPage>
       ),
       child: refreshIndicator(
         onRefresh: () async {
-          await _controller.onRefresh();
+          await controller.onRefresh();
         },
         child: CustomScrollView(
-          controller: _controller.scrollController,
+          controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(
@@ -81,14 +50,14 @@ class _RcmdPageState extends State<RcmdPage>
                 bottom: MediaQuery.paddingOf(context).bottom,
               ),
               sliver: Obx(
-                () => _controller.loadingState.value is Loading ||
-                        _controller.loadingState.value is Success
-                    ? contentGrid(_controller.loadingState.value)
+                () => controller.loadingState.value is Loading ||
+                        controller.loadingState.value is Success
+                    ? contentGrid(controller.loadingState.value)
                     : HttpError(
-                        errMsg: _controller.loadingState.value is Error
-                            ? (_controller.loadingState.value as Error).errMsg
+                        errMsg: controller.loadingState.value is Error
+                            ? (controller.loadingState.value as Error).errMsg
                             : '没有相关数据',
-                        callback: _controller.onReload,
+                        callback: controller.onReload,
                       ),
               ),
             ),
@@ -114,15 +83,15 @@ class _RcmdPageState extends State<RcmdPage>
         (BuildContext context, int index) {
           if (loadingState is Success &&
               index == loadingState.response.length - 1) {
-            _controller.onLoadMore();
+            controller.onLoadMore();
           }
           if (loadingState is Success) {
-            if (_controller.lastRefreshAt != null) {
-              if (_controller.lastRefreshAt == index) {
+            if (controller.lastRefreshAt != null) {
+              if (controller.lastRefreshAt == index) {
                 return GestureDetector(
                   onTap: () {
-                    _controller.animateToTop();
-                    _controller.onRefresh();
+                    controller.animateToTop();
+                    controller.onRefresh();
                   },
                   child: Card(
                     margin: EdgeInsets.zero,
@@ -140,19 +109,19 @@ class _RcmdPageState extends State<RcmdPage>
                   ),
                 );
               }
-              int actualIndex = _controller.lastRefreshAt == null
+              int actualIndex = controller.lastRefreshAt == null
                   ? index
-                  : index > _controller.lastRefreshAt!
+                  : index > controller.lastRefreshAt!
                       ? index - 1
                       : index;
               return VideoCardV(
                 videoItem: loadingState.response[actualIndex],
                 onRemove: () {
-                  if (_controller.lastRefreshAt != null &&
-                      actualIndex < _controller.lastRefreshAt!) {
-                    _controller.lastRefreshAt = _controller.lastRefreshAt! - 1;
+                  if (controller.lastRefreshAt != null &&
+                      actualIndex < controller.lastRefreshAt!) {
+                    controller.lastRefreshAt = controller.lastRefreshAt! - 1;
                   }
-                  _controller.loadingState.value = LoadingState.success(
+                  controller.loadingState.value = LoadingState.success(
                       (loadingState.response as List)..removeAt(actualIndex));
                 },
               );
@@ -160,7 +129,7 @@ class _RcmdPageState extends State<RcmdPage>
               return VideoCardV(
                 videoItem: loadingState.response[index],
                 onRemove: () {
-                  _controller.loadingState.value = LoadingState.success(
+                  controller.loadingState.value = LoadingState.success(
                       (loadingState.response as List)..removeAt(index));
                 },
               );
@@ -169,7 +138,7 @@ class _RcmdPageState extends State<RcmdPage>
           return const VideoCardVSkeleton();
         },
         childCount: loadingState is Success
-            ? _controller.lastRefreshAt != null
+            ? controller.lastRefreshAt != null
                 ? loadingState.response.length + 1
                 : loadingState.response.length
             : 10,
