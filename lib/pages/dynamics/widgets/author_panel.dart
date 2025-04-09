@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/common/widgets/report.dart';
 import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/http/index.dart';
@@ -219,8 +221,10 @@ class AuthorPanel extends StatelessWidget {
           onPressed: () {
             showModalBottomSheet(
               context: context,
-              useRootNavigator: true,
               isScrollControlled: true,
+              constraints: BoxConstraints(
+                maxWidth: min(640, min(Get.width, Get.height)),
+              ),
               builder: (context) {
                 return morePanel(context);
               },

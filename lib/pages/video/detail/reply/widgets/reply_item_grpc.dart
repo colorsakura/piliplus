@@ -79,8 +79,10 @@ class ReplyItemGrpc extends StatelessWidget {
           // );
           showModalBottomSheet(
             context: context,
-            useRootNavigator: true,
             isScrollControlled: true,
+            constraints: BoxConstraints(
+              maxWidth: min(640, min(Get.width, Get.height)),
+            ),
             builder: (context) {
               return morePanel(
                 context: context,
@@ -532,8 +534,10 @@ class ReplyItemGrpc extends StatelessWidget {
                     feedBack();
                     showModalBottomSheet(
                       context: context,
-                      useRootNavigator: true,
                       isScrollControlled: true,
+                      constraints: BoxConstraints(
+                        maxWidth: min(640, min(Get.width, Get.height)),
+                      ),
                       builder: (context) {
                         return morePanel(
                           context: context,
