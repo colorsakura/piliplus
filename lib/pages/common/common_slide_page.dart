@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +21,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage>
   Widget build(BuildContext context) {
     return enableSlide
         ? Padding(
-            padding: EdgeInsets.only(top: max(0, padding)),
+            padding: EdgeInsets.only(top: padding),
             child: buildPage,
           )
         : buildPage;
@@ -50,7 +48,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage>
               if (cumulativeDelta.dx.abs() >= cumulativeDelta.dy.abs()) {
                 isSliding = true;
                 setState(() {
-                  padding = event.localPosition.dx;
+                  padding = event.localPosition.dx.abs();
                 });
               } else {
                 isSliding = false;
@@ -58,7 +56,7 @@ abstract class CommonSlidePageState<T extends CommonSlidePage>
             }
           } else if (isSliding == true) {
             setState(() {
-              padding = event.localPosition.dx;
+              padding = event.localPosition.dx.abs();
             });
           }
         },
