@@ -15,15 +15,14 @@ class SysMsgController extends CommonController {
   }
 
   @override
-  List? handleListResponse(List currentList, List dataList) {
+  void handleListResponse(List dataList) {
     if (cursor == -1) {
-      msgSysUpdateCursor(dataList.firstOrNull?.cursor);
+      msgSysUpdateCursor(dataList.first?.cursor);
     }
-    cursor = dataList.lastOrNull?.cursor ?? -1;
+    cursor = dataList.last?.cursor ?? -1;
     if (isEnd.not && dataList.length + 1 < pageSize) {
       isEnd = true;
     }
-    return null;
   }
 
   Future msgSysUpdateCursor(int? cursor) async {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -60,10 +59,9 @@ class WebDav {
     try {
       String data = await GStorage.exportAllSettings();
       final path = '$_webdavDirectory/piliplus_settings.json';
-      final file = File(path);
-      if (await file.exists()) {
-        await file.delete();
-      }
+      try {
+        await _client!.remove(path);
+      } catch (_) {}
       await _client!.write(path, utf8.encode(data));
       SmartDialog.showToast('备份成功');
     } catch (e) {

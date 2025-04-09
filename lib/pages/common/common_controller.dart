@@ -39,9 +39,7 @@ abstract class CommonController extends GetxController
 
   Future<LoadingState> customGetData();
 
-  List? handleListResponse(List currentList, List dataList) {
-    return null;
-  }
+  void handleListResponse(List dataList) {}
 
   bool customHandleResponse(Success response) {
     return false;
@@ -51,28 +49,28 @@ abstract class CommonController extends GetxController
     return false;
   }
 
-  // void handleSuccess(List currentList, List dataList) {}
-
   Future queryData([bool isRefresh = true]) async {
     if (isLoading || (isRefresh.not && isEnd)) return;
     isLoading = true;
     LoadingState response = await customGetData();
     if (response is Success) {
       if (!customHandleResponse(response)) {
-        List dataList = (response.response as List?) ?? [];
-        if (dataList.isEmpty) {
+        List? dataList = response.response;
+        if (dataList.isNullOrEmpty) {
           isEnd = true;
+          if (isRefresh) {
+            loadingState.value = response;
+          }
+          return;
         }
-        List currentList = loadingState.value is Success
-            ? (loadingState.value as Success).response
-            : [];
-        List? handleList = handleListResponse(currentList, dataList);
-        loadingState.value = isRefresh
-            ? handleList != null
-                ? LoadingState.success(handleList)
-                : response
-            : LoadingState.success(currentList + dataList);
-        // handleSuccess(currentList, response.response);
+        handleListResponse(dataList!);
+        if (isRefresh) {
+          loadingState.value = LoadingState.success(dataList);
+        } else if (loadingState.value is Success) {
+          List currentList = (loadingState.value as Success).response ?? [];
+          currentList.addAll(dataList);
+          loadingState.value = LoadingState.success(currentList);
+        }
       }
       currentPage++;
     } else {
