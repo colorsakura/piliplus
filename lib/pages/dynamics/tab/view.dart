@@ -47,7 +47,8 @@ class _DynamicsTabPageState
 
   @override
   void listener() {
-    if (_mainController.selectedIndex.value == 0) {
+    if (_mainController.navigationBars[0]['id'] != 1 &&
+        _mainController.selectedIndex.value == 0) {
       return;
     }
     super.listener();

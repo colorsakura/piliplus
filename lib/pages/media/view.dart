@@ -28,7 +28,8 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
 
   @override
   void listener() {
-    if (_mainController.selectedIndex.value == 0) {
+    if (_mainController.navigationBars[0]['id'] != 2 &&
+        _mainController.selectedIndex.value == 0) {
       return;
     }
     super.listener();

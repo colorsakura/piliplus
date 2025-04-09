@@ -45,17 +45,18 @@ class MainController extends GetxController {
     if (GStorage.autoUpdate) {
       Utils.checkUpdate();
     }
+
+    setNavBarConfig();
+
     hideTabBar =
         GStorage.setting.get(SettingBoxKey.hideTabBar, defaultValue: true);
-    if (hideTabBar) {
+    if (navigationBars.length > 1 && hideTabBar) {
       bottomBarStream = StreamController<bool>.broadcast();
     }
     isLogin.value = Accounts.main.isLogin;
     dynamicBadgeMode = DynamicBadgeMode.values[GStorage.setting.get(
         SettingBoxKey.dynamicBadgeMode,
         defaultValue: DynamicBadgeMode.number.index)];
-
-    setNavBarConfig();
 
     dynIndex = navigationBars.indexWhere((e) => e['id'] == 1);
     if (dynamicBadgeMode != DynamicBadgeMode.hidden) {
