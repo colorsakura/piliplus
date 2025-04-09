@@ -769,6 +769,9 @@ class Utils {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+      constraints: BoxConstraints(
+        maxWidth: min(640, min(Get.width, Get.height)),
+      ),
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           minChildSize: 0,
@@ -1185,6 +1188,9 @@ class Utils {
                         isScrollControlled: true,
                         backgroundColor: Theme.of(context).colorScheme.surface,
                         sheetAnimationStyle: AnimationStyle(curve: Curves.ease),
+                        constraints: BoxConstraints(
+                          maxWidth: min(640, min(Get.width, Get.height)),
+                        ),
                         builder: (BuildContext context) {
                           return DraggableScrollableSheet(
                             minChildSize: 0,

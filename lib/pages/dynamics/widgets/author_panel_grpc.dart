@@ -131,6 +131,7 @@ class AuthorPanelGrpc extends StatelessWidget {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
+                useSafeArea: true,
                 isScrollControlled: true,
                 constraints: BoxConstraints(
                   maxWidth: min(640, min(Get.width, Get.height)),
@@ -162,137 +163,130 @@ class MorePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeLeft: true,
-      removeRight: true,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            InkWell(
-              onTap: Get.back,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(28),
-                topRight: Radius.circular(28),
-              ),
-              child: Container(
-                height: 35,
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Center(
-                  child: Container(
-                    width: 32,
-                    height: 3,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.outline,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(3))),
-                  ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: Get.back,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(28),
+              topRight: Radius.circular(28),
+            ),
+            child: Container(
+              height: 35,
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Center(
+                child: Container(
+                  width: 32,
+                  height: 3,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.outline,
+                      borderRadius: const BorderRadius.all(Radius.circular(3))),
                 ),
               ),
             ),
-            if (item.type == 'DYNAMIC_TYPE_AV')
-              ListTile(
-                onTap: () async {
-                  try {
-                    String bvid = item.modules.moduleDynamic.major.archive.bvid;
-                    var res = await UserHttp.toViewLater(bvid: bvid);
-                    SmartDialog.showToast(res['msg']);
-                    Get.back();
-                  } catch (err) {
-                    SmartDialog.showToast('出错了：${err.toString()}');
-                  }
-                },
-                minLeadingWidth: 0,
-                // dense: true,
-                leading: const Icon(Icons.watch_later_outlined, size: 19),
-                title: Text(
-                  '稍后再看',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
+          ),
+          if (item.type == 'DYNAMIC_TYPE_AV')
             ListTile(
-              title: Text(
-                '分享动态',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              leading: const Icon(Icons.share_outlined, size: 19),
-              onTap: () {
-                Get.back();
-                Utils.shareText(
-                    '${HttpString.dynamicShareBaseUrl}/${item.idStr}');
-              },
-              minLeadingWidth: 0,
-            ),
-            ListTile(
-              title: Text(
-                '临时屏蔽：${item.modules.moduleAuthor.name}',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              leading: const Icon(Icons.visibility_off_outlined, size: 19),
-              onTap: () {
-                Get.back();
-                DynamicsController dynamicsController =
-                    Get.find<DynamicsController>();
-                dynamicsController.tempBannedList
-                    .add(item.modules.moduleAuthor.mid);
-                SmartDialog.showToast(
-                    '已临时屏蔽${item.modules.moduleAuthor.name}(${item.modules.moduleAuthor.mid})，重启恢复');
-              },
-              minLeadingWidth: 0,
-            ),
-            if (item.modules.moduleAuthor.mid == Accounts.main.mid)
-              ListTile(
-                onTap: () async {
+              onTap: () async {
+                try {
+                  String bvid = item.modules.moduleDynamic.major.archive.bvid;
+                  var res = await UserHttp.toViewLater(bvid: bvid);
+                  SmartDialog.showToast(res['msg']);
                   Get.back();
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            title: const Text('确定删除该动态?'),
-                            actions: [
-                              TextButton(
-                                onPressed: Get.back,
-                                child: Text(
-                                  '取消',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                  ),
+                } catch (err) {
+                  SmartDialog.showToast('出错了：${err.toString()}');
+                }
+              },
+              minLeadingWidth: 0,
+              // dense: true,
+              leading: const Icon(Icons.watch_later_outlined, size: 19),
+              title: Text(
+                '稍后再看',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          ListTile(
+            title: Text(
+              '分享动态',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            leading: const Icon(Icons.share_outlined, size: 19),
+            onTap: () {
+              Get.back();
+              Utils.shareText(
+                  '${HttpString.dynamicShareBaseUrl}/${item.idStr}');
+            },
+            minLeadingWidth: 0,
+          ),
+          ListTile(
+            title: Text(
+              '临时屏蔽：${item.modules.moduleAuthor.name}',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            leading: const Icon(Icons.visibility_off_outlined, size: 19),
+            onTap: () {
+              Get.back();
+              DynamicsController dynamicsController =
+                  Get.find<DynamicsController>();
+              dynamicsController.tempBannedList
+                  .add(item.modules.moduleAuthor.mid);
+              SmartDialog.showToast(
+                  '已临时屏蔽${item.modules.moduleAuthor.name}(${item.modules.moduleAuthor.mid})，重启恢复');
+            },
+            minLeadingWidth: 0,
+          ),
+          if (item.modules.moduleAuthor.mid == Accounts.main.mid)
+            ListTile(
+              onTap: () async {
+                Get.back();
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text('确定删除该动态?'),
+                          actions: [
+                            TextButton(
+                              onPressed: Get.back,
+                              child: Text(
+                                '取消',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Get.back();
-                                  onRemove?.call(item.idStr);
-                                },
-                                child: const Text('确定'),
-                              ),
-                            ],
-                          ));
-                },
-                minLeadingWidth: 0,
-                leading: Icon(Icons.delete_outline,
-                    color: Theme.of(context).colorScheme.error, size: 19),
-                title: Text('删除',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: Theme.of(context).colorScheme.error)),
-              ),
-            const Divider(thickness: 0.1, height: 1),
-            ListTile(
-              onTap: () => Get.back(),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                                onRemove?.call(item.idStr);
+                              },
+                              child: const Text('确定'),
+                            ),
+                          ],
+                        ));
+              },
               minLeadingWidth: 0,
-              dense: true,
-              title: Text(
-                '取消',
-                style: TextStyle(color: Theme.of(context).colorScheme.outline),
-                textAlign: TextAlign.center,
-              ),
+              leading: Icon(Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.error, size: 19),
+              title: Text('删除',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: Theme.of(context).colorScheme.error)),
             ),
-          ],
-        ),
+          const Divider(thickness: 0.1, height: 1),
+          ListTile(
+            onTap: () => Get.back(),
+            minLeadingWidth: 0,
+            dense: true,
+            title: Text(
+              '取消',
+              style: TextStyle(color: Theme.of(context).colorScheme.outline),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

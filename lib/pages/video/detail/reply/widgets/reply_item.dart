@@ -72,6 +72,7 @@ class ReplyItem extends StatelessWidget {
           feedBack();
           showModalBottomSheet(
             context: context,
+            useSafeArea: true,
             isScrollControlled: true,
             constraints: BoxConstraints(
               maxWidth: min(640, min(Get.width, Get.height)),
@@ -500,6 +501,7 @@ class ReplyItem extends StatelessWidget {
                     feedBack();
                     showModalBottomSheet(
                       context: context,
+                      useSafeArea: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(
                         maxWidth: min(640, min(Get.width, Get.height)),

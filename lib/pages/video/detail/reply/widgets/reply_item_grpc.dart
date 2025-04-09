@@ -79,6 +79,7 @@ class ReplyItemGrpc extends StatelessWidget {
           // );
           showModalBottomSheet(
             context: context,
+            useSafeArea: true,
             isScrollControlled: true,
             constraints: BoxConstraints(
               maxWidth: min(640, min(Get.width, Get.height)),
@@ -534,6 +535,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     feedBack();
                     showModalBottomSheet(
                       context: context,
+                      useSafeArea: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(
                         maxWidth: min(640, min(Get.width, Get.height)),
@@ -1218,108 +1220,95 @@ class ReplyItemGrpc extends StatelessWidget {
 
     Color errorColor = Theme.of(context).colorScheme.error;
 
-    return MediaQuery.removePadding(
-      context: context,
-      removeLeft: true,
-      removeRight: true,
-      child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            InkWell(
-              onTap: Get.back,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(28),
-                topRight: Radius.circular(28),
-              ),
-              child: Container(
-                height: 35,
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Center(
-                  child: Container(
-                    width: 32,
-                    height: 3,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.outline,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(3))),
-                  ),
+    return Padding(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: Get.back,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(28),
+              topRight: Radius.circular(28),
+            ),
+            child: Container(
+              height: 35,
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Center(
+                child: Container(
+                  width: 32,
+                  height: 3,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.outline,
+                      borderRadius: const BorderRadius.all(Radius.circular(3))),
                 ),
               ),
             ),
-            if (ownerMid == upMid.toInt() ||
-                ownerMid == item.member.mid.toInt())
-              ListTile(
-                onTap: () => menuActionHandler('delete'),
-                minLeadingWidth: 0,
-                leading:
-                    Icon(Icons.delete_outlined, color: errorColor, size: 19),
-                title: Text('删除',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: errorColor)),
-              ),
-            if (ownerMid != 0)
-              ListTile(
-                onTap: () => menuActionHandler('report'),
-                minLeadingWidth: 0,
-                leading: Icon(Icons.error_outline, color: errorColor, size: 19),
-                title: Text('举报',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: errorColor)),
-              ),
-            if (replyLevel == '1' &&
-                isSubReply.not &&
-                ownerMid == upMid.toInt())
-              ListTile(
-                onTap: () => menuActionHandler('top'),
-                minLeadingWidth: 0,
-                leading: Icon(Icons.vertical_align_top, size: 19),
-                title: Text('${replyItem.replyControl.isUpTop ? '取消' : ''}置顶',
-                    style: Theme.of(context).textTheme.titleSmall!),
-              ),
+          ),
+          if (ownerMid == upMid.toInt() || ownerMid == item.member.mid.toInt())
             ListTile(
-              onTap: () => menuActionHandler('copyAll'),
+              onTap: () => menuActionHandler('delete'),
               minLeadingWidth: 0,
-              leading: const Icon(Icons.copy_all_outlined, size: 19),
-              title:
-                  Text('复制全部', style: Theme.of(context).textTheme.titleSmall),
+              leading: Icon(Icons.delete_outlined, color: errorColor, size: 19),
+              title: Text('删除',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: errorColor)),
             ),
+          if (ownerMid != 0)
             ListTile(
-              onTap: () => menuActionHandler('copyFreedom'),
+              onTap: () => menuActionHandler('report'),
               minLeadingWidth: 0,
-              leading: const Icon(Icons.copy_outlined, size: 19),
-              title:
-                  Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
+              leading: Icon(Icons.error_outline, color: errorColor, size: 19),
+              title: Text('举报',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: errorColor)),
             ),
+          if (replyLevel == '1' && isSubReply.not && ownerMid == upMid.toInt())
             ListTile(
-              onTap: () => menuActionHandler('saveReply'),
+              onTap: () => menuActionHandler('top'),
               minLeadingWidth: 0,
-              leading: const Icon(Icons.save_alt, size: 19),
-              title:
-                  Text('保存评论', style: Theme.of(context).textTheme.titleSmall),
+              leading: Icon(Icons.vertical_align_top, size: 19),
+              title: Text('${replyItem.replyControl.isUpTop ? '取消' : ''}置顶',
+                  style: Theme.of(context).textTheme.titleSmall!),
             ),
-            if (item.mid.toInt() == ownerMid)
-              ListTile(
-                onTap: () => menuActionHandler('checkReply'),
-                minLeadingWidth: 0,
-                leading: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    const Icon(Icons.shield_outlined, size: 19),
-                    const Icon(Icons.reply, size: 12),
-                  ],
-                ),
-                title:
-                    Text('检查评论', style: Theme.of(context).textTheme.titleSmall),
+          ListTile(
+            onTap: () => menuActionHandler('copyAll'),
+            minLeadingWidth: 0,
+            leading: const Icon(Icons.copy_all_outlined, size: 19),
+            title: Text('复制全部', style: Theme.of(context).textTheme.titleSmall),
+          ),
+          ListTile(
+            onTap: () => menuActionHandler('copyFreedom'),
+            minLeadingWidth: 0,
+            leading: const Icon(Icons.copy_outlined, size: 19),
+            title: Text('自由复制', style: Theme.of(context).textTheme.titleSmall),
+          ),
+          ListTile(
+            onTap: () => menuActionHandler('saveReply'),
+            minLeadingWidth: 0,
+            leading: const Icon(Icons.save_alt, size: 19),
+            title: Text('保存评论', style: Theme.of(context).textTheme.titleSmall),
+          ),
+          if (item.mid.toInt() == ownerMid)
+            ListTile(
+              onTap: () => menuActionHandler('checkReply'),
+              minLeadingWidth: 0,
+              leading: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.shield_outlined, size: 19),
+                  const Icon(Icons.reply, size: 12),
+                ],
               ),
-          ],
-        ),
+              title:
+                  Text('检查评论', style: Theme.of(context).textTheme.titleSmall),
+            ),
+        ],
       ),
     );
   }

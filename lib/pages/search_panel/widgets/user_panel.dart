@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
 import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
@@ -208,8 +210,13 @@ class UserPanelController extends GetxController {
   ) {
     showModalBottomSheet(
       context: context,
+      useSafeArea: true,
       isScrollControlled: true,
+      clipBehavior: Clip.hardEdge,
       backgroundColor: Theme.of(context).colorScheme.surface,
+      constraints: BoxConstraints(
+        maxWidth: min(640, min(Get.width, Get.height)),
+      ),
       builder: (context) => SingleChildScrollView(
         child: Container(
           width: double.infinity,

@@ -133,6 +133,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
   void showBottomSheet(index) {
     showModalBottomSheet(
       context: context,
+      useSafeArea: true,
       isScrollControlled: true,
       clipBehavior: Clip.hardEdge,
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -140,32 +141,27 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
         maxWidth: min(640, min(Get.width, Get.height)),
       ),
       builder: (context) {
-        return MediaQuery.removePadding(
-          context: context,
-          removeLeft: true,
-          removeRight: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 10),
-              ...sheetMenu.map(
-                (item) => ListTile(
-                  onTap: () {
-                    Navigator.pop(context);
-                    menuAction(index, item['id']);
-                  },
-                  minLeadingWidth: 0,
-                  iconColor: Theme.of(context).colorScheme.onSurface,
-                  leading: item['leading'],
-                  title: Text(
-                    item['title'],
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 10),
+            ...sheetMenu.map(
+              (item) => ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  menuAction(index, item['id']);
+                },
+                minLeadingWidth: 0,
+                iconColor: Theme.of(context).colorScheme.onSurface,
+                leading: item['leading'],
+                title: Text(
+                  item['title'],
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
-              SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
-            ],
-          ),
+            ),
+            SizedBox(height: 25 + MediaQuery.paddingOf(context).bottom),
+          ],
         );
       },
     );
