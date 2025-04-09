@@ -152,7 +152,10 @@ class ReplyItemGrpc extends StatelessWidget {
                 ),
               ),
               // ),
-              _buildAuthorPanel(context),
+              SizedBox(
+                width: double.infinity,
+                child: _buildAuthorPanel(context),
+              ),
             ],
           )
         else
@@ -272,6 +275,7 @@ class ReplyItemGrpc extends StatelessWidget {
             Get.toNamed('/member?mid=${replyItem.mid}');
           },
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               lfAvtar(context),
