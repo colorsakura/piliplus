@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -17,7 +18,7 @@ class WebDav {
   static final WebDav _instance = WebDav._internal();
   factory WebDav() => _instance;
 
-  Future<bool> init() async {
+  Future<Pair<bool, String?>> init() async {
     _webDavUri = GStorage.webdavUri;
     _webDavUsername = GStorage.webdavUsername;
     _webDavPassword = GStorage.webdavPassword;
@@ -42,26 +43,27 @@ class WebDav {
       await client.mkdirAll(_webdavDirectory);
 
       _client = client;
-      return true;
-    } catch (_) {
-      return false;
+      return Pair(first: true, second: null);
+    } catch (e) {
+      return Pair(first: false, second: e.toString());
     }
   }
 
   Future backup() async {
     if (_client == null) {
-      if (await init() == false) {
-        SmartDialog.showToast('备份失败，请检查配置');
+      final res = await init();
+      if (res.first == false) {
+        SmartDialog.showToast('备份失败，请检查配置: ${res.second}');
         return;
       }
     }
     try {
+      String data = await GStorage.exportAllSettings();
       final path = '$_webdavDirectory/piliplus_settings.json';
       final file = File(path);
       if (await file.exists()) {
         await file.delete();
       }
-      String data = await GStorage.exportAllSettings();
       await _client!.write(path, utf8.encode(data));
       SmartDialog.showToast('备份成功');
     } catch (e) {
@@ -71,8 +73,9 @@ class WebDav {
 
   Future restore() async {
     if (_client == null) {
-      if (await init() == false) {
-        SmartDialog.showToast('恢复失败，请检查配置');
+      final res = await init();
+      if (res.first == false) {
+        SmartDialog.showToast('恢复失败，请检查配置: ${res.second}');
         return;
       }
     }
