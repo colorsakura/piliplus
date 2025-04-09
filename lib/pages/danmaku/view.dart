@@ -74,7 +74,7 @@ class _PlDanmakuState extends State<PlDanmaku> {
   // 播放器状态监听
   void playerListener(PlayerStatus? status) {
     if (status == PlayerStatus.playing) {
-      _controller?.onResume();
+      _controller?.resume();
     } else {
       _controller?.pause();
     }
@@ -90,6 +90,10 @@ class _PlDanmakuState extends State<PlDanmaku> {
     }
 
     if (playerController.showDanmaku.not && widget.isPipMode != true) {
+      return;
+    }
+
+    if (playerController.playerStatus.status.value != PlayerStatus.playing) {
       return;
     }
 

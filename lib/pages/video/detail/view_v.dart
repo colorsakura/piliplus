@@ -2331,6 +2331,11 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
     required dynamic aid,
     required bool isSeason,
   }) {
+    if (isSeason && videoDetailController.isPlayAll) {
+      SmartDialog.showToast('当前为播放全部，合集不支持倒序');
+      return;
+    }
+
     void changeEpisode(episode) {
       videoIntroController.changeSeasonOrbangu(
         episode is bangumi.EpisodeItem ? episode.epId : null,

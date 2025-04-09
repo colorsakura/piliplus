@@ -1217,6 +1217,9 @@ class VideoDetailController extends GetxController
         autoPlay.value = false;
         isShowCover.value = true;
         videoState.value = LoadingState.error('视频资源不存在');
+        if (plPlayerController.isFullScreen.value) {
+          plPlayerController.toggleFullScreen(false);
+        }
         isQuerying = false;
         return;
       }
@@ -1330,6 +1333,9 @@ class VideoDetailController extends GetxController
       autoPlay.value = false;
       isShowCover.value = true;
       videoState.value = LoadingState.error(result['msg']);
+      if (plPlayerController.isFullScreen.value) {
+        plPlayerController.toggleFullScreen(false);
+      }
       if (result['code'] == -404) {
         SmartDialog.showToast('视频不存在或已被删除');
       }
