@@ -48,7 +48,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   late VideoReplyController _videoReplyController;
 
-  late String heroTag;
+  String get heroTag => widget.heroTag;
 
   // 添加页面缓存
   @override
@@ -57,19 +57,12 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   @override
   void initState() {
     super.initState();
-    // int oid = widget.bvid != null ? IdUtils.bv2av(widget.bvid!) : 0;
-    // heroTag = Get.arguments['heroTag'];
-    heroTag = widget.heroTag;
     _videoReplyController = Get.find<VideoReplyController>(tag: heroTag);
-
-    if (widget.needController != false) {
-      _videoReplyController.scrollController.addListener(listener);
-    }
   }
 
   @override
-  void didUpdateWidget(VideoReplyPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _videoReplyController.showFab();
     if (widget.needController != false) {
       _videoReplyController.scrollController.addListener(listener);
