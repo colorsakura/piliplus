@@ -55,13 +55,24 @@ class _MediaListPanelState
   void initState() {
     super.initState();
     desc = widget.desc.obs;
+  }
+
+  @override
+  void init() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      int index =
-          widget.mediaList.indexWhere((item) => item.bvid == widget.getBvId());
-      if (index != -1 && index != 0) {
-        try {
-          _scrollController.jumpTo(index: index);
-        } catch (_) {}
+      if (mounted) {
+        int index = widget.mediaList
+            .indexWhere((item) => item.bvid == widget.getBvId());
+        if (index > 0) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            try {
+              _scrollController.jumpTo(index: index);
+            } catch (_) {}
+          });
+        }
+        setState(() {
+          isInit = false;
+        });
       }
     });
   }
