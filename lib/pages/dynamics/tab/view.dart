@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
+import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,7 @@ class _DynamicsTabPageState
     with AutomaticKeepAliveClientMixin {
   late bool dynamicsWaterfallFlow;
   StreamSubscription? _listener;
+  late final MainController _mainController = Get.find<MainController>();
 
   DynamicsController dynamicsController = Get.put(DynamicsController());
   @override
@@ -42,6 +44,14 @@ class _DynamicsTabPageState
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void listener() {
+    if (_mainController.selectedIndex.value == 0) {
+      return;
+    }
+    super.listener();
+  }
 
   @override
   void initState() {

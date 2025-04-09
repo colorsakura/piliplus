@@ -71,7 +71,7 @@ class _SubDetailPageState extends State<SubDetailPage> {
             expandedHeight: 215 - MediaQuery.of(context).padding.top,
             pinned: true,
             title: StreamBuilder(
-              stream: titleStreamC.stream,
+              stream: titleStreamC.stream.distinct(),
               initialData: false,
               builder: (context, AsyncSnapshot snapshot) {
                 return AnimatedOpacity(

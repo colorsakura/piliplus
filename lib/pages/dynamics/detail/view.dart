@@ -294,7 +294,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: StreamBuilder(
-          stream: _titleStreamC.stream,
+          stream: _titleStreamC.stream.distinct(),
           initialData: false,
           builder: (context, AsyncSnapshot snapshot) {
             return AnimatedOpacity(

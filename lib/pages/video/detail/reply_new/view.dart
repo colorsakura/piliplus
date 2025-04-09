@@ -240,7 +240,7 @@ class _VideoReplyNewDialogState extends State<VideoReplyNewDialog>
                 const Spacer(),
                 StreamBuilder(
                   initialData: false,
-                  stream: _publishStream.stream,
+                  stream: _publishStream.stream.distinct(),
                   builder: (context, snapshot) => FilledButton.tonal(
                     onPressed: snapshot.data == true ? submitReplyAdd : null,
                     style: FilledButton.styleFrom(

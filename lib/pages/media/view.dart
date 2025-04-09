@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
+import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -20,9 +21,18 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
     with AutomaticKeepAliveClientMixin {
   @override
   MediaController controller = Get.put(MediaController());
+  late final MainController _mainController = Get.find<MainController>();
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void listener() {
+    if (_mainController.selectedIndex.value == 0) {
+      return;
+    }
+    super.listener();
+  }
 
   @override
   Widget build(BuildContext context) {

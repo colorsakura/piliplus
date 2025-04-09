@@ -82,7 +82,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
           : AppBar(
               title: StreamBuilder(
                 initialData: null,
-                stream: _titleStream.stream,
+                stream: _titleStream.stream.distinct(),
                 builder: (context, snapshot) => Text(
                   maxLines: 1,
                   snapshot.hasData ? snapshot.data! : _url,
@@ -93,7 +93,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 preferredSize: Size.zero,
                 child: StreamBuilder(
                   initialData: 0.0,
-                  stream: _progressStream.stream,
+                  stream: _progressStream.stream.distinct(),
                   builder: (context, snapshot) => snapshot.data as double < 1
                       ? LinearProgressIndicator(
                           value: snapshot.data as double,
