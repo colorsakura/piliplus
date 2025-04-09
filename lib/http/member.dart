@@ -447,8 +447,7 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {
         'status': true,
-        'data': DynamicsDataModel.fromJson(res.data['data']).items,
-        'count': res.data['data']?['total'],
+        'data': DynamicsDataModel.fromJson(res.data['data']),
       };
     } else {
       return {

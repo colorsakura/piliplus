@@ -130,70 +130,76 @@ class _DynamicsTabPageState
     return switch (loadingState) {
       Loading() => skeleton(),
       Success() => (loadingState.response as List?)?.isNotEmpty == true
-          ? dynamicsWaterfallFlow
-              ? SliverWaterfallFlow.extent(
-                  maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                  //cacheExtent: 0.0,
-                  crossAxisSpacing: StyleString.cardSpace / 2,
-                  // mainAxisSpacing: StyleString.cardSpace / 2,
+          ? SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
+              ),
+              sliver: dynamicsWaterfallFlow
+                  ? SliverWaterfallFlow.extent(
+                      maxCrossAxisExtent: Grid.smallCardWidth * 2,
+                      //cacheExtent: 0.0,
+                      crossAxisSpacing: StyleString.cardSpace / 2,
+                      // mainAxisSpacing: StyleString.cardSpace / 2,
 
-                  lastChildLayoutTypeBuilder: (index) {
-                    if (index == loadingState.response.length - 1) {
-                      controller.onLoadMore();
-                    }
-                    return index == loadingState.response.length
-                        ? LastChildLayoutType.foot
-                        : LastChildLayoutType.none;
-                  },
-                  children: [
-                    if (dynamicsController.tabController.index == 4 &&
-                        dynamicsController.mid.value != -1) ...[
-                      for (var i in loadingState.response)
-                        DynamicPanel(
-                          item: i,
-                          onRemove: controller.onRemove,
-                        ),
-                    ] else ...[
-                      for (var i in loadingState.response)
-                        if (!dynamicsController.tempBannedList
-                            .contains(i.modules?.moduleAuthor?.mid))
-                          DynamicPanel(
-                            item: i,
-                            onRemove: controller.onRemove,
-                          ),
-                    ]
-                  ],
-                )
-              : SliverCrossAxisGroup(
-                  slivers: [
-                    const SliverFillRemaining(),
-                    SliverConstrainedCrossAxis(
-                      maxExtent: Grid.smallCardWidth * 2,
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            if (index == loadingState.response.length - 1) {
-                              controller.onLoadMore();
-                            }
-                            if ((dynamicsController.tabController.index == 4 &&
-                                    dynamicsController.mid.value != -1) ||
-                                !dynamicsController.tempBannedList.contains(
-                                    loadingState.response[index].modules
-                                        ?.moduleAuthor?.mid)) {
-                              return DynamicPanel(
-                                item: loadingState.response[index],
+                      lastChildLayoutTypeBuilder: (index) {
+                        if (index == loadingState.response.length - 1) {
+                          controller.onLoadMore();
+                        }
+                        return index == loadingState.response.length
+                            ? LastChildLayoutType.foot
+                            : LastChildLayoutType.none;
+                      },
+                      children: [
+                        if (dynamicsController.tabController.index == 4 &&
+                            dynamicsController.mid.value != -1) ...[
+                          for (var i in loadingState.response)
+                            DynamicPanel(
+                              item: i,
+                              onRemove: controller.onRemove,
+                            ),
+                        ] else ...[
+                          for (var i in loadingState.response)
+                            if (!dynamicsController.tempBannedList
+                                .contains(i.modules?.moduleAuthor?.mid))
+                              DynamicPanel(
+                                item: i,
                                 onRemove: controller.onRemove,
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                          childCount: loadingState.response.length,
+                              ),
+                        ]
+                      ],
+                    )
+                  : SliverCrossAxisGroup(
+                      slivers: [
+                        const SliverFillRemaining(),
+                        SliverConstrainedCrossAxis(
+                          maxExtent: Grid.smallCardWidth * 2,
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                if (index == loadingState.response.length - 1) {
+                                  controller.onLoadMore();
+                                }
+                                if ((dynamicsController.tabController.index ==
+                                            4 &&
+                                        dynamicsController.mid.value != -1) ||
+                                    !dynamicsController.tempBannedList.contains(
+                                        loadingState.response[index].modules
+                                            ?.moduleAuthor?.mid)) {
+                                  return DynamicPanel(
+                                    item: loadingState.response[index],
+                                    onRemove: controller.onRemove,
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              },
+                              childCount: loadingState.response.length,
+                            ),
+                          ),
                         ),
-                      ),
+                        const SliverFillRemaining(),
+                      ],
                     ),
-                    const SliverFillRemaining(),
-                  ],
-                )
+            )
           : HttpError(
               callback: controller.onReload,
             ),

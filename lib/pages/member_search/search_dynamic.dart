@@ -1,14 +1,11 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
-import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/member_search/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +39,7 @@ class SearchDynamic extends StatelessWidget {
                 slivers: [
                   SliverPadding(
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.paddingOf(context).bottom,
+                      bottom: MediaQuery.paddingOf(context).bottom + 80,
                     ),
                     sliver: dynamicsWaterfallFlow
                         ? SliverWaterfallFlow.extent(
@@ -110,54 +107,5 @@ class SearchDynamic extends StatelessWidget {
         ),
       LoadingState() => throw UnimplementedError(),
     };
-  }
-
-  _buildHeader({
-    required BuildContext context,
-    required String face,
-    required String name,
-    required dynamic vip,
-    required dynamic pubTime,
-  }) {
-    return Row(
-      children: [
-        NetworkImgLayer(
-          width: 40,
-          height: 40,
-          type: 'avatar',
-          src: face,
-        ),
-        const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    color: vip != null
-                        ? (vip?['status'] ?? vip?['vipStatus'] ?? 0) > 0 &&
-                                (vip?['type'] ?? vip?['vipType']) == 2
-                            ? context.vipColor
-                            : null
-                        : null,
-                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-                  ),
-                ),
-              ],
-            ),
-            if (pubTime != null)
-              Text(
-                Utils.dateFormat(pubTime),
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
-          ],
-        ),
-      ],
-    );
   }
 }

@@ -78,7 +78,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom,
+                bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
               sliver: dynamicsWaterfallFlow
                   ? SliverWaterfallFlow.extent(
