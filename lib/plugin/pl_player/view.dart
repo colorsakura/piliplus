@@ -471,7 +471,8 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
             color: Colors.white,
           ),
           onTap: () {
-            if (anySeason.not) {
+            if (anySeason.not ||
+                widget.videoDetailController?.isPlayAll == true) {
               widget.showEpisodes?.call();
               return;
             }
