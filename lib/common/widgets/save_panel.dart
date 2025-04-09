@@ -97,6 +97,8 @@ class _SavePanelState extends State<SavePanel> {
           late final rootId = hasRoot ? _item.root : _item.id;
           late final anchor = hasRoot ? 'anchor=${_item.id}&' : '';
           late final enterUri = parseDyn(dynItem);
+          viewType = '查看';
+          itemType = '评论';
           uri = switch (type) {
             1 ||
             11 ||
