@@ -939,19 +939,24 @@ class PlPlayerController {
               }
             });
           });
-          return;
         } else if (event.startsWith('Could not open codec')) {
           SmartDialog.showToast('无法加载解码器, $event，可能会切换至软解');
-          return;
         } else {
           if (onlyPlayAudio.value.not) {
             if (event.startsWith("Failed to open .") ||
-                event.startsWith("Cannot open file ''")) {
-              SmartDialog.showToast('视频源为空');
-            } else {
-              SmartDialog.showToast('视频加载错误, $event');
-              debugPrint('视频加载错误, $event');
+                event.startsWith("Cannot open") ||
+                event.startsWith("Can not open")) {
+              List list = [
+                if (dataSource.videoSource.isNullOrEmpty) '视频',
+                if (dataSource.audioSource.isNullOrEmpty) '音频',
+              ];
+              if (list.isNotEmpty) {
+                SmartDialog.showToast('${list.join('、')}源为空');
+                return;
+              }
             }
+            SmartDialog.showToast('视频加载错误, $event');
+            debugPrint('视频加载错误, $event');
           }
         }
       }),
