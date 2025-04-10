@@ -104,7 +104,11 @@ class Utils {
   }
 
   /// 定时关闭
-  static void scheduleExit(context, isFullScreen, [bool isLive = false]) {
+  static void scheduleExit(BuildContext context, isFullScreen,
+      [bool isLive = false]) {
+    if (!context.mounted) {
+      return;
+    }
     const List<int> scheduleTimeChoices = [0, 15, 30, 45, 60];
     const TextStyle titleStyle = TextStyle(fontSize: 14);
     if (isLive) {
@@ -567,6 +571,9 @@ class Utils {
     required Function isFullScreen,
     double? padding,
   }) {
+    if (!context.mounted) {
+      return;
+    }
     Get.generalDialog(
       barrierLabel: '',
       barrierDismissible: true,

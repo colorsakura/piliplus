@@ -189,8 +189,10 @@ class HeaderControlState extends State<HeaderControl> {
                 ),
               ListTile(
                 dense: true,
-                onTap: () =>
-                    {Get.back(), Utils.scheduleExit(context, isFullScreen)},
+                onTap: () => {
+                  Get.back(),
+                  Utils.scheduleExit(this.context, isFullScreen)
+                },
                 leading: const Icon(Icons.hourglass_top_outlined, size: 20),
                 title: const Text('定时关闭', style: titleStyle),
               ),
