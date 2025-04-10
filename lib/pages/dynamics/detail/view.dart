@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPlus/common/widgets/custom_sliver_persistent_header_delegate.dart';
@@ -41,8 +40,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     with TickerProviderStateMixin {
   late DynamicDetailController _dynamicDetailController;
   AnimationController? _fabAnimationCtr;
-  late StreamController<bool> _titleStreamC; // appBar title
-  bool _visibleTitle = false;
+  final RxBool _visibleTitle = false.obs;
   // String? action;
   // 回复类型
   late int replyType;
@@ -105,7 +103,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     super.initState();
     // floor 1原创 2转发
     init();
-    _titleStreamC = StreamController<bool>();
     // if (action == 'comment') {
     //   _visibleTitle = true;
     //   _titleStreamC.add(true);
@@ -240,15 +237,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
   void listener() {
     // 标题
     if (_dynamicDetailController.scrollController.positions.length == 1) {
-      if (_dynamicDetailController.scrollController.offset > 55 &&
-          !_visibleTitle) {
-        _visibleTitle = true;
-        _titleStreamC.add(true);
-      } else if (_dynamicDetailController.scrollController.offset <= 55 &&
-          _visibleTitle) {
-        _visibleTitle = false;
-        _titleStreamC.add(false);
-      }
+      _visibleTitle.value =
+          _dynamicDetailController.scrollController.offset > 55;
     }
 
     // fab按钮
@@ -281,7 +271,6 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
 
   @override
   void dispose() {
-    _titleStreamC.close();
     _fabAnimationCtr?.dispose();
     _fabAnimationCtr = null;
     _dynamicDetailController.scrollController.removeListener(listener);
@@ -293,12 +282,10 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: StreamBuilder(
-          stream: _titleStreamC.stream.distinct(),
-          initialData: false,
-          builder: (context, AsyncSnapshot snapshot) {
+        title: Obx(
+          () {
             return AnimatedOpacity(
-              opacity: snapshot.data ? 1 : 0,
+              opacity: _visibleTitle.value ? 1 : 0,
               duration: const Duration(milliseconds: 300),
               child: AuthorPanel(
                 item: _dynamicDetailController.item,

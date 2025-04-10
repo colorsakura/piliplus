@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:PiliPlus/http/init.dart';
@@ -50,8 +49,8 @@ class WebviewPageNew extends StatefulWidget {
 class _WebviewPageNewState extends State<WebviewPageNew> {
   late final String _url = widget.url ?? Get.parameters['url'] ?? '';
   late final uaType = widget.uaType ?? Get.parameters['uaType'] ?? 'mob';
-  final _titleStream = StreamController<String?>();
-  final _progressStream = StreamController<double>();
+  final RxString title = ''.obs;
+  final RxDouble progress = 1.0.obs;
   bool? _inApp;
   bool? _off;
 
@@ -68,8 +67,6 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
 
   @override
   void dispose() {
-    _titleStream.close();
-    _progressStream.close();
     _webViewController = null;
     super.dispose();
   }
@@ -80,24 +77,18 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
       appBar: widget.url != null
           ? null
           : AppBar(
-              title: StreamBuilder(
-                initialData: null,
-                stream: _titleStream.stream.distinct(),
-                builder: (context, snapshot) => Text(
+              title: Obx(
+                () => Text(
+                  title.value.isNotEmpty ? title.value : _url,
                   maxLines: 1,
-                  snapshot.hasData ? snapshot.data! : _url,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               bottom: PreferredSize(
                 preferredSize: Size.zero,
-                child: StreamBuilder(
-                  initialData: 0.0,
-                  stream: _progressStream.stream.distinct(),
-                  builder: (context, snapshot) => snapshot.data as double < 1
-                      ? LinearProgressIndicator(
-                          value: snapshot.data as double,
-                        )
+                child: Obx(
+                  () => progress.value < 1
+                      ? LinearProgressIndicator(value: progress.value)
                       : const SizedBox.shrink(),
                 ),
               ),
@@ -207,10 +198,10 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             );
           },
           onProgressChanged: (controller, progress) {
-            _progressStream.add(progress / 100);
+            this.progress.value = progress / 100;
           },
           onTitleChanged: (controller, title) {
-            _titleStream.add(title);
+            this.title.value = title ?? '';
           },
           onCloseWindow: (controller) => Get.back(),
           onLoadStop: (controller, url) {
@@ -277,7 +268,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                           ],
                         );
                       });
-                  _progressStream.add(1);
+                  progress.value = 1;
                 }
               : null,
           shouldInterceptAjaxRequest: (controller, ajaxRequest) async {
@@ -311,7 +302,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
             );
             // debugPrint('webview: [$url], [$hasMatch]');
             if (hasMatch) {
-              _progressStream.add(1.0);
+              progress.value = 1;
               return NavigationActionPolicy.CANCEL;
             } else if (RegExp(r'^(?!(https?://))\S+://', caseSensitive: false)
                 .hasMatch(url)) {
@@ -326,7 +317,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
-              _progressStream.add(1.0);
+              progress.value = 1;
               return NavigationActionPolicy.CANCEL;
             }
 

@@ -26,23 +26,18 @@ class _SubDetailPageState extends State<SubDetailPage> {
   late final SubDetailController _subDetailController = Get.put(
       SubDetailController(),
       tag: Utils.makeHeroTag(Get.parameters['id']));
-  late StreamController<bool> titleStreamC;
+  final RxBool showTitle = false.obs;
   late Future _futureBuilderFuture;
 
   @override
   void initState() {
     super.initState();
     _futureBuilderFuture = _subDetailController.queryUserSubFolderDetail();
-    titleStreamC = StreamController<bool>();
     _controller.addListener(listener);
   }
 
   void listener() {
-    if (_controller.offset > 160) {
-      titleStreamC.add(true);
-    } else if (_controller.offset <= 160) {
-      titleStreamC.add(false);
-    }
+    showTitle.value = _controller.offset > 160;
 
     if (_controller.position.pixels >=
         _controller.position.maxScrollExtent - 200) {
@@ -54,7 +49,6 @@ class _SubDetailPageState extends State<SubDetailPage> {
 
   @override
   void dispose() {
-    titleStreamC.close();
     _controller.removeListener(listener);
     _controller.dispose();
     super.dispose();
@@ -70,12 +64,10 @@ class _SubDetailPageState extends State<SubDetailPage> {
           SliverAppBar(
             expandedHeight: 215 - MediaQuery.of(context).padding.top,
             pinned: true,
-            title: StreamBuilder(
-              stream: titleStreamC.stream.distinct(),
-              initialData: false,
-              builder: (context, AsyncSnapshot snapshot) {
+            title: Obx(
+              () {
                 return AnimatedOpacity(
-                  opacity: snapshot.data ? 1 : 0,
+                  opacity: showTitle.value ? 1 : 0,
                   curve: Curves.easeOut,
                   duration: const Duration(milliseconds: 500),
                   child: Row(
