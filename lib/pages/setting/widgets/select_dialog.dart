@@ -73,10 +73,10 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
   void initState() {
     _cdnSpeedTest = GStorage.cdnSpeedTest;
     if (_cdnSpeedTest) {
-      _startSpeedTest();
       _cdnResList = List.generate(
           CDNService.values.length, (_) => ValueNotifier<String?>(null));
       _cancelToken = CancelToken();
+      _startSpeedTest();
     }
     super.initState();
   }
@@ -170,9 +170,7 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
     debugPrint('CDN speed test error: $error');
     if (!mounted) return;
     var message = error.toString();
-    if (message.length > 30) {
-      message = '${message.substring(0, 30)}...';
-    } else if (message.isEmpty) {
+    if (message.isEmpty) {
       message = '测速失败';
     }
     _cdnResList[index].value = message;
@@ -191,6 +189,8 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
                   return Text(
                     _cdnResList[index].value ?? '---',
                     style: const TextStyle(fontSize: 13),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   );
                 },
               )
