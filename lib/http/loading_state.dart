@@ -18,19 +18,19 @@ class Success<T> extends LoadingState<T> {
   final T response;
   const Success(this.response);
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (other is Success) {
-      return response == other.response;
-    }
-    return false;
-  }
+  // @override
+  // bool operator ==(Object other) {
+  //   if (identical(this, other)) {
+  //     return true;
+  //   }
+  //   if (other is Success) {
+  //     return response == other.response;
+  //   }
+  //   return false;
+  // }
 
-  @override
-  int get hashCode => response.hashCode;
+  // @override
+  // int get hashCode => response.hashCode;
 }
 
 class Error extends LoadingState<Never> {
