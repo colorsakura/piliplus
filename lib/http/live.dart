@@ -10,13 +10,13 @@ import 'api.dart';
 import 'init.dart';
 
 class LiveHttp {
-  static Future<LoadingState> liveList(
+  static Future<LoadingState<List<LiveItemModel>?>> liveList(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
     var res = await Request().get(Api.liveList,
         queryParameters: {'page': pn, 'page_size': 30, 'platform': 'web'});
     if (res.data['code'] == 0) {
-      List<LiveItemModel> list = res.data['data']['list']
-          .map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
+      List<LiveItemModel>? list = (res.data['data']?['list'] as List?)
+          ?.map<LiveItemModel>((e) => LiveItemModel.fromJson(e))
           .toList();
       return LoadingState.success(list);
     } else {

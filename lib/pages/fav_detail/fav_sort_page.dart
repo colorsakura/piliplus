@@ -22,7 +22,7 @@ class _FavSortPageState extends State<FavSortPage> {
   FavDetailController get _favDetailController => widget.favDetailController;
 
   final GlobalKey _key = GlobalKey();
-  late List<FavDetailItemData> list = List<FavDetailItemData>.from(
+  late List<FavDetailItemData> sortList = List<FavDetailItemData>.from(
       (_favDetailController.loadingState.value as Success).response);
   List<String> sort = <String>[];
 
@@ -39,7 +39,7 @@ class _FavSortPageState extends State<FavSortPage> {
           if (_favDetailController.loadingState.value is Success) {
             List<FavDetailItemData> list =
                 (_favDetailController.loadingState.value as Success).response;
-            this.list.addAll(list.sublist(this.list.length));
+            this.sortList.addAll(list.sublist(this.sortList.length));
             if (mounted) {
               setState(() {});
             }
@@ -83,7 +83,7 @@ class _FavSortPageState extends State<FavSortPage> {
               if (res['status']) {
                 SmartDialog.showToast('排序完成');
                 _favDetailController.loadingState.value =
-                    LoadingState.success(list);
+                    LoadingState.success(sortList);
                 Get.back();
               } else {
                 SmartDialog.showToast(res['msg']);
@@ -103,14 +103,14 @@ class _FavSortPageState extends State<FavSortPage> {
       newIndex -= 1;
     }
 
-    final oldItem = list[oldIndex];
+    final oldItem = sortList[oldIndex];
     final newItem =
-        list.getOrNull(oldIndex > newIndex ? newIndex - 1 : newIndex);
+        sortList.getOrNull(oldIndex > newIndex ? newIndex - 1 : newIndex);
     sort.add(
         '${newItem == null ? '0:0' : '${newItem.id}:${newItem.type}'}:${oldItem.id}:${oldItem.type}');
 
-    final tabsItem = list.removeAt(oldIndex);
-    list.insert(newIndex, tabsItem);
+    final tabsItem = sortList.removeAt(oldIndex);
+    sortList.insert(newIndex, tabsItem);
 
     setState(() {});
   }
@@ -124,7 +124,7 @@ class _FavSortPageState extends State<FavSortPage> {
       footer: SizedBox(
         height: MediaQuery.of(context).padding.bottom + 80,
       ),
-      children: list
+      children: sortList
           .map(
             (item) => Stack(
               key: Key(item.id.toString()),

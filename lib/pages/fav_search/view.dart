@@ -61,12 +61,12 @@ class _FavSearchPageState extends State<FavSearchPage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => errorWidget(),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? switch (_favSearchCtr.searchType) {
-              SearchType.fav => CustomScrollView(
+              SearchType.fav || SearchType.history => CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   controller: _favSearchCtr.scrollController,
                   slivers: [
@@ -82,40 +82,53 @@ class _FavSearchPageState extends State<FavSearchPage> {
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            if (index == loadingState.response.length - 1) {
+                            if (index == loadingState.response!.length - 1) {
                               _favSearchCtr.onLoadMore();
                             }
-                            final element = loadingState.response[index];
-                            return FavVideoCardH(
-                              videoItem: element,
-                              searchType: _favSearchCtr.type,
-                              callFn: _favSearchCtr.type != 1
-                                  ? () {
-                                      _favSearchCtr.onCancelFav(
-                                        element.id!,
-                                        element.type,
+                            final item = loadingState.response![index];
+                            return _favSearchCtr.searchType == SearchType.fav
+                                ? FavVideoCardH(
+                                    videoItem: item,
+                                    isOwner: _favSearchCtr.isOwner ?? false,
+                                    searchType: _favSearchCtr.type,
+                                    callFn: _favSearchCtr.type != 1
+                                        ? () {
+                                            _favSearchCtr.onCancelFav(
+                                              index,
+                                              item.id!,
+                                              item.type,
+                                            );
+                                          }
+                                        : null,
+                                    onViewFav: () {
+                                      Utils.toViewPage(
+                                        'bvid=${item.bvid}&cid=${item.cid}',
+                                        arguments: {
+                                          'videoItem': item,
+                                          'heroTag':
+                                              Utils.makeHeroTag(item.bvid),
+                                          'sourceType': 'fav',
+                                          'mediaId': Get.arguments['mediaId'],
+                                          'oid': item.id,
+                                          'favTitle': Get.arguments['title'],
+                                          'count': Get.arguments['count'],
+                                          'desc': true,
+                                          'isContinuePlaying': true,
+                                        },
                                       );
-                                    }
-                                  : null,
-                              onViewFav: () {
-                                Utils.toViewPage(
-                                  'bvid=${element.bvid}&cid=${element.cid}',
-                                  arguments: {
-                                    'videoItem': element,
-                                    'heroTag': Utils.makeHeroTag(element.bvid),
-                                    'sourceType': 'fav',
-                                    'mediaId': Get.arguments['mediaId'],
-                                    'oid': element.id,
-                                    'favTitle': Get.arguments['title'],
-                                    'count': Get.arguments['count'],
-                                    'desc': true,
-                                    'isContinuePlaying': true,
-                                  },
-                                );
-                              },
-                            );
+                                    },
+                                  )
+                                : HistoryItem(
+                                    videoItem: item,
+                                    ctr: _favSearchCtr,
+                                    onChoose: null,
+                                    onDelete: (kid, business) {
+                                      _favSearchCtr.onDelHistory(
+                                          index, kid, business);
+                                    },
+                                  );
                           },
-                          childCount: loadingState.response.length,
+                          childCount: loadingState.response!.length,
                         ),
                       ),
                     ),
@@ -126,46 +139,15 @@ class _FavSearchPageState extends State<FavSearchPage> {
                     bottom: MediaQuery.of(context).padding.bottom + 80,
                   ),
                   controller: _favSearchCtr.scrollController,
-                  itemCount: loadingState.response.length,
+                  itemCount: loadingState.response!.length,
                   itemBuilder: ((context, index) {
-                    if (index == loadingState.response.length - 1) {
+                    if (index == loadingState.response!.length - 1) {
                       _favSearchCtr.onLoadMore();
                     }
                     return FollowItem(
-                      item: loadingState.response[index],
+                      item: loadingState.response![index],
                     );
                   }),
-                ),
-              SearchType.history => CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  controller: _favSearchCtr.scrollController,
-                  slivers: [
-                    SliverPadding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom + 80,
-                      ),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                          mainAxisSpacing: 2,
-                          maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                          childAspectRatio: StyleString.aspectRatio * 2.2,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            if (index == loadingState.response.length - 1) {
-                              _favSearchCtr.onLoadMore();
-                            }
-                            return HistoryItem(
-                              videoItem: loadingState.response[index],
-                              ctr: _favSearchCtr,
-                              onChoose: null,
-                            );
-                          },
-                          childCount: loadingState.response.length,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
             }
           : errorWidget(

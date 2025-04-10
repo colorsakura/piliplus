@@ -9,7 +9,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/user.dart';
 
-class LaterController extends MultiSelectController {
+class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
   RxInt count = (-1).obs;
 
   dynamic mid;
@@ -22,25 +22,24 @@ class LaterController extends MultiSelectController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    count.value = response.response['count'];
-    if (response.response['list'].isEmpty) {
-      isEnd = true;
-    }
-    if (currentPage != 1 && loadingState.value is Success) {
-      response.response['list'].insertAll(
-        0,
-        List<HotVideoItemModel>.from((loadingState.value as Success).response),
-      );
-    }
-    if (response.response['list'].length >= count.value) {
-      isEnd = true;
-    }
-    loadingState.value = LoadingState.success(response.response['list']);
-    return true;
+  List<HotVideoItemModel>? getDataList(response) {
+    return response['list'];
   }
 
-  Future toViewDel(BuildContext context, {int? aid}) async {
+  @override
+  void checkIsEnd(int length) {
+    if (length >= count.value) {
+      isEnd = true;
+    }
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
+    count.value = response.response['count'];
+    return false;
+  }
+
+  Future toViewDel(BuildContext context, {index, aid}) async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -50,7 +49,7 @@ class LaterController extends MultiSelectController {
               aid != null ? '即将移除该视频，确定是否移除' : '即将删除所有已观看视频，此操作不可恢复。确定是否删除？'),
           actions: [
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: Get.back,
               child: Text(
                 '取消',
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
@@ -62,10 +61,11 @@ class LaterController extends MultiSelectController {
                     await UserHttp.toViewDel(aids: aid != null ? [aid] : null);
                 if (res['status']) {
                   if (aid != null) {
-                    List list = (loadingState.value as Success).response;
-                    list.removeWhere((e) => e.aid == aid);
+                    List<HotVideoItemModel> list =
+                        (loadingState.value as Success).response;
+                    list.removeAt(index);
                     count.value -= 1;
-                    loadingState.value = LoadingState.success(list);
+                    loadingState.refresh();
                   } else {
                     onReload();
                   }
@@ -90,7 +90,7 @@ class LaterController extends MultiSelectController {
       onConfirm: () async {
         var res = await UserHttp.toViewClear();
         if (res['status']) {
-          loadingState.value = LoadingState.success([]);
+          loadingState.value = LoadingState.success(null);
         }
         SmartDialog.showToast(res['msg']);
       },
@@ -98,7 +98,7 @@ class LaterController extends MultiSelectController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.seeYouLater();
+  Future<LoadingState<Map>> customGetData() => UserHttp.seeYouLater();
 
   onDelChecked(BuildContext context) {
     showDialog(
@@ -137,9 +137,10 @@ class LaterController extends MultiSelectController {
     List aids = result.map((item) => item.aid).toList();
     dynamic res = await UserHttp.toViewDel(aids: aids);
     if (res['status']) {
-      Set remainList = ((loadingState.value as Success).response as List)
-          .toSet()
-          .difference(result.toSet());
+      Set<HotVideoItemModel> remainList =
+          ((loadingState.value as Success).response as List<HotVideoItemModel>)
+              .toSet()
+              .difference(result.toSet());
       count.value -= aids.length;
       loadingState.value = LoadingState.success(remainList.toList());
       if (enableMultiSelect.value) {

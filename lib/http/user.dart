@@ -46,7 +46,7 @@ class UserHttp {
   }
 
   // 收藏夹
-  static Future<LoadingState> userfavFolder({
+  static Future<LoadingState<FavFolderData>> userfavFolder({
     required int pn,
     required int ps,
     required dynamic mid,
@@ -170,7 +170,7 @@ class UserHttp {
     }
   }
 
-  static Future<LoadingState> userFavFolderDetail(
+  static Future<LoadingState<FavDetailData>> userFavFolderDetail(
       {required int mediaId,
       required int pn,
       required int ps,
@@ -195,7 +195,7 @@ class UserHttp {
   }
 
   // 稍后再看
-  static Future<LoadingState> seeYouLater() async {
+  static Future<LoadingState<Map>> seeYouLater() async {
     var res = await Request().get(Api.seeYouLater);
     if (res.data['code'] == 0) {
       if (res.data['data']['count'] == 0) {
@@ -220,7 +220,7 @@ class UserHttp {
   }
 
   // 观看历史
-  static Future<LoadingState> historyList({
+  static Future<LoadingState<HistoryData>> historyList({
     required String type,
     int? max,
     int? viewAt,
@@ -426,7 +426,7 @@ class UserHttp {
   }
 
   // 我的订阅
-  static Future<LoadingState> userSubFolder({
+  static Future<LoadingState<List<SubFolderItemData>?>> userSubFolder({
     required int mid,
     required int pn,
     required int ps,

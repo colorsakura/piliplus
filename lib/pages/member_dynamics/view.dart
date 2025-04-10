@@ -1,5 +1,7 @@
+import 'package:PiliPlus/common/skeleton/dynamic_card.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/member_dynamics/index.dart';
@@ -56,26 +58,57 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
         onRefresh: () async {
           await _memberDynamicController.onRefresh();
         },
-        child: Obx(
-          () => _memberDynamicController.loadingState.value is Loading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: [
-                    _buildContent(_memberDynamicController.loadingState.value),
-                  ],
-                ),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            Obx(
+              () => _buildContent(_memberDynamicController.loadingState.value),
+            )
+          ],
         ),
       );
 
-  _buildContent(LoadingState loadingState) {
+  Widget skeleton() {
+    if (!dynamicsWaterfallFlow) {
+      return SliverCrossAxisGroup(
+        slivers: [
+          const SliverFillRemaining(),
+          SliverConstrainedCrossAxis(
+            maxExtent: Grid.smallCardWidth * 2,
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return const DynamicCardSkeleton();
+                },
+                childCount: 10,
+              ),
+            ),
+          ),
+          const SliverFillRemaining()
+        ],
+      );
+    }
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithExtentAndRatio(
+        crossAxisSpacing: StyleString.cardSpace / 2,
+        mainAxisSpacing: StyleString.cardSpace / 2,
+        maxCrossAxisExtent: Grid.smallCardWidth * 2,
+        childAspectRatio: StyleString.aspectRatio,
+        mainAxisExtent: 50,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return const DynamicCardSkeleton();
+        },
+        childCount: 10,
+      ),
+    );
+  }
+
+  Widget _buildContent(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
-      Loading() => HttpError(
-          callback: _memberDynamicController.onReload,
-        ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Loading() => skeleton(),
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
@@ -83,24 +116,12 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
               sliver: dynamicsWaterfallFlow
                   ? SliverWaterfallFlow.extent(
                       maxCrossAxisExtent: Grid.smallCardWidth * 2,
-                      //cacheExtent: 0.0,
                       crossAxisSpacing: StyleString.safeSpace,
-                      // mainAxisSpacing: StyleString.safeSpace,
-
-                      /// follow max child trailing layout offset and layout with full cross axis extend
-                      /// last child as loadmore item/no more item in [GridView] and [WaterfallFlow]
-                      /// with full cross axis extend
-                      //  LastChildLayoutType.fullCrossAxisExtend,
-
-                      /// as foot at trailing and layout with full cross axis extend
-                      /// show no more item at trailing when children are not full of viewport
-                      /// if children is full of viewport, it's the same as fullCrossAxisExtend
-                      //  LastChildLayoutType.foot,
                       lastChildLayoutTypeBuilder: (index) {
-                        if (index == loadingState.response.length - 1) {
+                        if (index == loadingState.response!.length - 1) {
                           _memberDynamicController.onLoadMore();
                         }
-                        return index == loadingState.response.length
+                        return index == loadingState.response!.length
                             ? LastChildLayoutType.foot
                             : LastChildLayoutType.none;
                       },
@@ -121,15 +142,16 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                if (index == loadingState.response.length - 1) {
+                                if (index ==
+                                    loadingState.response!.length - 1) {
                                   _memberDynamicController.onLoadMore();
                                 }
                                 return DynamicPanel(
-                                  item: loadingState.response[index],
+                                  item: loadingState.response![index],
                                   onRemove: _memberDynamicController.onRemove,
                                 );
                               },
-                              childCount: loadingState.response.length,
+                              childCount: loadingState.response!.length,
                             ),
                           ),
                         ),

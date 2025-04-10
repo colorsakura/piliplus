@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
 import 'package:PiliPlus/pages/bangumi/pgc_index/pgc_index_page.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
@@ -230,10 +231,10 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<BangumiListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => const SliverToBoxAdapter(),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 // 行间距
@@ -247,13 +248,13 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index == loadingState.response.length - 1) {
+                  if (index == loadingState.response!.length - 1) {
                     controller.onLoadMore();
                   }
                   return BangumiCardV(
-                      bangumiItem: loadingState.response[index]);
+                      bangumiItem: loadingState.response![index]);
                 },
-                childCount: loadingState.response.length,
+                childCount: loadingState.response!.length,
               ),
             )
           : HttpError(

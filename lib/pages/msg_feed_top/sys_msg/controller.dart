@@ -1,10 +1,12 @@
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPlus/http/msg.dart';
 
-class SysMsgController extends CommonController {
+class SysMsgController
+    extends CommonListController<List<SystemNotifyList>?, SystemNotifyList> {
   final pageSize = 20;
   int cursor = -1;
 
@@ -41,9 +43,9 @@ class SysMsgController extends CommonController {
     try {
       var res = await MsgHttp.delSysMsg(id);
       if (res['status']) {
-        List list = (loadingState.value as Success).response;
+        List<SystemNotifyList> list = (loadingState.value as Success).response;
         list.removeAt(index);
-        loadingState.value = LoadingState.success(list);
+        loadingState.refresh();
         SmartDialog.showToast('删除成功');
       } else {
         SmartDialog.showToast(res['msg']);
@@ -52,6 +54,6 @@ class SysMsgController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() =>
+  Future<LoadingState<List<SystemNotifyList>?>> customGetData() =>
       MsgHttp.msgFeedNotify(cursor: cursor, pageSize: pageSize);
 }

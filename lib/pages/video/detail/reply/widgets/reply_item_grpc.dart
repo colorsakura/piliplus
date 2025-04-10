@@ -49,7 +49,7 @@ class ReplyItemGrpc extends StatelessWidget {
   final Function(ReplyInfo replyItem, int? rpid)? replyReply;
   final bool needDivider;
   final VoidCallback? onReply;
-  final Function(dynamic rpid, dynamic frpid)? onDelete;
+  final ValueChanged<int?>? onDelete;
   final dynamic upMid;
   final VoidCallback? showDialogue;
   final Function? getTag;
@@ -88,8 +88,8 @@ class ReplyItemGrpc extends StatelessWidget {
               return morePanel(
                 context: context,
                 item: replyItem,
-                onDelete: (rpid) {
-                  onDelete?.call(rpid, null);
+                onDelete: () {
+                  onDelete?.call(null);
                 },
                 isSubReply: false,
               );
@@ -549,8 +549,8 @@ class ReplyItemGrpc extends StatelessWidget {
                         return morePanel(
                           context: context,
                           item: replyItem.replies[i],
-                          onDelete: (rpid) {
-                            onDelete?.call(rpid, replyItem.id.toInt());
+                          onDelete: () {
+                            onDelete?.call(i);
                           },
                           isSubReply: true,
                         );
@@ -1116,7 +1116,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     Options(contentType: Headers.formUrlEncodedContentType),
               );
               if (res.data['code'] == 0) {
-                onDelete?.call(item.id.toInt());
+                onDelete?.call();
               }
               return res.data as Map;
             },
@@ -1199,7 +1199,7 @@ class ReplyItemGrpc extends StatelessWidget {
           SmartDialog.dismiss();
           if (result['status']) {
             SmartDialog.showToast('删除成功');
-            onDelete?.call(item.id.toInt());
+            onDelete?.call();
           } else {
             SmartDialog.showToast('删除失败, ${result["msg"]}');
           }

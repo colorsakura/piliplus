@@ -37,12 +37,16 @@ class _FollowPageState extends State<FollowPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () => Get.toNamed('/favSearch', arguments: {
-                    'mid': int.parse(mid),
-                    'searchType': SearchType.follow,
-                  }),
-              icon: const Icon(Icons.search_outlined),
-              tooltip: '搜索'),
+            onPressed: () => Get.toNamed(
+              '/favSearch',
+              arguments: {
+                'mid': int.parse(mid),
+                'searchType': SearchType.follow,
+              },
+            ),
+            icon: const Icon(Icons.search_outlined),
+            tooltip: '搜索',
+          ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[

@@ -61,7 +61,7 @@ class _SearchPanelState extends State<SearchPanel>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     if (loadingState is Loading) {
       return CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

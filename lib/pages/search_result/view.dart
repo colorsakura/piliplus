@@ -15,7 +15,7 @@ class SearchResultPage extends StatefulWidget {
 }
 
 class _SearchResultPageState extends State<SearchResultPage>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late SearchResultController _searchResultController;
   late TabController _tabController;
   final String _tag = DateTime.now().millisecondsSinceEpoch.toString();

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/member/new/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 import '../../../../../models/space/item.dart';
 
-class MemberContributeCtr extends CommonController
+class MemberContributeCtr extends CommonDataController
     with GetTickerProviderStateMixin {
   MemberContributeCtr({
     required this.heroTag,

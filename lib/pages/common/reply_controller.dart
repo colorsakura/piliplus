@@ -6,7 +6,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/models/video/reply/data.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -16,12 +16,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/models/common/reply_sort_type.dart';
-import 'package:PiliPlus/models/video/reply/item.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
-abstract class ReplyController extends CommonController {
+abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   String nextOffset = '';
   RxInt count = (-1).obs;
 
@@ -31,6 +30,7 @@ abstract class ReplyController extends CommonController {
 
   late final bool isLogin = Accounts.main.isLogin;
 
+  dynamic upMid;
   CursorReply? cursor;
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
@@ -60,33 +60,33 @@ abstract class ReplyController extends CommonController {
   }
 
   @override
+  void checkIsEnd(int length) {
+    if (length >= count.value) {
+      isEnd = true;
+    }
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
+    MainListReply data = response.response;
+    cursor = data.cursor;
+    count.value = data.subjectControl.count.toInt();
+    if (isRefresh) {
+      upMid ??= data.subjectControl.upMid;
+      hasUpTop = data.hasUpTop();
+      if (data.hasUpTop()) {
+        data.replies.insert(0, data.upTop);
+      }
+    }
+    isEnd = data.cursor.isEnd;
+    return false;
+  }
+
+  @override
   Future onRefresh() {
     cursor = null;
     nextOffset = '';
     return super.onRefresh();
-  }
-
-  @override
-  bool customHandleResponse(Success response) {
-    MainListReply replies = response.response;
-    if (cursor == null) {
-      count.value = replies.subjectControl.count.toInt();
-      hasUpTop = replies.hasUpTop();
-      if (replies.hasUpTop()) {
-        replies.replies.insert(0, replies.upTop);
-      }
-    }
-    cursor = replies.cursor;
-    if (currentPage != 1 && loadingState.value is Success) {
-      replies.replies
-          .insertAll(0, (loadingState.value as Success).response.replies);
-    }
-    isEnd = replies.replies.isEmpty ||
-        replies.cursor.isEnd ||
-        replies.replies.length >= count.value;
-    loadingState.value = LoadingState.success(replies);
-
-    return true;
   }
 
   // 排序搜索评论
@@ -168,16 +168,24 @@ abstract class ReplyController extends CommonController {
         if (res != null) {
           savedReplies[key] = null;
           ReplyInfo replyInfo = Utils.replyCast(res);
-          MainListReply response = loadingState.value is Success
-              ? (loadingState.value as Success).response
-              : MainListReply();
-          if (oid != null) {
-            response.replies.insert(hasUpTop ? 1 : 0, replyInfo);
+          if (loadingState.value is Success) {
+            List<ReplyInfo>? list = (loadingState.value as Success).response;
+            if (list == null) {
+              loadingState.value = LoadingState.success([replyInfo]);
+            } else {
+              if (oid != null) {
+                list.insert(hasUpTop ? 1 : 0, replyInfo);
+              } else {
+                list[index].replies.add(replyInfo);
+              }
+              loadingState.refresh();
+            }
           } else {
-            response.replies[index].replies.add(replyInfo);
+            loadingState.value = LoadingState.success([replyInfo]);
           }
           count.value += 1;
-          loadingState.value = LoadingState.success(response);
+
+          // check reply
           if (enableCommAntifraud && context.mounted) {
             checkReply(
               context: context,
@@ -203,63 +211,36 @@ abstract class ReplyController extends CommonController {
     );
   }
 
-  onMDelete(rpid, frpid) {
-    MainListReply response = (loadingState.value as Success).response;
-    if (frpid == null) {
-      response.replies.removeWhere((item) {
-        return item.id.toInt() == rpid;
-      });
+  void onRemove(int index, int? subIndex) {
+    List<ReplyInfo> list = (loadingState.value as Success).response;
+    if (subIndex == null) {
+      list.removeAt(index);
     } else {
-      response.replies.map((item) {
-        if (item.id == frpid) {
-          return item..replies.removeWhere((reply) => reply.id.toInt() == rpid);
-        } else {
-          return item;
-        }
-      }).toList();
+      list[index].replies.removeAt(subIndex);
     }
     count.value -= 1;
-    loadingState.value = LoadingState.success(response);
+    loadingState.refresh();
   }
 
   void onCheckReply(context, item) {
     try {
-      if (item is ReplyInfo) {
-        checkReply(
-          context: context,
-          oid: item.oid.toInt(),
-          rpid: item.hasRoot() ? item.root.toInt() : null,
-          replyType: item.type.toInt(),
-          replyId: item.id.toInt(),
-          message: item.content.message,
-          //
-          root: item.root.toInt(),
-          parent: item.parent.toInt(),
-          ctime: item.ctime.toInt(),
-          pictures:
-              item.content.pictures.map((item) => item.toProto3Json()).toList(),
-          mid: item.mid.toInt(),
-          //
-          isManual: true,
-        );
-      } else if (item is ReplyItemModel) {
-        checkReply(
-          context: context,
-          oid: item.oid,
-          rpid: item.root == 0 ? null : item.root,
-          replyType: item.type!,
-          replyId: item.rpid!,
-          message: item.content!.message!,
-          //
-          root: item.root,
-          parent: item.parent,
-          ctime: item.ctime,
-          pictures: item.content?.pictures,
-          mid: item.mid,
-          //
-          isManual: true,
-        );
-      }
+      checkReply(
+        context: context,
+        oid: item.oid.toInt(),
+        rpid: item.hasRoot() ? item.root.toInt() : null,
+        replyType: item.type.toInt(),
+        replyId: item.id.toInt(),
+        message: item.content.message,
+        //
+        root: item.root.toInt(),
+        parent: item.parent.toInt(),
+        ctime: item.ctime.toInt(),
+        pictures:
+            item.content.pictures.map((item) => item.toProto3Json()).toList(),
+        mid: item.mid.toInt(),
+        //
+        isManual: true,
+      );
     } catch (e) {
       SmartDialog.showToast(e.toString());
     }
@@ -502,16 +483,14 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
       isUpTop: isUpTop,
     );
     if (res['status']) {
-      final data = (loadingState.value as Success).response;
-      if (data is MainListReply) {
-        data.replies[index].replyControl.isUpTop = !isUpTop;
-        if (!isUpTop && index != 0) {
-          data.replies[0].replyControl.isUpTop = false;
-          final item = data.replies.removeAt(index);
-          data.replies.insert(0, item);
-        }
-        loadingState.value = LoadingState.success(data);
+      List<ReplyInfo> list = (loadingState.value as Success).response;
+      list[index].replyControl.isUpTop = !isUpTop;
+      if (!isUpTop && index != 0) {
+        list[0].replyControl.isUpTop = false;
+        final item = list.removeAt(index);
+        list.insert(0, item);
       }
+      loadingState.refresh();
       SmartDialog.showToast('${isUpTop ? '取消' : ''}置顶成功');
     } else {
       SmartDialog.showToast(res['msg']);

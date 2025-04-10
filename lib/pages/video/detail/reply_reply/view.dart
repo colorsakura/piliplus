@@ -358,8 +358,7 @@ class _VideoReplyReplyPanelState
             : <ReplyInfo>[];
         list.insert(index + 1, replyInfo);
         _videoReplyReplyController.count.value += 1;
-        _videoReplyReplyController.loadingState.value =
-            LoadingState.success(list);
+        _videoReplyReplyController.loadingState.refresh();
         if (_videoReplyReplyController.enableCommAntifraud && mounted) {
           _videoReplyReplyController.checkReply(
             context: context,
@@ -456,13 +455,12 @@ class _VideoReplyReplyPanelState
       onReply: () {
         _onReply(replyItem, index);
       },
-      onDelete: (rpid, frpid) {
-        List list =
+      onDelete: (subIndex) {
+        List<ReplyInfo> list =
             (_videoReplyReplyController.loadingState.value as Success).response;
-        list = list.where((item) => item.id != rpid).toList();
+        list.removeAt(index);
         _videoReplyReplyController.count.value -= 1;
-        _videoReplyReplyController.loadingState.value =
-            LoadingState.success(list);
+        _videoReplyReplyController.loadingState.refresh();
       },
       upMid: _videoReplyReplyController.upMid,
       showDialogue: () {

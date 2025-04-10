@@ -8,13 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class FavPgcController extends MultiSelectController {
+class FavPgcController
+    extends MultiSelectController<BangumiListDataModel, BangumiListItemModel> {
   final int type;
   final int followStatus;
 
   FavPgcController(this.type, this.followStatus);
-
-  late final allSelected = false.obs;
 
   @override
   void onInit() {
@@ -23,34 +22,24 @@ class FavPgcController extends MultiSelectController {
   }
 
   @override
-  onSelect(int index) {
-    List<BangumiListItemModel> list = (loadingState.value as Success).response;
-    list[index].checked = !(list[index].checked ?? false);
-    checkedCount.value = list.where((item) => item.checked == true).length;
-    loadingState.value = LoadingState.success(list);
-    allSelected.value = checkedCount.value == list.length;
-    if (checkedCount.value == 0) {
-      enableMultiSelect.value = false;
-    }
+  onSelect(int index, [bool disableSelect = true]) {
+    super.onSelect(index, false);
   }
 
   @override
-  void handleSelect([bool checked = false]) {
+  void handleSelect([bool checked = false, bool disableSelect = true]) {
     allSelected.value = checked;
-    if (loadingState.value is Success) {
-      List<BangumiListItemModel> list =
-          (loadingState.value as Success).response;
-      if (list.isNotEmpty) {
-        loadingState.value = LoadingState.success(list
-            .map<BangumiListItemModel>((item) => item..checked = checked)
-            .toList());
-        checkedCount.value = checked ? list.length : 0;
-      }
-    }
+    super.handleSelect(checked, false);
   }
 
   @override
-  Future<LoadingState> customGetData() => BangumiHttp.bangumiFollowList(
+  List<BangumiListItemModel>? getDataList(BangumiListDataModel response) {
+    return response.list;
+  }
+
+  @override
+  Future<LoadingState<BangumiListDataModel>> customGetData() =>
+      BangumiHttp.bangumiFollowList(
         mid: Accounts.main.mid,
         type: type,
         followStatus: followStatus,
@@ -71,12 +60,12 @@ class FavPgcController extends MultiSelectController {
       List<BangumiListItemModel> list =
           (loadingState.value as Success).response;
       list.removeAt(index);
-      loadingState.value = LoadingState.success(list);
+      loadingState.refresh();
     }
     SmartDialog.showToast(result['msg']);
   }
 
-  Future onUpdate(followStatus) async {
+  Future onUpdateList(followStatus) async {
     List<BangumiListItemModel> dataList =
         (loadingState.value as Success).response as List<BangumiListItemModel>;
     Set<BangumiListItemModel> updateList =
@@ -96,7 +85,7 @@ class FavPgcController extends MultiSelectController {
           List<BangumiListItemModel> list =
               (ctr.loadingState.value as Success).response;
           list.insertAll(0, updateList.map((item) => item..checked = null));
-          ctr.loadingState.value = LoadingState.success(list);
+          ctr.loadingState.refresh();
           ctr.allSelected.value = false;
         }
       } catch (e) {
@@ -106,7 +95,7 @@ class FavPgcController extends MultiSelectController {
     SmartDialog.showToast(res['msg']);
   }
 
-  Future bangumiUpdate(index, followStatus, seasonId) async {
+  Future onUpdate(index, followStatus, seasonId) async {
     var result = await VideoHttp.bangumiUpdate(
       seasonId: [seasonId],
       status: followStatus,
@@ -115,14 +104,14 @@ class FavPgcController extends MultiSelectController {
       List<BangumiListItemModel> list =
           (loadingState.value as Success).response;
       final item = list.removeAt(index);
-      loadingState.value = LoadingState.success(list);
+      loadingState.refresh();
       try {
         final ctr = Get.find<FavPgcController>(tag: '$type$followStatus');
         if (ctr.loadingState.value is Success) {
           List<BangumiListItemModel> list =
               (ctr.loadingState.value as Success).response;
           list.insert(0, item);
-          ctr.loadingState.value = LoadingState.success(list);
+          ctr.loadingState.refresh();
           ctr.allSelected.value = false;
         }
       } catch (e) {

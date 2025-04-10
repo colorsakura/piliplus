@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/self_sized_horizontal_list.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/live/controller.dart';
 import 'package:PiliPlus/pages/live/widgets/live_item.dart';
@@ -66,17 +67,7 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
                 top: StyleString.cardSpace,
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
               ),
-              sliver: Obx(
-                () => controller.loadingState.value is Loading ||
-                        controller.loadingState.value is Success
-                    ? contentGrid(controller.loadingState.value)
-                    : HttpError(
-                        errMsg: controller.loadingState.value is Error
-                            ? (controller.loadingState.value as Error).errMsg
-                            : '没有相关数据',
-                        callback: controller.onReload,
-                      ),
-              ),
+              sliver: Obx(() => _buildBody(controller.loadingState.value)),
             ),
           ],
         ),
@@ -84,33 +75,49 @@ class _LivePageState extends CommonPageState<LivePage, LiveController>
     );
   }
 
-  Widget contentGrid(LoadingState loadingState) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        // 行间距
-        mainAxisSpacing: StyleString.cardSpace,
-        // 列间距
-        crossAxisSpacing: StyleString.cardSpace,
-        // 最大宽度
-        maxCrossAxisExtent: Grid.smallCardWidth,
-        childAspectRatio: StyleString.aspectRatio,
-        mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (loadingState is Success &&
-              index == loadingState.response.length - 1) {
-            controller.onLoadMore();
-          }
-          return loadingState is Success
-              ? LiveCardV(
-                  liveItem: loadingState.response[index],
-                )
-              : const VideoCardVSkeleton();
-        },
-        childCount: loadingState is Success ? loadingState.response.length : 10,
-      ),
-    );
+  Widget _buildBody(LoadingState<List<LiveItemModel>?> loadingState) {
+    return switch (loadingState) {
+      Loading() => SliverGrid(
+          gridDelegate: SliverGridDelegateWithExtentAndRatio(
+            mainAxisSpacing: StyleString.cardSpace,
+            crossAxisSpacing: StyleString.cardSpace,
+            maxCrossAxisExtent: Grid.smallCardWidth,
+            childAspectRatio: StyleString.aspectRatio,
+            mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const VideoCardVSkeleton();
+            },
+            childCount: 10,
+          ),
+        ),
+      Success() => loadingState.response?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.cardSpace,
+                maxCrossAxisExtent: Grid.smallCardWidth,
+                childAspectRatio: StyleString.aspectRatio,
+                mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index == loadingState.response!.length - 1) {
+                    controller.onLoadMore();
+                  }
+                  return LiveCardV(liveItem: loadingState.response![index]);
+                },
+                childCount: loadingState.response!.length,
+              ),
+            )
+          : scrollErrorWidget(callback: controller.onReload),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: controller.onReload,
+        ),
+      _ => throw UnimplementedError(),
+    };
   }
 
   Widget _buildFollowList() {

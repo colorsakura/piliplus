@@ -31,8 +31,6 @@ class VideoReplyReplyController extends ReplyController
   int rpid;
   ReplyType replyType; // = ReplyType.video;
 
-  int? upMid;
-
   dynamic firstFloor;
 
   int? index;
@@ -58,17 +56,26 @@ class VideoReplyReplyController extends ReplyController
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    dynamic replies = response.response;
+  List<ReplyInfo>? getDataList(response) {
+    return isDialogue ? response.replies : response.root.replies;
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
+    final data = response.response;
+
+    upMid ??= data.subjectControl.upMid.toInt();
+    cursor = data.cursor;
+    isEnd = cursor?.isEnd ?? false;
+
     // reply2Reply // isDialogue.not
-    if (replies is DetailListReply) {
-      count.value = replies.root.count.toInt();
+    if (data is DetailListReply) {
+      count.value = data.root.count.toInt();
       if (cursor == null && firstFloor == null) {
-        firstFloor = replies.root;
+        firstFloor = data.root;
       }
       if (id != null) {
-        index =
-            replies.root.replies.indexWhere((item) => item.id.toInt() == id);
+        index = data.root.replies.indexWhere((item) => item.id.toInt() == id);
         if (index == -1) {
           index = null;
         } else {
@@ -93,43 +100,8 @@ class VideoReplyReplyController extends ReplyController
         id = null;
       }
     }
-    upMid ??= replies.subjectControl.upMid.toInt();
-    cursor = replies.cursor;
-    if (isDialogue) {
-      if (replies.replies.isEmpty) {
-        isEnd = true;
-      }
-    } else {
-      if (replies.root.replies.isEmpty) {
-        isEnd = true;
-      }
-    }
-    if (currentPage != 1) {
-      List<ReplyInfo> list = loadingState.value is Success
-          ? (loadingState.value as Success).response
-          : <ReplyInfo>[];
-      if (isDialogue) {
-        replies.replies.insertAll(0, list);
-      } else {
-        replies.root.replies.insertAll(0, list);
-      }
-    }
-    if (isDialogue) {
-      if (replies.cursor.isEnd || replies.replies.length >= count.value) {
-        isEnd = true;
-      }
-    } else {
-      if (replies.cursor.isEnd || replies.root.replies.length >= count.value) {
-        isEnd = true;
-      }
-    }
-    if (isDialogue) {
-      loadingState.value = LoadingState.success(replies.replies);
-    } else {
-      loadingState.value = LoadingState.success(replies.root.replies);
-    }
 
-    return true;
+    return false;
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
+import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/pages/fav/note/controller.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class FavNoteItem extends StatelessWidget {
     required this.onSelect,
   });
 
-  final dynamic item;
+  final FavArticleModel item;
   final FavNoteController ctr;
   final VoidCallback onSelect;
 
@@ -26,10 +27,12 @@ class FavNoteItem extends StatelessWidget {
             onSelect();
             return;
           }
-          Utils.handleWebview(
-            item['web_url'],
-            inApp: true,
-          );
+          if (item.webUrl?.isNotEmpty == true) {
+            Utils.handleWebview(
+              item.webUrl!,
+              inApp: true,
+            );
+          }
         },
         onLongPress: () {
           if (!ctr.enableMultiSelect.value) {
@@ -53,7 +56,7 @@ class FavNoteItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        item['title'],
+                        item.title ?? '',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -64,14 +67,14 @@ class FavNoteItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      item['summary'],
+                      item.summary ?? '',
                       maxLines: 1,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                     Text(
-                      item['message'],
+                      item.message ?? '',
                       maxLines: 1,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
@@ -80,7 +83,7 @@ class FavNoteItem extends StatelessWidget {
                   ],
                 ),
               ),
-              if (item['arc']?['pic'] != null) ...[
+              if (item.pic?.isNotEmpty == true) ...[
                 const SizedBox(width: 10),
                 AspectRatio(
                   aspectRatio: StyleString.aspectRatio,
@@ -91,7 +94,7 @@ class FavNoteItem extends StatelessWidget {
                         clipBehavior: Clip.none,
                         children: [
                           NetworkImgLayer(
-                            src: item['arc']?['pic'],
+                            src: item.pic,
                             width: boxConstraints.maxWidth,
                             height: boxConstraints.maxHeight,
                           ),
@@ -100,7 +103,7 @@ class FavNoteItem extends StatelessWidget {
                               child: LayoutBuilder(
                                 builder: (context, constraints) =>
                                     AnimatedOpacity(
-                                  opacity: item['checked'] == true ? 1 : 0,
+                                  opacity: item.checked == true ? 1 : 0,
                                   duration: const Duration(milliseconds: 200),
                                   child: Container(
                                     alignment: Alignment.center,
@@ -115,7 +118,7 @@ class FavNoteItem extends StatelessWidget {
                                       width: 34,
                                       height: 34,
                                       child: AnimatedScale(
-                                        scale: item['checked'] == true ? 1 : 0,
+                                        scale: item.checked == true ? 1 : 0,
                                         duration:
                                             const Duration(milliseconds: 250),
                                         curve: Curves.easeInOut,

@@ -1,3 +1,6 @@
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
+
 class HistoryData {
   HistoryData({
     this.cursor,
@@ -59,7 +62,7 @@ class HisTabItem {
   }
 }
 
-class HisListItem {
+class HisListItem with MultiSelectData {
   late String title;
   String? longTitle;
   String? cover;
@@ -84,7 +87,6 @@ class HisListItem {
   int? kid;
   String? tagName;
   int? liveStatus;
-  bool? checked;
   dynamic isFullScreen;
 
   HisListItem.fromJson(Map<String, dynamic> json) {

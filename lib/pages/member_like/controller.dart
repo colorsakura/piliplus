@@ -1,8 +1,10 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/models/member/coin.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 
-class MemberLikeController extends CommonController {
+class MemberLikeController extends CommonListController<
+    List<MemberCoinsDataModel>?, MemberCoinsDataModel> {
   final dynamic mid;
   MemberLikeController({this.mid});
 
@@ -13,6 +15,6 @@ class MemberLikeController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() =>
+  Future<LoadingState<List<MemberCoinsDataModel>?>> customGetData() =>
       MemberHttp.getRecentLikeVideo(mid: mid);
 }

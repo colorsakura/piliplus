@@ -3,7 +3,6 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/video.dart';
 
-class FavDetailController extends MultiSelectController {
+class FavDetailController
+    extends MultiSelectController<FavDetailData, FavDetailItemData> {
   Rx<FavFolderItemData> item = FavFolderItemData().obs;
   int? mediaId;
   late String heroTag;
@@ -35,40 +35,39 @@ class FavDetailController extends MultiSelectController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
+  List<FavDetailItemData>? getDataList(FavDetailData response) {
+    return response.list;
+  }
+
+  @override
+  void checkIsEnd(int length) {
+    if (item.value.mediaCount != null && length >= item.value.mediaCount!) {
+      isEnd = true;
+    }
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success<FavDetailData> response) {
     FavDetailData data = response.response;
-    if (currentPage == 1) {
+    if (isRefresh) {
       item.value = data.info ?? FavFolderItemData();
       isOwner.value = data.info?.mid == mid;
     }
-    if (data.list.isNullOrEmpty) {
-      isEnd = true;
-    }
-    if (currentPage != 1 && loadingState.value is Success) {
-      data.list ??= <FavDetailItemData>[];
-      data.list!.insertAll(
-        0,
-        (loadingState.value as Success).response,
-      );
-    }
-    if (isEnd.not && (data.list?.length ?? 0) >= (data.info?.mediaCount ?? 0)) {
-      isEnd = true;
-    }
-    loadingState.value = LoadingState.success(data.list);
-    return true;
+    return false;
   }
 
-  onCancelFav(int id, int type) async {
+  onCancelFav(int index, int id, int type) async {
     var result = await VideoHttp.delFav(
       ids: ['$id:$type'],
       delIds: mediaId.toString(),
     );
     if (result['status']) {
-      List dataList = (loadingState.value as Success).response;
-      dataList.removeWhere((item) => item.id == id);
+      List<FavDetailItemData> dataList =
+          (loadingState.value as Success).response;
       item.value.mediaCount = item.value.mediaCount! - 1;
       item.refresh();
-      loadingState.value = LoadingState.success(dataList);
+      dataList.removeAt(index);
+      loadingState.refresh();
       SmartDialog.showToast('取消收藏');
     } else {
       SmartDialog.showToast(result['msg']);
@@ -76,7 +75,8 @@ class FavDetailController extends MultiSelectController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.userFavFolderDetail(
+  Future<LoadingState<FavDetailData>> customGetData() =>
+      UserHttp.userFavFolderDetail(
         pn: currentPage,
         ps: 20,
         mediaId: mediaId!,
@@ -110,8 +110,9 @@ class FavDetailController extends MultiSelectController {
                   delIds: mediaId.toString(),
                 );
                 if (result['status']) {
-                  List dataList = (loadingState.value as Success).response;
-                  List remainList =
+                  List<FavDetailItemData> dataList =
+                      (loadingState.value as Success).response;
+                  List<FavDetailItemData> remainList =
                       dataList.toSet().difference(list.toSet()).toList();
                   item.value.mediaCount = item.value.mediaCount! - list.length;
                   item.refresh();
@@ -137,8 +138,7 @@ class FavDetailController extends MultiSelectController {
 
   void toViewPlayAll() {
     if (loadingState.value is Success) {
-      List<FavDetailItemData> list = List<FavDetailItemData>.from(
-          (loadingState.value as Success).response);
+      List<FavDetailItemData> list = (loadingState.value as Success).response;
       for (FavDetailItemData element in list) {
         if (element.cid == null) {
           continue;

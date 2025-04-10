@@ -1,11 +1,10 @@
 import 'package:PiliPlus/http/bangumi.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/pgc_index/condition.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart' hide Condition;
 
-class PgcIndexController extends CommonController {
+class PgcIndexController extends CommonListController {
   PgcIndexController(this.indexType);
   int? indexType;
   Rx<LoadingState> conditionState = LoadingState.loading().obs;
@@ -51,20 +50,16 @@ class PgcIndexController extends CommonController {
       );
 
   @override
-  bool customHandleResponse(Success response) {
+  List? getDataList(response) {
+    return response['list'];
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
     if (response.response['has_next'] == null ||
         response.response['has_next'] == 0) {
       isEnd = true;
     }
-    if (isEnd.not && (response.response['list'] as List?).isNullOrEmpty) {
-      isEnd = true;
-    }
-    if (currentPage != 1 && loadingState.value is Success) {
-      response.response['list'] ??= [];
-      response.response['list']!
-          .insertAll(0, (loadingState.value as Success).response);
-    }
-    loadingState.value = LoadingState.success(response.response['list']);
-    return true;
+    return false;
   }
 }

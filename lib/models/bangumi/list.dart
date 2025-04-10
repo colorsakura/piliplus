@@ -1,3 +1,6 @@
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
+
 class BangumiListDataModel {
   BangumiListDataModel({
     this.hasNext,
@@ -24,7 +27,7 @@ class BangumiListDataModel {
   }
 }
 
-class BangumiListItemModel {
+class BangumiListItemModel with MultiSelectData {
   BangumiListItemModel({
     this.badge,
     this.badgeType,
@@ -65,8 +68,6 @@ class BangumiListItemModel {
   String? titleIcon;
   Map? newEp;
   String? progress;
-
-  bool? checked;
 
   BangumiListItemModel.fromJson(Map<String, dynamic> json) {
     badge = json['badge'] == '' ? null : json['badge'];

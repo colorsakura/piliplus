@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/space_article/item.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/article/member_article_ctr.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/article/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -38,10 +39,10 @@ class _MemberArticleState extends State<MemberArticle>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState loadingState) {
+  _buildBody(LoadingState<List<Item>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: () async {
                 await _controller.onRefresh();
@@ -56,14 +57,14 @@ class _MemberArticleState extends State<MemberArticle>
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        if (index == loadingState.response.length - 1) {
+                        if (index == loadingState.response!.length - 1) {
                           _controller.onLoadMore();
                         }
                         return MemberArticleItem(
-                          item: loadingState.response[index],
+                          item: loadingState.response![index],
                         );
                       },
-                      childCount: loadingState.response.length,
+                      childCount: loadingState.response!.length,
                     ),
                   ),
                 ],

@@ -131,8 +131,7 @@ class BangumiInfo extends StatefulWidget {
   State<BangumiInfo> createState() => _BangumiInfoState();
 }
 
-class _BangumiInfoState extends State<BangumiInfo>
-    with TickerProviderStateMixin {
+class _BangumiInfoState extends State<BangumiInfo> {
   late final BangumiIntroController bangumiIntroController;
   late final VideoDetailController videoDetailCtr;
   late final BangumiInfoModel? bangumiItem;

@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/rank/view.dart';
 import 'package:flutter/material.dart';
@@ -160,10 +161,10 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => _buildSkeleton(),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: 2,
@@ -172,15 +173,15 @@ class _HotPageState extends CommonPageState<HotPage, HotController>
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response.length - 1) {
+                  if (index == loadingState.response!.length - 1) {
                     controller.onLoadMore();
                   }
                   return VideoCardH(
-                    videoItem: loadingState.response[index],
+                    videoItem: loadingState.response![index],
                     showPubdate: true,
                   );
                 },
-                childCount: loadingState.response.length,
+                childCount: loadingState.response!.length,
               ),
             )
           : HttpError(

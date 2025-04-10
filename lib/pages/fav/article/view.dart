@@ -40,7 +40,7 @@ class _FavArticlePageState extends State<FavArticlePage>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -55,7 +55,7 @@ class _FavArticlePageState extends State<FavArticlePage>
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.safeSpace - 5,
@@ -69,11 +69,11 @@ class _FavArticlePageState extends State<FavArticlePage>
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response.length - 1) {
+                    if (index == loadingState.response!.length - 1) {
                       _favArticleController.onLoadMore();
                     }
                     return FavArticleItem(
-                      item: loadingState.response[index],
+                      item: loadingState.response![index],
                       onDelete: () {
                         showConfirmDialog(
                             context: context,
@@ -81,13 +81,13 @@ class _FavArticlePageState extends State<FavArticlePage>
                             onConfirm: () {
                               _favArticleController.onRemove(
                                 index,
-                                loadingState.response[index]['opus_id'],
+                                loadingState.response![index]['opus_id'],
                               );
                             });
                       },
                     );
                   },
-                  childCount: loadingState.response.length,
+                  childCount: loadingState.response!.length,
                 ),
               ),
             )

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
@@ -137,10 +138,10 @@ class _DynamicsTabPageState
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<DynamicItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => skeleton(),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.paddingOf(context).bottom + 80,
@@ -153,23 +154,23 @@ class _DynamicsTabPageState
                       // mainAxisSpacing: StyleString.cardSpace / 2,
 
                       lastChildLayoutTypeBuilder: (index) {
-                        if (index == loadingState.response.length - 1) {
+                        if (index == loadingState.response!.length - 1) {
                           controller.onLoadMore();
                         }
-                        return index == loadingState.response.length
+                        return index == loadingState.response!.length
                             ? LastChildLayoutType.foot
                             : LastChildLayoutType.none;
                       },
                       children: [
                         if (dynamicsController.tabController.index == 4 &&
                             dynamicsController.mid.value != -1) ...[
-                          for (var i in loadingState.response)
+                          for (var i in loadingState.response!)
                             DynamicPanel(
                               item: i,
                               onRemove: controller.onRemove,
                             ),
                         ] else ...[
-                          for (var i in loadingState.response)
+                          for (var i in loadingState.response!)
                             if (!dynamicsController.tempBannedList
                                 .contains(i.modules?.moduleAuthor?.mid))
                               DynamicPanel(
@@ -187,23 +188,24 @@ class _DynamicsTabPageState
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                if (index == loadingState.response.length - 1) {
+                                if (index ==
+                                    loadingState.response!.length - 1) {
                                   controller.onLoadMore();
                                 }
+                                final item = loadingState.response![index];
                                 if ((dynamicsController.tabController.index ==
                                             4 &&
                                         dynamicsController.mid.value != -1) ||
                                     !dynamicsController.tempBannedList.contains(
-                                        loadingState.response[index].modules
-                                            ?.moduleAuthor?.mid)) {
+                                        item.modules?.moduleAuthor?.mid)) {
                                   return DynamicPanel(
-                                    item: loadingState.response[index],
+                                    item: item,
                                     onRemove: controller.onRemove,
                                   );
                                 }
                                 return const SizedBox.shrink();
                               },
-                              childCount: loadingState.response.length,
+                              childCount: loadingState.response!.length,
                             ),
                           ),
                         ),

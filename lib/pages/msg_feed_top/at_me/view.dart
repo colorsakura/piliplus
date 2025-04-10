@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/msg/msgfeed_at_me.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -35,20 +36,20 @@ class _AtMePageState extends State<AtMePage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<AtMeItems>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? ListView.separated(
-              itemCount: loadingState.response.length,
+              itemCount: loadingState.response!.length,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
               itemBuilder: (context, int index) {
-                if (index == loadingState.response.length - 1) {
+                if (index == loadingState.response!.length - 1) {
                   _atMeController.onLoadMore();
                 }
-                final item = loadingState.response[index];
+                final item = loadingState.response![index];
                 return ListTile(
                   onTap: () {
                     String? nativeUri = item.item?.nativeUri;
@@ -103,10 +104,9 @@ class _AtMePageState extends State<AtMePage> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if ((item.item?.sourceContent as String?)?.isNotEmpty ==
-                          true) ...[
+                      if (item.item?.sourceContent?.isNotEmpty == true) ...[
                         const SizedBox(height: 4),
-                        Text(item.item?.sourceContent,
+                        Text(item.item!.sourceContent!,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)

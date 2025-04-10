@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/pages/fav/note/controller.dart';
 import 'package:PiliPlus/pages/fav/note/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -132,7 +133,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<FavArticleModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -147,7 +148,7 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
@@ -159,18 +160,18 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response.length - 1) {
+                    if (index == loadingState.response!.length - 1) {
                       _favNoteController.onLoadMore();
                     }
                     return FavNoteItem(
-                      item: loadingState.response[index],
+                      item: loadingState.response![index],
                       ctr: _favNoteController,
                       onSelect: () {
                         _favNoteController.onSelect(index);
                       },
                     );
                   },
-                  childCount: loadingState.response.length,
+                  childCount: loadingState.response!.length,
                 ),
               ),
             )

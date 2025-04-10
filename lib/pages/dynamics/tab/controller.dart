@@ -1,15 +1,15 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 import '../../../http/dynamics.dart';
 
-class DynamicsTabController extends CommonController {
+class DynamicsTabController
+    extends CommonListController<DynamicsDataModel, DynamicItemModel> {
   DynamicsTabController({required this.dynamicsType});
   final String dynamicsType;
   String offset = '';
@@ -32,22 +32,20 @@ class DynamicsTabController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    offset = response.response.offset;
-    if ((response.response.items as List?).isNullOrEmpty) {
-      isEnd = true;
-    }
-    if (currentPage != 1 && loadingState.value is Success) {
-      response.response.items ??= <DynamicItemModel>[];
-      response.response.items!
-          .insertAll(0, (loadingState.value as Success).response);
-    }
-    loadingState.value = LoadingState.success(response.response.items);
-    return true;
+  List<DynamicItemModel>? getDataList(DynamicsDataModel response) {
+    return response.items;
   }
 
   @override
-  Future<LoadingState> customGetData() => DynamicsHttp.followDynamic(
+  bool customHandleResponse(
+      bool isRefresh, Success<DynamicsDataModel> response) {
+    offset = response.response.offset ?? '';
+    return false;
+  }
+
+  @override
+  Future<LoadingState<DynamicsDataModel>> customGetData() =>
+      DynamicsHttp.followDynamic(
         type: dynamicsType == "up" ? "all" : dynamicsType,
         offset: offset,
         mid: dynamicsType == "up" ? mid : -1,
@@ -56,9 +54,9 @@ class DynamicsTabController extends CommonController {
   Future onRemove(dynamic dynamicId) async {
     var res = await MsgHttp.removeDynamic(dynamicId);
     if (res['status']) {
-      List list = (loadingState.value as Success).response;
+      List<DynamicItemModel> list = (loadingState.value as Success).response;
       list.removeWhere((item) => item.idStr == dynamicId);
-      loadingState.value = LoadingState.success(list);
+      loadingState.refresh();
       SmartDialog.showToast('删除成功');
     } else {
       SmartDialog.showToast(res['msg']);

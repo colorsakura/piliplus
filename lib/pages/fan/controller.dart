@@ -1,12 +1,12 @@
 import 'package:PiliPlus/http/fan.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/fans/result.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-class FansController extends CommonController {
+class FansController
+    extends CommonListController<FansDataModel, FansItemModel> {
   int ps = 20;
   int total = 0;
   late int? mid;
@@ -28,22 +28,12 @@ class FansController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    if ((currentPage == 1 && response.response.total < ps) ||
-        (response.response.list as List?).isNullOrEmpty) {
-      isEnd = true;
-    }
-    if (currentPage != 1 && loadingState.value is Success) {
-      response.response.list ??= <FansItemModel>[];
-      response.response.list!
-          .insertAll(0, (loadingState.value as Success).response);
-    }
-    loadingState.value = LoadingState.success(response.response.list);
-    return true;
+  List<FansItemModel>? getDataList(FansDataModel response) {
+    return response.list;
   }
 
   @override
-  Future<LoadingState> customGetData() => FanHttp.fans(
+  Future<LoadingState<FansDataModel>> customGetData() => FanHttp.fans(
         vmid: mid,
         pn: currentPage,
         ps: ps,

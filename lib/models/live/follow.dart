@@ -22,9 +22,8 @@ class LiveFollowingModel {
   LiveFollowingModel.fromJson(Map<String, dynamic> json) {
     count = json['count'];
     list = (json['list'] as List?)
-            ?.map((item) => LiveFollowingItemModel.fromJson(item))
-            .toList() ??
-        <LiveFollowingItemModel>[];
+        ?.map((item) => LiveFollowingItemModel.fromJson(item))
+        .toList();
     liveCount = json['live_count'];
     neverLivedCount = json['never_lived_count'];
     neverLivedFaces = json['never_lived_faces'];

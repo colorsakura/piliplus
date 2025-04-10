@@ -49,17 +49,7 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
                 top: StyleString.cardSpace,
                 bottom: MediaQuery.paddingOf(context).bottom,
               ),
-              sliver: Obx(
-                () => controller.loadingState.value is Loading ||
-                        controller.loadingState.value is Success
-                    ? contentGrid(controller.loadingState.value)
-                    : HttpError(
-                        errMsg: controller.loadingState.value is Error
-                            ? (controller.loadingState.value as Error).errMsg
-                            : '没有相关数据',
-                        callback: controller.onReload,
-                      ),
-              ),
+              sliver: Obx(() => _buildBody(controller.loadingState.value)),
             ),
           ],
         ),
@@ -67,81 +57,107 @@ class _RcmdPageState extends CommonPageState<RcmdPage, RcmdController>
     );
   }
 
-  Widget contentGrid(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
+    return switch (loadingState) {
+      Loading() => _buildSkeleton(),
+      Success() => loadingState.response?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: StyleString.cardSpace,
+                crossAxisSpacing: StyleString.cardSpace,
+                maxCrossAxisExtent: Grid.smallCardWidth,
+                childAspectRatio: StyleString.aspectRatio,
+                mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  if (index == loadingState.response!.length - 1) {
+                    controller.onLoadMore();
+                  }
+                  if (controller.lastRefreshAt != null) {
+                    if (controller.lastRefreshAt == index) {
+                      return GestureDetector(
+                        onTap: () {
+                          controller.animateToTop();
+                          controller.onRefresh();
+                        },
+                        child: Card(
+                          margin: EdgeInsets.zero,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              '上次看到这里\n点击刷新',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    int actualIndex = controller.lastRefreshAt == null
+                        ? index
+                        : index > controller.lastRefreshAt!
+                            ? index - 1
+                            : index;
+                    return VideoCardV(
+                      videoItem: loadingState.response![actualIndex],
+                      onRemove: () {
+                        if (controller.lastRefreshAt != null &&
+                            actualIndex < controller.lastRefreshAt!) {
+                          controller.lastRefreshAt =
+                              controller.lastRefreshAt! - 1;
+                        }
+                        ((controller.loadingState.value as Success).response
+                                as List)
+                            .removeAt(actualIndex);
+                        controller.loadingState.refresh();
+                      },
+                    );
+                  } else {
+                    return VideoCardV(
+                      videoItem: loadingState.response![index],
+                      onRemove: () {
+                        ((controller.loadingState.value as Success).response
+                                as List)
+                            .removeAt(index);
+                        controller.loadingState.refresh();
+                      },
+                    );
+                  }
+                },
+                childCount: controller.lastRefreshAt != null
+                    ? loadingState.response!.length + 1
+                    : loadingState.response!.length,
+              ),
+            )
+          : HttpError(callback: controller.onReload),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: controller.onReload,
+        ),
+      LoadingState() => throw UnimplementedError(),
+    };
+  }
+
+  Widget _buildSkeleton() {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        // 行间距
         mainAxisSpacing: StyleString.cardSpace,
-        // 列间距
         crossAxisSpacing: StyleString.cardSpace,
-        // 最大宽度
         maxCrossAxisExtent: Grid.smallCardWidth,
         childAspectRatio: StyleString.aspectRatio,
         mainAxisExtent: MediaQuery.textScalerOf(context).scale(90),
       ),
       delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (loadingState is Success &&
-              index == loadingState.response.length - 1) {
-            controller.onLoadMore();
-          }
-          if (loadingState is Success) {
-            if (controller.lastRefreshAt != null) {
-              if (controller.lastRefreshAt == index) {
-                return GestureDetector(
-                  onTap: () {
-                    controller.animateToTop();
-                    controller.onRefresh();
-                  },
-                  child: Card(
-                    margin: EdgeInsets.zero,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        '上次看到这里\n点击刷新',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-              int actualIndex = controller.lastRefreshAt == null
-                  ? index
-                  : index > controller.lastRefreshAt!
-                      ? index - 1
-                      : index;
-              return VideoCardV(
-                videoItem: loadingState.response[actualIndex],
-                onRemove: () {
-                  if (controller.lastRefreshAt != null &&
-                      actualIndex < controller.lastRefreshAt!) {
-                    controller.lastRefreshAt = controller.lastRefreshAt! - 1;
-                  }
-                  controller.loadingState.value = LoadingState.success(
-                      (loadingState.response as List)..removeAt(actualIndex));
-                },
-              );
-            } else {
-              return VideoCardV(
-                videoItem: loadingState.response[index],
-                onRemove: () {
-                  controller.loadingState.value = LoadingState.success(
-                      (loadingState.response as List)..removeAt(index));
-                },
-              );
-            }
-          }
+        (context, index) {
           return const VideoCardVSkeleton();
         },
-        childCount: loadingState is Success
-            ? controller.lastRefreshAt != null
-                ? loadingState.response.length + 1
-                : loadingState.response.length
-            : 10,
+        childCount: 10,
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/episodic_button.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPlus/utils/extension.dart';
@@ -13,7 +13,7 @@ import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class MemberVideoCtr extends CommonController {
+class MemberVideoCtr extends CommonListController<Data, Item> {
   MemberVideoCtr({
     required this.type,
     required this.mid,
@@ -70,7 +70,7 @@ class MemberVideoCtr extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
+  bool customHandleResponse(bool isRefresh, Success<Data> response) {
     Data data = response.response;
     episodicButton.value = data.episodicButton ?? EpisodicButton();
     episodicButton.refresh();
@@ -105,7 +105,7 @@ class MemberVideoCtr extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => MemberHttp.spaceArchive(
+  Future<LoadingState<Data>> customGetData() => MemberHttp.spaceArchive(
         type: type,
         mid: mid,
         aid: type == ContributeType.video

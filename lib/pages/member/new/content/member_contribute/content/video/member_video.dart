@@ -60,10 +60,10 @@ class _MemberVideoState extends State<MemberVideo>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState loadingState) {
+  _buildBody(LoadingState<List<Item>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? Stack(
               clipBehavior: Clip.none,
               children: [
@@ -186,17 +186,17 @@ class _MemberVideoState extends State<MemberVideo>
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               if (widget.type != ContributeType.season &&
-                                  index == loadingState.response.length - 1) {
+                                  index == loadingState.response!.length - 1) {
                                 _controller.onLoadMore();
                               }
-                              final Item item = loadingState.response[index];
+                              final Item item = loadingState.response![index];
                               return VideoCardHMemberVideo(
                                 key: ValueKey('${item.param}'),
                                 videoItem: item,
                                 fromViewAid: _controller.fromViewAid,
                               );
                             },
-                            childCount: loadingState.response.length,
+                            childCount: loadingState.response!.length,
                           ),
                         ),
                       ),

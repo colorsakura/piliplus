@@ -39,10 +39,10 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? CustomScrollView(
               slivers: [
                 SliverPadding(
@@ -58,13 +58,13 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        if (index == loadingState.response.length - 1) {
+                        if (index == loadingState.response!.length - 1) {
                           _controller.onLoadMore();
                         }
+                        dynamic item = loadingState.response![index];
                         return SeasonSeriesCard(
-                          item: loadingState.response[index],
+                          item: item,
                           onTap: () {
-                            dynamic item = loadingState.response[index];
                             bool isSeason = item['meta']['season_id'] != null;
                             dynamic id = isSeason
                                 ? item['meta']['season_id']
@@ -89,7 +89,7 @@ class _SeasonSeriesPageState extends State<SeasonSeriesPage>
                           },
                         );
                       },
-                      childCount: loadingState.response.length,
+                      childCount: loadingState.response!.length,
                     ),
                   ),
                 ),

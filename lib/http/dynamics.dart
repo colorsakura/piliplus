@@ -8,7 +8,7 @@ import '../models/dynamics/up.dart';
 import 'index.dart';
 
 class DynamicsHttp {
-  static Future<LoadingState> followDynamic({
+  static Future<LoadingState<DynamicsDataModel>> followDynamic({
     String? type,
     String? offset,
     int? mid,

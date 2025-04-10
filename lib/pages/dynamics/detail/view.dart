@@ -775,7 +775,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
     );
   }
 
-  Widget replyList(LoadingState loadingState) {
+  Widget replyList(LoadingState<List<ReplyInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -785,11 +785,11 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             childCount: 8,
           ),
         ),
-      Success() => (loadingState.response.replies as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (index == loadingState.response.replies.length) {
+                  if (index == loadingState.response!.length) {
                     _dynamicDetailController.onLoadMore();
                     return Container(
                       alignment: Alignment.center,
@@ -799,7 +799,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                       child: Text(
                         _dynamicDetailController.isEnd.not
                             ? '加载中...'
-                            : loadingState.response.replies.isEmpty
+                            : loadingState.response!.isEmpty
                                 ? '还没有评论'
                                 : '没有更多了',
                         style: TextStyle(
@@ -810,19 +810,20 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     );
                   } else {
                     return ReplyItemGrpc(
-                      replyItem: loadingState.response.replies[index],
+                      replyItem: loadingState.response![index],
                       replyLevel: '1',
                       replyReply: (replyItem, id) =>
                           replyReply(context, replyItem, id),
                       onReply: () {
                         _dynamicDetailController.onReply(
                           context,
-                          replyItem: loadingState.response.replies[index],
+                          replyItem: loadingState.response![index],
                           index: index,
                         );
                       },
-                      onDelete: _dynamicDetailController.onMDelete,
-                      upMid: loadingState.response.subjectControl.upMid,
+                      onDelete: (subIndex) =>
+                          _dynamicDetailController.onRemove(index, subIndex),
+                      upMid: _dynamicDetailController.upMid,
                       callback: _getImageCallback,
                       onCheckReply: (item) =>
                           _dynamicDetailController.onCheckReply(context, item),
@@ -837,7 +838,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                     );
                   }
                 },
-                childCount: loadingState.response.replies.length + 1,
+                childCount: loadingState.response!.length + 1,
               ),
             )
           : HttpError(

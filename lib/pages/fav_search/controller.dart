@@ -1,6 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -9,7 +9,7 @@ import 'package:PiliPlus/http/user.dart';
 
 import '../../http/video.dart';
 
-class FavSearchController extends CommonController {
+class FavSearchController extends CommonListController {
   final controller = TextEditingController();
   final searchFocusNode = FocusNode();
 
@@ -17,6 +17,7 @@ class FavSearchController extends CommonController {
   int? mediaId;
   int? mid;
   late SearchType searchType;
+  final bool? isOwner = Get.arguments['isOwner'];
 
   @override
   void onInit() {
@@ -45,23 +46,19 @@ class FavSearchController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    late List currentList = loadingState.value is Success
-        ? (loadingState.value as Success).response
-        : [];
-    List? dataList = currentPage == 1
-        ? response.response.list
-        : response.response.list != null
-            ? currentList + response.response.list
-            : currentList;
+  List? getDataList(response) {
+    return response.list;
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
     isEnd = searchType == SearchType.fav
         ? response.response.hasMore == false
         : response.response.list == null || response.response.list.isEmpty;
-    loadingState.value = LoadingState.success(dataList);
-    return true;
+    return false;
   }
 
-  onCancelFav(int id, int type) async {
+  onCancelFav(int index, int id, int type) async {
     var result = await VideoHttp.favVideo(
       aid: id,
       addIds: '',
@@ -70,8 +67,8 @@ class FavSearchController extends CommonController {
     );
     if (result['status']) {
       List dataList = (loadingState.value as Success).response;
-      dataList.removeWhere((item) => item.id == id);
-      loadingState.value = LoadingState.success(dataList);
+      dataList.removeAt(index);
+      loadingState.refresh();
       SmartDialog.showToast('取消收藏');
     }
   }
@@ -104,7 +101,7 @@ class FavSearchController extends CommonController {
     super.onClose();
   }
 
-  Future delHistory(kid, business) async {
+  Future onDelHistory(index, kid, business) async {
     String resKid = 'archive_$kid';
     if (business == 'live') {
       resKid = 'live_$kid';
@@ -115,8 +112,8 @@ class FavSearchController extends CommonController {
     var res = await UserHttp.delHistory([resKid]);
     if (res['status']) {
       List historyList = (loadingState.value as Success).response;
-      historyList.removeWhere((e) => e.kid == kid);
-      loadingState.value = LoadingState.success(historyList);
+      historyList.removeAt(index);
+      loadingState.refresh();
       SmartDialog.showToast(res['msg']);
     }
   }

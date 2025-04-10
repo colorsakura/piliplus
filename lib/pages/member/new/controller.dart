@@ -6,7 +6,7 @@ import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ extension MemberTabTypeExt on MemberTabType {
   String get title => ['默认', '首页', '动态', '投稿', '收藏', '番剧'][index];
 }
 
-class MemberControllerNew extends CommonController
+class MemberControllerNew extends CommonDataController<Data, dynamic>
     with GetTickerProviderStateMixin {
   MemberControllerNew({required this.mid});
   int mid;
@@ -58,7 +58,7 @@ class MemberControllerNew extends CommonController
   ];
 
   @override
-  bool customHandleResponse(Success response) {
+  bool customHandleResponse(bool isRefresh, Success<Data> response) {
     Data data = response.response;
     username = data.card?.name ?? '';
     isFollow.value = data.card?.relation?.isFollow == 1;
@@ -138,7 +138,7 @@ class MemberControllerNew extends CommonController
   }
 
   @override
-  Future<LoadingState> customGetData() => MemberHttp.space(
+  Future<LoadingState<Data>> customGetData() => MemberHttp.space(
         mid: mid,
         fromViewAid: fromViewAid,
       );

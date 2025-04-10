@@ -4,7 +4,7 @@ import '../models/fans/result.dart';
 import 'index.dart';
 
 class FanHttp {
-  static Future<LoadingState> fans(
+  static Future<LoadingState<FansDataModel>> fans(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
     var res = await Request().get(Api.fans, queryParameters: {
       'vmid': vmid,

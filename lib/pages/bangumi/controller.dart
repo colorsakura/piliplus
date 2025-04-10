@@ -1,14 +1,15 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/models/common/tab_type.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/bangumi.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-class BangumiController extends CommonController {
+class BangumiController extends CommonListController<
+    List<BangumiListItemModel>?, BangumiListItemModel> {
   BangumiController({required this.tabType});
   final TabType tabType;
 
@@ -75,7 +76,8 @@ class BangumiController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => BangumiHttp.bangumiList(
+  Future<LoadingState<List<BangumiListItemModel>?>> customGetData() =>
+      BangumiHttp.bangumiList(
         page: currentPage,
         indexType: tabType == TabType.cinema ? 102 : null, // TODO: sort
       );

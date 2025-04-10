@@ -24,14 +24,14 @@ class HistoryItem extends StatelessWidget {
   final HisListItem videoItem;
   final dynamic ctr;
   final Function? onChoose;
-  final Function? onDelete;
+  final Function(dynamic kid, dynamic business) onDelete;
 
   const HistoryItem({
     super.key,
     required this.videoItem,
     this.ctr,
     this.onChoose,
-    this.onDelete,
+    required this.onDelete,
   });
 
   @override
@@ -380,10 +380,8 @@ class HistoryItem extends StatelessWidget {
                         ),
                       ),
                     PopupMenuItem<String>(
-                      onTap: () => onDelete != null
-                          ? onDelete!(videoItem.kid, videoItem.history.business)
-                          : ctr.delHistory(
-                              videoItem.kid, videoItem.history.business),
+                      onTap: () =>
+                          onDelete(videoItem.kid, videoItem.history.business),
                       height: 35,
                       child: const Row(
                         children: [

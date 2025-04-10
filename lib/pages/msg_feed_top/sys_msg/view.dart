@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -39,21 +40,21 @@ class _SysMsgPageState extends State<SysMsgPage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<SystemNotifyList>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? ListView.separated(
-              itemCount: loadingState.response.length,
+              itemCount: loadingState.response!.length,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
               itemBuilder: (context, int index) {
-                if (index == loadingState.response.length - 1) {
+                if (index == loadingState.response!.length - 1) {
                   _sysMsgController.onLoadMore();
                 }
 
-                final item = loadingState.response[index];
+                final item = loadingState.response![index];
                 String? content = item.content;
                 if (content != null) {
                   try {

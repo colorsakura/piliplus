@@ -1,12 +1,12 @@
 import 'package:PiliPlus/common/widgets/pair.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
 import 'package:PiliPlus/http/msg.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/models/msg/msgfeed_like_me.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-class LikeMeController extends CommonController {
+class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
   int cursor = -1;
   int cursorTime = -1;
 
@@ -17,7 +17,7 @@ class LikeMeController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
+  bool customHandleResponse(bool isRefresh, Success<MsgFeedLikeMe> response) {
     MsgFeedLikeMe data = response.response;
     if (data.total?.cursor?.isEnd == true ||
         data.total?.items.isNullOrEmpty == true) {
@@ -46,7 +46,7 @@ class LikeMeController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() =>
+  Future<LoadingState<MsgFeedLikeMe>> customGetData() =>
       MsgHttp.msgFeedLikeMe(cursor: cursor, cursorTime: cursorTime);
 
   Future onRemove(dynamic id, int index, bool isLatest) async {

@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/member/coin.dart';
 import 'package:PiliPlus/pages/member_coin/widgets/item.dart';
 import 'package:PiliPlus/pages/member_like/controller.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -41,10 +42,10 @@ class _MemberLikePageState extends State<MemberLikePage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<MemberCoinsDataModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? GridView.builder(
               padding: EdgeInsets.only(
                 top: StyleString.safeSpace - 5,
@@ -59,9 +60,9 @@ class _MemberLikePageState extends State<MemberLikePage> {
                 childAspectRatio: StyleString.aspectRatio,
                 mainAxisExtent: MediaQuery.textScalerOf(context).scale(75),
               ),
-              itemCount: loadingState.response.length,
+              itemCount: loadingState.response!.length,
               itemBuilder: (context, index) {
-                return MemberCoinsItem(coinItem: loadingState.response[index]);
+                return MemberCoinsItem(coinItem: loadingState.response![index]);
               },
             )
           : scrollErrorWidget(callback: _ctr.onReload),

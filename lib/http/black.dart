@@ -4,7 +4,8 @@ import '../models/user/black.dart';
 import 'index.dart';
 
 class BlackHttp {
-  static Future<LoadingState> blackList({required int pn, int? ps}) async {
+  static Future<LoadingState<BlackListDataModel>> blackList(
+      {required int pn, int? ps}) async {
     var res = await Request().get(Api.blackLst, queryParameters: {
       'pn': pn,
       'ps': ps ?? 50,

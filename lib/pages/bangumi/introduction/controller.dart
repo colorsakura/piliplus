@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
@@ -26,7 +26,8 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 
-class BangumiIntroController extends CommonController {
+class BangumiIntroController
+    extends CommonDataController<BangumiInfoModel, BangumiInfoModel> {
   // 视频bvid
   String bvid = Get.parameters['bvid'] ?? '';
   var seasonId = Get.parameters['seasonId'] != null
@@ -125,14 +126,15 @@ class BangumiIntroController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    epId ??= response.response.episodes!.first.id;
+  bool customHandleResponse(
+      bool isRefresh, Success<BangumiInfoModel> response) {
+    epId ??= response.response.episodes?.firstOrNull?.id;
     loadingState.value = response;
     return true;
   }
 
   @override
-  Future<LoadingState> customGetData() =>
+  Future<LoadingState<BangumiInfoModel>> customGetData() =>
       SearchHttp.bangumiInfoNew(seasonId: seasonId, epId: epId);
 
   // 获取点赞/投币/收藏状态
@@ -147,40 +149,15 @@ class BangumiIntroController extends CommonController {
     }
   }
 
-  // 获取点赞状态
-  // Future queryHasLikeVideo() async {
-  //   var result = await VideoHttp.hasLikeVideo(bvid: bvid);
-  //   // data	num	被点赞标志	0：未点赞  1：已点赞
-  //   hasLike.value = result["data"] == 1 ? true : false;
-  // }
-
-  // 获取投币状态
-  // Future queryHasCoinVideo() async {
-  //   var result = await VideoHttp.hasCoinVideo(bvid: bvid);
-  //   hasCoin.value = result["data"]['multiply'] == 0 ? false : true;
-  // }
-
-  // 获取收藏状态
-  // Future queryHasFavVideo() async {
-  //   var result = await VideoHttp.hasFavVideo(aid: IdUtils.bv2av(bvid));
-  //   if (result['status']) {
-  //     hasFav.value = result["data"]['favoured'];
-  //   } else {
-  //     hasFav.value = false;
-  //   }
-  // }
-
   // （取消）点赞
   Future actionLikeVideo() async {
     var result = await VideoHttp.likeVideo(bvid: bvid, type: !hasLike.value);
     if (result['status']) {
       SmartDialog.showToast(!hasLike.value ? result['data']['toast'] : '取消赞');
-      hasLike.value = !hasLike.value;
-      dynamic bangumiDetail = (loadingState.value as Success).response;
+      BangumiInfoModel bangumiDetail = (loadingState.value as Success).response;
       bangumiDetail.stat!['likes'] =
           bangumiDetail.stat!['likes'] + (!hasLike.value ? 1 : -1);
-      loadingState.value = LoadingState.success(bangumiDetail);
-      hasLike.refresh();
+      hasLike.value = !hasLike.value;
     } else {
       SmartDialog.showToast(result['msg']);
     }
@@ -194,14 +171,13 @@ class BangumiIntroController extends CommonController {
     );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
-      hasCoin.value = true;
-      dynamic bangumiDetail = (loadingState.value as Success).response;
+      BangumiInfoModel bangumiDetail = (loadingState.value as Success).response;
       bangumiDetail.stat!['coins'] = bangumiDetail.stat!['coins'] + coin;
       if (selectLike && hasLike.value.not) {
         hasLike.value = true;
         bangumiDetail.stat!['likes'] = bangumiDetail.stat!['likes'] + 1;
       }
-      loadingState.value = LoadingState.success(bangumiDetail);
+      hasCoin.value = true;
     } else {
       SmartDialog.showToast(res['msg']);
     }
@@ -236,60 +212,6 @@ class BangumiIntroController extends CommonController {
         },
       ),
     );
-    // showDialog(
-    //     context: Get.context!,
-    //     builder: (context) {
-    //       return AlertDialog(
-    //         title: const Text('选择投币个数'),
-    //         contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-    //         content: StatefulBuilder(builder: (context, StateSetter setState) {
-    //           return Column(
-    //             mainAxisSize: MainAxisSize.min,
-    //             children: [
-    //               RadioListTile(
-    //                 value: 1,
-    //                 title: const Text('1枚'),
-    //                 groupValue: _tempThemeValue,
-    //                 onChanged: (value) {
-    //                   _tempThemeValue = value!;
-    //                   Get.appUpdate();
-    //                 },
-    //               ),
-    //               RadioListTile(
-    //                 value: 2,
-    //                 title: const Text('2枚'),
-    //                 groupValue: _tempThemeValue,
-    //                 onChanged: (value) {
-    //                   _tempThemeValue = value!;
-    //                   Get.appUpdate();
-    //                 },
-    //               ),
-    //             ],
-    //           );
-    //         }),
-    //         actions: [
-    //           TextButton(onPressed: () => Get.back(), child: const Text('取消')),
-    //           TextButton(
-    //               onPressed: () async {
-    //                 var res = await VideoHttp.coinVideo(
-    //                     bvid: bvid, multiply: _tempThemeValue);
-    //                 if (res['status']) {
-    //                   SmartDialog.showToast('投币成功');
-    //                   hasCoin.value = true;
-    //                   dynamic bangumiDetail =
-    //                       (loadingState.value as Success).response;
-    //                   bangumiDetail.stat!['coins'] =
-    //                       bangumiDetail.stat!['coins'] + _tempThemeValue;
-    //                   loadingState.value = LoadingState.success(bangumiDetail);
-    //                 } else {
-    //                   SmartDialog.showToast(res['msg']);
-    //                 }
-    //                 Get.back();
-    //               },
-    //               child: const Text('确定'))
-    //         ],
-    //       );
-    //     });
   }
 
   // （取消）收藏 bangumi
@@ -582,8 +504,11 @@ class BangumiIntroController extends CommonController {
           Get.find<VideoDetailController>(tag: Get.arguments['heroTag']);
       PlayRepeat playRepeat = videoDetailCtr.plPlayerController.playRepeat;
 
-      if ((loadingState.value as Success).response.episodes != null) {
-        episodes = (loadingState.value as Success).response.episodes!;
+      if ((loadingState.value as Success<BangumiInfoModel>).response.episodes !=
+          null) {
+        episodes = (loadingState.value as Success<BangumiInfoModel>)
+            .response
+            .episodes!;
       } else {
         if (playRepeat == PlayRepeat.autoPlayRelated) {
           return playRelated();

@@ -16,8 +16,10 @@ import 'package:intl/intl.dart';
 import '../../../common/constants.dart';
 import '../../../utils/grid.dart';
 
-Widget searchVideoPanel(BuildContext context,
-    SearchPanelController searchPanelCtr, LoadingState loadingState) {
+Widget searchVideoPanel(
+    BuildContext context,
+    SearchPanelController searchPanelCtr,
+    LoadingState<List<dynamic>?> loadingState) {
   final controller = Get.put(VideoPanelController(), tag: searchPanelCtr.tag);
   return CustomScrollView(
     controller: searchPanelCtr.scrollController,
@@ -90,7 +92,7 @@ Widget searchVideoPanel(BuildContext context,
       ),
       switch (loadingState) {
         Loading() => errorWidget(),
-        Success() => (loadingState.response as List?)?.isNotEmpty == true
+        Success() => loadingState.response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom + 80,
@@ -103,15 +105,15 @@ Widget searchVideoPanel(BuildContext context,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      if (index == loadingState.response.length - 1) {
+                      if (index == loadingState.response!.length - 1) {
                         searchPanelCtr.onLoadMore();
                       }
                       return VideoCardH(
-                        videoItem: loadingState.response[index],
+                        videoItem: loadingState.response![index],
                         showPubdate: true,
                       );
                     },
-                    childCount: loadingState.response.length,
+                    childCount: loadingState.response!.length,
                   ),
                 ),
               )

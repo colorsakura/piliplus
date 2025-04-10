@@ -16,8 +16,10 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchArticlePanel(BuildContext context,
-    SearchPanelController searchPanelCtr, LoadingState loadingState) {
+Widget searchArticlePanel(
+    BuildContext context,
+    SearchPanelController searchPanelCtr,
+    LoadingState<List<dynamic>?> loadingState) {
   TextStyle textStyle = TextStyle(
       fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
       color: Theme.of(context).colorScheme.outline);
@@ -80,7 +82,7 @@ Widget searchArticlePanel(BuildContext context,
       ),
       switch (loadingState) {
         Loading() => errorWidget(),
-        Success() => (loadingState.response as List?)?.isNotEmpty == true
+        Success() => loadingState.response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: StyleString.safeSpace +
@@ -94,26 +96,26 @@ Widget searchArticlePanel(BuildContext context,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      if (index == loadingState.response.length - 1) {
+                      if (index == loadingState.response!.length - 1) {
                         searchPanelCtr.onLoadMore();
                       }
+                      final item = loadingState.response![index];
                       return InkWell(
                         onTap: () {
                           Get.toNamed('/htmlRender', parameters: {
-                            'url':
-                                'www.bilibili.com/read/cv${loadingState.response[index].id}',
-                            'title': loadingState.response[index].subTitle,
-                            'id': 'cv${loadingState.response[index].id}',
+                            'url': 'www.bilibili.com/read/cv${item.id}',
+                            'title': item.subTitle,
+                            'id': 'cv${item.id}',
                             'dynamicType': 'read'
                           });
                         },
                         onLongPress: () => imageSaveDialog(
                           context: context,
-                          title: (loadingState.response[index].title as List?)
+                          title: (item.title as List?)
                                   ?.map((item) => item['text'])
                                   .join() ??
                               '',
-                          cover: loadingState.response[index].imageUrls.first,
+                          cover: item.imageUrls.first,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -135,11 +137,8 @@ Widget searchArticlePanel(BuildContext context,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    if (loadingState
-                                                .response[index].imageUrls !=
-                                            null &&
-                                        loadingState.response[index].imageUrls
-                                            .isNotEmpty)
+                                    if (item.imageUrls != null &&
+                                        item.imageUrls.isNotEmpty)
                                       AspectRatio(
                                         aspectRatio: StyleString.aspectRatio,
                                         child: LayoutBuilder(
@@ -151,8 +150,7 @@ Widget searchArticlePanel(BuildContext context,
                                           return NetworkImgLayer(
                                             width: maxWidth,
                                             height: maxHeight,
-                                            src: loadingState.response[index]
-                                                .imageUrls.first,
+                                            src: item.imageUrls.first,
                                           );
                                         }),
                                       ),
@@ -167,8 +165,7 @@ Widget searchArticlePanel(BuildContext context,
                                             maxLines: 2,
                                             TextSpan(
                                               children: [
-                                                for (var i in loadingState
-                                                    .response[index].title) ...[
+                                                for (var i in item.title) ...[
                                                   TextSpan(
                                                     text: i['text'],
                                                     style: TextStyle(
@@ -187,19 +184,15 @@ Widget searchArticlePanel(BuildContext context,
                                           ),
                                           const Spacer(),
                                           Text(
-                                              Utils.dateFormat(
-                                                  loadingState
-                                                      .response[index].pubTime,
+                                              Utils.dateFormat(item.pubTime,
                                                   formatType: 'detail'),
                                               style: textStyle),
                                           Row(
                                             children: [
-                                              Text(
-                                                  '${loadingState.response[index].view}浏览',
+                                              Text('${item.view}浏览',
                                                   style: textStyle),
                                               Text(' • ', style: textStyle),
-                                              Text(
-                                                  '${loadingState.response[index].reply}评论',
+                                              Text('${item.reply}评论',
                                                   style: textStyle),
                                             ],
                                           ),
@@ -214,7 +207,7 @@ Widget searchArticlePanel(BuildContext context,
                         ),
                       );
                     },
-                    childCount: loadingState.response.length,
+                    childCount: loadingState.response!.length,
                   ),
                 ),
               )

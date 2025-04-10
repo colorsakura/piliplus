@@ -1,32 +1,43 @@
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/utils/extension.dart';
 
-abstract class MultiSelectController extends CommonController {
+mixin class MultiSelectData {
+  bool? checked;
+}
+
+abstract class MultiSelectController<R, T extends MultiSelectData>
+    extends CommonListController<R, T> {
   late final RxBool enableMultiSelect = false.obs;
   late final RxInt checkedCount = 0.obs;
+  late final allSelected = false.obs;
 
-  onSelect(int index) {
-    List list = (loadingState.value as Success).response;
-    list[index].checked = !(list[index]?.checked ?? false);
+  void onSelect(int index, [bool disableSelect = true]) {
+    List<T> list = (loadingState.value as Success).response;
+    list[index].checked = !(list[index].checked ?? false);
     checkedCount.value = list.where((item) => item.checked == true).length;
-    loadingState.value = LoadingState.success(list);
-    if (checkedCount.value == 0) {
-      enableMultiSelect.value = false;
+    loadingState.refresh();
+    if (disableSelect) {
+      if (checkedCount.value == 0) {
+        enableMultiSelect.value = false;
+      }
+    } else {
+      allSelected.value = checkedCount.value == list.length;
     }
   }
 
-  void handleSelect([bool checked = false]) {
+  void handleSelect([bool checked = false, bool disableSelect = true]) {
     if (loadingState.value is Success) {
-      List list = (loadingState.value as Success).response;
-      if (list.isNotEmpty) {
-        loadingState.value = LoadingState.success(
-            list.map((item) => item..checked = checked).toList());
+      List<T>? list = (loadingState.value as Success).response;
+      if (list?.isNotEmpty == true) {
+        for (T item in list!) {
+          item.checked = checked;
+        }
+        loadingState.refresh();
         checkedCount.value = checked ? list.length : 0;
       }
     }
-    if (checked.not) {
+    if (disableSelect && !checked) {
       enableMultiSelect.value = false;
     }
   }

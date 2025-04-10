@@ -50,7 +50,7 @@ class BangumiHttp {
     }
   }
 
-  static Future<LoadingState> bangumiList({
+  static Future<LoadingState<List<BangumiListItemModel>?>> bangumiList({
     int? page,
     int? indexType,
   }) async {
@@ -67,7 +67,7 @@ class BangumiHttp {
     }
   }
 
-  static Future<LoadingState> bangumiFollowList({
+  static Future<LoadingState<BangumiListDataModel>> bangumiFollowList({
     required dynamic mid,
     required int type,
     required int pn,
@@ -80,12 +80,8 @@ class BangumiHttp {
       'pn': pn,
     });
     if (res.data['code'] == 0) {
-      BangumiListDataModel data =
-          BangumiListDataModel.fromJson(res.data['data']);
-      if (followStatus != null) {
-        return LoadingState.success(data.list);
-      }
-      return LoadingState.success(data);
+      return LoadingState.success(
+          BangumiListDataModel.fromJson(res.data['data']));
     } else {
       return LoadingState.error(res.data['message']);
     }

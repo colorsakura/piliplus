@@ -160,7 +160,8 @@ class SearchHttp {
     }
   }
 
-  static Future<LoadingState> bangumiInfoNew({int? seasonId, int? epId}) async {
+  static Future<LoadingState<BangumiInfoModel>> bangumiInfoNew(
+      {int? seasonId, int? epId}) async {
     final dynamic res = await Request().get(
       Api.bangumiInfo,
       queryParameters: {

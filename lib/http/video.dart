@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:PiliPlus/grpc/app/card/v1/card.pb.dart' as card;
 import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -145,7 +146,7 @@ class VideoHttp {
   }
 
   // 最热视频
-  static Future<LoadingState> hotVideoList(
+  static Future<LoadingState<List<HotVideoItemModel>>> hotVideoList(
       {required int pn, required int ps}) async {
     var res = await Request().get(
       Api.hotList,
@@ -345,15 +346,16 @@ class VideoHttp {
   }
 
   // 相关视频
-  static Future<LoadingState> relatedVideoList({required String bvid}) async {
+  static Future<LoadingState<List<HotVideoItemModel>?>> relatedVideoList(
+      {required String bvid}) async {
     var res =
         await Request().get(Api.relatedList, queryParameters: {'bvid': bvid});
     if (res.data['code'] == 0) {
-      final items =
-          (res.data['data'] as List).map((i) => HotVideoItemModel.fromJson(i));
+      final items = (res.data['data'] as List?)
+          ?.map((i) => HotVideoItemModel.fromJson(i));
       final list = RecommendFilter.applyFilterToRelatedVideos
-          ? items.where((i) => !RecommendFilter.filterAll(i)).toList()
-          : items.toList();
+          ? items?.where((i) => !RecommendFilter.filterAll(i)).toList()
+          : items?.toList();
       return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
@@ -1046,7 +1048,8 @@ class VideoHttp {
   }
 
   // 视频排行
-  static Future<LoadingState> getRankVideoList(int rid) async {
+  static Future<LoadingState<List<HotVideoItemModel>>> getRankVideoList(
+      int rid) async {
     var rankApi = "${Api.getRankApi}?rid=$rid&type=all";
     var res = await Request().get(rankApi);
     if (res.data['code'] == 0) {
@@ -1094,7 +1097,7 @@ class VideoHttp {
     }
   }
 
-  static Future<LoadingState> noteList({
+  static Future<LoadingState<List<FavArticleModel>?>> noteList({
     required int page,
   }) async {
     var res = await Request().get(
@@ -1106,13 +1109,16 @@ class VideoHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']?['list']);
+      List<FavArticleModel>? list = (res.data['data']?['list'] as List?)
+          ?.map((e) => FavArticleModel.fromJson(e))
+          .toList();
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }
   }
 
-  static Future<LoadingState> userNoteList({
+  static Future<LoadingState<List<FavArticleModel>?>> userNoteList({
     required int page,
   }) async {
     var res = await Request().get(
@@ -1124,7 +1130,10 @@ class VideoHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']?['list']);
+      List<FavArticleModel>? list = (res.data['data']?['list'] as List?)
+          ?.map((e) => FavArticleModel.fromJson(e))
+          .toList();
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }

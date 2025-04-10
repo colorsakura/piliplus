@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/bangumi/widgets/bangumi_card_v_member_home.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/content/bangumi/member_bangumi_ctr.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -41,10 +42,10 @@ class _MemberBangumiState extends State<MemberBangumi>
     return Obx(() => _buildBody(_controller.loadingState.value));
   }
 
-  _buildBody(LoadingState loadingState) {
+  _buildBody(LoadingState<List<Item>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: () async {
                 await _controller.onRefresh();
@@ -70,14 +71,14 @@ class _MemberBangumiState extends State<MemberBangumi>
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          if (index == loadingState.response.length - 1) {
+                          if (index == loadingState.response!.length - 1) {
                             _controller.onLoadMore();
                           }
                           return BangumiCardVMemberHome(
-                            bangumiItem: loadingState.response[index],
+                            bangumiItem: loadingState.response![index],
                           );
                         },
-                        childCount: loadingState.response.length,
+                        childCount: loadingState.response!.length,
                       ),
                     ),
                   ),

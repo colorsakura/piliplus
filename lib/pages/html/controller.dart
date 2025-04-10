@@ -13,7 +13,7 @@ import 'package:PiliPlus/http/html.dart';
 import 'package:PiliPlus/http/reply.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
 
-class HtmlRenderController extends ReplyController {
+class HtmlRenderController extends ReplyController<MainListReply> {
   late String id;
   late String dynamicType;
   late int type;
@@ -91,7 +91,12 @@ class HtmlRenderController extends ReplyController {
   }
 
   @override
-  Future<LoadingState> customGetData() {
+  List<ReplyInfo>? getDataList(MainListReply response) {
+    return response.replies;
+  }
+
+  @override
+  Future<LoadingState<MainListReply>> customGetData() {
     return ReplyHttp.replyListGrpc(
       type: type,
       oid: oid.value,

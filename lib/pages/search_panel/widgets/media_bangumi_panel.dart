@@ -9,11 +9,12 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
+Widget searchBangumiPanel(
+    context, ctr, LoadingState<List<dynamic>?> loadingState) {
   late TextStyle style = TextStyle(fontSize: 13);
   return switch (loadingState) {
     Loading() => loadingWidget,
-    Success() => (loadingState.response as List?)?.isNotEmpty == true
+    Success() => loadingState.response?.isNotEmpty == true
         ? CustomScrollView(
             controller: ctr.scrollController,
             slivers: [
@@ -28,10 +29,10 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      if (index == loadingState.response.length - 1) {
+                      if (index == loadingState.response!.length - 1) {
                         ctr.onLoadMore();
                       }
-                      var i = loadingState.response[index];
+                      var i = loadingState.response![index];
                       return InkWell(
                         onTap: () {
                           Utils.viewBangumi(seasonId: i.seasonId);
@@ -139,7 +140,7 @@ Widget searchBangumiPanel(context, ctr, LoadingState loadingState) {
                         ),
                       );
                     },
-                    childCount: loadingState.response.length,
+                    childCount: loadingState.response!.length,
                   ),
                 ),
               ),

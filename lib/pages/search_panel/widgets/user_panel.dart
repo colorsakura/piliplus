@@ -14,8 +14,10 @@ import 'package:PiliPlus/utils/utils.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchUserPanel(BuildContext context,
-    SearchPanelController searchPanelCtr, LoadingState loadingState) {
+Widget searchUserPanel(
+    BuildContext context,
+    SearchPanelController searchPanelCtr,
+    LoadingState<List<dynamic>?> loadingState) {
   TextStyle style = TextStyle(
       fontSize: Theme.of(context).textTheme.labelSmall!.fontSize,
       color: Theme.of(context).colorScheme.outline);
@@ -78,7 +80,7 @@ Widget searchUserPanel(BuildContext context,
       ),
       switch (loadingState) {
         Loading() => errorWidget(),
-        Success() => (loadingState.response as List?)?.isNotEmpty == true
+        Success() => loadingState.response?.isNotEmpty == true
             ? SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom + 80,
@@ -90,10 +92,10 @@ Widget searchUserPanel(BuildContext context,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      if (index == loadingState.response.length - 1) {
+                      if (index == loadingState.response!.length - 1) {
                         searchPanelCtr.onLoadMore();
                       }
-                      var i = loadingState.response[index];
+                      var i = loadingState.response![index];
                       String heroTag = Utils.makeHeroTag(i!.mid);
                       return InkWell(
                         onTap: () => Get.toNamed('/member?mid=${i.mid}',
@@ -170,7 +172,7 @@ Widget searchUserPanel(BuildContext context,
                         ),
                       );
                     },
-                    childCount: loadingState.response.length,
+                    childCount: loadingState.response!.length,
                   ),
                 ),
               )

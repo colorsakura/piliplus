@@ -1,12 +1,14 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/live.dart';
 import 'package:PiliPlus/models/live/follow.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/models/live/item.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
-class LiveController extends CommonController {
+class LiveController
+    extends CommonListController<List<LiveItemModel>?, LiveItemModel> {
   @override
   void onInit() {
     super.onInit();
@@ -17,7 +19,8 @@ class LiveController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => LiveHttp.liveList(pn: currentPage);
+  Future<LoadingState<List<LiveItemModel>?>> customGetData() =>
+      LiveHttp.liveList(pn: currentPage);
 
   @override
   Future onRefresh() {
@@ -41,20 +44,34 @@ class LiveController extends CommonController {
     }
     dynamic res = await LiveHttp.liveFollowing(pn: followPage, ps: 20);
     if (res['status']) {
-      followPage++;
-      liveCount.value = res['data'].liveCount;
-      List list = res['data']
-          .list
-          .where((LiveFollowingItemModel item) =>
+      LiveFollowingModel data = res['data'];
+      liveCount.value = data.liveCount ?? 0;
+      List<LiveFollowingItemModel>? dataList = data.list
+          ?.where((LiveFollowingItemModel item) =>
               item.liveStatus == 1 && item.recordLiveTime == 0)
           .toList();
-      if (isRefresh.not && followListState.value is Success) {
-        list.insertAll(0, (followListState.value as Success).response);
+      if (dataList.isNullOrEmpty) {
+        followEnd = true;
+        if (isRefresh) {
+          followListState.value = LoadingState.success(dataList);
+        }
+        return;
       }
-      followEnd = list.length >= liveCount.value ||
-          list.isEmpty ||
-          (res['data'].list as List?).isNullOrEmpty;
-      followListState.value = LoadingState.success(list);
+      if (isRefresh) {
+        if (dataList!.length >= liveCount.value) {
+          followEnd = true;
+        }
+        followListState.value = LoadingState.success(dataList);
+      } else if (loadingState.value is Success) {
+        List<LiveFollowingItemModel> list =
+            (loadingState.value as Success).response;
+        list.addAll(dataList!);
+        if (list.length >= liveCount.value) {
+          followEnd = true;
+        }
+        loadingState.refresh();
+      }
+      followPage++;
     } else {
       followListState.value = LoadingState.error(res['msg']);
     }

@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/pages/fav/pgc/controller.dart';
 import 'package:PiliPlus/pages/fav/pgc/widget/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
@@ -126,7 +127,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                                   if (_favPgcController.checkedCount.value !=
                                       0) {
                                     _favPgcController
-                                        .onUpdate(item['followStatus']);
+                                        .onUpdateList(item['followStatus']);
                                   }
                                 },
                                 child: Padding(
@@ -156,7 +157,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<BangumiListItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -171,7 +172,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
@@ -183,11 +184,12 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response.length - 1) {
+                    if (index == loadingState.response!.length - 1) {
                       _favPgcController.onLoadMore();
                     }
+                    final item = loadingState.response![index];
                     return FavPgcItem(
-                      item: loadingState.response[index],
+                      item: item,
                       ctr: _favPgcController,
                       onSelect: () {
                         _favPgcController.onSelect(index);
@@ -201,13 +203,13 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                             if (followStatus == -1) {
                               _favPgcController.bangumiDel(
                                 index,
-                                loadingState.response[index].seasonId,
+                                item.seasonId,
                               );
                             } else {
-                              _favPgcController.bangumiUpdate(
+                              _favPgcController.onUpdate(
                                 index,
                                 followStatus,
-                                loadingState.response[index].seasonId,
+                                item.seasonId,
                               );
                             }
                           },
@@ -215,7 +217,7 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                       },
                     );
                   },
-                  childCount: loadingState.response.length,
+                  childCount: loadingState.response!.length,
                 ),
               ),
             )

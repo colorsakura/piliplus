@@ -111,7 +111,7 @@ class VideoInfo extends StatefulWidget {
   State<VideoInfo> createState() => _VideoInfoState();
 }
 
-class _VideoInfoState extends State<VideoInfo> with TickerProviderStateMixin {
+class _VideoInfoState extends State<VideoInfo> {
   late final VideoDetailController videoDetailCtr;
 
   Map get videoItem => videoIntroController.videoItem;

@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/user/sub_folder.dart';
 import 'package:PiliPlus/pages/subscription/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _SubPageState extends State<SubPage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<SubFolderItemData>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -54,7 +55,7 @@ class _SubPageState extends State<SubPage> {
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: 2,
@@ -62,13 +63,13 @@ class _SubPageState extends State<SubPage> {
                 childAspectRatio: StyleString.aspectRatio * 2.2,
               ),
               delegate: SliverChildBuilderDelegate(
-                childCount: loadingState.response.length,
+                childCount: loadingState.response!.length,
                 (BuildContext context, int index) {
-                  if (index == loadingState.response.length - 1) {
+                  if (index == loadingState.response!.length - 1) {
                     _subController.onLoadMore();
                   }
                   return SubItem(
-                    subFolderItem: loadingState.response[index],
+                    subFolderItem: loadingState.response![index],
                     cancelSub: _subController.cancelSub,
                   );
                 },

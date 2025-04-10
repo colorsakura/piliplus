@@ -4,12 +4,12 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/space_fav/datum.dart';
 import 'package:PiliPlus/models/space_fav/list.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class MemberFavoriteCtr extends CommonController {
+class MemberFavoriteCtr extends CommonDataController {
   MemberFavoriteCtr({
     required this.mid,
   });
@@ -39,7 +39,7 @@ class MemberFavoriteCtr extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
+  bool customHandleResponse(bool isRefresh, Success response) {
     try {
       List<Datum> res = response.response;
       first.value = res.first;

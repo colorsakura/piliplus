@@ -9,7 +9,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-class HistoryController extends MultiSelectController
+class HistoryController extends MultiSelectController<HistoryData, HisListItem>
     with GetTickerProviderStateMixin {
   HistoryController(this.type);
 
@@ -37,25 +37,27 @@ class HistoryController extends MultiSelectController
   }
 
   @override
-  onSelect(int index) {
-    List list = (loadingState.value as Success).response;
-    list[index].checked = !(list[index]?.checked ?? false);
+  onSelect(int index, [bool disableSelect = true]) {
+    List<HisListItem> list = (loadingState.value as Success).response;
+    list[index].checked = !(list[index].checked ?? false);
     baseCtr.checkedCount.value =
         list.where((item) => item.checked == true).length;
-    loadingState.value = LoadingState.success(list);
+    loadingState.refresh();
     if (baseCtr.checkedCount.value == 0) {
       baseCtr.enableMultiSelect.value = false;
     }
   }
 
   @override
-  void handleSelect([bool checked = false]) {
+  void handleSelect([bool checked = false, bool disableSelect = true]) {
     if (loadingState.value is Success) {
-      List list = (loadingState.value as Success).response;
-      if (list.isNotEmpty) {
-        loadingState.value = LoadingState.success(
-            list.map((item) => item..checked = checked).toList());
+      List<HisListItem>? list = (loadingState.value as Success).response;
+      if (list?.isNotEmpty == true) {
+        for (HisListItem item in list!) {
+          item.checked = checked;
+        }
         baseCtr.checkedCount.value = checked ? list.length : 0;
+        loadingState.refresh();
       }
     }
     if (checked.not) {
@@ -64,26 +66,28 @@ class HistoryController extends MultiSelectController
   }
 
   @override
-  bool customHandleResponse(Success response) {
+  List<HisListItem>? getDataList(HistoryData response) {
+    return response.list;
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success<HistoryData> response) {
     HistoryData data = response.response;
     isEnd = data.list.isNullOrEmpty;
     max = data.list?.lastOrNull?.history.oid;
     viewAt = data.list?.lastOrNull?.viewAt;
-    if (currentPage == 1) {
-      if (type == null && tabs.isEmpty && data.tab?.isNotEmpty == true) {
+
+    if (isRefresh && type == null) {
+      if (tabs.isEmpty && data.tab?.isNotEmpty == true) {
         tabs.value = data.tab!;
-        tabController =
-            TabController(length: data.tab!.length + 1, vsync: this);
+        tabController = TabController(
+          length: data.tab!.length + 1,
+          vsync: this,
+        );
       }
-    } else if (loadingState.value is Success) {
-      data.list ??= <HisListItem>[];
-      data.list!.insertAll(
-        0,
-        List<HisListItem>.from((loadingState.value as Success).response),
-      );
     }
-    loadingState.value = LoadingState.success(data.list);
-    return true;
+
+    return false;
   }
 
   // 观看历史暂停状态
@@ -125,10 +129,11 @@ class HistoryController extends MultiSelectController
     }).toList();
     dynamic response = await UserHttp.delHistory(kidList);
     if (response['status']) {
-      List remainList = ((loadingState.value as Success).response as List)
-          .toSet()
-          .difference(result.toSet())
-          .toList();
+      List<HisListItem> remainList =
+          ((loadingState.value as Success).response as List<HisListItem>)
+              .toSet()
+              .difference(result.toSet())
+              .toList();
       if (remainList.isNotEmpty) {
         loadingState.value = LoadingState.success(remainList);
       } else {
@@ -179,7 +184,7 @@ class HistoryController extends MultiSelectController
   }
 
   @override
-  Future<LoadingState> customGetData() =>
+  Future<LoadingState<HistoryData>> customGetData() =>
       UserHttp.historyList(type: type ?? 'all', max: max, viewAt: viewAt);
 
   @override

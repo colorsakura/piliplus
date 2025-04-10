@@ -763,7 +763,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
     );
   }
 
-  Widget replyList(LoadingState loadingState) {
+  Widget replyList(LoadingState<List<ReplyInfo>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverList.builder(
           itemCount: 5,
@@ -771,11 +771,11 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             return const VideoReplySkeleton();
           },
         ),
-      Success() => (loadingState.response.replies as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverList.builder(
-              itemCount: loadingState.response.replies.length + 1,
+              itemCount: loadingState.response!.length + 1,
               itemBuilder: (context, index) {
-                if (index == loadingState.response.replies.length) {
+                if (index == loadingState.response!.length) {
                   _htmlRenderCtr.onLoadMore();
                   return Container(
                     alignment: Alignment.center,
@@ -785,7 +785,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                     child: Text(
                       _htmlRenderCtr.isEnd.not
                           ? '加载中...'
-                          : loadingState.response.replies.isEmpty
+                          : loadingState.response!.isEmpty
                               ? '还没有评论'
                               : '没有更多了',
                       style: TextStyle(
@@ -796,19 +796,20 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                   );
                 } else {
                   return ReplyItemGrpc(
-                    replyItem: loadingState.response.replies[index],
+                    replyItem: loadingState.response![index],
                     replyLevel: '1',
                     replyReply: (replyItem, id) =>
                         replyReply(context, replyItem, id),
                     onReply: () {
                       _htmlRenderCtr.onReply(
                         context,
-                        replyItem: loadingState.response.replies[index],
+                        replyItem: loadingState.response![index],
                         index: index,
                       );
                     },
-                    onDelete: _htmlRenderCtr.onMDelete,
-                    upMid: loadingState.response.subjectControl.upMid,
+                    onDelete: (subIndex) =>
+                        _htmlRenderCtr.onRemove(index, subIndex),
+                    upMid: _htmlRenderCtr.upMid,
                     callback: _getImageCallback,
                     onCheckReply: (item) =>
                         _htmlRenderCtr.onCheckReply(context, item),

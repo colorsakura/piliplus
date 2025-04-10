@@ -130,7 +130,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
         ),
       );
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => CustomScrollView(
           physics: const NeverScrollableScrollPhysics(),
@@ -145,7 +145,7 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
             )
           ],
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: () async {
                 await _controller.onRefresh();
@@ -156,12 +156,13 @@ class _NoteListPageState extends CommonSlidePageState<NoteListPage> {
                 slivers: [
                   SliverList.separated(
                     itemBuilder: (context, index) {
-                      if (index == loadingState.response.length - 1) {
+                      if (index == loadingState.response!.length - 1) {
                         _controller.onLoadMore();
                       }
-                      return _itemWidget(context, loadingState.response[index]);
+                      return _itemWidget(
+                          context, loadingState.response![index]);
                     },
-                    itemCount: loadingState.response.length,
+                    itemCount: loadingState.response!.length,
                     separatorBuilder: (context, index) => Divider(
                       height: 1,
                       color: Theme.of(context)

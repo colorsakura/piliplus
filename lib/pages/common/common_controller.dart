@@ -27,7 +27,7 @@ abstract mixin class ScrollOrRefreshMixin {
   }
 }
 
-abstract class CommonController extends GetxController
+abstract class CommonController<R, T> extends GetxController
     with ScrollOrRefreshMixin {
   @override
   final ScrollController scrollController = ScrollController();
@@ -35,13 +35,13 @@ abstract class CommonController extends GetxController
   late int currentPage = 1;
   bool isLoading = false;
   late bool isEnd = false;
-  Rx<LoadingState> loadingState = LoadingState.loading().obs;
+  Rx<LoadingState> get loadingState;
 
-  Future<LoadingState> customGetData();
+  Future<LoadingState<R>> customGetData();
 
   void handleListResponse(List dataList) {}
 
-  bool customHandleResponse(Success response) {
+  bool customHandleResponse(bool isRefresh, Success<R> response) {
     return false;
   }
 
@@ -49,27 +49,36 @@ abstract class CommonController extends GetxController
     return false;
   }
 
+  List<T>? getDataList(R response) {
+    return response as List<T>?;
+  }
+
+  void checkIsEnd(int length) {}
+
   Future queryData([bool isRefresh = true]) async {
     if (isLoading || (isRefresh.not && isEnd)) return;
     isLoading = true;
-    LoadingState response = await customGetData();
-    if (response is Success) {
-      if (!customHandleResponse(response)) {
-        List? dataList = response.response;
+    LoadingState<R> response = await customGetData();
+    if (response is Success<R>) {
+      if (!customHandleResponse(isRefresh, response)) {
+        List<T>? dataList = getDataList(response.response);
         if (dataList.isNullOrEmpty) {
           isEnd = true;
           if (isRefresh) {
-            loadingState.value = response;
+            loadingState.value = LoadingState<List<T>?>.success(dataList);
           }
+          isLoading = false;
           return;
         }
         handleListResponse(dataList!);
         if (isRefresh) {
-          loadingState.value = LoadingState.success(dataList);
+          checkIsEnd(dataList.length);
+          loadingState.value = LoadingState<List<T>?>.success(dataList);
         } else if (loadingState.value is Success) {
-          List currentList = (loadingState.value as Success).response ?? [];
-          currentList.addAll(dataList);
-          loadingState.value = LoadingState.success(currentList);
+          List<T> list = (loadingState.value as Success).response;
+          list.addAll(dataList);
+          checkIsEnd(list.length);
+          loadingState.refresh();
         }
       }
       currentPage++;

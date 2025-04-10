@@ -124,7 +124,7 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState> replyListGrpc({
+  static Future<LoadingState<MainListReply>> replyListGrpc({
     int type = 1,
     required int oid,
     required CursorReq cursor,
@@ -387,7 +387,8 @@ class ReplyHttp {
     }
   }
 
-  static Future<LoadingState> getEmoteList({String? business}) async {
+  static Future<LoadingState<List<Packages>?>> getEmoteList(
+      {String? business}) async {
     var res = await Request().get(Api.myEmote, queryParameters: {
       'business': business ?? 'reply',
       'web_location': '333.1245',

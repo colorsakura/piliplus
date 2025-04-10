@@ -91,22 +91,31 @@ class MemberSearchController extends GetxController
     );
     if (res['status']) {
       DynamicsDataModel data = res['data'];
-      if (data.hasMore == false || data.items.isNullOrEmpty) {
-        isEndDynamic = true;
-      }
-      if (isRefresh) {
-        dynamicCount.value = data.total ?? 0;
-      }
+      List<DynamicItemModel>? items = data.items;
+      dynamicCount.value = data.total ?? 0;
       offset = data.offset ?? '';
-      if (isRefresh.not && dynamicState.value is Success) {
-        data.items ??= <DynamicItemModel>[];
-        data.items!.insertAll(0, (dynamicState.value as Success).response);
-      }
-      if (!isEndDynamic && (data.items?.length ?? 0) >= dynamicCount.value) {
+
+      if (data.hasMore == false || items.isNullOrEmpty) {
         isEndDynamic = true;
+        dynamicState.value = LoadingState.success(items);
+        return;
+      }
+
+      if (isRefresh) {
+        if (items!.length >= dynamicCount.value) {
+          isEndDynamic = true;
+        }
+        dynamicState.value = LoadingState.success(items);
+      } else if (dynamicState.value is Success) {
+        List<DynamicItemModel> currentList =
+            (dynamicState.value as Success).response;
+        currentList.addAll(items!);
+        if (currentList.length >= dynamicCount.value) {
+          isEndDynamic = true;
+        }
+        dynamicState.refresh();
       }
       dynamicPn++;
-      dynamicState.value = LoadingState.success(data.items);
     } else if (isRefresh) {
       dynamicState.value = LoadingState.error(res['msg']);
     }
@@ -124,24 +133,30 @@ class MemberSearchController extends GetxController
     );
     if (res['status']) {
       MemberArchiveDataModel data = res['data'];
+      List<VListItemModel>? vlist = data.list?.vlist;
+      archiveCount.value = data.page?['count'] ?? 0;
+
+      if (vlist.isNullOrEmpty) {
+        isEndArchive = true;
+        archiveState.value = LoadingState.success(vlist);
+        return;
+      }
+
       if (isRefresh) {
-        archiveCount.value = data.page?['count'] ?? 0;
-      }
-      if (data.list == null || data.list!.vlist.isNullOrEmpty) {
-        isEndArchive = true;
-      }
-      if (isRefresh.not && archiveState.value is Success) {
-        data.list ??= ArchiveListModel();
-        data.list!.vlist ??= <VListItemModel>[];
-        data.list!.vlist!
-            .insertAll(0, (archiveState.value as Success).response);
-      }
-      if (!isEndArchive &&
-          (data.list?.vlist?.length ?? 0) >= archiveCount.value) {
-        isEndArchive = true;
+        if (vlist!.length >= archiveCount.value) {
+          isEndArchive = true;
+        }
+        archiveState.value = LoadingState.success(vlist);
+      } else if (dynamicState.value is Success) {
+        List<VListItemModel> currentList =
+            (dynamicState.value as Success).response;
+        currentList.addAll(vlist!);
+        if (currentList.length >= archiveCount.value) {
+          isEndDynamic = true;
+        }
+        archiveState.refresh();
       }
       archivePn++;
-      archiveState.value = LoadingState.success(data.list?.vlist);
     } else if (isRefresh) {
       archiveState.value = LoadingState.error(res['msg']);
     }

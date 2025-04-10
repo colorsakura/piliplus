@@ -6,6 +6,9 @@ import 'package:PiliPlus/grpc/grpc_repo.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/space/data.dart';
+import 'package:PiliPlus/models/space_archive/data.dart' as space_archive;
+import 'package:PiliPlus/models/space_article/data.dart' as space_article;
+import 'package:PiliPlus/models/space/data.dart' as space_;
 import 'package:PiliPlus/models/space_fav/space_fav.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
@@ -62,7 +65,7 @@ class MemberHttp {
     }
   }
 
-  static Future<LoadingState> spaceArticle({
+  static Future<LoadingState<space_article.Data>> spaceArticle({
     required int mid,
     required int page,
   }) async {
@@ -138,13 +141,13 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']['items_lists']);
+      return LoadingState.success(res.data['data']?['items_lists']);
     } else {
       return LoadingState.error(res.data['message']);
     }
   }
 
-  static Future<LoadingState> spaceArchive({
+  static Future<LoadingState<space_archive.Data>> spaceArchive({
     required ContributeType type,
     required int? mid,
     String? aid,
@@ -241,7 +244,7 @@ class MemberHttp {
     }
   }
 
-  static Future<LoadingState> space({
+  static Future<LoadingState<space_.Data>> space({
     int? mid,
     dynamic fromViewAid,
   }) async {
@@ -391,7 +394,7 @@ class MemberHttp {
   }
 
   // 用户动态
-  static Future<LoadingState> memberDynamic({
+  static Future<LoadingState<DynamicsDataModel>> memberDynamic({
     String? offset,
     int? mid,
   }) async {
@@ -601,7 +604,8 @@ class MemberHttp {
   }
 
   // 最近投币
-  static Future<LoadingState> getRecentCoinVideo({required int mid}) async {
+  static Future<LoadingState<List<MemberCoinsDataModel>?>> getRecentCoinVideo(
+      {required int mid}) async {
     Map params = await WbiSign.makSign({
       'mid': mid,
       'gaia_source': 'main_web',
@@ -618,16 +622,18 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']
-          .map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
-          .toList());
+      List<MemberCoinsDataModel>? list = (res.data['data'] as List?)
+          ?.map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
+          .toList();
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }
   }
 
   // 最近点赞
-  static Future<LoadingState> getRecentLikeVideo({required int mid}) async {
+  static Future<LoadingState<List<MemberCoinsDataModel>?>> getRecentLikeVideo(
+      {required int mid}) async {
     Map params = await WbiSign.makSign({
       'mid': mid,
       'gaia_source': 'main_web',
@@ -644,9 +650,10 @@ class MemberHttp {
       },
     );
     if (res.data['code'] == 0) {
-      return LoadingState.success(res.data['data']['list']
-          .map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
-          .toList());
+      List<MemberCoinsDataModel>? list = (res.data['data']?['list'] as List?)
+          ?.map<MemberCoinsDataModel>((e) => MemberCoinsDataModel.fromJson(e))
+          .toList();
+      return LoadingState.success(list);
     } else {
       return LoadingState.error(res.data['message']);
     }

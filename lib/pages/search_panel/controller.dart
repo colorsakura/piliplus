@@ -1,5 +1,5 @@
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/search_result/controller.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/common/search_type.dart';
 
-class SearchPanelController extends CommonController {
+class SearchPanelController extends CommonListController {
   SearchPanelController({
     required this.keyword,
     required this.searchType,
@@ -28,9 +28,14 @@ class SearchPanelController extends CommonController {
   int? pubEnd;
   bool? hasJump2Video;
 
+  SearchResultController? searchResultController;
+
   @override
   void onInit() {
     super.onInit();
+    try {
+      searchResultController = Get.find<SearchResultController>(tag: tag);
+    } catch (_) {}
     if (searchType == SearchType.video) {
       jump2Video();
     } else if (searchType == SearchType.article) {
@@ -40,31 +45,21 @@ class SearchPanelController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    try {
-      Get.find<SearchResultController>(tag: tag).count[searchType.index] =
-          response.response.numResults;
-    } catch (_) {}
-    if (response.response.list != null) {
-      isEnd = response.response.list.isEmpty;
-      if (currentPage != 1 && loadingState.value is Success) {
-        response.response.list
-            .insertAll(0, (loadingState.value as Success).response);
-      }
-      loadingState.value = LoadingState.success(response.response.list);
-      if (searchType == SearchType.video &&
-          hasJump2Video != true &&
-          currentPage == 1) {
-        hasJump2Video = true;
-        onPushDetail(response.response.list);
-      }
-    } else {
-      isEnd = true;
-      if (currentPage == 1) {
-        loadingState.value = LoadingState.success([]);
-      }
+  List? getDataList(response) {
+    return response.list;
+  }
+
+  @override
+  bool customHandleResponse(bool isRefresh, Success response) {
+    searchResultController?.count[searchType.index] =
+        response.response.numResults;
+
+    if (searchType == SearchType.video && hasJump2Video != true && isRefresh) {
+      hasJump2Video = true;
+      onPushDetail(response.response.list);
     }
-    return true;
+
+    return false;
   }
 
   void jump2Video() {
@@ -102,10 +97,12 @@ class SearchPanelController extends CommonController {
   }
 
   void onPushDetail(resultList) async {
-    int? aid = int.tryParse(keyword);
-    if (aid != null && resultList.first.aid == aid) {
-      PiliScheme.videoPush(aid, null, showDialog: false);
-    }
+    try {
+      int? aid = int.tryParse(keyword);
+      if (aid != null && resultList.first.aid == aid) {
+        PiliScheme.videoPush(aid, null, showDialog: false);
+      }
+    } catch (_) {}
   }
 
   @override

@@ -1,9 +1,11 @@
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
 import 'model_owner.dart';
 import 'model_rec_video_item.dart';
 import 'model_video.dart';
 
 // 稍后再看, 排行榜等网页返回也使用该类
-class HotVideoItemModel extends BaseRecVideoItemModel {
+class HotVideoItemModel extends BaseRecVideoItemModel with MultiSelectData {
   int? videos;
   int? tid;
   String? tname;
@@ -15,8 +17,6 @@ class HotVideoItemModel extends BaseRecVideoItemModel {
   String? pubLocation;
   String? pgcLabel;
   String? redirectUrl;
-
-  bool? checked; // 手动设置的
 
   num? progress;
 

@@ -135,7 +135,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               visualDensity:
                                   VisualDensity(horizontal: -2, vertical: -2),
                             ),
-                            onPressed: () => Utils.onCopyOrMove(
+                            onPressed: () =>
+                                Utils.onCopyOrMove<FavDetailItemData>(
                               context: context,
                               isCopy: true,
                               ctr: _favDetailController,
@@ -155,7 +156,8 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               visualDensity:
                                   VisualDensity(horizontal: -2, vertical: -2),
                             ),
-                            onPressed: () => Utils.onCopyOrMove(
+                            onPressed: () =>
+                                Utils.onCopyOrMove<FavDetailItemData>(
                               context: context,
                               isCopy: false,
                               ctr: _favDetailController,
@@ -188,15 +190,18 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       : [
                           IconButton(
                             tooltip: '搜索',
-                            onPressed: () =>
-                                Get.toNamed('/favSearch', arguments: {
-                              'type': 0,
-                              'mediaId': int.parse(mediaId),
-                              'title': _favDetailController.item.value.title,
-                              'count':
-                                  _favDetailController.item.value.mediaCount,
-                              'searchType': SearchType.fav,
-                            }),
+                            onPressed: () => Get.toNamed(
+                              '/favSearch',
+                              arguments: {
+                                'type': 0,
+                                'mediaId': int.parse(mediaId),
+                                'title': _favDetailController.item.value.title,
+                                'count':
+                                    _favDetailController.item.value.mediaCount,
+                                'searchType': SearchType.fav,
+                                'isOwner': _favDetailController.isOwner.value,
+                              },
+                            ),
                             icon: const Icon(Icons.search_outlined),
                           ),
                           //   IconButton(
@@ -416,7 +421,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<FavDetailItemData>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -431,7 +436,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).padding.bottom + 85,
@@ -444,7 +449,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response.length) {
+                    if (index == loadingState.response!.length) {
                       _favDetailController.onLoadMore();
                       return Container(
                         height: 60,
@@ -458,25 +463,26 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         ),
                       );
                     }
-                    FavDetailItemData element = loadingState.response[index];
+                    FavDetailItemData item = loadingState.response![index];
                     return Stack(
                       children: [
                         Positioned.fill(
                           child: FavVideoCardH(
-                            videoItem: element,
+                            videoItem: item,
                             callFn: () => _favDetailController.onCancelFav(
-                              element.id!,
-                              element.type!,
+                              index,
+                              item.id!,
+                              item.type!,
                             ),
                             onViewFav: () {
                               Utils.toViewPage(
-                                'bvid=${element.bvid}&cid=${element.cid}',
+                                'bvid=${item.bvid}&cid=${item.cid}',
                                 arguments: {
-                                  'videoItem': element,
-                                  'heroTag': Utils.makeHeroTag(element.bvid),
+                                  'videoItem': item,
+                                  'heroTag': Utils.makeHeroTag(item.bvid),
                                   'sourceType': 'fav',
                                   'mediaId': _favDetailController.item.value.id,
-                                  'oid': element.id,
+                                  'oid': item.id,
                                   'favTitle':
                                       _favDetailController.item.value.title,
                                   'count': _favDetailController
@@ -513,10 +519,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                             child: LayoutBuilder(
                               builder: (context, constraints) =>
                                   AnimatedOpacity(
-                                opacity:
-                                    loadingState.response[index].checked == true
-                                        ? 1
-                                        : 0,
+                                opacity: item.checked == true ? 1 : 0,
                                 duration: const Duration(milliseconds: 200),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -531,11 +534,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                     width: 34,
                                     height: 34,
                                     child: AnimatedScale(
-                                      scale: loadingState
-                                                  .response[index].checked ==
-                                              true
-                                          ? 1
-                                          : 0,
+                                      scale: item.checked == true ? 1 : 0,
                                       duration:
                                           const Duration(milliseconds: 250),
                                       curve: Curves.easeInOut,
@@ -571,7 +570,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                       ],
                     );
                   },
-                  childCount: loadingState.response.length + 1,
+                  childCount: loadingState.response!.length + 1,
                 ),
               ),
             )

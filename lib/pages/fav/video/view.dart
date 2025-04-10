@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,7 +45,7 @@ class _FavVideoPageState extends State<FavVideoPage>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<FavFolderItemData>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -59,7 +60,7 @@ class _FavVideoPageState extends State<FavVideoPage>
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.safeSpace - 5,
@@ -72,33 +73,31 @@ class _FavVideoPageState extends State<FavVideoPage>
                   childAspectRatio: StyleString.aspectRatio * 2.2,
                 ),
                 delegate: SliverChildBuilderDelegate(
-                  childCount: loadingState.response.length,
+                  childCount: loadingState.response!.length,
                   (BuildContext context, int index) {
-                    if (index == loadingState.response.length - 1) {
+                    if (index == loadingState.response!.length - 1) {
                       _favController.onLoadMore();
                     }
-                    String heroTag =
-                        Utils.makeHeroTag(loadingState.response[index].fid);
+                    final item = loadingState.response![index];
+                    String heroTag = Utils.makeHeroTag(item.fid);
                     return FavItem(
                       heroTag: heroTag,
-                      favFolderItem: loadingState.response[index],
+                      favFolderItem: item,
                       onTap: () async {
                         dynamic res = await Get.toNamed(
                           '/favDetail',
-                          arguments: loadingState.response[index],
+                          arguments: item,
                           parameters: {
                             'heroTag': heroTag,
-                            'mediaId':
-                                loadingState.response[index].id.toString(),
+                            'mediaId': item.id.toString(),
                           },
                         );
                         if (res == true) {
-                          List list =
+                          List<FavFolderItemData> list =
                               (_favController.loadingState.value as Success)
                                   .response;
                           list.removeAt(index);
-                          _favController.loadingState.value =
-                              LoadingState.success(list);
+                          _favController.loadingState.refresh();
                         } else {
                           Future.delayed(const Duration(milliseconds: 255), () {
                             _favController.onRefresh();

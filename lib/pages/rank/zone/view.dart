@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,18 +48,7 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
               top: StyleString.safeSpace - 5,
               bottom: MediaQuery.of(context).padding.bottom + 80,
             ),
-            sliver: Obx(
-              () => controller.loadingState.value is Loading
-                  ? _buildSkeleton()
-                  : controller.loadingState.value is Success
-                      ? _buildBody(controller.loadingState.value as Success)
-                      : HttpError(
-                          errMsg: controller.loadingState.value is Error
-                              ? (controller.loadingState.value as Error).errMsg
-                              : '没有相关数据',
-                          callback: controller.onReload,
-                        ),
-            ),
+            sliver: Obx(() => _buildBody(controller.loadingState.value)),
           ),
         ],
       ),
@@ -81,22 +71,32 @@ class _ZonePageState extends CommonPageState<ZonePage, ZoneController>
     );
   }
 
-  Widget _buildBody(Success loadingState) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithExtentAndRatio(
-        mainAxisSpacing: 2,
-        maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio * 2.2,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return VideoCardH(
-            videoItem: loadingState.response[index],
-            showPubdate: true,
-          );
-        },
-        childCount: loadingState.response.length,
-      ),
-    );
+  Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
+    return switch (loadingState) {
+      Loading() => _buildSkeleton(),
+      Success() => loadingState.response?.isNotEmpty == true
+          ? SliverGrid(
+              gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                mainAxisSpacing: 2,
+                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                childAspectRatio: StyleString.aspectRatio * 2.2,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return VideoCardH(
+                    videoItem: loadingState.response![index],
+                    showPubdate: true,
+                  );
+                },
+                childCount: loadingState.response!.length,
+              ),
+            )
+          : HttpError(callback: controller.onReload),
+      Error() => HttpError(
+          errMsg: loadingState.errMsg,
+          callback: controller.onReload,
+        ),
+      _ => throw UnimplementedError(),
+    };
   }
 }

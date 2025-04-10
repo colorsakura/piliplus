@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/http_error.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/user/history.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
@@ -261,7 +262,7 @@ class _HistoryPageState extends State<HistoryPage>
         ),
       );
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<HisListItem>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -276,7 +277,7 @@ class _HistoryPageState extends State<HistoryPage>
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
               padding: EdgeInsets.only(
                 top: StyleString.safeSpace - 5,
@@ -290,18 +291,18 @@ class _HistoryPageState extends State<HistoryPage>
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == loadingState.response.length - 1) {
+                    if (index == loadingState.response!.length - 1) {
                       _historyController.onLoadMore();
                     }
                     return HistoryItem(
-                      videoItem: loadingState.response[index],
+                      videoItem: loadingState.response![index],
                       ctr: _historyController.baseCtr,
                       onChoose: () => _historyController.onSelect(index),
                       onDelete: (kid, business) =>
                           _historyController.delHistory(kid, business),
                     );
                   },
-                  childCount: loadingState.response.length,
+                  childCount: loadingState.response!.length,
                 ),
               ),
             )

@@ -1,11 +1,13 @@
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-class MediaController extends CommonController {
+class MediaController
+    extends CommonDataController<FavFolderData, FavFolderData> {
   List list = [
     // {
     //   'icon': Icons.file_download_outlined,
@@ -52,14 +54,14 @@ class MediaController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
-    count.value = response.response.count;
+  bool customHandleResponse(bool isRefresh, Success<FavFolderData> response) {
+    count.value = response.response.count ?? -1;
     loadingState.value = response;
     return true;
   }
 
   @override
-  Future<LoadingState> customGetData() {
+  Future<LoadingState<FavFolderData>> customGetData() {
     mid ??= Accounts.main.mid;
     return UserHttp.userfavFolder(
       pn: 1,

@@ -1,9 +1,9 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
-class RcmdController extends CommonController {
+class RcmdController extends CommonListController {
   late bool enableSaveLastData = GStorage.setting
       .get(SettingBoxKey.enableSaveLastData, defaultValue: false);
   late bool appRcmd = true;

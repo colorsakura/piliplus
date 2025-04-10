@@ -2,13 +2,13 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_data_controller.dart';
 import 'package:PiliPlus/pages/member/new/content/member_contribute/member_contribute.dart'
     show ContributeType;
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:get/get.dart';
 
-class HorizontalMemberPageController extends CommonController {
+class HorizontalMemberPageController extends CommonDataController {
   HorizontalMemberPageController({this.mid, required this.lastAid});
 
   dynamic mid;
@@ -52,7 +52,7 @@ class HorizontalMemberPageController extends CommonController {
   }
 
   @override
-  bool customHandleResponse(Success response) {
+  bool customHandleResponse(bool isRefresh, Success response) {
     Data data = response.response;
     count.value = data.count ?? -1;
     if (currentPage == 0 || isLoadPrevious) {

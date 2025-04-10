@@ -207,10 +207,10 @@ class _PgcIndexPageState extends State<PgcIndexPage>
         ],
       );
 
-  Widget _buildList(LoadingState loadingState) {
+  Widget _buildList(LoadingState<List<dynamic>?> loadingState) {
     return switch (loadingState) {
       Loading() => HttpError(errMsg: '加载中'),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: StyleString.cardSpace,
@@ -221,13 +221,13 @@ class _PgcIndexPageState extends State<PgcIndexPage>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index == loadingState.response.length - 1) {
+                  if (index == loadingState.response!.length - 1) {
                     _ctr.onLoadMore();
                   }
                   return BangumiCardVPgcIndex(
-                      bangumiItem: loadingState.response[index]);
+                      bangumiItem: loadingState.response![index]);
                 },
-                childCount: loadingState.response.length,
+                childCount: loadingState.response!.length,
               ),
             )
           : HttpError(callback: _ctr.onReload),

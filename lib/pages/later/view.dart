@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -93,7 +94,7 @@ class _LaterPageState extends State<LaterPage> {
                   style: TextButton.styleFrom(
                     visualDensity: VisualDensity(horizontal: -2, vertical: -2),
                   ),
-                  onPressed: () => Utils.onCopyOrMove(
+                  onPressed: () => Utils.onCopyOrMove<HotVideoItemModel>(
                     context: context,
                     isCopy: true,
                     ctr: _laterController,
@@ -110,7 +111,7 @@ class _LaterPageState extends State<LaterPage> {
                   style: TextButton.styleFrom(
                     visualDensity: VisualDensity(horizontal: -2, vertical: -2),
                   ),
-                  onPressed: () => Utils.onCopyOrMove(
+                  onPressed: () => Utils.onCopyOrMove<HotVideoItemModel>(
                     context: context,
                     isCopy: false,
                     ctr: _laterController,
@@ -171,7 +172,7 @@ class _LaterPageState extends State<LaterPage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -186,7 +187,7 @@ class _LaterPageState extends State<LaterPage> {
             childCount: 10,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: 2,
@@ -195,7 +196,7 @@ class _LaterPageState extends State<LaterPage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  var videoItem = loadingState.response[index];
+                  var videoItem = loadingState.response![index];
                   return Stack(
                     children: [
                       VideoCardH(
@@ -209,7 +210,7 @@ class _LaterPageState extends State<LaterPage> {
                               'oid': videoItem.aid,
                               'heroTag': Utils.makeHeroTag(videoItem.bvid),
                               'sourceType': 'watchLater',
-                              'count': loadingState.response.length,
+                              'count': loadingState.response!.length,
                               'favTitle': '稍后再看',
                               'mediaId': _laterController.mid,
                               'desc': false,
@@ -293,6 +294,7 @@ class _LaterPageState extends State<LaterPage> {
                           onPressed: () {
                             _laterController.toViewDel(
                               context,
+                              index: index,
                               aid: videoItem.aid,
                             );
                           },
@@ -305,7 +307,7 @@ class _LaterPageState extends State<LaterPage> {
                     ],
                   );
                 },
-                childCount: loadingState.response.length,
+                childCount: loadingState.response!.length,
               ),
             )
           : HttpError(

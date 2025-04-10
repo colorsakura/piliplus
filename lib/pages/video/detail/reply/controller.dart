@@ -7,7 +7,7 @@ import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_ticket_provider_mixin.dart';
 
-class VideoReplyController extends ReplyController
+class VideoReplyController extends ReplyController<MainListReply>
     with GetTickerProviderStateMixin {
   VideoReplyController({required this.aid});
   // 视频aid 请求时使用的oid
@@ -36,7 +36,13 @@ class VideoReplyController extends ReplyController
   }
 
   @override
-  Future<LoadingState> customGetData() => ReplyHttp.replyListGrpc(
+  List<ReplyInfo>? getDataList(MainListReply response) {
+    return response.replies;
+  }
+
+  @override
+  Future<LoadingState<MainListReply>> customGetData() =>
+      ReplyHttp.replyListGrpc(
         oid: aid,
         cursor: CursorReq(
           next: cursor?.next ?? $fixnum.Int64(0),

@@ -17,7 +17,7 @@ import 'api.dart';
 import 'init.dart';
 
 class MsgHttp {
-  static Future<LoadingState> msgFeedReplyMe(
+  static Future<LoadingState<MsgFeedReplyMe>> msgFeedReplyMe(
       {int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedReply, queryParameters: {
       'id': cursor == -1 ? null : cursor,
@@ -34,7 +34,7 @@ class MsgHttp {
     }
   }
 
-  static Future<LoadingState> msgFeedAtMe(
+  static Future<LoadingState<MsgFeedAtMe>> msgFeedAtMe(
       {int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedAt, queryParameters: {
       'id': cursor == -1 ? null : cursor,
@@ -51,7 +51,7 @@ class MsgHttp {
     }
   }
 
-  static Future<LoadingState> msgFeedLikeMe(
+  static Future<LoadingState<MsgFeedLikeMe>> msgFeedLikeMe(
       {int cursor = -1, int cursorTime = -1}) async {
     var res = await Request().get(Api.msgFeedLike, queryParameters: {
       'id': cursor == -1 ? null : cursor,
@@ -68,7 +68,7 @@ class MsgHttp {
     }
   }
 
-  static Future<LoadingState> msgFeedNotify(
+  static Future<LoadingState<List<SystemNotifyList>?>> msgFeedNotify(
       {int cursor = -1, int pageSize = 20}) async {
     var res = await Request().get(Api.msgSysNotify, queryParameters: {
       'cursor': cursor == -1 ? null : cursor,

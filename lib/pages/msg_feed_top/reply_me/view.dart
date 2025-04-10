@@ -34,21 +34,21 @@ class _ReplyMePageState extends State<ReplyMePage> {
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<ReplyMeItems>?> loadingState) {
     return switch (loadingState) {
       Loading() => loadingWidget,
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? ListView.separated(
-              itemCount: loadingState.response.length,
+              itemCount: loadingState.response!.length,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom + 80),
               itemBuilder: (context, int index) {
-                if (index == loadingState.response.length - 1) {
+                if (index == loadingState.response!.length - 1) {
                   _replyMeController.onLoadMore();
                 }
 
-                ReplyMeItems item = loadingState.response[index];
+                ReplyMeItems item = loadingState.response![index];
                 return ListTile(
                   onTap: () {
                     String? nativeUri = item.item?.nativeUri;
@@ -121,12 +121,8 @@ class _ReplyMePageState extends State<ReplyMePage> {
                       Text(item.item?.sourceContent ?? "",
                           style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(height: 4),
-                      if (loadingState
-                                  .response[index].item?.targetReplyContent !=
-                              null &&
-                          loadingState
-                                  .response[index].item?.targetReplyContent !=
-                              "")
+                      if (item.item?.targetReplyContent != null &&
+                          item.item?.targetReplyContent != "")
                         Text("| ${item.item?.targetReplyContent}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

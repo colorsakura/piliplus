@@ -30,16 +30,6 @@ class _ExpandedSectionState extends State<ExpandedSection>
     _runExpandCheck();
   }
 
-  ///Setting up the animation
-  // void prepareAnimations() {
-  //   expandController = AnimationController(
-  //       vsync: this, duration: const Duration(milliseconds: 500));
-  //   animation = CurvedAnimation(
-  //     parent: expandController,
-  //     curve: Curves.fastOutSlowIn,
-  //   );
-  // }
-
   void prepareAnimations() {
     expandController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 400));

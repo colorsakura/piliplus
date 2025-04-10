@@ -1,5 +1,5 @@
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/common/common_controller.dart';
+import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,8 @@ import 'package:PiliPlus/utils/storage.dart';
 
 import '../../models/user/sub_folder.dart';
 
-class SubController extends CommonController {
+class SubController
+    extends CommonListController<List<SubFolderItemData>?, SubFolderItemData> {
   dynamic mid;
 
   @override
@@ -49,9 +50,10 @@ class SubController extends CommonController {
               var res = await UserHttp.cancelSub(
                   id: subFolderItem.id!, type: subFolderItem.type!);
               if (res['status']) {
-                List list = (loadingState.value as Success).response;
+                List<SubFolderItemData> list =
+                    (loadingState.value as Success).response;
                 list.remove(subFolderItem);
-                loadingState.value = LoadingState.success(list);
+                loadingState.refresh();
                 SmartDialog.showToast('取消订阅成功');
               } else {
                 SmartDialog.showToast(res['msg']);
@@ -66,7 +68,8 @@ class SubController extends CommonController {
   }
 
   @override
-  Future<LoadingState> customGetData() => UserHttp.userSubFolder(
+  Future<LoadingState<List<SubFolderItemData>?>> customGetData() =>
+      UserHttp.userSubFolder(
         pn: currentPage,
         ps: 20,
         mid: mid,

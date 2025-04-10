@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/episode_panel.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/main.dart';
+import 'package:PiliPlus/models/bangumi/info.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/pages/bangumi/introduction/widgets/intro_detail.dart'
     as bangumi;
@@ -140,7 +141,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
       _listenerLoadingState =
           bangumiIntroController.loadingState.listen((value) {
         if (!context.mounted) return;
-        if (value is Success) {
+        if (value is Success<BangumiInfoModel>) {
           videoPlayerServiceHandler.onVideoDetailChange(
               value.response, videoDetailController.cid.value, heroTag);
         }

@@ -1,4 +1,5 @@
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/skeleton/video_card_h.dart';
@@ -32,7 +33,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
     );
   }
 
-  Widget _buildBody(LoadingState loadingState) {
+  Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
           gridDelegate: SliverGridDelegateWithExtentAndRatio(
@@ -47,7 +48,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
             childCount: 5,
           ),
         ),
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response?.isNotEmpty == true
           ? SliverGrid(
               gridDelegate: SliverGridDelegateWithExtentAndRatio(
                 mainAxisSpacing: 2,
@@ -55,17 +56,17 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
                 childAspectRatio: StyleString.aspectRatio * 2.2,
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
-                if (index == loadingState.response.length) {
+                if (index == loadingState.response!.length) {
                   return SizedBox(
                     height: MediaQuery.of(context).padding.bottom,
                   );
                 } else {
                   return VideoCardH(
-                    videoItem: loadingState.response[index],
+                    videoItem: loadingState.response![index],
                     showPubdate: true,
                   );
                 }
-              }, childCount: loadingState.response.length + 1),
+              }, childCount: loadingState.response!.length + 1),
             )
           : SliverToBoxAdapter(),
       Error() => HttpError(

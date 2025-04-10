@@ -1,3 +1,6 @@
+import 'package:PiliPlus/pages/common/multi_select_controller.dart'
+    show MultiSelectData;
+
 import '../model_owner.dart';
 import '../model_video.dart';
 import 'fav_folder.dart';
@@ -18,7 +21,7 @@ class FavDetailData {
   }
 }
 
-class FavDetailItemData extends BaseVideoItemModel {
+class FavDetailItemData extends BaseVideoItemModel with MultiSelectData {
   int? id;
   int? type;
   int? page;
@@ -31,7 +34,6 @@ class FavDetailItemData extends BaseVideoItemModel {
   int? favTime;
   Map? ogv;
   String? epId;
-  bool? checked;
 
   FavDetailItemData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

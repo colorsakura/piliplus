@@ -8,10 +8,11 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 
 import '../../../utils/grid.dart';
 
-Widget searchLivePanel(BuildContext context, ctr, LoadingState loadingState) {
+Widget searchLivePanel(
+    BuildContext context, ctr, LoadingState<List<dynamic>?> loadingState) {
   return switch (loadingState) {
     Loading() => loadingWidget,
-    Success() => (loadingState.response as List?)?.isNotEmpty == true
+    Success() => loadingState.response?.isNotEmpty == true
         ? GridView.builder(
             padding: EdgeInsets.only(
               left: StyleString.safeSpace,
@@ -27,12 +28,12 @@ Widget searchLivePanel(BuildContext context, ctr, LoadingState loadingState) {
               childAspectRatio: StyleString.aspectRatio,
               mainAxisExtent: MediaQuery.textScalerOf(context).scale(80),
             ),
-            itemCount: loadingState.response.length,
+            itemCount: loadingState.response!.length,
             itemBuilder: (context, index) {
-              if (index == loadingState.response.length - 1) {
+              if (index == loadingState.response!.length - 1) {
                 ctr.onLoadMore();
               }
-              return LiveItem(liveItem: loadingState.response[index]);
+              return LiveItem(liveItem: loadingState.response![index]);
             },
           )
         : errorWidget(
