@@ -286,183 +286,191 @@ class _SavePanelState extends State<SavePanel> {
                         color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (_item is ReplyInfo)
-                            IgnorePointer(
-                              child: ReplyItemGrpc(
-                                replyItem: _item,
-                                replyLevel: '',
-                                needDivider: false,
-                                upMid: widget.upMid,
+                      child: AnimatedSize(
+                        curve: Curves.easeInOut,
+                        alignment: Alignment.topCenter,
+                        duration: const Duration(milliseconds: 255),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (_item is ReplyInfo)
+                              IgnorePointer(
+                                child: ReplyItemGrpc(
+                                  replyItem: _item,
+                                  replyLevel: '',
+                                  needDivider: false,
+                                  upMid: widget.upMid,
+                                ),
+                              )
+                            else if (_item is DynamicItemModel)
+                              IgnorePointer(
+                                child: DynamicPanel(
+                                  item: _item,
+                                  source: 'detail',
+                                  isSave: true,
+                                ),
                               ),
-                            )
-                          else if (_item is DynamicItemModel)
-                            IgnorePointer(
-                              child: DynamicPanel(
-                                item: _item,
-                                source: 'detail',
-                                isSave: true,
-                              ),
-                            ),
-                          if (cover?.isNotEmpty == true &&
-                              title?.isNotEmpty == true)
-                            Container(
-                              height: 81,
-                              clipBehavior: Clip.hardEdge,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onInverseSurface,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  NetworkImgLayer(
-                                    radius: 6,
-                                    src: cover!,
-                                    height: MediaQuery.textScalerOf(context)
-                                        .scale(65),
-                                    width: MediaQuery.textScalerOf(context)
-                                            .scale(65) *
-                                        16 /
-                                        9,
-                                    quality: 100,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '$title\n',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        if (pubdate != null) ...[
-                                          const Spacer(),
-                                          Text(
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                    pubdate! * 1000)
-                                                .toString()
-                                                .substring(0, 19),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          showBottom
-                              ? Stack(
-                                  clipBehavior: Clip.none,
+                            if (cover?.isNotEmpty == true &&
+                                title?.isNotEmpty == true)
+                              Container(
+                                height: 81,
+                                clipBehavior: Clip.hardEdge,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onInverseSurface,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
                                   children: [
-                                    if (uri.isNotEmpty)
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  if (uname?.isNotEmpty ==
-                                                      true) ...[
+                                    NetworkImgLayer(
+                                      radius: 6,
+                                      src: cover!,
+                                      height: MediaQuery.textScalerOf(context)
+                                          .scale(65),
+                                      width: MediaQuery.textScalerOf(context)
+                                              .scale(65) *
+                                          16 /
+                                          9,
+                                      quality: 100,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '$title\n',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          if (pubdate != null) ...[
+                                            const Spacer(),
+                                            Text(
+                                              DateTime.fromMillisecondsSinceEpoch(
+                                                      pubdate! * 1000)
+                                                  .toString()
+                                                  .substring(0, 19),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            showBottom
+                                ? Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      if (uri.isNotEmpty)
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    if (uname?.isNotEmpty ==
+                                                        true) ...[
+                                                      Text(
+                                                        '@$uname',
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                    ],
                                                     Text(
-                                                      '@$uname',
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      '识别二维码，$viewType$itemType',
+                                                      textAlign: TextAlign.end,
                                                       style: TextStyle(
                                                         color: Theme.of(context)
                                                             .colorScheme
-                                                            .primary,
+                                                            .onSurfaceVariant,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 4),
+                                                    Text(
+                                                      DateTime.now()
+                                                          .toString()
+                                                          .split('.')
+                                                          .first,
+                                                      textAlign: TextAlign.end,
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .outline,
+                                                      ),
+                                                    ),
                                                   ],
-                                                  Text(
-                                                    '识别二维码，$viewType$itemType',
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurfaceVariant,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    DateTime.now()
-                                                        .toString()
-                                                        .split('.')
-                                                        .first,
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .outline,
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                            Container(
-                                              width: 100,
-                                              height: 100,
-                                              padding: const EdgeInsets.all(12),
-                                              child: Container(
-                                                color: Get.isDarkMode
-                                                    ? Colors.white
-                                                    : Theme.of(context)
-                                                        .colorScheme
-                                                        .surface,
+                                              Container(
+                                                width: 100,
+                                                height: 100,
                                                 padding:
-                                                    const EdgeInsets.all(3),
-                                                child: PrettyQrView.data(
-                                                  data: uri,
-                                                  decoration:
-                                                      const PrettyQrDecoration(
-                                                    shape:
-                                                        PrettyQrRoundedSymbol(
-                                                      borderRadius:
-                                                          BorderRadius.zero,
+                                                    const EdgeInsets.all(12),
+                                                child: Container(
+                                                  color: Get.isDarkMode
+                                                      ? Colors.white
+                                                      : Theme.of(context)
+                                                          .colorScheme
+                                                          .surface,
+                                                  padding:
+                                                      const EdgeInsets.all(3),
+                                                  child: PrettyQrView.data(
+                                                    data: uri,
+                                                    decoration:
+                                                        const PrettyQrDecoration(
+                                                      shape:
+                                                          PrettyQrRoundedSymbol(
+                                                        borderRadius:
+                                                            BorderRadius.zero,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+                                        ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Image.asset(
+                                          'assets/images/logo/logo_2.png',
+                                          width: 100,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
                                         ),
                                       ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Image.asset(
-                                        'assets/images/logo/logo_2.png',
-                                        width: 100,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox(height: 12),
-                        ],
+                                    ],
+                                  )
+                                : const SizedBox(height: 12),
+                          ],
+                        ),
                       ),
                     ),
                   ),
