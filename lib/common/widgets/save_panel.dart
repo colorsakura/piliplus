@@ -297,7 +297,6 @@ class _SavePanelState extends State<SavePanel> {
                                 replyLevel: '',
                                 needDivider: false,
                                 upMid: widget.upMid,
-                                isSave: true,
                               ),
                             )
                           else if (_item is DynamicItemModel)

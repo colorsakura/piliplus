@@ -43,7 +43,6 @@ class ReplyItemGrpc extends StatelessWidget {
     this.callback,
     this.onCheckReply,
     this.onToggleTop,
-    this.isSave = false,
   });
   final ReplyInfo replyItem;
   final String replyLevel;
@@ -59,7 +58,6 @@ class ReplyItemGrpc extends StatelessWidget {
   final Function(List<String>, int)? callback;
   final ValueChanged<ReplyInfo>? onCheckReply;
   final Function(bool isUpTop, int rpid)? onToggleTop;
-  final bool isSave;
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +320,7 @@ class ReplyItemGrpc extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        isSave
+                        replyLevel == ''
                             ? DateTime.fromMillisecondsSinceEpoch(
                                     replyItem.ctime.toInt() * 1000)
                                 .toString()
