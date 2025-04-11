@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/grpc/app/main/community/reply/v1/reply.pb.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/pages/bangumi/introduction/controller.dart';
 import 'package:PiliPlus/pages/dynamics/widgets/dynamic_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
@@ -90,6 +91,17 @@ class _SavePanelState extends State<SavePanel> {
         } catch (_) {}
         uri =
             'bilibili://video/${_item.oid}?comment_root_id=${hasRoot ? _item.root : _item.id}${hasRoot ? '&comment_secondary_id=${_item.id}' : ''}';
+
+        try {
+          final heroTag = Get.arguments?['heroTag'];
+          late final ctr = Get.find<BangumiIntroController>(tag: heroTag);
+          final type = _item.type.toInt();
+          late final oid = _item.oid;
+          late final rootId = hasRoot ? _item.root : _item.id;
+          late final anchor = hasRoot ? 'anchor=${_item.id}&' : '';
+          uri =
+              'bilibili://comment/detail/$type/$oid/$rootId/?${anchor}enterUri=bilibili://pgc/season/ep/${ctr.epId}';
+        } catch (_) {}
       } else if (currentRoute.startsWith('/dynamicDetail')) {
         try {
           DynamicItemModel dynItem = Get.arguments['item'];
