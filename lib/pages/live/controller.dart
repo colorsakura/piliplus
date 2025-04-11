@@ -72,7 +72,7 @@ class LiveController
         loadingState.refresh();
       }
       followPage++;
-    } else {
+    } else if (isRefresh) {
       followListState.value = LoadingState.error(res['msg']);
     }
   }

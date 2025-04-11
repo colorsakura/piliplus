@@ -498,11 +498,16 @@ class Utils {
         dynamic res = await DynamicsHttp.dynamicDetail(id: id);
         if (res['status']) {
           final ctr = Get.find<DynamicsTabController>(tag: 'all');
-          List<DynamicItemModel> list = ctr.loadingState.value is Success
-              ? (ctr.loadingState.value as Success).response
-              : <DynamicItemModel>[];
-          list.insert(0, res['data']);
-          ctr.loadingState.value = LoadingState.success(list);
+          if (ctr.loadingState.value is Success) {
+            List<DynamicItemModel>? list =
+                (ctr.loadingState.value as Success).response;
+            if (list != null) {
+              list.insert(0, res['data']);
+              ctr.loadingState.refresh();
+              return;
+            }
+          }
+          ctr.loadingState.value = LoadingState.success([res['data']]);
         }
       }
     } catch (e) {

@@ -71,7 +71,7 @@ class VideoReplyReplyController extends ReplyController
     // reply2Reply // isDialogue.not
     if (data is DetailListReply) {
       count.value = data.root.count.toInt();
-      if (cursor == null && firstFloor == null) {
+      if (isRefresh && firstFloor == null) {
         firstFloor = data.root;
       }
       if (id != null) {

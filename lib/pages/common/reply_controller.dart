@@ -35,6 +35,9 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late Rx<Mode> mode = Mode.MAIN_LIST_HOT.obs;
   late bool hasUpTop = false;
 
+  @override
+  bool? get isReply => true;
+
   late final antiGoodsReply = GStorage.antiGoodsReply;
 
   // comment antifraud

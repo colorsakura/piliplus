@@ -60,7 +60,7 @@ class LikeMeController extends CommonDataController<MsgFeedLikeMe, dynamic> {
         } else {
           pair.second.removeAt(index);
         }
-        loadingState.value = LoadingState.success(pair);
+        loadingState.refresh();
         SmartDialog.showToast('删除成功');
       } else {
         SmartDialog.showToast(res['msg']);

@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/models/member/info.dart';
 import 'package:PiliPlus/models/space_archive/data.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
@@ -14,7 +15,8 @@ class HorizontalMemberPageController extends CommonDataController {
   dynamic mid;
   dynamic wwebid;
 
-  Rx<LoadingState> userState = LoadingState.loading().obs;
+  Rx<LoadingState<MemberInfoModel>> userState =
+      LoadingState<MemberInfoModel>.loading().obs;
   RxMap userStat = {}.obs;
 
   @override

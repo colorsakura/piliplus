@@ -36,6 +36,7 @@ abstract class CommonController<R, T> extends GetxController
   bool isLoading = false;
   late bool isEnd = false;
   Rx<LoadingState> get loadingState;
+  bool? isReply;
 
   Future<LoadingState<R>> customGetData();
 
@@ -66,6 +67,8 @@ abstract class CommonController<R, T> extends GetxController
           isEnd = true;
           if (isRefresh) {
             loadingState.value = LoadingState<List<T>?>.success(dataList);
+          } else if (isReply == true) {
+            loadingState.refresh();
           }
           isLoading = false;
           return;

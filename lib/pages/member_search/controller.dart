@@ -97,7 +97,9 @@ class MemberSearchController extends GetxController
 
       if (data.hasMore == false || items.isNullOrEmpty) {
         isEndDynamic = true;
-        dynamicState.value = LoadingState.success(items);
+        if (isRefresh) {
+          dynamicState.value = LoadingState.success(items);
+        }
         return;
       }
 
@@ -138,7 +140,9 @@ class MemberSearchController extends GetxController
 
       if (vlist.isNullOrEmpty) {
         isEndArchive = true;
-        archiveState.value = LoadingState.success(vlist);
+        if (isRefresh) {
+          archiveState.value = LoadingState.success(vlist);
+        }
         return;
       }
 

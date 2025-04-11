@@ -57,19 +57,41 @@ class BangumiController extends CommonListController<
       type: tabType == TabType.bangumi ? 1 : 2,
       pn: followPage,
     );
+
     if (res is Success) {
       BangumiListDataModel data = res.response;
-      followPage++;
-      followEnd = data.hasNext == 0 || data.list.isNullOrEmpty;
+      List<BangumiListItemModel>? list = data.list;
       followCount.value = data.total ?? -1;
-      if (isRefresh.not && followState.value is Success) {
-        data.list?.insertAll(0, (followState.value as Success).response);
+      if (data.hasNext == 0) {
+        followEnd = true;
       }
-      followState.value = LoadingState.success(data.list);
+
+      if (list.isNullOrEmpty) {
+        followEnd = true;
+        if (isRefresh) {
+          followState.value = LoadingState.success(list);
+        }
+        followLoading = false;
+        return;
+      }
+
       if (isRefresh) {
+        if (list!.length >= followCount.value) {
+          followEnd = true;
+        }
+        followState.value = LoadingState.success(list);
         followController?.animToTop();
+      } else if (followState.value is Success) {
+        List<BangumiListItemModel> currentList =
+            (followState.value as Success).response;
+        currentList.addAll(list!);
+        if (currentList.length >= followCount.value) {
+          followEnd = true;
+        }
+        followState.refresh();
       }
-    } else {
+      followPage++;
+    } else if (isRefresh) {
       followState.value = res;
     }
     followLoading = false;
