@@ -349,7 +349,9 @@ class VideoIntroController extends GetxController
       return;
     }
 
-    if (_coinNum.value >= 2) {
+    int copyright =
+        (queryVideoIntroData.value['data'] as VideoDetailData?)?.copyright ?? 1;
+    if ((copyright != 1 && _coinNum.value >= 1) || _coinNum.value >= 2) {
       SmartDialog.showToast('达到投币上限啦~');
       return;
     }
@@ -361,9 +363,7 @@ class VideoIntroController extends GetxController
 
     PayCoinsPage.toPayCoinsPage(
       onPayCoin: coinVideo,
-      copyright:
-          (queryVideoIntroData.value['data'] as VideoDetailData?)?.copyright ??
-              1,
+      copyright: copyright,
       hasCoin: _coinNum.value == 1,
     );
   }
