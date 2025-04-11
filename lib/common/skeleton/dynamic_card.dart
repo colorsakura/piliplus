@@ -87,6 +87,7 @@ class DynamicCardSkeleton extends StatelessWidget {
                 ],
               ),
             ),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
