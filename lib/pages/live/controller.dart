@@ -62,14 +62,14 @@ class LiveController
           followEnd = true;
         }
         followListState.value = LoadingState.success(dataList);
-      } else if (loadingState.value is Success) {
+      } else if (followListState.value is Success) {
         List<LiveFollowingItemModel> list =
-            (loadingState.value as Success).response;
+            (followListState.value as Success).response;
         list.addAll(dataList!);
         if (list.length >= liveCount.value) {
           followEnd = true;
         }
-        loadingState.refresh();
+        followListState.refresh();
       }
       followPage++;
     } else if (isRefresh) {
