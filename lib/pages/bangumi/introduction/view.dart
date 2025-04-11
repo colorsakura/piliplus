@@ -469,7 +469,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                           ),
                     needAnim: true,
                     hasTriple: bangumiIntroController.hasLike.value &&
-                        bangumiIntroController.hasCoin.value &&
+                        bangumiIntroController.hasCoin &&
                         bangumiIntroController.hasFav.value,
                     callBack: (start) {
                       if (start) {
@@ -490,7 +490,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
                     selectIcon: const Icon(FontAwesomeIcons.b),
                     onTap: () =>
                         handleState(bangumiIntroController.actionCoinVideo),
-                    selectStatus: bangumiIntroController.hasCoin.value,
+                    selectStatus: bangumiIntroController.hasCoin,
                     loadingStatus: false,
                     semanticsLabel: '投币',
                     text: !widget.isLoading
@@ -573,7 +573,7 @@ class _BangumiInfoState extends State<BangumiInfo> {
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.b),
           onTap: () => handleState(bangumiIntroController.actionCoinVideo),
-          selectStatus: bangumiIntroController.hasCoin.value,
+          selectStatus: bangumiIntroController.hasCoin,
           loadingStatus: widget.isLoading,
           text: !widget.isLoading
               ? widget.bangumiDetail!.stat!['coins']!.toString()

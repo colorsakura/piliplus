@@ -2,22 +2,58 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 
 class PayCoinsPage extends StatefulWidget {
   const PayCoinsPage({
     super.key,
-    required this.callback,
+    required this.onPayCoin,
     this.copyright = 1,
+    this.hasCoin = false,
   });
 
-  final Function callback;
+  final Function(int coin, bool coinWithLike) onPayCoin;
   final int copyright;
+  final bool hasCoin;
 
   @override
   State<PayCoinsPage> createState() => _PayCoinsPageState();
+
+  static toPayCoinsPage({
+    required Function(int coin, bool coinWithLike) onPayCoin,
+    int copyright = 1,
+    bool hasCoin = false,
+  }) async {
+    Navigator.of(Get.context!).push(
+      GetDialogRoute(
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return PayCoinsPage(
+            onPayCoin: onPayCoin,
+            copyright: copyright,
+            hasCoin: hasCoin,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 225),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = 0.0;
+          const end = 1.0;
+          const curve = Curves.linear;
+
+          var tween = Tween<double>(begin: begin, end: end)
+              .chain(CurveTween(curve: curve));
+
+          return FadeTransition(
+            opacity: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+  }
 }
 
 class _PayCoinsPageState extends State<PayCoinsPage>
@@ -28,6 +64,48 @@ class _PayCoinsPageState extends State<PayCoinsPage>
   final _key = GlobalKey();
 
   int get _index => _controller.hasClients ? _controller.page?.round() ?? 0 : 0;
+
+  num? get _coins => GlobalData().coins;
+  bool get _canPay {
+    if (_index == 1 && widget.hasCoin) {
+      return false;
+    }
+    if (_coins == null) {
+      return true;
+    }
+    if (_index == 0 && _coins! >= 1) {
+      return true;
+    }
+    if (_index == 1 && _coins! >= 2) {
+      return true;
+    }
+    return false;
+  }
+
+  Color _getColorFilter(int index) {
+    if (index == 1 && widget.hasCoin) {
+      return Colors.black45;
+    }
+    if (_coins == null) {
+      return Colors.transparent;
+    }
+    if (index == 0 && _coins == 0) {
+      return Colors.black45;
+    }
+    if (index == 1 && _coins! < 2) {
+      return Colors.black45;
+    }
+    return Colors.transparent;
+  }
+
+  String get _getImage {
+    if (!_canPay) {
+      return 'assets/images/paycoins/ic_22_not_enough_pay.png';
+    }
+    return _index == 0
+        ? 'assets/images/paycoins/ic_22_mario.png'
+        : 'assets/images/paycoins/ic_22_gun_sister.png';
+  }
 
   late AnimationController _slide22Controller;
   late AnimationController _scale22Controller;
@@ -162,6 +240,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                           height: 100,
                           child: PageView.builder(
                             key: PageStorageKey('PageView'),
+                            physics: const ClampingScrollPhysics(),
                             itemCount: widget.copyright == 1 ? 2 : 1,
                             controller: _controller,
                             onPageChanged: (index) => setState(() {
@@ -183,44 +262,53 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                                       child: SizedBox(
                                         height: 70 + (factor * 30),
                                         width: 70 + (factor * 30),
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            SlideTransition(
-                                              position:
-                                                  _boxAnimController.drive(
-                                                Tween(
-                                                  begin: const Offset(0.0, 0.0),
-                                                  end: const Offset(0.0, -0.2),
+                                        child: ColorFiltered(
+                                          colorFilter: ColorFilter.mode(
+                                            _getColorFilter(index),
+                                            BlendMode.srcATop,
+                                          ),
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SlideTransition(
+                                                position:
+                                                    _boxAnimController.drive(
+                                                  Tween(
+                                                    begin:
+                                                        const Offset(0.0, 0.0),
+                                                    end:
+                                                        const Offset(0.0, -0.2),
+                                                  ),
                                                 ),
-                                              ),
-                                              child: Image.asset(
-                                                'assets/images/paycoins/ic_pay_coins_box.png',
-                                              ),
-                                            ),
-                                            SlideTransition(
-                                              position:
-                                                  _coinSlideController.drive(
-                                                Tween(
-                                                  begin: const Offset(0.0, 0.0),
-                                                  end: const Offset(0.0, -2),
-                                                ),
-                                              ),
-                                              child: FadeTransition(
-                                                opacity: Tween<double>(
-                                                        begin: 1, end: 0)
-                                                    .animate(
-                                                        _coinFadeController),
                                                 child: Image.asset(
-                                                  height: 35 + (factor * 15),
-                                                  width: 35 + (factor * 15),
-                                                  index == 0
-                                                      ? 'assets/images/paycoins/ic_coins_one.png'
-                                                      : 'assets/images/paycoins/ic_coins_two.png',
+                                                  'assets/images/paycoins/ic_pay_coins_box.png',
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              SlideTransition(
+                                                position:
+                                                    _coinSlideController.drive(
+                                                  Tween(
+                                                    begin:
+                                                        const Offset(0.0, 0.0),
+                                                    end: const Offset(0.0, -2),
+                                                  ),
+                                                ),
+                                                child: FadeTransition(
+                                                  opacity: Tween<double>(
+                                                          begin: 1, end: 0)
+                                                      .animate(
+                                                          _coinFadeController),
+                                                  child: Image.asset(
+                                                    height: 35 + (factor * 15),
+                                                    width: 35 + (factor * 15),
+                                                    index == 0
+                                                        ? 'assets/images/paycoins/ic_coins_one.png'
+                                                        : 'assets/images/paycoins/ic_coins_two.png',
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -265,8 +353,9 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                       height: 155,
                       child: Center(
                         child: GestureDetector(
-                          onTap: _onPayCoin,
-                          onPanUpdate: (e) => _handlePanUpdate(e, true),
+                          onTap: _canPay ? _onPayCoin : null,
+                          onPanUpdate:
+                              _canPay ? (e) => _handlePanUpdate(e, true) : null,
                           child: ScaleTransition(
                             scale: _scale22Controller.drive(
                               Tween(begin: 1, end: 1.1),
@@ -281,11 +370,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                               child: SizedBox(
                                 width: 110,
                                 height: 155,
-                                child: Image.asset(
-                                  _index == 0
-                                      ? 'assets/images/paycoins/ic_22_mario.png'
-                                      : 'assets/images/paycoins/ic_22_gun_sister.png',
-                                ),
+                                child: Image.asset(_getImage),
                               ),
                             ),
                           ),
@@ -293,6 +378,15 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                       ),
                     ),
                   ),
+                  if (_coins != null || widget.hasCoin) ...[
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Text(
+                        '${_coins != null ? '硬币余额：${_coins!.toDouble().toPrecision(1)}' : ''}${widget.hasCoin ? '${_coins != null ? '，' : ''}已投1枚硬币' : ''}',
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   Stack(
                     alignment: Alignment.centerLeft,
@@ -394,7 +488,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
         _coinSlideController.forward().whenComplete(() {
           _coinFadeController.forward().whenComplete(() {
             Get.back();
-            widget.callback(_index + 1, _coinWithLike.value);
+            widget.onPayCoin(_index + 1, _coinWithLike.value);
           });
         });
       });

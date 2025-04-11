@@ -2300,7 +2300,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 semanticsLabel: '点赞',
                                 needAnim: true,
                                 hasTriple: videoIntroController.hasLike.value &&
-                                    videoIntroController.hasCoin.value &&
+                                    videoIntroController.hasCoin &&
                                     videoIntroController.hasFav.value,
                                 callBack: (start) {
                                   if (start) {
@@ -2352,8 +2352,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 ),
                                 selectIcon: const Icon(FontAwesomeIcons.b),
                                 onTap: videoIntroController.actionCoinVideo,
-                                selectStatus:
-                                    videoIntroController.hasCoin.value,
+                                selectStatus: videoIntroController.hasCoin,
                                 semanticsLabel: '投币',
                                 needAnim: true,
                               ),
@@ -2422,7 +2421,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 needAnim: true,
                                 hasTriple:
                                     bangumiIntroController.hasLike.value &&
-                                        bangumiIntroController.hasCoin.value &&
+                                        bangumiIntroController.hasCoin &&
                                         bangumiIntroController.hasFav.value,
                                 callBack: (start) {
                                   if (start) {
@@ -2455,8 +2454,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 ),
                                 selectIcon: const Icon(FontAwesomeIcons.b),
                                 onTap: bangumiIntroController.actionCoinVideo,
-                                selectStatus:
-                                    bangumiIntroController.hasCoin.value,
+                                selectStatus: bangumiIntroController.hasCoin,
                                 semanticsLabel: '投币',
                                 needAnim: true,
                               ),

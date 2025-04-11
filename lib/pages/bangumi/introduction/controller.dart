@@ -8,11 +8,11 @@ import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -54,8 +54,10 @@ class BangumiIntroController
 
   // 是否点赞
   RxBool hasLike = false.obs;
+  // 投币数量
+  final RxInt _coinNum = 0.obs;
   // 是否投币
-  RxBool hasCoin = false.obs;
+  bool get hasCoin => _coinNum.value != 0;
   // 是否收藏
   RxBool hasFav = false.obs;
   dynamic videoTags;
@@ -74,33 +76,12 @@ class BangumiIntroController
       if (Get.arguments.containsKey('bangumiItem') as bool) {
         preRender = true;
         bangumiItem = Get.arguments['bangumiItem'];
-        // bangumiItem!['pic'] = args.pic;
-        // if (args.title is String) {
-        //   videoItem!['title'] = args.title;
-        // } else {
-        //   String str = '';
-        //   for (Map map in args.title) {
-        //     str += map['text'];
-        //   }
-        //   videoItem!['title'] = str;
-        // }
-        // if (args.stat != null) {
-        //   videoItem!['stat'] = args.stat;
-        // }
-        // videoItem!['pubdate'] = args.pubdate;
-        // videoItem!['owner'] = args.owner;
       }
     }
     userInfo = GStorage.userInfo.get('userInfoCache');
     isLogin = userInfo != null;
 
     if (isLogin && epId != null) {
-      // // 获取点赞状态
-      // queryHasLikeVideo();
-      // // 获取投币状态
-      // queryHasCoinVideo();
-      // // 获取收藏状态
-      // queryHasFavVideo();
       queryBangumiLikeCoinFav();
     }
 
@@ -142,7 +123,7 @@ class BangumiIntroController
     var result = await VideoHttp.bangumiLikeCoinFav(epId: epId);
     if (result['status']) {
       hasLike.value = result["data"]['like'] == 1;
-      hasCoin.value = result["data"]['coin_number'] != 0;
+      _coinNum.value = result["data"]['coin_number'];
       hasFav.value = result["data"]['favorite'] == 1;
     } else {
       SmartDialog.showToast(result['msg']);
@@ -177,7 +158,8 @@ class BangumiIntroController
         hasLike.value = true;
         bangumiDetail.stat!['likes'] = bangumiDetail.stat!['likes'] + 1;
       }
-      hasCoin.value = true;
+      _coinNum.value += coin;
+      GlobalData().afterCoin(coin);
     } else {
       SmartDialog.showToast(res['msg']);
     }
@@ -189,28 +171,20 @@ class BangumiIntroController
       SmartDialog.showToast('账号未登录');
       return;
     }
-    Navigator.of(Get.context!).push(
-      GetDialogRoute(
-        pageBuilder: (buildContext, animation, secondaryAnimation) {
-          return PayCoinsPage(
-            callback: coinVideo,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 225),
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = 0.0;
-          const end = 1.0;
-          const curve = Curves.linear;
 
-          var tween = Tween<double>(begin: begin, end: end)
-              .chain(CurveTween(curve: curve));
+    if (_coinNum.value >= 2) {
+      SmartDialog.showToast('超过投币上限啦~');
+      return;
+    }
 
-          return FadeTransition(
-            opacity: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
+    if (GlobalData().coins != null && GlobalData().coins! < 1) {
+      SmartDialog.showToast('硬币不足');
+      return;
+    }
+
+    PayCoinsPage.toPayCoinsPage(
+      onPayCoin: coinVideo,
+      hasCoin: _coinNum.value == 1,
     );
   }
 
@@ -551,7 +525,7 @@ class BangumiIntroController
       SmartDialog.showToast('账号未登录');
       return;
     }
-    if (hasLike.value && hasCoin.value && hasFav.value) {
+    if (hasLike.value && hasCoin && hasFav.value) {
       // 已点赞、投币、收藏
       SmartDialog.showToast('已三连');
       return false;
@@ -559,7 +533,10 @@ class BangumiIntroController
     var result = await VideoHttp.triple(epId: epId, seasonId: seasonId);
     if (result['status']) {
       hasLike.value = result["data"]["like"] == 1;
-      hasCoin.value = result["data"]["coin"] == 1;
+      if (result["data"]["coin"] == 1) {
+        _coinNum.value = 2;
+        GlobalData().afterCoin(2);
+      }
       hasFav.value = result["data"]["favorite"] == 1;
       SmartDialog.showToast('三连成功');
     } else {

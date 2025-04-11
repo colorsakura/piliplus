@@ -7,12 +7,12 @@ import 'package:PiliPlus/http/member.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
@@ -58,8 +58,10 @@ class VideoIntroController extends GetxController
   RxBool hasLike = false.obs;
   // 是否点踩
   RxBool hasDislike = false.obs;
+  // 投币数量
+  final RxInt _coinNum = 0.obs;
   // 是否投币
-  RxBool hasCoin = false.obs;
+  bool get hasCoin => _coinNum.value != 0;
   // 是否收藏
   RxBool hasFav = false.obs;
   // 是否稍后再看
@@ -179,13 +181,6 @@ class VideoIntroController extends GetxController
     queryVideoIntroData.value = result;
     if (isLogin) {
       queryAllStatus();
-      // // 获取点赞状态
-      // queryHasLikeVideo();
-      // // 获取投币状态
-      // queryHasCoinVideo();
-      // // 获取收藏状态
-      // queryHasFavVideo();
-      // //
       queryFollowStatus();
     }
   }
@@ -194,7 +189,6 @@ class VideoIntroController extends GetxController
     var result = await UserHttp.videoTags(bvid: bvid);
     if (result['status']) {
       videoTags = result['data'];
-      // debugPrint('tags: ${result['data']}');
     }
   }
 
@@ -234,39 +228,10 @@ class VideoIntroController extends GetxController
       var data = result['data'];
       hasLike.value = data['like'];
       hasDislike.value = data['dislike'];
-      hasCoin.value = data['coin'] != 0;
+      _coinNum.value = data['coin'];
       hasFav.value = data['favorite'];
-      // followStatus['attritube'] = data['attention'] ? 2 : 0;
     }
   }
-
-  // // 获取点赞状态
-  // Future queryHasLikeVideo() async {
-  //   var result = await VideoHttp.hasLikeVideo(bvid: bvid);
-  //   // data	num	被点赞标志	0：未点赞  1：已点赞  2：已点踩
-  //   hasLike.value = result["data"] == 1;
-  //   hasDislike.value = result["data"] == 2;
-  // }
-
-  // // 获取投币状态
-  // Future queryHasCoinVideo() async {
-  //   var result = await VideoHttp.hasCoinVideo(bvid: bvid);
-  //   if (result['status']) {
-  //     hasCoin.value = result["data"]['multiply'] != 0;
-  //   }
-  // }
-
-  // // 获取收藏状态
-  // Future queryHasFavVideo() async {
-  //   /// fix 延迟查询
-  //   await Future.delayed(const Duration(milliseconds: 200));
-  //   var result = await VideoHttp.hasFavVideo(aid: IdUtils.bv2av(bvid));
-  //   if (result['status']) {
-  //     hasFav.value = result["data"]['favoured'];
-  //   } else {
-  //     hasFav.value = false;
-  //   }
-  // }
 
   // 一键三连
   Future actionOneThree() async {
@@ -275,7 +240,7 @@ class VideoIntroController extends GetxController
       SmartDialog.showToast('账号未登录');
       return;
     }
-    if (hasLike.value && hasCoin.value && hasFav.value) {
+    if (hasLike.value && hasCoin && hasFav.value) {
       // 已点赞、投币、收藏
       SmartDialog.showToast('已三连');
       return false;
@@ -283,7 +248,10 @@ class VideoIntroController extends GetxController
     var result = await VideoHttp.oneThree(bvid: bvid);
     if (result['status']) {
       hasLike.value = result["data"]["like"];
-      hasCoin.value = result["data"]["coin"];
+      if (result["data"]["coin"]) {
+        _coinNum.value = 2;
+        GlobalData().afterCoin(2);
+      }
       hasFav.value = result["data"]["fav"];
       SmartDialog.showToast('三连成功');
     } else {
@@ -362,7 +330,8 @@ class VideoIntroController extends GetxController
     );
     if (res['status']) {
       SmartDialog.showToast('投币成功');
-      hasCoin.value = true;
+      _coinNum.value += coin;
+      GlobalData().afterCoin(coin);
       videoDetail.value.stat!.coin = videoDetail.value.stat!.coin! + coin;
       if (selectLike && hasLike.value.not) {
         hasLike.value = true;
@@ -380,60 +349,23 @@ class VideoIntroController extends GetxController
       return;
     }
 
-    Navigator.of(Get.context!).push(
-      GetDialogRoute(
-        pageBuilder: (buildContext, animation, secondaryAnimation) {
-          return PayCoinsPage(
-            callback: coinVideo,
-            copyright: (queryVideoIntroData.value['data'] as VideoDetailData?)
-                    ?.copyright ??
-                1,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 225),
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = 0.0;
-          const end = 1.0;
-          const curve = Curves.linear;
+    if (_coinNum.value >= 2) {
+      SmartDialog.showToast('超过投币上限啦~');
+      return;
+    }
 
-          var tween = Tween<double>(begin: begin, end: end)
-              .chain(CurveTween(curve: curve));
+    if (GlobalData().coins != null && GlobalData().coins! < 1) {
+      SmartDialog.showToast('硬币不足');
+      return;
+    }
 
-          return FadeTransition(
-            opacity: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
+    PayCoinsPage.toPayCoinsPage(
+      onPayCoin: coinVideo,
+      copyright:
+          (queryVideoIntroData.value['data'] as VideoDetailData?)?.copyright ??
+              1,
+      hasCoin: _coinNum.value == 1,
     );
-    // showDialog(
-    //   context: Get.context!,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       title: const Text('选择投币个数'),
-    //       contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-    //       actions: [
-    //         TextButton(
-    //             onPressed: () => Get.back(),
-    //             child: Text('取消',
-    //                 style: TextStyle(
-    //                     color: Theme.of(context).colorScheme.outline))),
-    //         TextButton(
-    //             onPressed: () async {
-    //               coinVideo(1);
-    //               Get.back();
-    //             },
-    //             child: const Text('投 1 枚')),
-    //         TextButton(
-    //             onPressed: () async {
-    //               coinVideo(2);
-    //               Get.back();
-    //             },
-    //             child: const Text('投 2 枚'))
-    //       ],
-    //     );
-    //   },
-    // );
   }
 
   // （取消）收藏

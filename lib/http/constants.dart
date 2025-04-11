@@ -8,5 +8,7 @@ class HttpString {
   static const String messageBaseUrl = 'https://message.bilibili.com';
   static const String dynamicShareBaseUrl = 'https://t.bilibili.com';
   static const String spaceBaseUrl = 'https://space.bilibili.com';
+  static const String accountBaseUrl = 'https://account.bilibili.com';
+
   static const String sponsorBlockBaseUrl = 'https://www.bsbsb.top';
 }

@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/http/retry_interceptor.dart';
+import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/accounts/account_manager/account_mgr.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:archive/archive.dart';
 import 'package:brotli/brotli.dart';
 import 'package:dio/dio.dart';
@@ -41,6 +43,17 @@ class Request {
           isSecure: item.secure,
           isHttpOnly: item.httpOnly,
         )));
+
+    if (Accounts.main.isLogin) {
+      getCoin();
+    }
+  }
+
+  static Future getCoin() async {
+    final res = await UserHttp.getCoin();
+    if (res['status']) {
+      GlobalData().coins = res['data'];
+    }
   }
 
   // 从cookie中获取 csrf token

@@ -177,7 +177,8 @@ class AccountManager extends Interceptor {
       'online/total',
       'github',
       'hdslb.com',
-      'biliimg.com'
+      'biliimg.com',
+      'site/getCoin',
     ];
     String url = err.requestOptions.uri.toString();
     debugPrint('🌹🌹ApiInterceptor: $url');

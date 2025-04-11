@@ -926,7 +926,7 @@ class _VideoInfoState extends State<VideoInfo> {
                     : '-',
                 needAnim: true,
                 hasTriple: videoIntroController.hasLike.value &&
-                    videoIntroController.hasCoin.value &&
+                    videoIntroController.hasCoin &&
                     videoIntroController.hasFav.value,
                 callBack: (start) {
                   if (start) {
@@ -958,7 +958,7 @@ class _VideoInfoState extends State<VideoInfo> {
                 icon: const Icon(FontAwesomeIcons.b),
                 selectIcon: const Icon(FontAwesomeIcons.b),
                 onTap: () => handleState(videoIntroController.actionCoinVideo),
-                selectStatus: videoIntroController.hasCoin.value,
+                selectStatus: videoIntroController.hasCoin,
                 loadingStatus: widget.loadingStatus,
                 semanticsLabel: '投币',
                 text: !widget.loadingStatus
@@ -1032,7 +1032,7 @@ class _VideoInfoState extends State<VideoInfo> {
         () => ActionRowItem(
           icon: const Icon(FontAwesomeIcons.b),
           onTap: () => handleState(videoIntroController.actionCoinVideo),
-          selectStatus: videoIntroController.hasCoin.value,
+          selectStatus: videoIntroController.hasCoin,
           loadingStatus: widget.loadingStatus,
           text:
               !widget.loadingStatus ? videoDetail.stat!.coin!.toString() : '-',

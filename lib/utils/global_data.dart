@@ -3,6 +3,14 @@ class GlobalData {
 
   int replyLengthLimit = 6;
 
+  num? coins;
+
+  void afterCoin(int coin) {
+    if (coins != null) {
+      coins = coins! - coin;
+    }
+  }
+
   // 私有构造函数
   GlobalData._();
 

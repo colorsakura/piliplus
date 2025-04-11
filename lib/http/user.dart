@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/later.dart';
+import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -29,6 +30,7 @@ class UserHttp {
     var res = await Request().get(Api.userInfo);
     if (res.data['code'] == 0) {
       UserInfoData data = UserInfoData.fromJson(res.data['data']);
+      GlobalData().coins = data.money;
       return {'status': true, 'data': data};
     } else {
       return {'status': false, 'msg': res.data['message']};
@@ -682,31 +684,12 @@ class UserHttp {
     }
   }
 
-  // 解析收藏夹视频
-  // static Future parseFavVideo({
-  //   required int mediaId,
-  //   required int oid,
-  //   required String bvid,
-  // }) async {
-  //   var res = await Request().get(
-  //     'https://www.bilibili.com/list/ml$mediaId',
-  //     queryParameters: {
-  //       'oid': mediaId,
-  //       'bvid': bvid,
-  //     },
-  //   );
-  //   String scriptContent =
-  //       extractScriptContents(parse(res.data).body!.outerHtml)[0];
-  //   int startIndex = scriptContent.indexOf('{');
-  //   int endIndex = scriptContent.lastIndexOf('};');
-  //   String jsonContent = scriptContent.substring(startIndex, endIndex + 1);
-  //   // 解析JSON字符串为Map
-  //   Map<String, dynamic> jsonData = json.decode(jsonContent);
-  //   return {
-  //     'status': true,
-  //     'data': jsonData['resourceList']
-  //         .map<MediaVideoItemModel>((e) => MediaVideoItemModel.fromJson(e))
-  //         .toList()
-  //   };
-  // }
+  static Future getCoin() async {
+    final res = await Request().get(Api.getCoin);
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']?['money']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }

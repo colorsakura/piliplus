@@ -753,4 +753,6 @@ class Api {
   static const String addFavArticle = '/x/article/favorites/add';
 
   static const String replyTop = '/x/v2/reply/top';
+
+  static const String getCoin = '${HttpString.accountBaseUrl}/site/getCoin';
 }
