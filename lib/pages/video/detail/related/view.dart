@@ -49,26 +49,25 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
           ),
         ),
       Success() => loadingState.response?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.2,
+          ? SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
               ),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                if (index == loadingState.response!.length) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).padding.bottom,
-                  );
-                } else {
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                  mainAxisSpacing: 2,
+                  maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                  childAspectRatio: StyleString.aspectRatio * 2.2,
+                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
                   return VideoCardH(
                     videoItem: loadingState.response![index],
                     showPubdate: true,
                   );
-                }
-              }, childCount: loadingState.response!.length + 1),
+                }, childCount: loadingState.response!.length),
+              ),
             )
-          : SliverToBoxAdapter(),
+          : const SliverToBoxAdapter(),
       Error() => HttpError(
           errMsg: loadingState.errMsg,
           callback: _relatedController.onReload,

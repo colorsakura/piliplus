@@ -35,6 +35,9 @@ class FavDetailController
   }
 
   @override
+  bool? get hasFooter => true;
+
+  @override
   List<FavDetailItemData>? getDataList(FavDetailData response) {
     return response.list;
   }

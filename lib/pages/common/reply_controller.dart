@@ -36,7 +36,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
   late bool hasUpTop = false;
 
   @override
-  bool? get isReply => true;
+  bool? get hasFooter => true;
 
   late final antiGoodsReply = GStorage.antiGoodsReply;
 

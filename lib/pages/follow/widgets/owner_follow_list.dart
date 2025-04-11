@@ -91,27 +91,19 @@ class _OwnerFollowListState extends State<OwnerFollowList>
                     ? ListView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
                         controller: scrollController,
-                        itemCount: followList.length + 1,
+                        itemCount: followList.length,
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom + 80,
+                        ),
                         itemBuilder: (BuildContext context, int index) {
-                          if (index == followList.length) {
-                            return Container(
-                              height:
-                                  MediaQuery.of(context).padding.bottom + 60,
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).padding.bottom),
-                            );
-                          } else {
-                            return FollowItem(
-                              item: followList[index],
-                              ctr: widget.ctr,
-                              callback: (attr) {
-                                followList[index].attribute =
-                                    attr == 0 ? -1 : 0;
-                                followList.refresh();
-                              },
-                            );
-                          }
+                          return FollowItem(
+                            item: followList[index],
+                            ctr: widget.ctr,
+                            callback: (attr) {
+                              followList[index].attribute = attr == 0 ? -1 : 0;
+                              followList.refresh();
+                            },
+                          );
                         },
                       )
                     : errorWidget(
