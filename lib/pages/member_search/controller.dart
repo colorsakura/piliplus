@@ -151,9 +151,9 @@ class MemberSearchController extends GetxController
           isEndArchive = true;
         }
         archiveState.value = LoadingState.success(vlist);
-      } else if (dynamicState.value is Success) {
+      } else if (archiveState.value is Success) {
         List<VListItemModel> currentList =
-            (dynamicState.value as Success).response;
+            (archiveState.value as Success).response;
         currentList.addAll(vlist!);
         if (currentList.length >= archiveCount.value) {
           isEndDynamic = true;

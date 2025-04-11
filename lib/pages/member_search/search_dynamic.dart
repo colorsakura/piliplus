@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
-class SearchDynamic extends StatelessWidget {
+class SearchDynamic extends StatefulWidget {
   const SearchDynamic({
     super.key,
     required this.ctr,
@@ -20,8 +20,15 @@ class SearchDynamic extends StatelessWidget {
   final MemberSearchController ctr;
 
   @override
+  State<SearchDynamic> createState() => _SearchDynamicState();
+}
+
+class _SearchDynamicState extends State<SearchDynamic>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
-    return Obx(() => _buildBody(context, ctr.dynamicState.value));
+    super.build(context);
+    return Obx(() => _buildBody(context, widget.ctr.dynamicState.value));
   }
 
   Widget _buildBody(BuildContext context, LoadingState loadingState) {
@@ -32,7 +39,7 @@ class SearchDynamic extends StatelessWidget {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: () async {
-                await ctr.refreshDynamic();
+                await widget.ctr.refreshDynamic();
               },
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -50,7 +57,7 @@ class SearchDynamic extends StatelessWidget {
                               if (index == loadingState.response.length - 1) {
                                 EasyThrottle.throttle('member_dynamics',
                                     const Duration(milliseconds: 1000), () {
-                                  ctr.searchDynamic(false);
+                                  widget.ctr.searchDynamic(false);
                                 });
                               }
                               return index == loadingState.response.length
@@ -74,7 +81,7 @@ class SearchDynamic extends StatelessWidget {
                                         EasyThrottle.throttle('member_dynamics',
                                             const Duration(milliseconds: 1000),
                                             () {
-                                          ctr.searchDynamic(false);
+                                          widget.ctr.searchDynamic(false);
                                         });
                                       }
                                       return DynamicPanel(
@@ -94,18 +101,21 @@ class SearchDynamic extends StatelessWidget {
             )
           : errorWidget(
               callback: () {
-                ctr.dynamicState.value = LoadingState.loading();
-                ctr.refreshDynamic();
+                widget.ctr.dynamicState.value = LoadingState.loading();
+                widget.ctr.refreshDynamic();
               },
             ),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
           callback: () {
-            ctr.dynamicState.value = LoadingState.loading();
-            ctr.refreshDynamic();
+            widget.ctr.dynamicState.value = LoadingState.loading();
+            widget.ctr.refreshDynamic();
           },
         ),
       LoadingState() => throw UnimplementedError(),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

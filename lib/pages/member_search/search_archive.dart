@@ -9,7 +9,7 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
-class SearchArchive extends StatelessWidget {
+class SearchArchive extends StatefulWidget {
   const SearchArchive({
     super.key,
     required this.ctr,
@@ -18,8 +18,15 @@ class SearchArchive extends StatelessWidget {
   final MemberSearchController ctr;
 
   @override
+  State<SearchArchive> createState() => _SearchArchiveState();
+}
+
+class _SearchArchiveState extends State<SearchArchive>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
-    return Obx(() => _buildBody(context, ctr.archiveState.value));
+    super.build(context);
+    return Obx(() => _buildBody(context, widget.ctr.archiveState.value));
   }
 
   Widget _buildBody(BuildContext context, LoadingState loadingState) {
@@ -28,7 +35,7 @@ class SearchArchive extends StatelessWidget {
       Success() => (loadingState.response as List?)?.isNotEmpty == true
           ? refreshIndicator(
               onRefresh: () async {
-                await ctr.refreshArchive();
+                await widget.ctr.refreshArchive();
               },
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -49,7 +56,7 @@ class SearchArchive extends StatelessWidget {
                           if (index == loadingState.response.length - 1) {
                             EasyThrottle.throttle('searchArchives',
                                 const Duration(milliseconds: 500), () {
-                              ctr.searchArchives(false);
+                              widget.ctr.searchArchives(false);
                             });
                           }
                           return VideoCardH(
@@ -65,18 +72,21 @@ class SearchArchive extends StatelessWidget {
             )
           : errorWidget(
               callback: () {
-                ctr.archiveState.value = LoadingState.loading();
-                ctr.refreshArchive();
+                widget.ctr.archiveState.value = LoadingState.loading();
+                widget.ctr.refreshArchive();
               },
             ),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
           callback: () {
-            ctr.archiveState.value = LoadingState.loading();
-            ctr.refreshArchive();
+            widget.ctr.archiveState.value = LoadingState.loading();
+            widget.ctr.refreshArchive();
           },
         ),
       LoadingState() => throw UnimplementedError(),
     };
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
