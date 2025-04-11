@@ -352,10 +352,11 @@ class _VideoReplyReplyPanelState
       if (res != null) {
         _savedReplies[key] = null;
         ReplyInfo replyInfo = Utils.replyCast(res);
-        List list = _videoReplyReplyController.loadingState.value is Success
-            ? (_videoReplyReplyController.loadingState.value as Success)
-                .response
-            : <ReplyInfo>[];
+        List<ReplyInfo> list =
+            _videoReplyReplyController.loadingState.value is Success
+                ? (_videoReplyReplyController.loadingState.value as Success)
+                    .response
+                : <ReplyInfo>[];
         list.insert(index + 1, replyInfo);
         _videoReplyReplyController.count.value += 1;
         _videoReplyReplyController.loadingState.refresh();

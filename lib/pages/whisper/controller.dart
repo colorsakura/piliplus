@@ -137,13 +137,12 @@ class WhisperController extends GetxController {
     return res;
   }
 
-  Future queryAccountList(sessionList) async {
-    List midsList = sessionList.map((e) => e.talkerId!).toList();
+  Future queryAccountList(List<SessionList> sessionList) async {
+    List<int?> midsList = sessionList.map((e) => e.talkerId).toList();
     var res = await MsgHttp.accountList(midsList.join(','));
     if (res['status']) {
       accountList.value = res['data'];
     }
-    return res;
   }
 
   Future onLoad() async {

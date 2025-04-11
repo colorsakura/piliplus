@@ -294,12 +294,13 @@ class _HistoryPageState extends State<HistoryPage>
                     if (index == loadingState.response!.length - 1) {
                       _historyController.onLoadMore();
                     }
+                    final item = loadingState.response![index];
                     return HistoryItem(
-                      videoItem: loadingState.response![index],
+                      videoItem: item,
                       ctr: _historyController.baseCtr,
                       onChoose: () => _historyController.onSelect(index),
                       onDelete: (kid, business) =>
-                          _historyController.delHistory(kid, business),
+                          _historyController.delHistory(item),
                     );
                   },
                   childCount: loadingState.response!.length,

@@ -40,7 +40,7 @@ abstract class CommonController<R, T> extends GetxController
 
   Future<LoadingState<R>> customGetData();
 
-  void handleListResponse(List dataList) {}
+  void handleListResponse(List<T> dataList) {}
 
   bool customHandleResponse(bool isRefresh, Success<R> response) {
     return false;

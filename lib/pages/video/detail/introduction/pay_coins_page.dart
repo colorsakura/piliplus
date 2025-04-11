@@ -113,7 +113,7 @@ class _PayCoinsPageState extends State<PayCoinsPage>
   late AnimationController _coinFadeController;
   late AnimationController _boxAnimController;
 
-  final List _images = [
+  final List<String> _images = [
     'assets/images/paycoins/ic_thunder_1.png',
     'assets/images/paycoins/ic_thunder_2.png',
     'assets/images/paycoins/ic_thunder_3.png',

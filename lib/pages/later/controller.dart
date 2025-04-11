@@ -120,7 +120,8 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
             TextButton(
               onPressed: () async {
                 Get.back();
-                _onDelete(((loadingState.value as Success).response as List)
+                _onDelete(((loadingState.value as Success).response
+                        as List<HotVideoItemModel>)
                     .where((e) => e.checked == true)
                     .toList());
               },
@@ -132,9 +133,9 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
     );
   }
 
-  void _onDelete(List result) async {
+  void _onDelete(List<HotVideoItemModel> result) async {
     SmartDialog.showLoading(msg: '请求中');
-    List aids = result.map((item) => item.aid).toList();
+    List<int?> aids = result.map((item) => item.aid).toList();
     dynamic res = await UserHttp.toViewDel(aids: aids);
     if (res['status']) {
       Set<HotVideoItemModel> remainList =

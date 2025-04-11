@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/models/user/sub_detail.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -215,7 +216,8 @@ class _SubDetailPageState extends State<SubDetailPage> {
                       }),
                     );
                   } else {
-                    List subList = _subDetailController.subList;
+                    List<SubDetailMediaItem> subList =
+                        _subDetailController.subList;
                     return Obx(
                       () => subList.isEmpty
                           ? const SliverToBoxAdapter(child: SizedBox())

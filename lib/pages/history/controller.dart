@@ -102,18 +102,17 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
   }
 
   // 删除某条历史记录
-  Future delHistory(kid, business) async {
-    _onDelete(((loadingState.value as Success).response as List)
-        .where((e) => e.kid == kid)
-        .toList());
+  Future delHistory(HisListItem item) async {
+    _onDelete([item]);
   }
 
   // 删除已看历史记录
   void onDelHistory() {
     if (loadingState.value is Success) {
-      List list = ((loadingState.value as Success).response as List)
-          .where((e) => e.progress == -1)
-          .toList();
+      List<HisListItem> list =
+          ((loadingState.value as Success).response as List<HisListItem>)
+              .where((e) => e.progress == -1)
+              .toList();
       if (list.isNotEmpty) {
         _onDelete(list);
       } else {
@@ -122,10 +121,10 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
     }
   }
 
-  void _onDelete(List result) async {
+  void _onDelete(List<HisListItem> result) async {
     SmartDialog.showLoading(msg: '请求中');
-    List kidList = result.map((item) {
-      return '${item.history?.business}_${item.kid}';
+    List<String> kidList = result.map((item) {
+      return '${item.history.business}_${item.kid}';
     }).toList();
     dynamic response = await UserHttp.delHistory(kidList);
     if (response['status']) {
@@ -170,7 +169,8 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
               onPressed: () async {
                 Get.back();
                 if (loadingState.value is Success) {
-                  _onDelete(((loadingState.value as Success).response as List)
+                  _onDelete(((loadingState.value as Success).response
+                          as List<HisListItem>)
                       .where((e) => e.checked == true)
                       .toList());
                 }

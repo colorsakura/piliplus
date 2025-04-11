@@ -219,8 +219,8 @@ class BangumiIntroController
       return;
     }
 
-    List addMediaIdsNew = [];
-    List delMediaIdsNew = [];
+    List<int?> addMediaIdsNew = [];
+    List<int?> delMediaIdsNew = [];
     try {
       for (var i in favFolderData.value.list!.toList()) {
         bool isFaved = favIds?.contains(i.id) == true;

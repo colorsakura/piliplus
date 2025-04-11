@@ -105,7 +105,8 @@ class FavDetailController
             TextButton(
               onPressed: () async {
                 Get.back();
-                List list = ((loadingState.value as Success).response as List)
+                List<FavDetailItemData> list = ((loadingState.value as Success)
+                        .response as List<FavDetailItemData>)
                     .where((e) => e.checked == true)
                     .toList();
                 dynamic result = await VideoHttp.delFav(

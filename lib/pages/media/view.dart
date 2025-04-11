@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/common/common_page.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -176,9 +177,11 @@ class _MediaPageState extends CommonPageState<MediaPage, MediaController>
 
   Widget _buildBody(LoadingState loadingState) {
     if (loadingState is Success) {
-      List favFolderList = loadingState.response.list;
-      int favFolderCount = loadingState.response.count;
-      bool flag = favFolderCount > favFolderList.length;
+      List<FavFolderItemData>? favFolderList = loadingState.response.list;
+      if (favFolderList.isNullOrEmpty) {
+        return const SizedBox.shrink();
+      }
+      bool flag = controller.count.value > favFolderList!.length;
       return ListView.builder(
         itemCount: loadingState.response.list.length + (flag ? 1 : 0),
         itemBuilder: (context, index) {

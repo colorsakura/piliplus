@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/http_error.dart';
+import 'package:PiliPlus/models/member/seasons.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,7 +72,8 @@ class _MemberSeasonsPageState extends State<MemberSeasonsPage> {
                     );
                   }
                   Map data = snapshot.data as Map;
-                  List list = _memberSeasonsController.seasonsList;
+                  List<MemberArchiveItem> list =
+                      _memberSeasonsController.seasonsList;
                   if (data['status']) {
                     return Obx(
                       () => list.isNotEmpty

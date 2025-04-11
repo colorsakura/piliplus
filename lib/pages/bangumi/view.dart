@@ -167,8 +167,14 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                       if (widget.tabType == TabType.bangumi) {
                         Get.to(PgcIndexPage());
                       } else {
-                        List titles = const ['全部', '电影', '电视剧', '纪录片', '综艺'];
-                        List types = const [102, 2, 5, 3, 7];
+                        List<String> titles = const [
+                          '全部',
+                          '电影',
+                          '电视剧',
+                          '纪录片',
+                          '综艺',
+                        ];
+                        List<int> types = const [102, 2, 5, 3, 7];
                         Get.to(
                           Scaffold(
                             appBar: AppBar(title: const Text('索引')),

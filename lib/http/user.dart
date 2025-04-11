@@ -296,9 +296,7 @@ class UserHttp {
   }
 
   // 移除已观看
-  static Future toViewDel({
-    List? aids,
-  }) async {
+  static Future toViewDel({List<int?>? aids}) async {
     final Map<String, dynamic> params = {
       'jsonp': 'jsonp',
       'csrf': await Request.getCsrf(),
@@ -352,7 +350,7 @@ class UserHttp {
   }
 
   // 删除历史记录
-  static Future delHistory(List kidList) async {
+  static Future delHistory(List<String> kidList) async {
     var res = await Request().post(
       Api.delHistory,
       data: {

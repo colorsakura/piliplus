@@ -18,7 +18,7 @@ class PlaySpeedPage extends StatefulWidget {
 class _PlaySpeedPageState extends State<PlaySpeedPage> {
   late double playSpeedDefault;
   late double longPressSpeedDefault;
-  late List speedList;
+  late List<double> speedList;
   late bool enableAutoLongPressSpeed;
   List<Map<dynamic, dynamic>> sheetMenu = [
     {
@@ -115,7 +115,7 @@ class _PlaySpeedPageState extends State<PlaySpeedPage> {
                   SmartDialog.showToast('该倍速已存在');
                 } else {
                   Get.back();
-                  speedList.add(customSpeed);
+                  speedList.add(customSpeed!);
                   speedList.sort();
                   await video.put(VideoBoxKey.speedsList, speedList);
                   setState(() {});

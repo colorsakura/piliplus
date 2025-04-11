@@ -17,11 +17,11 @@ class SysMsgController
   }
 
   @override
-  void handleListResponse(List dataList) {
+  void handleListResponse(List<SystemNotifyList> dataList) {
     if (cursor == -1) {
-      msgSysUpdateCursor(dataList.first?.cursor);
+      msgSysUpdateCursor(dataList.first.cursor);
     }
-    cursor = dataList.last?.cursor ?? -1;
+    cursor = dataList.last.cursor ?? -1;
     if (isEnd.not && dataList.length + 1 < pageSize) {
       isEnd = true;
     }

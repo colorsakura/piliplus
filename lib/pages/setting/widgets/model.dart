@@ -597,7 +597,7 @@ List<SettingsModel> get styleSettings => [
         leading: const Icon(Icons.chrome_reader_mode_outlined),
         onTap: (setState) {
           final numberRegExp = RegExp(r'[\d\.]+');
-          List springDescription =
+          List<String> springDescription =
               GStorage.springDescription.map((i) => i.toString()).toList();
           showDialog(
             context: Get.context!,
