@@ -1777,7 +1777,6 @@ Widget buildDmChart(
     child: Container(
       height: 12,
       margin: EdgeInsets.only(
-        top: 1,
         bottom: plPlayerController.viewPointList.isNotEmpty &&
                 plPlayerController.showVP.value
             ? 20.25 + offset

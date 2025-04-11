@@ -22,7 +22,7 @@ class AppBarAni extends StatelessWidget implements PreferredSizeWidget {
     visible ? controller.forward() : controller.reverse();
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0, position! == 'top' ? -1 : 1),
+        begin: Offset(0, position! == 'top' ? -1 : 1.1),
         end: Offset.zero,
       ).animate(CurvedAnimation(
         parent: controller,
