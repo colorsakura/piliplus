@@ -127,6 +127,7 @@ class _DynamicsTabPageState
         mainAxisSpacing: StyleString.cardSpace / 2,
         maxCrossAxisExtent: Grid.smallCardWidth * 2,
         childAspectRatio: StyleString.aspectRatio,
+        mainAxisExtent: 50,
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
