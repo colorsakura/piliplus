@@ -173,7 +173,7 @@ class BangumiIntroController
     }
 
     if (_coinNum.value >= 2) {
-      SmartDialog.showToast('超过投币上限啦~');
+      SmartDialog.showToast('达到投币上限啦~');
       return;
     }
 
