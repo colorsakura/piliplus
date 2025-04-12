@@ -2450,7 +2450,7 @@ List<SettingsModel> get extraSettings => [
         subtitle: '每次启动时清除缓存',
         leading: const Icon(Icons.auto_delete_outlined),
         setKey: SettingBoxKey.autoClearCache,
-        defaultVal: false,
+        defaultVal: true,
       ),
       SettingsModel(
         settingsType: SettingsType.sw1tch,
