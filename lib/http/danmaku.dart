@@ -97,7 +97,6 @@ class DanmakuHttp {
     if (response.statusCode != 200) {
       return {
         'status': false,
-        'data': [],
         'msg': '弹幕发送失败，状态码:${response.statusCode}',
       };
     }
@@ -109,7 +108,6 @@ class DanmakuHttp {
     } else {
       return {
         'status': false,
-        'data': [],
         'msg': "${response.data['code']}: ${response.data['message']}",
       };
     }

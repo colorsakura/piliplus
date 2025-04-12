@@ -110,11 +110,7 @@ class MsgHttp {
         'data': res.data['data'],
       };
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -434,21 +430,13 @@ class MsgHttp {
       try {
         return {
           'status': true,
-          'data': SessionDataModel.fromJson(res.data['data']),
+          'data': SessionDataModel.fromJson(res.data['data']).sessionList,
         };
       } catch (err) {
-        return {
-          'status': false,
-          'date': [],
-          'msg': err.toString(),
-        };
+        return {'status': false, 'msg': err.toString()};
       }
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -470,11 +458,7 @@ class MsgHttp {
         debugPrint('err🔟: $err');
       }
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -500,11 +484,7 @@ class MsgHttp {
         debugPrint(err.toString());
       }
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -532,7 +512,6 @@ class MsgHttp {
     } else {
       return {
         'status': false,
-        'date': [],
         'msg': "message: ${res.data['message']},"
             " msg: ${res.data['msg']},"
             " code: ${res.data['code']}",
@@ -581,11 +560,7 @@ class MsgHttp {
         'data': res.data['data'],
       };
     } else {
-      return {
-        'status': false,
-        'date': [],
-        'msg': res.data['message'] ?? res.data['msg'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

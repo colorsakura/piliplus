@@ -22,6 +22,7 @@ import 'package:PiliPlus/models/common/search_type.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/live/item.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
+import 'package:PiliPlus/pages/common/multi_select_controller.dart';
 import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/fav_panel.dart';
@@ -670,13 +671,14 @@ class Utils {
     );
   }
 
-  static void onCopyOrMove<T>({
+  static void onCopyOrMove<R, T extends MultiSelectData>({
     required BuildContext context,
     required bool isCopy,
-    required dynamic ctr,
+    required MultiSelectController<R, T> ctr,
     required dynamic mediaId,
+    required dynamic mid,
   }) {
-    VideoHttp.allFavFolders(ctr.mid).then((res) {
+    VideoHttp.allFavFolders(mid).then((res) {
       if (context.mounted &&
           res['status'] &&
           (res['data'].list as List?)?.isNotEmpty == true) {
@@ -720,10 +722,10 @@ class Utils {
                 TextButton(
                   onPressed: () {
                     if (checkedId != null) {
-                      List resources =
-                          ((ctr.loadingState.value as Success).response as List)
-                              .where((e) => e.checked == true)
-                              .toList();
+                      List resources = ((ctr.loadingState.value as Success)
+                              .response as List<T>)
+                          .where((e) => e.checked == true)
+                          .toList();
                       SmartDialog.showLoading();
                       VideoHttp.copyOrMoveFav(
                         isCopy: isCopy,
@@ -735,7 +737,7 @@ class Utils {
                                 ? item.aid
                                 : '${item.id}:${item.type}')
                             .toList(),
-                        mid: isCopy ? ctr.mid : null,
+                        mid: isCopy ? mid : null,
                       ).then((res) {
                         if (res['status']) {
                           ctr.handleSelect(false);

@@ -223,7 +223,7 @@ class Api {
       '${HttpString.tUrl}/dynamic_like/v1/dynamic_like/thumb';
 
   // 获取稍后再看
-  static const String seeYouLater = '/x/v2/history/toview';
+  static const String seeYouLater = '/x/v2/history/toview/web';
 
   // 获取历史记录
   static const String historyList = '/x/web-interface/history/cursor';
@@ -381,7 +381,7 @@ class Api {
   static const String toViewLater = '/x/v2/history/toview/add';
 
   // 移除已观看
-  static const String toViewDel = '/x/v2/history/toview/del';
+  static const String toViewDel = '/x/v2/history/toview/v2/dels';
 
   // 清空稍后再看
   static const String toViewClear = '/x/v2/history/toview/clear';

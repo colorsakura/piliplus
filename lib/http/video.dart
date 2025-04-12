@@ -50,7 +50,7 @@ class VideoHttp {
       },
     );
     if (res.data['code'] == 0) {
-      List<RecVideoItemModel> list = [];
+      List<RecVideoItemModel> list = <RecVideoItemModel>[];
       Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['item']) {
         //过滤掉live与ad，以及拉黑用户
@@ -119,7 +119,7 @@ class VideoHttp {
       }),
     );
     if (res.data['code'] == 0) {
-      List<RecVideoItemAppModel> list = [];
+      List<RecVideoItemAppModel> list = <RecVideoItemAppModel>[];
       Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['items']) {
         // 屏蔽推广和拉黑用户
@@ -153,7 +153,7 @@ class VideoHttp {
       queryParameters: {'pn': pn, 'ps': ps},
     );
     if (res.data['code'] == 0) {
-      List<HotVideoItemModel> list = [];
+      List<HotVideoItemModel> list = <HotVideoItemModel>[];
       Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['list']) {
         if (!blackMids.contains(i['owner']['mid']) &&
@@ -177,7 +177,7 @@ class VideoHttp {
   static Future<LoadingState> hotVideoListGrpc({required int idx}) async {
     dynamic res = await GrpcRepo.popular(idx);
     if (res['status']) {
-      List<card.Card> list = [];
+      List<card.Card> list = <card.Card>[];
       Set<int> blackMids = GStorage.blackMids;
       for (card.Card item in res['data']) {
         if (!blackMids.contains(item.smallCoverV5.up.id.toInt())) {
@@ -259,13 +259,12 @@ class VideoHttp {
         }
         return {
           'status': false,
-          'data': [],
           'code': res.data['code'],
           'msg': res.data['message'],
         };
       }
     } catch (err) {
-      return {'status': false, 'data': [], 'msg': err};
+      return {'status': false, 'msg': err};
     }
   }
 
@@ -382,7 +381,7 @@ class VideoHttp {
   //   if (res.data['code'] == 0) {
   //     return {'status': true, 'data': res.data['data']};
   //   } else {
-  //     return {'status': false, 'data': []};
+  //     return {'status': false, 'msg': res.data['message']};
   //   }
   // }
 
@@ -393,7 +392,7 @@ class VideoHttp {
   //   if (res.data['code'] == 0) {
   //     return {'status': true, 'data': res.data['data']};
   //   } else {
-  //     return {'status': false, 'data': []};
+  //     return {'status': false, 'msg': res.data['message']};
   //   }
   // }
 
@@ -417,7 +416,7 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -428,7 +427,7 @@ class VideoHttp {
   //   if (res.data['code'] == 0) {
   //     return {'status': true, 'data': res.data['data']};
   //   } else {
-  //     return {'status': false, 'data': []};
+  //     return {'status': false, 'msg': res.data['message']};
   //   }
   // }
 
@@ -452,7 +451,7 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -480,7 +479,7 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -502,7 +501,7 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -719,7 +718,7 @@ class VideoHttp {
       FavFolderData data = FavFolderData.fromJson(res.data['data']);
       return {'status': true, 'data': data};
     } else {
-      return {'status': false, 'data': []};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -741,7 +740,7 @@ class VideoHttp {
     bool? syncToDynamic,
   }) async {
     if (message == '') {
-      return {'status': false, 'data': [], 'msg': '请输入评论内容'};
+      return {'status': false, 'msg': '请输入评论内容'};
     }
     Map<String, dynamic> data = {
       'type': type.index,
@@ -761,7 +760,7 @@ class VideoHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -973,7 +972,7 @@ class VideoHttp {
         'data': AiConclusionModel.fromJson(res.data['data']),
       };
     } else {
-      return {'status': false, 'data': []};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -1053,7 +1052,7 @@ class VideoHttp {
     var rankApi = "${Api.getRankApi}?rid=$rid&type=all";
     var res = await Request().get(rankApi);
     if (res.data['code'] == 0) {
-      List<HotVideoItemModel> list = [];
+      List<HotVideoItemModel> list = <HotVideoItemModel>[];
       Set<int> blackMids = GStorage.blackMids;
       for (var i in res.data['data']['list']) {
         if (!blackMids.contains(i['owner']['mid']) &&

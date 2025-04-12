@@ -2,6 +2,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/video/later.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../common/constants.dart';
@@ -43,7 +44,7 @@ class UserHttp {
       UserStat data = UserStat.fromJson(res.data['data']);
       return {'status': true, 'data': data};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -197,16 +198,29 @@ class UserHttp {
   }
 
   // 稍后再看
-  static Future<LoadingState<Map>> seeYouLater() async {
-    var res = await Request().get(Api.seeYouLater);
+  static Future<LoadingState<Map>> seeYouLater({
+    required int page,
+    int viewed = 0,
+    String keyword = '',
+    bool asc = false,
+  }) async {
+    var res = await Request().get(
+      Api.seeYouLater,
+      queryParameters: await WbiSign.makSign({
+        'pn': page,
+        'ps': 20,
+        'viewed': viewed,
+        'key': keyword,
+        'asc': asc,
+        'need_split': true,
+        'web_location': 333.881,
+      }),
+    );
     if (res.data['code'] == 0) {
       if (res.data['data']['count'] == 0) {
-        return LoadingState.success({
-          'list': [],
-          'count': 0,
-        });
+        return LoadingState.success({'count': 0});
       }
-      List<HotVideoItemModel> list = [];
+      List<HotVideoItemModel> list = <HotVideoItemModel>[];
       if (res.data['data']?['list'] != null) {
         for (var i in res.data['data']['list']) {
           list.add(HotVideoItemModel.fromJson(i));
@@ -260,7 +274,7 @@ class UserHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {'status': false, 'data': [], 'msg': res.data['message']};
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -296,11 +310,10 @@ class UserHttp {
   }
 
   // 移除已观看
-  static Future toViewDel({List<int?>? aids}) async {
+  static Future toViewDel({required List<int?> aids}) async {
     final Map<String, dynamic> params = {
-      'jsonp': 'jsonp',
       'csrf': await Request.getCsrf(),
-      if (aids != null) 'aid': aids.join(',') else 'viewed': true
+      'resources': aids.join(',')
     };
     dynamic res = await Request().post(
       Api.toViewDel,
@@ -333,12 +346,12 @@ class UserHttp {
     }
   }
 
-  // 清空稍后再看
-  static Future toViewClear() async {
+  // 清空稍后再看 // clean_type: null->all, 1->invalid, 2->viewed
+  static Future toViewClear([int? cleanType]) async {
     var res = await Request().post(
       Api.toViewClear,
       queryParameters: {
-        'jsonp': 'jsonp',
+        if (cleanType != null) 'clean_type': cleanType,
         'csrf': await Request.getCsrf(),
       },
     );
@@ -631,7 +644,7 @@ class UserHttp {
   static List<String> extractScriptContents(String htmlContent) {
     RegExp scriptRegExp = RegExp(r'<script>([\s\S]*?)<\/script>');
     Iterable<Match> matches = scriptRegExp.allMatches(htmlContent);
-    List<String> scriptContents = [];
+    List<String> scriptContents = <String>[];
     for (Match match in matches) {
       String scriptContent = match.group(1)!;
       scriptContents.add(scriptContent);
@@ -675,7 +688,7 @@ class UserHttp {
                 .map<MediaVideoItemModel>(
                     (e) => MediaVideoItemModel.fromJson(e))
                 .toList()
-            : []
+            : <MediaVideoItemModel>[]
       };
     } else {
       return {'status': false, 'msg': res.data['message']};

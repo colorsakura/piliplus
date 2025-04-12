@@ -300,11 +300,7 @@ class MemberHttp {
         'data': MemberInfoModel.fromJson(res.data['data'])
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -313,11 +309,7 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -332,11 +324,7 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -476,11 +464,7 @@ class MemberHttp {
             .toList()
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -523,13 +507,9 @@ class MemberHttp {
       ),
     );
     if (res.data['code'] == 0) {
-      return {'status': true, 'data': [], 'msg': '操作成功'};
+      return {'status': true, 'msg': '操作成功'};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -555,11 +535,7 @@ class MemberHttp {
             .toList()
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -574,11 +550,7 @@ class MemberHttp {
             .toList()
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -595,11 +567,7 @@ class MemberHttp {
         'data': MemberSeasonsDataModel.fromJson(res.data['data']['items_lists'])
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -687,11 +655,7 @@ class MemberHttp {
         debugPrint(err.toString());
       }
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -702,11 +666,7 @@ class MemberHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

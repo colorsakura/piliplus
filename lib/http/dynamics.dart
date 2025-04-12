@@ -53,11 +53,7 @@ class DynamicsHttp {
         'data': FollowUpModel.fromJson(res.data['data']),
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -80,11 +76,7 @@ class DynamicsHttp {
         'data': res.data['data'],
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

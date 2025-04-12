@@ -31,13 +31,12 @@ class _HistoryPageState extends State<HistoryPage>
     tag: widget.type ?? 'all',
   );
 
-  HistoryController get currCtr {
+  HistoryController currCtr([int? index]) {
     try {
-      if (_historyController.tabController != null &&
-          _historyController.tabController!.index != 0) {
+      index ??= _historyController.tabController!.index;
+      if (index != 0) {
         return Get.find<HistoryController>(
-          tag: _historyController
-              .tabs[_historyController.tabController!.index - 1].type,
+          tag: _historyController.tabs[index - 1].type,
         );
       }
     } catch (_) {
@@ -65,7 +64,7 @@ class _HistoryPageState extends State<HistoryPage>
               canPop: enableMultiSelect.not,
               onPopInvokedWithResult: (didPop, result) {
                 if (enableMultiSelect) {
-                  currCtr.handleSelect();
+                  currCtr().handleSelect();
                 }
               },
               child: Scaffold(
@@ -115,7 +114,7 @@ class _HistoryPageState extends State<HistoryPage>
                                     });
                                     break;
                                   case 'del':
-                                    currCtr.onDelHistory();
+                                    currCtr().onDelHistory();
                                     break;
                                   case 'multiple':
                                     _historyController
@@ -157,7 +156,7 @@ class _HistoryPageState extends State<HistoryPage>
                           leading: IconButton(
                             tooltip: '取消',
                             onPressed: () {
-                              currCtr.handleSelect();
+                              currCtr().handleSelect();
                             },
                             icon: const Icon(Icons.close_outlined),
                           ),
@@ -168,12 +167,12 @@ class _HistoryPageState extends State<HistoryPage>
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () => currCtr.handleSelect(true),
+                              onPressed: () => currCtr().handleSelect(true),
                               child: const Text('全选'),
                             ),
                             TextButton(
                               onPressed: () =>
-                                  currCtr.onDelCheckedHistory(context),
+                                  currCtr().onDelCheckedHistory(context),
                               child: Text(
                                 '删除',
                                 style: TextStyle(
@@ -191,28 +190,15 @@ class _HistoryPageState extends State<HistoryPage>
                           children: [
                             TabBar(
                               controller: _historyController.tabController,
-                              onTap: (value) {
+                              onTap: (index) {
                                 if (_historyController
                                     .tabController!.indexIsChanging.not) {
-                                  currCtr.scrollController.animToTop();
+                                  currCtr().scrollController.animToTop();
                                 } else {
                                   if (enableMultiSelect) {
-                                    if (_historyController
-                                            .tabController!.previousIndex ==
-                                        0) {
-                                      _historyController.handleSelect();
-                                    } else {
-                                      try {
-                                        Get.find<HistoryController>(
-                                                tag: _historyController
-                                                    .tabs[_historyController
-                                                            .tabController!
-                                                            .previousIndex -
-                                                        1]
-                                                    .type)
-                                            .handleSelect();
-                                      } catch (_) {}
-                                    }
+                                    currCtr(_historyController
+                                            .tabController!.previousIndex)
+                                        .handleSelect();
                                   }
                                 }
                               },

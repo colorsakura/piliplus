@@ -1,5 +1,6 @@
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/member.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:flutter/material.dart';
@@ -47,14 +48,18 @@ class FavSearchController extends CommonListController {
 
   @override
   List? getDataList(response) {
+    if (searchType == SearchType.later) {
+      return response['list'];
+    }
     return response.list;
   }
 
   @override
   bool customHandleResponse(bool isRefresh, Success response) {
-    isEnd = searchType == SearchType.fav
-        ? response.response.hasMore == false
-        : response.response.list == null || response.response.list.isEmpty;
+    if (searchType == SearchType.fav && response.response.hasMore == false) {
+      isEnd = true;
+    }
+
     return false;
   }
 
@@ -92,6 +97,10 @@ class FavSearchController extends CommonListController {
             pn: currentPage,
             keyword: controller.value.text,
           ),
+        SearchType.later => UserHttp.seeYouLater(
+            page: currentPage,
+            keyword: controller.value.text,
+          ),
       };
 
   @override
@@ -116,5 +125,15 @@ class FavSearchController extends CommonListController {
       loadingState.refresh();
       SmartDialog.showToast(res['msg']);
     }
+  }
+
+  Future toViewDel(BuildContext context, int index, aid) async {
+    var res = await UserHttp.toViewDel(aids: [aid]);
+    if (res['status']) {
+      List<HotVideoItemModel> list = (loadingState.value as Success).response;
+      list.removeAt(index);
+      loadingState.refresh();
+    }
+    SmartDialog.showToast(res['msg']);
   }
 }

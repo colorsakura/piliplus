@@ -17,11 +17,7 @@ class FollowHttp {
         'data': FollowDataModel.fromJson(res.data['data'])
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 }

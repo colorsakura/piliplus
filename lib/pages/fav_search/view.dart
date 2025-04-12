@@ -1,5 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
+import 'package:PiliPlus/common/widgets/video_card_h.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
@@ -11,7 +13,7 @@ import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
 
 import 'controller.dart';
 
-enum SearchType { fav, follow, history }
+enum SearchType { fav, follow, history, later }
 
 class FavSearchPage extends StatefulWidget {
   const FavSearchPage({super.key});
@@ -51,7 +53,12 @@ class _FavSearchPageState extends State<FavSearchPage> {
             suffixIcon: IconButton(
               tooltip: '清空',
               icon: const Icon(Icons.clear, size: 22),
-              onPressed: _favSearchCtr.onClear,
+              onPressed: () {
+                _favSearchCtr
+                  ..loadingState.value = LoadingState.loading()
+                  ..onClear()
+                  ..searchFocusNode.requestFocus();
+              },
             ),
           ),
           onSubmitted: (value) => _favSearchCtr.onReload(),
@@ -148,6 +155,143 @@ class _FavSearchPageState extends State<FavSearchPage> {
                       item: loadingState.response![index],
                     );
                   }),
+                ),
+              SearchType.later => CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _favSearchCtr.scrollController,
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom + 80,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithExtentAndRatio(
+                          mainAxisSpacing: 2,
+                          maxCrossAxisExtent: Grid.mediumCardWidth * 2,
+                          childAspectRatio: StyleString.aspectRatio * 2.2,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            if (index == loadingState.response!.length - 1) {
+                              _favSearchCtr.onLoadMore();
+                            }
+                            var videoItem = loadingState.response![index];
+                            return Stack(
+                              children: [
+                                VideoCardH(
+                                  videoItem: videoItem,
+                                  source: 'later',
+                                  onViewLater: (cid) {
+                                    Utils.toViewPage(
+                                      'bvid=${videoItem.bvid}&cid=$cid',
+                                      arguments: {
+                                        'videoItem': videoItem,
+                                        'oid': videoItem.aid,
+                                        'heroTag':
+                                            Utils.makeHeroTag(videoItem.bvid),
+                                        'sourceType': 'watchLater',
+                                        'count': Get.arguments['count'],
+                                        'favTitle': '稍后再看',
+                                        'mediaId': _favSearchCtr.mid,
+                                        'desc': false,
+                                        'isContinuePlaying': index != 0,
+                                      },
+                                    );
+                                  },
+                                ),
+                                Positioned(
+                                  top: 5,
+                                  left: 12,
+                                  bottom: 5,
+                                  child: IgnorePointer(
+                                    child: LayoutBuilder(
+                                      builder: (context, constraints) =>
+                                          AnimatedOpacity(
+                                        opacity:
+                                            videoItem.checked == true ? 1 : 0,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          height: constraints.maxHeight,
+                                          width: constraints.maxHeight *
+                                              StyleString.aspectRatio,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                          ),
+                                          child: SizedBox(
+                                            width: 34,
+                                            height: 34,
+                                            child: AnimatedScale(
+                                              scale: videoItem.checked == true
+                                                  ? 1
+                                                  : 0,
+                                              duration: const Duration(
+                                                  milliseconds: 250),
+                                              curve: Curves.easeInOut,
+                                              child: IconButton(
+                                                tooltip: '取消选择',
+                                                style: ButtonStyle(
+                                                  padding:
+                                                      WidgetStateProperty.all(
+                                                          EdgeInsets.zero),
+                                                  backgroundColor:
+                                                      WidgetStateProperty
+                                                          .resolveWith(
+                                                    (states) {
+                                                      return Theme.of(context)
+                                                          .colorScheme
+                                                          .surface
+                                                          .withOpacity(0.8);
+                                                    },
+                                                  ),
+                                                ),
+                                                onPressed: null,
+                                                icon: Icon(
+                                                  Icons.done_all_outlined,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 12,
+                                  bottom: 0,
+                                  child: iconButton(
+                                    tooltip: '移除',
+                                    context: context,
+                                    onPressed: () {
+                                      _favSearchCtr.toViewDel(
+                                        context,
+                                        index,
+                                        videoItem.aid,
+                                      );
+                                    },
+                                    icon: Icons.clear,
+                                    iconColor: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    bgColor: Colors.transparent,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          childCount: loadingState.response!.length,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
             }
           : errorWidget(

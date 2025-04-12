@@ -29,11 +29,7 @@ class SearchHttp {
       };
     }
 
-    return {
-      'status': false,
-      'data': [],
-      'msg': '请求错误',
-    };
+    return {'status': false, 'msg': '请求错误'};
   }
 
   // 获取搜索建议
@@ -50,19 +46,17 @@ class SearchHttp {
           'status': true,
           'data': resultMap['result'] is Map
               ? SearchSuggestModel.fromJson(resultMap['result'])
-              : [],
+              : null,
         };
       } else {
         return {
           'status': false,
-          'data': [],
           'msg': '请求错误 🙅',
         };
       }
     } else {
       return {
         'status': false,
-        'data': [],
         'msg': '请求错误 🙅',
       };
     }
@@ -210,11 +204,7 @@ class SearchHttp {
         'data': BangumiInfoModel.fromJson(res.data['result']),
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 }

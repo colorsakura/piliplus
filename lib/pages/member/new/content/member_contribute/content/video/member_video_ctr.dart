@@ -138,7 +138,9 @@ class MemberVideoCtr extends CommonListController<Data, Item> {
 
   void toViewPlayAll() async {
     if (loadingState.value is Success) {
-      List<Item> list = (loadingState.value as Success).response;
+      List<Item>? list = (loadingState.value as Success).response;
+
+      if (list.isNullOrEmpty) return;
 
       if (episodicButton.value.text == '继续播放') {
         dynamic oid = RegExp(r'oid=([\d]+)')
@@ -173,7 +175,7 @@ class MemberVideoCtr extends CommonListController<Data, Item> {
         return;
       }
 
-      for (Item element in list) {
+      for (Item element in list!) {
         if (element.cid == null) {
           continue;
         } else {

@@ -135,13 +135,16 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               visualDensity:
                                   VisualDensity(horizontal: -2, vertical: -2),
                             ),
-                            onPressed: () =>
-                                Utils.onCopyOrMove<FavDetailItemData>(
-                              context: context,
-                              isCopy: true,
-                              ctr: _favDetailController,
-                              mediaId: _favDetailController.mediaId,
-                            ),
+                            onPressed: () {
+                              Utils.onCopyOrMove<FavDetailData,
+                                  FavDetailItemData>(
+                                context: context,
+                                isCopy: true,
+                                ctr: _favDetailController,
+                                mediaId: _favDetailController.mediaId,
+                                mid: _favDetailController.mid,
+                              );
+                            },
                             child: Text(
                               '复制',
                               style: TextStyle(
@@ -156,13 +159,16 @@ class _FavDetailPageState extends State<FavDetailPage> {
                               visualDensity:
                                   VisualDensity(horizontal: -2, vertical: -2),
                             ),
-                            onPressed: () =>
-                                Utils.onCopyOrMove<FavDetailItemData>(
-                              context: context,
-                              isCopy: false,
-                              ctr: _favDetailController,
-                              mediaId: _favDetailController.mediaId,
-                            ),
+                            onPressed: () {
+                              Utils.onCopyOrMove<FavDetailData,
+                                  FavDetailItemData>(
+                                context: context,
+                                isCopy: false,
+                                ctr: _favDetailController,
+                                mediaId: _favDetailController.mediaId,
+                                mid: _favDetailController.mid,
+                              );
+                            },
                             child: Text(
                               '移动',
                               style: TextStyle(

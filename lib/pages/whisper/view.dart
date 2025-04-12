@@ -78,9 +78,11 @@ class _WhisperPageState extends State<WhisperPage> {
             _whisperController.onRefresh(),
           ]);
         },
+        // TODO: refactor
         child: ListView(
           padding: EdgeInsets.only(bottom: 80),
           controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           children: [
             LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {

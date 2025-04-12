@@ -1,19 +1,27 @@
-import 'package:PiliPlus/common/widgets/icon_button.dart';
-import 'package:PiliPlus/common/widgets/refresh_indicator.dart';
+import 'package:PiliPlus/common/widgets/scroll_physics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
+import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:PiliPlus/pages/history/view.dart' show AppBarWidget;
+import 'package:PiliPlus/pages/later/base_controller.dart';
+import 'package:PiliPlus/pages/later/child_view.dart';
+import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/common/skeleton/video_card_h.dart';
-import 'package:PiliPlus/common/widgets/http_error.dart';
-import 'package:PiliPlus/common/widgets/video_card_h.dart';
-import 'package:PiliPlus/pages/later/index.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../common/constants.dart';
-import '../../utils/grid.dart';
+enum LaterViewType { all, toView, unfinished, viewed }
+
+extension LaterViewTypeExt on LaterViewType {
+  int get type => index;
+
+  String get title => ['全部', '未看', '未看完', '已看完'][index];
+
+  Widget get page => LaterViewChildPage(laterViewType: this);
+}
 
 class LaterPage extends StatefulWidget {
   const LaterPage({super.key});
@@ -22,302 +30,294 @@ class LaterPage extends StatefulWidget {
   State<LaterPage> createState() => _LaterPageState();
 }
 
-class _LaterPageState extends State<LaterPage> {
-  final LaterController _laterController = Get.put(LaterController());
+class _LaterPageState extends State<LaterPage>
+    with SingleTickerProviderStateMixin {
+  final LaterBaseController _baseCtr = Get.put(LaterBaseController());
+  late final TabController _tabController = TabController(
+    length: LaterViewType.values.length,
+    vsync: this,
+  );
+
+  LaterController currCtr([int? index]) {
+    final type = LaterViewType.values[index ?? _tabController.index];
+    return Get.put(
+      LaterController(type),
+      tag: type.type.toString(),
+    );
+  }
+
+  final sortKey = GlobalKey();
+  void listener() {
+    (sortKey.currentContext as Element?)?.markNeedsBuild();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController.addListener(listener);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(listener);
+    _tabController.dispose();
+    Get.delete<LaterBaseController>();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => PopScope(
-        canPop: _laterController.enableMultiSelect.value.not,
+        canPop: _baseCtr.enableMultiSelect.value.not,
         onPopInvokedWithResult: (didPop, result) {
-          if (_laterController.enableMultiSelect.value) {
-            _laterController.handleSelect();
+          if (_baseCtr.enableMultiSelect.value) {
+            currCtr().handleSelect();
           }
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBarWidget(
-            visible: _laterController.enableMultiSelect.value,
-            child1: AppBar(
-              title: Obx(
-                () => Text(
-                  '稍后再看${_laterController.count.value == -1 ? '' : ' (${_laterController.count.value})'}',
-                ),
-              ),
-              actions: [
-                Obx(
-                  () => _laterController.count.value != -1
-                      ? TextButton(
-                          onPressed: () => _laterController.toViewDel(context),
-                          child: const Text('移除已看'),
-                        )
-                      : const SizedBox(),
-                ),
-                Obx(
-                  () => _laterController.count.value != -1
-                      ? IconButton(
-                          tooltip: '一键清空',
-                          onPressed: () =>
-                              _laterController.toViewClear(context),
-                          icon: Icon(
-                            Icons.clear_all_outlined,
-                            size: 21,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        )
-                      : const SizedBox(),
-                ),
-                const SizedBox(width: 8),
-              ],
-            ),
-            child2: AppBar(
-              leading: IconButton(
-                tooltip: '取消',
-                onPressed: _laterController.handleSelect,
-                icon: const Icon(Icons.close_outlined),
-              ),
-              title: Obx(
-                () => Text(
-                  '已选: ${_laterController.checkedCount.value}',
-                ),
-              ),
-              actions: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                  ),
-                  onPressed: () => _laterController.handleSelect(true),
-                  child: const Text('全选'),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                  ),
-                  onPressed: () => Utils.onCopyOrMove<HotVideoItemModel>(
-                    context: context,
-                    isCopy: true,
-                    ctr: _laterController,
-                    mediaId: null,
-                  ),
-                  child: Text(
-                    '复制',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                  ),
-                  onPressed: () => Utils.onCopyOrMove<HotVideoItemModel>(
-                    context: context,
-                    isCopy: false,
-                    ctr: _laterController,
-                    mediaId: null,
-                  ),
-                  child: Text(
-                    '移动',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                  ),
-                  onPressed: () => _laterController.onDelChecked(context),
-                  child: Text(
-                    '移除',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
-                ),
-                const SizedBox(width: 6),
-              ],
-            ),
-          ),
+          appBar: _buildAppbar,
           floatingActionButton: Obx(
-            () => _laterController.loadingState.value is Success
+            () => currCtr().loadingState.value is Success
                 ? FloatingActionButton.extended(
-                    onPressed: _laterController.toViewPlayAll,
+                    onPressed: currCtr().toViewPlayAll,
                     label: const Text('播放全部'),
                     icon: const Icon(Icons.playlist_play),
                   )
                 : const SizedBox(),
           ),
-          body: refreshIndicator(
-            onRefresh: () async {
-              await _laterController.onRefresh();
-            },
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              controller: _laterController.scrollController,
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom + 85,
-                  ),
-                  sliver: Obx(
-                    () => _buildBody(_laterController.loadingState.value),
-                  ),
+          body: Column(
+            children: [
+              TabBar(
+                controller: _tabController,
+                tabs: LaterViewType.values.map((item) {
+                  final count = _baseCtr.counts[item];
+                  return Tab(
+                      text: '${item.title}${count != -1 ? '($count)' : ''}');
+                }).toList(),
+                onTap: (_) {
+                  if (_tabController.indexIsChanging.not) {
+                    currCtr().scrollController.animToTop();
+                  } else {
+                    if (_baseCtr.enableMultiSelect.value) {
+                      currCtr(_tabController.previousIndex).handleSelect();
+                    }
+                  }
+                },
+              ),
+              Expanded(
+                child: TabBarView(
+                  physics: _baseCtr.enableMultiSelect.value
+                      ? const NeverScrollableScrollPhysics()
+                      : const CustomTabBarViewScrollPhysics(),
+                  controller: _tabController,
+                  children:
+                      LaterViewType.values.map((item) => item.page).toList(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBody(LoadingState<List<HotVideoItemModel>?> loadingState) {
-    return switch (loadingState) {
-      Loading() => SliverGrid(
-          gridDelegate: SliverGridDelegateWithExtentAndRatio(
-            mainAxisSpacing: 2,
-            maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-            childAspectRatio: StyleString.aspectRatio * 2.2,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return const VideoCardHSkeleton();
+  PreferredSizeWidget get _buildAppbar {
+    Color color = Theme.of(context).colorScheme.secondary;
+
+    return AppBarWidget(
+      visible: _baseCtr.enableMultiSelect.value,
+      child1: AppBar(
+        title: const Text('稍后再看'),
+        actions: [
+          IconButton(
+            tooltip: '搜索',
+            onPressed: () {
+              final mid = Accounts.main.mid;
+              Get.toNamed(
+                '/favSearch',
+                arguments: {
+                  'type': 0,
+                  'mediaId': mid,
+                  'mid': mid,
+                  'title': '稍后再看',
+                  'count': _baseCtr.counts[LaterViewType.all],
+                  'searchType': SearchType.later,
+                },
+              );
             },
-            childCount: 10,
+            icon: const Icon(Icons.search),
           ),
-        ),
-      Success() => loadingState.response?.isNotEmpty == true
-          ? SliverGrid(
-              gridDelegate: SliverGridDelegateWithExtentAndRatio(
-                mainAxisSpacing: 2,
-                maxCrossAxisExtent: Grid.mediumCardWidth * 2,
-                childAspectRatio: StyleString.aspectRatio * 2.2,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  var videoItem = loadingState.response![index];
-                  return Stack(
-                    children: [
-                      VideoCardH(
-                        videoItem: videoItem,
-                        source: 'later',
-                        onViewLater: (cid) {
-                          Utils.toViewPage(
-                            'bvid=${videoItem.bvid}&cid=$cid',
-                            arguments: {
-                              'videoItem': videoItem,
-                              'oid': videoItem.aid,
-                              'heroTag': Utils.makeHeroTag(videoItem.bvid),
-                              'sourceType': 'watchLater',
-                              'count': loadingState.response!.length,
-                              'favTitle': '稍后再看',
-                              'mediaId': _laterController.mid,
-                              'desc': false,
-                              'isContinuePlaying': index != 0,
-                            },
-                          );
-                        },
-                        onTap: _laterController.enableMultiSelect.value.not
-                            ? null
-                            : () {
-                                _laterController.onSelect(index);
-                              },
-                        onLongPress: () {
-                          if (_laterController.enableMultiSelect.value.not) {
-                            _laterController.enableMultiSelect.value = true;
-                            _laterController.onSelect(index);
-                          }
-                        },
-                      ),
-                      Positioned(
-                        top: 5,
-                        left: 12,
-                        bottom: 5,
-                        child: IgnorePointer(
-                          child: LayoutBuilder(
-                            builder: (context, constraints) => AnimatedOpacity(
-                              opacity: videoItem.checked == true ? 1 : 0,
-                              duration: const Duration(milliseconds: 200),
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: constraints.maxHeight,
-                                width: constraints.maxHeight *
-                                    StyleString.aspectRatio,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.black.withOpacity(0.6),
-                                ),
-                                child: SizedBox(
-                                  width: 34,
-                                  height: 34,
-                                  child: AnimatedScale(
-                                    scale: videoItem.checked == true ? 1 : 0,
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    child: IconButton(
-                                      tooltip: '取消选择',
-                                      style: ButtonStyle(
-                                        padding: WidgetStateProperty.all(
-                                            EdgeInsets.zero),
-                                        backgroundColor:
-                                            WidgetStateProperty.resolveWith(
-                                          (states) {
-                                            return Theme.of(context)
-                                                .colorScheme
-                                                .surface
-                                                .withOpacity(0.8);
-                                          },
-                                        ),
-                                      ),
-                                      onPressed: null,
-                                      icon: Icon(
-                                        Icons.done_all_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+          Material(
+            clipBehavior: Clip.hardEdge,
+            borderRadius: BorderRadius.circular(20),
+            child: Builder(
+              key: sortKey,
+              builder: (context) {
+                final value = currCtr().asc.value;
+                return PopupMenuButton(
+                  initialValue: value,
+                  tooltip: '排序',
+                  onSelected: (value) {
+                    currCtr()
+                      ..asc.value = value
+                      ..onReload();
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: value ? '最早添加' : '最近添加',
+                          ),
+                          WidgetSpan(
+                            child: Icon(
+                              size: 16,
+                              MdiIcons.unfoldMoreHorizontal,
+                              color: color,
                             ),
                           ),
-                        ),
+                        ],
+                        style: TextStyle(color: color),
                       ),
-                      Positioned(
-                        right: 12,
-                        bottom: 0,
-                        child: iconButton(
-                          tooltip: '移除',
-                          context: context,
-                          onPressed: () {
-                            _laterController.toViewDel(
-                              context,
-                              index: index,
-                              aid: videoItem.aid,
-                            );
-                          },
-                          icon: Icons.clear,
-                          iconColor:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
-                          bgColor: Colors.transparent,
+                    ),
+                  ),
+                  itemBuilder: (BuildContext context) => [
+                    PopupMenuItem(
+                      value: false,
+                      child: const Text('最近添加'),
+                    ),
+                    PopupMenuItem(
+                      value: true,
+                      child: const Text('最早添加'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          Material(
+            clipBehavior: Clip.hardEdge,
+            borderRadius: BorderRadius.circular(20),
+            child: PopupMenuButton(
+              tooltip: '清空',
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '清空',
+                      ),
+                      WidgetSpan(
+                        child: Icon(
+                          size: 16,
+                          MdiIcons.unfoldMoreHorizontal,
+                          color: color,
                         ),
                       ),
                     ],
-                  );
-                },
-                childCount: loadingState.response!.length,
+                    style: TextStyle(color: color),
+                  ),
+                ),
               ),
-            )
-          : HttpError(
-              callback: _laterController.onReload,
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(
+                  onTap: () => currCtr().toViewClear(context, 1),
+                  child: const Text('清空失效'),
+                ),
+                PopupMenuItem(
+                  onTap: () => currCtr().toViewClear(context, 2),
+                  child: const Text('清空看完'),
+                ),
+                PopupMenuItem(
+                  onTap: () => currCtr().toViewClear(context),
+                  child: const Text('清空全部'),
+                ),
+              ],
             ),
-      Error() => HttpError(
-          errMsg: loadingState.errMsg,
-          callback: _laterController.onReload,
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      child2: AppBar(
+        leading: IconButton(
+          tooltip: '取消',
+          onPressed: currCtr().handleSelect,
+          icon: const Icon(Icons.close_outlined),
         ),
-      LoadingState() => throw UnimplementedError(),
-    };
+        title: Obx(
+          () => Text(
+            '已选: ${_baseCtr.checkedCount.value}',
+          ),
+        ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+            ),
+            onPressed: () => currCtr().handleSelect(true),
+            child: const Text('全选'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+            ),
+            onPressed: () {
+              final ctr = currCtr();
+              Utils.onCopyOrMove<Map, HotVideoItemModel>(
+                context: context,
+                isCopy: true,
+                ctr: ctr,
+                mediaId: null,
+                mid: ctr.mid,
+              );
+            },
+            child: Text(
+              '复制',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+            ),
+            onPressed: () {
+              final ctr = currCtr();
+              Utils.onCopyOrMove<Map, HotVideoItemModel>(
+                context: context,
+                isCopy: false,
+                ctr: ctr,
+                mediaId: null,
+                mid: ctr.mid,
+              );
+            },
+            child: Text(
+              '移动',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+            ),
+            onPressed: () => currCtr().onDelChecked(context),
+            child: Text(
+              '移除',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+          const SizedBox(width: 6),
+        ],
+      ),
+    );
   }
 }

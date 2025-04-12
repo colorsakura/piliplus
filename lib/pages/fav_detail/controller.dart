@@ -3,6 +3,7 @@ import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -142,8 +143,10 @@ class FavDetailController
 
   void toViewPlayAll() {
     if (loadingState.value is Success) {
-      List<FavDetailItemData> list = (loadingState.value as Success).response;
-      for (FavDetailItemData element in list) {
+      List<FavDetailItemData>? list = (loadingState.value as Success).response;
+      if (list.isNullOrEmpty) return;
+
+      for (FavDetailItemData element in list!) {
         if (element.cid == null) {
           continue;
         } else {

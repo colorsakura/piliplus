@@ -82,11 +82,7 @@ class LiveHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': RoomInfoModel.fromJson(res.data['data'])};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -100,11 +96,7 @@ class LiveHttp {
         'data': RoomInfoH5Model.fromJson(res.data['data'])
       };
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -115,11 +107,7 @@ class LiveHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': res.data['data']['room']};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 
@@ -130,11 +118,7 @@ class LiveHttp {
     if (res.data['code'] == 0) {
       return {'status': true, 'data': LiveDanmakuInfo.fromJson(res.data)};
     } else {
-      return {
-        'status': false,
-        'data': [],
-        'msg': res.data['message'],
-      };
+      return {'status': false, 'msg': res.data['message']};
     }
   }
 

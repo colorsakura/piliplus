@@ -12,7 +12,6 @@ class DanmakuFilterHttp {
     } else {
       return {
         'status': false,
-        'data': [],
         'msg': res.data['message'],
       };
     }

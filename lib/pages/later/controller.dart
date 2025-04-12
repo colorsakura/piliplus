@@ -2,6 +2,10 @@ import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
+import 'package:PiliPlus/pages/later/base_controller.dart';
+import 'package:PiliPlus/pages/later/view.dart'
+    show LaterViewType, LaterViewTypeExt;
+import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +14,49 @@ import 'package:get/get.dart';
 import 'package:PiliPlus/http/user.dart';
 
 class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
-  RxInt count = (-1).obs;
+  LaterController(this.laterViewType);
+  final LaterViewType laterViewType;
 
   dynamic mid;
+  final RxBool asc = false.obs;
+
+  final LaterBaseController baseCtr = Get.put(LaterBaseController());
+
+  @override
+  Future<LoadingState<Map>> customGetData() => UserHttp.seeYouLater(
+        page: currentPage,
+        viewed: laterViewType.type,
+        asc: asc.value,
+      );
+
+  @override
+  onSelect(int index, [bool disableSelect = true]) {
+    List<HotVideoItemModel> list = (loadingState.value as Success).response;
+    list[index].checked = !(list[index].checked ?? false);
+    baseCtr.checkedCount.value =
+        list.where((item) => item.checked == true).length;
+    loadingState.refresh();
+    if (baseCtr.checkedCount.value == 0) {
+      baseCtr.enableMultiSelect.value = false;
+    }
+  }
+
+  @override
+  void handleSelect([bool checked = false, bool disableSelect = true]) {
+    if (loadingState.value is Success) {
+      List<HotVideoItemModel>? list = (loadingState.value as Success).response;
+      if (list?.isNotEmpty == true) {
+        for (HotVideoItemModel item in list!) {
+          item.checked = checked;
+        }
+        baseCtr.checkedCount.value = checked ? list.length : 0;
+        loadingState.refresh();
+      }
+    }
+    if (checked.not) {
+      baseCtr.enableMultiSelect.value = false;
+    }
+  }
 
   @override
   void onInit() {
@@ -28,25 +72,25 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
 
   @override
   void checkIsEnd(int length) {
-    if (length >= count.value) {
+    if (length >= baseCtr.counts[laterViewType]!) {
       isEnd = true;
     }
   }
 
   @override
   bool customHandleResponse(bool isRefresh, Success response) {
-    count.value = response.response['count'];
+    baseCtr.counts[laterViewType] = response.response['count'];
     return false;
   }
 
-  Future toViewDel(BuildContext context, {index, aid}) async {
+  // single
+  Future toViewDel(BuildContext context, int index, int? aid) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('提示'),
-          content: Text(
-              aid != null ? '即将移除该视频，确定是否移除' : '即将删除所有已观看视频，此操作不可恢复。确定是否删除？'),
+          content: Text('即将移除该视频，确定是否移除'),
           actions: [
             TextButton(
               onPressed: Get.back,
@@ -57,23 +101,19 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
             ),
             TextButton(
               onPressed: () async {
-                var res =
-                    await UserHttp.toViewDel(aids: aid != null ? [aid] : null);
-                if (res['status']) {
-                  if (aid != null) {
-                    List<HotVideoItemModel> list =
-                        (loadingState.value as Success).response;
-                    list.removeAt(index);
-                    count.value -= 1;
-                    loadingState.refresh();
-                  } else {
-                    onReload();
-                  }
-                }
                 Get.back();
+                var res = await UserHttp.toViewDel(aids: [aid]);
+                if (res['status']) {
+                  List<HotVideoItemModel> list =
+                      (loadingState.value as Success).response;
+                  list.removeAt(index);
+                  baseCtr.counts[laterViewType] =
+                      baseCtr.counts[laterViewType]! - 1;
+                  loadingState.refresh();
+                }
                 SmartDialog.showToast(res['msg']);
               },
-              child: Text(aid != null ? '确认移除' : '确认删除'),
+              child: Text('确认移除'),
             )
           ],
         );
@@ -82,23 +122,32 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
   }
 
   // 一键清空
-  void toViewClear(BuildContext context) {
+  void toViewClear(BuildContext context, [int? cleanType]) {
+    String content = switch (cleanType) {
+      1 => '确定清空已失效视频吗？',
+      2 => '确定清空已看完视频吗？',
+      _ => '确定清空稍后再看列表吗？',
+    };
     showConfirmDialog(
       context: context,
-      title: '清空确认',
-      content: '确定要清空你的稍后再看列表吗？',
+      title: '确认',
+      content: content,
       onConfirm: () async {
-        var res = await UserHttp.toViewClear();
+        var res = await UserHttp.toViewClear(cleanType);
         if (res['status']) {
-          loadingState.value = LoadingState.success(null);
+          onReload();
+          final restTypes = List<LaterViewType>.from(LaterViewType.values)
+            ..remove(laterViewType);
+          for (final item in restTypes) {
+            try {
+              Get.find<LaterController>(tag: item.type.toString()).onReload();
+            } catch (_) {}
+          }
         }
         SmartDialog.showToast(res['msg']);
       },
     );
   }
-
-  @override
-  Future<LoadingState<Map>> customGetData() => UserHttp.seeYouLater();
 
   onDelChecked(BuildContext context) {
     showDialog(
@@ -142,11 +191,12 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
           ((loadingState.value as Success).response as List<HotVideoItemModel>)
               .toSet()
               .difference(result.toSet());
-      count.value -= aids.length;
+      baseCtr.counts[laterViewType] =
+          baseCtr.counts[laterViewType]! - aids.length;
       loadingState.value = LoadingState.success(remainList.toList());
-      if (enableMultiSelect.value) {
-        checkedCount.value = 0;
-        enableMultiSelect.value = false;
+      if (baseCtr.enableMultiSelect.value) {
+        baseCtr.checkedCount.value = 0;
+        baseCtr.enableMultiSelect.value = false;
       }
     }
     SmartDialog.dismiss();
@@ -156,9 +206,10 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
   // 稍后再看播放全部
   void toViewPlayAll() {
     if (loadingState.value is Success) {
-      List<HotVideoItemModel> list = List<HotVideoItemModel>.from(
-          (loadingState.value as Success).response);
-      for (HotVideoItemModel item in list) {
+      List<HotVideoItemModel>? list = (loadingState.value as Success).response;
+      if (list.isNullOrEmpty) return;
+
+      for (HotVideoItemModel item in list!) {
         if (item.cid == null || item.pgcLabel?.isNotEmpty == true) {
           continue;
         } else {
