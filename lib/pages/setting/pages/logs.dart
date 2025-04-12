@@ -15,11 +15,22 @@ class _LogsPageState extends State<LogsPage> {
   late File logsPath;
   late String fileContent;
   List logsContent = [];
+  DateTime? latestLog;
 
   @override
   void initState() {
     getPath();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (latestLog != null) {
+      if (DateTime.now().difference(latestLog!) >= Duration(days: 14)) {
+        clearLogs();
+      }
+    }
+    super.dispose();
   }
 
   void getPath() async {
@@ -53,6 +64,7 @@ class _LogsPageState extends State<LogsPage> {
                 date = DateTime.parse(
                   l.split("Crash occurred on")[1].trim(), //.split('.')[0],
                 );
+                latestLog ??= date;
               } catch (e) {
                 debugPrint(e.toString());
                 date = l.toString();

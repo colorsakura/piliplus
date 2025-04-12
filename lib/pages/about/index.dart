@@ -234,6 +234,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             onLongPress: clearLogs,
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('错误日志'),
+            subtitle: Text('长按清除日志', style: subTitleStyle),
             trailing: Icon(Icons.arrow_forward, size: 16, color: outline),
           ),
           ListTile(
