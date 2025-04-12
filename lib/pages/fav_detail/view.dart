@@ -475,11 +475,13 @@ class _FavDetailPageState extends State<FavDetailPage> {
                         Positioned.fill(
                           child: FavVideoCardH(
                             videoItem: item,
-                            callFn: () => _favDetailController.onCancelFav(
-                              index,
-                              item.id!,
-                              item.type!,
-                            ),
+                            onDelFav: _favDetailController.isOwner.value
+                                ? () => _favDetailController.onCancelFav(
+                                      index,
+                                      item.id!,
+                                      item.type!,
+                                    )
+                                : null,
                             onViewFav: () {
                               Utils.toViewPage(
                                 'bvid=${item.bvid}&cid=${item.cid}',
@@ -514,7 +516,6 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                     }
                                   }
                                 : null,
-                            isOwner: _favDetailController.isOwner.value,
                           ),
                         ),
                         Positioned(

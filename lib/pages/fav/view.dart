@@ -76,14 +76,17 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                   final item = (_favController.loadingState.value as Success)
                       .response
                       .first;
-                  Get.toNamed('/favSearch', arguments: {
-                    'type': 1,
-                    'mediaId': item.id,
-                    'title': item.title,
-                    'count': item.mediaCount,
-                    'searchType': SearchType.fav,
-                    'isOwner': true,
-                  });
+                  Get.toNamed(
+                    '/favSearch',
+                    arguments: {
+                      'type': 1,
+                      'mediaId': item.id,
+                      'title': item.title,
+                      'count': item.mediaCount,
+                      'searchType': SearchType.fav,
+                      'isOwner': true,
+                    },
+                  );
                 } catch (_) {}
               }
             },

@@ -96,9 +96,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
                             return _favSearchCtr.searchType == SearchType.fav
                                 ? FavVideoCardH(
                                     videoItem: item,
-                                    isOwner: _favSearchCtr.isOwner ?? false,
-                                    searchType: _favSearchCtr.type,
-                                    callFn: _favSearchCtr.type != 1
+                                    onDelFav: _favSearchCtr.isOwner == true
                                         ? () {
                                             _favSearchCtr.onCancelFav(
                                               index,

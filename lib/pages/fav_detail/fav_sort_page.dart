@@ -132,7 +132,6 @@ class _FavSortPageState extends State<FavSortPage> {
                 FavVideoCardH(
                   isSort: true,
                   videoItem: item,
-                  isOwner: false,
                 ),
                 if (BuildConfig.isDebug)
                   Positioned(

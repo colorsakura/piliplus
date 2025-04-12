@@ -17,22 +17,18 @@ import '../../../common/widgets/badge.dart';
 // 收藏视频卡片 - 水平布局
 class FavVideoCardH extends StatelessWidget {
   final FavDetailItemData videoItem;
-  final Function? callFn;
-  final int? searchType;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
-  final bool isOwner;
+  final VoidCallback? onDelFav;
   final VoidCallback? onViewFav;
   final bool? isSort;
 
   const FavVideoCardH({
     super.key,
     required this.videoItem,
-    this.callFn,
-    this.searchType,
+    this.onDelFav,
     this.onTap,
     this.onLongPress,
-    this.isOwner = false,
     this.onViewFav,
     this.isSort,
   });
@@ -210,7 +206,7 @@ class FavVideoCardH extends StatelessWidget {
               ),
             ],
           ),
-          if (searchType != 1 && isOwner)
+          if (onDelFav != null)
             Positioned(
               right: 0,
               bottom: 0,
@@ -237,9 +233,9 @@ class FavVideoCardH extends StatelessWidget {
                             ),
                           ),
                           TextButton(
-                            onPressed: () async {
-                              await callFn?.call();
+                            onPressed: () {
                               Get.back();
+                              onDelFav!();
                             },
                             child: const Text('确定取消'),
                           )
