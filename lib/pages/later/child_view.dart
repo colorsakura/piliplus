@@ -100,7 +100,8 @@ class _LaterViewChildPageState extends State<LaterViewChildPage>
                               'oid': videoItem.aid,
                               'heroTag': Utils.makeHeroTag(videoItem.bvid),
                               'sourceType': 'watchLater',
-                              'count': loadingState.response!.length,
+                              'count': _laterController
+                                  .baseCtr.counts[LaterViewType.all],
                               'favTitle': '稍后再看',
                               'mediaId': _laterController.mid,
                               'desc': false,

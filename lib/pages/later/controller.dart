@@ -222,7 +222,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
               'videoItem': item,
               'heroTag': Utils.makeHeroTag(item.bvid),
               'sourceType': 'watchLater',
-              'count': list.length,
+              'count': baseCtr.counts[LaterViewType.all],
               'favTitle': '稍后再看',
               'mediaId': mid,
               'desc': false,
