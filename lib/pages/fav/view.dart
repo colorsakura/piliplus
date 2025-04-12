@@ -34,20 +34,21 @@ class FavPage extends StatefulWidget {
 class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final FavController _favController = Get.put(FavController());
-  late final RxInt _tabIndex;
+  late final RxBool _showVideoFavMenu;
 
   void listener() {
-    _tabIndex.value = _tabController.index;
+    _showVideoFavMenu.value = _tabController.index == 0;
   }
 
   @override
   void initState() {
     super.initState();
-    _tabIndex = (Get.arguments is int ? Get.arguments as int : 0).obs;
+    int initialIndex = Get.arguments is int ? Get.arguments as int : 0;
+    _showVideoFavMenu = (initialIndex == 0).obs;
     _tabController = TabController(
       length: _FavType.values.length,
       vsync: this,
-      initialIndex: _tabIndex.value,
+      initialIndex: initialIndex,
     );
     _tabController.addListener(listener);
   }
@@ -66,7 +67,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
         title: const Text('我的收藏'),
         actions: [
           Obx(
-            () => _tabIndex.value == 0
+            () => _showVideoFavMenu.value
                 ? IconButton(
                     onPressed: () {
                       Get.toNamed('/createFav')?.then(
@@ -89,7 +90,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                 : const SizedBox.shrink(),
           ),
           Obx(
-            () => _tabIndex.value == 0
+            () => _showVideoFavMenu.value
                 ? IconButton(
                     onPressed: () {
                       Get.to(FavFolderSortPage(favController: _favController));
@@ -100,7 +101,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
                 : const SizedBox.shrink(),
           ),
           Obx(
-            () => _tabIndex.value == 0
+            () => _showVideoFavMenu.value
                 ? IconButton(
                     onPressed: () {
                       if (_favController.loadingState.value is Success) {
