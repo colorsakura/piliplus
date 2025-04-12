@@ -57,7 +57,8 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
   @override
   void initState() {
     super.initState();
-    _videoReplyController = Get.find<VideoReplyController>(tag: heroTag);
+    _videoReplyController = Get.find<VideoReplyController>(tag: heroTag)
+      ..queryData();
   }
 
   @override

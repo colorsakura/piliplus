@@ -162,6 +162,13 @@ class VideoIntroController extends GetxController
                 videoDetailController.isQuerying.not)) {
           videoDetailController.videoItem['pic'] = data.pic;
         }
+        if (videoDetailController.showReply) {
+          try {
+            final videoReplyController =
+                Get.find<VideoReplyController>(tag: heroTag);
+            videoReplyController.count.value = data.stat?.reply ?? 0;
+          } catch (_) {}
+        }
       } catch (_) {}
       if (videoDetail.value.pages != null &&
           videoDetail.value.pages!.isNotEmpty &&

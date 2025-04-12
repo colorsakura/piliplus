@@ -208,9 +208,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   // 获取视频资源，初始化播放器
   Future<void> videoSourceInit() async {
     videoDetailController.queryVideoUrl();
-    if (videoDetailController.showReply) {
-      _videoReplyController.queryData();
-    }
     if (videoDetailController.autoPlay.value) {
       plPlayerController = videoDetailController.plPlayerController;
       plPlayerController!.addStatusLister(playerListener);
