@@ -90,7 +90,9 @@ class _LaterPageState extends State<LaterPage>
           body: Column(
             children: [
               TabBar(
+                isScrollable: true,
                 controller: _tabController,
+                tabAlignment: TabAlignment.start,
                 tabs: LaterViewType.values.map((item) {
                   final count = _baseCtr.counts[item];
                   return Tab(
