@@ -64,7 +64,6 @@ class _LogsPageState extends State<LogsPage> {
                 date = DateTime.parse(
                   l.split("Crash occurred on")[1].trim(), //.split('.')[0],
                 );
-                latestLog ??= date;
               } catch (e) {
                 debugPrint(e.toString());
                 date = l.toString();
@@ -149,6 +148,9 @@ class _LogsPageState extends State<LogsPage> {
               itemCount: logsContent.length,
               itemBuilder: (context, index) {
                 final log = logsContent[index];
+                if (log['date'] is DateTime) {
+                  latestLog ??= log['date'];
+                }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
