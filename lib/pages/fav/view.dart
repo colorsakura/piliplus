@@ -4,6 +4,7 @@ import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav/article/view.dart';
 import 'package:PiliPlus/pages/fav/note/view.dart';
 import 'package:PiliPlus/pages/fav/pgc/view.dart';
+import 'package:PiliPlus/pages/fav/video/fav_folder_sort_page.dart';
 import 'package:PiliPlus/pages/fav/video/index.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +32,29 @@ class FavPage extends StatefulWidget {
 }
 
 class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
-  late final TabController _tabController = TabController(
-    length: _FavType.values.length,
-    vsync: this,
-    initialIndex: Get.arguments is int ? Get.arguments : 0,
-  );
+  late final TabController _tabController;
   final FavController _favController = Get.put(FavController());
+  late final RxInt _tabIndex;
+
+  void listener() {
+    _tabIndex.value = _tabController.index;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabIndex = (Get.arguments is int ? Get.arguments as int : 0).obs;
+    _tabController = TabController(
+      length: _FavType.values.length,
+      vsync: this,
+      initialIndex: _tabIndex.value,
+    );
+    _tabController.addListener(listener);
+  }
 
   @override
   void dispose() {
+    _tabController.removeListener(listener);
     _tabController.dispose();
     super.dispose();
   }
@@ -50,48 +65,68 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('我的收藏'),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.toNamed('/createFav')?.then(
-                (data) {
-                  if (data != null) {
-                    List<FavFolderItemData> list =
-                        _favController.loadingState.value is Success
-                            ? (_favController.loadingState.value as Success)
-                                .response
-                            : <FavFolderItemData>[];
-                    list.insert(list.isNotEmpty ? 1 : 0, data);
-                    _favController.loadingState.refresh();
-                  }
-                },
-              );
-            },
-            icon: const Icon(Icons.add),
-            tooltip: '新建收藏夹',
-          ),
-          IconButton(
-            onPressed: () {
-              if (_favController.loadingState.value is Success) {
-                try {
-                  final item = (_favController.loadingState.value as Success)
-                      .response
-                      .first;
-                  Get.toNamed(
-                    '/favSearch',
-                    arguments: {
-                      'type': 1,
-                      'mediaId': item.id,
-                      'title': item.title,
-                      'count': item.mediaCount,
-                      'searchType': SearchType.fav,
-                      'isOwner': true,
+          Obx(
+            () => _tabIndex.value == 0
+                ? IconButton(
+                    onPressed: () {
+                      Get.toNamed('/createFav')?.then(
+                        (data) {
+                          if (data != null) {
+                            List<FavFolderItemData> list = _favController
+                                    .loadingState.value is Success
+                                ? (_favController.loadingState.value as Success)
+                                    .response
+                                : <FavFolderItemData>[];
+                            list.insert(list.isNotEmpty ? 1 : 0, data);
+                            _favController.loadingState.refresh();
+                          }
+                        },
+                      );
                     },
-                  );
-                } catch (_) {}
-              }
-            },
-            icon: const Icon(Icons.search_outlined),
-            tooltip: '搜索',
+                    icon: const Icon(Icons.add),
+                    tooltip: '新建收藏夹',
+                  )
+                : const SizedBox.shrink(),
+          ),
+          Obx(
+            () => _tabIndex.value == 0
+                ? IconButton(
+                    onPressed: () {
+                      Get.to(FavFolderSortPage(favController: _favController));
+                    },
+                    icon: const Icon(Icons.sort),
+                    tooltip: '收藏夹排序',
+                  )
+                : const SizedBox.shrink(),
+          ),
+          Obx(
+            () => _tabIndex.value == 0
+                ? IconButton(
+                    onPressed: () {
+                      if (_favController.loadingState.value is Success) {
+                        try {
+                          final item =
+                              (_favController.loadingState.value as Success)
+                                  .response
+                                  .first;
+                          Get.toNamed(
+                            '/favSearch',
+                            arguments: {
+                              'type': 1,
+                              'mediaId': item.id,
+                              'title': item.title,
+                              'count': item.mediaCount,
+                              'searchType': SearchType.fav,
+                              'isOwner': true,
+                            },
+                          );
+                        } catch (_) {}
+                      }
+                    },
+                    icon: const Icon(Icons.search_outlined),
+                    tooltip: '搜索',
+                  )
+                : const SizedBox.shrink(),
           ),
           const SizedBox(width: 6),
         ],

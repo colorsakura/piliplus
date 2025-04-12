@@ -39,7 +39,7 @@ class FavController
   @override
   Future<LoadingState<FavFolderData>> customGetData() => UserHttp.userfavFolder(
         pn: currentPage,
-        ps: 10,
+        ps: 20,
         mid: mid,
       );
 }

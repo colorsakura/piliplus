@@ -7,10 +7,13 @@ import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 class FavItem extends StatelessWidget {
   final String heroTag;
   final dynamic favFolderItem;
-  final GestureTapCallback onTap;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+
   const FavItem({
     super.key,
-    required this.onTap,
+    this.onTap,
+    this.onLongPress,
     required this.heroTag,
     required this.favFolderItem,
   });
@@ -19,11 +22,14 @@ class FavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      onLongPress: () => imageSaveDialog(
-        context: context,
-        title: favFolderItem.title,
-        cover: favFolderItem.cover,
-      ),
+      onLongPress: onLongPress ??
+          (onTap == null
+              ? null
+              : () => imageSaveDialog(
+                    context: context,
+                    title: favFolderItem.title,
+                    cover: favFolderItem.cover,
+                  )),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         child: LayoutBuilder(

@@ -66,6 +66,28 @@ class UserHttp {
     }
   }
 
+  static Future sortFavFolder({
+    required List<int?> sort,
+  }) async {
+    Map<String, dynamic> data = {
+      'sort': sort.join(','),
+      'csrf': await Request.getCsrf(),
+    };
+    Utils.appSign(data);
+    var res = await Request().post(
+      Api.sortFavFolder,
+      data: data,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true, 'data': res.data['data']};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
+
   static Future sortFav({
     required dynamic mediaId,
     required List<String> sort,

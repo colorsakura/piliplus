@@ -116,6 +116,8 @@ class Api {
 
   static const String sortFav = '/x/v3/fav/resource/sort';
 
+  static const String sortFavFolder = '/x/v3/fav/folder/sort';
+
   // 判断视频是否被收藏（双端）GET
   /// aid
   // https://api.bilibili.com/x/v2/fav/video/favoured
