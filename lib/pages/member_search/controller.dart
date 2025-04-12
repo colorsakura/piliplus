@@ -156,7 +156,7 @@ class MemberSearchController extends GetxController
             (archiveState.value as Success).response;
         currentList.addAll(vlist!);
         if (currentList.length >= archiveCount.value) {
-          isEndDynamic = true;
+          isEndArchive = true;
         }
         archiveState.refresh();
       }

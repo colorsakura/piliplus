@@ -140,6 +140,7 @@ class _MediaListPanelState
             // physics: const PositionRetainedScrollPhysics(
             //   parent: ClampingScrollPhysics(),
             // ),
+            physics: const AlwaysScrollableScrollPhysics(),
             itemCount: widget.mediaList.length,
             padding: EdgeInsets.only(
               top: 7,
