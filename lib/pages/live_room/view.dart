@@ -568,6 +568,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
 
   void onSendDanmaku([bool fromEmote = false]) {
     Get.generalDialog(
+      barrierLabel: '',
+      barrierDismissible: true,
       pageBuilder: (context, animation, secondaryAnimation) {
         return LiveSendDmPanel(
           fromEmote: fromEmote,
