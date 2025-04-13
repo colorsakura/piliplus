@@ -760,4 +760,6 @@ class Api {
 
   static const String getLiveEmoticons =
       '${HttpString.liveBaseUrl}/xlive/web-ucenter/v2/emoticon/GetEmoticons';
+
+  static const String pgcTimeline = '/pgc/web/timeline';
 }

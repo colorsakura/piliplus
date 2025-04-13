@@ -65,17 +65,16 @@ class FavPgcItem extends StatelessWidget {
                               width: boxConstraints.maxWidth,
                               height: boxConstraints.maxHeight,
                             ),
-                            if (item.badge?.isNotEmpty == true)
-                              PBadge(
-                                right: 4,
-                                top: 4,
-                                text: item.badge,
-                                fs: 10,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 2,
-                                  vertical: 1,
-                                ),
+                            PBadge(
+                              right: 4,
+                              top: 4,
+                              text: item.badge,
+                              fs: 10,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                                vertical: 1,
                               ),
+                            ),
                             Positioned.fill(
                               child: IgnorePointer(
                                 child: LayoutBuilder(
