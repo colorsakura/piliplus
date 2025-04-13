@@ -93,6 +93,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
               message: emote.emoticonUnique!,
               dmType: 1,
               emoticonOptions: '[object Object]',
+              emoticonUnique: emote.emoji,
             );
           },
         ),
@@ -218,6 +219,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
     List? pictures,
     int? dmType,
     emoticonOptions,
+    emoticonUnique,
   }) async {
     if (!liveRoomController.isLogin) {
       SmartDialog.showToast('未登录');
@@ -235,7 +237,7 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
       SmartDialog.showToast('发送成功');
       liveRoomController.plPlayerController.danmakuController?.addDanmaku(
         DanmakuContentItem(
-          message,
+          emoticonUnique ?? message,
           type: DanmakuItemType.scroll,
           selfSend: true,
         ),

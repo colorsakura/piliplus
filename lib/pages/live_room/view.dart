@@ -263,6 +263,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
   }
 
   Widget get _buildPH => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: _buildAppBar,
         backgroundColor: Colors.transparent,
         body: Column(
@@ -271,6 +272,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
       );
 
   Widget get _buildPP => Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
