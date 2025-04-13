@@ -55,12 +55,11 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           _buildFollow,
-          if (widget.tabType == TabType.bangumi)
+          if (controller.showPgcTimeline)
             SliverToBoxAdapter(
-              child: Container(
-                margin: const EdgeInsets.only(top: 10),
+              child: SizedBox(
                 height: Grid.smallCardWidth / 2 / 0.75 +
-                    MediaQuery.textScalerOf(context).scale(110),
+                    MediaQuery.textScalerOf(context).scale(96),
                 child:
                     Obx(() => _buildTimeline(controller.timelineState.value)),
               ),
@@ -109,6 +108,30 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                               child: TabBar(
                                 isScrollable: true,
                                 tabAlignment: TabAlignment.start,
+                                dividerHeight: 0,
+                                overlayColor:
+                                    WidgetStateProperty.all(Colors.transparent),
+                                splashFactory: NoSplash.splashFactory,
+                                indicatorPadding: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 10,
+                                ),
+                                indicator: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                ),
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                labelColor: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                labelStyle: TabBarTheme.of(context)
+                                        .labelStyle
+                                        ?.copyWith(fontSize: 14) ??
+                                    const TextStyle(fontSize: 14),
+                                dividerColor: Colors.transparent,
                                 tabs: loadingState.response!
                                     .map(
                                       (item) => Tab(
@@ -122,7 +145,6 @@ class _BangumiPageState extends CommonPageState<BangumiPage, BangumiController>
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
                       Expanded(
                         child: TabBarView(
                             physics: const NeverScrollableScrollPhysics(),

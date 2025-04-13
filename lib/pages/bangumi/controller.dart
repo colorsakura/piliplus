@@ -16,6 +16,8 @@ class BangumiController extends CommonListController<
 
   RxBool isLogin = false.obs;
   int? mid;
+  late final showPgcTimeline =
+      tabType == TabType.bangumi && GStorage.showPgcTimeline;
 
   @override
   void onInit() {
@@ -25,7 +27,7 @@ class BangumiController extends CommonListController<
 
     queryData();
     queryBangumiFollow();
-    if (tabType == TabType.bangumi) {
+    if (showPgcTimeline) {
       queryPgcTimeline();
     }
     if (isLogin.value) {
@@ -40,7 +42,7 @@ class BangumiController extends CommonListController<
       followEnd = false;
     }
     queryBangumiFollow();
-    if (tabType == TabType.bangumi) {
+    if (showPgcTimeline) {
       queryPgcTimeline();
     }
     return super.onRefresh();
