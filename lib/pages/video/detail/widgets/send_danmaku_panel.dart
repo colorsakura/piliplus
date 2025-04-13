@@ -25,6 +25,10 @@ class SendDanmakuPanel extends CommonPublishPage {
   final ValueChanged<DanmakuContentItem> callback;
   final bool darkVideoPage;
 
+  // config
+  final ({int? mode, int? fontsize, Color? color})? dmConfig;
+  final ValueChanged<({int mode, int fontsize, Color color})>? onSaveDmConfig;
+
   const SendDanmakuPanel({
     super.key,
     super.initialValue,
@@ -35,6 +39,8 @@ class SendDanmakuPanel extends CommonPublishPage {
     this.roomId,
     required this.callback,
     required this.darkVideoPage,
+    this.dmConfig,
+    this.onSaveDmConfig,
   });
 
   @override
@@ -42,9 +48,9 @@ class SendDanmakuPanel extends CommonPublishPage {
 }
 
 class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
-  final RxInt _mode = 1.obs;
-  final RxInt _fontsize = 25.obs;
-  final Rx<Color> _color = Colors.white.obs;
+  late final RxInt _mode;
+  late final RxInt _fontsize;
+  late final Rx<Color> _color;
 
   final List<Color> _colorList = [
     Colors.white,
@@ -62,6 +68,21 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
     Color(0xFF222222),
     Color(0xFF9B9B9B),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _mode = (widget.dmConfig?.mode ?? 1).obs;
+    _fontsize = (widget.dmConfig?.fontsize ?? 25).obs;
+    _color = (widget.dmConfig?.color ?? Colors.white).obs;
+  }
+
+  @override
+  void dispose() {
+    widget.onSaveDmConfig?.call(
+        (mode: _mode.value, fontsize: _fontsize.value, color: _color.value));
+    super.dispose();
+  }
 
   get _buildColorPanel => Expanded(
         child: Obx(
