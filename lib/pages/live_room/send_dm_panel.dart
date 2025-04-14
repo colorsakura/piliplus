@@ -220,10 +220,6 @@ class _ReplyPageState extends CommonPublishPageState<LiveSendDmPanel> {
     emoticonOptions,
     emoticonUnique,
   }) async {
-    if (!liveRoomController.isLogin) {
-      SmartDialog.showToast('未登录');
-      return;
-    }
     final res = await LiveHttp.sendLiveMsg(
       roomId: liveRoomController.roomId,
       msg: message,
