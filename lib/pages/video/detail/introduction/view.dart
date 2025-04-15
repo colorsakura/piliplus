@@ -126,111 +126,79 @@ class _VideoInfoState extends State<VideoInfo> {
 
   late final _horizontalMemberPage = GStorage.horizontalMemberPage;
 
-  Widget _buildVideoTitle([bool isExpand = false]) => Obx(
-        () => Text.rich(
-          TextSpan(
-            children: [
-              if (videoIntroController.videoDetail.value.honorReply?.honor
-                      ?.any((item) => item.type == 7) ==
-                  true) ...[
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        left: 6, right: 8, top: 2, bottom: 2),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          MdiIcons.fire,
-                          size: 16,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                        Text(
-                          '热门',
-                          textScaler: TextScaler.linear(1),
-                          strutStyle: StrutStyle(leading: 0, height: 1),
-                          style: TextStyle(
-                            height: 1,
-                            fontSize: 12,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+  Widget _buildVideoTitle([bool isExpand = false]) => videoDetailCtr
+          .enableSponsorBlock
+      ? Obx(
+          () => Text.rich(
+            TextSpan(
+              children: [
+                if (videoDetailCtr.videoLabel.value.isNotEmpty) ...[
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Icon(
+                                Icons.shield_outlined,
+                                size: 16,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                              ),
+                              Icon(
+                                Icons.play_arrow_rounded,
+                                size: 12,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                TextSpan(text: ' '),
-              ],
-              if (videoDetailCtr.videoLabel.value.isNotEmpty) ...[
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Icon(
-                              Icons.shield_outlined,
-                              size: 16,
+                          Text(
+                            videoDetailCtr.videoLabel.value,
+                            textScaler: TextScaler.linear(1),
+                            strutStyle: StrutStyle(leading: 0, height: 1),
+                            style: TextStyle(
+                              height: 1,
+                              fontSize: 13,
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSecondaryContainer,
                             ),
-                            Icon(
-                              Icons.play_arrow_rounded,
-                              size: 12,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          videoDetailCtr.videoLabel.value,
-                          textScaler: TextScaler.linear(1),
-                          strutStyle: StrutStyle(leading: 0, height: 1),
-                          style: TextStyle(
-                            height: 1,
-                            fontSize: 13,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                TextSpan(text: ' '),
+                  TextSpan(text: ' '),
+                ],
+                TextSpan(
+                    text: '${videoDetail.title ?? videoItem['title'] ?? ''}'),
               ],
-              TextSpan(
-                  text: '${videoDetail.title ?? videoItem['title'] ?? ''}'),
-            ],
+            ),
+            maxLines: isExpand ? null : 2,
+            overflow: isExpand ? null : TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 16),
           ),
+        )
+      : Text(
+          '${videoDetail.title ?? videoItem['title'] ?? ''}',
           maxLines: isExpand ? null : 2,
           overflow: isExpand ? null : TextOverflow.ellipsis,
           style: const TextStyle(fontSize: 16),
-        ),
-      );
+        );
 
   void handleState(Future Function() action) async {
     if (isProcessing.not) {
