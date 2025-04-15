@@ -1808,14 +1808,16 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                       top: 0,
                       left: 0,
                       right: 0,
+                      bottom: 0,
                       child: GestureDetector(
                         onTap: handlePlay,
                         child: Obx(
                           () => CachedNetworkImage(
                             imageUrl:
                                 videoDetailController.videoItem['pic'] != null
-                                    ? Utils.thumbnailImgUrl(
-                                        videoDetailController.videoItem['pic'])
+                                    ? (videoDetailController.videoItem['pic']
+                                            as String)
+                                        .http2https
                                     : '',
                             width: videoWidth,
                             height: videoHeight,
