@@ -196,6 +196,7 @@ List<SettingsModel> get styleSettings => [
             },
           );
           if (result != null) {
+            GStorage.pageTransition = result;
             await GStorage.setting
                 .put(SettingBoxKey.pageTransition, result.index);
             SmartDialog.showToast('重启生效');
