@@ -88,18 +88,18 @@ class _SendDanmakuPanelState extends CommonPublishPageState<SendDanmakuPanel> {
 
   get _buildColorPanel => Expanded(
         child: Obx(
-          () => Builder(
+          () => LayoutBuilder(
             key: ValueKey(_color.value),
-            builder: (context) {
+            builder: (context, constraints) {
+              final int crossAxisCount = (constraints.maxWidth / 40).toInt();
               final bool isCustomColor = _colorList.contains(_color.value).not;
               final int length =
                   _colorList.length + (isCustomColor ? 1 : 0) + 1;
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 40,
-                  mainAxisExtent: 40,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
                   crossAxisSpacing: 4,
                   mainAxisSpacing: 4,
                 ),
