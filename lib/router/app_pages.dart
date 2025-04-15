@@ -10,6 +10,7 @@ import 'package:PiliPlus/pages/video/detail/introduction/widgets/create_fav_page
 import 'package:PiliPlus/pages/video/detail/view_v.dart';
 import 'package:PiliPlus/pages/webdav/view.dart';
 import 'package:PiliPlus/pages/webview/webview_page.dart';
+import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/msg_feed_top/at_me/view.dart';
@@ -192,7 +193,7 @@ class CustomGetPage extends GetPage<dynamic> {
     super.transitionDuration,
   }) : super(
           curve: Curves.linear,
-          transition: Transition.native,
+          transition: GStorage.pageTransition,
           showCupertinoParallax: false,
           popGesture: false,
           fullscreenDialog: fullscreen,

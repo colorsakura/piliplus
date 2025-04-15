@@ -178,6 +178,32 @@ List<SettingsModel> get styleSettings => [
         },
       ),
       SettingsModel(
+        settingsType: SettingsType.normal,
+        title: '页面过渡动画',
+        leading: const Icon(Icons.animation),
+        getSubtitle: () => '当前：${GStorage.pageTransition.name}',
+        onTap: (setState) async {
+          Transition? result = await showDialog(
+            context: Get.context!,
+            builder: (context) {
+              return SelectDialog<Transition>(
+                title: '页面过渡动画',
+                value: GStorage.pageTransition,
+                values: Transition.values.map((e) {
+                  return (e, e.name);
+                }).toList(),
+              );
+            },
+          );
+          if (result != null) {
+            await GStorage.setting
+                .put(SettingBoxKey.pageTransition, result.index);
+            SmartDialog.showToast('重启生效');
+            setState();
+          }
+        },
+      ),
+      SettingsModel(
         settingsType: SettingsType.sw1tch,
         title: 'MD3样式底栏',
         subtitle: 'Material You设计规范底栏，关闭可变窄',

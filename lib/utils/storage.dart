@@ -29,6 +29,7 @@ import 'package:PiliPlus/utils/login.dart';
 import 'package:PiliPlus/utils/set_int_adapter.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:PiliPlus/models/model_owner.dart';
@@ -471,6 +472,10 @@ class GStorage {
   static bool get showPgcTimeline =>
       GStorage.setting.get(SettingBoxKey.showPgcTimeline, defaultValue: true);
 
+  static Transition pageTransition = Transition.values[GStorage.setting.get(
+      SettingBoxKey.pageTransition,
+      defaultValue: Transition.native.index)];
+
   static List<double> get dynamicDetailRatio => List<double>.from(setting
       .get(SettingBoxKey.dynamicDetailRatio, defaultValue: [60.0, 40.0]));
 
@@ -759,6 +764,7 @@ class SettingBoxKey {
       recordSearchHistory = 'recordSearchHistory',
       navSearchStreamDebounce = 'navSearchStreamDebounce',
       showPgcTimeline = 'showPgcTimeline',
+      pageTransition = 'pageTransition',
 
       // WebDAV
       webdavUri = 'webdavUri',
