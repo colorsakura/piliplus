@@ -145,8 +145,9 @@ class MsgHttp {
               }
             ]
           },
-          if (replyOption != null || publishTime != null)
+          if (privatePub != null || replyOption != null || publishTime != null)
             "option": {
+              if (privatePub != null) 'private_pub': privatePub,
               if (publishTime != null) "timer_pub_time": publishTime,
               if (replyOption == ReplyOption.close)
                 "close_comment": 1
@@ -160,10 +161,6 @@ class MsgHttp {
                   : pics != null
                       ? 2
                       : 1,
-          if (privatePub != null)
-            'create_option': {
-              'private_pub': privatePub,
-            },
           if (pics != null) 'pics': pics,
           "attach_card": null,
           "upload_id":

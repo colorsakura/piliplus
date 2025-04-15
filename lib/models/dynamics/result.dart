@@ -598,6 +598,7 @@ class RichTextNodeItem {
   String? text;
   String? type;
   String? rid;
+  List<OpusPicsModel>? pics;
 
   RichTextNodeItem.fromJson(Map<String, dynamic> json) {
     emoji = json['emoji'] != null ? Emoji.fromJson(json['emoji']) : null;
@@ -605,6 +606,11 @@ class RichTextNodeItem {
     text = json['text'];
     type = json['type'];
     rid = json['rid'];
+    pics = json['pics'] == null
+        ? null
+        : (json['pics'] as List?)
+            ?.map((e) => OpusPicsModel.fromJson(e))
+            .toList();
   }
 }
 

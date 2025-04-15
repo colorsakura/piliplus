@@ -45,24 +45,22 @@ Widget content(bool isSave, BuildContext context, item, source, callback) {
           ),
         ],
         if (richNodes != null)
-          IgnorePointer(
-            // 禁用SelectableRegion的触摸交互功能
-            ignoring: source == 'detail' ? false : true,
-            child: SelectableRegion(
-              magnifierConfiguration: const TextMagnifierConfiguration(),
-              focusNode: FocusNode(),
-              selectionControls: MaterialTextSelectionControls(),
-              child: Text.rich(
-                /// fix 默认20px高度
-                style: TextStyle(
-                  fontSize: source == 'detail' && !isSave ? 16 : 15,
+          source == 'detail'
+              ? SelectableRegion(
+                  magnifierConfiguration: const TextMagnifierConfiguration(),
+                  focusNode: FocusNode(),
+                  selectionControls: MaterialTextSelectionControls(),
+                  child: Text.rich(
+                    style: TextStyle(fontSize: !isSave ? 16 : 15),
+                    richNodes,
+                  ),
+                )
+              : Text.rich(
+                  style: const TextStyle(fontSize: 15),
+                  richNodes,
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                richNodes,
-                maxLines: source == 'detail' ? null : 6,
-                overflow: source == 'detail' ? null : TextOverflow.ellipsis,
-              ),
-            ),
-          ),
         if (item.modules.moduleDynamic.major != null &&
             item.modules.moduleDynamic.major.opus != null &&
             item.modules.moduleDynamic.major.opus.pics.isNotEmpty)

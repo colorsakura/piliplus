@@ -1,3 +1,4 @@
+import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 
 // 富文本
-InlineSpan? richNode(item, context) {
+InlineSpan? richNode(item, BuildContext context) {
   final spacer = _VerticalSpaceSpan(0.0);
   try {
     TextStyle authorStyle =
@@ -256,8 +257,37 @@ InlineSpan? richNode(item, context) {
               ),
             ),
           );
+        } else if (i.type == 'RICH_TEXT_NODE_TYPE_VIEW_PICTURE') {
+          if (i.pics?.isNotEmpty == true) {
+            spanChildren.add(
+              WidgetSpan(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return imageView(
+                      constraints.maxWidth,
+                      i.pics!
+                          .map((item) => ImageModel(
+                                url: item.src ?? '',
+                                width: item.width,
+                                height: item.height,
+                              ))
+                          .toList(),
+                    );
+                  },
+                ),
+              ),
+            );
+          } else {
+            spanChildren.add(
+              TextSpan(
+                text: '${i.text}',
+                style: authorStyle,
+              ),
+            );
+          }
         }
       }
+
       // if (contentType == 'major' &&
       //     item.modules.moduleDynamic.major.opus.pics.isNotEmpty) {
       //   // 图片可能跟其他widget重复渲染
