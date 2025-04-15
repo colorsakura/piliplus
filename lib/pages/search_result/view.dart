@@ -132,17 +132,20 @@ class _SearchResultPageState extends State<SearchResultPage>
             ),
           ),
           Expanded(
-            child: tabBarView(
-              controller: _tabController,
-              children: SearchType.values
-                  .map(
-                    (item) => SearchPanel(
-                      keyword: _searchResultController.keyword,
-                      searchType: item,
-                      tag: _tag,
-                    ),
-                  )
-                  .toList(),
+            child: Material(
+              color: Colors.transparent,
+              child: tabBarView(
+                controller: _tabController,
+                children: SearchType.values
+                    .map(
+                      (item) => SearchPanel(
+                        keyword: _searchResultController.keyword,
+                        searchType: item,
+                        tag: _tag,
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
           ),
         ],

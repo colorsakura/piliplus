@@ -192,4 +192,10 @@ class HistoryController extends MultiSelectController<HistoryData, HisListItem>
     tabController?.dispose();
     super.onClose();
   }
+
+  @override
+  Future onReload() {
+    scrollController.jumpToTop();
+    return super.onReload();
+  }
 }

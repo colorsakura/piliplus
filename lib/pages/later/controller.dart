@@ -233,4 +233,10 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
       }
     }
   }
+
+  @override
+  Future onReload() {
+    scrollController.jumpToTop();
+    return super.onReload();
+  }
 }

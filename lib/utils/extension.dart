@@ -23,6 +23,11 @@ extension ScrollControllerExt on ScrollController {
           duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
     }
   }
+
+  void jumpToTop() {
+    if (!hasClients) return;
+    jumpTo(0);
+  }
 }
 
 extension IterableExt<T> on Iterable<T>? {

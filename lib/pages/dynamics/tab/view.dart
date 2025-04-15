@@ -60,9 +60,11 @@ class _DynamicsTabPageState
     super.initState();
     if (widget.dynamicsType == 'up') {
       _listener = dynamicsController.mid.listen((mid) {
-        controller.mid = mid;
-        controller.scrollController.jumpTo(0);
-        controller.onReload();
+        if (mid != -1) {
+          controller
+            ..mid = mid
+            ..onReload();
+        }
       });
     }
     dynamicsWaterfallFlow = GStorage.setting

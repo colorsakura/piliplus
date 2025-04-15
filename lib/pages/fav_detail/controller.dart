@@ -172,4 +172,10 @@ class FavDetailController
       }
     }
   }
+
+  @override
+  Future onReload() {
+    scrollController.jumpToTop();
+    return super.onReload();
+  }
 }

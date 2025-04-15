@@ -499,4 +499,10 @@ https://api.bilibili.com/x/v2/reply/reply?oid=$oid&pn=1&ps=20&root=${rpid ?? rep
       SmartDialog.showToast(res['msg']);
     }
   }
+
+  @override
+  Future onReload() {
+    scrollController.jumpToTop();
+    return super.onReload();
+  }
 }

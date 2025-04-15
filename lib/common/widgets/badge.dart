@@ -45,7 +45,7 @@ class PBadge extends StatelessWidget {
     // 前景色
     Color color = t.onPrimary;
     // 边框色
-    Color? borderColor;
+    Color borderColor = Colors.transparent;
     if (type == 'gray') {
       bgColor = Colors.black45;
       color = Colors.white;
@@ -77,7 +77,7 @@ class PBadge extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: br,
         color: bgColor,
-        border: borderColor != null ? Border.all(color: borderColor) : null,
+        border: Border.all(color: borderColor),
       ),
       child: Text(
         text!,

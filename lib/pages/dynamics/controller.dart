@@ -171,10 +171,12 @@ class DynamicsController extends GetxController
   }
 
   onSelectUp(mid) async {
-    if (mid == this.mid.value) {
-      this.mid.refresh();
+    if (this.mid == mid) {
+      tabController.index = (mid == -1 ? 0 : 4);
+      controller.onReload();
       return;
     }
+
     this.mid.value = mid;
     tabController.index = (mid == -1 ? 0 : 4);
   }
@@ -194,9 +196,10 @@ class DynamicsController extends GetxController
 
   @override
   FutureOr<void> toTopOrRefresh() {
-    if (scrollController.hasClients && controller.scrollController.hasClients) {
+    final ctr = controller;
+    if (scrollController.hasClients && ctr.scrollController.hasClients) {
       if (scrollController.position.pixels == 0 &&
-          controller.scrollController.position.pixels == 0) {
+          ctr.scrollController.position.pixels == 0) {
         return onRefresh();
       } else {
         animateToTop();

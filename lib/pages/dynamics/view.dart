@@ -1,11 +1,9 @@
 import 'package:PiliPlus/models/common/dynamics_type.dart';
 import 'package:PiliPlus/models/common/up_panel_position.dart';
 import 'package:PiliPlus/pages/dynamics/create_dyn_panel.dart';
-import 'package:PiliPlus/pages/dynamics/tab/controller.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -161,9 +159,7 @@ class _DynamicsPageState extends State<DynamicsPage>
                   DynamicsType.values.map((e) => Tab(text: e.labels)).toList(),
               onTap: (index) {
                 if (!_dynamicsController.tabController.indexIsChanging) {
-                  feedBack();
-                  Get.find<DynamicsTabController>(tag: tabsConfig[index]['tag'])
-                      .animateToTop();
+                  _dynamicsController.animateToTop();
                 }
               },
             ),
