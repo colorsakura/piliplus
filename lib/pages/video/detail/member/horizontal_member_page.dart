@@ -274,7 +274,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
               ),
               const SizedBox(width: 8),
               Image.asset(
-                'assets/images/lv/lv${memberInfoModel.level}.png',
+                'assets/images/lv/lv${memberInfoModel.isSeniorMember == 1 ? '6_s' : memberInfoModel.level}.png',
                 height: 11,
               ),
             ],

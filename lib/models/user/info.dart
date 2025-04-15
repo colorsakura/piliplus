@@ -29,6 +29,7 @@ class UserInfoData {
     this.wallet,
     this.hasShop,
     this.shopUrl,
+    this.isSeniorMember,
   });
   @HiveField(0)
   bool? isLogin;
@@ -78,6 +79,8 @@ class UserInfoData {
   bool? hasShop;
   @HiveField(23)
   String? shopUrl;
+  @HiveField(24)
+  int? isSeniorMember;
 
   UserInfoData.fromJson(Map<String, dynamic> json) {
     isLogin = json['isLogin'] ?? false;
@@ -106,6 +109,7 @@ class UserInfoData {
     wallet = json['wallet'];
     hasShop = json['has_shop'];
     shopUrl = json['shop_url'];
+    isSeniorMember = json['is_senior_member'];
   }
 }
 

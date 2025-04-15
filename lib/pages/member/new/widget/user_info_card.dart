@@ -130,7 +130,7 @@ class UserInfoCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Image.asset(
-                  'assets/images/lv/lv${card.levelInfo?.currentLevel}.png',
+                  'assets/images/lv/lv${card.levelInfo?.identity == 2 ? '6_s' : card.levelInfo?.currentLevel}.png',
                   height: 11,
                   semanticLabel: '等级${card.levelInfo?.currentLevel}',
                 ),

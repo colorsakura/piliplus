@@ -17,6 +17,7 @@ Widget searchBangumiPanel(
     Success() => loadingState.response?.isNotEmpty == true
         ? CustomScrollView(
             controller: ctr.scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.only(

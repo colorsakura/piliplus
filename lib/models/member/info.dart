@@ -11,6 +11,7 @@ class MemberInfoModel {
     this.official,
     this.vip,
     this.liveRoom,
+    this.isSeniorMember,
   });
 
   int? mid;
@@ -24,6 +25,7 @@ class MemberInfoModel {
   Map? official;
   Vip? vip;
   LiveRoom? liveRoom;
+  int? isSeniorMember;
 
   MemberInfoModel.fromJson(Map<String, dynamic> json) {
     mid = json['mid'];
@@ -38,6 +40,7 @@ class MemberInfoModel {
     vip = Vip.fromJson(json['vip']);
     liveRoom =
         json['live_room'] != null ? LiveRoom.fromJson(json['live_room']) : null;
+    isSeniorMember = json['is_senior_member'];
   }
 }
 

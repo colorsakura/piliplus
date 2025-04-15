@@ -41,13 +41,14 @@ class UserInfoDataAdapter extends TypeAdapter<UserInfoData> {
       wallet: (fields[21] as Map?)?.cast<dynamic, dynamic>(),
       hasShop: fields[22] as bool?,
       shopUrl: fields[23] as String?,
+      isSeniorMember: fields[24] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserInfoData obj) {
     writer
-      ..writeByte(24)
+      ..writeByte(25)
       ..writeByte(0)
       ..write(obj.isLogin)
       ..writeByte(1)
@@ -95,7 +96,9 @@ class UserInfoDataAdapter extends TypeAdapter<UserInfoData> {
       ..writeByte(22)
       ..write(obj.hasShop)
       ..writeByte(23)
-      ..write(obj.shopUrl);
+      ..write(obj.shopUrl)
+      ..writeByte(24)
+      ..write(obj.isSeniorMember);
   }
 
   @override

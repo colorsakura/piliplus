@@ -27,6 +27,7 @@ Widget searchArticlePanel(
 
   return CustomScrollView(
     controller: searchPanelCtr.scrollController,
+    physics: const AlwaysScrollableScrollPhysics(),
     slivers: [
       SliverPersistentHeader(
         pinned: false,

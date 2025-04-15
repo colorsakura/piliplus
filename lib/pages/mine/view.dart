@@ -176,7 +176,7 @@ class _MinePageState extends State<MinePage> {
                           ),
                           const SizedBox(width: 4),
                           Image.asset(
-                            'assets/images/lv/lv${_mineController.userInfo.value.levelInfo != null ? _mineController.userInfo.value.levelInfo!.currentLevel : '0'}.png',
+                            'assets/images/lv/lv${_mineController.userInfo.value.isSeniorMember == 1 ? '6_s' : _mineController.userInfo.value.levelInfo != null ? _mineController.userInfo.value.levelInfo!.currentLevel : '0'}.png',
                             height: 10,
                             semanticLabel:
                                 '等级：${_mineController.userInfo.value.levelInfo != null ? _mineController.userInfo.value.levelInfo!.currentLevel : '0'}',

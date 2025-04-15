@@ -14,6 +14,7 @@ Widget searchLivePanel(
     Loading() => loadingWidget,
     Success() => loadingState.response?.isNotEmpty == true
         ? GridView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.only(
               left: StyleString.safeSpace,
               right: StyleString.safeSpace,

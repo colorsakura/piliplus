@@ -123,6 +123,7 @@ class SearchUserItemModel {
     this.isLive,
     this.roomId,
     this.officialVerify,
+    this.isSeniorMember,
   });
 
   String? type;
@@ -141,6 +142,7 @@ class SearchUserItemModel {
   int? isLive;
   int? roomId;
   Map? officialVerify;
+  int? isSeniorMember;
 
   SearchUserItemModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -159,6 +161,7 @@ class SearchUserItemModel {
     isLive = json['is_live'];
     roomId = json['room_id'];
     officialVerify = json['official_verify'];
+    isSeniorMember = json['is_senior_member'];
   }
 }
 

@@ -245,7 +245,7 @@ Widget _itemWidget(BuildContext context, dynamic item) {
                       const SizedBox(width: 6),
                       Image.asset(
                         'assets/images/lv/lv${item['author']['level']}.png',
-                        height: 11,
+                        height: 19,
                       ),
                     ],
                   ),

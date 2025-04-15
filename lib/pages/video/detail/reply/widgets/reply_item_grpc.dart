@@ -302,7 +302,7 @@ class ReplyItemGrpc extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Image.asset(
-                        'assets/images/lv/lv${replyItem.member.level}.png',
+                        'assets/images/lv/lv${replyItem.member.isSeniorMember == 1 ? '6_s' : replyItem.member.level}.png',
                         height: 11,
                         semanticLabel: "等级：${replyItem.member.level}",
                       ),

@@ -23,6 +23,7 @@ Widget searchVideoPanel(
   final controller = Get.put(VideoPanelController(), tag: searchPanelCtr.tag);
   return CustomScrollView(
     controller: searchPanelCtr.scrollController,
+    physics: const AlwaysScrollableScrollPhysics(),
     slivers: [
       SliverPersistentHeader(
         pinned: false,

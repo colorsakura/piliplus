@@ -25,6 +25,7 @@ Widget searchUserPanel(
 
   return CustomScrollView(
     controller: searchPanelCtr.scrollController,
+    physics: const AlwaysScrollableScrollPhysics(),
     slivers: [
       SliverPersistentHeader(
         pinned: false,
@@ -151,7 +152,7 @@ Widget searchUserPanel(
                                     ),
                                     const SizedBox(width: 6),
                                     Image.asset(
-                                      'assets/images/lv/lv${i!.level}.png',
+                                      'assets/images/lv/lv${i.isSeniorMember == 1 ? '6_s' : i!.level}.png',
                                       height: 11,
                                       semanticLabel: '等级${i.level}',
                                     ),
