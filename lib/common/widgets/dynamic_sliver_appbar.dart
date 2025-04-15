@@ -35,7 +35,7 @@ class DynamicSliverAppBar extends StatefulWidget {
     this.stretchTriggerOffset = 100.0,
     this.onStretchTrigger,
     this.shape,
-    this.toolbarHeight = kToolbarHeight + 20,
+    this.toolbarHeight = kToolbarHeight,
     this.leadingWidth,
     this.toolbarTextStyle,
     this.titleTextStyle,
@@ -43,8 +43,10 @@ class DynamicSliverAppBar extends StatefulWidget {
     this.forceMaterialTransparency = false,
     this.clipBehavior,
     this.appBarClipper,
+    this.hasTabBar = false,
   });
 
+  final bool hasTabBar;
   final Widget? flexibleSpace;
   final Widget? leading;
   final bool automaticallyImplyLeading;
@@ -95,18 +97,10 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   // As long as the height is 0 instead of the sliver app bar a sliver to box adapter will be used
   // to calculate dynamically the size for the sliver app bar
   double _height = 0;
-  Orientation? _orientation;
 
   @override
   void initState() {
     super.initState();
-    _updateHeight();
-  }
-
-  @override
-  void didUpdateWidget(covariant DynamicSliverAppBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
     _updateHeight();
   }
 
@@ -124,21 +118,25 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   }
 
   @override
+  void didChangeDependencies() {
+    _height = 0;
+    _updateHeight();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //Needed to lay out the flexibleSpace the first time, so we can calculate its intrinsic height
-    Orientation orientation = MediaQuery.orientationOf(context);
-    if (_orientation != orientation) {
-      _orientation = orientation;
-      _height = 0;
-    }
     if (_height == 0) {
       return SliverToBoxAdapter(
-        child: Container(
+        child: SizedBox(
           key: _childKey,
           child: widget.flexibleSpace ?? SizedBox(height: kToolbarHeight),
         ),
       );
     }
+
+    MediaQuery.orientationOf(context);
 
     return SliverAppBar(
       leading: widget.leading,
@@ -168,7 +166,7 @@ class _DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
       onStretchTrigger: widget.onStretchTrigger,
       shape: widget.shape,
       toolbarHeight: widget.toolbarHeight,
-      expandedHeight: _height,
+      expandedHeight: _height + (widget.hasTabBar ? 48 : 0),
       leadingWidth: widget.leadingWidth,
       toolbarTextStyle: widget.toolbarTextStyle,
       titleTextStyle: widget.titleTextStyle,

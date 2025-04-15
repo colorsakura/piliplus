@@ -55,7 +55,7 @@ class _MemberPageNewState extends State<MemberPageNew> {
 
   @override
   Widget build(BuildContext context) {
-    if (_userController.top == null || _userController.top == 0) {
+    if (_userController.top == 0) {
       _userController.top = MediaQuery.of(context).padding.top;
     }
     return Scaffold(
@@ -64,7 +64,6 @@ class _MemberPageNewState extends State<MemberPageNew> {
         () => _userController.loadingState.value is Success
             ? LayoutBuilder(
                 builder: (context, constraints) {
-                  // if (constraints.maxHeight > constraints.maxWidth) {
                   return ExtendedNestedScrollView(
                     key: _key,
                     controller: _userController.scrollController,
@@ -97,41 +96,6 @@ class _MemberPageNewState extends State<MemberPageNew> {
                           )
                         : Center(child: const Text('EMPTY')),
                   );
-                  // } else {
-                  //   return Row(
-                  //     children: [
-                  //       Expanded(
-                  //         child: CustomScrollView(
-                  //           slivers: [
-                  //             _buildAppBar(false),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       Expanded(
-                  //         child: SafeArea(
-                  //           top: false,
-                  //           left: false,
-                  //           bottom: false,
-                  //           child: Column(
-                  //             children: [
-                  //               SizedBox(height: _userController.top),
-                  //               if ((_userController.tab2?.length ?? -1) > 1)
-                  //                 _buildTab,
-                  //               Expanded(
-                  //                 child:
-                  //                     _userController.tab2?.isNotEmpty == true
-                  //                         ? _buildBody
-                  //                         : Center(
-                  //                             child: const Text('EMPTY'),
-                  //                           ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   );
-                  // }
                 },
               )
             : Center(
@@ -186,120 +150,117 @@ class _MemberPageNewState extends State<MemberPageNew> {
       );
 
   Widget _buildAppBar({bool needTab = true, bool isV = true}) =>
-      MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        // removeRight: true,
-        child: DynamicSliverAppBar(
-          leading: Padding(
-            padding: EdgeInsets.only(top: _userController.top ?? 0),
-            child: const BackButton(),
-          ),
-          title: IgnorePointer(
-            child: Obx(() => _userController.showUname.value &&
-                    _userController.username != null
-                ? Padding(
-                    padding: EdgeInsets.only(top: _userController.top ?? 0),
-                    child: Text(_userController.username!),
-                  )
-                : const SizedBox.shrink()),
-          ),
-          pinned: true,
-          flexibleSpace:
-              _buildUserInfo(_userController.loadingState.value, isV),
-          bottom: needTab && (_userController.tab2?.length ?? -1) > 1
-              ? PreferredSize(
-                  preferredSize: Size.fromHeight(48),
-                  child: _buildTab,
+      DynamicSliverAppBar(
+        primary: false,
+        leading: Padding(
+          padding: EdgeInsets.only(top: _userController.top),
+          child: const BackButton(),
+        ),
+        hasTabBar: (_userController.tab2?.length ?? 0) > 1,
+        toolbarHeight: kToolbarHeight + _userController.top,
+        title: IgnorePointer(
+          child: Obx(() => _userController.showUname.value &&
+                  _userController.username != null
+              ? Padding(
+                  padding: EdgeInsets.only(top: _userController.top),
+                  child: Text(_userController.username!),
                 )
-              : null,
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(top: _userController.top ?? 0),
-              child: IconButton(
-                tooltip: '搜索',
-                onPressed: () => Get.toNamed(
-                    '/memberSearch?mid=$_mid&uname=${_userController.username}'),
-                icon: const Icon(Icons.search_outlined),
-              ),
+              : const SizedBox.shrink()),
+        ),
+        pinned: true,
+        flexibleSpace: _buildUserInfo(_userController.loadingState.value, isV),
+        bottom: needTab && (_userController.tab2?.length ?? -1) > 1
+            ? PreferredSize(
+                preferredSize: Size.fromHeight(48),
+                child: _buildTab,
+              )
+            : null,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(top: _userController.top),
+            child: IconButton(
+              tooltip: '搜索',
+              onPressed: () => Get.toNamed(
+                  '/memberSearch?mid=$_mid&uname=${_userController.username}'),
+              icon: const Icon(Icons.search_outlined),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: _userController.top ?? 0),
-              child: PopupMenuButton(
-                icon: const Icon(Icons.more_vert),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  if (_userController.ownerMid != _mid) ...[
-                    PopupMenuItem(
-                      onTap: () => _userController.blockUser(context),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.block, size: 19),
-                          const SizedBox(width: 10),
-                          Text(_userController.relation.value != -1
-                              ? '加入黑名单'
-                              : '移除黑名单'),
-                        ],
-                      ),
-                    )
-                  ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: _userController.top),
+            child: PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                if (_userController.ownerMid != _mid) ...[
                   PopupMenuItem(
-                    onTap: () => _userController.shareUser(),
+                    onTap: () => _userController.blockUser(context),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.share_outlined, size: 19),
+                        const Icon(Icons.block, size: 19),
                         const SizedBox(width: 10),
-                        Text(_userController.ownerMid != _mid
-                            ? '分享UP主'
-                            : '分享我的主页'),
+                        Text(_userController.relation.value != -1
+                            ? '加入黑名单'
+                            : '移除黑名单'),
+                      ],
+                    ),
+                  )
+                ],
+                PopupMenuItem(
+                  onTap: () => _userController.shareUser(),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.share_outlined, size: 19),
+                      const SizedBox(width: 10),
+                      Text(_userController.ownerMid != _mid
+                          ? '分享UP主'
+                          : '分享我的主页'),
+                    ],
+                  ),
+                ),
+                if (_userController.ownerMid != null &&
+                    _userController.mid != _userController.ownerMid) ...[
+                  const PopupMenuDivider(),
+                  PopupMenuItem(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          clipBehavior: Clip.hardEdge,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                          content: ReportPanel(
+                            name: _userController.username,
+                            mid: _mid,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 19,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          '举报',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
+                        ),
                       ],
                     ),
                   ),
-                  if (_userController.ownerMid != null &&
-                      _userController.mid != _userController.ownerMid) ...[
-                    const PopupMenuDivider(),
-                    PopupMenuItem(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            clipBehavior: Clip.hardEdge,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 16,
-                            ),
-                            content: ReportPanel(
-                              name: _userController.username,
-                              mid: _mid,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            size: 19,
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            '举报',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.error),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ],
-              ),
+              ],
             ),
-            const SizedBox(width: 4),
-          ],
-        ),
+          ),
+          const SizedBox(width: 4),
+        ],
       );
 
   Widget _errorWidget(msg) {
@@ -314,21 +275,17 @@ class _MemberPageNewState extends State<MemberPageNew> {
       Loading() => const CircularProgressIndicator(),
       Success() => userState.response is Data
           ? Obx(
-              () => Padding(
-                padding: EdgeInsets.only(
-                    bottom: (_userController.tab2?.length ?? 0) > 1 ? 48 : 0),
-                child: UserInfoCard(
-                  isV: isV,
-                  isOwner: _userController.mid == _userController.ownerMid,
-                  relation: _userController.relation.value,
-                  isFollow: _userController.isFollow.value,
-                  card: userState.response.card,
-                  images: userState.response.images,
-                  onFollow: () => _userController.onFollow(context),
-                  live: _userController.live,
-                  silence: _userController.silence,
-                  endTime: _userController.endTime,
-                ),
+              () => UserInfoCard(
+                isV: isV,
+                isOwner: _userController.mid == _userController.ownerMid,
+                relation: _userController.relation.value,
+                isFollow: _userController.isFollow.value,
+                card: userState.response.card,
+                images: userState.response.images,
+                onFollow: () => _userController.onFollow(context),
+                live: _userController.live,
+                silence: _userController.silence,
+                endTime: _userController.endTime,
               ),
             )
           : GestureDetector(

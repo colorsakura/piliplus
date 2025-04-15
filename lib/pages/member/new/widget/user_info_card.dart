@@ -436,13 +436,13 @@ class UserInfoCard extends StatelessWidget {
           child: card.officialVerify?.icon?.isNotEmpty == true
               ? CachedNetworkImage(
                   imageUrl: card.officialVerify!.icon!.http2https,
-                  width: 24,
-                  height: 24,
+                  width: 22,
+                  height: 22,
                 )
               : Image.asset(
                   'assets/images/big-vip.png',
-                  width: 24,
-                  height: 24,
+                  width: 22,
+                  height: 22,
                 ),
         ),
       );
@@ -508,8 +508,8 @@ class UserInfoCard extends StatelessWidget {
               if (card.officialVerify?.icon?.isNotEmpty == true ||
                   (card.vip?.vipStatus ?? -1) > 0)
                 Positioned(
-                  top: 170,
-                  left: 80,
+                  top: 172,
+                  left: 82,
                   child: _buildBadge(context),
                 ),
               if (live is Map && ((live['liveStatus'] as int?) ?? 0) == 1)
