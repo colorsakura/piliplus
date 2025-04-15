@@ -17,10 +17,11 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> with RouteAware {
-  final SSearchController _searchController = Get.put(
+class _SearchPageState extends State<SearchPage> {
+  final _tag = Utils.generateRandomString(6);
+  late final SSearchController _searchController = Get.put(
     SSearchController(),
-    tag: Utils.generateRandomString(6),
+    tag: _tag,
   );
 
   @override
@@ -156,7 +157,10 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Get.toNamed('/searchTrending');
+                    Get.toNamed(
+                      '/searchTrending',
+                      parameters: {'tag': _tag},
+                    );
                   },
                   child: Padding(
                     padding:

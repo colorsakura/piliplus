@@ -18,7 +18,10 @@ class SearchTrendingPage extends StatefulWidget {
 }
 
 class _SearchTrendingPageState extends State<SearchTrendingPage> {
-  final _controller = Get.put(SearchTrendingController());
+  final _controller = Get.put(
+    SearchTrendingController(),
+    tag: Get.parameters['tag'],
+  );
 
   late double _offset;
   final RxDouble _scrollRatio = 0.0.obs;
@@ -33,6 +36,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _offset = Get.width * 528 / 1125 - 56 - Get.mediaQuery.padding.top;
+    listener();
   }
 
   @override
@@ -42,11 +46,13 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
   }
 
   void listener() {
-    _scrollRatio.value = clampDouble(
-      _controller.scrollController.position.pixels / _offset,
-      0.0,
-      1.0,
-    );
+    if (_controller.scrollController.hasClients) {
+      _scrollRatio.value = clampDouble(
+        _controller.scrollController.position.pixels / _offset,
+        0.0,
+        1.0,
+      );
+    }
   }
 
   @override
@@ -140,7 +146,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                     },
                     leading: index < _controller.topCount
                         ? Icon(
-                            size: 16,
+                            size: 17,
                             Icons.vertical_align_top_outlined,
                             color: const Color(0xFFd1403e),
                           )
@@ -154,7 +160,7 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                                 2 => const Color(0xFFdfa777),
                                 _ => Theme.of(context).colorScheme.outline,
                               },
-                              fontSize: 16,
+                              fontSize: 17,
                               fontStyle: FontStyle.italic,
                             ),
                           ),
@@ -166,21 +172,21 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             strutStyle: StrutStyle(height: 1, leading: 0),
-                            style: TextStyle(height: 1, fontSize: 14),
+                            style: TextStyle(height: 1, fontSize: 15),
                           ),
                         ),
                         if (item.icon?.isNotEmpty == true) ...[
                           const SizedBox(width: 4),
                           CachedNetworkImage(
                             imageUrl: item.icon!.http2https,
-                            height: 15,
+                            height: 16,
                           ),
                         ] else if (item.showLiveIcon == true) ...[
                           const SizedBox(width: 4),
                           Image.asset(
                             'assets/images/live/live_@28h.gif',
-                            width: 48,
-                            height: 15,
+                            width: 51,
+                            height: 16,
                           ),
                         ],
                       ],
