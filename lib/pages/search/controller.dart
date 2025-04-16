@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/dialog.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/http/search.dart';
@@ -8,9 +9,6 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class SSearchController extends GetxController {
-  late final historyOff =
-      '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m785-289-58-58q16-29 24.5-63t8.5-70q0-117-81.5-198.5T480-760q-35 0-68.5 8.5T348-726l-59-59q43-26 91.5-40.5T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 53-14.5 101T785-289ZM520-554l-80-80v-46h80v126ZM792-56 672-176q-42 26-90 41t-102 15q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q37 0 70.5-8.5T614-234L288-560H120v-168l-64-64 56-56 736 736-56 56Z"/></svg>';
-
   final searchFocusNode = FocusNode();
   final controller = TextEditingController();
 
@@ -21,8 +19,13 @@ class SSearchController extends GetxController {
   String hintText = '搜索';
 
   late bool enableHotKey;
+  late bool enableSearchRcmd;
 
-  Rx<LoadingState> loadingState = LoadingState.loading().obs;
+  Rx<LoadingState<TrendingData>> loadingState =
+      LoadingState<TrendingData>.loading().obs;
+
+  Rx<LoadingState<SearchKeywordData>> recommendData =
+      LoadingState<SearchKeywordData>.loading().obs;
 
   int initIndex = 0;
 
@@ -31,6 +34,8 @@ class SSearchController extends GetxController {
   final _debouncer = Debouncer(delay: const Duration(milliseconds: 200));
   late final searchSuggestion = GStorage.searchSuggestion;
   late final RxBool recordSearchHistory = GStorage.recordSearchHistory.obs;
+
+  late final digitOnlyRegExp = RegExp(r'^\d+$');
 
   @override
   void onInit() {
@@ -53,13 +58,20 @@ class SSearchController extends GetxController {
     enableHotKey =
         GStorage.setting.get(SettingBoxKey.enableHotKey, defaultValue: true);
 
+    enableSearchRcmd = GStorage.setting
+        .get(SettingBoxKey.enableSearchRcmd, defaultValue: true);
+
     if (enableHotKey) {
       queryHotSearchList();
+    }
+
+    if (enableSearchRcmd) {
+      queryRecommendList();
     }
   }
 
   void validateUid() {
-    showUidBtn.value = RegExp(r'^\d+$').hasMatch(controller.text);
+    showUidBtn.value = digitOnlyRegExp.hasMatch(controller.text);
   }
 
   void onChange(String value) {
@@ -112,12 +124,11 @@ class SSearchController extends GetxController {
 
   // 获取热搜关键词
   Future queryHotSearchList() async {
-    dynamic result = await SearchHttp.hotSearchList();
-    if (result['status']) {
-      loadingState.value = LoadingState.success(result['data'].list);
-    } else {
-      loadingState.value = LoadingState.error(result['msg']);
-    }
+    loadingState.value = await SearchHttp.searchTrending(limit: 10);
+  }
+
+  Future queryRecommendList() async {
+    recommendData.value = await SearchHttp.searchRecommend();
   }
 
   void onClickKeyword(String keyword) {

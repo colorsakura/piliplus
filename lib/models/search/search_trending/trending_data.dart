@@ -1,9 +1,19 @@
 import 'package:PiliPlus/models/search/search_trending/trending_list.dart';
 
-class TrendingData {
+class SearchKeywordData {
+  List<SearchKeywordList>? list;
+
+  SearchKeywordData.fromJson(Map<String, dynamic> json) {
+    list =
+        (json['list'] as List?)?.map((e) => TrendingList.fromJson(e)).toList();
+  }
+}
+
+class TrendingData implements SearchKeywordData {
   String? trackid;
-  List<TrendingList>? list;
-  List<TrendingList>? topList;
+  @override
+  List<SearchKeywordList>? list;
+  List<SearchKeywordList>? topList;
   String? hotwordEggInfo;
 
   TrendingData({this.trackid, this.list, this.topList, this.hotwordEggInfo});
@@ -18,11 +28,4 @@ class TrendingData {
             .toList(),
         hotwordEggInfo: json['hotword_egg_info'] as String?,
       );
-
-  Map<String, dynamic> toJson() => {
-        'trackid': trackid,
-        'list': list?.map((e) => e.toJson()).toList(),
-        'top_list': topList?.map((e) => e.toJson()).toList(),
-        'hotword_egg_info': hotwordEggInfo,
-      };
 }

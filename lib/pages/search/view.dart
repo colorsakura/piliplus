@@ -1,10 +1,11 @@
+import 'package:PiliPlus/common/widgets/disabled_icon.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/models/search/search_trending/trending_data.dart';
 import 'package:PiliPlus/models/search/suggest.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
 import 'widgets/hot_keyword.dart';
@@ -42,11 +43,8 @@ class _SearchPageState extends State<SearchPage> {
                     tooltip: 'UID搜索用户',
                     icon: const Icon(Icons.person_outline, size: 22),
                     onPressed: () {
-                      if (RegExp(r'^\d+$')
-                          .hasMatch(_searchController.controller.text)) {
-                        Get.toNamed(
-                            '/member?mid=${_searchController.controller.text}');
-                      }
+                      Get.toNamed(
+                          '/member?mid=${_searchController.controller.text}');
                     },
                   )
                 : const SizedBox.shrink(),
@@ -83,11 +81,9 @@ class _SearchPageState extends State<SearchPage> {
             // 搜索建议
             if (_searchController.searchSuggestion) _searchSuggest(),
             if (context.orientation == Orientation.portrait) ...[
-              if (_searchController.enableHotKey)
-                // 热搜
-                hotSearch(),
-              // 搜索历史
-              _history()
+              if (_searchController.enableHotKey) hotSearch(),
+              _history(),
+              if (_searchController.enableSearchRcmd) hotSearch(false)
             ] else
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +91,8 @@ class _SearchPageState extends State<SearchPage> {
                   if (_searchController.enableHotKey)
                     Expanded(child: hotSearch()),
                   Expanded(child: _history()),
+                  if (_searchController.enableSearchRcmd)
+                    Expanded(child: hotSearch(false)),
                 ],
               ),
           ],
@@ -135,7 +133,15 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget hotSearch() {
+  Widget hotSearch([bool isHot = true]) {
+    final text = Text(
+      isHot ? '大家都在搜' : '搜索发现',
+      strutStyle: const StrutStyle(leading: 0, height: 1),
+      style: Theme.of(context)
+          .textTheme
+          .titleMedium!
+          .copyWith(height: 1, fontWeight: FontWeight.bold),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 25, 4, 25),
       child: Column(
@@ -144,61 +150,54 @@ class _SearchPageState extends State<SearchPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '大家都在搜',
-                  strutStyle: StrutStyle(leading: 0, height: 1),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(height: 1, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 12),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.toNamed(
-                      '/searchTrending',
-                      parameters: {'tag': _tag},
-                    );
-                  },
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                    child: Text.rich(
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                      TextSpan(
+                isHot
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          TextSpan(
-                            text: '完整榜单',
-                          ),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Icon(
-                              size: 16,
-                              Icons.keyboard_arrow_right,
-                              color: Theme.of(context).colorScheme.outline,
+                          text,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 14),
+                            child: SizedBox(
+                              height: 34,
+                              child: TextButton.icon(
+                                onPressed: () {
+                                  Get.toNamed(
+                                    '/searchTrending',
+                                    parameters: {'tag': _tag},
+                                  );
+                                },
+                                label: Text(
+                                  '完整榜单',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                                icon: Icon(
+                                  size: 16,
+                                  Icons.keyboard_arrow_right,
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                                iconAlignment: IconAlignment.end,
+                              ),
                             ),
-                          ),
+                          )
                         ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
+                      )
+                    : text,
                 SizedBox(
                   height: 34,
                   child: TextButton.icon(
                     style: ButtonStyle(
-                      padding: WidgetStateProperty.all(
-                        const EdgeInsets.only(
-                            left: 10, top: 6, bottom: 6, right: 10),
-                      ),
+                      padding: const WidgetStatePropertyAll(
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 6)),
                     ),
-                    onPressed: _searchController.queryHotSearchList,
+                    onPressed: isHot
+                        ? _searchController.queryHotSearchList
+                        : _searchController.queryRecommendList,
                     icon: Icon(
                       Icons.refresh_outlined,
                       size: 18,
@@ -215,7 +214,11 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           ),
-          Obx(() => _buildHotKey(_searchController.loadingState.value)),
+          Obx(() => _buildHotKey(
+                isHot
+                    ? _searchController.loadingState.value
+                    : _searchController.recommendData.value,
+              )),
         ],
       ),
     );
@@ -223,8 +226,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _history() {
     return Obx(
-      () => Container(
-        width: double.infinity,
+      () => Padding(
         padding: EdgeInsets.fromLTRB(
           10,
           context.orientation == Orientation.landscape
@@ -233,7 +235,7 @@ class _SearchPageState extends State<SearchPage> {
                   ? 0
                   : 6,
           6,
-          MediaQuery.of(context).padding.bottom + 50,
+          25,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,25 +264,8 @@ class _SearchPageState extends State<SearchPage> {
                               ? '记录搜索'
                               : '无痕搜索',
                           icon: _searchController.recordSearchHistory.value
-                              ? Icon(
-                                  Icons.history,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant
-                                      .withOpacity(0.8),
-                                )
-                              : SvgPicture.string(
-                                  width: 22,
-                                  height: 22,
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .outline
-                                        .withOpacity(0.8),
-                                    BlendMode.srcIn,
-                                  ),
-                                  _searchController.historyOff,
-                                ),
+                              ? historyIcon
+                              : historyIcon.disable(),
                           style: IconButton.styleFrom(
                             padding: EdgeInsets.zero,
                           ),
@@ -349,13 +334,16 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildHotKey(LoadingState loadingState) {
+  Icon get historyIcon => Icon(Icons.history,
+      color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.8));
+
+  Widget _buildHotKey(LoadingState<SearchKeywordData> loadingState) {
     return switch (loadingState) {
-      Success() => (loadingState.response as List?)?.isNotEmpty == true
+      Success() => loadingState.response.list?.isNotEmpty == true
           ? LayoutBuilder(
               builder: (context, constraints) => HotKeyword(
                 width: constraints.maxWidth,
-                hotSearchList: loadingState.response,
+                hotSearchList: loadingState.response.list!,
                 onClick: _searchController.onClickKeyword,
               ),
             )
