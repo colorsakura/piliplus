@@ -4,8 +4,8 @@ import 'package:PiliPlus/pages/dynamics/view.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/toolbar_icon_button.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -488,8 +488,8 @@ class _CreateDynPanelState extends CommonPublishPageState<CreateDynPanel> {
     if (result['status']) {
       Get.back();
       SmartDialog.showToast('发布成功');
-      Utils.insertCreatedDyn(result);
-      Utils.checkCreatedDyn(
+      RequestUtils.insertCreatedDyn(result);
+      RequestUtils.checkCreatedDyn(
         id: result['data']?['dyn_id'],
         dynText: editController.text,
       );

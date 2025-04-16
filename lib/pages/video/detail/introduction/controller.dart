@@ -8,6 +8,8 @@ import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -471,7 +473,7 @@ class VideoIntroController extends GetxController
                   ),
                   onTap: () {
                     Get.back();
-                    Utils.launchURL(videoUrl);
+                    PageUtils.launchURL(videoUrl);
                   },
                 ),
                 ListTile(
@@ -570,7 +572,7 @@ class VideoIntroController extends GetxController
       }
       return;
     } else {
-      Utils.actionRelationMod(
+      RequestUtils.actionRelationMod(
         context: context,
         mid: videoDetail.value.owner?.mid,
         isFollow: attr != 0,
@@ -598,7 +600,7 @@ class VideoIntroController extends GetxController
     if (videoDetailCtr.isPlayAll) {
       if (videoDetailCtr.mediaList.indexWhere((item) => item.bvid == bvid) ==
           -1) {
-        Utils.toViewPage(
+        PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
             if (cover != null) 'pic': cover,
@@ -866,7 +868,7 @@ class VideoIntroController extends GetxController
         );
       } else {
         SearchHttp.ab2c(aid: videoItem.aid, bvid: videoItem.bvid).then(
-          (cid) => Utils.toViewPage(
+          (cid) => PageUtils.toVideoPage(
             'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
             arguments: {
               'videoItem': videoItem,
@@ -912,10 +914,10 @@ class VideoIntroController extends GetxController
       if (type == 'tap') {
         actionFavVideo(type: 'default');
       } else {
-        Utils.showFavBottomSheet(context: context, ctr: this);
+        PageUtils.showFavBottomSheet(context: context, ctr: this);
       }
     } else if (type != 'longPress') {
-      Utils.showFavBottomSheet(context: context, ctr: this);
+      PageUtils.showFavBottomSheet(context: context, ctr: this);
     }
   }
 }

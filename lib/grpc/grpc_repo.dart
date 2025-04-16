@@ -16,7 +16,7 @@ import 'package:PiliPlus/grpc/network/network.pb.dart' as network;
 import 'package:PiliPlus/grpc/restriction/restriction.pb.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/utils/login.dart';
+import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:archive/archive.dart';

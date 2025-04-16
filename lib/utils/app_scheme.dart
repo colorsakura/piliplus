@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/models/common/reply_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -84,7 +85,7 @@ class PiliScheme {
             String? id = uriDigitRegExp.firstMatch(path)?.group(1);
             if (id != null) {
               bool isEp = path.contains('/ep/');
-              Utils.viewBangumi(
+              PageUtils.viewBangumi(
                   seasonId: isEp ? null : id,
                   epId: isEp ? id : null,
                   progress: uri.queryParameters['start_progress']);
@@ -95,7 +96,7 @@ class PiliScheme {
             // bilibili://space/12345678?frommodule=XX&h5awaken=random
             String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
             if (mid != null) {
-              Utils.toDupNamed('/member?mid=$mid', off: off);
+              PageUtils.toDupNamed('/member?mid=$mid', off: off);
               return true;
             }
             return false;
@@ -159,7 +160,7 @@ class PiliScheme {
             if (aid != null || bvid != null) {
               if (queryParameters['cid'] != null) {
                 bvid ??= IdUtils.av2bv(int.parse(aid!));
-                Utils.toViewPage(
+                PageUtils.toVideoPage(
                   'bvid=$bvid&cid=${queryParameters['cid']}',
                   arguments: {
                     'pic': null,
@@ -185,7 +186,7 @@ class PiliScheme {
             // bilibili://live/12345678?extra_jump_from=1&from=1&is_room_feed=1&h5awaken=random
             String? roomId = uriDigitRegExp.firstMatch(path)?.group(1);
             if (roomId != null) {
-              Utils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
+              PageUtils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
               return true;
             }
             return false;
@@ -194,7 +195,7 @@ class PiliScheme {
             if (path.startsWith('/season')) {
               String? seasonId = uriDigitRegExp.firstMatch(path)?.group(1);
               if (seasonId != null) {
-                Utils.viewBangumi(seasonId: seasonId, epId: null);
+                PageUtils.viewBangumi(seasonId: seasonId, epId: null);
                 return true;
               }
             }
@@ -203,7 +204,7 @@ class PiliScheme {
             // bilibili://opus/detail/12345678?h5awaken=random
             // String? id = uriDigitRegExp.firstMatch(path)?.group(1);
             // if (id != null) {
-            //   Utils.toDupNamed(
+            //   PageUtils.toDupNamed(
             //     '/htmlRender',
             //     parameters: {
             //       'url': 'https://www.bilibili.com/opus/$id',
@@ -219,7 +220,7 @@ class PiliScheme {
             bool hasMatch = await _onPushDynDetail(path, off);
             return hasMatch;
           case 'search':
-            Utils.toDupNamed(
+            PageUtils.toDupNamed(
               '/searchResult',
               parameters: {'keyword': ''},
               off: off,
@@ -229,7 +230,7 @@ class PiliScheme {
             // bilibili://article/40679479?jump_opus=1&jump_opus_type=1&opus_type=article&h5awaken=random
             String? id = uriDigitRegExp.firstMatch(path)?.group(1);
             if (id != null) {
-              Utils.toDupNamed(
+              PageUtils.toDupNamed(
                 '/htmlRender',
                 parameters: {
                   'url': 'www.bilibili.com/read/cv$id',
@@ -351,7 +352,7 @@ class PiliScheme {
                 .firstMatch(path)
                 ?.group(1);
             if (cvid != null) {
-              Utils.toDupNamed(
+              PageUtils.toDupNamed(
                 '/htmlRender',
                 parameters: {
                   'url': 'https://www.bilibili.com/read/cv$cvid',
@@ -424,7 +425,7 @@ class PiliScheme {
               dynamic res = await DynamicsHttp.dynamicDetail(rid: rid, type: 2);
               SmartDialog.dismiss();
               if (res['status']) {
-                Utils.toDupNamed(
+                PageUtils.toDupNamed(
                   '/dynamicDetail',
                   arguments: {
                     'item': res['data'],
@@ -442,7 +443,7 @@ class PiliScheme {
           case 'medialist':
             String? mediaId = uriDigitRegExp.firstMatch(path)?.group(1);
             if (mediaId != null) {
-              Utils.toDupNamed(
+              PageUtils.toDupNamed(
                 '/favDetail',
                 parameters: {
                   'mediaId': mediaId,
@@ -546,7 +547,7 @@ class PiliScheme {
     if (host.contains('live.bilibili.com')) {
       String? roomId = uriDigitRegExp.firstMatch(path)?.group(1);
       if (roomId != null) {
-        Utils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
+        PageUtils.toDupNamed('/liveRoom?roomid=$roomId', off: off);
         return true;
       }
       launchURL();
@@ -556,7 +557,7 @@ class PiliScheme {
     if (host.contains('space.bilibili.com')) {
       String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
       if (mid != null) {
-        Utils.toDupNamed('/member?mid=$mid', off: off);
+        PageUtils.toDupNamed('/member?mid=$mid', off: off);
         return true;
       }
       launchURL();
@@ -579,7 +580,7 @@ class PiliScheme {
               .firstMatch(uri.query)
               ?.group(1);
           if (id != null) {
-            Utils.toDupNamed(
+            PageUtils.toDupNamed(
               '/htmlRender',
               parameters: {
                 'url': 'https://www.bilibili.com/read/cv$id',
@@ -597,7 +598,7 @@ class PiliScheme {
       // case 'opus':
       //   String? id = uriDigitRegExp.firstMatch(path)?.group(1);
       //   if (id != null) {
-      //     Utils.toDupNamed(
+      //     PageUtils.toDupNamed(
       //       '/htmlRender',
       //       parameters: {
       //         'url': 'https://www.bilibili.com/opus/$id',
@@ -635,7 +636,7 @@ class PiliScheme {
         if (id != null) {
           bool isSeason = id.startsWith('ss');
           id = id.substring(2);
-          Utils.viewBangumi(
+          PageUtils.viewBangumi(
               seasonId: isSeason ? id : null,
               epId: isSeason ? null : id,
               progress: uri.queryParameters['start_progress']);
@@ -664,7 +665,7 @@ class PiliScheme {
         String? id =
             RegExp(r'cv(\d+)', caseSensitive: false).firstMatch(path)?.group(1);
         if (id != null) {
-          Utils.toDupNamed(
+          PageUtils.toDupNamed(
             '/htmlRender',
             parameters: {
               'url': 'https://www.bilibili.com/read/cv$id',
@@ -682,7 +683,7 @@ class PiliScheme {
         debugPrint('个人空间');
         String? mid = uriDigitRegExp.firstMatch(path)?.group(1);
         if (mid != null) {
-          Utils.toDupNamed(
+          PageUtils.toDupNamed(
             '/member?mid=$mid',
             off: off,
           );
@@ -708,7 +709,7 @@ class PiliScheme {
   static Future<bool> _onPushDynDetail(path, off) async {
     String? id = uriDigitRegExp.firstMatch(path)?.group(1);
     if (id != null) {
-      Utils.pushDynFromId(id, off: off);
+      PageUtils.pushDynFromId(id, off: off);
       return true;
     }
     return false;
@@ -719,7 +720,7 @@ class PiliScheme {
     bool off,
     Map? parameters,
   ) {
-    Utils.toDupNamed(
+    PageUtils.toDupNamed(
       '/webview',
       parameters: {
         'url': url,
@@ -752,7 +753,7 @@ class PiliScheme {
       if (showDialog) {
         SmartDialog.dismiss();
       }
-      Utils.toViewPage(
+      PageUtils.toVideoPage(
         'bvid=$bvid&cid=$cid',
         arguments: {
           'pic': null,

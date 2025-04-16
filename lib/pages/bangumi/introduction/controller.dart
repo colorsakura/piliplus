@@ -9,6 +9,7 @@ import 'package:PiliPlus/pages/video/detail/introduction/controller.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/pay_coins_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -281,7 +282,7 @@ class BangumiIntroController
                   ),
                   onTap: () {
                     Get.back();
-                    Utils.launchURL(videoUrl);
+                    PageUtils.launchURL(videoUrl);
                   },
                 ),
                 ListTile(
@@ -582,10 +583,10 @@ class BangumiIntroController
       if (type == 'tap') {
         actionFavVideo(type: 'default');
       } else {
-        Utils.showFavBottomSheet(context: context, ctr: this);
+        PageUtils.showFavBottomSheet(context: context, ctr: this);
       }
     } else if (type != 'longPress') {
-      Utils.showFavBottomSheet(context: context, ctr: this);
+      PageUtils.showFavBottomSheet(context: context, ctr: this);
     }
   }
 }

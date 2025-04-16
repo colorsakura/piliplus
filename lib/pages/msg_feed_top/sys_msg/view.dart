@@ -7,6 +7,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models/msg/msgfeed_sys_msg.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +198,7 @@ class _SysMsgPageState extends State<SysMsgPage> {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     try {
-                      Utils.pushDynFromId(match[4]);
+                      PageUtils.pushDynFromId(match[4]);
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
                     }

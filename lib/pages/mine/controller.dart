@@ -1,5 +1,5 @@
 import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/login.dart';
+import 'package:PiliPlus/utils/login_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';

@@ -107,7 +107,7 @@ class _FavPanelState extends State<FavPanel> {
                                       1,
                                   index),
                               dense: true,
-                              leading: Utils.isPublic(widget
+                              leading: Utils.isPublicFav(widget
                                       .ctr.favFolderData.value.list[index].attr)
                                   ? const Icon(Icons.folder_outlined)
                                   : const Icon(Icons.lock_outline),
@@ -115,7 +115,7 @@ class _FavPanelState extends State<FavPanel> {
                               title: Text(widget
                                   .ctr.favFolderData.value.list[index].title!),
                               subtitle: Text(
-                                '${widget.ctr.favFolderData.value.list[index].mediaCount}个内容 . ${Utils.isPublicText(widget.ctr.favFolderData.value.list[index].attr)}',
+                                '${widget.ctr.favFolderData.value.list[index].mediaCount}个内容 . ${Utils.isPublicFavText(widget.ctr.favFolderData.value.list[index].attr)}',
                               ),
                               trailing: Transform.scale(
                                 scale: 0.9,

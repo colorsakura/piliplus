@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
@@ -25,7 +26,7 @@ class MemberCoinsItem extends StatelessWidget {
         onTap: () async {
           int cid =
               await SearchHttp.ab2c(aid: coinItem.aid, bvid: coinItem.bvid);
-          Utils.toViewPage(
+          PageUtils.toVideoPage(
             'bvid=${coinItem.bvid}&cid=$cid',
             arguments: {
               'videoItem': coinItem,

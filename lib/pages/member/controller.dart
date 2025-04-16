@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/space/data.dart';
 import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/models/space/tab2.dart';
 import 'package:PiliPlus/pages/common/common_data_controller.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -204,7 +205,7 @@ class MemberControllerNew extends CommonDataController<Data, dynamic>
         SmartDialog.showToast('账号未登录');
         return;
       }
-      Utils.actionRelationMod(
+      RequestUtils.actionRelationMod(
         context: context,
         mid: mid,
         isFollow: isFollow,

@@ -14,6 +14,7 @@ import 'package:PiliPlus/pages/video/detail/member/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -338,7 +339,7 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
                         SmartDialog.showToast('账号未登录');
                         return;
                       }
-                      Utils.actionRelationMod(
+                      RequestUtils.actionRelationMod(
                         context: context,
                         mid: widget.mid,
                         isFollow: memberInfoModel.isFollowed ?? false,

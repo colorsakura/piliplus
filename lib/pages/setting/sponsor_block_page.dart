@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/index.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/pages/setting/slide_color_picker.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -135,7 +136,7 @@ class _SponsorBlockPageState extends State<SponsorBlockPage> {
         dense: true,
         title: Text('关于空降助手', style: _titleStyle),
         subtitle: Text(_url, style: _subTitleStyle),
-        onTap: () => Utils.launchURL(_url),
+        onTap: () => PageUtils.launchURL(_url),
       );
 
   Widget get _userIdItem => ListTile(

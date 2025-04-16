@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -34,7 +35,7 @@ Widget addWidget(item, context, type, {floor = 1}) {
             String cover = dynamicProperty[type].cover;
             try {
               int cid = await SearchHttp.ab2c(bvid: bvid);
-              Utils.toViewPage(
+              PageUtils.toVideoPage(
                 'bvid=$bvid&cid=$cid',
                 arguments: {
                   'pic': cover,

@@ -22,6 +22,7 @@ import 'package:PiliPlus/pages/video/detail/post_panel/post_panel.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/send_danmaku_panel.dart';
 import 'package:PiliPlus/pages/video/detail/widgets/media_list_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
@@ -428,7 +429,7 @@ class VideoDetailController extends GetxController
                 : null,
           );
       if (plPlayerController.isFullScreen.value) {
-        Utils.showFSSheet(
+        PageUtils.showVideoBottomSheet(
           context,
           child: plPlayerController.darkVideoPage && MyApp.darkThemeData != null
               ? Theme(
@@ -1368,7 +1369,7 @@ class VideoDetailController extends GetxController
       );
     }
     if (plPlayerController.isFullScreen.value) {
-      Utils.showFSSheet(
+      PageUtils.showVideoBottomSheet(
         context,
         child: plPlayerController.darkVideoPage && MyApp.darkThemeData != null
             ? Theme(
@@ -1664,7 +1665,7 @@ class VideoDetailController extends GetxController
           Get.find<VideoIntroController>(tag: heroTag).videoDetail.value.title;
     } catch (_) {}
     if (plPlayerController.isFullScreen.value) {
-      Utils.showFSSheet(
+      PageUtils.showVideoBottomSheet(
         context,
         child: plPlayerController.darkVideoPage && MyApp.darkThemeData != null
             ? Theme(

@@ -114,11 +114,11 @@ class FavArticleItem extends StatelessWidget {
             right: 12,
             bottom: 0,
             child: iconButton(
-              iconSize: 22,
+              iconSize: 18,
               context: context,
               onPressed: onDelete,
               icon: Icons.clear,
-              iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+              iconColor: Theme.of(context).colorScheme.outline,
               bgColor: Colors.transparent,
             ),
           ),

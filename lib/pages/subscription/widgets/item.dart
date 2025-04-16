@@ -35,39 +35,30 @@ class SubItem extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-        child: LayoutBuilder(
-          builder: (context, boxConstraints) {
-            double width =
-                (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
-            return SizedBox(
-              height: width / StyleString.aspectRatio,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: StyleString.aspectRatio,
-                    child: LayoutBuilder(
-                      builder: (context, boxConstraints) {
-                        double maxWidth = boxConstraints.maxWidth;
-                        double maxHeight = boxConstraints.maxHeight;
-                        return Hero(
-                          tag: heroTag,
-                          child: NetworkImgLayer(
-                            src: subFolderItem.cover,
-                            width: maxWidth,
-                            height: maxHeight,
-                          ),
-                        );
-                      },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: StyleString.aspectRatio,
+              child: LayoutBuilder(
+                builder: (context, boxConstraints) {
+                  double maxWidth = boxConstraints.maxWidth;
+                  double maxHeight = boxConstraints.maxHeight;
+                  return Hero(
+                    tag: heroTag,
+                    child: NetworkImgLayer(
+                      src: subFolderItem.cover,
+                      width: maxWidth,
+                      height: maxHeight,
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  videoContent(context),
-                ],
+                  );
+                },
               ),
-            );
-          },
+            ),
+            const SizedBox(width: 10),
+            videoContent(context),
+          ],
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -108,7 +109,7 @@ InlineSpan? richNode(item, BuildContext context) {
                     PiliScheme.routePushFromUrl('https:$url');
                     return;
                   }
-                  Utils.handleWebview(
+                  PageUtils.handleWebview(
                     url.startsWith('//') ? "https://$url" : url,
                   );
                 },
@@ -239,7 +240,7 @@ InlineSpan? richNode(item, BuildContext context) {
                 onTap: () async {
                   try {
                     int cid = await SearchHttp.ab2c(bvid: i.rid);
-                    Utils.toViewPage(
+                    PageUtils.toVideoPage(
                       'bvid=${i.rid}&cid=$cid',
                       arguments: {
                         'pic': null,

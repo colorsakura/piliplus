@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models/search/result.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../http/search.dart';
@@ -80,7 +81,7 @@ class VideoCardH extends StatelessWidget {
                 if ((videoItem is HotVideoItemModel) &&
                     (videoItem as HotVideoItemModel).redirectUrl?.isNotEmpty ==
                         true) {
-                  if (Utils.viewPgcFromUri(
+                  if (PageUtils.viewPgcFromUri(
                       (videoItem as HotVideoItemModel).redirectUrl!)) {
                     return;
                   }
@@ -91,7 +92,7 @@ class VideoCardH extends StatelessWidget {
                   if (source == 'later') {
                     onViewLater!(cid);
                   } else {
-                    Utils.toViewPage(
+                    PageUtils.toVideoPage(
                       'bvid=$bvid&cid=$cid',
                       arguments: {
                         'videoItem': videoItem,
@@ -115,8 +116,7 @@ class VideoCardH extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: StyleString.aspectRatio,
                       child: LayoutBuilder(
-                        builder: (BuildContext context,
-                            BoxConstraints boxConstraints) {
+                        builder: (context, boxConstraints) {
                           final double maxWidth = boxConstraints.maxWidth;
                           final double maxHeight = boxConstraints.maxHeight;
                           num? progress;

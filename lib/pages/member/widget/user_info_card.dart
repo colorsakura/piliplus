@@ -5,6 +5,7 @@ import 'package:PiliPlus/models/dynamics/result.dart';
 import 'package:PiliPlus/models/space/card.dart' as space;
 import 'package:PiliPlus/models/space/images.dart' as space;
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -549,7 +550,7 @@ class UserInfoCard extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             if (card.prInfo?.url?.isNotEmpty == true) {
-              Utils.handleWebview(card.prInfo!.url!);
+              PageUtils.handleWebview(card.prInfo!.url!);
             }
           },
           child: Container(

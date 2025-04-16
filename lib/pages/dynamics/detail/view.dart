@@ -9,6 +9,8 @@ import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -69,7 +71,7 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
             vsync: this,
             duration: const Duration(milliseconds: 200),
           )..forward();
-          Utils.onHorizontalPreview(
+          PageUtils.onHorizontalPreview(
             _key,
             AnimationController(
               vsync: this,
@@ -618,7 +620,8 @@ class _DynamicDetailPageState extends State<DynamicDetailPage>
                                     Expanded(
                                       child: Builder(
                                         builder: (context) => TextButton.icon(
-                                          onPressed: () => Utils.onLikeDynamic(
+                                          onPressed: () =>
+                                              RequestUtils.onLikeDynamic(
                                             _dynamicDetailController.item,
                                             () {
                                               if (context.mounted) {

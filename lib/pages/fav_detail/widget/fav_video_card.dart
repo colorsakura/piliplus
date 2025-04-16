@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/models/user/fav_detail.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class FavVideoCardH extends StatelessWidget {
                 videoItem.cid = await SearchHttp.ab2c(bvid: bvid);
                 dynamic seasonId = videoItem.ogv!['season_id'];
                 epId = videoItem.epId;
-                Utils.viewBangumi(seasonId: seasonId, epId: epId);
+                PageUtils.viewBangumi(seasonId: seasonId, epId: epId);
                 return;
               } else if (videoItem.page == 0 || videoItem.page! > 1) {
                 var result = await VideoHttp.videoIntro(bvid: bvid);
@@ -85,53 +86,44 @@ class FavVideoCardH extends StatelessWidget {
           horizontal: StyleString.safeSpace,
           vertical: 5,
         ),
-        child: LayoutBuilder(
-          builder: (context, boxConstraints) {
-            double width =
-                (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
-            return SizedBox(
-              height: width / StyleString.aspectRatio,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: StyleString.aspectRatio,
-                    child: LayoutBuilder(
-                      builder: (context, boxConstraints) {
-                        double maxWidth = boxConstraints.maxWidth;
-                        double maxHeight = boxConstraints.maxHeight;
-                        return Stack(
-                          children: [
-                            NetworkImgLayer(
-                              src: videoItem.pic,
-                              width: maxWidth,
-                              height: maxHeight,
-                            ),
-                            PBadge(
-                              text: Utils.timeFormat(videoItem.duration),
-                              right: 6.0,
-                              bottom: 6.0,
-                              type: 'gray',
-                            ),
-                            PBadge(
-                              text: videoItem.ogv?['type_name'],
-                              top: 6.0,
-                              right: 6.0,
-                              bottom: null,
-                              left: null,
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  videoContent(context),
-                ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: StyleString.aspectRatio,
+              child: LayoutBuilder(
+                builder: (context, boxConstraints) {
+                  double maxWidth = boxConstraints.maxWidth;
+                  double maxHeight = boxConstraints.maxHeight;
+                  return Stack(
+                    children: [
+                      NetworkImgLayer(
+                        src: videoItem.pic,
+                        width: maxWidth,
+                        height: maxHeight,
+                      ),
+                      PBadge(
+                        text: Utils.timeFormat(videoItem.duration),
+                        right: 6.0,
+                        bottom: 6.0,
+                        type: 'gray',
+                      ),
+                      PBadge(
+                        text: videoItem.ogv?['type_name'],
+                        top: 6.0,
+                        right: 6.0,
+                        bottom: null,
+                        left: null,
+                      ),
+                    ],
+                  );
+                },
               ),
-            );
-          },
+            ),
+            const SizedBox(width: 10),
+            videoContent(context),
+          ],
         ),
       ),
     );
@@ -144,55 +136,43 @@ class FavVideoCardH extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                videoItem.title,
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  letterSpacing: 0.3,
+              Expanded(
+                child: Text(
+                  videoItem.title,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    letterSpacing: 0.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 2,
+              ),
+              Text(
+                '${Utils.dateFormat(videoItem.favTime)} ${videoItem.owner.name}',
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-              ),
-              if (videoItem.ogv != null)
-                Text(
-                  videoItem.desc!,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              const Spacer(),
-              Text(
-                Utils.dateFormat(videoItem.favTime),
                 style: TextStyle(
-                    fontSize: 11, color: Theme.of(context).colorScheme.outline),
+                  height: 1,
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
-              if (!videoItem.owner.name.isNullOrEmpty)
-                Text(
-                  videoItem.owner.name!,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.outline,
+              const SizedBox(height: 3),
+              Row(
+                children: [
+                  StatView(
+                    context: context,
+                    theme: 'gray',
+                    value: videoItem.stat.viewStr,
                   ),
-                ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  children: [
-                    StatView(
-                      context: context,
-                      theme: 'gray',
-                      value: videoItem.stat.viewStr,
-                    ),
-                    const SizedBox(width: 8),
-                    StatDanMu(
-                      context: context,
-                      theme: 'gray',
-                      value: videoItem.stat.danmuStr,
-                    ),
-                    const Spacer(),
-                  ],
-                ),
+                  const SizedBox(width: 8),
+                  StatDanMu(
+                    context: context,
+                    theme: 'gray',
+                    value: videoItem.stat.danmuStr,
+                  ),
+                  const Spacer(),
+                ],
               ),
             ],
           ),
@@ -204,7 +184,7 @@ class FavVideoCardH extends StatelessWidget {
                 context: context,
                 icon: Icons.clear,
                 tooltip: '取消收藏',
-                iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                iconColor: Theme.of(context).colorScheme.outline,
                 bgColor: Colors.transparent,
                 onPressed: () {
                   showDialog(

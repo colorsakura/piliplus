@@ -7,8 +7,8 @@ import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/pages/later/child_view.dart';
 import 'package:PiliPlus/pages/later/controller.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -271,7 +271,7 @@ class _LaterPageState extends State<LaterPage>
             ),
             onPressed: () {
               final ctr = currCtr();
-              Utils.onCopyOrMove<Map, HotVideoItemModel>(
+              RequestUtils.onCopyOrMove<Map, HotVideoItemModel>(
                 context: context,
                 isCopy: true,
                 ctr: ctr,
@@ -292,7 +292,7 @@ class _LaterPageState extends State<LaterPage>
             ),
             onPressed: () {
               final ctr = currCtr();
-              Utils.onCopyOrMove<Map, HotVideoItemModel>(
+              RequestUtils.onCopyOrMove<Map, HotVideoItemModel>(
                 context: context,
                 isCopy: false,
                 ctr: ctr,

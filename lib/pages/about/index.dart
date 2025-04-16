@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/services/loggeer.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/login.dart';
+import 'package:PiliPlus/utils/login_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -70,7 +71,7 @@ class _AboutPageState extends State<AboutPage> {
                         onSubmitted: (value) {
                           Get.back();
                           if (value.isNotEmpty) {
-                            Utils.handleWebview(value, inApp: true);
+                            PageUtils.handleWebview(value, inApp: true);
                           }
                         },
                       ),
@@ -132,7 +133,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
               style: TextStyle(fontSize: 14),
             ),
             leading: const Icon(Icons.info_outline),
-            onTap: () => Utils.launchURL(
+            onTap: () => PageUtils.launchURL(
                 'https://github.com/bggRGjQaUbCoE/PiliPlus/commit/${BuildConfig.commitHash}'),
             onLongPress: () => Utils.copyText(BuildConfig.commitHash),
           ),
@@ -165,13 +166,13 @@ Commit Hash: ${BuildConfig.commitHash}''',
             color: Theme.of(context).colorScheme.outlineVariant,
           ),
           ListTile(
-            onTap: () => Utils.launchURL(_sourceCodeUrl),
+            onTap: () => PageUtils.launchURL(_sourceCodeUrl),
             leading: const Icon(Icons.code),
             title: const Text('Source Code'),
             subtitle: Text(_sourceCodeUrl, style: subTitleStyle),
           ),
           ListTile(
-            onTap: () => Utils.launchURL(_originSourceCodeUrl),
+            onTap: () => PageUtils.launchURL(_originSourceCodeUrl),
             leading: const Icon(Icons.code),
             title: const Text('Origin'),
             subtitle: Text(
@@ -180,7 +181,7 @@ Commit Hash: ${BuildConfig.commitHash}''',
             ),
           ),
           ListTile(
-            onTap: () => Utils.launchURL(_upstreamUrl),
+            onTap: () => PageUtils.launchURL(_upstreamUrl),
             leading: const Icon(Icons.code),
             title: const Text('Upstream'),
             subtitle: Text(
@@ -212,7 +213,8 @@ Commit Hash: ${BuildConfig.commitHash}''',
                     children: [
                       ListTile(
                         title: const Text('GitHub Issue'),
-                        onTap: () => Utils.launchURL('$_sourceCodeUrl/issues'),
+                        onTap: () =>
+                            PageUtils.launchURL('$_sourceCodeUrl/issues'),
                       ),
                     ],
                   );

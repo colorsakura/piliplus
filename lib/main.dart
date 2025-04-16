@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:PiliPlus/build_config.dart';
 import 'package:PiliPlus/pages/video/detail/view_v.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/theme_utils.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -182,12 +182,12 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           // showSemanticsDebugger: true,
           title: 'PiliPlus',
-          theme: Utils.getThemeData(
+          theme: ThemeUtils.getThemeData(
             colorScheme: lightColorScheme,
             isDynamic: lightDynamic != null && isDynamicColor,
             variant: variant,
           ),
-          darkTheme: Utils.getThemeData(
+          darkTheme: ThemeUtils.getThemeData(
             colorScheme: darkColorScheme,
             isDynamic: darkDynamic != null && isDynamicColor,
             isDark: true,

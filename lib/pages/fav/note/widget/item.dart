@@ -2,7 +2,7 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/member/article.dart';
 import 'package:PiliPlus/pages/fav/note/controller.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 
 class FavNoteItem extends StatelessWidget {
@@ -28,7 +28,7 @@ class FavNoteItem extends StatelessWidget {
             return;
           }
           if (item.webUrl?.isNotEmpty == true) {
-            Utils.handleWebview(
+            PageUtils.handleWebview(
               item.webUrl!,
               inApp: true,
             );

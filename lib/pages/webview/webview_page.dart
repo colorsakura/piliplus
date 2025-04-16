@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/cache_manage.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                       case _WebviewMenuItem.openInBrowser:
                         WebUri? uri = await _webViewController?.getUrl();
                         if (uri != null) {
-                          Utils.launchURL(uri.toString());
+                          PageUtils.launchURL(uri.toString());
                         }
                         break;
                       case _WebviewMenuItem.clearCache:
@@ -261,7 +262,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                             TextButton(
                                 onPressed: () async {
                                   Get.back();
-                                  Utils.launchURL(request.url.toString());
+                                  PageUtils.launchURL(request.url.toString());
                                 },
                                 child: Text('确定 ($fileSize)')),
                           ],
@@ -312,7 +313,7 @@ class _WebviewPageNewState extends State<WebviewPageNew> {
                   showCloseIcon: true,
                   action: SnackBarAction(
                     label: '打开',
-                    onPressed: () => Utils.launchURL(url),
+                    onPressed: () => PageUtils.launchURL(url),
                   ),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);

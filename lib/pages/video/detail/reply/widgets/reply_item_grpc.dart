@@ -12,6 +12,7 @@ import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/global_data.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
@@ -917,14 +918,14 @@ class ReplyItemGrpc extends StatelessWidget {
                             });
                             return;
                           }
-                          Utils.handleWebview(matchStr);
+                          PageUtils.handleWebview(matchStr);
                         }
                       } else {
                         if (appUrlSchema.startsWith('bilibili://search')) {
                           Get.toNamed('/searchResult',
                               parameters: {'keyword': title});
                         } else {
-                          Utils.handleWebview(matchStr);
+                          PageUtils.handleWebview(matchStr);
                         }
                       }
                     },
@@ -960,7 +961,7 @@ class ReplyItemGrpc extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    Utils.handleWebview(matchStr);
+                    PageUtils.handleWebview(matchStr);
                   },
               ),
             );
@@ -1019,7 +1020,7 @@ class ReplyItemGrpc extends StatelessWidget {
                       return;
                     }
 
-                    Utils.handleWebview(patternStr);
+                    PageUtils.handleWebview(patternStr);
                   },
               )
             ],
@@ -1074,7 +1075,8 @@ class ReplyItemGrpc extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           recognizer: TapGestureRecognizer()
-            ..onTap = () => Utils.handleWebview(content.richText.note.clickUrl),
+            ..onTap =
+                () => PageUtils.handleWebview(content.richText.note.clickUrl),
         ),
       );
     }

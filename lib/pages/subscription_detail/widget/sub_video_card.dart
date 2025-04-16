@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/stat/stat.dart';
@@ -27,7 +28,7 @@ class SubVideoCardH extends StatelessWidget {
     return InkWell(
       onTap: () async {
         int cid = await SearchHttp.ab2c(bvid: bvid);
-        Utils.toViewPage(
+        PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
             'videoItem': videoItem,
@@ -46,46 +47,37 @@ class SubVideoCardH extends StatelessWidget {
           horizontal: StyleString.safeSpace,
           vertical: 5,
         ),
-        child: LayoutBuilder(
-          builder: (context, boxConstraints) {
-            double width =
-                (boxConstraints.maxWidth - StyleString.cardSpace * 6) / 2;
-            return SizedBox(
-              height: width / StyleString.aspectRatio,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: StyleString.aspectRatio,
-                    child: LayoutBuilder(
-                      builder: (context, boxConstraints) {
-                        double maxWidth = boxConstraints.maxWidth;
-                        double maxHeight = boxConstraints.maxHeight;
-                        return Stack(
-                          children: [
-                            NetworkImgLayer(
-                              src: videoItem.cover,
-                              width: maxWidth,
-                              height: maxHeight,
-                            ),
-                            PBadge(
-                              text: Utils.timeFormat(videoItem.duration!),
-                              right: 6.0,
-                              bottom: 6.0,
-                              type: 'gray',
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  videoContent(context),
-                ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: StyleString.aspectRatio,
+              child: LayoutBuilder(
+                builder: (context, boxConstraints) {
+                  double maxWidth = boxConstraints.maxWidth;
+                  double maxHeight = boxConstraints.maxHeight;
+                  return Stack(
+                    children: [
+                      NetworkImgLayer(
+                        src: videoItem.cover,
+                        width: maxWidth,
+                        height: maxHeight,
+                      ),
+                      PBadge(
+                        text: Utils.timeFormat(videoItem.duration!),
+                        right: 6.0,
+                        bottom: 6.0,
+                        type: 'gray',
+                      ),
+                    ],
+                  );
+                },
               ),
-            );
-          },
+            ),
+            const SizedBox(width: 10),
+            videoContent(context),
+          ],
         ),
       ),
     );
@@ -116,24 +108,22 @@ class SubVideoCardH extends StatelessWidget {
                   color: Theme.of(context).colorScheme.outline,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  children: [
-                    StatView(
-                      context: context,
-                      theme: 'gray',
-                      value: Utils.numFormat(videoItem.cntInfo?['play']),
-                    ),
-                    const SizedBox(width: 8),
-                    StatDanMu(
-                      context: context,
-                      theme: 'gray',
-                      value: Utils.numFormat(videoItem.cntInfo?['danmaku']),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
+              const SizedBox(height: 3),
+              Row(
+                children: [
+                  StatView(
+                    context: context,
+                    theme: 'gray',
+                    value: Utils.numFormat(videoItem.cntInfo?['play']),
+                  ),
+                  const SizedBox(width: 8),
+                  StatDanMu(
+                    context: context,
+                    theme: 'gray',
+                    value: Utils.numFormat(videoItem.cntInfo?['danmaku']),
+                  ),
+                  const Spacer(),
+                ],
               ),
             ],
           ),

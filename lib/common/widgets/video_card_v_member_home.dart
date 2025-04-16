@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/http/search.dart';
 import 'package:PiliPlus/models/space/item.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../utils/utils.dart';
@@ -22,11 +23,11 @@ class VideoCardVMemberHome extends StatelessWidget {
     String goto = videoItem.goto ?? '';
     switch (goto) {
       case 'bangumi':
-        Utils.viewBangumi(epId: videoItem.param);
+        PageUtils.viewBangumi(epId: videoItem.param);
         break;
       case 'av':
         if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
-          if (Utils.viewPgcFromUri(videoItem.uri!)) {
+          if (PageUtils.viewPgcFromUri(videoItem.uri!)) {
             return;
           }
         }
@@ -37,7 +38,7 @@ class VideoCardVMemberHome extends StatelessWidget {
         }
         int? cid = videoItem.firstCid;
         cid ??= await SearchHttp.ab2c(aid: aid, bvid: bvid);
-        Utils.toViewPage(
+        PageUtils.toVideoPage(
           'bvid=${bvid ?? IdUtils.av2bv(int.parse(aid!))}&cid=$cid',
           arguments: {
             'pic': videoItem.cover,
@@ -47,7 +48,7 @@ class VideoCardVMemberHome extends StatelessWidget {
         break;
       default:
         SmartDialog.showToast(goto);
-        Utils.handleWebview(videoItem.uri ?? '');
+        PageUtils.handleWebview(videoItem.uri ?? '');
     }
   }
 

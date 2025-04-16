@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -77,7 +78,7 @@ class FollowItem extends StatelessWidget {
               height: 34,
               child: FilledButton.tonal(
                 onPressed: () {
-                  Utils.actionRelationMod(
+                  RequestUtils.actionRelationMod(
                     context: context,
                     mid: item.mid,
                     isFollow: item.attribute != -1,

@@ -11,6 +11,7 @@ import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
 import 'package:PiliPlus/pages/video/detail/introduction/widgets/action_item.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -99,7 +100,7 @@ class HeaderControlState extends State<HeaderControl> {
   }
 
   void showBottomSheet(StatefulWidgetBuilder builder, {double? padding}) {
-    Utils.showFSSheet(
+    PageUtils.showVideoBottomSheet(
       context,
       isFullScreen: () => isFullScreen,
       padding: padding,
@@ -191,7 +192,7 @@ class HeaderControlState extends State<HeaderControl> {
                 dense: true,
                 onTap: () => {
                   Get.back(),
-                  Utils.scheduleExit(this.context, isFullScreen)
+                  PageUtils.scheduleExit(this.context, isFullScreen)
                 },
                 leading: const Icon(Icons.hourglass_top_outlined, size: 20),
                 title: const Text('定时关闭', style: titleStyle),
@@ -582,7 +583,7 @@ class HeaderControlState extends State<HeaderControl> {
                     return;
                   }
                   Get.back();
-                  Utils.reportVideo(videoDetailCtr.oid.value);
+                  PageUtils.reportVideo(videoDetailCtr.oid.value);
                 },
                 leading: const Icon(Icons.error_outline, size: 20),
                 title: const Text('举报', style: titleStyle),
@@ -2237,7 +2238,7 @@ class HeaderControlState extends State<HeaderControl> {
                                 const Duration(seconds: 3), () {});
                           }
                           if (!context.mounted) return;
-                          Utils.enterPip(
+                          PageUtils.enterPip(
                             widget.floating!,
                             widget
                                 .videoDetailCtr.data.dash!.video!.first.width!,

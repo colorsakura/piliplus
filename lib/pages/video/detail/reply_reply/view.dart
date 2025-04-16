@@ -6,6 +6,8 @@ import 'package:PiliPlus/pages/common/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -287,7 +289,7 @@ class _VideoReplyReplyPanelState
             vsync: this,
             duration: const Duration(milliseconds: 200),
           )..forward();
-          Utils.onHorizontalPreview(
+          PageUtils.onHorizontalPreview(
             _key,
             AnimationController(
               vsync: this,
@@ -351,7 +353,7 @@ class _VideoReplyReplyPanelState
         .then((res) {
       if (res != null) {
         _savedReplies[key] = null;
-        ReplyInfo replyInfo = Utils.replyCast(res);
+        ReplyInfo replyInfo = RequestUtils.replyCast(res);
         List<ReplyInfo> list =
             _videoReplyReplyController.loadingState.value is Success
                 ? (_videoReplyReplyController.loadingState.value as Success)

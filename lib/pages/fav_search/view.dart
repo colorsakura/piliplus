@@ -6,6 +6,7 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/pages/follow/widgets/follow_item.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -107,7 +108,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
                                       }
                                     : null,
                                 onViewFav: () {
-                                  Utils.toViewPage(
+                                  PageUtils.toVideoPage(
                                     'bvid=${item.bvid}&cid=${item.cid}',
                                     arguments: {
                                       'videoItem': item,
@@ -144,7 +145,7 @@ class _FavSearchPageState extends State<FavSearchPage> {
                                   videoItem: item,
                                   source: 'later',
                                   onViewLater: (cid) {
-                                    Utils.toViewPage(
+                                    PageUtils.toVideoPage(
                                       'bvid=${item.bvid}&cid=$cid',
                                       arguments: {
                                         'videoItem': item,

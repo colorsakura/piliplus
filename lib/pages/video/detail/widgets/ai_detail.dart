@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/pages/common/common_collapse_slide_page.dart';
 import 'package:PiliPlus/pages/video/detail/controller.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -50,7 +51,7 @@ class _AiDetailState extends CommonCollapseSlidePageState<AiDetail> {
                   ..onTap = () {
                     // 处理点击事件
                     try {
-                      Utils.handleWebview(match.group(0)!);
+                      PageUtils.handleWebview(match.group(0)!);
                     } catch (err) {
                       SmartDialog.showToast(err.toString());
                     }

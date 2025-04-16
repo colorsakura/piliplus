@@ -9,6 +9,7 @@ import 'package:PiliPlus/pages/member/content/member_contribute/member_contribut
     show ContributeType;
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -148,7 +149,7 @@ class MemberVideoCtr extends CommonListController<Data, Item> {
             ?.group(1);
         dynamic bvid = IdUtils.av2bv(int.tryParse(oid) ?? 0);
         dynamic cid = await SearchHttp.ab2c(aid: oid, bvid: bvid);
-        Utils.toViewPage(
+        PageUtils.toVideoPage(
           'bvid=$bvid&cid=$cid',
           arguments: {
             'heroTag': Utils.makeHeroTag(oid),
@@ -189,7 +190,7 @@ class MemberVideoCtr extends CommonListController<Data, Item> {
                       : sort.value == 'asc')
               ? desc.not
               : desc;
-          Utils.toViewPage(
+          PageUtils.toVideoPage(
             'bvid=${element.bvid}&cid=${element.cid}',
             arguments: {
               'videoItem': element,

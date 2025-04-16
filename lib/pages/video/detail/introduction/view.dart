@@ -5,6 +5,8 @@ import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -296,112 +298,125 @@ class _VideoInfoState extends State<VideoInfo> {
                       children: [
                         Expanded(
                           child: videoItem['staff'] == null
-                              ? GestureDetector(
-                                  onTap: onPushMember,
-                                  behavior: HitTestBehavior.opaque,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Obx(
-                                        () => Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            NetworkImgLayer(
-                                              type: 'avatar',
-                                              src: videoIntroController.userStat
-                                                      .value['card']?['face'] ??
-                                                  '',
-                                              width: 35,
-                                              height: 35,
-                                              fadeInDuration: Duration.zero,
-                                              fadeOutDuration: Duration.zero,
-                                            ),
-                                            if ((videoIntroController.userStat
-                                                                .value['card']
-                                                            ?['official_verify']
-                                                        ?['type'] ??
-                                                    -1) !=
-                                                -1)
-                                              Positioned(
-                                                right: -2,
-                                                bottom: -2,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .surface,
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: onPushMember,
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Obx(
+                                            () => Stack(
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                NetworkImgLayer(
+                                                  type: 'avatar',
+                                                  src: videoIntroController
+                                                              .userStat
+                                                              .value['card']
+                                                          ?['face'] ??
+                                                      '',
+                                                  width: 35,
+                                                  height: 35,
+                                                  fadeInDuration: Duration.zero,
+                                                  fadeOutDuration:
+                                                      Duration.zero,
+                                                ),
+                                                if ((videoIntroController
+                                                                    .userStat
+                                                                    .value['card']
+                                                                ?[
+                                                                'official_verify']
+                                                            ?['type'] ??
+                                                        -1) !=
+                                                    -1)
+                                                  Positioned(
+                                                    right: -2,
+                                                    bottom: -2,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .surface,
+                                                      ),
+                                                      child: Icon(
+                                                        Icons.offline_bolt,
+                                                        color: videoIntroController
+                                                                            .userStat
+                                                                            .value['card']
+                                                                        ?[
+                                                                        'official_verify']
+                                                                    ?['type'] ==
+                                                                0
+                                                            ? Colors.yellow
+                                                            : Colors
+                                                                .lightBlueAccent,
+                                                        size: 14,
+                                                      ),
+                                                    ),
                                                   ),
-                                                  child: Icon(
-                                                    Icons.offline_bolt,
-                                                    color: videoIntroController
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Obx(
+                                                () => Text(
+                                                  videoIntroController.userStat
+                                                              .value['card']
+                                                          ?['name'] ??
+                                                      "",
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: (videoIntroController
+                                                                            .userStat
+                                                                            .value['card']?['vip']
+                                                                        ?[
+                                                                        'status'] ??
+                                                                    -1) >
+                                                                0 &&
+                                                            videoIntroController
                                                                         .userStat
                                                                         .value['card']
                                                                     ?[
-                                                                    'official_verify']
-                                                                ?['type'] ==
-                                                            0
-                                                        ? Colors.yellow
-                                                        : Colors
-                                                            .lightBlueAccent,
-                                                    size: 14,
+                                                                    'vip']?['type'] ==
+                                                                2
+                                                        ? context.vipColor
+                                                        : null,
                                                   ),
                                                 ),
                                               ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Obx(
-                                              () => Text(
-                                                videoIntroController.userStat
-                                                            .value['card']
-                                                        ?['name'] ??
-                                                    "",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  color: (videoIntroController
-                                                                          .userStat
-                                                                          .value['card']?['vip']
-                                                                      ?[
-                                                                      'status'] ??
-                                                                  -1) >
-                                                              0 &&
-                                                          videoIntroController
-                                                                      .userStat
-                                                                      .value['card']
-                                                                  ?[
-                                                                  'vip']?['type'] ==
-                                                              2
-                                                      ? context.vipColor
-                                                      : null,
+                                              const SizedBox(height: 0),
+                                              Obx(
+                                                () => Text(
+                                                  '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝    ${videoIntroController.userStat.value['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat.value['archive_count'])}视频' : ''}',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color:
+                                                        t.colorScheme.outline,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 0),
-                                            Obx(
-                                              () => Text(
-                                                '${Utils.numFormat(videoIntroController.userStat.value['follower'])}粉丝    ${videoIntroController.userStat.value['archive_count'] != null ? '${Utils.numFormat(videoIntroController.userStat.value['archive_count'])}视频' : ''}',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: t.colorScheme.outline,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      followButton(context, t),
-                                    ],
-                                  ),
+                                    ),
+                                    const Spacer(),
+                                    followButton(context, t),
+                                  ],
                                 )
                               : SelfSizedHorizontalList(
                                   gapSize: 25,
@@ -489,7 +504,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                                         customBorder:
                                                             const CircleBorder(),
                                                         onTap: () {
-                                                          Utils
+                                                          RequestUtils
                                                               .actionRelationMod(
                                                             context: context,
                                                             mid: videoItem[
@@ -1140,7 +1155,7 @@ class _VideoInfoState extends State<VideoInfo> {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         try {
-                          Utils.handleWebview(matchStr);
+                          PageUtils.handleWebview(matchStr);
                         } catch (err) {
                           SmartDialog.showToast(err.toString());
                         }

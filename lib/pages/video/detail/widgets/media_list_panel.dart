@@ -240,7 +240,7 @@ class _MediaListPanelState
                                           Theme.of(context).colorScheme.outline,
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
+                                  const SizedBox(height: 3),
                                   Row(
                                     children: [
                                       StatView(

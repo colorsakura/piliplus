@@ -12,7 +12,7 @@ class Grid {
       SliverGridDelegateWithExtentAndRatio(
         mainAxisSpacing: 2,
         maxCrossAxisExtent: Grid.smallCardWidth * 2,
-        childAspectRatio: StyleString.aspectRatio * 2.4,
+        childAspectRatio: StyleString.aspectRatio * 2.2,
         minHeight: MediaQuery.textScalerOf(context).scale(minHeight),
       );
 }

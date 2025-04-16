@@ -1,5 +1,6 @@
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -110,7 +111,7 @@ class _ActionPanelState extends State<ActionPanel> {
           flex: 1,
           child: TextButton.icon(
             onPressed: () =>
-                Utils.pushDynDetail(widget.item, 1, action: 'comment'),
+                PageUtils.pushDynDetail(widget.item, 1, action: 'comment'),
             icon: Icon(
               FontAwesomeIcons.comment,
               size: 16,

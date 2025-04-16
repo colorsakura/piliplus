@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
 import '../common/constants.dart';
 import '../models/login/index.dart';
-import '../utils/login.dart';
+import '../utils/login_utils.dart';
 import '../utils/utils.dart';
 import 'index.dart';
 

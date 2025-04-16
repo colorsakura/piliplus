@@ -4,7 +4,7 @@ import 'package:PiliPlus/common/widgets/icon_button.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/models/bangumi/list.dart';
 import 'package:PiliPlus/pages/common/multi_select_controller.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 
 class FavPgcItem extends StatelessWidget {
@@ -34,7 +34,7 @@ class FavPgcItem extends StatelessWidget {
                 onSelect();
                 return;
               }
-              Utils.viewBangumi(seasonId: item.seasonId);
+              PageUtils.viewBangumi(seasonId: item.seasonId);
             },
             onLongPress: () {
               if (!ctr.enableMultiSelect.value) {
@@ -179,11 +179,11 @@ class FavPgcItem extends StatelessWidget {
             right: 12,
             bottom: 0,
             child: iconButton(
-              iconSize: 20,
+              iconSize: 18,
               context: context,
               onPressed: onUpdateStatus,
               icon: Icons.more_vert,
-              iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+              iconColor: Theme.of(context).colorScheme.outline,
               bgColor: Colors.transparent,
             ),
           ),

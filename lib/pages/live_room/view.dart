@@ -7,6 +7,7 @@ import 'package:PiliPlus/pages/live_room/widgets/chat.dart';
 import 'package:PiliPlus/pages/live_room/widgets/header_control.dart';
 import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canvas_danmaku/canvas_danmaku.dart';
@@ -436,7 +437,7 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                     IconButton(
                         tooltip: '浏览器打开',
                         onPressed: () {
-                          Utils.inAppWebview(
+                          PageUtils.inAppWebview(
                             'https://live.bilibili.com/h5/${_liveRoomController.roomId}',
                             off: true,
                           );

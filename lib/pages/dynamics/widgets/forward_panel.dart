@@ -4,6 +4,7 @@ import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/image_view.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -218,7 +219,7 @@ Widget forWard(bool isSave, item, BuildContext context, source, callback,
               'MAJOR_TYPE_NONE') {
             return;
           }
-          Utils.pushDynDetail(item.orig, floor + 1);
+          PageUtils.pushDynDetail(item.orig, floor + 1);
         },
         onLongPress: () {
           if (item.orig.modules.moduleDynamic.major?.type ==
@@ -365,10 +366,10 @@ Widget forWard(bool isSave, item, BuildContext context, source, callback,
         onTap: () {
           try {
             String url = item.modules.moduleDynamic.major.common['jump_url'];
-            if (url.contains('bangumi/play') && Utils.viewPgcFromUri(url)) {
+            if (url.contains('bangumi/play') && PageUtils.viewPgcFromUri(url)) {
               return;
             }
-            Utils.handleWebview(url, inApp: true);
+            PageUtils.handleWebview(url, inApp: true);
           } catch (_) {}
         },
         child: Container(
@@ -420,7 +421,7 @@ Widget forWard(bool isSave, item, BuildContext context, source, callback,
       final Map music = item.modules.moduleDynamic.major.music;
       return InkWell(
         onTap: () {
-          Utils.handleWebview("https:${music['jump_url']}");
+          PageUtils.handleWebview("https:${music['jump_url']}");
         },
         child: Container(
           width: double.infinity,

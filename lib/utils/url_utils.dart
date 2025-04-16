@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -65,7 +66,7 @@ class UrlUtils {
       String? bvid = matchRes['BV'];
       bvid ??= IdUtils.av2bv(aid!);
       final int cid = await SearchHttp.ab2c(aid: aid, bvid: bvid);
-      Utils.toViewPage(
+      PageUtils.toVideoPage(
         'bvid=$bvid&cid=$cid',
         arguments: <String, String?>{
           'pic': '',
@@ -75,7 +76,7 @@ class UrlUtils {
       );
     } else {
       if (redirectUrl.isNotEmpty) {
-        Utils.handleWebview(redirectUrl);
+        PageUtils.handleWebview(redirectUrl);
       } else {
         SmartDialog.showToast('matchUrlPush: $pathSegment');
       }

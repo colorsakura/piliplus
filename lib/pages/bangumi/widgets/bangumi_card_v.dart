@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
@@ -28,7 +29,7 @@ class BangumiCardV extends StatelessWidget {
         ),
         onTap: () async {
           final int seasonId = bangumiItem.seasonId;
-          Utils.viewBangumi(seasonId: seasonId);
+          PageUtils.viewBangumi(seasonId: seasonId);
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
@@ -89,7 +89,7 @@ class LiveHeaderControl extends StatelessWidget implements PreferredSizeWidget {
             const SizedBox(width: 10),
           ],
           IconButton(
-            onPressed: () => Utils.scheduleExit(
+            onPressed: () => PageUtils.scheduleExit(
               context,
               plPlayerController.isFullScreen.value,
               true,

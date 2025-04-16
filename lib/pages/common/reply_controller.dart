@@ -10,6 +10,7 @@ import 'package:PiliPlus/pages/common/common_list_controller.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/reply_page.dart';
 import 'package:PiliPlus/utils/accounts/account.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +171,7 @@ abstract class ReplyController<R> extends CommonListController<R, ReplyInfo> {
       (res) {
         if (res != null) {
           savedReplies[key] = null;
-          ReplyInfo replyInfo = Utils.replyCast(res);
+          ReplyInfo replyInfo = RequestUtils.replyCast(res);
           if (loadingState.value is Success) {
             List<ReplyInfo>? list = (loadingState.value as Success).response;
             if (list == null) {

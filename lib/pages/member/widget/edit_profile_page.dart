@@ -4,6 +4,7 @@ import 'package:PiliPlus/http/constants.dart';
 import 'package:PiliPlus/http/index.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -177,7 +178,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _divider1,
               _item(
                 title: '头像挂件',
-                onTap: () => Utils.launchURL(
+                onTap: () => PageUtils.launchURL(
                     'https://www.bilibili.com/h5/mall/pendant/home'),
               ),
               _divider1,
@@ -200,7 +201,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               _divider1,
               _item(
                 title: '哔哩哔哩认证',
-                onTap: () => Utils.launchURL(
+                onTap: () => PageUtils.launchURL(
                     'https://account.bilibili.com/official/mobile/home'),
               ),
               _divider,

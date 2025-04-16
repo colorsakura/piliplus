@@ -6,6 +6,7 @@ import 'package:PiliPlus/pages/later/base_controller.dart';
 import 'package:PiliPlus/pages/later/view.dart'
     show LaterViewType, LaterViewTypeExt;
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -216,7 +217,7 @@ class LaterController extends MultiSelectController<Map, HotVideoItemModel> {
           if (item.bvid != list.first.bvid) {
             SmartDialog.showToast('已跳过不支持播放的视频');
           }
-          Utils.toViewPage(
+          PageUtils.toVideoPage(
             'bvid=${item.bvid}&cid=${item.cid}',
             arguments: {
               'videoItem': item,

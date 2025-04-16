@@ -128,7 +128,7 @@ class MemberFavItem extends StatelessWidget {
                     const Spacer(),
                     Text(
                       item.type == 0
-                          ? '${item.mediaCount}个内容 · ${Utils.isPublicText(item.attr ?? 0)}'
+                          ? '${item.mediaCount}个内容 · ${Utils.isPublicFavText(item.attr ?? 0)}'
                           : item.type == 11
                               ? '${item.mediaCount}个内容 · ${item.upper?.name}'
                               : item.type == 21

@@ -1,6 +1,7 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/common/widgets/loading_widget.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
@@ -35,7 +36,7 @@ Widget searchBangumiPanel(
                       var i = loadingState.response![index];
                       return InkWell(
                         onTap: () {
-                          Utils.viewBangumi(seasonId: i.seasonId);
+                          PageUtils.viewBangumi(seasonId: i.seasonId);
                         },
                         onLongPress: () => imageSaveDialog(
                           context: context,

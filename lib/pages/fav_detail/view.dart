@@ -7,6 +7,8 @@ import 'package:PiliPlus/models/user/fav_folder.dart';
 import 'package:PiliPlus/pages/fav_detail/fav_sort_page.dart';
 import 'package:PiliPlus/pages/fav_search/view.dart' show SearchType;
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -136,7 +138,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                   VisualDensity(horizontal: -2, vertical: -2),
                             ),
                             onPressed: () {
-                              Utils.onCopyOrMove<FavDetailData,
+                              RequestUtils.onCopyOrMove<FavDetailData,
                                   FavDetailItemData>(
                                 context: context,
                                 isCopy: true,
@@ -160,7 +162,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                   VisualDensity(horizontal: -2, vertical: -2),
                             ),
                             onPressed: () {
-                              Utils.onCopyOrMove<FavDetailData,
+                              RequestUtils.onCopyOrMove<FavDetailData,
                                   FavDetailItemData>(
                                 context: context,
                                 isCopy: false,
@@ -279,9 +281,10 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                         },
                                         child: Text('排序'),
                                       ),
-                                      if (!Utils.isDefault(_favDetailController
-                                              .item.value.attr ??
-                                          0))
+                                      if (!Utils.isDefaultFav(
+                                          _favDetailController
+                                                  .item.value.attr ??
+                                              0))
                                         PopupMenuItem(
                                           onTap: () {
                                             showConfirmDialog(
@@ -397,7 +400,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                               .item.value.attr !=
                                           null)
                                         Text(
-                                          '共${_favDetailController.item.value.mediaCount}条视频 · ${Utils.isPublicText(_favDetailController.item.value.attr ?? 0)}',
+                                          '共${_favDetailController.item.value.mediaCount}条视频 · ${Utils.isPublicFavText(_favDetailController.item.value.attr ?? 0)}',
                                           style: TextStyle(
                                               fontSize: Theme.of(context)
                                                   .textTheme
@@ -430,7 +433,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
   Widget _buildBody(LoadingState<List<FavDetailItemData>?> loadingState) {
     return switch (loadingState) {
       Loading() => SliverGrid(
-          gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
+          gridDelegate: Grid.videoCardHDelegate(context),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return const VideoCardHSkeleton();
@@ -444,7 +447,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                 bottom: MediaQuery.of(context).padding.bottom + 85,
               ),
               sliver: SliverGrid(
-                gridDelegate: Grid.videoCardHDelegate(context, minHeight: 110),
+                gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == loadingState.response!.length) {
@@ -475,7 +478,7 @@ class _FavDetailPageState extends State<FavDetailPage> {
                                     )
                                 : null,
                             onViewFav: () {
-                              Utils.toViewPage(
+                              PageUtils.toVideoPage(
                                 'bvid=${item.bvid}&cid=${item.cid}',
                                 arguments: {
                                   'videoItem': item,

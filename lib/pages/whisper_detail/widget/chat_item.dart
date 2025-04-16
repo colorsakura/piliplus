@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactiveviewer_gallery.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPlus/common/widgets/network_img_layer.dart';
@@ -192,7 +193,7 @@ class ChatItem extends StatelessWidget {
                   SmartDialog.showLoading();
                   final int cid = await SearchHttp.ab2c(bvid: bvid);
                   SmartDialog.dismiss<dynamic>().then(
-                    (e) => Utils.toViewPage(
+                    (e) => PageUtils.toVideoPage(
                       'bvid=$bvid&cid=$cid',
                       arguments: <String, String?>{
                         'pic': content['thumb'],
@@ -240,7 +241,7 @@ class ChatItem extends StatelessWidget {
                     var bvid = content["bvid"];
                     final int cid = await SearchHttp.ab2c(bvid: bvid);
                     SmartDialog.dismiss().then(
-                      (_) => Utils.toViewPage(
+                      (_) => PageUtils.toVideoPage(
                         'bvid=$bvid&cid=$cid',
                         arguments: {
                           'pic': content['thumb'],
@@ -327,7 +328,8 @@ class ChatItem extends StatelessWidget {
                               SmartDialog.showLoading();
                               final int cid = await SearchHttp.ab2c(bvid: bvid);
                               SmartDialog.dismiss<dynamic>().then(
-                                (e) => Utils.toViewPage('bvid=$bvid&cid=$cid',
+                                (e) => PageUtils.toVideoPage(
+                                    'bvid=$bvid&cid=$cid',
                                     arguments: <String, String?>{
                                       'pic': i['cover_url'],
                                       'heroTag': Utils.makeHeroTag(bvid),
@@ -339,7 +341,7 @@ class ChatItem extends StatelessWidget {
                             }
                           } else {
                             SmartDialog.showToast('未匹配到 BV 号');
-                            Utils.handleWebview(i['jump_url']);
+                            PageUtils.handleWebview(i['jump_url']);
                           }
                         },
                         child: Row(

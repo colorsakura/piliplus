@@ -6,8 +6,8 @@ import 'package:PiliPlus/pages/emote/controller.dart';
 import 'package:PiliPlus/pages/emote/view.dart';
 import 'package:PiliPlus/pages/video/detail/reply_new/toolbar_icon_button.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -386,8 +386,8 @@ class _RepostPanelState extends CommonPublishPageState<RepostPanel> {
       Get.back();
       SmartDialog.showToast('转发成功');
       widget.callback?.call();
-      Utils.insertCreatedDyn(result);
-      Utils.checkCreatedDyn(
+      RequestUtils.insertCreatedDyn(result);
+      RequestUtils.checkCreatedDyn(
         id: result['data']?['dyn_id'],
         dynText: editController.text,
       );

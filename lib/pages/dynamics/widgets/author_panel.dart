@@ -5,6 +5,7 @@ import 'package:PiliPlus/common/widgets/save_panel.dart';
 import 'package:PiliPlus/http/index.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -343,7 +344,7 @@ class AuthorPanel extends StatelessWidget {
             ListTile(
               onTap: () {
                 Get.back();
-                Utils.checkCreatedDyn(id: item.idStr, isManual: true);
+                RequestUtils.checkCreatedDyn(id: item.idStr, isManual: true);
               },
               minLeadingWidth: 0,
               leading: Stack(

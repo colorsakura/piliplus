@@ -3,6 +3,7 @@ import 'package:PiliPlus/common/widgets/stat/stat.dart';
 import 'package:PiliPlus/common/widgets/video_popup_menu.dart';
 import 'package:PiliPlus/common/widgets/video_progress_indicator.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../utils/utils.dart';
@@ -40,7 +41,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
               return;
             }
             if (videoItem.isPgc == true && videoItem.uri?.isNotEmpty == true) {
-              if (Utils.viewPgcFromUri(videoItem.uri!)) {
+              if (PageUtils.viewPgcFromUri(videoItem.uri!)) {
                 return;
               }
             }
@@ -48,7 +49,7 @@ class VideoCardHMemberVideo extends StatelessWidget {
               return;
             }
             try {
-              Utils.toViewPage(
+              PageUtils.toVideoPage(
                 'bvid=${videoItem.bvid}&cid=${videoItem.cid}',
                 arguments: {
                   'heroTag': Utils.makeHeroTag(videoItem.bvid),

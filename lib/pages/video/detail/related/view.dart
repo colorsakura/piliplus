@@ -46,9 +46,7 @@ class _RelatedVideoPanelState extends State<RelatedVideoPanel>
         ),
       Success() => loadingState.response?.isNotEmpty == true
           ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
+              padding: const EdgeInsets.only(bottom: 80),
               sliver: SliverGrid(
                 gridDelegate: Grid.videoCardHDelegate(context),
                 delegate: SliverChildBuilderDelegate((context, index) {

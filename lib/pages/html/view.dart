@@ -10,6 +10,8 @@ import 'package:PiliPlus/models/common/reply_sort_type.dart';
 import 'package:PiliPlus/pages/dynamics/repost_dyn_panel.dart';
 import 'package:PiliPlus/pages/video/detail/reply/widgets/reply_item_grpc.dart';
 import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:easy_debounce/easy_throttle.dart';
@@ -68,7 +70,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
             vsync: this,
             duration: const Duration(milliseconds: 200),
           )..forward();
-          Utils.onHorizontalPreview(
+          PageUtils.onHorizontalPreview(
             _key,
             AnimationController(
               vsync: this,
@@ -283,7 +285,8 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
           IconButton(
             tooltip: '浏览器打开',
             onPressed: () {
-              Utils.inAppWebview(url.startsWith('http') ? url : 'https:$url');
+              PageUtils.inAppWebview(
+                  url.startsWith('http') ? url : 'https:$url');
             },
             icon: const Icon(Icons.open_in_browser_outlined, size: 19),
           ),
@@ -305,7 +308,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
               ),
               PopupMenuItem(
                 onTap: () {
-                  Utils.inAppWebview(
+                  PageUtils.inAppWebview(
                       url.startsWith('http') ? url : 'https:$url');
                 },
                 child: const Row(
@@ -640,7 +643,7 @@ class _HtmlRenderPageState extends State<HtmlRenderPage>
                                               builder: (context) =>
                                                   TextButton.icon(
                                                 onPressed: () =>
-                                                    Utils.onLikeDynamic(
+                                                    RequestUtils.onLikeDynamic(
                                                   _htmlRenderCtr.item.value,
                                                   () {
                                                     if (context.mounted) {

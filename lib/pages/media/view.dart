@@ -322,7 +322,7 @@ class FavFolderItem extends StatelessWidget {
               maxLines: 1,
             ),
             Text(
-              ' 共${item!.mediaCount}条视频 · ${Utils.isPublicText(item?.attr ?? 0)}',
+              ' 共${item!.mediaCount}条视频 · ${Utils.isPublicFavText(item?.attr ?? 0)}',
               style: Theme.of(context)
                   .textTheme
                   .labelSmall!

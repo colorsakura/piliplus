@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/pages/danmaku/index.dart';
 import 'package:PiliPlus/plugin/pl_player/index.dart';
-import 'package:PiliPlus/utils/danmaku.dart';
+import 'package:PiliPlus/utils/danmaku_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 
 /// 传入播放器控制器，监听播放进度，加载对应弹幕

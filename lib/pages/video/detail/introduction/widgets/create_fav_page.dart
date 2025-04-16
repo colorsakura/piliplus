@@ -43,7 +43,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
       if (data['status']) {
         _titleController.text = data['data']['title'];
         _introController.text = data['data']['intro'];
-        _isPublic = Utils.isPublic(data['data']['attr']);
+        _isPublic = Utils.isPublicFav(data['data']['attr']);
         _cover = data['data']['cover'];
         _attr = data['data']['attr'];
       } else {
@@ -171,7 +171,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
   Widget get _buildBody => SingleChildScrollView(
         child: Column(
           children: [
-            if (_attr == null || !Utils.isDefault(_attr!)) ...[
+            if (_attr == null || !Utils.isDefaultFav(_attr!)) ...[
               ListTile(
                 tileColor: Theme.of(context).colorScheme.onInverseSurface,
                 onTap: () {
@@ -285,11 +285,11 @@ class _CreateFavPageState extends State<CreateFavPage> {
               ),
               title: TextField(
                 autofocus: true,
-                readOnly: _attr != null && Utils.isDefault(_attr!),
+                readOnly: _attr != null && Utils.isDefaultFav(_attr!),
                 controller: _titleController,
                 style: TextStyle(
                   fontSize: 14,
-                  color: _attr != null && Utils.isDefault(_attr!)
+                  color: _attr != null && Utils.isDefaultFav(_attr!)
                       ? Theme.of(context).colorScheme.outline
                       : null,
                 ),
@@ -312,7 +312,7 @@ class _CreateFavPageState extends State<CreateFavPage> {
               ),
             ),
             const SizedBox(height: 16),
-            if (_attr == null || !Utils.isDefault(_attr!)) ...[
+            if (_attr == null || !Utils.isDefaultFav(_attr!)) ...[
               ListTile(
                 tileColor: Theme.of(context).colorScheme.onInverseSurface,
                 title: Row(

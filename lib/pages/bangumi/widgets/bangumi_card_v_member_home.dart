@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/image_save.dart';
 import 'package:PiliPlus/models/space_archive/item.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/utils/utils.dart';
@@ -23,7 +24,7 @@ class BangumiCardVMemberHome extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           final int seasonId = int.tryParse(bangumiItem.param ?? '') ?? -1;
-          Utils.viewBangumi(seasonId: seasonId);
+          PageUtils.viewBangumi(seasonId: seasonId);
         },
         onLongPress: () => imageSaveDialog(
           context: context,

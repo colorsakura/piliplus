@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:PiliPlus/common/constants.dart';
@@ -63,7 +64,7 @@ Widget liveRcmdPanel(source, item, context, {floor = 1}) {
               const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
           child: GestureDetector(
             onTap: () {
-              Utils.pushDynDetail(item, floor);
+              PageUtils.pushDynDetail(item, floor);
             },
             child: LayoutBuilder(builder: (context, box) {
               double width = box.maxWidth;

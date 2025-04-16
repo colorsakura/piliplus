@@ -22,6 +22,7 @@ import 'package:PiliPlus/pages/video/detail/widgets/ai_detail.dart';
 import 'package:PiliPlus/utils/download.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -557,7 +558,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
   void enterPip() {
     if (Get.currentRoute.startsWith('/video') &&
         videoDetailController.floating != null) {
-      Utils.enterPip(
+      PageUtils.enterPip(
         videoDetailController.floating!,
         videoDetailController.data.dash!.video!.first.width!,
         videoDetailController.data.dash!.video!.first.height!,
@@ -875,7 +876,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                                                           SmartDialog.showToast(
                                                               '账号未登录');
                                                         } else {
-                                                          Utils.reportVideo(
+                                                          PageUtils.reportVideo(
                                                               videoDetailController
                                                                   .oid.value);
                                                         }
@@ -1462,7 +1463,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                             if (!Accounts.main.isLogin) {
                               SmartDialog.showToast('账号未登录');
                             } else {
-                              Utils.reportVideo(
+                              PageUtils.reportVideo(
                                   videoDetailController.oid.value);
                             }
                             break;
@@ -2195,7 +2196,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                     vsync: this,
                     duration: const Duration(milliseconds: 200),
                   )..forward();
-                  Utils.onHorizontalPreview(
+                  PageUtils.onHorizontalPreview(
                     videoDetailController.childKey,
                     AnimationController(
                       vsync: this,
@@ -2309,7 +2310,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           },
         );
     if (isFullScreen) {
-      Utils.showFSSheet(
+      PageUtils.showVideoBottomSheet(
         context,
         isFullScreen: () => isFullScreen,
         child: videoDetailController.plPlayerController.darkVideoPage
@@ -2407,7 +2408,7 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
 
   void showViewPoints() {
     if (isFullScreen) {
-      Utils.showFSSheet(
+      PageUtils.showVideoBottomSheet(
         context,
         isFullScreen: () => isFullScreen,
         child: videoDetailController.plPlayerController.darkVideoPage
