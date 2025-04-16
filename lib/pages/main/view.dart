@@ -204,36 +204,88 @@ class _MainAppState extends State<MainApp>
                   context.orientation == Orientation.landscape) ...[
                 Obx(
                   () => _mainController.navigationBars.length > 1
-                      ? NavigationRail(
-                          groupAlignment: 0.5,
-                          selectedIndex: _mainController.selectedIndex.value,
-                          onDestinationSelected: setIndex,
-                          labelType: NavigationRailLabelType.selected,
-                          leading: userAndSearchVertical,
-                          destinations: _mainController.navigationBars
-                              .map(
-                                (e) => NavigationRailDestination(
-                                  icon: _buildIcon(
-                                    id: e['id'],
-                                    count: e['count'],
-                                    icon: e['icon'],
+                      ? context.isTablet
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                    height:
+                                        MediaQuery.paddingOf(context).top + 50),
+                                userAndSearchVertical,
+                                const Spacer(flex: 2),
+                                Expanded(
+                                  flex: 5,
+                                  child: SizedBox(
+                                    width: 130,
+                                    child: MediaQuery.removePadding(
+                                      context: context,
+                                      removeRight: true,
+                                      child: NavigationDrawer(
+                                        tilePadding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 12),
+                                        indicatorShape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
+                                        onDestinationSelected: setIndex,
+                                        selectedIndex:
+                                            _mainController.selectedIndex.value,
+                                        children: [
+                                          ..._mainController.navigationBars
+                                              .map((e) {
+                                            return NavigationDrawerDestination(
+                                              label: Text(e['label']),
+                                              icon: _buildIcon(
+                                                id: e['id'],
+                                                count: e['count'],
+                                                icon: e['icon'],
+                                              ),
+                                              selectedIcon: _buildIcon(
+                                                id: e['id'],
+                                                count: e['count'],
+                                                icon: e['selectIcon'],
+                                              ),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  selectedIcon: _buildIcon(
-                                    id: e['id'],
-                                    count: e['count'],
-                                    icon: e['selectIcon'],
-                                  ),
-                                  label: Text(e['label']),
                                 ),
-                              )
-                              .toList(),
-                        )
-                      : Container(
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.paddingOf(context).top + 10,
+                              ],
+                            )
+                          : NavigationRail(
+                              groupAlignment: 0.5,
+                              selectedIndex:
+                                  _mainController.selectedIndex.value,
+                              onDestinationSelected: setIndex,
+                              labelType: NavigationRailLabelType.selected,
+                              leading: userAndSearchVertical,
+                              destinations: _mainController.navigationBars
+                                  .map(
+                                    (e) => NavigationRailDestination(
+                                      icon: _buildIcon(
+                                        id: e['id'],
+                                        count: e['count'],
+                                        icon: e['icon'],
+                                      ),
+                                      selectedIcon: _buildIcon(
+                                        id: e['id'],
+                                        count: e['count'],
+                                        icon: e['selectIcon'],
+                                      ),
+                                      label: Text(e['label']),
+                                    ),
+                                  )
+                                  .toList(),
+                            )
+                      : SafeArea(
+                          right: false,
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                            ),
+                            width: 80,
+                            child: userAndSearchVertical,
                           ),
-                          width: 56,
-                          child: userAndSearchVertical,
                         ),
                 ),
                 VerticalDivider(
