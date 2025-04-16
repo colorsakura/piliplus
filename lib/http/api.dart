@@ -764,4 +764,6 @@ class Api {
   static const String pgcTimeline = '/pgc/web/timeline';
 
   static const String searchTrending = '/x/v2/search/trending/ranking';
+
+  static const String setTopDyn = '/x/dynamic/feed/space/set_top';
 }

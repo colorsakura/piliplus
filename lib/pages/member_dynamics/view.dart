@@ -130,6 +130,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                             (item) => DynamicPanel(
                               item: item,
                               onRemove: _memberDynamicController.onRemove,
+                              onSetTop: _memberDynamicController.onSetTop,
                             ),
                           )
                           .toList(),
@@ -149,6 +150,7 @@ class _MemberDynamicsPageState extends State<MemberDynamicsPage>
                                 return DynamicPanel(
                                   item: loadingState.response![index],
                                   onRemove: _memberDynamicController.onRemove,
+                                  onSetTop: _memberDynamicController.onSetTop,
                                 );
                               },
                               childCount: loadingState.response!.length,

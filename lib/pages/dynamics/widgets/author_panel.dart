@@ -25,6 +25,7 @@ class AuthorPanel extends StatelessWidget {
   final String? source;
   final Function? onRemove;
   final bool isSave;
+  final Function(bool isTop, dynamic dynId)? onSetTop;
 
   const AuthorPanel({
     super.key,
@@ -33,6 +34,7 @@ class AuthorPanel extends StatelessWidget {
     this.source,
     this.onRemove,
     this.isSave = false,
+    this.onSetTop,
   });
 
   Widget _buildAvatar(double size) => NetworkImgLayer(
@@ -354,6 +356,18 @@ class AuthorPanel extends StatelessWidget {
               title:
                   Text('检查动态', style: Theme.of(context).textTheme.titleSmall!),
             ),
+            if (onSetTop != null)
+              ListTile(
+                onTap: () {
+                  Get.back();
+                  onSetTop!(item.modules?.moduleTag?.text != null, item.idStr);
+                },
+                minLeadingWidth: 0,
+                leading: const Icon(Icons.vertical_align_top, size: 19),
+                title: Text(
+                    '${item.modules?.moduleTag?.text != null ? '取消' : ''}置顶',
+                    style: Theme.of(context).textTheme.titleSmall!),
+              ),
             if (onRemove != null)
               ListTile(
                 onTap: () {

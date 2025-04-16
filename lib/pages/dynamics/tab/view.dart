@@ -170,6 +170,7 @@ class _DynamicsTabPageState
                             DynamicPanel(
                               item: i,
                               onRemove: controller.onRemove,
+                              // onSetTop: controller.onSetTop,
                             ),
                         ] else ...[
                           for (var i in loadingState.response!)
@@ -178,6 +179,7 @@ class _DynamicsTabPageState
                               DynamicPanel(
                                 item: i,
                                 onRemove: controller.onRemove,
+                                // onSetTop: controller.onSetTop,
                               ),
                         ]
                       ],
@@ -203,6 +205,7 @@ class _DynamicsTabPageState
                                   return DynamicPanel(
                                     item: item,
                                     onRemove: controller.onRemove,
+                                    // onSetTop: controller.onSetTop,
                                   );
                                 }
                                 return const SizedBox.shrink();

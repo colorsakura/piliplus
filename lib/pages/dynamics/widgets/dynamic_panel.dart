@@ -15,14 +15,16 @@ class DynamicPanel extends StatelessWidget {
   final Function? onRemove;
   final Function(List<String>, int)? callback;
   final bool isSave;
+  final Function(bool isTop, dynamic dynId)? onSetTop;
 
   const DynamicPanel({
+    super.key,
     required this.item,
     this.source,
     this.onRemove,
     this.callback,
     this.isSave = false,
-    super.key,
+    this.onSetTop,
   });
 
   @override
@@ -134,6 +136,7 @@ class DynamicPanel extends StatelessWidget {
               source: source,
               onRemove: onRemove,
               isSave: isSave,
+              onSetTop: onSetTop,
             ),
           ),
           if (item!.modules!.moduleDynamic!.desc != null ||

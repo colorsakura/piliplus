@@ -118,4 +118,23 @@ class DynamicsHttp {
       };
     }
   }
+
+  static Future setTop({
+    required dynamic dynamicId,
+  }) async {
+    var res = await Request().post(
+      Api.setTopDyn,
+      queryParameters: {
+        'csrf': await Request.getCsrf(),
+      },
+      data: {
+        'dyn_str': dynamicId,
+      },
+    );
+    if (res.data['code'] == 0) {
+      return {'status': true};
+    } else {
+      return {'status': false, 'msg': res.data['message']};
+    }
+  }
 }
