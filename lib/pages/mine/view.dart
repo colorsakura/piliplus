@@ -55,33 +55,27 @@ class _MinePageState extends State<MinePage> {
                 size: 24,
               ),
             ),
-            IconButton(
-              iconSize: 40.0,
-              padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(),
-              style: const ButtonStyle(
-                tapTargetSize:
-                    MaterialTapTargetSize.shrinkWrap, // the '2023' part
-              ),
-              tooltip: '切换至${switch (_mineController.nextThemeType) {
-                ThemeType.light => '浅色',
-                ThemeType.dark => '深色',
-                ThemeType.system => '跟随系统',
-              }}主题',
-              onPressed: _mineController.onChangeTheme,
-              icon: Icon(
-                switch (_mineController.themeType.value) {
-                  ThemeType.light => MdiIcons.weatherSunny,
-                  ThemeType.dark => MdiIcons.weatherNight,
-                  ThemeType.system => MdiIcons.themeLightDark,
-                },
-                size: 24,
-              ),
+            Obx(
+              () {
+                return IconButton(
+                  iconSize: 40.0,
+                  padding: const EdgeInsets.all(8),
+                  style: const ButtonStyle(
+                    tapTargetSize:
+                        MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                  ),
+                  tooltip: '切换至${_mineController.nextThemeType.description}主题',
+                  onPressed: _mineController.onChangeTheme,
+                  icon: Icon(
+                    _mineController.themeType.value.iconData,
+                    size: 24,
+                  ),
+                );
+              },
             ),
             IconButton(
               iconSize: 40.0,
               padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(),
               style: const ButtonStyle(
                 tapTargetSize:
                     MaterialTapTargetSize.shrinkWrap, // the '2023' part

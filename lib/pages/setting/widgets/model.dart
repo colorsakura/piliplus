@@ -538,7 +538,7 @@ List<SettingsModel> get styleSettings => [
           if (result != null) {
             GStorage.setting.put(SettingBoxKey.themeMode, result.index);
             Get.put(ColorSelectController()).themeType.value = result;
-            Get.forceAppUpdate();
+            Get.changeThemeMode(result.toThemeMode);
           }
         },
         leading: const Icon(Icons.flashlight_on_outlined),

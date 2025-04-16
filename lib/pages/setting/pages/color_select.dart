@@ -69,7 +69,7 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
               if (result != null) {
                 ctr.themeType.value = result;
                 GStorage.setting.put(SettingBoxKey.themeMode, result.index);
-                Get.forceAppUpdate();
+                Get.changeThemeMode(result.toThemeMode);
               }
             },
             leading: Container(

@@ -201,7 +201,7 @@ class MineController extends GetxController {
   onChangeTheme() {
     themeType.value = nextThemeType;
     setting.put(SettingBoxKey.themeMode, themeType.value.code);
-    Get.forceAppUpdate();
+    Get.changeThemeMode(themeType.value.toThemeMode);
   }
 
   pushFollow() {
