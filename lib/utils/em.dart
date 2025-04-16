@@ -14,15 +14,13 @@ class Em {
       _exp,
       onMatch: (Match match) {
         String matchStr = match[0]!;
-        var map = {'type': 'em', 'text': regCate(matchStr)};
-        res.add(map);
+        res.add({'type': 'em', 'text': regCate(matchStr)});
         return matchStr;
       },
       onNonMatch: (String str) {
         if (str != '') {
-          str = parse(str).body?.text ?? str;
-          var map = {'type': 'text', 'text': str};
-          res.add(map);
+          str = decodeHtmlEntities(str);
+          res.add({'type': 'text', 'text': str});
         }
         return str;
       },
