@@ -56,6 +56,15 @@ class HotKeyword extends StatelessWidget {
                               height: 15,
                             ),
                           )
+                        else if (i.showLiveIcon == true)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4),
+                            child: Image.asset(
+                              'assets/images/live/live_@28h.gif',
+                              width: 48,
+                              height: 15,
+                            ),
+                          )
                       ],
                     ),
                   ),

@@ -218,6 +218,7 @@ class _SearchPageState extends State<SearchPage> {
                 isHot
                     ? _searchController.loadingState.value
                     : _searchController.recommendData.value,
+                isHot,
               )),
         ],
       ),
@@ -337,7 +338,8 @@ class _SearchPageState extends State<SearchPage> {
   Icon get historyIcon => Icon(Icons.history,
       color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.8));
 
-  Widget _buildHotKey(LoadingState<SearchKeywordData> loadingState) {
+  Widget _buildHotKey(
+      LoadingState<SearchKeywordData> loadingState, bool isHot) {
     return switch (loadingState) {
       Success() => loadingState.response.list?.isNotEmpty == true
           ? LayoutBuilder(
@@ -350,7 +352,9 @@ class _SearchPageState extends State<SearchPage> {
           : const SizedBox.shrink(),
       Error() => errorWidget(
           errMsg: loadingState.errMsg,
-          callback: _searchController.queryHotSearchList,
+          callback: isHot
+              ? _searchController.queryHotSearchList
+              : _searchController.queryRecommendList,
         ),
       _ => const SizedBox.shrink(),
     };
